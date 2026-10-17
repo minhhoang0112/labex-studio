@@ -64,14 +64,27 @@ test("the learner receives a complete ordered Linux syllabus and accurate catalo
   const junior = await fetch(base + "/labs/linux-day-6-the-process-overseer-596618").then(r => r.json());
   assert.ok([...junior.steps, ...junior.sections].every(section =>
     !Object.hasOwn(section, "verification") && !Object.hasOwn(section, "verification_by_provider")));
-  // Existing locally authored practice remains separate from the 41 source labs.
-  assert.equal(roadmap.courses.find(course => course.id === "linux-basic-commands-practice-online").imported_labs_count, 0);
+  // The imported source course stays separate from the four local exercises.
+  const commands = await fetch(`${base}/courses/linux-basic-commands-practice-online`).then(r => r.json());
+  assert.equal(commands.labs.length, 41);
+  assert.equal(commands.course.imported_labs_count, 41);
+  assert.equal(commands.course.steps_count, 181);
+  assert.equal(commands.labs.reduce((sum, lesson) => sum + lesson.sections_count, 0), 263);
+  assert.equal(roadmap.courses.find(course => course.id === "linux-basic-commands-practice-online").imported_labs_count, 41);
+  const commandsReference = await fetch(`${base}/courses/linux-basic-commands-practice-online/reference`).then(r => r.json());
+  for (const item of commands.labs) {
+    const lesson = await fetch(`${base}/labs/${item.id}`).then(r => r.json());
+    const outline = commandsReference.lessons.find(ref => ref.source_lab_id === lesson.source_lab_id);
+    assert.deepEqual(lesson.sections.map(section => section.title), outline.sections.map(section => section.title));
+    assert.ok(lesson.sections.every(section => section.content_vi && section.title_vi));
+    assert.ok(lesson.steps.every(step => step.grading && !Object.hasOwn(step, "verification")));
+  }
   const challenges = await fetch(`${base}/courses/linux-practice-challenges`).then(r => r.json());
   assert.equal(challenges.labs.length, 156);
   assert.equal(challenges.course.imported_labs_count, 6);
   assert.equal(challenges.labs.filter(item => item.reused).length, 6);
-  assert.equal(roadmap.totals.unique_imported_labs, 75);
-  assert.equal(roadmap.totals.imported_labs, 81);
+  assert.equal(roadmap.totals.unique_imported_labs, 116);
+  assert.equal(roadmap.totals.imported_labs, 122);
   const sharedId = "linux-display-user-and-group-information";
   assert.ok(challenges.labs.some(item => item.id === sharedId && item.reused));
   const shared = await fetch(`${base}/labs/${sharedId}?courseId=linux-practice-challenges`).then(r => r.json());

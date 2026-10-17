@@ -38,8 +38,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Ghép và định dạng dữ liệu",
-      "content": "Join employee IDs with departments, format “name works in department”, sort, and save employee_departments.txt.",
-      "content_vi": "Ghép mã nhân viên với phòng ban, định dạng “tên works in phòng ban”, sắp xếp và lưu employee_departments.txt.",
+      "content": "Work in /home/labex/project. Use join to combine employees.txt and departments.txt on employee ID. Use awk to print the employee’s two name fields followed by \"works in\" and the department; for example, John Doe works in Sales. Sort the complete lines alphabetically and save employee_departments.txt. Omit IDs and preserve both inputs. The local dataset is reconstructed, so names can differ from the source examples.",
+      "content_vi": "Làm trong /home/labex/project. Dùng join ghép employees.txt với departments.txt theo mã nhân viên. Dùng awk in hai trường tên, tiếp theo là \"works in\" và phòng ban; ví dụ John Doe works in Sales. Sắp xếp các dòng theo bảng chữ cái rồi lưu employee_departments.txt, không kèm mã. Giữ nguyên hai tệp đầu vào. Bộ dữ liệu local được tái dựng nên tên có thể khác ví dụ nguồn.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -59,7 +59,19 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bjoin\\s+employees\\.txt\\s+departments\\.txt[^\\n]*\\bawk\\b[^\\n]*employee_departments\\.txt"
+                    "\\bjoin\\b[^\\n]*(?:employees\\.txt[^\\n]*departments\\.txt|departments\\.txt[^\\n]*employees\\.txt)"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bawk\\b"
                   ]
                 ],
                 "allowed_status": [
@@ -103,8 +115,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Ghép và định dạng dữ liệu",
-      "content": "Join employee IDs with departments, format “name works in department”, sort, and save employee_departments.txt.",
-      "content_vi": "Ghép mã nhân viên với phòng ban, định dạng “tên works in phòng ban”, sắp xếp và lưu employee_departments.txt.",
+      "content": "Work in /home/labex/project. Use join to combine employees.txt and departments.txt on employee ID. Use awk to print the employee’s two name fields followed by \"works in\" and the department; for example, John Doe works in Sales. Sort the complete lines alphabetically and save employee_departments.txt. Omit IDs and preserve both inputs. The local dataset is reconstructed, so names can differ from the source examples.",
+      "content_vi": "Làm trong /home/labex/project. Dùng join ghép employees.txt với departments.txt theo mã nhân viên. Dùng awk in hai trường tên, tiếp theo là \"works in\" và phòng ban; ví dụ John Doe works in Sales. Sắp xếp các dòng theo bảng chữ cái rồi lưu employee_departments.txt, không kèm mã. Giữ nguyên hai tệp đầu vào. Bộ dữ liệu local được tái dựng nên tên có thể khác ví dụ nguồn.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -124,7 +136,19 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bjoin\\s+employees\\.txt\\s+departments\\.txt[^\\n]*\\bawk\\b[^\\n]*employee_departments\\.txt"
+                    "\\bjoin\\b[^\\n]*(?:employees\\.txt[^\\n]*departments\\.txt|departments\\.txt[^\\n]*employees\\.txt)"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bawk\\b"
                   ]
                 ],
                 "allowed_status": [

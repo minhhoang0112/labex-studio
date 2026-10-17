@@ -207,7 +207,14 @@ END {
         if p == 2:
             l['sections'][p]['verification'] = all_checks(history(r'\buniq\b'),l['sections'][p]['verification'])
 
-    l=lesson(388132,'Xử lý dữ liệu nhân viên',{'employees.txt':'1 John Doe\n2 Jane Smith\n3 Bob Johnson\n','departments.txt':'1 Sales\n2 Marketing\n3 Engineering\n'})
+    # Preserve the public example's first three records and reconstruct the
+    # remaining rows; the source describes a 50-employee exercise.
+    employee_rows = {1:('John','Doe','Sales'),2:('Jane','Smith','Marketing'),3:('Bob','Johnson','Engineering')}
+    employee_rows.update({i:(f'Employee{i:02d}', f'Local{i:02d}', ['Sales','Marketing','Engineering','Finance','HR'][i%5]) for i in range(4,51)})
+    ids = sorted(employee_rows, key=str)  # GNU join's textual key order.
+    l=lesson(388132,'Xử lý dữ liệu nhân viên',{
+        'employees.txt':''.join(f'{i} {employee_rows[i][0]} {employee_rows[i][1]}\n' for i in ids),
+        'departments.txt':''.join(f'{i} {employee_rows[i][2]}\n' for i in ids)})
     output(l,1,'Ghép và định dạng dữ liệu','Work in /home/labex/project. Use join to combine employees.txt and departments.txt on employee ID. Use awk to print the employee’s two name fields followed by "works in" and the department; for example, John Doe works in Sales. Sort the complete lines alphabetically and save employee_departments.txt. Omit IDs and preserve both inputs. The local dataset is reconstructed, so names can differ from the source examples.',
            'Làm trong /home/labex/project. Dùng join ghép employees.txt với departments.txt theo mã nhân viên. Dùng awk in hai trường tên, tiếp theo là "works in" và phòng ban; ví dụ John Doe works in Sales. Sắp xếp các dòng theo bảng chữ cái rồi lưu employee_departments.txt, không kèm mã. Giữ nguyên hai tệp đầu vào. Bộ dữ liệu local được tái dựng nên tên có thể khác ví dụ nguồn.',
            "join employees.txt departments.txt | awk '{print $2, $3, \"works in\", $4}' | sort",'employee_departments.txt',r'\bjoin\s+employees\.txt\s+departments\.txt[^\n]*\bawk\b[^\n]*employee_departments\.txt')
@@ -257,4 +264,25 @@ END {
          "test -s disk_usage_report.txt\ngrep -Eq '[[:space:]]\\./data$' disk_usage_report.txt\ngrep -Eq '[[:space:]]\\./documents$' disk_usage_report.txt\nsort -hcr disk_usage_report.txt")
 
     l=lesson(388099,'Điều tra dung lượng đĩa',{'data/local.txt':'local storage fixture\n'*1000})
-    cmds=['df -h > disk_usage.txt','du -sh /home/labex > home_size.txt',"du -h --max-depth=1 /home/labex | 
+    cmds=['df -h > disk_usage.txt','du -sh /home/labex > home_size.txt',"du -h --max-depth=1 /home/labex | sort -hr | awk '$2 != \"/home/labex\" {print $2; exit}' > largest_subdir.txt"]
+    check="test -s disk_usage.txt\ngrep -q '^Filesystem' disk_usage.txt\nawk 'NR>1 && $5 ~ /%$/ {found=1} END {exit !found}' disk_usage.txt\ntest -s home_size.txt\ngrep -Eq '[[:space:]]/home/labex$' home_size.txt\nexpected=$(du -h --max-depth=1 /home/labex | sort -hr | awk '$2 != \"/home/labex\" {print $2; exit}')\ntest -n \"$expected\"\ngot=$(cat largest_subdir.txt)\ntest \"$got\" = \"$expected\" || test \"$got\" = \"${expected##*/}\""
+    task(l,1,'Phân tích dung lượng','Work in ~/project. Use df -h to inspect all mounted filesystems, save the complete table to disk_usage.txt, and identify the highest Use% row. Use du with human-readable units to save the total size and /home/labex path to home_size.txt. Limit another du scan to immediate subdirectories and save only the largest subdirectory’s name or full path to largest_subdir.txt, excluding /home/labex itself. Measurements depend on the actual container; no extra file is required for the highest-Use% observation.',
+         'Làm trong ~/project. Dùng df -h xem mọi hệ thống tệp đã gắn, lưu toàn bộ bảng vào disk_usage.txt và xác định dòng có Use% cao nhất. Dùng du với đơn vị dễ đọc để lưu tổng dung lượng kèm đường dẫn /home/labex vào home_size.txt. Giới hạn lần quét du khác ở các thư mục con trực tiếp rồi lưu riêng tên hoặc đường dẫn đầy đủ của thư mục con lớn nhất vào largest_subdir.txt; loại chính /home/labex. Đọc số liệu container thực tế; phần xác định Use% cao nhất không cần tệp bổ sung.',cmds,r'\bdu\b',check)
+    l['sections'][1]['verification']=all_checks(history(r'\bdf\b'),history(r'\bdu\b'),l['sections'][1]['verification'])
+
+    l=lesson(219197,'Lệnh time: đo thời gian chạy')
+    task(l,1,'Đo thao tác đọc tệp','Create test_file.txt and time reading it. Bash labels real/user/sys differ from Zsh examples.','Tạo test_file.txt rồi đo thời gian đọc. Bash hiển thị real/user/sys khác ví dụ Zsh.',
+         ["echo \"This is a test file for TechInnovate's performance analysis.\" > test_file.txt",'time cat test_file.txt'],r'^time\s+cat\s+test_file\.txt$','test -s test_file.txt')
+    script='#!/bin/bash\nfor i in {1..1000}; do echo "Processing log entry $i" >> output.log; done\nsort output.log > sorted_output.log\nuniq -c sorted_output.log > final_output.log\nrm output.log sorted_output.log\n'
+    task(l,2,'Đo thời gian script','Create and time the log-processing script.','Tạo và đo thời gian script xử lý log.',["cat > process_logs.sh <<'SH'\n"+script+'SH','chmod +x process_logs.sh','time ./process_logs.sh'],r'^time\s+\./process_logs\.sh$', 'test -x process_logs.sh\ntest "$(wc -l < final_output.log)" -eq 1000\ntest ! -e output.log\ntest ! -e sorted_output.log')
+    task(l,3,'So sánh các loại tải','Time a numeric pipeline, file search and passwd sort. Runtime values vary.','Đo pipeline số, tìm tệp và sắp xếp passwd. Thời gian thực tế có thể khác.',
+         ['time echo {1..10000} | wc -w','time find / -name "*.txt" 2>/dev/null','time sort -R /etc/passwd | head -n 5'],r'^time\s+sort\s+-R\s+/etc/passwd\s*\|\s*head\s+-n\s+5$')
+    # Challenge outputs must not be made correct by editing their input datasets.
+    import hashlib
+    for sid in (388109, 388125, 388132):
+        lab = result[sid]
+        entries = ''.join(hashlib.sha256(f['content'].encode()).hexdigest()+'  '+f['path']+'\n' for f in lab['setup']['files'])
+        immutable = state('set -e\nprintf %s '+shlex.quote(entries)+' | sha256sum -c - >/dev/null')
+        for section in lab['sections'].values():
+            section['verification'] = all_checks(immutable, section['verification'])
+    return result

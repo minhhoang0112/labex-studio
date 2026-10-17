@@ -38,8 +38,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Trích xuất bốn kết quả",
-      "content": "Save counts, POST requests, warning queries and authentications to task1_output.txt through task4_output.txt. Keep the original logs unchanged.",
-      "content_vi": "Lưu số lỗi, yêu cầu POST, cảnh báo query và xác thực vào task1_output.txt đến task4_output.txt. Giữ nguyên log đầu vào.",
+      "content": "Work in /home/labex/project. Use grep for every search. Save only the count of uppercase ERROR lines in system.log to task1_output.txt; POST lines from access.log to task2_output.txt; lines containing both WARNING and query, case-insensitively, from application.log to task3_output.txt; and every \"User authenticated\" match across *.log to task4_output.txt, retaining filename prefixes. Keep all input logs unchanged. Counts come from your prepared files, not the source page’s illustrative numbers.",
+      "content_vi": "Làm trong /home/labex/project và dùng grep cho mọi tìm kiếm. Lưu riêng số dòng chứa ERROR viết hoa của system.log vào task1_output.txt; các dòng POST của access.log vào task2_output.txt; dòng chứa đồng thời WARNING và query, không phân biệt hoa thường, của application.log vào task3_output.txt; mọi kết quả \"User authenticated\" trong *.log, có tiền tố tên tệp, vào task4_output.txt. Giữ nguyên log đầu vào. Tính kết quả từ tệp thực tế của bạn.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -59,7 +59,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bgrep\\b[^\\n]*task4_output\\.txt"
+                    "\\bgrep\\b[^\\n]*system\\.log"
                   ]
                 ],
                 "allowed_status": [
@@ -67,8 +67,49 @@
                 ]
               },
               {
-                "kind": "state",
-                "command": "set -e\ncd /home/labex/project/\ncmp -s task1_output.txt <(grep -c ERROR system.log)\ncmp -s task2_output.txt <(grep POST access.log)\ncmp -s task3_output.txt <(grep -i WARNING application.log | grep -i query)\ncmp -s task4_output.txt <(grep \"User authenticated\" *.log)"
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bgrep\\b[^\\n]*access\\.log"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bgrep\\b[^\\n]*application\\.log"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "all",
+                "checks": [
+                  {
+                    "kind": "commands",
+                    "user": "labex",
+                    "groups": [
+                      [
+                        "\\bgrep\\b[^\\n]*task4_output\\.txt"
+                      ]
+                    ],
+                    "allowed_status": [
+                      0
+                    ]
+                  },
+                  {
+                    "kind": "state",
+                    "command": "set -e\ncd /home/labex/project/\ncmp -s task1_output.txt <(grep -c ERROR system.log)\ncmp -s task2_output.txt <(grep POST access.log)\ncmp -s task3_output.txt <(grep -i WARNING application.log | grep -i query)\ncmp -s task4_output.txt <(grep \"User authenticated\" *.log)"
+                  }
+                ]
               }
             ]
           }
@@ -103,8 +144,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Trích xuất bốn kết quả",
-      "content": "Save counts, POST requests, warning queries and authentications to task1_output.txt through task4_output.txt. Keep the original logs unchanged.",
-      "content_vi": "Lưu số lỗi, yêu cầu POST, cảnh báo query và xác thực vào task1_output.txt đến task4_output.txt. Giữ nguyên log đầu vào.",
+      "content": "Work in /home/labex/project. Use grep for every search. Save only the count of uppercase ERROR lines in system.log to task1_output.txt; POST lines from access.log to task2_output.txt; lines containing both WARNING and query, case-insensitively, from application.log to task3_output.txt; and every \"User authenticated\" match across *.log to task4_output.txt, retaining filename prefixes. Keep all input logs unchanged. Counts come from your prepared files, not the source page’s illustrative numbers.",
+      "content_vi": "Làm trong /home/labex/project và dùng grep cho mọi tìm kiếm. Lưu riêng số dòng chứa ERROR viết hoa của system.log vào task1_output.txt; các dòng POST của access.log vào task2_output.txt; dòng chứa đồng thời WARNING và query, không phân biệt hoa thường, của application.log vào task3_output.txt; mọi kết quả \"User authenticated\" trong *.log, có tiền tố tên tệp, vào task4_output.txt. Giữ nguyên log đầu vào. Tính kết quả từ tệp thực tế của bạn.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -124,7 +165,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bgrep\\b[^\\n]*task4_output\\.txt"
+                    "\\bgrep\\b[^\\n]*system\\.log"
                   ]
                 ],
                 "allowed_status": [
@@ -132,8 +173,49 @@
                 ]
               },
               {
-                "kind": "state",
-                "command": "set -e\ncd /home/labex/project/\ncmp -s task1_output.txt <(grep -c ERROR system.log)\ncmp -s task2_output.txt <(grep POST access.log)\ncmp -s task3_output.txt <(grep -i WARNING application.log | grep -i query)\ncmp -s task4_output.txt <(grep \"User authenticated\" *.log)"
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bgrep\\b[^\\n]*access\\.log"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bgrep\\b[^\\n]*application\\.log"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "all",
+                "checks": [
+                  {
+                    "kind": "commands",
+                    "user": "labex",
+                    "groups": [
+                      [
+                        "\\bgrep\\b[^\\n]*task4_output\\.txt"
+                      ]
+                    ],
+                    "allowed_status": [
+                      0
+                    ]
+                  },
+                  {
+                    "kind": "state",
+                    "command": "set -e\ncd /home/labex/project/\ncmp -s task1_output.txt <(grep -c ERROR system.log)\ncmp -s task2_output.txt <(grep POST access.log)\ncmp -s task3_output.txt <(grep -i WARNING application.log | grep -i query)\ncmp -s task4_output.txt <(grep \"User authenticated\" *.log)"
+                  }
+                ]
               }
             ]
           }

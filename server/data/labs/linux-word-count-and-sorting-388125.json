@@ -38,8 +38,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Đếm dòng log",
-      "content": "Save only the access-log line count.",
-      "content_vi": "Chỉ lưu số dòng của access.log.",
+      "content": "In /home/labex/project, use wc to count access.log lines. Save one integer only, without the filename, to task1_output.txt. Preserve access.log.",
+      "content_vi": "Trong /home/labex/project, dùng wc đếm dòng access.log. Lưu duy nhất số nguyên, không kèm tên tệp, vào task1_output.txt. Giữ nguyên access.log.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -59,7 +59,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bwc\\b[^\\n]*task1_output\\.txt"
+                    "\\bwc\\b"
                   ]
                 ],
                 "allowed_status": [
@@ -89,8 +89,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Năm IP thường gặp",
-      "content": "Save the five most frequent IPs without counts.",
-      "content_vi": "Lưu năm IP thường gặp nhất, không kèm số lần.",
+      "content": "Extract the first field of access.log, count frequencies using sort and uniq, then save the five most frequent IPs in descending frequency order to task2_output.txt. Save one IP per line without counts; preserve the log.",
+      "content_vi": "Trích trường đầu của access.log, dùng sort và uniq đếm số lần xuất hiện, rồi lưu năm IP phổ biến nhất theo tần suất giảm dần vào task2_output.txt. Mỗi dòng chỉ có IP, không có số lần; giữ nguyên log.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -110,7 +110,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bcut\\b[^\\n]*task2_output\\.txt"
+                    "\\buniq\\b"
                   ]
                 ],
                 "allowed_status": [
@@ -118,8 +118,25 @@
                 ]
               },
               {
-                "kind": "state",
-                "command": "set -e\ncd /home/labex/project/\ntest -s task2_output.txt\ncmp -s task2_output.txt <(cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -n 5 | awk '{print $2}')"
+                "kind": "all",
+                "checks": [
+                  {
+                    "kind": "commands",
+                    "user": "labex",
+                    "groups": [
+                      [
+                        "\\bsort\\b"
+                      ]
+                    ],
+                    "allowed_status": [
+                      0
+                    ]
+                  },
+                  {
+                    "kind": "state",
+                    "command": "set -e\ncd /home/labex/project/\ntest -s task2_output.txt\ncmp -s task2_output.txt <(cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -n 5 | awk '{print $2}')"
+                  }
+                ]
               }
             ]
           }
@@ -140,8 +157,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Tổng số từ",
-      "content": "Save the total word count across document files.",
-      "content_vi": "Lưu tổng số từ của các tệp tài liệu.",
+      "content": "Use wc to count words across every documents/*.txt file. Save only the combined total integer to task3_output.txt, without filenames or the word total. Preserve the documents.",
+      "content_vi": "Dùng wc đếm từ trong mọi tệp documents/*.txt. Lưu duy nhất tổng số nguyên vào task3_output.txt, không kèm tên tệp hay chữ total. Giữ nguyên tài liệu.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -161,7 +178,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bwc\\b[^\\n]*task3_output\\.txt"
+                    "\\bwc\\b"
                   ]
                 ],
                 "allowed_status": [
@@ -191,8 +208,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Mười số lớn nhất",
-      "content": "Save the ten largest numbers in descending order.",
-      "content_vi": "Lưu mười số lớn nhất theo thứ tự giảm dần.",
+      "content": "Sort numbers.txt numerically in descending order. Save exactly the ten highest numbers, one per line, to task4_output.txt. Preserve repeated values and the input file.",
+      "content_vi": "Sắp xếp numbers.txt theo giá trị số giảm dần. Lưu đúng mười số lớn nhất, mỗi dòng một số, vào task4_output.txt. Giữ các giá trị lặp và giữ nguyên tệp đầu vào.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -212,7 +229,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bsort\\b[^\\n]*task4_output\\.txt"
+                    "\\bsort\\b"
                   ]
                 ],
                 "allowed_status": [
@@ -256,8 +273,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Đếm dòng log",
-      "content": "Save only the access-log line count.",
-      "content_vi": "Chỉ lưu số dòng của access.log.",
+      "content": "In /home/labex/project, use wc to count access.log lines. Save one integer only, without the filename, to task1_output.txt. Preserve access.log.",
+      "content_vi": "Trong /home/labex/project, dùng wc đếm dòng access.log. Lưu duy nhất số nguyên, không kèm tên tệp, vào task1_output.txt. Giữ nguyên access.log.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -277,7 +294,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bwc\\b[^\\n]*task1_output\\.txt"
+                    "\\bwc\\b"
                   ]
                 ],
                 "allowed_status": [
@@ -307,8 +324,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Năm IP thường gặp",
-      "content": "Save the five most frequent IPs without counts.",
-      "content_vi": "Lưu năm IP thường gặp nhất, không kèm số lần.",
+      "content": "Extract the first field of access.log, count frequencies using sort and uniq, then save the five most frequent IPs in descending frequency order to task2_output.txt. Save one IP per line without counts; preserve the log.",
+      "content_vi": "Trích trường đầu của access.log, dùng sort và uniq đếm số lần xuất hiện, rồi lưu năm IP phổ biến nhất theo tần suất giảm dần vào task2_output.txt. Mỗi dòng chỉ có IP, không có số lần; giữ nguyên log.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -328,7 +345,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bcut\\b[^\\n]*task2_output\\.txt"
+                    "\\buniq\\b"
                   ]
                 ],
                 "allowed_status": [
@@ -336,8 +353,25 @@
                 ]
               },
               {
-                "kind": "state",
-                "command": "set -e\ncd /home/labex/project/\ntest -s task2_output.txt\ncmp -s task2_output.txt <(cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -n 5 | awk '{print $2}')"
+                "kind": "all",
+                "checks": [
+                  {
+                    "kind": "commands",
+                    "user": "labex",
+                    "groups": [
+                      [
+                        "\\bsort\\b"
+                      ]
+                    ],
+                    "allowed_status": [
+                      0
+                    ]
+                  },
+                  {
+                    "kind": "state",
+                    "command": "set -e\ncd /home/labex/project/\ntest -s task2_output.txt\ncmp -s task2_output.txt <(cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -n 5 | awk '{print $2}')"
+                  }
+                ]
               }
             ]
           }
@@ -358,8 +392,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Tổng số từ",
-      "content": "Save the total word count across document files.",
-      "content_vi": "Lưu tổng số từ của các tệp tài liệu.",
+      "content": "Use wc to count words across every documents/*.txt file. Save only the combined total integer to task3_output.txt, without filenames or the word total. Preserve the documents.",
+      "content_vi": "Dùng wc đếm từ trong mọi tệp documents/*.txt. Lưu duy nhất tổng số nguyên vào task3_output.txt, không kèm tên tệp hay chữ total. Giữ nguyên tài liệu.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -379,7 +413,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bwc\\b[^\\n]*task3_output\\.txt"
+                    "\\bwc\\b"
                   ]
                 ],
                 "allowed_status": [
@@ -409,8 +443,8 @@
       "need_verify": true,
       "has_solution": false,
       "title_vi": "Mười số lớn nhất",
-      "content": "Save the ten largest numbers in descending order.",
-      "content_vi": "Lưu mười số lớn nhất theo thứ tự giảm dần.",
+      "content": "Sort numbers.txt numerically in descending order. Save exactly the ten highest numbers, one per line, to task4_output.txt. Preserve repeated values and the input file.",
+      "content_vi": "Sắp xếp numbers.txt theo giá trị số giảm dần. Lưu đúng mười số lớn nhất, mỗi dòng một số, vào task4_output.txt. Giữ các giá trị lặp và giữ nguyên tệp đầu vào.",
       "task": "Perform the actions described above and check the result.",
       "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
       "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
@@ -430,7 +464,7 @@
                 "user": "labex",
                 "groups": [
                   [
-                    "\\bsort\\b[^\\n]*task4_output\\.txt"
+                    "\\bsort\\b"
                   ]
                 ],
                 "allowed_status": [
