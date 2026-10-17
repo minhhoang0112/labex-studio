@@ -132,8 +132,17 @@ export async function verifyDefinition(labId, definition, {
     if (!Array.isArray(definition.checks) || !definition.checks.length) {
       return { supported: false, passed: false, reason: "Thiếu các điều kiện kiểm tra." };
     }
+    // A verification observes one completed-command snapshot, including nested
+    // groups. Re-reading Linux for every group is slow and can mix histories
+    // if the learner keeps typing while the request is running.
+    let snapshot;
+    const readSnapshot = id => {
+      if (id !== labId) return readHistory(id);
+      snapshot ??= Promise.resolve().then(() => readHistory(id));
+      return snapshot;
+    };
     const results = [];
-    for (const check of definition.checks) results.push(await verifyDefinition(labId, check, { runCommand, readHistory, acknowledged, stepIndex, allSteps }));
+    for (const check of definition.checks) results.push(await verifyDefinition(labId, check, { runCommand, readHistory: readSnapshot, acknowledged, stepIndex, allSteps }));
     return { supported: results.every(result => result.supported), passed: results.every(result => result.supported && result.passed),
       timedOut: results.some(result => result.timedOut), method: "combined", reason: results.find(result => !result.supported)?.reason };
   }

@@ -721,7 +721,13 @@
           "id": "commands-219197-section-3-v1",
           "commands": [
             "time echo {1..10000} | wc -w",
-            "time find / -name \"*.txt\" 2>/dev/null",
+            {
+              "command": "time find / -name \"*.txt\" 2>/dev/null",
+              "allowed_status": [
+                0,
+                1
+              ]
+            },
             "time sort -R /etc/passwd | head -n 5"
           ]
         }

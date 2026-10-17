@@ -21,11 +21,15 @@ def manifest(dirs=(), files=(), **extra):
 
 
 def present(*paths):
-    return state(' && '.join('test -e '+shlex.quote(BASE+p) for p in paths))
+    return state(' && '.join('test -f '+shlex.quote(BASE+p) for p in paths))
+
+
+def directories(*paths):
+    return state(' && '.join('test -d '+shlex.quote(BASE+p) for p in paths))
 
 
 def absent(*paths):
-    return state(' && '.join('test ! -e '+shlex.quote(BASE+p) for p in paths))
+    return state(' && '.join('test ! -e '+shlex.quote(BASE+p)+' && test ! -L '+shlex.quote(BASE+p) for p in paths))
 
 
 def same(a, b):
@@ -48,7 +52,7 @@ def build():
         ('Đọc thuộc tính tệp', 'Inspect permissions, owner, size and modification time.', 'Đọc quyền, chủ sở hữu, kích thước và thời gian sửa.', ['ls -l'], [r'^\s*ls\s+-[A-Za-z]*l[A-Za-z]*\s*$']),
         ('Kích thước dễ đọc', 'Show detailed sizes with readable units.', 'Xem kích thước chi tiết theo đơn vị dễ đọc.', ['ls -lh'], [r'^\s*ls\s+(?=[^\n]*l)(?=[^\n]*h)-[A-Za-z]+\s*$']),
         ('Kết hợp tùy chọn', 'Combine hidden entries, details and readable sizes.', 'Kết hợp mục ẩn, thông tin chi tiết và đơn vị dễ đọc.', ['ls -alh'], [r'^\s*ls\s+(?=[^\n]*a)(?=[^\n]*l)(?=[^\n]*h)-[A-Za-z]+\s*$']),
-        ('Sắp xếp kết quả', 'Compare newest-first and oldest-first listings.', 'So sánh thứ tự mới nhất và cũ nhất.', ['ls -lt','ls -ltr'], [r'^\s*ls\s+(?=[^\n]*l)(?=[^\n]*t)-[A-Za-z]+\s*$',r'^\s*ls\s+(?=[^\n]*l)(?=[^\n]*t)(?=[^\n]*r)-[A-Za-z]+\s*$']),
+        ('Sắp xếp kết quả', 'Compare newest-first and oldest-first listings.', 'So sánh thứ tự mới nhất và cũ nhất.', ['ls -lt','ls -ltr'], [r'^\s*ls\s+(?=[^\n]*l)(?=[^\n]*t)(?![^\n]*r)-[A-Za-z]+\s*$',r'^\s*ls\s+(?=[^\n]*l)(?=[^\n]*t)(?=[^\n]*r)-[A-Za-z]+\s*$']),
         ('Xem thư mục con', 'Inspect test without changing directory.', 'Xem test mà không chuyển thư mục.', ['ls -l test'], [r'^\s*ls\s+-[A-Za-z]*l[A-Za-z]*\s+(?:\./)?test/?\s*$']),
         ('Pipe và màu sắc', 'Pipe a listing to cowsay; disable ls colors.', 'Chuyển kết quả qua cowsay; tắt màu của ls.', ['ls | cowsay','ls --color=never'], [r'^\s*ls\s*\|\s*(?:/usr/games/)?cowsay\s*$',r'^\s*ls\s+--color=never\s*$'])]
     for p,(title,en,vi,cmds,patterns) in enumerate(specs,1):
@@ -77,17 +81,17 @@ def build():
 
     garden=BASE+'digital_garden/'
     put(209739,'Lệnh mkdir: tạo thư mục',{
-        1: task('Tạo gốc khu vườn','Create digital_garden.','Tạo digital_garden.',['mkdir digital_garden'],present('digital_garden')),
-        2: task('Tạo các khu vực','Add notes, projects and resources.','Thêm notes, projects và resources.',['mkdir '+garden+'notes '+garden+'projects '+garden+'resources'],present('digital_garden/notes','digital_garden/projects','digital_garden/resources')),
-        3: task('Tạo thư mục lồng nhau','Create projects/web_app/src/components using -p.','Tạo projects/web_app/src/components bằng -p.',['mkdir -p '+garden+'projects/web_app/src/components'],present('digital_garden/projects/web_app/src/components')),
+        1: task('Tạo gốc khu vườn','Create digital_garden.','Tạo digital_garden.',['mkdir digital_garden'],directories('digital_garden')),
+        2: task('Tạo các khu vực','Add notes, projects and resources.','Thêm notes, projects và resources.',['mkdir '+garden+'notes '+garden+'projects '+garden+'resources'],directories('digital_garden/notes','digital_garden/projects','digital_garden/resources')),
+        3: task('Tạo thư mục lồng nhau','Create projects/web_app/src/components using -p.','Tạo projects/web_app/src/components bằng -p.',['mkdir -p '+garden+'projects/web_app/src/components'],directories('digital_garden/projects/web_app/src/components')),
         4: task('Quyền truy cập','Create private with mode 700.','Tạo private với quyền 700.',['mkdir -m 700 '+garden+'private'],state('test -d '+garden+'private && test "$(stat -c %a '+garden+'private)" = 700')),
-        5: task('Thông báo chi tiết','Use -v to create resources/books, articles and videos.','Dùng -v tạo resources/books, articles và videos.',['mkdir -v '+garden+'resources/books '+garden+'resources/articles '+garden+'resources/videos'],all_checks(present('digital_garden/resources/books','digital_garden/resources/articles','digital_garden/resources/videos'),history(r'^\s*mkdir\s+[^\n]*-\w*v\w*\b'))),
-        6: task('Kết hợp tùy chọn','Create research_paper/drafts and references under projects using -pvm 750.','Tạo research_paper/drafts và references trong projects bằng -pvm 750.',['mkdir -pvm 750 '+garden+'projects/research_paper/drafts '+garden+'projects/research_paper/references'],state('test -d '+garden+'projects/research_paper/drafts && test "$(stat -c %a '+garden+'projects/research_paper/drafts)" = 750 && test "$(stat -c %a '+garden+'projects/research_paper/references)" = 750')),
+        5: task('Thông báo chi tiết','Use -v to create resources/books, articles and videos.','Dùng -v tạo resources/books, articles và videos.',['mkdir -v '+garden+'resources/books '+garden+'resources/articles '+garden+'resources/videos'],all_checks(directories('digital_garden/resources/books','digital_garden/resources/articles','digital_garden/resources/videos'),history(r'^\s*mkdir\s+[^\n]*-\w*v\w*\b'))),
+        6: task('Kết hợp tùy chọn','Create research_paper/drafts and references under projects using -pvm 750.','Tạo research_paper/drafts và references trong projects bằng -pvm 750.',['mkdir -pvm 750 '+garden+'projects/research_paper/drafts '+garden+'projects/research_paper/references'],state('test -d '+garden+'projects/research_paper/drafts && test -d '+garden+'projects/research_paper/references && test "$(stat -c %a '+garden+'projects/research_paper/drafts)" = 750 && test "$(stat -c %a '+garden+'projects/research_paper/references)" = 750')),
         7: observation('Xem cây thư mục','Display the garden tree with and without permissions.','Xem cây khu vườn, rồi hiện thêm quyền.',['tree '+garden,'tree -p '+garden],r'^\s*tree\s+(?:/home/labex/project/|~/project/)?digital_garden/?\s*$',r'^\s*tree\s+-p\s+(?:/home/labex/project/|~/project/)?digital_garden/?\s*$')
     })
 
     put(387859,'Thiết lập cấu trúc dự án',{
-        1: task('Tạo và di chuyển trong cây thư mục','Use mkdir and cd to build frontend/css, frontend/js, backend/api and backend/database in project; navigate through the result.','Dùng mkdir và cd tạo frontend/css, frontend/js, backend/api, backend/database trong project rồi đi qua cây thư mục.',['mkdir -p frontend/css frontend/js backend/api backend/database','cd frontend/css','cd ../../backend/api'],all_checks(present('frontend/css','frontend/js','backend/api','backend/database'),history(r'^\s*cd\s+[^\n]*(?:frontend|backend)[^\n]*$')))
+        1: task('Tạo và di chuyển trong cây thư mục','Use mkdir and cd to build frontend/css, frontend/js, backend/api and backend/database in project; navigate through the result.','Dùng mkdir và cd tạo frontend/css, frontend/js, backend/api, backend/database trong project rồi đi qua cây thư mục.',['mkdir -p frontend/css frontend/js backend/api backend/database','cd frontend/css','cd ../../backend/api'],all_checks(directories('frontend/css','frontend/js','backend/api','backend/database'),history(r'^\s*cd\s+[^\n]*(?:frontend|backend)[^\n]*$')))
     })
 
     cpdirs=[BASE+p for p in ['music','documents','website','website/css','text_files','pdf_files']]
@@ -107,7 +111,7 @@ def build():
         1: observation('Xem dự án','Inspect the starting project.','Xem nội dung dự án ban đầu.',['pwd','ls'],r'^\s*ls\s*$'),
         2: task('Di chuyển tệp','Create css and move styles.css into it.','Tạo css và chuyển styles.css vào đó.',['mkdir css','mv styles.css css/'],all_checks(present('css/styles.css'),absent('styles.css'),state("grep -Fxq 'body{}' "+BASE+'css/styles.css'))),
         3: task('Đổi tên tệp','Rename index.html to home.html.','Đổi index.html thành home.html.',['mv index.html home.html'],all_checks(present('home.html'),absent('index.html'),state("grep -Fxq '<h1>Home</h1>' "+BASE+'home.html'))),
-        4: task('Di chuyển theo mẫu','Create scripts and move every .js file into it.','Tạo scripts và chuyển mọi tệp .js vào đó.',['mkdir scripts','mv *.js scripts/'],all_checks(present('scripts/script.js','scripts/utils.js'),absent('script.js','utils.js'))),
+        4: task('Di chuyển theo mẫu','Create scripts and move every .js file into it.','Tạo scripts và chuyển mọi tệp .js vào đó.',['mkdir scripts','mv *.js scripts/'],all_checks(present('scripts/script.js','scripts/utils.js'),absent('script.js','utils.js'),state("grep -Fxq 'console.log(1);' "+BASE+"scripts/script.js && grep -Fxq 'function util() {}' "+BASE+'scripts/utils.js'))),
         5: task('Từ chối ghi đè','Create test.txt containing Test content; run mv -i test.txt home.html and answer n. Both files must survive.','Tạo test.txt chứa Test content; chạy mv -i test.txt home.html và trả lời n. Cả hai tệp phải còn.',['echo "Test content" > test.txt',{'command':'mv -i test.txt home.html','input':[{'wait_for':'overwrite','text':'n'}]}],all_checks(present('test.txt','home.html'),state("grep -Fxq 'Test content' "+BASE+"test.txt && grep -Fxq '<h1>Home</h1>' "+BASE+'home.html'),history(r'^\s*mv\s+-\w*i\w*\s+(?:\./)?test\.txt\s+(?:\./)?home\.html\s*$')))
     },manifest([BASE+'images'],mvfiles))
 

@@ -896,7 +896,13 @@
         {
           "id": "commands-388032-section-1-v1",
           "commands": [
-            "which python3\nwhereis gcc\nfind /etc -type f -name \"*.conf\" > config_files.txt"
+            {
+              "command": "which python3\nwhereis gcc\nfind /etc -type f -name \"*.conf\" > config_files.txt",
+              "allowed_status": [
+                0,
+                1
+              ]
+            }
           ]
         }
       ]
@@ -1617,7 +1623,13 @@
           "id": "commands-219197-section-3-v1",
           "commands": [
             "time echo {1..10000} | wc -w",
-            "time find / -name \"*.txt\" 2>/dev/null",
+            {
+              "command": "time find / -name \"*.txt\" 2>/dev/null",
+              "allowed_status": [
+                0,
+                1
+              ]
+            },
             "time sort -R /etc/passwd | head -n 5"
           ]
         }

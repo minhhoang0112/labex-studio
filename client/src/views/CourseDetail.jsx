@@ -177,7 +177,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
       {/* Syllabus / Labs List */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         {/* Bridge banner for linux-basic-commands-practice-online */}
-        {(course.id === 'linux-basic-commands-practice-online' || course.id === 'linux-commands-practice-online') && (
+        {((course.id === 'linux-basic-commands-practice-online' && labs.length === 0) || course.id === 'linux-commands-practice-online') && (
           <div className="p-4 mb-6 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900 text-blue-900 dark:text-blue-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
             <div className="flex items-center gap-3">
               <BookOpen className="w-5 h-5 text-blue-500 shrink-0" />

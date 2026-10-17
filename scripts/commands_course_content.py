@@ -135,4 +135,8 @@ def build():
 
     result[388032]={'title_vi':'Tìm tài nguyên hệ thống quan trọng','setup':setup(),'sections':{
         1:step('Thực hành tìm tài nguyên','Locate python3 with which and gcc with whereis. Find only regular files ending in .conf below /etc; save every resulting path to config_files.txt in the project directory. Results reflect this container.','Dùng which tìm python3 và whereis tìm gcc. Tìm riêng tệp thông thường có đuôi .conf trong /etc và thư mục con; lưu toàn bộ đường dẫn vào config_files.txt trong thư mục dự án. Kết quả phụ thuộc container đang chạy.','which python3\nwhereis gcc\nfind /etc -type f -name "*.conf" > config_files.txt',all_checks(history(r'^which\s+python3\s*$'),history(r'^whereis\s+gcc\s*$'),history(r'^find\s+/etc\s+-type\s+f\s+-name\s+[\'\"]\*\.conf[\'\"]\s*>\s*config_files\.txt\s*$',allowed_status=[0,1]),compare('config_files.txt','test -s '+BASE+'config_files.txt && diff -u <(find /etc -type f -name "*.conf" 2>/dev/null | sort) <(sort '+BASE+'config_files.txt)')))}}
+    # The real /etc traversal reports permission-denied entries and exits 1;
+    # its useful path output is still checked completely by the trusted rule.
+    final = result[388032]['sections'][1]
+    final['commands'] = [{'command': command, 'allowed_status': [0, 1]} for command in final['commands']]
     return result

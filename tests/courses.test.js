@@ -75,7 +75,7 @@ test("the learner receives a complete ordered Linux syllabus and accurate catalo
   for (const item of commands.labs) {
     const lesson = await fetch(`${base}/labs/${item.id}`).then(r => r.json());
     const outline = commandsReference.lessons.find(ref => ref.source_lab_id === lesson.source_lab_id);
-    assert.deepEqual(lesson.sections.map(section => section.title), outline.sections.map(section => section.title));
+    assert.deepEqual(lesson.sections.map(section => section.title), (outline.sections || outline.outline.sections).map(section => section.title));
     assert.ok(lesson.sections.every(section => section.content_vi && section.title_vi));
     assert.ok(lesson.steps.every(step => step.grading && !Object.hasOwn(step, "verification")));
   }

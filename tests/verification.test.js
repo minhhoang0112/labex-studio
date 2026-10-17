@@ -66,6 +66,17 @@ test("history boundaries match multi-group tasks across separate commands and sk
   assert.equal((await verifyDefinition("history", current, { ...options, readHistory: async () => [entry("ls")] })).passed, true);
 });
 
+test("combined command checks share one immutable history snapshot", async () => {
+  let reads = 0;
+  const history = [{ command: "pwd", status: 0 }, { command: "ls", status: 0 }];
+  const result = await verifyDefinition("snapshot", { kind: "all", checks: [
+    { kind: "commands", groups: [["^pwd$"]] },
+    { kind: "all", checks: [{ kind: "commands", groups: [["^ls$"]] }] },
+  ] }, { readHistory: async () => { reads++; return history; } });
+  assert.equal(result.passed, true);
+  assert.equal(reads, 1);
+});
+
 test("all checks must pass and unsupported requirements cannot be marked complete", async () => {
   const result = await verifyDefinition("ownership", { kind: "all", checks: [
     { kind: "state", command: "test-owner-and-mode" }, { kind: "unsupported", reason: "Unobserved fixture" },

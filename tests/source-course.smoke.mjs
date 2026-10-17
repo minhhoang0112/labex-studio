@@ -201,13 +201,16 @@ for (const [index, lesson] of plan.lessons.entries()) {
       assert.ok(step, `Unknown source step ${lesson.lab_id}/${scenario.id}`);
       const definition = getVerificationDefinition(step);
       const readiness = getStepReadiness(step, source);
-      const before = await verifyDefinition(alias, definition);
+      // Mirror POST /api/verify, including boundaries between repeated
+      // observations in successive steps (for example reopening less).
+      const verificationOptions = { stepIndex: source.steps.indexOf(step), allSteps: source.steps };
+      const before = await verifyDefinition(alias, definition, verificationOptions);
       if (scenario.unsupported || !readiness.ready) {
         assert.ok(scenario.unsupported || scenario.allow_missing_capabilities === true,
           `${lesson.lab_id}/${scenario.id}: unexpectedly missing capabilities: ${readiness.missing_capabilities.join(', ')}`);
         assert.ok(!before.supported || !readiness.ready, `${lesson.lab_id}/${scenario.id}: expected an explicitly unsupported rule or capability`);
         assert.equal(before.passed, false);
-        const forgedAcknowledgement = await verifyDefinition(alias, definition, { acknowledged: true });
+        const forgedAcknowledgement = await verifyDefinition(alias, definition, { ...verificationOptions, acknowledged: true });
         assert.equal(forgedAcknowledgement.passed, false, "unsupported task must not pass through acknowledgement");
         blocked += 1;
         report.tasks.push({ labId: lesson.lab_id, testEnvironment: alias, stepId: scenario.id, passed: false, blockedAsExpected: true, reason: before.reason || readiness.reasons.join(' '), missingCapabilities: readiness.missing_capabilities });
@@ -226,11 +229,11 @@ for (const [index, lesson] of plan.lessons.entries()) {
         const tail = ws.output.slice(-2000).replace(/\$[^\s:]+/g, "[redacted-test-hash]").replaceAll("ephemeral-test-only", "[test-input]");
         throw new Error(`${lesson.lab_id}/${scenario.id}: ${error.message}; terminal tail=${JSON.stringify(tail)}`, { cause: error });
       }
-      let result = await verifyDefinition(alias, definition, { acknowledged: scenario.acknowledge === true });
+      let result = await verifyDefinition(alias, definition, { ...verificationOptions, acknowledged: scenario.acknowledge === true });
       if (scenario.wait_for_pass_ms) {
         assert.ok(Number.isInteger(scenario.wait_for_pass_ms) && scenario.wait_for_pass_ms > 0 && scenario.wait_for_pass_ms <= 180000);
         result = await until(async () => {
-          const current = await verifyDefinition(alias, definition, { acknowledged: scenario.acknowledge === true });
+          const current = await verifyDefinition(alias, definition, { ...verificationOptions, acknowledged: scenario.acknowledge === true });
           assert.equal(current.supported, true, current.reason);
           return current.passed ? current : false;
         }, scenario.wait_for_pass_ms, "Timed out waiting for actual scheduled task verification");

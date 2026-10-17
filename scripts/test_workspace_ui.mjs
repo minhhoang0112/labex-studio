@@ -111,6 +111,11 @@ try {
     const card = page.getByRole('button').filter({ has: page.getByRole('heading', { name: 'Linux Commands Practice Online', exact: true }) });
     await card.click();
     await page.waitForURL('**/courses/linux-basic-commands-practice-online');
+    await page.locator('#start-first-lab').waitFor();
+    assert.equal(await page.locator('.btn-start-lab').count(), 41);
+    assert.equal(await page.locator('#start-first-lab').isEnabled(), true);
+    assert.equal(await page.getByText('Khóa học tham khảo giáo trình nguồn', { exact: true }).count(), 0);
+    await page.screenshot({ path: '.artifacts/commands-course-imported-ui.png' });
     const syllabus = page.getByRole('region', { name: 'Giáo trình nguồn' });
     await syllabus.waitFor();
     assert.equal(await syllabus.getByRole('button', { name: 'Xem cấu trúc', exact: true }).count(), 41);

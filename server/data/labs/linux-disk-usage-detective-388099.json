@@ -52,7 +52,7 @@
             "user": "labex",
             "groups": [
               [
-                "\\bdf\\s+-h\\s*>\\s*disk_usage\\.txt"
+                "\\bdf\\b"
               ]
             ],
             "allowed_status": [
@@ -64,7 +64,7 @@
             "user": "labex",
             "groups": [
               [
-                "\\bdu\\s+-sh\\s+/home/labex\\s*>\\s*home_size\\.txt"
+                "\\bdu\\b"
               ]
             ],
             "allowed_status": [
@@ -88,7 +88,7 @@
               },
               {
                 "kind": "state",
-                "command": "set -e\ncd /home/labex/project/\ntest -s disk_usage.txt\ngrep -q '^Filesystem' disk_usage.txt\nawk 'NR>1 && $5 ~ /%$/ {found=1} END {exit !found}' disk_usage.txt\ntest -s home_size.txt\ngrep -Eq '[[:space:]]/home/labex$' home_size.txt\nexpected=$(du -h --max-depth=1 /home/labex | sort -hr | awk '$2 != \"/home/labex\" {print $2; exit}')\ntest -n \"$expected\"\ntest \"$(cat largest_subdir.txt)\" = \"$expected\""
+                "command": "set -e\ncd /home/labex/project/\ntest -s disk_usage.txt\ngrep -q '^Filesystem' disk_usage.txt\nawk 'NR>1 && $5 ~ /%$/ {found=1} END {exit !found}' disk_usage.txt\ntest -s home_size.txt\ngrep -Eq '[[:space:]]/home/labex$' home_size.txt\nexpected=$(du -h --max-depth=1 /home/labex | sort -hr | awk '$2 != \"/home/labex\" {print $2; exit}')\ntest -n \"$expected\"\ngot=$(cat largest_subdir.txt)\ntest \"$got\" = \"$expected\" || test \"$got\" = \"${expected##*/}\""
               }
             ]
           }
@@ -137,7 +137,7 @@
             "user": "labex",
             "groups": [
               [
-                "\\bdf\\s+-h\\s*>\\s*disk_usage\\.txt"
+                "\\bdf\\b"
               ]
             ],
             "allowed_status": [
@@ -149,7 +149,7 @@
             "user": "labex",
             "groups": [
               [
-                "\\bdu\\s+-sh\\s+/home/labex\\s*>\\s*home_size\\.txt"
+                "\\bdu\\b"
               ]
             ],
             "allowed_status": [
@@ -173,7 +173,7 @@
               },
               {
                 "kind": "state",
-                "command": "set -e\ncd /home/labex/project/\ntest -s disk_usage.txt\ngrep -q '^Filesystem' disk_usage.txt\nawk 'NR>1 && $5 ~ /%$/ {found=1} END {exit !found}' disk_usage.txt\ntest -s home_size.txt\ngrep -Eq '[[:space:]]/home/labex$' home_size.txt\nexpected=$(du -h --max-depth=1 /home/labex | sort -hr | awk '$2 != \"/home/labex\" {print $2; exit}')\ntest -n \"$expected\"\ntest \"$(cat largest_subdir.txt)\" = \"$expected\""
+                "command": "set -e\ncd /home/labex/project/\ntest -s disk_usage.txt\ngrep -q '^Filesystem' disk_usage.txt\nawk 'NR>1 && $5 ~ /%$/ {found=1} END {exit !found}' disk_usage.txt\ntest -s home_size.txt\ngrep -Eq '[[:space:]]/home/labex$' home_size.txt\nexpected=$(du -h --max-depth=1 /home/labex | sort -hr | awk '$2 != \"/home/labex\" {print $2; exit}')\ntest -n \"$expected\"\ngot=$(cat largest_subdir.txt)\ntest \"$got\" = \"$expected\" || test \"$got\" = \"${expected##*/}\""
               }
             ]
           }

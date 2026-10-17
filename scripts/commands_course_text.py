@@ -276,7 +276,11 @@ END {
     script='#!/bin/bash\nfor i in {1..1000}; do echo "Processing log entry $i" >> output.log; done\nsort output.log > sorted_output.log\nuniq -c sorted_output.log > final_output.log\nrm output.log sorted_output.log\n'
     task(l,2,'Đo thời gian script','Create and time the log-processing script.','Tạo và đo thời gian script xử lý log.',["cat > process_logs.sh <<'SH'\n"+script+'SH','chmod +x process_logs.sh','time ./process_logs.sh'],r'^time\s+\./process_logs\.sh$', 'test -x process_logs.sh\ntest "$(wc -l < final_output.log)" -eq 1000\ntest ! -e output.log\ntest ! -e sorted_output.log')
     task(l,3,'So sánh các loại tải','Time a numeric pipeline, file search and passwd sort. Runtime values vary.','Đo pipeline số, tìm tệp và sắp xếp passwd. Thời gian thực tế có thể khác.',
-         ['time echo {1..10000} | wc -w','time find / -name "*.txt" 2>/dev/null','time sort -R /etc/passwd | head -n 5'],r'^time\s+sort\s+-R\s+/etc/passwd\s*\|\s*head\s+-n\s+5$')
+         ['time echo {1..10000} | wc -w',{'command':'time find / -name "*.txt" 2>/dev/null','allowed_status':[0,1]},'time sort -R /etc/passwd | head -n 5'],r'^time\s+sort\s+-R\s+/etc/passwd\s*\|\s*head\s+-n\s+5$')
+    l['sections'][3]['verification'] = all_checks(
+        history(r'^time\s+echo\s+\{1\.\.10000\}\s*\|\s*wc\s+-w$'),
+        history(r'^time\s+find\s+/\s+-name\s+.*\.txt', [0, 1]),
+        l['sections'][3]['verification'])
     # Challenge outputs must not be made correct by editing their input datasets.
     import hashlib
     for sid in (388109, 388125, 388132):

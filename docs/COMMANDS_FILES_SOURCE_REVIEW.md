@@ -38,5 +38,24 @@ an assertion that the original prose or graders were recovered verbatim.
 
 Local definition validation: 10 lessons / 45 tasks, all required REA positions
 covered, serializable definitions, every command-history pattern matches its
-smoke instruction. Course runtime verification is performed by the parent
-integration run after generation; this document alone does not claim PTY passes.
+smoke instruction. Full actual PTY integration with API-equivalent step-history
+boundaries passed all 45 tasks and 45 before-work negative checks across all ten
+lessons: `.artifacts/source-course-smoke-mvcjgry0.json`. This final run includes
+the hardened sort-direction, directory-type, file-content and deletion checks.
+Seven additional wrong-type probes reject regular files at required directory
+paths and accept real directories: `.artifacts/commands-directory-type-proof.json`.
+
+Runtime support: `server/runtime/docker/Commands.Dockerfile` derives a dedicated
+`labex-local/commands-ubuntu22:1` image from the existing Ubuntu 22 course base.
+It installs genuine cowsay, tree, gcc plus libc6-dev, python-is-python3,
+openssh-client and manual packages. Existing base APT layers remain unchanged,
+so other courses retain their original package exercises. `/usr/games` is on
+the Commands image PATH. Only this exact image name is accepted as a manifest
+override; arbitrary image names are rejected before any Docker call.
+
+Docker bootstrap alone can create trusted fixtures under `/usr/local/bin/`.
+The namespace provider continues rejecting these paths by default. Real image
+probes passed symlink setup, executable prioritydemo fixture, compiling and
+running C code with gcc, Python alias, cowsay pipe, tree, ssh and actual installed
+manual pages. The unique owned probe container was stopped afterward; learner
+containers were untouched. Proof: `.artifacts/commands-runtime-build-proof.json`.

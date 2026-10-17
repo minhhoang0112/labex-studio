@@ -87,11 +87,11 @@
         "checks": [
           {
             "kind": "state",
-            "command": "test -e /home/labex/project/css/styles.css"
+            "command": "test -f /home/labex/project/css/styles.css"
           },
           {
             "kind": "state",
-            "command": "test ! -e /home/labex/project/styles.css"
+            "command": "test ! -e /home/labex/project/styles.css && test ! -L /home/labex/project/styles.css"
           },
           {
             "kind": "state",
@@ -125,11 +125,11 @@
         "checks": [
           {
             "kind": "state",
-            "command": "test -e /home/labex/project/home.html"
+            "command": "test -f /home/labex/project/home.html"
           },
           {
             "kind": "state",
-            "command": "test ! -e /home/labex/project/index.html"
+            "command": "test ! -e /home/labex/project/index.html && test ! -L /home/labex/project/index.html"
           },
           {
             "kind": "state",
@@ -163,11 +163,15 @@
         "checks": [
           {
             "kind": "state",
-            "command": "test -e /home/labex/project/scripts/script.js && test -e /home/labex/project/scripts/utils.js"
+            "command": "test -f /home/labex/project/scripts/script.js && test -f /home/labex/project/scripts/utils.js"
           },
           {
             "kind": "state",
-            "command": "test ! -e /home/labex/project/script.js && test ! -e /home/labex/project/utils.js"
+            "command": "test ! -e /home/labex/project/script.js && test ! -L /home/labex/project/script.js && test ! -e /home/labex/project/utils.js && test ! -L /home/labex/project/utils.js"
+          },
+          {
+            "kind": "state",
+            "command": "grep -Fxq 'console.log(1);' /home/labex/project/scripts/script.js && grep -Fxq 'function util() {}' /home/labex/project/scripts/utils.js"
           }
         ]
       },
@@ -197,7 +201,7 @@
         "checks": [
           {
             "kind": "state",
-            "command": "test -e /home/labex/project/test.txt && test -e /home/labex/project/home.html"
+            "command": "test -f /home/labex/project/test.txt && test -f /home/labex/project/home.html"
           },
           {
             "kind": "state",
@@ -295,11 +299,11 @@
         "checks": [
           {
             "kind": "state",
-            "command": "test -e /home/labex/project/css/styles.css"
+            "command": "test -f /home/labex/project/css/styles.css"
           },
           {
             "kind": "state",
-            "command": "test ! -e /home/labex/project/styles.css"
+            "command": "test ! -e /home/labex/project/styles.css && test ! -L /home/labex/project/styles.css"
           },
           {
             "kind": "state",
@@ -333,11 +337,11 @@
         "checks": [
           {
             "kind": "state",
-            "command": "test -e /home/labex/project/home.html"
+            "command": "test -f /home/labex/project/home.html"
           },
           {
             "kind": "state",
-            "command": "test ! -e /home/labex/project/index.html"
+            "command": "test ! -e /home/labex/project/index.html && test ! -L /home/labex/project/index.html"
           },
           {
             "kind": "state",
@@ -371,11 +375,15 @@
         "checks": [
           {
             "kind": "state",
-            "command": "test -e /home/labex/project/scripts/script.js && test -e /home/labex/project/scripts/utils.js"
+            "command": "test -f /home/labex/project/scripts/script.js && test -f /home/labex/project/scripts/utils.js"
           },
           {
             "kind": "state",
-            "command": "test ! -e /home/labex/project/script.js && test ! -e /home/labex/project/utils.js"
+            "command": "test ! -e /home/labex/project/script.js && test ! -L /home/labex/project/script.js && test ! -e /home/labex/project/utils.js && test ! -L /home/labex/project/utils.js"
+          },
+          {
+            "kind": "state",
+            "command": "grep -Fxq 'console.log(1);' /home/labex/project/scripts/script.js && grep -Fxq 'function util() {}' /home/labex/project/scripts/utils.js"
           }
         ]
       },
@@ -405,7 +413,7 @@
         "checks": [
           {
             "kind": "state",
-            "command": "test -e /home/labex/project/test.txt && test -e /home/labex/project/home.html"
+            "command": "test -f /home/labex/project/test.txt && test -f /home/labex/project/home.html"
           },
           {
             "kind": "state",
