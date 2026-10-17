@@ -1,0 +1,421 @@
+{
+  "id": "linux-text-processing-and-regular-expressions-18003",
+  "course_id": "linux-for-noobs",
+  "order": 20,
+  "title": "Text Processing with Regular Expressions",
+  "title_vi": "Xử lý văn bản bằng biểu thức chính quy",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "55 mins",
+  "overview": "A regular expression describes text by structure rather than one exact string. The same pattern language appears in many Linux tools, but each tool uses it differently:  grep  selects or extracts matc",
+  "source_url": "https://labex.io/tutorials/linux-text-processing-and-regular-expressions-18003",
+  "source_lab_id": 18003,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A regular expression describes text by structure rather than one exact string. The same pattern language appears in many Linux tools, but each tool uses it differently: `grep` selects or extracts matches, `sed` transforms a stream, and `awk` combines patterns with field-aware actions.\n\nYou will start with anchors and character classes, move to extended repetition and extraction, preview transformations before saving them, and finish with field selection and aggregation. Patterns are quoted so the shell passes special characters to the text tool instead of interpreting them itself.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Biểu thức chính quy mô tả văn bản theo cấu trúc thay vì một chuỗi chính xác duy nhất. Cùng một ngôn ngữ mẫu xuất hiện trong nhiều công cụ Linux, nhưng mỗi công cụ sử dụng nó khác nhau: `grep` chọn hoặc trích xuất phần khớp, `sed` biến đổi luồng và `awk` kết hợp mẫu với thao tác hiểu cấu trúc trường.\n\nBạn sẽ bắt đầu với ký hiệu neo và lớp ký tự, chuyển sang phép lặp mở rộng và trích xuất, xem trước các phép biến đổi trước khi lưu, rồi kết thúc bằng chọn trường và tổng hợp. Mẫu được đặt trong dấu nháy để shell chuyển ký tự đặc biệt cho công cụ văn bản thay vì tự diễn giải chúng."
+    },
+    {
+      "id": "source-18003-section-1-v3",
+      "title": "Match Lines with Basic Regex Structure",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use literal text, anchors, and character classes to describe whole-line positions.\n\nInspect the practice file:\n\n```bash\ncd /home/labex/project/regex-lab\nnl -ba contacts.txt\n```\n\nLiteral text matches anywhere in a line:\n\n```bash\ngrep 'active' contacts.txt\n```\n\n`^` anchors a pattern to the beginning and `$` anchors it to the end. Find the Alice record and records ending in a two-digit number:\n\n```bash\ngrep '^Alice|' contacts.txt\ngrep '[0-9][0-9]$' contacts.txt\n```\n\nInside brackets, a character class matches one character. `[ABC]` means A, B, or C:\n\n```bash\ngrep '^[ABC]' contacts.txt | tee abc-contacts.txt\n```\n\nThis produces Alice, Bob, and Carol. Save anchored numeric matches too:\n\n```bash\ngrep '[0-9][0-9]$' contacts.txt > two-digit-values.txt\n```",
+      "title_vi": "Khớp dòng bằng cấu trúc regex cơ bản",
+      "task": "Thực hiện hướng dẫn: Match Lines with Basic Regex Structure",
+      "hint": "Chạy lệnh: grep 'active' contacts.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/abc-contacts.txt <(grep \"^[ABC]\" /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/two-digit-values.txt <(grep \"[0-9][0-9]$\" /home/labex/project/regex-lab/contacts.txt)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng văn bản nguyên dạng, ký hiệu neo và lớp ký tự để mô tả vị trí trên toàn dòng.\n\nKiểm tra tệp thực hành:\n\n```bash\ncd /home/labex/project/regex-lab\nnl -ba contacts.txt\n```\n\nVăn bản nguyên dạng khớp ở bất kỳ vị trí nào trong một dòng:\n\n```bash\ngrep 'active' contacts.txt\n```\n\n`^` neo mẫu vào đầu dòng và `$` neo vào cuối dòng. Tìm bản ghi Alice và những bản ghi kết thúc bằng số có hai chữ số:\n\n```bash\ngrep '^Alice|' contacts.txt\ngrep '[0-9][0-9]$' contacts.txt\n```\n\nTrong dấu ngoặc vuông, một lớp ký tự khớp với một ký tự. `[ABC]` có nghĩa là A, B hoặc C:\n\n```bash\ngrep '^[ABC]' contacts.txt | tee abc-contacts.txt\n```\n\nKết quả gồm Alice, Bob và Carol. Hãy lưu cả những dòng khớp với mẫu số có neo:\n\n```bash\ngrep '[0-9][0-9]$' contacts.txt > two-digit-values.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Khớp dòng bằng cấu trúc regex cơ bản",
+      "hint_vi": "Chạy lệnh: grep 'active' contacts.txt"
+    },
+    {
+      "id": "source-18003-section-2-v3",
+      "title": "Use Extended Regex and Extract Matches",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use extended regular expressions for alternatives and repetition, then extract only the matching substring.\n\n`grep -E` enables operators such as `+` (one or more), `?` (zero or one), and `|` (alternative). Match complete active or pending status fields:\n\n```bash\ncd /home/labex/project/regex-lab\ngrep -E '\\|(active|pending)\\|' contacts.txt\n```\n\nAn email-like pattern can be built in pieces:\n\n- `[[:alnum:]._-]+` matches one or more allowed local-part characters;\n- `@` is literal;\n- `[[:alnum:].-]+` matches the domain body;\n- `\\.[[:alpha:]]{2,}` matches a dot and a two-or-more-letter suffix.\n\nUse `-o` to print only matching substrings:\n\n```bash\ngrep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' contacts.txt | tee emails.txt\n```\n\nNumber matching lines and count extracted addresses:\n\n```bash\ngrep -En '\\|(active|pending)\\|' contacts.txt\nwc -l < emails.txt | tr -d ' ' > email-count.txt\ncat email-count.txt\n```\n\nThe malformed `dave_at_example.com` does not match because it has no `@`.",
+      "title_vi": "Dùng regex mở rộng và trích xuất phần khớp",
+      "task": "Thực hiện hướng dẫn: Use Extended Regex and Extract Matches",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/emails.txt <(grep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/email-count.txt <(printf %s '4\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng biểu thức chính quy mở rộng cho các lựa chọn và phép lặp, rồi chỉ trích xuất chuỗi con khớp.\n\n`grep -E` bật các toán tử như `+` (một hoặc nhiều), `?` (không hoặc một) và `|` (lựa chọn). Khớp toàn bộ trường trạng thái active hoặc pending:\n\n```bash\ncd /home/labex/project/regex-lab\ngrep -E '\\|(active|pending)\\|' contacts.txt\n```\n\nCó thể xây dựng mẫu giống địa chỉ email từ các phần:\n\n- `[[:alnum:]._-]+` khớp một hoặc nhiều ký tự được phép trong phần trước dấu @;\n- `@` là ký tự nguyên dạng;\n- `[[:alnum:].-]+` khớp phần tên miền;\n- `\\.[[:alpha:]]{2,}` khớp dấu chấm và hậu tố có ít nhất hai chữ cái.\n\nDùng `-o` để chỉ in những chuỗi con khớp:\n\n```bash\ngrep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' contacts.txt | tee emails.txt\n```\n\nĐánh số những dòng khớp và đếm địa chỉ đã trích xuất:\n\n```bash\ngrep -En '\\|(active|pending)\\|' contacts.txt\nwc -l < emails.txt | tr -d ' ' > email-count.txt\ncat email-count.txt\n```\n\nChuỗi sai định dạng `dave_at_example.com` không khớp vì không có `@`.",
+      "task_vi": "Thực hiện hướng dẫn: Dùng regex mở rộng và trích xuất phần khớp",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-18003-section-3-v3",
+      "title": "Preview Transformations with Sed",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will transform a stream with `sed` while leaving the input unchanged.\n\nA substitution has the form `s/pattern/replacement/flags`. Replace only the first `a` on each line, then every lowercase `a` using the `g` flag:\n\n```bash\ncd /home/labex/project/regex-lab\nsed 's/a/A/' contacts.txt\nsed 's/a/A/g' contacts.txt\n```\n\nUse a different delimiter when the text itself contains slashes or when another delimiter is clearer. Replace email domains with `redacted.invalid`:\n\n```bash\nsed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt\n```\n\nSed addresses select which lines receive a command. Apply a status replacement only to lines containing an exact `|inactive|` field:\n\n```bash\nsed '/|inactive|/s/|inactive|/|disabled|/' contacts.txt | tee contacts-preview.txt\n```\n\nConfirm that the original still contains `inactive`:\n\n```bash\ngrep '|inactive|' contacts.txt\n```",
+      "title_vi": "Xem trước phép biến đổi bằng sed",
+      "task": "Thực hiện hướng dẫn: Preview Transformations with Sed",
+      "hint": "Chạy lệnh: sed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/contacts-preview.txt <(sed '/|inactive|/s/|inactive|/|disabled|/' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/contacts.txt <(printf %s 'Alice|alice@example.com|active|25\nBob|bob@example.net|pending|32\nCarol|carol@example.org|inactive|41\nDavid|david@example.com|active|103\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ biến đổi một luồng bằng `sed` mà không thay đổi dữ liệu đầu vào.\n\nPhép thay thế có dạng `s/pattern/replacement/flags`. Chỉ thay chữ `a` đầu tiên trên mỗi dòng, sau đó thay mọi chữ `a` viết thường bằng cờ `g`:\n\n```bash\ncd /home/labex/project/regex-lab\nsed 's/a/A/' contacts.txt\nsed 's/a/A/g' contacts.txt\n```\n\nDùng ký tự phân cách khác khi bản thân văn bản chứa dấu gạch chéo hoặc khi ký tự khác giúp dễ đọc hơn. Thay các tên miền email bằng `redacted.invalid`:\n\n```bash\nsed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt\n```\n\nĐịa chỉ của sed chọn những dòng nhận lệnh. Chỉ thay trạng thái trên những dòng chứa chính xác trường `|inactive|`:\n\n```bash\nsed '/|inactive|/s/|inactive|/|disabled|/' contacts.txt | tee contacts-preview.txt\n```\n\nXác nhận bản gốc vẫn chứa `inactive`:\n\n```bash\ngrep '|inactive|' contacts.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Xem trước phép biến đổi bằng sed",
+      "hint_vi": "Chạy lệnh: sed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt"
+    },
+    {
+      "id": "source-18003-section-4-v3",
+      "title": "Create a Cleaned File with Sed",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will combine multiple sed commands and save the transformed stream as a new file.\n\nThe header in `services.csv` should remain unchanged. For data rows, normalize `warn` to `warning` and add a `ms` suffix to the final numeric field. `-e` supplies multiple commands, and the address `2,$` limits them to lines 2 through the end:\n\n```bash\ncd /home/labex/project/regex-lab\nsed -E -e '2,$ s/,warn,/,warning,/' -e '2,$ s/([0-9]+)$/\\1ms/' services.csv | tee services-clean.csv\n```\n\nHere, parentheses capture the final digits and `\\1` reuses that capture in the replacement.\n\nCompare the original and new files:\n\n```bash\ndiff -u services.csv services-clean.csv || true\n```\n\nThe nonzero `diff` status is expected because the output intentionally changed; `|| true` allows a copied command sequence to continue.",
+      "title_vi": "Tạo tệp đã chuẩn hóa bằng sed",
+      "task": "Thực hiện hướng dẫn: Create a Cleaned File with Sed",
+      "hint": "Chạy lệnh: diff -u services.csv services-clean.csv || true",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/services-clean.csv <(printf %s 'service,state,latency\napi,warning,250ms\nworker,ok,150ms\nweb,warning,300ms\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kết hợp nhiều lệnh sed và lưu luồng đã biến đổi thành một tệp mới.\n\nDòng tiêu đề trong `services.csv` cần giữ nguyên. Với các dòng dữ liệu, chuẩn hóa `warn` thành `warning` và thêm hậu tố `ms` vào trường số cuối cùng. `-e` cung cấp nhiều lệnh và địa chỉ `2,$` giới hạn chúng từ dòng 2 đến hết:\n\n```bash\ncd /home/labex/project/regex-lab\nsed -E -e '2,$ s/,warn,/,warning,/' -e '2,$ s/([0-9]+)$/\\1ms/' services.csv | tee services-clean.csv\n```\n\nỞ đây, dấu ngoặc đơn bắt giữ các chữ số cuối cùng và `\\1` sử dụng lại phần bắt giữ trong chuỗi thay thế.\n\nSo sánh tệp gốc và tệp mới:\n\n```bash\ndiff -u services.csv services-clean.csv || true\n```\n\nTrạng thái khác 0 của `diff` là điều dự kiến vì kết quả đã được chủ ý thay đổi; `|| true` cho phép chuỗi lệnh được sao chép tiếp tục chạy.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo tệp đã chuẩn hóa bằng sed",
+      "hint_vi": "Chạy lệnh: diff -u services.csv services-clean.csv || true"
+    },
+    {
+      "id": "source-18003-section-5-v3",
+      "title": "Select Fields and Aggregate with Awk",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `awk` when a task needs both field structure and calculations.\n\n`-F,` sets comma as the input separator. Print service and status for data rows only; `NR` is the current record number:\n\n```bash\ncd /home/labex/project/regex-lab\nawk -F, 'NR > 1 {print $1, $2}' services.csv\n```\n\nSelect rows whose numeric third field exceeds 200:\n\n```bash\nawk -F, 'NR > 1 && $3 > 200 {print $1, $3}' services.csv | tee slow-services.txt\n```\n\nAccumulate a total and count, then calculate an average in the `END` block. `printf` controls the numeric format:\n\n```bash\nawk -F, 'NR > 1 {sum += $3; count++} END {printf \"average_latency=%.1f\\n\", sum/count}' services.csv | tee latency-summary.txt\n```\n\nAwk patterns decide which records run an action; fields such as `$1` and `$3` make structured calculations readable.",
+      "title_vi": "Chọn trường và tổng hợp bằng awk",
+      "task": "Thực hiện hướng dẫn: Select Fields and Aggregate with Awk",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/slow-services.txt <(printf %s 'api 250\nweb 300\n') && cmp -s /home/labex/project/regex-lab/latency-summary.txt <(printf %s 'average_latency=233.3\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `awk` khi nhiệm vụ cần cả cấu trúc trường lẫn phép tính.\n\n`-F,` đặt dấu phẩy làm ký tự phân cách đầu vào. Chỉ in dịch vụ và trạng thái cho các dòng dữ liệu; `NR` là số thứ tự bản ghi hiện tại:\n\n```bash\ncd /home/labex/project/regex-lab\nawk -F, 'NR > 1 {print $1, $2}' services.csv\n```\n\nChọn những dòng có trường số thứ ba lớn hơn 200:\n\n```bash\nawk -F, 'NR > 1 && $3 > 200 {print $1, $3}' services.csv | tee slow-services.txt\n```\n\nCộng dồn tổng và số lượng, rồi tính trung bình trong khối `END`. `printf` điều khiển định dạng số:\n\n```bash\nawk -F, 'NR > 1 {sum += $3; count++} END {printf \"average_latency=%.1f\\n\", sum/count}' services.csv | tee latency-summary.txt\n```\n\nMẫu của awk quyết định bản ghi nào chạy một thao tác; các trường như `$1` và `$3` giúp phép tính trên dữ liệu có cấu trúc dễ đọc hơn.",
+      "task_vi": "Thực hiện hướng dẫn: Chọn trường và tổng hợp bằng awk",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You built regex patterns from anchors, classes, alternatives, and repetition; used grep to select and extract; used sed to preview and save transformations; and used awk for field-aware selection and aggregation. The next Challenge asks you to apply these ideas without being given a full command sequence.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã xây dựng mẫu regex từ ký hiệu neo, lớp ký tự, lựa chọn và phép lặp; dùng grep để chọn và trích xuất; dùng sed để xem trước và lưu phép biến đổi; dùng awk để chọn và tổng hợp theo trường. Thử thách tiếp theo yêu cầu áp dụng các ý tưởng này mà không được cung cấp toàn bộ chuỗi lệnh."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-18003-section-1-v3",
+      "title": "Match Lines with Basic Regex Structure",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use literal text, anchors, and character classes to describe whole-line positions.\n\nInspect the practice file:\n\n```bash\ncd /home/labex/project/regex-lab\nnl -ba contacts.txt\n```\n\nLiteral text matches anywhere in a line:\n\n```bash\ngrep 'active' contacts.txt\n```\n\n`^` anchors a pattern to the beginning and `$` anchors it to the end. Find the Alice record and records ending in a two-digit number:\n\n```bash\ngrep '^Alice|' contacts.txt\ngrep '[0-9][0-9]$' contacts.txt\n```\n\nInside brackets, a character class matches one character. `[ABC]` means A, B, or C:\n\n```bash\ngrep '^[ABC]' contacts.txt | tee abc-contacts.txt\n```\n\nThis produces Alice, Bob, and Carol. Save anchored numeric matches too:\n\n```bash\ngrep '[0-9][0-9]$' contacts.txt > two-digit-values.txt\n```",
+      "title_vi": "Khớp dòng bằng cấu trúc regex cơ bản",
+      "task": "Thực hiện hướng dẫn: Match Lines with Basic Regex Structure",
+      "hint": "Chạy lệnh: grep 'active' contacts.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/abc-contacts.txt <(grep \"^[ABC]\" /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/two-digit-values.txt <(grep \"[0-9][0-9]$\" /home/labex/project/regex-lab/contacts.txt)"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/abc-contacts.txt <(grep \"^[ABC]\" /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/two-digit-values.txt <(grep \"[0-9][0-9]$\" /home/labex/project/regex-lab/contacts.txt)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng văn bản nguyên dạng, ký hiệu neo và lớp ký tự để mô tả vị trí trên toàn dòng.\n\nKiểm tra tệp thực hành:\n\n```bash\ncd /home/labex/project/regex-lab\nnl -ba contacts.txt\n```\n\nVăn bản nguyên dạng khớp ở bất kỳ vị trí nào trong một dòng:\n\n```bash\ngrep 'active' contacts.txt\n```\n\n`^` neo mẫu vào đầu dòng và `$` neo vào cuối dòng. Tìm bản ghi Alice và những bản ghi kết thúc bằng số có hai chữ số:\n\n```bash\ngrep '^Alice|' contacts.txt\ngrep '[0-9][0-9]$' contacts.txt\n```\n\nTrong dấu ngoặc vuông, một lớp ký tự khớp với một ký tự. `[ABC]` có nghĩa là A, B hoặc C:\n\n```bash\ngrep '^[ABC]' contacts.txt | tee abc-contacts.txt\n```\n\nKết quả gồm Alice, Bob và Carol. Hãy lưu cả những dòng khớp với mẫu số có neo:\n\n```bash\ngrep '[0-9][0-9]$' contacts.txt > two-digit-values.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Khớp dòng bằng cấu trúc regex cơ bản",
+      "hint_vi": "Chạy lệnh: grep 'active' contacts.txt"
+    },
+    {
+      "id": "source-18003-section-2-v3",
+      "title": "Use Extended Regex and Extract Matches",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use extended regular expressions for alternatives and repetition, then extract only the matching substring.\n\n`grep -E` enables operators such as `+` (one or more), `?` (zero or one), and `|` (alternative). Match complete active or pending status fields:\n\n```bash\ncd /home/labex/project/regex-lab\ngrep -E '\\|(active|pending)\\|' contacts.txt\n```\n\nAn email-like pattern can be built in pieces:\n\n- `[[:alnum:]._-]+` matches one or more allowed local-part characters;\n- `@` is literal;\n- `[[:alnum:].-]+` matches the domain body;\n- `\\.[[:alpha:]]{2,}` matches a dot and a two-or-more-letter suffix.\n\nUse `-o` to print only matching substrings:\n\n```bash\ngrep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' contacts.txt | tee emails.txt\n```\n\nNumber matching lines and count extracted addresses:\n\n```bash\ngrep -En '\\|(active|pending)\\|' contacts.txt\nwc -l < emails.txt | tr -d ' ' > email-count.txt\ncat email-count.txt\n```\n\nThe malformed `dave_at_example.com` does not match because it has no `@`.",
+      "title_vi": "Dùng regex mở rộng và trích xuất phần khớp",
+      "task": "Thực hiện hướng dẫn: Use Extended Regex and Extract Matches",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/emails.txt <(grep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/email-count.txt <(printf %s '4\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/emails.txt <(grep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/email-count.txt <(printf %s '4\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng biểu thức chính quy mở rộng cho các lựa chọn và phép lặp, rồi chỉ trích xuất chuỗi con khớp.\n\n`grep -E` bật các toán tử như `+` (một hoặc nhiều), `?` (không hoặc một) và `|` (lựa chọn). Khớp toàn bộ trường trạng thái active hoặc pending:\n\n```bash\ncd /home/labex/project/regex-lab\ngrep -E '\\|(active|pending)\\|' contacts.txt\n```\n\nCó thể xây dựng mẫu giống địa chỉ email từ các phần:\n\n- `[[:alnum:]._-]+` khớp một hoặc nhiều ký tự được phép trong phần trước dấu @;\n- `@` là ký tự nguyên dạng;\n- `[[:alnum:].-]+` khớp phần tên miền;\n- `\\.[[:alpha:]]{2,}` khớp dấu chấm và hậu tố có ít nhất hai chữ cái.\n\nDùng `-o` để chỉ in những chuỗi con khớp:\n\n```bash\ngrep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' contacts.txt | tee emails.txt\n```\n\nĐánh số những dòng khớp và đếm địa chỉ đã trích xuất:\n\n```bash\ngrep -En '\\|(active|pending)\\|' contacts.txt\nwc -l < emails.txt | tr -d ' ' > email-count.txt\ncat email-count.txt\n```\n\nChuỗi sai định dạng `dave_at_example.com` không khớp vì không có `@`.",
+      "task_vi": "Thực hiện hướng dẫn: Dùng regex mở rộng và trích xuất phần khớp",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-18003-section-3-v3",
+      "title": "Preview Transformations with Sed",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will transform a stream with `sed` while leaving the input unchanged.\n\nA substitution has the form `s/pattern/replacement/flags`. Replace only the first `a` on each line, then every lowercase `a` using the `g` flag:\n\n```bash\ncd /home/labex/project/regex-lab\nsed 's/a/A/' contacts.txt\nsed 's/a/A/g' contacts.txt\n```\n\nUse a different delimiter when the text itself contains slashes or when another delimiter is clearer. Replace email domains with `redacted.invalid`:\n\n```bash\nsed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt\n```\n\nSed addresses select which lines receive a command. Apply a status replacement only to lines containing an exact `|inactive|` field:\n\n```bash\nsed '/|inactive|/s/|inactive|/|disabled|/' contacts.txt | tee contacts-preview.txt\n```\n\nConfirm that the original still contains `inactive`:\n\n```bash\ngrep '|inactive|' contacts.txt\n```",
+      "title_vi": "Xem trước phép biến đổi bằng sed",
+      "task": "Thực hiện hướng dẫn: Preview Transformations with Sed",
+      "hint": "Chạy lệnh: sed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/contacts-preview.txt <(sed '/|inactive|/s/|inactive|/|disabled|/' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/contacts.txt <(printf %s 'Alice|alice@example.com|active|25\nBob|bob@example.net|pending|32\nCarol|carol@example.org|inactive|41\nDavid|david@example.com|active|103\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/contacts-preview.txt <(sed '/|inactive|/s/|inactive|/|disabled|/' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/contacts.txt <(printf %s 'Alice|alice@example.com|active|25\nBob|bob@example.net|pending|32\nCarol|carol@example.org|inactive|41\nDavid|david@example.com|active|103\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ biến đổi một luồng bằng `sed` mà không thay đổi dữ liệu đầu vào.\n\nPhép thay thế có dạng `s/pattern/replacement/flags`. Chỉ thay chữ `a` đầu tiên trên mỗi dòng, sau đó thay mọi chữ `a` viết thường bằng cờ `g`:\n\n```bash\ncd /home/labex/project/regex-lab\nsed 's/a/A/' contacts.txt\nsed 's/a/A/g' contacts.txt\n```\n\nDùng ký tự phân cách khác khi bản thân văn bản chứa dấu gạch chéo hoặc khi ký tự khác giúp dễ đọc hơn. Thay các tên miền email bằng `redacted.invalid`:\n\n```bash\nsed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt\n```\n\nĐịa chỉ của sed chọn những dòng nhận lệnh. Chỉ thay trạng thái trên những dòng chứa chính xác trường `|inactive|`:\n\n```bash\nsed '/|inactive|/s/|inactive|/|disabled|/' contacts.txt | tee contacts-preview.txt\n```\n\nXác nhận bản gốc vẫn chứa `inactive`:\n\n```bash\ngrep '|inactive|' contacts.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Xem trước phép biến đổi bằng sed",
+      "hint_vi": "Chạy lệnh: sed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt"
+    },
+    {
+      "id": "source-18003-section-4-v3",
+      "title": "Create a Cleaned File with Sed",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will combine multiple sed commands and save the transformed stream as a new file.\n\nThe header in `services.csv` should remain unchanged. For data rows, normalize `warn` to `warning` and add a `ms` suffix to the final numeric field. `-e` supplies multiple commands, and the address `2,$` limits them to lines 2 through the end:\n\n```bash\ncd /home/labex/project/regex-lab\nsed -E -e '2,$ s/,warn,/,warning,/' -e '2,$ s/([0-9]+)$/\\1ms/' services.csv | tee services-clean.csv\n```\n\nHere, parentheses capture the final digits and `\\1` reuses that capture in the replacement.\n\nCompare the original and new files:\n\n```bash\ndiff -u services.csv services-clean.csv || true\n```\n\nThe nonzero `diff` status is expected because the output intentionally changed; `|| true` allows a copied command sequence to continue.",
+      "title_vi": "Tạo tệp đã chuẩn hóa bằng sed",
+      "task": "Thực hiện hướng dẫn: Create a Cleaned File with Sed",
+      "hint": "Chạy lệnh: diff -u services.csv services-clean.csv || true",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/services-clean.csv <(printf %s 'service,state,latency\napi,warning,250ms\nworker,ok,150ms\nweb,warning,300ms\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/services-clean.csv <(printf %s 'service,state,latency\napi,warning,250ms\nworker,ok,150ms\nweb,warning,300ms\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kết hợp nhiều lệnh sed và lưu luồng đã biến đổi thành một tệp mới.\n\nDòng tiêu đề trong `services.csv` cần giữ nguyên. Với các dòng dữ liệu, chuẩn hóa `warn` thành `warning` và thêm hậu tố `ms` vào trường số cuối cùng. `-e` cung cấp nhiều lệnh và địa chỉ `2,$` giới hạn chúng từ dòng 2 đến hết:\n\n```bash\ncd /home/labex/project/regex-lab\nsed -E -e '2,$ s/,warn,/,warning,/' -e '2,$ s/([0-9]+)$/\\1ms/' services.csv | tee services-clean.csv\n```\n\nỞ đây, dấu ngoặc đơn bắt giữ các chữ số cuối cùng và `\\1` sử dụng lại phần bắt giữ trong chuỗi thay thế.\n\nSo sánh tệp gốc và tệp mới:\n\n```bash\ndiff -u services.csv services-clean.csv || true\n```\n\nTrạng thái khác 0 của `diff` là điều dự kiến vì kết quả đã được chủ ý thay đổi; `|| true` cho phép chuỗi lệnh được sao chép tiếp tục chạy.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo tệp đã chuẩn hóa bằng sed",
+      "hint_vi": "Chạy lệnh: diff -u services.csv services-clean.csv || true"
+    },
+    {
+      "id": "source-18003-section-5-v3",
+      "title": "Select Fields and Aggregate with Awk",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `awk` when a task needs both field structure and calculations.\n\n`-F,` sets comma as the input separator. Print service and status for data rows only; `NR` is the current record number:\n\n```bash\ncd /home/labex/project/regex-lab\nawk -F, 'NR > 1 {print $1, $2}' services.csv\n```\n\nSelect rows whose numeric third field exceeds 200:\n\n```bash\nawk -F, 'NR > 1 && $3 > 200 {print $1, $3}' services.csv | tee slow-services.txt\n```\n\nAccumulate a total and count, then calculate an average in the `END` block. `printf` controls the numeric format:\n\n```bash\nawk -F, 'NR > 1 {sum += $3; count++} END {printf \"average_latency=%.1f\\n\", sum/count}' services.csv | tee latency-summary.txt\n```\n\nAwk patterns decide which records run an action; fields such as `$1` and `$3` make structured calculations readable.",
+      "title_vi": "Chọn trường và tổng hợp bằng awk",
+      "task": "Thực hiện hướng dẫn: Select Fields and Aggregate with Awk",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/slow-services.txt <(printf %s 'api 250\nweb 300\n') && cmp -s /home/labex/project/regex-lab/latency-summary.txt <(printf %s 'average_latency=233.3\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/slow-services.txt <(printf %s 'api 250\nweb 300\n') && cmp -s /home/labex/project/regex-lab/latency-summary.txt <(printf %s 'average_latency=233.3\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `awk` khi nhiệm vụ cần cả cấu trúc trường lẫn phép tính.\n\n`-F,` đặt dấu phẩy làm ký tự phân cách đầu vào. Chỉ in dịch vụ và trạng thái cho các dòng dữ liệu; `NR` là số thứ tự bản ghi hiện tại:\n\n```bash\ncd /home/labex/project/regex-lab\nawk -F, 'NR > 1 {print $1, $2}' services.csv\n```\n\nChọn những dòng có trường số thứ ba lớn hơn 200:\n\n```bash\nawk -F, 'NR > 1 && $3 > 200 {print $1, $3}' services.csv | tee slow-services.txt\n```\n\nCộng dồn tổng và số lượng, rồi tính trung bình trong khối `END`. `printf` điều khiển định dạng số:\n\n```bash\nawk -F, 'NR > 1 {sum += $3; count++} END {printf \"average_latency=%.1f\\n\", sum/count}' services.csv | tee latency-summary.txt\n```\n\nMẫu của awk quyết định bản ghi nào chạy một thao tác; các trường như `$1` và `$3` giúp phép tính trên dữ liệu có cấu trúc dễ đọc hơn.",
+      "task_vi": "Thực hiện hướng dẫn: Chọn trường và tổng hợp bằng awk",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-text-processing-and-regular-expressions-18003.json"
+}

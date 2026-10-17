@@ -1,0 +1,119 @@
+{
+  "id": "linux-create-personalized-terminal-greeting-446322",
+  "course_id": "linux-for-noobs",
+  "order": 2,
+  "title": "Save a Terminal Banner",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "10 mins",
+  "overview": "The preceding guided lab showed that terminal output can be saved in a file instead of disappearing into the scrollback. It also introduced  figlet , which renders ordinary text as large terminal char",
+  "source_url": "https://labex.io/tutorials/linux-create-personalized-terminal-greeting-446322",
+  "source_lab_id": 446322,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "The preceding guided lab showed that terminal output can be saved in a file instead of disappearing into the scrollback. It also introduced `figlet`, which renders ordinary text as large terminal characters.\n\nIn this first challenge, you will combine only those two familiar ideas. Success is one small, reusable banner file.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Bài thực hành có hướng dẫn trước đó cho thấy đầu ra của terminal có thể được lưu vào một tệp thay vì biến mất trong vùng cuộn ngược (scrollback). Bài học cũng giới thiệu lệnh `figlet`, dùng để hiển thị văn bản thông thường thành các ký tự terminal lớn.\n\nTrong thử thách đầu tiên này, bạn sẽ kết hợp đúng hai ý quen thuộc đó. Thành công là một tệp banner nhỏ gọn, có thể tái sử dụng."
+    },
+    {
+      "id": "source-446322-section-1-v3",
+      "title": "Save the ASCII-Art Banner",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe empty workspace `/home/labex/project/terminal-greeting` is ready, and `figlet` is installed.\n\n### Scope\n\n- Work in `/home/labex/project/terminal-greeting`.\n- Create the file `welcome-banner.txt`.\n- Use the default `figlet` font.\n- Do not add any other text to the file.\n\n### Your Goal\n\nSave the default `figlet` rendering of `Welcome` in `welcome-banner.txt`.\n\n### Acceptance Criteria\n\n- `welcome-banner.txt` exists and is not empty.\n- Its content is exactly the default `figlet` rendering of `Welcome`.\n\n### Hints\n\nWhich two ideas from the guided lab apply?\n\n`figlet` creates the banner, and the output-redirection operator from the date and ASCII-art steps saves command output in a file.",
+      "task": "Thực hiện hướng dẫn: Save the ASCII-Art Banner",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "title_vi": "Lưu Banner Chữ Nghệ Thuật ASCII",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Lưu Banner Chữ Nghệ Thuật ASCII",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/terminal-greeting/welcome-banner.txt && cmp -s /home/labex/project/terminal-greeting/welcome-banner.txt <(figlet Welcome)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "### Tình trạng hiện tại\n\nKhông gian làm việc trống `/home/labex/project/terminal-greeting` đã sẵn sàng và `figlet` đã được cài đặt.\n\n### Phạm vi\n\n- Làm việc trong `/home/labex/project/terminal-greeting`.\n- Tạo tệp `welcome-banner.txt`.\n- Sử dụng phông chữ `figlet` mặc định.\n- Không thêm bất kỳ văn bản nào khác vào tệp.\n\n### Mục tiêu của bạn\n\nLưu kết quả kết xuất `figlet` mặc định của từ `Welcome` vào tệp `welcome-banner.txt`.\n\n### Tiêu chí chấp nhận\n\n- Tệp `welcome-banner.txt` tồn tại và không trống.\n- Nội dung của tệp chính xác là kết quả kết xuất `figlet` mặc định của từ `Welcome`.\n\n### Gợi ý\n\nHai ý tưởng nào từ bài lab hướng dẫn được áp dụng?\n\n`figlet` tạo ra banner và toán tử chuyển hướng đầu ra từ các bước ngày tháng và nghệ thuật ASCII sẽ lưu đầu ra của lệnh vào một tệp.",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You used two commands and one redirection operator from the guided lab to save a reusable ASCII-art banner.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã sử dụng hai câu lệnh và một toán tử chuyển hướng từ phòng thực hành có hướng dẫn để lưu một banner nghệ thuật ASCII có thể tái sử dụng."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-446322-section-1-v3",
+      "title": "Save the ASCII-Art Banner",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe empty workspace `/home/labex/project/terminal-greeting` is ready, and `figlet` is installed.\n\n### Scope\n\n- Work in `/home/labex/project/terminal-greeting`.\n- Create the file `welcome-banner.txt`.\n- Use the default `figlet` font.\n- Do not add any other text to the file.\n\n### Your Goal\n\nSave the default `figlet` rendering of `Welcome` in `welcome-banner.txt`.\n\n### Acceptance Criteria\n\n- `welcome-banner.txt` exists and is not empty.\n- Its content is exactly the default `figlet` rendering of `Welcome`.\n\n### Hints\n\nWhich two ideas from the guided lab apply?\n\n`figlet` creates the banner, and the output-redirection operator from the date and ASCII-art steps saves command output in a file.",
+      "task": "Thực hiện hướng dẫn: Save the ASCII-Art Banner",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Lưu Banner Chữ Nghệ Thuật ASCII",
+      "task_vi": "Thực hiện hướng dẫn: Lưu Banner Chữ Nghệ Thuật ASCII",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/terminal-greeting/welcome-banner.txt && cmp -s /home/labex/project/terminal-greeting/welcome-banner.txt <(figlet Welcome)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "### Tình trạng hiện tại\n\nKhông gian làm việc trống `/home/labex/project/terminal-greeting` đã sẵn sàng và `figlet` đã được cài đặt.\n\n### Phạm vi\n\n- Làm việc trong `/home/labex/project/terminal-greeting`.\n- Tạo tệp `welcome-banner.txt`.\n- Sử dụng phông chữ `figlet` mặc định.\n- Không thêm bất kỳ văn bản nào khác vào tệp.\n\n### Mục tiêu của bạn\n\nLưu kết quả kết xuất `figlet` mặc định của từ `Welcome` vào tệp `welcome-banner.txt`.\n\n### Tiêu chí chấp nhận\n\n- Tệp `welcome-banner.txt` tồn tại và không trống.\n- Nội dung của tệp chính xác là kết quả kết xuất `figlet` mặc định của từ `Welcome`.\n\n### Gợi ý\n\nHai ý tưởng nào từ bài lab hướng dẫn được áp dụng?\n\n`figlet` tạo ra banner và toán tử chuyển hướng đầu ra từ các bước ngày tháng và nghệ thuật ASCII sẽ lưu đầu ra của lệnh vào một tệp.",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "title_vi": "Lưu Banner Lời Chào Terminal",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-create-personalized-terminal-greeting-446322.json"
+}

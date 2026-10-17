@@ -1,0 +1,389 @@
+{
+  "id": "linux-environment-variables-in-linux-385274",
+  "course_id": "linux-for-noobs",
+  "order": 10,
+  "title": "Environment Variables in Linux",
+  "title_vi": "Biến Môi Trường Trong Linux",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45 mins",
+  "overview": "Programs often need small pieces of configuration: a home directory, a language, a search path, or an application setting. Linux processes receive many of these values through an   environment  , a co",
+  "source_url": "https://labex.io/tutorials/linux-environment-variables-in-linux-385274",
+  "source_lab_id": 385274,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Programs often need small pieces of configuration: a home directory, a language, a search path, or an application setting. Linux processes receive many of these values through an **environment**, a collection of named strings.\n\nThis lab builds the idea in layers. You will first create a variable that belongs only to the current shell, then export a variable to child processes, inspect standard variables, extend `PATH`, and make settings appear in future Zsh sessions. Each step leaves an observable file or command result so you can verify what the shell actually did.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Các chương trình thường cần những mẩu cấu hình nhỏ: thư mục chính (home directory), ngôn ngữ, đường dẫn tìm kiếm (search path) hoặc cài đặt ứng dụng. Các tiến trình Linux nhận nhiều giá trị trong số này thông qua một **môi trường** (environment), đây là một tập hợp các chuỗi có tên.\n\nBài thực hành này xây dựng ý tưởng theo từng lớp. Trước tiên, bạn sẽ tạo một biến chỉ thuộc về shell hiện tại, sau đó xuất (export) một biến sang các tiến trình con, kiểm tra các biến tiêu chuẩn, mở rộng `PATH` và làm cho các cài đặt xuất hiện trong các phiên Zsh tương lai. Mỗi bước đều để lại một tệp có thể quan sát được hoặc kết quả lệnh để bạn có thể xác minh những gì shell thực sự đã làm."
+    },
+    {
+      "id": "source-385274-section-1-v3",
+      "title": "Create and Expand a Shell Variable",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a shell variable and observe how quoting affects expansion.\n\nA shell variable pairs a name with a value inside the current shell. Assignment syntax has no spaces around `=`. Quoting the value preserves the embedded space:\n\n```bash\ncd /home/labex/project/environment-lab\ncourse_name=\"Linux for Noobs\"\n```\n\nPrefixing the name with `$` asks the shell to **expand** it to its value:\n\n```bash\necho \"$course_name\"\n```\n\nDouble quotes allow expansion and keep the result as one argument. Single quotes preserve the dollar sign literally. Compare them:\n\n```bash\nprintf 'double: %s\\n' \"$course_name\"\nprintf 'single: %s\\n' '$course_name'\n```\n\nSave the expanded value as an observable result:\n\n```bash\nprintf 'course=%s\\n' \"$course_name\" > shell-variable.txt\ncat shell-variable.txt\n```\n\nThis variable exists only in the current shell unless it is exported.",
+      "title_vi": "Tạo và mở rộng biến shell",
+      "task": "Thực hiện hướng dẫn: Create and Expand a Shell Variable",
+      "hint": "Chạy lệnh: echo \"$course_name\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một biến shell và quan sát cách việc sử dụng dấu trích dẫn ảnh hưởng đến quá trình mở rộng (expansion).\n\nMột biến shell ghép nối một tên với một giá trị bên trong shell hiện tại. Cú pháp gán không có khoảng trắng quanh dấu `=`. Việc đặt giá trị trong dấu trích dẫn sẽ bảo toàn khoảng trắng bên trong:\n\n```bash\ncd /home/labex/project/environment-lab\ncourse_name=\"Linux for Noobs\"\n```\n\nThêm tiền tố `$` trước tên biến sẽ yêu cầu shell **mở rộng** nó thành giá trị của nó:\n\n```bash\necho \"$course_name\"\n```\n\nDấu ngoặc kép (double quotes) cho phép mở rộng và giữ kết quả thành một đối số duy nhất. Dấu nháy đơn (single quotes) giữ nguyên ký tự đô la một cách chính xác theo nghĩa đen. Hãy so sánh chúng:\n\n```bash\nprintf 'double: %s\\n' \"$course_name\"\nprintf 'single: %s\\n' '$course_name'\n```\n\nLưu giá trị đã được mở rộng thành một kết quả có thể quan sát được:\n\n```bash\nprintf 'course=%s\\n' \"$course_name\" > shell-variable.txt\ncat shell-variable.txt\n```\n\nBiến này chỉ tồn tại trong shell hiện tại trừ khi nó được xuất (export).",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và mở rộng biến shell",
+      "hint_vi": "Chạy lệnh: echo \"$course_name\""
+    },
+    {
+      "id": "source-385274-section-2-v3",
+      "title": "Observe Child-Process Inheritance",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will compare an ordinary shell variable with an exported variable inside a child process.\n\nEvery command runs in a process. A child process receives exported environment variables from its parent, but it does not receive ordinary shell variables.\n\nReturn to the workspace and create one variable of each kind:\n\n```bash\ncd /home/labex/project/environment-lab\nlocal_message=\"visible only in this shell\"\nexport SHARED_MESSAGE=\"visible in child processes\"\n```\n\nCreate a small Bash child process that prints both names. The quoted heredoc marker prevents the current shell from expanding the variables while writing the script:\n\n```bash\ncat > inspect-child.sh <<'EOF'\n#!/bin/bash\nprintf 'local=%s\\n' \"${local_message:-<missing>}\"\nprintf 'shared=%s\\n' \"${SHARED_MESSAGE:-<missing>}\"\nEOF\nchmod +x inspect-child.sh\n```\n\nRun it and redirect the output to a file, then display the file. Keeping these as separate commands makes it clear which action runs the child process and which action inspects the saved result:\n\n```bash\n./inspect-child.sh > child-environment.txt\ncat child-environment.txt\n```\n\nThe ordinary variable appears as `<missing>`, while `SHARED_MESSAGE` is inherited. Confirm that the exported name is present in the environment:\n\n```bash\nenv | grep '^SHARED_MESSAGE='\n```",
+      "title_vi": "Quan sát sự kế thừa tiến trình con",
+      "task": "Thực hiện hướng dẫn: Observe Child-Process Inheritance",
+      "hint": "Chạy lệnh: env | grep '^SHARED_MESSAGE='",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ so sánh một biến shell thông thường với một biến đã được xuất (exported variable) bên trong một tiến trình con.\n\nMỗi lệnh chạy trong một tiến trình. Một tiến trình con nhận các biến môi trường được xuất từ tiến trình cha của nó, nhưng nó không nhận các biến shell thông thường.\n\nQuay lại không gian làm việc và tạo một biến cho mỗi loại:\n\n```bash\ncd /home/labex/project/environment-lab\nlocal_message=\"visible only in this shell\"\nexport SHARED_MESSAGE=\"visible in child processes\"\n```\n\nTạo một tiến trình con Bash nhỏ để in ra cả hai tên biến. Dấu ngoặc kép của dấu hiệu heredoc ngăn shell hiện tại mở rộng các biến trong khi ghi tập lệnh:\n\n```bash\ncat > inspect-child.sh <<'EOF'\n#!/bin/bash\nprintf 'local=%s\\n' \"${local_message:-<missing>}\"\nprintf 'shared=%s\\n' \"${SHARED_MESSAGE:-<missing>}\"\nEOF\nchmod +x inspect-child.sh\n```\n\nChạy tập lệnh và chuyển hướng đầu ra vào một tệp, sau đó hiển thị tệp đó. Việc giữ các thao tác này thành các lệnh riêng biệt giúp làm rõ hành động nào chạy tiến trình con và hành động nào kiểm tra kết quả đã lưu:\n\n```bash\n./inspect-child.sh > child-environment.txt\ncat child-environment.txt\n```\n\nBiến thông thường xuất hiện dưới dạng `<missing>`, trong khi `SHARED_MESSAGE` được kế thừa. Xác nhận rằng tên đã xuất có mặt trong môi trường:\n\n```bash\nenv | grep '^SHARED_MESSAGE='\n```",
+      "task_vi": "Thực hiện hướng dẫn: Quan sát sự kế thừa tiến trình con",
+      "hint_vi": "Chạy lệnh: env | grep '^SHARED_MESSAGE='"
+    },
+    {
+      "id": "source-385274-section-3-v3",
+      "title": "Inspect Standard Environment Variables",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect standard variables that describe your account, working directory, terminal, and command search path.\n\nLinux shells normally provide useful standard variables:\n\n- `HOME` is your home directory.\n- `USER` is your account name.\n- `SHELL` is your configured login shell.\n- `PWD` tracks the current working directory.\n- `PATH` lists command-search directories separated by colons.\n- `TERM` describes terminal capabilities to interactive programs.\n\nDisplay selected values with `printenv`, which reads exported variables by name:\n\n```bash\nprintenv HOME USER SHELL PWD TERM\n```\n\n`PATH` is easier to read one entry per line. Send the value through `tr` to replace every colon with a newline:\n\n```bash\nprintf '%s\\n' \"$PATH\" | tr ':' '\\n'\n```\n\nCreate a stable report from variables whose expected values are known in this lab:\n\n```bash\ncd /home/labex/project/environment-lab\nprintf 'HOME=%s\\nUSER=%s\\n' \"$HOME\" \"$USER\" > standard-environment.txt\ncat standard-environment.txt\n```",
+      "title_vi": "Kiểm tra biến môi trường chuẩn",
+      "task": "Thực hiện hướng dẫn: Inspect Standard Environment Variables",
+      "hint": "Chạy lệnh: printenv HOME USER SHELL PWD TERM",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra các biến tiêu chuẩn mô tả tài khoản, thư mục làm việc, terminal và đường dẫn tìm kiếm lệnh của bạn.\n\nCác Linux shell thường cung cấp các biến tiêu chuẩn hữu ích:\n\n- `HOME` là thư mục chính của bạn.\n- `USER` là tên tài khoản của bạn.\n- `SHELL` là login shell đã được cấu hình của bạn.\n- `PWD` theo dõi thư mục làm việc hiện tại.\n- `PATH` liệt kê các thư mục tìm kiếm lệnh được phân tách bằng dấu hai chấm.\n- `TERM` mô tả các khả năng của terminal cho các chương trình tương tác.\n\nHiển thị các giá trị đã chọn bằng lệnh `printenv`, lệnh này đọc các biến đã được export theo tên:\n\n```bash\nprintenv HOME USER SHELL PWD TERM\n```\n\nBiến `PATH` sẽ dễ đọc hơn khi hiển thị mỗi mục trên một dòng. Gửi giá trị qua lệnh `tr` để thay thế mọi dấu hai chấm bằng một ký tự xuống dòng:\n\n```bash\nprintf '%s\\n' \"$PATH\" | tr ':' '\\n'\n```\n\nTạo một báo cáo ổn định từ các biến mà giá trị dự kiến của chúng đã được biết trong lab này:\n\n```bash\ncd /home/labex/project/environment-lab\nprintf 'HOME=%s\\nUSER=%s\\n' \"$HOME\" \"$USER\" > standard-environment.txt\ncat standard-environment.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra biến môi trường chuẩn",
+      "hint_vi": "Chạy lệnh: printenv HOME USER SHELL PWD TERM"
+    },
+    {
+      "id": "source-385274-section-4-v3",
+      "title": "Extend PATH with a Personal Command",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will add a personal executable directory to `PATH` and run a command by name from another directory.\n\nWhen you enter a command without a slash, the shell searches the directories in `PATH` from left to right. You can add a personal executable directory without replacing the existing search path.\n\nCreate a command named `course-status`:\n\n```bash\nmkdir -p \"$HOME/bin\"\ncat > \"$HOME/bin/course-status\" <<'EOF'\n#!/bin/bash\necho \"Linux learning environment is ready\"\nEOF\nchmod +x \"$HOME/bin/course-status\"\n```\n\nAppend the directory to the current `PATH`. Keeping `$PATH` preserves access to standard commands:\n\n```bash\nexport PATH=\"$PATH:$HOME/bin\"\n```\n\nAsk the shell which file it will execute, then run the command from a different directory:\n\n```bash\ncommand -v course-status\ncd /tmp\ncourse-status\n```\n\nSave its output in the lab workspace:\n\n```bash\ncourse-status > /home/labex/project/environment-lab/path-command.txt\n```",
+      "title_vi": "Thêm thư mục cá nhân vào biến PATH",
+      "task": "Thực hiện hướng dẫn: Extend PATH with a Personal Command",
+      "hint": "Chạy lệnh: export PATH=\"$PATH:$HOME/bin\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ thêm một thư mục thực thi cá nhân vào `PATH` và chạy một lệnh bằng tên của nó từ một thư mục khác.\n\nKhi bạn nhập một lệnh không có dấu gạch chéo, shell sẽ tìm kiếm các thư mục trong `PATH` từ trái sang phải. Bạn có thể thêm một thư mục thực thi cá nhân mà không cần thay thế đường dẫn tìm kiếm hiện có.\n\nTạo một lệnh có tên là `course-status`:\n\n```bash\nmkdir -p \"$HOME/bin\"\ncat > \"$HOME/bin/course-status\" <<'EOF'\n#!/bin/bash\necho \"Linux learning environment is ready\"\nEOF\nchmod +x \"$HOME/bin/course-status\"\n```\n\nThêm thư mục vào `PATH` hiện tại. Việc giữ lại `$PATH` sẽ duy trì quyền truy cập vào các lệnh tiêu chuẩn:\n\n```bash\nexport PATH=\"$PATH:$HOME/bin\"\n```\n\nHỏi shell xem nó sẽ thực thi tệp nào, sau đó chạy lệnh từ một thư mục khác:\n\n```bash\ncommand -v course-status\ncd /tmp\ncourse-status\n```\n\nLưu kết quả đầu ra của nó vào không gian làm việc của lab:\n\n```bash\ncourse-status > /home/labex/project/environment-lab/path-command.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Thêm thư mục cá nhân vào biến PATH",
+      "hint_vi": "Chạy lệnh: export PATH=\"$PATH:$HOME/bin\""
+    },
+    {
+      "id": "source-385274-section-5-v3",
+      "title": "Persist Settings for Future Zsh Sessions",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will configure future Zsh sessions and distinguish persistent configuration from current-shell state.\n\nExporting changes the current process and its future children; it does not edit a configuration file. A setting appears in later terminals only when a startup file recreates it. The LabEx Terminal uses Zsh, whose interactive startup file is `~/.zshrc`.\n\nAppend a clearly marked block. Each `export` line recreates one environment setting whenever a new interactive Zsh starts. This beginner version keeps the startup file intentionally direct: preserve the existing `PATH`, then add the personal directory at the end.\n\n```bash\ncat >> \"$HOME/.zshrc\" <<'EOF'\n## LABEX_ENV_LAB_START\nexport PROJECT_DIR=\"$HOME/project\"\nexport PATH=\"$PATH:$HOME/bin\"\n## LABEX_ENV_LAB_END\nEOF\n```\n\nThe `source` command reads a file in the current shell. Reload `.zshrc` now so you can use its settings without closing the Terminal:\n\n```bash\nsource \"$HOME/.zshrc\"\n```\n\nConfirm that the reloaded variable is available:\n\n```bash\nprintf 'PROJECT_DIR=%s\\n' \"$PROJECT_DIR\"\n```\n\nYou should see `PROJECT_DIR=/home/labex/project`. You can also start a new Zsh process to prove that a future session loads the same settings. In `zsh -ic`, `-i` requests an interactive shell so `.zshrc` is read, and `-c` supplies the command that shell should run. Redirect its two output lines into `future-shell.txt`, then inspect the file:\n\n```bash\nzsh -ic 'printf \"PROJECT_DIR=%s\\n\" \"$PROJECT_DIR\"; command -v course-status' > /home/labex/project/environment-lab/future-shell.txt\ncat /home/labex/project/environment-lab/future-shell.txt\n```\n\nThe first line should show `/home/labex/project`; the second should show `/home/labex/bin/course-status`.\n\nFinally, learn the difference between current state and persistent configuration. Create and remove a temporary environment variable:\n\n```bash\nexport TEMP_NOTE=\"remove me\"\nprintenv TEMP_NOTE\nunset TEMP_NOTE\nprintenv TEMP_NOTE\n```\n\nThe final `printenv` produces no output and returns a nonzero status because the name no longer exists. `unset` removes the name from the current shell. If a name is still defined in a startup file, a future shell will recreate it until that configuration line is removed.",
+      "title_vi": "Lưu cài đặt cho các phiên Zsh tương lai",
+      "task": "Thực hiện hướng dẫn: Persist Settings for Future Zsh Sessions",
+      "hint": "Chạy lệnh: source \"$HOME/.zshrc\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu Zsh thật; image hiện chưa có Zsh, không chấm Bash thay cho phiên Zsh."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ cấu hình các phiên Zsh trong tương lai và phân biệt giữa cấu hình lưu trữ bền vững (persistent configuration) với trạng thái của shell hiện tại.\n\nViệc `export` làm thay đổi tiến trình hiện tại và các tiến trình con trong tương lai của nó; thao tác này không chỉnh sửa tệp cấu hình. Một thiết lập chỉ xuất hiện ở các terminal sau đó khi một tệp khởi động tạo lại nó. LabEx Terminal sử dụng Zsh, có tệp khởi động tương tác là `~/.zshrc`.\n\nThêm một khối được đánh dấu rõ ràng. Mỗi dòng `export` sẽ tạo lại một thiết lập môi trường bất cứ khi nào một phiên Zsh tương tác mới khởi động. Phiên bản dành cho người mới bắt đầu này giữ cho tệp khởi động mang tính trực quan: giữ nguyên `PATH` hiện có, sau đó thêm thư mục cá nhân vào cuối.\n\n```bash\ncat >> \"$HOME/.zshrc\" <<'EOF'\n## LABEX_ENV_LAB_START\nexport PROJECT_DIR=\"$HOME/project\"\nexport PATH=\"$PATH:$HOME/bin\"\n## LABEX_ENV_LAB_END\nEOF\n```\n\nLệnh `source` đọc một tệp trong shell hiện tại. Tải lại `.zshrc` ngay bây giờ để bạn có thể sử dụng các thiết lập của nó mà không cần đóng Terminal:\n\n```bash\nsource \"$HOME/.zshrc\"\n```\n\nXác nhận rằng biến đã được tải lại có sẵn:\n\n```bash\nprintf 'PROJECT_DIR=%s\\n' \"$PROJECT_DIR\"\n```\n\nBạn sẽ thấy `PROJECT_DIR=/home/labex/project`. Bạn cũng có thể khởi động một tiến trình Zsh mới để chứng minh rằng một phiên làm việc trong tương lai sẽ tải các thiết lập tương tự. Trong `zsh -ic`, `-i` yêu cầu một shell tương tác để `.zshrc` được đọc, và `-c` cung cấp lệnh mà shell đó sẽ chạy. Chuyển hướng hai dòng đầu ra của nó vào tệp `future-shell.txt`, sau đó kiểm tra tệp:\n\n```bash\nzsh -ic 'printf \"PROJECT_DIR=%s\\n\" \"$PROJECT_DIR\"; command -v course-status' > /home/labex/project/environment-lab/future-shell.txt\ncat /home/labex/project/environment-lab/future-shell.txt\n```\n\nDòng đầu tiên sẽ hiển thị `/home/labex/project`; dòng thứ hai sẽ hiển thị `/home/labex/bin/course-status`.\n\nCuối cùng, hãy tìm hiểu sự khác biệt giữa trạng thái hiện tại và cấu hình lưu trữ bền vững. Tạo và xóa một biến môi trường tạm thời:\n\n```bash\nexport TEMP_NOTE=\"remove me\"\nprintenv TEMP_NOTE\nunset TEMP_NOTE\nprintenv TEMP_NOTE\n```\n\nLệnh `printenv` cuối cùng không tạo ra đầu ra nào và trả về một trạng thái khác không (nonzero status) vì tên biến không còn tồn tại nữa. `unset` xóa tên khỏi shell hiện tại. Nếu một tên vẫn được định nghĩa trong tệp khởi động, một shell trong tương lai sẽ tạo lại nó cho đến khi dòng cấu hình đó bị xóa.",
+      "task_vi": "Thực hiện hướng dẫn: Lưu cài đặt cho các phiên Zsh tương lai",
+      "hint_vi": "Chạy lệnh: source \"$HOME/.zshrc\""
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You observed the three mechanisms that are often confused: a shell variable belongs to one shell, `export` passes a value to child processes, and a startup file recreates settings in future shells. You also inspected standard environment variables, extended `PATH` without losing existing entries, verified command lookup, and removed temporary state with `unset`.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã quan sát ba cơ chế thường bị nhầm lẫn: một biến shell thuộc về một shell duy nhất, `export` truyền giá trị cho các tiến trình con, và tệp khởi động tái tạo các cài đặt trong các shell tương lai. Bạn cũng đã kiểm tra các biến môi trường tiêu chuẩn, mở rộng `PATH` mà không làm mất các mục hiện có, xác minh việc tra cứu lệnh, và xóa trạng thái tạm thời bằng `unset`."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-385274-section-1-v3",
+      "title": "Create and Expand a Shell Variable",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a shell variable and observe how quoting affects expansion.\n\nA shell variable pairs a name with a value inside the current shell. Assignment syntax has no spaces around `=`. Quoting the value preserves the embedded space:\n\n```bash\ncd /home/labex/project/environment-lab\ncourse_name=\"Linux for Noobs\"\n```\n\nPrefixing the name with `$` asks the shell to **expand** it to its value:\n\n```bash\necho \"$course_name\"\n```\n\nDouble quotes allow expansion and keep the result as one argument. Single quotes preserve the dollar sign literally. Compare them:\n\n```bash\nprintf 'double: %s\\n' \"$course_name\"\nprintf 'single: %s\\n' '$course_name'\n```\n\nSave the expanded value as an observable result:\n\n```bash\nprintf 'course=%s\\n' \"$course_name\" > shell-variable.txt\ncat shell-variable.txt\n```\n\nThis variable exists only in the current shell unless it is exported.",
+      "title_vi": "Tạo và mở rộng biến shell",
+      "task": "Thực hiện hướng dẫn: Create and Expand a Shell Variable",
+      "hint": "Chạy lệnh: echo \"$course_name\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một biến shell và quan sát cách việc sử dụng dấu trích dẫn ảnh hưởng đến quá trình mở rộng (expansion).\n\nMột biến shell ghép nối một tên với một giá trị bên trong shell hiện tại. Cú pháp gán không có khoảng trắng quanh dấu `=`. Việc đặt giá trị trong dấu trích dẫn sẽ bảo toàn khoảng trắng bên trong:\n\n```bash\ncd /home/labex/project/environment-lab\ncourse_name=\"Linux for Noobs\"\n```\n\nThêm tiền tố `$` trước tên biến sẽ yêu cầu shell **mở rộng** nó thành giá trị của nó:\n\n```bash\necho \"$course_name\"\n```\n\nDấu ngoặc kép (double quotes) cho phép mở rộng và giữ kết quả thành một đối số duy nhất. Dấu nháy đơn (single quotes) giữ nguyên ký tự đô la một cách chính xác theo nghĩa đen. Hãy so sánh chúng:\n\n```bash\nprintf 'double: %s\\n' \"$course_name\"\nprintf 'single: %s\\n' '$course_name'\n```\n\nLưu giá trị đã được mở rộng thành một kết quả có thể quan sát được:\n\n```bash\nprintf 'course=%s\\n' \"$course_name\" > shell-variable.txt\ncat shell-variable.txt\n```\n\nBiến này chỉ tồn tại trong shell hiện tại trừ khi nó được xuất (export).",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và mở rộng biến shell",
+      "hint_vi": "Chạy lệnh: echo \"$course_name\""
+    },
+    {
+      "id": "source-385274-section-2-v3",
+      "title": "Observe Child-Process Inheritance",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will compare an ordinary shell variable with an exported variable inside a child process.\n\nEvery command runs in a process. A child process receives exported environment variables from its parent, but it does not receive ordinary shell variables.\n\nReturn to the workspace and create one variable of each kind:\n\n```bash\ncd /home/labex/project/environment-lab\nlocal_message=\"visible only in this shell\"\nexport SHARED_MESSAGE=\"visible in child processes\"\n```\n\nCreate a small Bash child process that prints both names. The quoted heredoc marker prevents the current shell from expanding the variables while writing the script:\n\n```bash\ncat > inspect-child.sh <<'EOF'\n#!/bin/bash\nprintf 'local=%s\\n' \"${local_message:-<missing>}\"\nprintf 'shared=%s\\n' \"${SHARED_MESSAGE:-<missing>}\"\nEOF\nchmod +x inspect-child.sh\n```\n\nRun it and redirect the output to a file, then display the file. Keeping these as separate commands makes it clear which action runs the child process and which action inspects the saved result:\n\n```bash\n./inspect-child.sh > child-environment.txt\ncat child-environment.txt\n```\n\nThe ordinary variable appears as `<missing>`, while `SHARED_MESSAGE` is inherited. Confirm that the exported name is present in the environment:\n\n```bash\nenv | grep '^SHARED_MESSAGE='\n```",
+      "title_vi": "Quan sát sự kế thừa tiến trình con",
+      "task": "Thực hiện hướng dẫn: Observe Child-Process Inheritance",
+      "hint": "Chạy lệnh: env | grep '^SHARED_MESSAGE='",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ so sánh một biến shell thông thường với một biến đã được xuất (exported variable) bên trong một tiến trình con.\n\nMỗi lệnh chạy trong một tiến trình. Một tiến trình con nhận các biến môi trường được xuất từ tiến trình cha của nó, nhưng nó không nhận các biến shell thông thường.\n\nQuay lại không gian làm việc và tạo một biến cho mỗi loại:\n\n```bash\ncd /home/labex/project/environment-lab\nlocal_message=\"visible only in this shell\"\nexport SHARED_MESSAGE=\"visible in child processes\"\n```\n\nTạo một tiến trình con Bash nhỏ để in ra cả hai tên biến. Dấu ngoặc kép của dấu hiệu heredoc ngăn shell hiện tại mở rộng các biến trong khi ghi tập lệnh:\n\n```bash\ncat > inspect-child.sh <<'EOF'\n#!/bin/bash\nprintf 'local=%s\\n' \"${local_message:-<missing>}\"\nprintf 'shared=%s\\n' \"${SHARED_MESSAGE:-<missing>}\"\nEOF\nchmod +x inspect-child.sh\n```\n\nChạy tập lệnh và chuyển hướng đầu ra vào một tệp, sau đó hiển thị tệp đó. Việc giữ các thao tác này thành các lệnh riêng biệt giúp làm rõ hành động nào chạy tiến trình con và hành động nào kiểm tra kết quả đã lưu:\n\n```bash\n./inspect-child.sh > child-environment.txt\ncat child-environment.txt\n```\n\nBiến thông thường xuất hiện dưới dạng `<missing>`, trong khi `SHARED_MESSAGE` được kế thừa. Xác nhận rằng tên đã xuất có mặt trong môi trường:\n\n```bash\nenv | grep '^SHARED_MESSAGE='\n```",
+      "task_vi": "Thực hiện hướng dẫn: Quan sát sự kế thừa tiến trình con",
+      "hint_vi": "Chạy lệnh: env | grep '^SHARED_MESSAGE='"
+    },
+    {
+      "id": "source-385274-section-3-v3",
+      "title": "Inspect Standard Environment Variables",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect standard variables that describe your account, working directory, terminal, and command search path.\n\nLinux shells normally provide useful standard variables:\n\n- `HOME` is your home directory.\n- `USER` is your account name.\n- `SHELL` is your configured login shell.\n- `PWD` tracks the current working directory.\n- `PATH` lists command-search directories separated by colons.\n- `TERM` describes terminal capabilities to interactive programs.\n\nDisplay selected values with `printenv`, which reads exported variables by name:\n\n```bash\nprintenv HOME USER SHELL PWD TERM\n```\n\n`PATH` is easier to read one entry per line. Send the value through `tr` to replace every colon with a newline:\n\n```bash\nprintf '%s\\n' \"$PATH\" | tr ':' '\\n'\n```\n\nCreate a stable report from variables whose expected values are known in this lab:\n\n```bash\ncd /home/labex/project/environment-lab\nprintf 'HOME=%s\\nUSER=%s\\n' \"$HOME\" \"$USER\" > standard-environment.txt\ncat standard-environment.txt\n```",
+      "title_vi": "Kiểm tra biến môi trường chuẩn",
+      "task": "Thực hiện hướng dẫn: Inspect Standard Environment Variables",
+      "hint": "Chạy lệnh: printenv HOME USER SHELL PWD TERM",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra các biến tiêu chuẩn mô tả tài khoản, thư mục làm việc, terminal và đường dẫn tìm kiếm lệnh của bạn.\n\nCác Linux shell thường cung cấp các biến tiêu chuẩn hữu ích:\n\n- `HOME` là thư mục chính của bạn.\n- `USER` là tên tài khoản của bạn.\n- `SHELL` là login shell đã được cấu hình của bạn.\n- `PWD` theo dõi thư mục làm việc hiện tại.\n- `PATH` liệt kê các thư mục tìm kiếm lệnh được phân tách bằng dấu hai chấm.\n- `TERM` mô tả các khả năng của terminal cho các chương trình tương tác.\n\nHiển thị các giá trị đã chọn bằng lệnh `printenv`, lệnh này đọc các biến đã được export theo tên:\n\n```bash\nprintenv HOME USER SHELL PWD TERM\n```\n\nBiến `PATH` sẽ dễ đọc hơn khi hiển thị mỗi mục trên một dòng. Gửi giá trị qua lệnh `tr` để thay thế mọi dấu hai chấm bằng một ký tự xuống dòng:\n\n```bash\nprintf '%s\\n' \"$PATH\" | tr ':' '\\n'\n```\n\nTạo một báo cáo ổn định từ các biến mà giá trị dự kiến của chúng đã được biết trong lab này:\n\n```bash\ncd /home/labex/project/environment-lab\nprintf 'HOME=%s\\nUSER=%s\\n' \"$HOME\" \"$USER\" > standard-environment.txt\ncat standard-environment.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra biến môi trường chuẩn",
+      "hint_vi": "Chạy lệnh: printenv HOME USER SHELL PWD TERM"
+    },
+    {
+      "id": "source-385274-section-4-v3",
+      "title": "Extend PATH with a Personal Command",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will add a personal executable directory to `PATH` and run a command by name from another directory.\n\nWhen you enter a command without a slash, the shell searches the directories in `PATH` from left to right. You can add a personal executable directory without replacing the existing search path.\n\nCreate a command named `course-status`:\n\n```bash\nmkdir -p \"$HOME/bin\"\ncat > \"$HOME/bin/course-status\" <<'EOF'\n#!/bin/bash\necho \"Linux learning environment is ready\"\nEOF\nchmod +x \"$HOME/bin/course-status\"\n```\n\nAppend the directory to the current `PATH`. Keeping `$PATH` preserves access to standard commands:\n\n```bash\nexport PATH=\"$PATH:$HOME/bin\"\n```\n\nAsk the shell which file it will execute, then run the command from a different directory:\n\n```bash\ncommand -v course-status\ncd /tmp\ncourse-status\n```\n\nSave its output in the lab workspace:\n\n```bash\ncourse-status > /home/labex/project/environment-lab/path-command.txt\n```",
+      "title_vi": "Thêm thư mục cá nhân vào biến PATH",
+      "task": "Thực hiện hướng dẫn: Extend PATH with a Personal Command",
+      "hint": "Chạy lệnh: export PATH=\"$PATH:$HOME/bin\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ thêm một thư mục thực thi cá nhân vào `PATH` và chạy một lệnh bằng tên của nó từ một thư mục khác.\n\nKhi bạn nhập một lệnh không có dấu gạch chéo, shell sẽ tìm kiếm các thư mục trong `PATH` từ trái sang phải. Bạn có thể thêm một thư mục thực thi cá nhân mà không cần thay thế đường dẫn tìm kiếm hiện có.\n\nTạo một lệnh có tên là `course-status`:\n\n```bash\nmkdir -p \"$HOME/bin\"\ncat > \"$HOME/bin/course-status\" <<'EOF'\n#!/bin/bash\necho \"Linux learning environment is ready\"\nEOF\nchmod +x \"$HOME/bin/course-status\"\n```\n\nThêm thư mục vào `PATH` hiện tại. Việc giữ lại `$PATH` sẽ duy trì quyền truy cập vào các lệnh tiêu chuẩn:\n\n```bash\nexport PATH=\"$PATH:$HOME/bin\"\n```\n\nHỏi shell xem nó sẽ thực thi tệp nào, sau đó chạy lệnh từ một thư mục khác:\n\n```bash\ncommand -v course-status\ncd /tmp\ncourse-status\n```\n\nLưu kết quả đầu ra của nó vào không gian làm việc của lab:\n\n```bash\ncourse-status > /home/labex/project/environment-lab/path-command.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Thêm thư mục cá nhân vào biến PATH",
+      "hint_vi": "Chạy lệnh: export PATH=\"$PATH:$HOME/bin\""
+    },
+    {
+      "id": "source-385274-section-5-v3",
+      "title": "Persist Settings for Future Zsh Sessions",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will configure future Zsh sessions and distinguish persistent configuration from current-shell state.\n\nExporting changes the current process and its future children; it does not edit a configuration file. A setting appears in later terminals only when a startup file recreates it. The LabEx Terminal uses Zsh, whose interactive startup file is `~/.zshrc`.\n\nAppend a clearly marked block. Each `export` line recreates one environment setting whenever a new interactive Zsh starts. This beginner version keeps the startup file intentionally direct: preserve the existing `PATH`, then add the personal directory at the end.\n\n```bash\ncat >> \"$HOME/.zshrc\" <<'EOF'\n## LABEX_ENV_LAB_START\nexport PROJECT_DIR=\"$HOME/project\"\nexport PATH=\"$PATH:$HOME/bin\"\n## LABEX_ENV_LAB_END\nEOF\n```\n\nThe `source` command reads a file in the current shell. Reload `.zshrc` now so you can use its settings without closing the Terminal:\n\n```bash\nsource \"$HOME/.zshrc\"\n```\n\nConfirm that the reloaded variable is available:\n\n```bash\nprintf 'PROJECT_DIR=%s\\n' \"$PROJECT_DIR\"\n```\n\nYou should see `PROJECT_DIR=/home/labex/project`. You can also start a new Zsh process to prove that a future session loads the same settings. In `zsh -ic`, `-i` requests an interactive shell so `.zshrc` is read, and `-c` supplies the command that shell should run. Redirect its two output lines into `future-shell.txt`, then inspect the file:\n\n```bash\nzsh -ic 'printf \"PROJECT_DIR=%s\\n\" \"$PROJECT_DIR\"; command -v course-status' > /home/labex/project/environment-lab/future-shell.txt\ncat /home/labex/project/environment-lab/future-shell.txt\n```\n\nThe first line should show `/home/labex/project`; the second should show `/home/labex/bin/course-status`.\n\nFinally, learn the difference between current state and persistent configuration. Create and remove a temporary environment variable:\n\n```bash\nexport TEMP_NOTE=\"remove me\"\nprintenv TEMP_NOTE\nunset TEMP_NOTE\nprintenv TEMP_NOTE\n```\n\nThe final `printenv` produces no output and returns a nonzero status because the name no longer exists. `unset` removes the name from the current shell. If a name is still defined in a startup file, a future shell will recreate it until that configuration line is removed.",
+      "title_vi": "Lưu cài đặt cho các phiên Zsh tương lai",
+      "task": "Thực hiện hướng dẫn: Persist Settings for Future Zsh Sessions",
+      "hint": "Chạy lệnh: source \"$HOME/.zshrc\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu Zsh thật; image hiện chưa có Zsh, không chấm Bash thay cho phiên Zsh."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ cấu hình các phiên Zsh trong tương lai và phân biệt giữa cấu hình lưu trữ bền vững (persistent configuration) với trạng thái của shell hiện tại.\n\nViệc `export` làm thay đổi tiến trình hiện tại và các tiến trình con trong tương lai của nó; thao tác này không chỉnh sửa tệp cấu hình. Một thiết lập chỉ xuất hiện ở các terminal sau đó khi một tệp khởi động tạo lại nó. LabEx Terminal sử dụng Zsh, có tệp khởi động tương tác là `~/.zshrc`.\n\nThêm một khối được đánh dấu rõ ràng. Mỗi dòng `export` sẽ tạo lại một thiết lập môi trường bất cứ khi nào một phiên Zsh tương tác mới khởi động. Phiên bản dành cho người mới bắt đầu này giữ cho tệp khởi động mang tính trực quan: giữ nguyên `PATH` hiện có, sau đó thêm thư mục cá nhân vào cuối.\n\n```bash\ncat >> \"$HOME/.zshrc\" <<'EOF'\n## LABEX_ENV_LAB_START\nexport PROJECT_DIR=\"$HOME/project\"\nexport PATH=\"$PATH:$HOME/bin\"\n## LABEX_ENV_LAB_END\nEOF\n```\n\nLệnh `source` đọc một tệp trong shell hiện tại. Tải lại `.zshrc` ngay bây giờ để bạn có thể sử dụng các thiết lập của nó mà không cần đóng Terminal:\n\n```bash\nsource \"$HOME/.zshrc\"\n```\n\nXác nhận rằng biến đã được tải lại có sẵn:\n\n```bash\nprintf 'PROJECT_DIR=%s\\n' \"$PROJECT_DIR\"\n```\n\nBạn sẽ thấy `PROJECT_DIR=/home/labex/project`. Bạn cũng có thể khởi động một tiến trình Zsh mới để chứng minh rằng một phiên làm việc trong tương lai sẽ tải các thiết lập tương tự. Trong `zsh -ic`, `-i` yêu cầu một shell tương tác để `.zshrc` được đọc, và `-c` cung cấp lệnh mà shell đó sẽ chạy. Chuyển hướng hai dòng đầu ra của nó vào tệp `future-shell.txt`, sau đó kiểm tra tệp:\n\n```bash\nzsh -ic 'printf \"PROJECT_DIR=%s\\n\" \"$PROJECT_DIR\"; command -v course-status' > /home/labex/project/environment-lab/future-shell.txt\ncat /home/labex/project/environment-lab/future-shell.txt\n```\n\nDòng đầu tiên sẽ hiển thị `/home/labex/project`; dòng thứ hai sẽ hiển thị `/home/labex/bin/course-status`.\n\nCuối cùng, hãy tìm hiểu sự khác biệt giữa trạng thái hiện tại và cấu hình lưu trữ bền vững. Tạo và xóa một biến môi trường tạm thời:\n\n```bash\nexport TEMP_NOTE=\"remove me\"\nprintenv TEMP_NOTE\nunset TEMP_NOTE\nprintenv TEMP_NOTE\n```\n\nLệnh `printenv` cuối cùng không tạo ra đầu ra nào và trả về một trạng thái khác không (nonzero status) vì tên biến không còn tồn tại nữa. `unset` xóa tên khỏi shell hiện tại. Nếu một tên vẫn được định nghĩa trong tệp khởi động, một shell trong tương lai sẽ tạo lại nó cho đến khi dòng cấu hình đó bị xóa.",
+      "task_vi": "Thực hiện hướng dẫn: Lưu cài đặt cho các phiên Zsh tương lai",
+      "hint_vi": "Chạy lệnh: source \"$HOME/.zshrc\""
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-environment-variables-in-linux-385274.json"
+}

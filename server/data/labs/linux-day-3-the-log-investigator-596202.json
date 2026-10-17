@@ -1,0 +1,393 @@
+{
+  "id": "linux-day-3-the-log-investigator-596202",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 3,
+  "title": "The Log Investigator",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "It's Day 3 at LabEx Corporation, and disaster has struck Project Phoenix! You arrive at the office to find Sarah Chen and the development team in crisis mode. The application you helped organize yesterday has encountered critical errors during its first major testing phase.",
+  "source_url": "https://labex.io/tutorials/linux-day-3-the-log-investigator-596202",
+  "source_lab_id": 596202,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-3-the-log-investigator-596202",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-3-the-log-investigator-596202.json",
+    "reference_sha256": "800dde6d6408c9fe8267079fcf4db3a33ac8774eeaa80e45876af4faacc0fd7f",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "known-formatting-difference"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-3-the-log-investigator-596202.json",
+  "sections": [
+    {
+      "id": "source-596202-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nIt's Day 3 at LabEx Corporation, and disaster has struck Project Phoenix! You arrive at the office to find Sarah Chen and the development team in crisis mode. The application you helped organize yesterday has encountered critical errors during its first major testing phase.\n\nEmergency alerts are flooding the monitoring systems, users are reporting application failures, and the deployment pipeline has ground to a halt. Sarah turns to you with a look of desperation - the senior DevOps engineer is out sick, and the project deadline is fast approaching.\n\n\"We need our best investigator on this,\" Sarah says, handing you the incident report. \"Your systematic approach to organizing our files was exactly what we needed. Now we need that same methodical thinking to solve this mystery.\"\n\nYour mission is to dive deep into the Project Phoenix server, analyze logs and configuration files, and uncover the root cause of these failures. You'll use advanced Linux command-line tools to piece together the clues and restore stability to the application your team has worked so hard to build. The future of Project Phoenix—and possibly your career at TechNova—depends on your detective skills!\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Giới thiệu\n\nĐã là Ngày thứ 3 tại Tập đoàn LabEx, và thảm họa đã giáng xuống Dự án Phoenix! Bạn đến văn phòng và thấy Sarah Chen cùng đội ngũ phát triển đang trong tình trạng khủng hoảng. Ứng dụng mà bạn đã giúp tổ chức ngày hôm qua đã gặp phải các lỗi nghiêm trọng trong giai đoạn kiểm thử lớn đầu tiên.\n\nCác cảnh báo khẩn cấp đang tràn ngập các hệ thống giám sát, người dùng đang báo cáo lỗi ứng dụng, và chu trình triển khai (deployment pipeline) đã bị đình trệ hoàn toàn. Sarah quay sang nhìn bạn với vẻ mặt tuyệt vọng — kỹ sư DevOps cấp cao đang nghỉ ốm, và hạn chót của dự án đang đến rất gần.\n\nSarah vừa đưa cho bạn báo cáo sự cố vừa nói: \"Chúng tôi cần nhà điều tra giỏi nhất cho việc này. Cách tiếp cận có hệ thống của bạn trong việc tổ chức các tệp tin chính là điều chúng tôi cần. Bây giờ, chúng ta cần tư duy phương pháp luận tương tự để giải quyết bí ẩn này.\"\n\nNhiệm vụ của bạn là thâm nhập sâu vào máy chủ Dự án Phoenix, phân tích nhật ký (logs) và các tệp cấu hình, đồng thời tìm ra nguyên nhân gốc rễ của những lỗi này. Bạn sẽ sử dụng các công cụ dòng lệnh Linux nâng cao để ghép nối các manh mối và khôi phục sự ổn định cho ứng dụng mà nhóm của bạn đã rất vất vả để xây dựng. Tương lai của Dự án Phoenix — và có thể cả sự nghiệp của bạn tại TechNova — phụ thuộc vào kỹ năng thám tử của bạn!"
+    },
+    {
+      "id": "source-596202-section-1-v2",
+      "title": "Reviewing Application Log File Contents",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Reviewing Application Log File Contents\n\nYour first step as an investigator is to check Project Phoenix's application log file. The application writes its logs to `~/project/logs/app.log`. A flood of messages can be overwhelming, so you need to find the critical error messages quickly to understand what's going wrong with the system you helped organize yesterday.\n\n### Tasks\n\n- Filter the `~/project/logs/app.log` file to find all lines containing the word `ERROR`.\n- Save the filtered lines to a new file named `~/project/error_report.txt`.\n\n### Requirements\n\n- You must use a command-line tool to search the file.\n- The input file for your search is `~/project/logs/app.log`.\n- The output must be saved in a file named `~/project/error_report.txt` in the `~/project` directory.\n- The output file should only contain the lines with the word `ERROR`.\n\n### Hints\n\n- The `grep` command is perfect for searching for patterns in text files.\n- To save the output of a command to a file, you can use the `>` redirection operator. This will create the file if it doesn't exist or overwrite it if it does.\n\n### Examples\n\nAfter successfully filtering the log file, your `~/project/error_report.txt` file should contain only the error lines:\n\n```bash\n$ cat ~/project/error_report.txt\n[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\n```\n\nThe file should contain exactly 2 lines, both starting with timestamps and containing the word \"ERROR\".\n",
+      "task": "- Filter the `~/project/logs/app.log` file to find all lines containing the word `ERROR`.\n- Save the filtered lines to a new file named `~/project/error_report.txt`.",
+      "hint": "- The `grep` command is perfect for searching for patterns in text files.\n- To save the output of a command to a file, you can use the `>` redirection operator. This will create the file if it doesn't exist or overwrite it if it does.",
+      "verification": {
+        "kind": "state",
+        "command": "cmp -s '/home/labex/project/error_report.txt' <(printf '%s' '[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\n')"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Xem nội dung tệp nhật ký ứng dụng",
+      "content_vi": "## Xem lại nội dung tệp nhật ký ứng dụng\n\nBước đầu tiên của bạn với tư cách là một điều tra viên là kiểm tra tệp nhật ký ứng dụng của Project Phoenix. Ứng dụng ghi nhật ký của nó vào `~/project/logs/app.log`. Quá nhiều thông báo có thể khiến bạn choáng ngợp, vì vậy bạn cần tìm nhanh các thông báo lỗi quan trọng để hiểu điều gì đang xảy ra sai với hệ thống mà bạn đã giúp tổ chức ngày hôm qua.\n\n### Nhiệm vụ\n\n- Lọc tệp `~/project/logs/app.log` để tìm tất cả các dòng chứa từ `ERROR`.\n- Lưu các dòng đã lọc vào một tệp mới có tên là `~/project/error_report.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng một công cụ dòng lệnh để tìm kiếm trong tệp.\n- Tệp đầu vào cho việc tìm kiếm của bạn là `~/project/logs/app.log`.\n- Đầu ra phải được lưu trong một tệp có tên là `~/project/error_report.txt` trong thư mục `~/project`.\n- Tệp đầu ra chỉ nên chứa các dòng có từ `ERROR`.\n\n### Gợi ý\n\n- Lệnh `grep` rất hoàn hảo để tìm kiếm các mẫu trong tệp văn bản.\n- Để lưu đầu ra của một lệnh vào một tệp, bạn có thể sử dụng toán tử chuyển hướng `>`. Thao tác này sẽ tạo tệp nếu nó chưa tồn tại hoặc ghi đè lên nó nếu nó đã tồn tại.\n\n### Ví dụ\n\nSau khi lọc thành công tệp nhật ký, tệp `~/project/error_report.txt` của bạn sẽ chỉ chứa các dòng lỗi:\n\n```bash\n$ cat ~/project/error_report.txt\n[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\n```\n\nTệp phải chứa chính xác 2 dòng, cả hai đều bắt đầu bằng dấu thời gian và chứa từ \"ERROR\"."
+    },
+    {
+      "id": "source-596202-section-2-v2",
+      "title": "Investigating System Boot Messages",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Investigating System Boot Messages\n\nThe application errors might be a symptom of a deeper hardware or kernel-level issue. A good place to look for such problems is the kernel ring buffer, which contains messages from the system's boot process and driver operations.\n\n### Tasks\n\n- Examine the system's kernel messages for any lines related to `fail` or `error`.\n- Save these findings into a file named `~/project/boot_issues.txt`.\n\n### Requirements\n\n- You must use the `dmesg` command to view kernel messages.\n- Your search for `fail` or `error` should be case-insensitive.\n- The results must be saved to a file named `~/project/boot_issues.txt`.\n- Note: You may need administrative privileges (sudo) to access kernel messages.\n\n### Hints\n\n- The `dmesg` command displays kernel messages. You can \"pipe\" its output to another command for filtering.\n- The pipe operator `|` sends the output of one command to the input of another.\n- The `grep` command's `-i` option makes the search case-insensitive.\n- To search for multiple patterns at once (like `fail` OR `error`), you can use `grep -E 'pattern1|pattern2'`.\n- Note: If you encounter a \"Operation not permitted\" error, try running the command with `sudo` to gain the necessary privileges.\n\n### Examples\n\nAfter successfully filtering the kernel messages, your `~/project/boot_issues.txt` file should contain relevant system messages:\n\n```bash\n$ cat ~/project/boot_issues.txt\n[    0.330755] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.\n[    1.026520] RAS: Correctable Errors collector initialized.\n[   28.260800] kernel: [   10.123456] my-driver: probe of 0000:00:1f.0 failed with error -2\n```\n\nThe file should contain kernel messages that include words like \"fail\" or \"error\" (case-insensitive), showing potential hardware or driver issues during system boot.\n",
+      "task": "- Examine the system's kernel messages for any lines related to `fail` or `error`.\n- Save these findings into a file named `~/project/boot_issues.txt`.",
+      "hint": "- The `dmesg` command displays kernel messages. You can \"pipe\" its output to another command for filtering.\n- The pipe operator `|` sends the output of one command to the input of another.\n- The `grep` command's `-i` option makes the search case-insensitive.\n- To search for multiple patterns at once (like `fail` OR `error`), you can use `grep -E 'pattern1|pattern2'`.\n- Note: If you encounter a \"Operation not permitted\" error, try running the command with `sudo` to gain the necessary privileges.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu dmesg thật. Môi trường hiện không cấp quyền đọc kernel log (CAP_SYSLOG), nên chưa hỗ trợ kiểm tra bước này."
+      },
+      "required_capabilities": [
+        "kernel-log"
+      ],
+      "title_vi": "Kiểm tra thông báo khởi động hệ thống",
+      "content_vi": "## Điều tra Thông báo Khởi động Hệ thống\n\nCác lỗi ứng dụng có thể là triệu chứng của một vấn đề sâu xa hơn về phần cứng hoặc cấp độ kernel. Một nơi tốt để tìm kiếm các vấn đề như vậy là bộ đệm vòng (ring buffer) của kernel, nơi chứa các thông báo từ quá trình khởi động của hệ thống và các hoạt động của trình điều khiển (driver).\n\n### Nhiệm vụ\n\n- Kiểm tra các thông báo kernel của hệ thống để tìm bất kỳ dòng nào liên quan đến `fail` hoặc `error`.\n- Lưu các kết quả tìm được này vào một tệp có tên là `~/project/boot_issues.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `dmesg` để xem các thông báo kernel.\n- Việc tìm kiếm từ `fail` hoặc `error` của bạn phải không phân biệt chữ hoa chữ thường (case-insensitive).\n- Các kết quả phải được lưu vào một tệp có tên là `~/project/boot_issues.txt`.\n- Lưu ý: Bạn có thể cần quyền quản trị viên (sudo) để truy cập các thông báo kernel.\n\n### Gợi ý\n\n- Lệnh `dmesg` hiển thị các thông báo kernel. Bạn có thể \"chuyển ống\" (pipe) đầu ra của nó sang một lệnh khác để lọc.\n- Toán tử ống `|` gửi đầu ra của lệnh này làm đầu vào cho lệnh khác.\n- Tùy chọn `-i` của lệnh `grep` giúp việc tìm kiếm không phân biệt chữ hoa chữ thường.\n- Để tìm kiếm nhiều mẫu cùng một lúc (như `fail` HOẶC `error`), bạn có thể sử dụng `grep -E 'pattern1|pattern2'`.\n- Lưu ý: Nếu bạn gặp lỗi \"Operation not permitted\", hãy thử chạy lệnh với `sudo` để có được các quyền cần thiết.\n\n### Ví dụ\n\nSau khi lọc thành công các thông báo kernel, tệp `~/project/boot_issues.txt` của bạn sẽ chứa các thông báo hệ thống liên quan:\n\n```bash\n$ cat ~/project/boot_issues.txt\n[    0.330755] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.\n[    1.026520] RAS: Correctable Errors collector initialized.\n[   28.260800] kernel: [   10.123456] my-driver: probe of 0000:00:1f.0 failed with error -2\n```\n\nTệp phải chứa các thông báo kernel bao gồm các từ như \"fail\" hoặc \"error\" (không phân biệt chữ hoa chữ thường), cho thấy các sự cố tiềm ẩn về phần cứng hoặc trình điều khiển trong quá trình khởi động hệ thống."
+    },
+    {
+      "id": "source-596202-section-3-v2",
+      "title": "Examining the Web Server Configuration File",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Examining the Web Server Configuration File\n\nNo critical hardware issues found. The problem might be in the web server configuration. Let's examine the Nginx configuration file to see how it's set up. Sometimes, misconfigurations like having too few worker processes can cause performance bottlenecks and lead to application failures under load.\n\n### Tasks\n\n- Search the web server configuration file at `~/project/config/nginx.conf`.\n- Find the line containing the `worker_processes` directive.\n- **Append** this line to the `~/project/error_report.txt` file you created in the first step.\n\n### Requirements\n\n- The input file is `~/project/config/nginx.conf`.\n- You must **append** the result to `~/project/error_report.txt`, not overwrite it.\n\n### Hints\n\n- You can use `grep` again for this task.\n- To **append** output to a file instead of overwriting it, use the `>>` operator.\n\n### Examples\n\nAfter appending the worker_processes line to your existing error report, the `~/project/error_report.txt` file should now contain both the original error lines and the new configuration line:\n\n```bash\n$ cat ~/project/error_report.txt\n[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\nworker_processes 4;\n```\n\nThe file should contain 3 lines total: 2 original error lines plus 1 new line with \"worker_processes 4;\".\n",
+      "task": "- Search the web server configuration file at `~/project/config/nginx.conf`.\n- Find the line containing the `worker_processes` directive.\n- **Append** this line to the `~/project/error_report.txt` file you created in the first step.",
+      "hint": "- You can use `grep` again for this task.\n- To **append** output to a file instead of overwriting it, use the `>>` operator.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "cmp -s '/home/labex/project/error_report.txt' <(printf '%s' '[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\nworker_processes 4;\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*grep\\s+[^\\n;]*worker_processes[^\\n;]*nginx\\.conf\\s*>>\\s*[^\\n;]*error_report\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Kiểm tra tệp cấu hình máy chủ web",
+      "content_vi": "## Kiểm tra Tệp Cấu hình Máy chủ Web\n\nKhông tìm thấy vấn đề phần cứng quan trọng nào. Vấn đề có thể nằm ở cấu hình máy chủ web. Hãy kiểm tra tệp cấu hình Nginx để xem nó được thiết lập như thế nào. Đôi khi, các cấu hình sai như có quá ít tiến trình worker (worker processes) có thể gây ra hiện tượng nghẽn cổ chai về hiệu suất và dẫn đến lỗi ứng dụng khi chịu tải.\n\n### Nhiệm vụ\n\n- Tìm kiếm tệp cấu hình máy chủ web tại `~/project/config/nginx.conf`.\n- Tìm dòng chứa chỉ thị `worker_processes`.\n- **Thêm vào cuối** (append) dòng này vào tệp `~/project/error_report.txt` mà bạn đã tạo ở bước đầu tiên.\n\n### Yêu cầu\n\n- Tệp đầu vào là `~/project/config/nginx.conf`.\n- Bạn phải **thêm vào cuối** kết quả vào tệp `~/project/error_report.txt`, không ghi đè lên nó.\n\n### Gợi ý\n\n- Bạn có thể sử dụng lại lệnh `grep` cho nhiệm vụ này.\n- Để **thêm** đầu ra vào một tệp thay vì ghi đè lên nó, hãy sử dụng toán tử `>>`.\n\n### Ví dụ\n\nSau khi thêm dòng worker_processes vào báo cáo lỗi hiện có của bạn, tệp `~/project/error_report.txt` bây giờ sẽ chứa cả các dòng lỗi ban đầu và dòng cấu hình mới:\n\n```bash\n$ cat ~/project/error_report.txt\n[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\nworker_processes 4;\n```\n\nTệp phải chứa tổng cộng 3 dòng: 2 dòng lỗi ban đầu cộng với 1 dòng mới có nội dung \"worker_processes 4;\"."
+    },
+    {
+      "id": "source-596202-section-4-v2",
+      "title": "Comparing Staging and Production Configuration Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Comparing Staging and Production Configuration Files\n\nA common source of production issues is a discrepancy between the staging and production environments. A feature might work perfectly in staging but fail in production due to a small configuration difference. Let's compare the application's configuration files from both environments to spot any differences.\n\n### Tasks\n\n- Compare the staging configuration file `~/project/config/staging/app.conf` with the production configuration file `~/project/config/production/app.conf`.\n- Save the differences to a new file named `~/project/config_diff.txt`.\n\n### Requirements\n\n- You must use the `diff` command.\n- The output showing the differences must be saved to `~/project/config_diff.txt`.\n\n### Hints\n\n- The `diff` command is designed specifically for comparing two files line by line.\n- The basic syntax is `diff file1 file2`, where it shows what changes need to be made to file1 to make it identical to file2.\n- The order of files matters! `diff A B` and `diff B A` will show different outputs.\n- You can redirect the output of `diff` to a file just like you did with `grep`.\n\n### Examples\n\nAfter comparing the staging and production configuration files, your `~/project/config_diff.txt` file should show the differences between the two environments:\n\n```bash\n$ cat ~/project/config_diff.txt\n1,5c1,5\n< ## Staging Configuration\n< database.url=jdbc:mysql://staging-db:3306/nexus\n< api.key=staging_key_abc123\n< feature.flag.new_dashboard=true\n< timeout.ms=3000\n---\n> ## Production Configuration\n> database.url=jdbc:mysql://prod-db:3306/nexus\n> api.key=prod_key_xyz789\n> feature.flag.new_dashboard=false\n> timeout.ms=5000\n```\n\nThe diff output shows what changes would need to be made to the staging configuration file to make it match the production configuration file. Lines starting with `<` show content from the staging file, while lines starting with `>` show content from the production file. This reveals that the production environment uses different database URLs, API keys, feature flags, and timeout values compared to staging.\n",
+      "task": "- Compare the staging configuration file `~/project/config/staging/app.conf` with the production configuration file `~/project/config/production/app.conf`.\n- Save the differences to a new file named `~/project/config_diff.txt`.",
+      "hint": "- The `diff` command is designed specifically for comparing two files line by line.\n- The basic syntax is `diff file1 file2`, where it shows what changes need to be made to file1 to make it identical to file2.\n- The order of files matters! `diff A B` and `diff B A` will show different outputs.\n- You can redirect the output of `diff` to a file just like you did with `grep`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -s /home/labex/project/config_diff.txt && cmp -s /home/labex/project/config_diff.txt <(diff /home/labex/project/config/staging/app.conf /home/labex/project/config/production/app.conf)"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0,
+              1
+            ],
+            "groups": [
+              [
+                "^\\s*diff\\s+[^\\n;]*staging/app\\.conf\\s+[^\\n;]*production/app\\.conf\\s*>\\s*[^\\n;]*config_diff\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "So sánh tệp cấu hình Staging và Production",
+      "content_vi": "## So sánh tệp cấu hình Staging và Production\n\nMột nguyên nhân phổ biến gây ra sự cố trong môi trường production là sự sai lệch giữa môi trường staging và production. Một tính năng có thể hoạt động hoàn hảo trên staging nhưng lại thất bại trên production do một điểm khác biệt nhỏ về cấu hình. Hãy cùng so sánh các tệp cấu hình của ứng dụng từ cả hai môi trường để phát hiện ra bất kỳ sự khác biệt nào.\n\n### Nhiệm vụ\n\n- So sánh tệp cấu hình staging `~/project/config/staging/app.conf` với tệp cấu hình production `~/project/config/production/app.conf`.\n- Lưu các điểm khác biệt vào một tệp mới có tên là `~/project/config_diff.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `diff`.\n- Đầu ra hiển thị các điểm khác biệt phải được lưu vào `~/project/config_diff.txt`.\n\n### Gợi ý\n\n- Lệnh `diff` được thiết kế đặc biệt để so sánh hai tệp theo từng dòng.\n- Cú pháp cơ bản là `diff file1 file2`, trong đó lệnh sẽ hiển thị những thay đổi cần thực hiện đối với file1 để làm cho nó giống hệt với file2.\n- Thứ tự của các tệp rất quan trọng! `diff A B` và `diff B A` sẽ hiển thị các kết quả đầu ra khác nhau.\n- Bạn có thể chuyển hướng đầu ra của `diff` vào một tệp giống như cách bạn đã làm với `grep`.\n\n### Ví dụ\n\nSau khi so sánh các tệp cấu hình staging và production, tệp `~/project/config_diff.txt` của bạn sẽ hiển thị các điểm khác biệt giữa hai môi trường:\n\n```bash\n$ cat ~/project/config_diff.txt\n1,5c1,5\n< ## Staging Configuration\n< database.url=jdbc:mysql://staging-db:3306/nexus\n< api.key=staging_key_abc123\n< feature.flag.new_dashboard=true\n< timeout.ms=3000\n---\n> ## Production Configuration\n> database.url=jdbc:mysql://prod-db:3306/nexus\n> api.key=prod_key_xyz789\n> feature.flag.new_dashboard=false\n> timeout.ms=5000\n```\n\nKết quả đầu ra của lệnh diff cho biết những thay đổi nào cần được thực hiện đối với tệp cấu hình staging để làm cho nó khớp với tệp cấu hình production. Các dòng bắt đầu bằng ký tự `<` hiển thị nội dung từ tệp staging, trong khi các dòng bắt đầu bằng ký tự `>` hiển thị nội dung từ tệp production. Điều này cho thấy môi trường production sử dụng URL cơ sở dữ liệu, khóa API, cờ tính năng (feature flags) và giá trị thời gian chờ (timeout) khác so với môi trường staging."
+    },
+    {
+      "id": "source-596202-section-5-v2",
+      "title": "Verifying Directory Consistency Between Servers",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Verifying Directory Consistency Between Servers\n\nThe configuration difference is a strong lead! It seems the production server might also be missing some critical files that exist on the staging server. This could be due to a failed deployment. Let's simulate this by comparing two directories that represent the file structures from two different servers.\n\n### Tasks\n\n- You have two directories: `/home/labex/project/server1_files` (representing the staging server) and `/home/labex/project/server2_files` (representing the production server).\n- Compare these two directories to find out which files are unique to `server1_files`.\n- Save the complete comparison output to a file named `/home/labex/project/missing_files.txt`.\n\n### Requirements\n\n- You must use the `diff` command to compare the two directories.\n- The output must be saved to `/home/labex/project/missing_files.txt`.\n\n### Hints\n\n- The `diff` command can also compare directories if you provide directory paths instead of file paths.\n- Using the `-r` or `--recursive` option with `diff` is a good practice for comparing directories, as it will compare all files within them.\n- The output format of `diff` on directories will explicitly state which files are \"Only in\" a specific directory.\n- Just like with files, the order matters when comparing directories. `diff dir1 dir2` shows what's in dir1 but not in dir2, while `diff dir2 dir1` shows the opposite.\n\n### Examples\n\nAfter comparing the two server directories, your `/home/labex/project/missing_files.txt` file should show which files are missing from the production server:\n\n```bash\n$ cat /home/labex/project/missing_files.txt\nOnly in /home/labex/project/server1_files: asset2.js\n```\n\nThis output indicates that `asset2.js` exists in the first directory (`server1_files`, representing the staging server) but is missing from the second directory (`server2_files`, representing the production server). By comparing staging first and production second, we can easily identify files that are missing from production, which could explain some of the application failures.\n",
+      "task": "- You have two directories: `/home/labex/project/server1_files` (representing the staging server) and `/home/labex/project/server2_files` (representing the production server).\n- Compare these two directories to find out which files are unique to `server1_files`.\n- Save the complete comparison output to a file named `/home/labex/project/missing_files.txt`.",
+      "hint": "- The `diff` command can also compare directories if you provide directory paths instead of file paths.\n- Using the `-r` or `--recursive` option with `diff` is a good practice for comparing directories, as it will compare all files within them.\n- The output format of `diff` on directories will explicitly state which files are \"Only in\" a specific directory.\n- Just like with files, the order matters when comparing directories. `diff dir1 dir2` shows what's in dir1 but not in dir2, while `diff dir2 dir1` shows the opposite.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -s /home/labex/project/missing_files.txt && cmp -s /home/labex/project/missing_files.txt <(diff /home/labex/project/server1_files /home/labex/project/server2_files)"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0,
+              1
+            ],
+            "groups": [
+              [
+                "^\\s*diff\\s+(?:-r\\s+)?/home/labex/project/server1_files\\s+/home/labex/project/server2_files\\s*>\\s*/home/labex/project/missing_files\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Kiểm tra tính đồng nhất của thư mục giữa các máy chủ",
+      "content_vi": "## Xác minh tính nhất quán của thư mục giữa các máy chủ\n\nSự khác biệt về cấu hình là một manh mối quan trọng! Dường như máy chủ sản xuất (production) cũng có thể đang thiếu một số tệp quan trọng tồn tại trên máy chủ dàn dựng (staging). Điều này có thể là do quá trình triển khai (deployment) bị lỗi. Hãy mô phỏng điều này bằng cách so sánh hai thư mục đại diện cho cấu trúc tệp từ hai máy chủ khác nhau.\n\n### Nhiệm vụ\n\n- Bạn có hai thư mục: `/home/labex/project/server1_files` (đại diện cho máy chủ staging) và `/home/labex/project/server2_files` (đại diện cho máy chủ production).\n- So sánh hai thư mục này để tìm ra các tệp nào là duy nhất trong `server1_files`.\n- Lưu toàn bộ kết quả so sánh vào một tệp có tên là `/home/labex/project/missing_files.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `diff` để so sánh hai thư mục.\n- Kết quả đầu ra phải được lưu vào `/home/labex/project/missing_files.txt`.\n\n### Gợi ý\n\n- Lệnh `diff` cũng có thể so sánh các thư mục nếu bạn cung cấp đường dẫn thư mục thay vì đường dẫn tệp.\n- Sử dụng tùy chọn `-r` hoặc `--recursive` với `diff` là một phương pháp hay khi so sánh các thư mục, vì nó sẽ so sánh tất cả các tệp bên trong chúng.\n- Định dạng đầu ra của `diff` trên các thư mục sẽ nêu rõ tệp nào \"Only in\" (Chỉ có trong) một thư mục cụ thể.\n- Giống như với các tệp, thứ tự rất quan trọng khi so sánh các thư mục. `diff dir1 dir2` hiển thị những gì có trong dir1 nhưng không có trong dir2, trong khi `diff dir2 dir1` hiển thị điều ngược lại.\n\n### Ví dụ\n\nSau khi so sánh hai thư mục máy chủ, tệp `/home/labex/project/missing_files.txt` của bạn sẽ hiển thị tệp nào đang bị thiếu khỏi máy chủ production:\n\n```bash\n$ cat /home/labex/project/missing_files.txt\nOnly in /home/labex/project/server1_files: asset2.js\n```\n\nKết quả đầu ra này chỉ ra rằng `asset2.js` tồn tại trong thư mục đầu tiên (`server1_files`, đại diện cho máy chủ staging) nhưng bị thiếu trong thư mục thứ hai (`server2_files`, đại diện cho máy chủ production). Bằng cách so sánh staging trước và production sau, chúng ta có thể dễ dàng xác định các tệp bị thiếu ở môi trường production, điều này có thể giải thích một số lỗi của ứng dụng."
+    },
+    {
+      "id": "source-596202-section-6-v2",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nExceptional detective work! You have successfully identified the root causes of Project Phoenix's critical failures and provided Sarah Chen and the development team with actionable intelligence to resolve the issues.\n\nThrough your systematic investigation, you've mastered essential troubleshooting commands:\n\n- `grep`: To filter log files and extract critical error information.\n- `dmesg`: To investigate system-level hardware and kernel issues.\n- `diff`: To compare configuration files and identify discrepancies between environments.\n- Command pipelines and redirection: To efficiently process and document your findings.\n\nYour methodical approach to log analysis has saved Project Phoenix from a potentially catastrophic failure. The development team now has clear direction on fixing the configuration mismatches and missing deployment files you discovered.\n\nSarah Chen was so impressed with your investigation skills that she's recommending you for a security role. Tomorrow, you'll step into the shoes of the Fortress Guardian to secure Project Phoenix's infrastructure and protect it from future threats!\n",
+      "title_vi": "Tổng quan",
+      "content_vi": "## Tóm tắt\n\nCông việc điều tra xuất sắc! Bạn đã xác định thành công các nguyên nhân gốc rễ của những sự cố nghiêm trọng trong Dự án Phoenix (Project Phoenix) và cung cấp cho Sarah Chen cùng đội ngũ phát triển thông tin tình báo có thể hành động được để giải quyết các vấn đề.\n\nThông qua quá trình điều tra có hệ thống của mình, bạn đã thành thạo các lệnh khắc phục sự cố thiết yếu:\n\n- `grep`: Để lọc các tệp nhật ký và trích xuất thông tin lỗi quan trọng.\n- `dmesg`: Để điều tra các vấn đề về phần cứng và nhân hệ thống ở cấp độ hệ thống.\n- `diff`: Để so sánh các tệp cấu hình và xác định sự khác biệt giữa các môi trường.\n- Đường ống lệnh (pipeline) và chuyển hướng: Để xử lý và tài liệu hóa các phát hiện của bạn một cách hiệu quả.\n\nCách tiếp cận có phương pháp của bạn đối với việc phân tích nhật ký đã cứu Dự án Phoenix khỏi một thảm họa tiềm tàng. Đội ngũ phát triển giờ đây đã có hướng đi rõ ràng để khắc phục các điểm không khớp về cấu hình và các tệp triển khai bị thiếu mà bạn đã phát hiện ra.\n\nSarah Chen vô cùng ấn tượng với các kỹ năng điều tra của bạn đến mức cô ấy đang đề xuất bạn cho một vai trò bảo mật. Ngày mai, bạn sẽ đảm nhận vai trò Người bảo vệ Pháo đài (Fortress Guardian) để bảo mật cơ sở hạ tầng của Dự án Phoenix và bảo vệ nó khỏi các mốiε đe dọa trong tương lai!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596202-section-1-v2",
+      "title": "Reviewing Application Log File Contents",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Reviewing Application Log File Contents\n\nYour first step as an investigator is to check Project Phoenix's application log file. The application writes its logs to `~/project/logs/app.log`. A flood of messages can be overwhelming, so you need to find the critical error messages quickly to understand what's going wrong with the system you helped organize yesterday.\n\n### Tasks\n\n- Filter the `~/project/logs/app.log` file to find all lines containing the word `ERROR`.\n- Save the filtered lines to a new file named `~/project/error_report.txt`.\n\n### Requirements\n\n- You must use a command-line tool to search the file.\n- The input file for your search is `~/project/logs/app.log`.\n- The output must be saved in a file named `~/project/error_report.txt` in the `~/project` directory.\n- The output file should only contain the lines with the word `ERROR`.\n\n### Hints\n\n- The `grep` command is perfect for searching for patterns in text files.\n- To save the output of a command to a file, you can use the `>` redirection operator. This will create the file if it doesn't exist or overwrite it if it does.\n\n### Examples\n\nAfter successfully filtering the log file, your `~/project/error_report.txt` file should contain only the error lines:\n\n```bash\n$ cat ~/project/error_report.txt\n[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\n```\n\nThe file should contain exactly 2 lines, both starting with timestamps and containing the word \"ERROR\".\n",
+      "task": "- Filter the `~/project/logs/app.log` file to find all lines containing the word `ERROR`.\n- Save the filtered lines to a new file named `~/project/error_report.txt`.",
+      "hint": "- The `grep` command is perfect for searching for patterns in text files.\n- To save the output of a command to a file, you can use the `>` redirection operator. This will create the file if it doesn't exist or overwrite it if it does.",
+      "verification": {
+        "kind": "state",
+        "command": "cmp -s '/home/labex/project/error_report.txt' <(printf '%s' '[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\n')"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Xem nội dung tệp nhật ký ứng dụng",
+      "content_vi": "## Xem lại nội dung tệp nhật ký ứng dụng\n\nBước đầu tiên của bạn với tư cách là một điều tra viên là kiểm tra tệp nhật ký ứng dụng của Project Phoenix. Ứng dụng ghi nhật ký của nó vào `~/project/logs/app.log`. Quá nhiều thông báo có thể khiến bạn choáng ngợp, vì vậy bạn cần tìm nhanh các thông báo lỗi quan trọng để hiểu điều gì đang xảy ra sai với hệ thống mà bạn đã giúp tổ chức ngày hôm qua.\n\n### Nhiệm vụ\n\n- Lọc tệp `~/project/logs/app.log` để tìm tất cả các dòng chứa từ `ERROR`.\n- Lưu các dòng đã lọc vào một tệp mới có tên là `~/project/error_report.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng một công cụ dòng lệnh để tìm kiếm trong tệp.\n- Tệp đầu vào cho việc tìm kiếm của bạn là `~/project/logs/app.log`.\n- Đầu ra phải được lưu trong một tệp có tên là `~/project/error_report.txt` trong thư mục `~/project`.\n- Tệp đầu ra chỉ nên chứa các dòng có từ `ERROR`.\n\n### Gợi ý\n\n- Lệnh `grep` rất hoàn hảo để tìm kiếm các mẫu trong tệp văn bản.\n- Để lưu đầu ra của một lệnh vào một tệp, bạn có thể sử dụng toán tử chuyển hướng `>`. Thao tác này sẽ tạo tệp nếu nó chưa tồn tại hoặc ghi đè lên nó nếu nó đã tồn tại.\n\n### Ví dụ\n\nSau khi lọc thành công tệp nhật ký, tệp `~/project/error_report.txt` của bạn sẽ chỉ chứa các dòng lỗi:\n\n```bash\n$ cat ~/project/error_report.txt\n[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\n```\n\nTệp phải chứa chính xác 2 dòng, cả hai đều bắt đầu bằng dấu thời gian và chứa từ \"ERROR\".",
+      "task_vi": "- Lọc tệp `~/project/logs/app.log` để tìm tất cả các dòng chứa từ `ERROR`.\n- Lưu các dòng đã lọc vào một tệp mới có tên là `~/project/error_report.txt`.",
+      "hint_vi": "Lệnh `grep` rất thích hợp để tìm kiếm các mẫu trong tệp văn bản.\nĐể lưu đầu ra của lệnh vào một tệp, bạn có thể sử dụng toán tử chuyển hướng `>`. Thao tác này sẽ tạo tệp nếu tệp chưa tồn tại hoặc ghi đè lên tệp nếu tệp đã tồn tại."
+    },
+    {
+      "id": "source-596202-section-2-v2",
+      "title": "Investigating System Boot Messages",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Investigating System Boot Messages\n\nThe application errors might be a symptom of a deeper hardware or kernel-level issue. A good place to look for such problems is the kernel ring buffer, which contains messages from the system's boot process and driver operations.\n\n### Tasks\n\n- Examine the system's kernel messages for any lines related to `fail` or `error`.\n- Save these findings into a file named `~/project/boot_issues.txt`.\n\n### Requirements\n\n- You must use the `dmesg` command to view kernel messages.\n- Your search for `fail` or `error` should be case-insensitive.\n- The results must be saved to a file named `~/project/boot_issues.txt`.\n- Note: You may need administrative privileges (sudo) to access kernel messages.\n\n### Hints\n\n- The `dmesg` command displays kernel messages. You can \"pipe\" its output to another command for filtering.\n- The pipe operator `|` sends the output of one command to the input of another.\n- The `grep` command's `-i` option makes the search case-insensitive.\n- To search for multiple patterns at once (like `fail` OR `error`), you can use `grep -E 'pattern1|pattern2'`.\n- Note: If you encounter a \"Operation not permitted\" error, try running the command with `sudo` to gain the necessary privileges.\n\n### Examples\n\nAfter successfully filtering the kernel messages, your `~/project/boot_issues.txt` file should contain relevant system messages:\n\n```bash\n$ cat ~/project/boot_issues.txt\n[    0.330755] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.\n[    1.026520] RAS: Correctable Errors collector initialized.\n[   28.260800] kernel: [   10.123456] my-driver: probe of 0000:00:1f.0 failed with error -2\n```\n\nThe file should contain kernel messages that include words like \"fail\" or \"error\" (case-insensitive), showing potential hardware or driver issues during system boot.\n",
+      "task": "- Examine the system's kernel messages for any lines related to `fail` or `error`.\n- Save these findings into a file named `~/project/boot_issues.txt`.",
+      "hint": "- The `dmesg` command displays kernel messages. You can \"pipe\" its output to another command for filtering.\n- The pipe operator `|` sends the output of one command to the input of another.\n- The `grep` command's `-i` option makes the search case-insensitive.\n- To search for multiple patterns at once (like `fail` OR `error`), you can use `grep -E 'pattern1|pattern2'`.\n- Note: If you encounter a \"Operation not permitted\" error, try running the command with `sudo` to gain the necessary privileges.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu dmesg thật. Môi trường hiện không cấp quyền đọc kernel log (CAP_SYSLOG), nên chưa hỗ trợ kiểm tra bước này."
+      },
+      "required_capabilities": [
+        "kernel-log"
+      ],
+      "title_vi": "Kiểm tra thông báo khởi động hệ thống",
+      "content_vi": "## Điều tra Thông báo Khởi động Hệ thống\n\nCác lỗi ứng dụng có thể là triệu chứng của một vấn đề sâu xa hơn về phần cứng hoặc cấp độ kernel. Một nơi tốt để tìm kiếm các vấn đề như vậy là bộ đệm vòng (ring buffer) của kernel, nơi chứa các thông báo từ quá trình khởi động của hệ thống và các hoạt động của trình điều khiển (driver).\n\n### Nhiệm vụ\n\n- Kiểm tra các thông báo kernel của hệ thống để tìm bất kỳ dòng nào liên quan đến `fail` hoặc `error`.\n- Lưu các kết quả tìm được này vào một tệp có tên là `~/project/boot_issues.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `dmesg` để xem các thông báo kernel.\n- Việc tìm kiếm từ `fail` hoặc `error` của bạn phải không phân biệt chữ hoa chữ thường (case-insensitive).\n- Các kết quả phải được lưu vào một tệp có tên là `~/project/boot_issues.txt`.\n- Lưu ý: Bạn có thể cần quyền quản trị viên (sudo) để truy cập các thông báo kernel.\n\n### Gợi ý\n\n- Lệnh `dmesg` hiển thị các thông báo kernel. Bạn có thể \"chuyển ống\" (pipe) đầu ra của nó sang một lệnh khác để lọc.\n- Toán tử ống `|` gửi đầu ra của lệnh này làm đầu vào cho lệnh khác.\n- Tùy chọn `-i` của lệnh `grep` giúp việc tìm kiếm không phân biệt chữ hoa chữ thường.\n- Để tìm kiếm nhiều mẫu cùng một lúc (như `fail` HOẶC `error`), bạn có thể sử dụng `grep -E 'pattern1|pattern2'`.\n- Lưu ý: Nếu bạn gặp lỗi \"Operation not permitted\", hãy thử chạy lệnh với `sudo` để có được các quyền cần thiết.\n\n### Ví dụ\n\nSau khi lọc thành công các thông báo kernel, tệp `~/project/boot_issues.txt` của bạn sẽ chứa các thông báo hệ thống liên quan:\n\n```bash\n$ cat ~/project/boot_issues.txt\n[    0.330755] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.\n[    1.026520] RAS: Correctable Errors collector initialized.\n[   28.260800] kernel: [   10.123456] my-driver: probe of 0000:00:1f.0 failed with error -2\n```\n\nTệp phải chứa các thông báo kernel bao gồm các từ như \"fail\" hoặc \"error\" (không phân biệt chữ hoa chữ thường), cho thấy các sự cố tiềm ẩn về phần cứng hoặc trình điều khiển trong quá trình khởi động hệ thống.",
+      "task_vi": "- Kiểm tra các thông điệp nhân (kernel messages) của hệ thống để tìm bất kỳ dòng nào liên quan đến `fail` hoặc `error`.\n- Lưu các kết quả tìm được này vào một tệp có tên là `~/project/boot_issues.txt`.",
+      "hint_vi": "- Lệnh `dmesg` hiển thị thông báo kernel. Bạn có thể \"pipe\" (chuyển tiếp) đầu ra của nó sang lệnh khác để lọc.\n- Toán tử pipe `|` truyền đầu ra của lệnh này làm đầu vào cho lệnh khác.\n- Tùy chọn `-i` của lệnh `grep` giúp tìm kiếm không phân biệt chữ hoa chữ thường.\n- Để tìm kiếm nhiều mẫu cùng lúc (như `fail` HOẶC `error`), bạn có thể dùng `grep -E 'pattern1|pattern2'`.\n- Lưu ý: Nếu gặp lỗi \"Operation not permitted\", hãy thử chạy lệnh với `sudo` để có đủ quyền hạn."
+    },
+    {
+      "id": "source-596202-section-3-v2",
+      "title": "Examining the Web Server Configuration File",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Examining the Web Server Configuration File\n\nNo critical hardware issues found. The problem might be in the web server configuration. Let's examine the Nginx configuration file to see how it's set up. Sometimes, misconfigurations like having too few worker processes can cause performance bottlenecks and lead to application failures under load.\n\n### Tasks\n\n- Search the web server configuration file at `~/project/config/nginx.conf`.\n- Find the line containing the `worker_processes` directive.\n- **Append** this line to the `~/project/error_report.txt` file you created in the first step.\n\n### Requirements\n\n- The input file is `~/project/config/nginx.conf`.\n- You must **append** the result to `~/project/error_report.txt`, not overwrite it.\n\n### Hints\n\n- You can use `grep` again for this task.\n- To **append** output to a file instead of overwriting it, use the `>>` operator.\n\n### Examples\n\nAfter appending the worker_processes line to your existing error report, the `~/project/error_report.txt` file should now contain both the original error lines and the new configuration line:\n\n```bash\n$ cat ~/project/error_report.txt\n[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\nworker_processes 4;\n```\n\nThe file should contain 3 lines total: 2 original error lines plus 1 new line with \"worker_processes 4;\".\n",
+      "task": "- Search the web server configuration file at `~/project/config/nginx.conf`.\n- Find the line containing the `worker_processes` directive.\n- **Append** this line to the `~/project/error_report.txt` file you created in the first step.",
+      "hint": "- You can use `grep` again for this task.\n- To **append** output to a file instead of overwriting it, use the `>>` operator.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "cmp -s '/home/labex/project/error_report.txt' <(printf '%s' '[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\nworker_processes 4;\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*grep\\s+[^\\n;]*worker_processes[^\\n;]*nginx\\.conf\\s*>>\\s*[^\\n;]*error_report\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Kiểm tra tệp cấu hình máy chủ web",
+      "content_vi": "## Kiểm tra Tệp Cấu hình Máy chủ Web\n\nKhông tìm thấy vấn đề phần cứng quan trọng nào. Vấn đề có thể nằm ở cấu hình máy chủ web. Hãy kiểm tra tệp cấu hình Nginx để xem nó được thiết lập như thế nào. Đôi khi, các cấu hình sai như có quá ít tiến trình worker (worker processes) có thể gây ra hiện tượng nghẽn cổ chai về hiệu suất và dẫn đến lỗi ứng dụng khi chịu tải.\n\n### Nhiệm vụ\n\n- Tìm kiếm tệp cấu hình máy chủ web tại `~/project/config/nginx.conf`.\n- Tìm dòng chứa chỉ thị `worker_processes`.\n- **Thêm vào cuối** (append) dòng này vào tệp `~/project/error_report.txt` mà bạn đã tạo ở bước đầu tiên.\n\n### Yêu cầu\n\n- Tệp đầu vào là `~/project/config/nginx.conf`.\n- Bạn phải **thêm vào cuối** kết quả vào tệp `~/project/error_report.txt`, không ghi đè lên nó.\n\n### Gợi ý\n\n- Bạn có thể sử dụng lại lệnh `grep` cho nhiệm vụ này.\n- Để **thêm** đầu ra vào một tệp thay vì ghi đè lên nó, hãy sử dụng toán tử `>>`.\n\n### Ví dụ\n\nSau khi thêm dòng worker_processes vào báo cáo lỗi hiện có của bạn, tệp `~/project/error_report.txt` bây giờ sẽ chứa cả các dòng lỗi ban đầu và dòng cấu hình mới:\n\n```bash\n$ cat ~/project/error_report.txt\n[2023-10-26 10:00:03] ERROR: Failed to process payment transaction #12345.\n[2023-10-26 10:00:05] ERROR: NullPointerException at com.innovatech.Billing.process(Billing.java:101).\nworker_processes 4;\n```\n\nTệp phải chứa tổng cộng 3 dòng: 2 dòng lỗi ban đầu cộng với 1 dòng mới có nội dung \"worker_processes 4;\".",
+      "task_vi": "- Tìm kiếm tệp cấu hình máy chủ web tại `~/project/config/nginx.conf`.\n- Tìm dòng chứa chỉ thị `worker_processes`.\n- **Thêm** dòng này vào cuối tệp `~/project/error_report.txt` mà bạn đã tạo ở bước đầu tiên.",
+      "hint_vi": "Bạn có thể dùng lại lệnh `grep` cho tác vụ này.\nĐể nối thêm đầu ra vào tệp thay vì ghi đè, hãy sử dụng toán tử `>>`."
+    },
+    {
+      "id": "source-596202-section-4-v2",
+      "title": "Comparing Staging and Production Configuration Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Comparing Staging and Production Configuration Files\n\nA common source of production issues is a discrepancy between the staging and production environments. A feature might work perfectly in staging but fail in production due to a small configuration difference. Let's compare the application's configuration files from both environments to spot any differences.\n\n### Tasks\n\n- Compare the staging configuration file `~/project/config/staging/app.conf` with the production configuration file `~/project/config/production/app.conf`.\n- Save the differences to a new file named `~/project/config_diff.txt`.\n\n### Requirements\n\n- You must use the `diff` command.\n- The output showing the differences must be saved to `~/project/config_diff.txt`.\n\n### Hints\n\n- The `diff` command is designed specifically for comparing two files line by line.\n- The basic syntax is `diff file1 file2`, where it shows what changes need to be made to file1 to make it identical to file2.\n- The order of files matters! `diff A B` and `diff B A` will show different outputs.\n- You can redirect the output of `diff` to a file just like you did with `grep`.\n\n### Examples\n\nAfter comparing the staging and production configuration files, your `~/project/config_diff.txt` file should show the differences between the two environments:\n\n```bash\n$ cat ~/project/config_diff.txt\n1,5c1,5\n< ## Staging Configuration\n< database.url=jdbc:mysql://staging-db:3306/nexus\n< api.key=staging_key_abc123\n< feature.flag.new_dashboard=true\n< timeout.ms=3000\n---\n> ## Production Configuration\n> database.url=jdbc:mysql://prod-db:3306/nexus\n> api.key=prod_key_xyz789\n> feature.flag.new_dashboard=false\n> timeout.ms=5000\n```\n\nThe diff output shows what changes would need to be made to the staging configuration file to make it match the production configuration file. Lines starting with `<` show content from the staging file, while lines starting with `>` show content from the production file. This reveals that the production environment uses different database URLs, API keys, feature flags, and timeout values compared to staging.\n",
+      "task": "- Compare the staging configuration file `~/project/config/staging/app.conf` with the production configuration file `~/project/config/production/app.conf`.\n- Save the differences to a new file named `~/project/config_diff.txt`.",
+      "hint": "- The `diff` command is designed specifically for comparing two files line by line.\n- The basic syntax is `diff file1 file2`, where it shows what changes need to be made to file1 to make it identical to file2.\n- The order of files matters! `diff A B` and `diff B A` will show different outputs.\n- You can redirect the output of `diff` to a file just like you did with `grep`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -s /home/labex/project/config_diff.txt && cmp -s /home/labex/project/config_diff.txt <(diff /home/labex/project/config/staging/app.conf /home/labex/project/config/production/app.conf)"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0,
+              1
+            ],
+            "groups": [
+              [
+                "^\\s*diff\\s+[^\\n;]*staging/app\\.conf\\s+[^\\n;]*production/app\\.conf\\s*>\\s*[^\\n;]*config_diff\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "So sánh tệp cấu hình Staging và Production",
+      "content_vi": "## So sánh tệp cấu hình Staging và Production\n\nMột nguyên nhân phổ biến gây ra sự cố trong môi trường production là sự sai lệch giữa môi trường staging và production. Một tính năng có thể hoạt động hoàn hảo trên staging nhưng lại thất bại trên production do một điểm khác biệt nhỏ về cấu hình. Hãy cùng so sánh các tệp cấu hình của ứng dụng từ cả hai môi trường để phát hiện ra bất kỳ sự khác biệt nào.\n\n### Nhiệm vụ\n\n- So sánh tệp cấu hình staging `~/project/config/staging/app.conf` với tệp cấu hình production `~/project/config/production/app.conf`.\n- Lưu các điểm khác biệt vào một tệp mới có tên là `~/project/config_diff.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `diff`.\n- Đầu ra hiển thị các điểm khác biệt phải được lưu vào `~/project/config_diff.txt`.\n\n### Gợi ý\n\n- Lệnh `diff` được thiết kế đặc biệt để so sánh hai tệp theo từng dòng.\n- Cú pháp cơ bản là `diff file1 file2`, trong đó lệnh sẽ hiển thị những thay đổi cần thực hiện đối với file1 để làm cho nó giống hệt với file2.\n- Thứ tự của các tệp rất quan trọng! `diff A B` và `diff B A` sẽ hiển thị các kết quả đầu ra khác nhau.\n- Bạn có thể chuyển hướng đầu ra của `diff` vào một tệp giống như cách bạn đã làm với `grep`.\n\n### Ví dụ\n\nSau khi so sánh các tệp cấu hình staging và production, tệp `~/project/config_diff.txt` của bạn sẽ hiển thị các điểm khác biệt giữa hai môi trường:\n\n```bash\n$ cat ~/project/config_diff.txt\n1,5c1,5\n< ## Staging Configuration\n< database.url=jdbc:mysql://staging-db:3306/nexus\n< api.key=staging_key_abc123\n< feature.flag.new_dashboard=true\n< timeout.ms=3000\n---\n> ## Production Configuration\n> database.url=jdbc:mysql://prod-db:3306/nexus\n> api.key=prod_key_xyz789\n> feature.flag.new_dashboard=false\n> timeout.ms=5000\n```\n\nKết quả đầu ra của lệnh diff cho biết những thay đổi nào cần được thực hiện đối với tệp cấu hình staging để làm cho nó khớp với tệp cấu hình production. Các dòng bắt đầu bằng ký tự `<` hiển thị nội dung từ tệp staging, trong khi các dòng bắt đầu bằng ký tự `>` hiển thị nội dung từ tệp production. Điều này cho thấy môi trường production sử dụng URL cơ sở dữ liệu, khóa API, cờ tính năng (feature flags) và giá trị thời gian chờ (timeout) khác so với môi trường staging.",
+      "task_vi": "- So sánh tệp cấu hình staging `~/project/config/staging/app.conf` với tệp cấu hình production `~/project/config/production/app.conf`.\n- Lưu các điểm khác biệt vào một tệp mới có tên là `~/project/config_diff.txt`.",
+      "hint_vi": "- Lệnh `diff` được thiết kế đặc biệt để so sánh hai tệp theo từng dòng.\n- Cú pháp cơ bản là `diff file1 file2`, hiển thị các thay đổi cần thực hiện trên file1 để giống với file2.\n- Thứ tự các tệp rất quan trọng! `diff A B` và `diff B A` sẽ hiển thị kết quả khác nhau.\n- Bạn có thể chuyển hướng đầu ra của `diff` vào một tệp giống như đã làm với `grep`."
+    },
+    {
+      "id": "source-596202-section-5-v2",
+      "title": "Verifying Directory Consistency Between Servers",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Verifying Directory Consistency Between Servers\n\nThe configuration difference is a strong lead! It seems the production server might also be missing some critical files that exist on the staging server. This could be due to a failed deployment. Let's simulate this by comparing two directories that represent the file structures from two different servers.\n\n### Tasks\n\n- You have two directories: `/home/labex/project/server1_files` (representing the staging server) and `/home/labex/project/server2_files` (representing the production server).\n- Compare these two directories to find out which files are unique to `server1_files`.\n- Save the complete comparison output to a file named `/home/labex/project/missing_files.txt`.\n\n### Requirements\n\n- You must use the `diff` command to compare the two directories.\n- The output must be saved to `/home/labex/project/missing_files.txt`.\n\n### Hints\n\n- The `diff` command can also compare directories if you provide directory paths instead of file paths.\n- Using the `-r` or `--recursive` option with `diff` is a good practice for comparing directories, as it will compare all files within them.\n- The output format of `diff` on directories will explicitly state which files are \"Only in\" a specific directory.\n- Just like with files, the order matters when comparing directories. `diff dir1 dir2` shows what's in dir1 but not in dir2, while `diff dir2 dir1` shows the opposite.\n\n### Examples\n\nAfter comparing the two server directories, your `/home/labex/project/missing_files.txt` file should show which files are missing from the production server:\n\n```bash\n$ cat /home/labex/project/missing_files.txt\nOnly in /home/labex/project/server1_files: asset2.js\n```\n\nThis output indicates that `asset2.js` exists in the first directory (`server1_files`, representing the staging server) but is missing from the second directory (`server2_files`, representing the production server). By comparing staging first and production second, we can easily identify files that are missing from production, which could explain some of the application failures.\n",
+      "task": "- You have two directories: `/home/labex/project/server1_files` (representing the staging server) and `/home/labex/project/server2_files` (representing the production server).\n- Compare these two directories to find out which files are unique to `server1_files`.\n- Save the complete comparison output to a file named `/home/labex/project/missing_files.txt`.",
+      "hint": "- The `diff` command can also compare directories if you provide directory paths instead of file paths.\n- Using the `-r` or `--recursive` option with `diff` is a good practice for comparing directories, as it will compare all files within them.\n- The output format of `diff` on directories will explicitly state which files are \"Only in\" a specific directory.\n- Just like with files, the order matters when comparing directories. `diff dir1 dir2` shows what's in dir1 but not in dir2, while `diff dir2 dir1` shows the opposite.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -s /home/labex/project/missing_files.txt && cmp -s /home/labex/project/missing_files.txt <(diff /home/labex/project/server1_files /home/labex/project/server2_files)"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0,
+              1
+            ],
+            "groups": [
+              [
+                "^\\s*diff\\s+(?:-r\\s+)?/home/labex/project/server1_files\\s+/home/labex/project/server2_files\\s*>\\s*/home/labex/project/missing_files\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Kiểm tra tính đồng nhất của thư mục giữa các máy chủ",
+      "content_vi": "## Xác minh tính nhất quán của thư mục giữa các máy chủ\n\nSự khác biệt về cấu hình là một manh mối quan trọng! Dường như máy chủ sản xuất (production) cũng có thể đang thiếu một số tệp quan trọng tồn tại trên máy chủ dàn dựng (staging). Điều này có thể là do quá trình triển khai (deployment) bị lỗi. Hãy mô phỏng điều này bằng cách so sánh hai thư mục đại diện cho cấu trúc tệp từ hai máy chủ khác nhau.\n\n### Nhiệm vụ\n\n- Bạn có hai thư mục: `/home/labex/project/server1_files` (đại diện cho máy chủ staging) và `/home/labex/project/server2_files` (đại diện cho máy chủ production).\n- So sánh hai thư mục này để tìm ra các tệp nào là duy nhất trong `server1_files`.\n- Lưu toàn bộ kết quả so sánh vào một tệp có tên là `/home/labex/project/missing_files.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `diff` để so sánh hai thư mục.\n- Kết quả đầu ra phải được lưu vào `/home/labex/project/missing_files.txt`.\n\n### Gợi ý\n\n- Lệnh `diff` cũng có thể so sánh các thư mục nếu bạn cung cấp đường dẫn thư mục thay vì đường dẫn tệp.\n- Sử dụng tùy chọn `-r` hoặc `--recursive` với `diff` là một phương pháp hay khi so sánh các thư mục, vì nó sẽ so sánh tất cả các tệp bên trong chúng.\n- Định dạng đầu ra của `diff` trên các thư mục sẽ nêu rõ tệp nào \"Only in\" (Chỉ có trong) một thư mục cụ thể.\n- Giống như với các tệp, thứ tự rất quan trọng khi so sánh các thư mục. `diff dir1 dir2` hiển thị những gì có trong dir1 nhưng không có trong dir2, trong khi `diff dir2 dir1` hiển thị điều ngược lại.\n\n### Ví dụ\n\nSau khi so sánh hai thư mục máy chủ, tệp `/home/labex/project/missing_files.txt` của bạn sẽ hiển thị tệp nào đang bị thiếu khỏi máy chủ production:\n\n```bash\n$ cat /home/labex/project/missing_files.txt\nOnly in /home/labex/project/server1_files: asset2.js\n```\n\nKết quả đầu ra này chỉ ra rằng `asset2.js` tồn tại trong thư mục đầu tiên (`server1_files`, đại diện cho máy chủ staging) nhưng bị thiếu trong thư mục thứ hai (`server2_files`, đại diện cho máy chủ production). Bằng cách so sánh staging trước và production sau, chúng ta có thể dễ dàng xác định các tệp bị thiếu ở môi trường production, điều này có thể giải thích một số lỗi của ứng dụng.",
+      "task_vi": "- Bạn có hai thư mục: `/home/labex/project/server1_files` (đại diện cho máy chủ staging) và `/home/labex/project/server2_files` (đại diện cho máy chủ production).\n- So sánh hai thư mục này để tìm ra những tệp nào chỉ có trong `server1_files`.\n- Lưu toàn bộ kết quả so sánh vào một tệp có tên là `/home/labex/project/missing_files.txt`.",
+      "hint_vi": "Lệnh `diff` cũng có thể so sánh các thư mục nếu bạn cung cấp đường dẫn thư mục thay vì đường dẫn tệp.\nSử dụng tùy chọn `-r` hoặc `--recursive` với `diff` là cách tốt nhất để so sánh các thư mục, vì nó sẽ so sánh tất cả các tệp bên trong chúng.\nĐịnh dạng đầu ra của `diff` trên các thư mục sẽ nêu rõ tệp nào \"Only in\" (Chỉ có trong) một thư mục cụ thể.\nGiống như với các tệp, thứ tự rất quan trọng khi so sánh các thư mục. `diff dir1 dir2` hiển thị những gì có trong dir1 nhưng không có trong dir2, trong khi `diff dir2 dir1` hiển thị ngược lại."
+    }
+  ],
+  "title_vi": "Ngày 3: Điều Tra Bản Ghi Log"
+}

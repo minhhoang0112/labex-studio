@@ -1,0 +1,226 @@
+{
+  "tutorial": {
+    "id": 596621,
+    "name": "The Backup Sentinel",
+    "fee_type": 2,
+    "type": 1,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/archive_operations",
+        "name": "Archive Operations",
+        "desc": "Archive operations cover creating, listing, extracting, and preserving directory structure in portable archive files.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/output_redirection",
+        "name": "Output Redirection",
+        "desc": "Output redirection covers writing, appending, separating, and combining command output and error streams.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/terminal_file_editing",
+        "name": "Terminal File Editing",
+        "desc": "Terminal file editing covers modifying text files from command-line environments without relying on graphical tools.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_creation",
+        "name": "File Creation",
+        "desc": "File creation covers creating empty files, writing new file content, and understanding creation effects on metadata.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/data_compression",
+        "name": "Data Compression",
+        "desc": "Data compression covers reducing and restoring file size with common Linux compression formats.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_removal",
+        "name": "File Removal",
+        "desc": "File removal covers deleting files and directories deliberately while understanding recursive and forceful operations.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/scheduled_tasks",
+        "name": "Scheduled Tasks",
+        "desc": "Scheduled tasks cover recurring and delayed command execution through Linux scheduling facilities.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/time_synchronization",
+        "name": "Time Synchronization",
+        "desc": "Time synchronization covers checking system time, time zones, clock sources, and network time state.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/project-become-a-junior-system-administrator/challenge-day-9-the-backup-sentinel",
+    "alias": "linux-day-9-the-backup-sentinel-596621",
+    "icon": "https://icons.labex.io/the-backup-sentinel.png",
+    "show_in_tutorial": true,
+    "description": "In this challenge, you'll act as a system administrator to master Linux backup and recovery, protecting critical data using `tar` and `cron`.",
+    "default_console_type": 2,
+    "meta_title": "Master Linux Backup and Recovery with tar and cron",
+    "meta_description": "Learn to create, verify, restore, and automate Linux backups with tar archives and cron jobs.",
+    "meta_keywords": "linux backup, tar command, cron job, system recovery, data protection",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/projects"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nYou are the \"Backup Sentinel,\" the newly appointed system administrator for a promising tech startup. A recent, minor power surge caused a server glitch, momentarily corrupting a non-critical log file. While no important data was lost this time, it was a serious wake-up call.\n\nThe CTO has personally tasked you with a critical mission: implement a robust backup and recovery strategy for the company's main application server, and do it *today*. The integrity of user data, application configurations, and vital logs is now in your hands.\n\nThis is your moment to shine. By successfully creating, verifying, and automating the backup process, you will not only safeguard the company's most valuable asset—its data—but also prove yourself as an indispensable guardian of its digital infrastructure. The system is live, the clock is ticking. Let's get to work.\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Important Notice</div>\n<div class=\"text-sm\">\nThis challenge covers skills beyond <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. If you have not learned these topics yet, skip it for now and continue to <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, the next course in the <a href=\"https://labex.io/learn/linux\" class=\"underline\">Linux learning path</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>When to return:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Complete the <a href=\"https://labex.io/labs/linux-scheduled-backup-and-recovery-725417?course=linux-for-noobs\" class=\"underline\">Scheduled Backup and Recovery</a> Guided Lab, then return and try this challenge again.</li>\n</ol>\n</div>\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Identifying Critical Data for Backup",
+      "layout": "doc-workbench-split",
+      "text": "## Identifying Critical Data for Backup\n\nBefore creating a backup, your first task is to identify which data is critical. A full system backup is often impractical. For our application server, the most important assets are in the `data`, `config`, and `logs` directories.\n\nTo make our backup process clean and manageable, we will create a file that lists all the directories we want to back up. This list will serve as a manifest for our backup script.\n\n### Tasks\n\n- Create a file named `backup-list.txt` in the `~/project` directory.\n- This file should contain the relative paths to the three critical directories, with each path on a new line.\n\n### Requirements\n\n- The file must be named exactly `backup-list.txt`.\n- The file must be located in the `~/project` directory.\n- The file must contain the following three entries, each on its own line:\n  - `data`\n  - `config`\n  - `logs`\n\n### Examples\n\nAfter creating the `backup-list.txt` file, your project directory should contain the new manifest file alongside the existing directories:\n\n```bash\n~/project/\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nWhen you run `cat backup-list.txt`, you should see the three critical directories listed:\n\n```plaintext\ndata\nconfig\nlogs\n```\n\n### Hints\n\n- You can use a text editor like `nano` to create and edit the file.\n- Alternatively, you can use the `echo` command with output redirection (`>`) to create the file and `>>` to append to it.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 2,
+      "title": "Creating a Full System Backup Archive",
+      "layout": "doc-workbench-split",
+      "text": "## Creating a Full System Backup Archive\n\nWith the list of critical directories ready, it's time to create the backup archive. The standard Linux tool for this job is `tar` (Tape Archive). It can bundle multiple files and directories into a single file. We'll also compress the archive to save space using `gzip`.\n\n### Tasks\n\n- Use the `tar` command to create a compressed backup archive.\n- The archive should be named `system-backup.tar.gz`.\n- The archive must be placed in the `~/project/backups/` directory.\n- The contents of the archive should be determined by the `backup-list.txt` file you created in the previous step.\n\n### Requirements\n\n- The final archive must be located at `~/project/backups/system-backup.tar.gz`.\n- You must use the `tar` command.\n- You must use the `-T` option with `tar` to read the list of files/directories from `backup-list.txt`.\n- The archive must be compressed with `gzip` (use the `z` option in `tar`).\n\n### Examples\n\nAfter creating the backup archive, your `backups` directory should contain the new compressed archive:\n\n```bash\n~/project/backups/\n└── system-backup.tar.gz\n```\n\nWhen you run `ls -lh ~/project/backups/`, you should see the archive file with its size:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 1.2K Sep 11 15:08 system-backup.tar.gz\n```\n\n### Hints\n\n- The common options for creating a compressed archive with `tar` are `c` (create), `z` (compress with gzip), `v` (verbose, to see progress), and `f` (specify filename).\n- The `-T` option tells `tar` to get the names of the files to archive from the file that follows, instead of from the command line.\n- The command structure will look something like `tar -czvf [archive_name] -T [list_file]`.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 3,
+      "title": "Verifying Backup Integrity",
+      "layout": "doc-workbench-split",
+      "text": "## Verifying Backup Integrity\n\nA backup is useless if it's corrupted or incomplete. A crucial step in any backup strategy is verification. You must ensure that the archive you created contains all the intended files and is readable.\n\n### Tasks\n\n- Use the `tar` command to list the contents of the `system-backup.tar.gz` archive without extracting it.\n- Redirect the output of this command to a new file named `backup-contents.txt` in the `~/project` directory.\n\n### Requirements\n\n- You must create a file named `backup-contents.txt` in `~/project`.\n- This file must contain the list of all files and directories stored within `system-backup.tar.gz`.\n- Do not extract the files; only list them.\n\n### Examples\n\nAfter creating the verification file, your project directory should contain the new `backup-contents.txt` file:\n\n```bash\n~/project/\n├── backup-contents.txt\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nWhen you run `cat backup-contents.txt`, you should see a detailed listing of all files in the archive:\n\n```plaintext\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 data/\n-rw-rw-r-- labex/labex      46 2025-09-11 15:08 data/transactions.csv\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 config/\n-rw-rw-r-- labex/labex      72 2025-09-11 15:08 config/app.conf\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 logs/\n-rw-rw-r-- labex/labex      49 2025-09-11 15:08 logs/app.log\n```\n\n### Hints\n\n- The `tar` command has an option to list (`t`) the contents of an archive.\n- Combine the `t` option with `z` (for gzip), `v` (for a detailed list), and `f` (to specify the file).\n- Use the output redirection operator `>` to save the command's output to a file.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 4,
+      "title": "Restoring Files from a Backup",
+      "layout": "doc-workbench-split",
+      "text": "## Restoring Files from a Backup\n\nDisaster strikes! A junior developer, while trying to clear some space, has accidentally deleted the main application configuration file, `app.conf`. The application is now down. It's up to you, the Backup Sentinel, to restore this critical file from your backup and save the day.\n\n### Tasks\n\n1. First, simulate the accident by deleting the `config/app.conf` file.\n2. Then, use the `tar` command to restore *only* the `config/app.conf` file from your `system-backup.tar.gz` archive. The file should be restored to its original location.\n\n### Requirements\n\n- The file `~/project/config/app.conf` must be present after you complete the task.\n- You must extract only the single `config/app.conf` file, not the entire archive.\n\n### Examples\n\nAfter restoring the `app.conf` file, your `config` directory should contain the restored file:\n\n```bash\n~/project/config/\n├── app.conf\n└── ...\n```\n\nWhen you run `ls -l ~/project/config/app.conf`, you should see the restored file:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 72 Sep 11 15:08 /home/labex/project/config/app.conf\n```\n\nYou can verify the file content is correct by checking it contains the expected configuration:\n\n```bash\n## This should show the database and API key settings\ncat ~/project/config/app.conf\n```\n\n### Hints\n\n- The `rm` command is used to delete files.\n- The `tar` command uses the `x` option to extract files.\n- To extract a specific file, you can add its path (as it appears in the archive) to the end of the `tar -x` command.\n- The full path to the file inside the archive is `config/app.conf`.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 5,
+      "title": "Scheduling Automated Backup Tasks",
+      "layout": "doc-workbench-split",
+      "text": "## Scheduling Automated Backup Tasks\n\nYou saved the day, but a hero's work is never done. Relying on manual backups is risky. The final step is to automate the process so that backups are created regularly without any human intervention. For this, we will use `cron`, the standard Linux task scheduler.\n\n### Tasks\n\n- Create a cron job that automatically runs a backup command.\n- The job should run **every minute** (for the purpose of this challenge).\n- The command should create a new, compressed `tar` archive inside the `~/project/backups/` directory.\n- To prevent overwriting, each new backup file must have a unique name that includes a timestamp (e.g., `backup-2023-10-27_15-30-00.tar.gz`).\n\n### Requirements\n\n- You must use `crontab -e` to edit your cron jobs.\n- The cron schedule must be `* * * * *` to run every minute.\n- The backup command within the cron job must use an **absolute path** for the output directory.\n- The backup command must back up the `data`, `config`, and `logs` directories from `/home/labex/project`. You may either list the directories directly after `-C /home/labex/project` or reuse the `/home/labex/project/backup-list.txt` manifest with `-T`.\n- The backup filename must include a timestamp.\n\n### Examples\n\nAfter setting up the cron job, you can verify it's working by checking your crontab and waiting for automatic backups to appear. When you run `crontab -l`, you should see your new backup job:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project data config logs\n```\n\nThe same backup can also reuse the manifest you created earlier:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project -T /home/labex/project/backup-list.txt\n```\n\nAfter a minute or two, your `backups` directory should start showing timestamped backup files:\n\n```bash\n~/project/backups/\n├── backup-2025-09-11_15-30-00.tar.gz\n├── backup-2025-09-11_15-31-00.tar.gz\n├── backup-2025-09-11_15-32-00.tar.gz\n└── system-backup.tar.gz\n```\n\n### Hints\n\n- Run `crontab -e` to open the cron job editor. You may be asked to select an editor; `nano` is a good choice.\n- The format for a cron job is: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` means every minute of every hour of every day.\n- You can use the `date` command to generate a timestamp. For example, `date +%Y-%m-%d_%H-%M-%S` will produce a format like `2023-10-27_15-30-00`.\n- To use the output of a command within another command, use `$(command)`.\n- **Important:** In a crontab, the percent sign (`%`) has a special meaning (it's treated as a newline). You must escape it with a backslash (`\\%`) when using it with the `date` command.\n- Your final command in the crontab might look like: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nCongratulations, Sentinel! You have successfully designed and implemented a complete, automated backup and recovery strategy. The company's data is now secure, thanks to your diligence and skill. You've not only averted a potential crisis but also established a system that will protect the company for the future.\n\nIn this challenge, you have mastered several fundamental system administration skills:\n\n- **Identifying Critical Data:** Pinpointing what needs to be backed up.\n- **Creating Archives:** Using the `tar` command to create compressed backups.\n- **Verifying Integrity:** Ensuring backups are valid and complete.\n- **Performing Restores:** Extracting specific files to recover from data loss.\n- **Automating Tasks:** Scheduling cron jobs for regular, unattended backups.\n\nThese are essential, real-world skills for any Linux system administrator, developer, or DevOps engineer. You've proven you have what it takes to be a reliable guardian of critical systems.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

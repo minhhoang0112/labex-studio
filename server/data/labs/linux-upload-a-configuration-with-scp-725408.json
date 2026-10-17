@@ -1,0 +1,93 @@
+{
+  "id": "linux-upload-a-configuration-with-scp-725408",
+  "course_id": "linux-for-noobs",
+  "order": 33,
+  "title": "Upload a Configuration with SCP",
+  "title_vi": "Tải tệp cấu hình lên bằng SCP",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "overview": "A configuration file is ready locally and must be delivered unchanged to an existing remote account. A working private key is already supplied.  The preceding guided lab practiced selecting an SSH ide",
+  "source_url": "https://labex.io/tutorials/linux-upload-a-configuration-with-scp-725408",
+  "source_lab_id": 725408,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A configuration file is ready locally and must be delivered unchanged to an existing remote account. A working private key is already supplied.\n\nThe preceding guided lab practiced selecting an SSH identity and transferring a file with `scp`. This challenge focuses on that one delivery.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một tệp cấu hình đã sẵn sàng ở cục bộ và phải được chuyển nguyên vẹn tới một tài khoản từ xa hiện có. Khóa riêng hoạt động đã được cung cấp.\n\nBài hướng dẫn trước đã thực hành chọn khóa nhận diện SSH và truyền tệp bằng `scp`. Thử thách này chỉ tập trung vào lần chuyển giao đó."
+    },
+    {
+      "id": "source-725408-section-1-v3",
+      "title": "Deliver the Configuration File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe local workspace `/home/labex/project/remote-admin` contains:\n\n- `service.conf`, the file to deliver;\n- `id_ed25519`, the private key for `opsuser@localhost`.\n\nThe remote directory `/home/opsuser/incoming` already exists.\n\n### Scope\n\n- Use the supplied identity file.\n- Upload `service.conf` to `/home/opsuser/incoming/service.conf`.\n- Keep the local source file unchanged.\n- Do not change SSH server settings or account credentials.\n\n### Your Goal\n\nLeave an unchanged copy of `service.conf` in the remote incoming directory.\n\n### Acceptance Criteria\n\n- `/home/opsuser/incoming/service.conf` exists and is owned by `opsuser`.\n- Its content is byte-for-byte identical to the local `service.conf`.\n- The local source and supplied identity remain available.\n\n### Hints\n\nHow do I select the supplied key?\n\nThe guided lab used the `-i` option with both `ssh` and `scp`. In an upload, the local source comes before the remote destination.",
+      "title_vi": "Chuyển giao tệp cấu hình",
+      "task": "Thực hiện hướng dẫn: Deliver the Configuration File",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "### Tình huống hiện tại\n\nThư mục làm việc cục bộ `/home/labex/project/remote-admin` chứa:\n\n- `service.conf`, tệp cần chuyển giao;\n- `id_ed25519`, khóa riêng cho `opsuser@localhost`.\n\nThư mục từ xa `/home/opsuser/incoming` đã tồn tại.\n\n### Phạm vi\n\n- Dùng tệp khóa nhận diện được cung cấp.\n- Tải `service.conf` lên `/home/opsuser/incoming/service.conf`.\n- Giữ nguyên tệp nguồn cục bộ.\n- Không thay thiết lập máy chủ SSH hoặc thông tin xác thực tài khoản.\n\n### Mục tiêu của bạn\n\nĐể một bản sao nguyên vẹn của `service.conf` trong thư mục incoming từ xa.\n\n### Tiêu chí đạt\n\n- `/home/opsuser/incoming/service.conf` tồn tại và thuộc sở hữu `opsuser`.\n- Nội dung của nó giống từng byte với `service.conf` cục bộ.\n- Tệp nguồn cục bộ và khóa nhận diện được cung cấp vẫn còn.\n\n### Gợi ý\n\nLàm thế nào chọn khóa đã được cung cấp?\n\nBài hướng dẫn đã dùng tùy chọn `-i` với cả `ssh` và `scp`. Trong lần tải lên, nguồn cục bộ đứng trước đích từ xa.",
+      "task_vi": "Thực hiện hướng dẫn: Chuyển giao tệp cấu hình",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You used one supplied SSH identity to deliver one unchanged configuration file with SCP.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã dùng một khóa nhận diện SSH được cung cấp để chuyển giao nguyên vẹn một tệp cấu hình bằng SCP."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725408-section-1-v3",
+      "title": "Deliver the Configuration File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe local workspace `/home/labex/project/remote-admin` contains:\n\n- `service.conf`, the file to deliver;\n- `id_ed25519`, the private key for `opsuser@localhost`.\n\nThe remote directory `/home/opsuser/incoming` already exists.\n\n### Scope\n\n- Use the supplied identity file.\n- Upload `service.conf` to `/home/opsuser/incoming/service.conf`.\n- Keep the local source file unchanged.\n- Do not change SSH server settings or account credentials.\n\n### Your Goal\n\nLeave an unchanged copy of `service.conf` in the remote incoming directory.\n\n### Acceptance Criteria\n\n- `/home/opsuser/incoming/service.conf` exists and is owned by `opsuser`.\n- Its content is byte-for-byte identical to the local `service.conf`.\n- The local source and supplied identity remain available.\n\n### Hints\n\nHow do I select the supplied key?\n\nThe guided lab used the `-i` option with both `ssh` and `scp`. In an upload, the local source comes before the remote destination.",
+      "title_vi": "Chuyển giao tệp cấu hình",
+      "task": "Thực hiện hướng dẫn: Deliver the Configuration File",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "### Tình huống hiện tại\n\nThư mục làm việc cục bộ `/home/labex/project/remote-admin` chứa:\n\n- `service.conf`, tệp cần chuyển giao;\n- `id_ed25519`, khóa riêng cho `opsuser@localhost`.\n\nThư mục từ xa `/home/opsuser/incoming` đã tồn tại.\n\n### Phạm vi\n\n- Dùng tệp khóa nhận diện được cung cấp.\n- Tải `service.conf` lên `/home/opsuser/incoming/service.conf`.\n- Giữ nguyên tệp nguồn cục bộ.\n- Không thay thiết lập máy chủ SSH hoặc thông tin xác thực tài khoản.\n\n### Mục tiêu của bạn\n\nĐể một bản sao nguyên vẹn của `service.conf` trong thư mục incoming từ xa.\n\n### Tiêu chí đạt\n\n- `/home/opsuser/incoming/service.conf` tồn tại và thuộc sở hữu `opsuser`.\n- Nội dung của nó giống từng byte với `service.conf` cục bộ.\n- Tệp nguồn cục bộ và khóa nhận diện được cung cấp vẫn còn.\n\n### Gợi ý\n\nLàm thế nào chọn khóa đã được cung cấp?\n\nBài hướng dẫn đã dùng tùy chọn `-i` với cả `ssh` và `scp`. Trong lần tải lên, nguồn cục bộ đứng trước đích từ xa.",
+      "task_vi": "Thực hiện hướng dẫn: Chuyển giao tệp cấu hình",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-upload-a-configuration-with-scp-725408.json"
+}

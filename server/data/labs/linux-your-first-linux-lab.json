@@ -1,0 +1,322 @@
+{
+  "id": "linux-your-first-linux-lab",
+  "course_id": "quick-start-with-linux",
+  "order": 1,
+  "title": "Your First Linux Lab",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Làm quen terminal, lời chào, tài khoản và nhóm; phân biệt lệnh kiểm tra với thao tác tiếp tục đọc.",
+  "source_url": "https://labex.io/tutorials/linux-your-first-linux-lab-270253",
+  "source_lab_id": 270253,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-your-first-linux-lab-270253",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-or-observed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/linux-your-first-linux-lab.json",
+  "sections": [
+    {
+      "id": "source-270253-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Welcome to LabEx! In this lab, you'll get your feet wet with Linux. We'll cover the famous \"Hello, World!\" program and a few fundamental commands (`echo`, `whoami`, `id`) to understand your user identity. This is a Guided Lab, which provides step-by-step instructions to help you learn and practice. Follow the instructions carefully to complete each step and gain hands-on experience.\n\n> Click the **Continue** button below or the VM icon on the left to start the lab.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Chào mừng bạn đến với LabEx! Trong bài thực hành này, bạn sẽ bắt đầu những bước đi đầu tiên vào thế giới Linux. Chúng ta sẽ cùng nhau thực hiện chương trình kinh điển \"Hello, World!\" và một số câu lệnh cốt lõi (`echo`, `whoami`, `id`) để tìm hiểu danh tính người dùng trong hệ thống.\n\nĐây là một bài thực hành có hướng dẫn (Guided Lab), cung cấp các chỉ dẫn từng bước chi tiết giúp bạn vừa học vừa thực hành ngay lập tức. Hãy làm theo hướng dẫn cẩn thận để hoàn thành từng bước và tích lũy kinh nghiệm thực tế.\n\n> Nhấn nút **Bắt đầu nhiệm vụ** hoặc chuyển sang tab Terminal để bắt đầu bài lab."
+    },
+    {
+      "id": "source-270253-section-1",
+      "title": "Hello LabEx",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's get your computer to say hello! 😄 First up, the terminal. Think of it as your text-based command center for interacting with your computer.\n\nTo open the terminal:\n\n1. Look on the left side of your desktop.\n2. Find the **Xfce Terminal** icon.\n3. Click it!\n\nThe terminal window is where you'll type commands. It's a powerful tool and often a quicker way to accomplish many tasks in Linux than using a mouse.\n\nNow, let's make it say hello! We'll use the `echo` command. `echo` simply repeats whatever you tell it to.\n\n**The best way to learn Linux (and programming in general) is by *doing*.** Don't just passively read through this – try things out in the LabEx environment! It's the perfect place to experiment and learn.\n\nType this command into your terminal *exactly* as shown:\n\n```bash\necho \"Hello LabEx\"\n```\n\nPress Enter.\n\nYou should see \"Hello LabEx\" appear. Congratulations, you just ran your first Linux command!\n\nKey things to remember:\n\n- Linux is case-sensitive: `echo`, `Echo`, and `ECHO` are all *different*.\n- Spaces matter. Make sure there's a space between `echo` and the quotation mark (`\"`).\n- The quotes tell `echo` precisely what string of text to repeat.\n\n> **Tips:** This Lab is part of the Linux Skill Tree, a structured knowledge system with various skills. After each step, the system verifies your actions, awarding skill points for correct responses.\n\nClick **Continue** below to keep going. Labby will automatically verify your work.",
+      "task": "Chạy echo để hiện đúng lời chào Hello LabEx.",
+      "hint": "Bash phân biệt chữ hoa/thường; kết quả xuất hiện ngay trên terminal.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*echo\\s+(?:\"Hello LabEx\"|'Hello LabEx'|Hello\\s+LabEx)\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hello LabEx",
+      "content_vi": "Hãy bắt đầu bằng việc yêu cầu máy tính nói lời chào! 😄\n\nTrước hết là cửa sổ terminal. Hãy coi terminal như trung tâm chỉ huy dựa trên văn bản giúp bạn tương tác trực tiếp với máy tính của mình. Cửa sổ terminal là nơi bạn sẽ gõ các câu lệnh. Đây là một công cụ cực kỳ mạnh mẽ và trong nhiều trường hợp, đó là cách nhanh nhất để hoàn thành công việc trong Linux so với việc dùng chuột.\n\nBây giờ, hãy làm cho nó nói lời chào! Chúng ta sẽ sử dụng câu lệnh `echo`. Lệnh `echo` đơn giản là lặp lại bất kỳ điều gì bạn truyền cho nó.\n\n**Cách tốt nhất để học Linux (và lập trình nói chung) là *thực hành* (Doing).** Đừng chỉ đọc lướt qua một cách thụ động – hãy thử nghiệm các câu lệnh trực tiếp trong môi trường Terminal! Đây là nơi hoàn hảo để bạn vừa khám phá vừa học hỏi.\n\nHãy nhập câu lệnh sau vào terminal của bạn *chính xác* như hiển thị:\n\n```bash\necho \"Hello LabEx\"\n```\n\nNhấn **Enter**.\n\nBạn sẽ thấy dòng chữ \"Hello LabEx\" xuất hiện ngay bên dưới. Xin chúc mừng, bạn vừa chạy thành công câu lệnh Linux đầu tiên trong đời!\n\n### Những điều then chốt cần ghi nhớ:\n- **Linux phân biệt chữ hoa và chữ thường (Case-sensitive)**: `echo`, `Echo`, và `ECHO` là các câu lệnh hoàn toàn khác nhau.\n- **Khoảng trắng rất quan trọng**: Hãy đảm bảo luôn có khoảng trắng giữa `echo` và dấu ngoặc kép (`\"`).\n- Dấu ngoặc kép báo cho `echo` biết chính xác chuỗi văn bản nào cần được in ra.",
+      "task_vi": "Chạy lệnh echo \"Hello LabEx\" trong terminal.",
+      "hint_vi": "Gõ đúng chữ hoa/thường: echo \"Hello LabEx\"."
+    },
+    {
+      "id": "source-270253-section-2",
+      "title": "Displaying the Current User",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's find out who the computer thinks you are.\n\nType this command and press Enter:\n\n```bash\nwhoami\n```\n\n> **Tips:** Click \"Explain Code\" at the bottom right of the code block to chat with Labby AI for code clarification. After chatting with Labby, click \"Continue\" to return to the lab.\n\nThis is asking the computer, \"Who am I?\" It'll respond with your username.\n\nYou should see:\n\n```plaintext\nlabex\n```\n\n`whoami` is useful when you're working on different machines or using different accounts.\n\nKeep going by clicking **Continue** below.",
+      "task": "Hiện tên tài khoản hiện tại bằng whoami.",
+      "hint": "Môi trường riêng chạy bằng tài khoản labex.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*whoami\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hiển Thị Người Dùng Hiện Tại",
+      "content_vi": "Hãy cùng tìm hiểu xem máy tính nhận diện bạn là ai.\n\nNhập câu lệnh sau vào terminal và nhấn **Enter**:\n\n```bash\nwhoami\n```\n\nCâu lệnh này thực chất là hỏi máy tính: \"Who am I?\" (Tôi là ai?). Hệ thống sẽ phản hồi bằng tên tài khoản người dùng của bạn.\n\nBạn sẽ thấy kết quả:\n\n```plaintext\nlabex\n```\n\nCâu lệnh `whoami` cực kỳ hữu ích khi bạn làm việc trên nhiều máy chủ khác nhau hoặc khi cần xác định quyền của tài khoản bạn đang chuyển đổi qua.",
+      "task_vi": "Chạy lệnh whoami để xem tài khoản hiện tại.",
+      "hint_vi": "Nhập lệnh whoami trong terminal."
+    },
+    {
+      "id": "source-270253-section-3",
+      "title": "Displaying User and Group Information",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's get some more user information with the `id` command. This is a cool way to see what groups you belong to.\n\nIn Linux, users are organized into groups. These groups determine the permissions and access rights a user has.\n\nType this command and press Enter:\n\n```bash\nid\n```\n\nYou'll see something like:\n\n```plaintext\nuid=5000(labex) gid=5000(labex) groups=5000(labex),27(sudo),121(ssl-cert),5002(public)\n```\n\nDon't worry too much about the numbers right now. Here's the breakdown:\n\n- `uid`: Your User ID (a unique numerical identifier).\n- `gid`: Your primary Group ID.\n- `groups`: All the groups you are a member of.\n\nYou can also use `id` to look up other users. Try:\n\n```bash\nid root\n```\n\nYou'll see:\n\n```plaintext\nuid=0(root) gid=0(root) groups=0(root)\n```\n\n`root` is the superuser – like the administrator of the system!\n\nDon't be concerned if this seems a bit complex right now. You'll learn more about users and groups as you progress. Remember, practice makes perfect. The more you use these commands in LabEx, the more comfortable you'll become with them!\n\nClick **Continue** to move on.",
+      "task": "Chạy id để đọc UID, GID và nhóm; có thể thử thêm id root.",
+      "hint": "Các ID là dữ liệu của môi trường, không cần ghi ra file.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*id\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hiển Thị Thông Tin Người Dùng và Nhóm",
+      "content_vi": "Hãy xem thêm nhiều thông tin chi tiết hơn về tài khoản người dùng bằng câu lệnh `id`. Đây là cách tuyệt vời để xem bạn đang thuộc về những nhóm hệ thống nào.\n\nTrong Linux, người dùng được phân chia vào các nhóm (Groups). Các nhóm này quyết định quyền hạn và mức độ truy cập tệp tin mà người dùng được phép thực hiện.\n\nNhập lệnh sau và nhấn **Enter**:\n\n```bash\nid\n```\n\nBạn sẽ thấy kết quả tương tự như sau:\n\n```plaintext\nuid=1000(labex) gid=1000(labex) groups=1000(labex),27(sudo)...\n```\n\nĐừng quá bận tâm về các con số ngay lúc này. Dưới đây là ý nghĩa chi tiết:\n- `uid`: Mã định danh người dùng duy nhất của bạn (User ID).\n- `gid`: Mã nhóm chính của bạn (Primary Group ID).\n- `groups`: Danh sách tất cả các nhóm mà bạn là thành viên.\n\nBạn cũng có thể dùng `id` để tra cứu thông tin của tài khoản khác trên hệ thống. Hãy thử chạy:\n\n```bash\nid root\n```\n\nBạn sẽ thấy:\n\n```plaintext\nuid=0(root) gid=0(root) groups=0(root)\n```\n\nTài khoản `root` là tài khoản siêu quản trị viên (Superuser) – người nắm toàn quyền cao nhất trên hệ thống Linux!",
+      "task_vi": "Chạy lệnh id trong terminal.",
+      "hint_vi": "Gõ id và nhấn Enter."
+    },
+    {
+      "id": "source-270253-section-4",
+      "title": "Extracting Your Username",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In step 2, you used `whoami` to display your username. In step 3, you used `id` to display user and group information.\n\nSometimes `id` prints more detail than you need. A practical skill is learning how to ask for a specific piece of information.\n\nType this command and press Enter:\n\n```bash\nid -un\n```\n\n`id -un` prints only your username (the name for your current UID). You should see:\n\n```plaintext\nlabex\n```\n\nKeep going by clicking **Continue** below.\n\nAfter you click **Continue**, the script verification in this step is designed to fail on purpose, so you'll see an error message. This is expected.\n\nWhen the error appears, click **Re-Inspect**. This triggers **Deep Inspection**, which uses AI to review your operation logs.\n\nFollow the instructions shown by Deep Inspection (for example, re-run a command if asked). Once it passes, you can proceed to the next step.",
+      "task": "Chạy id -un để lấy riêng tên người dùng.",
+      "hint": "id -un chỉ lấy tên ứng với UID hiện tại.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*id\\s+-un\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Trích Xuất Riêng Tên Người Dùng",
+      "content_vi": "Ở bước 2, bạn đã dùng `whoami` để hiển thị tên người dùng. Ở bước 3, bạn đã dùng `id` để hiển thị toàn bộ thông tin tài khoản và nhóm.\n\nĐôi khi, câu lệnh `id` in ra nhiều chi tiết hơn mức bạn cần. Một kỹ năng thực tế rất phổ biến trong viết kịch bản shell (scripting) là yêu cầu hệ thống chỉ xuất ra một mẩu thông tin cụ thể.\n\nHãy nhập câu lệnh sau và nhấn **Enter**:\n\n```bash\nid -un\n```\n\nTùy chọn `-u` (user) kết hợp với `-n` (name) yêu cầu lệnh `id` chỉ in ra riêng tên tài khoản tương ứng với UID hiện tại của bạn:\n\n```plaintext\nlabex\n```\n\nSau khi chạy xong, hãy bấm **Tiếp tục** để chuyển sang bước trải nghiệm tiếp theo.",
+      "task_vi": "Chạy lệnh id -un trong terminal.",
+      "hint_vi": "Gõ id -un và nhấn Enter."
+    },
+    {
+      "id": "source-270253-section-5",
+      "title": "Learn By Doing",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Congratulations on completing your first hands-on lab! You've just experienced LabEx's core learning style: **Learn By Doing**.\n\nWhat you just finished is a **Guided Lab**: clear steps plus automatic checks. Next, you can try **Challenges**, where you solve tasks with fewer hints to test what you learned.\n\n### Ask Labby\n\nDeep Inspection helps when verification fails. During learning, you can also ask Labby questions anytime.\n\nTo use **Ask**, click the first **Ask** button under the Labby chat box. It will open an input field. Ask can understand your current lab context and your recent actions, so you can ask questions like:\n\n- \"Where did I make a mistake, and how do I fix it?\"\n- \"Based on what I did in this lab, generate a learning report.\"\n- \"Grade my performance in this lab and tell me how to improve.\"\n\nThink of Labby as a one-on-one assistant you can talk to while you learn.\n\nClick **Continue** to complete this lab.",
+      "task": "Đọc cách học bằng thực hành rồi bấm Tiếp tục để xác nhận đã đọc.",
+      "hint": "Sau khi đọc, dùng nút Tiếp tục để chuyển sang phần tổng kết.",
+      "verification": {
+        "kind": "acknowledgement",
+        "scope": "informational"
+      },
+      "action": "continue",
+      "title_vi": "Học Qua Thực Hành (Learn By Doing)",
+      "content_vi": "Xin chúc mừng bạn đã hoàn thành bài thực hành đầu tiên! Bạn vừa trải nghiệm phong cách học tập cốt lõi của LabEx: **Học Qua Thực Hành (Learn By Doing)**.\n\nNhững gì bạn vừa hoàn thành là một bài **Guided Lab** (Thực hành có hướng dẫn): các bước đi rõ ràng kết hợp với cơ chế kiểm tra tự động. Ở bài tiếp theo, bạn sẽ được thử sức với bài **Challenge** (Thử thách) – nơi bạn tự vận dụng kiến thức độc lập để giải quyết nhiệm vụ.\n\n### Trợ lý thông minh Labby AI\n\nTrong quá trình học tập, bạn có thể đặt câu hỏi cho trợ lý Labby AI bất cứ lúc nào bằng nút **Hỏi Labby AI**. Labby hiểu được ngữ cảnh bài học hiện tại và các thao tác bạn vừa thực hiện trên terminal, giúp bạn:\n- Giải thích chi tiết các câu lệnh và tùy chọn phức tạp.\n- Phân tích nguyên nhân khi bạn gõ sai cú pháp và hướng dẫn sửa lỗi.\n- Đề xuất các phương án tối ưu hóa khi thao tác với Linux.\n\nHãy bấm **Tiếp tục** để chuyển sang bước tổng kết và hoàn thành bài lab!",
+      "task_vi": "Đọc phần phương pháp học qua thực hành và xác nhận tiếp tục.",
+      "hint_vi": "Bấm nút Tiếp tục để hoàn tất bài học."
+    },
+    {
+      "id": "source-270253-section-6",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Congratulations! You learned how to:\n\n- Open and use the terminal.\n- Use basic commands: `echo`, `whoami`, `id`.\n- Extract a specific identity detail with `id -un`.\n\nThis is just the beginning of your Linux journey! You've seen how powerful even simple commands can be. Ready to take your skills to the next level?\n\n**LabEx Pro** is great value—**less than $0.30 a day** (under $2 a week), about the kind of spare change you might drop into a tip jar when grabbing coffee—and unlocks a whole new world of learning, including:\n\n- 6000+ Hands-On Labs\n- 2000+ Challenge Solutions\n- 400+ Real-World Projects\n- Certificates of Completion\n- Unlimited virtual machines\n- Full Access to Labby AI Assistant\n- Unrestricted Internet Access\n\nContinue your Linux adventure with more free labs, or upgrade to LabEx Pro and become a Linux expert *faster*!",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Xin chúc mừng bạn đã hoàn thành bài lab đầu tiên!\n\nHãy cùng điểm lại những câu lệnh bạn đã thành thạo hôm nay:\n- `echo`: In văn bản và lời chào ra màn hình terminal.\n- `whoami`: Xác định tài khoản người dùng hiện đang đăng nhập.\n- `id`: Kiểm tra mã định danh UID, GID và các nhóm quyền hệ thống.\n- `id -un`: Trích xuất riêng tên người dùng phục vụ cho tự động hóa.\n\nBạn đã sẵn sàng để bước tiếp vào các thử thách thú vị tiếp theo của lộ trình Linux!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-270253-section-1",
+      "title": "Hello LabEx",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's get your computer to say hello! 😄 First up, the terminal. Think of it as your text-based command center for interacting with your computer.\n\nTo open the terminal:\n\n1. Look on the left side of your desktop.\n2. Find the **Xfce Terminal** icon.\n3. Click it!\n\nThe terminal window is where you'll type commands. It's a powerful tool and often a quicker way to accomplish many tasks in Linux than using a mouse.\n\nNow, let's make it say hello! We'll use the `echo` command. `echo` simply repeats whatever you tell it to.\n\n**The best way to learn Linux (and programming in general) is by *doing*.** Don't just passively read through this – try things out in the LabEx environment! It's the perfect place to experiment and learn.\n\nType this command into your terminal *exactly* as shown:\n\n```bash\necho \"Hello LabEx\"\n```\n\nPress Enter.\n\nYou should see \"Hello LabEx\" appear. Congratulations, you just ran your first Linux command!\n\nKey things to remember:\n\n- Linux is case-sensitive: `echo`, `Echo`, and `ECHO` are all *different*.\n- Spaces matter. Make sure there's a space between `echo` and the quotation mark (`\"`).\n- The quotes tell `echo` precisely what string of text to repeat.\n\n> **Tips:** This Lab is part of the Linux Skill Tree, a structured knowledge system with various skills. After each step, the system verifies your actions, awarding skill points for correct responses.\n\nClick **Continue** below to keep going. Labby will automatically verify your work.",
+      "task": "Chạy echo để hiện đúng lời chào Hello LabEx.",
+      "hint": "Bash phân biệt chữ hoa/thường; kết quả xuất hiện ngay trên terminal.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*echo\\s+(?:\"Hello LabEx\"|'Hello LabEx'|Hello\\s+LabEx)\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hello LabEx",
+      "content_vi": "Hãy bắt đầu bằng việc yêu cầu máy tính nói lời chào! 😄\n\nTrước hết là cửa sổ terminal. Hãy coi terminal như trung tâm chỉ huy dựa trên văn bản giúp bạn tương tác trực tiếp với máy tính của mình. Cửa sổ terminal là nơi bạn sẽ gõ các câu lệnh. Đây là một công cụ cực kỳ mạnh mẽ và trong nhiều trường hợp, đó là cách nhanh nhất để hoàn thành công việc trong Linux so với việc dùng chuột.\n\nBây giờ, hãy làm cho nó nói lời chào! Chúng ta sẽ sử dụng câu lệnh `echo`. Lệnh `echo` đơn giản là lặp lại bất kỳ điều gì bạn truyền cho nó.\n\n**Cách tốt nhất để học Linux (và lập trình nói chung) là *thực hành* (Doing).** Đừng chỉ đọc lướt qua một cách thụ động – hãy thử nghiệm các câu lệnh trực tiếp trong môi trường Terminal! Đây là nơi hoàn hảo để bạn vừa khám phá vừa học hỏi.\n\nHãy nhập câu lệnh sau vào terminal của bạn *chính xác* như hiển thị:\n\n```bash\necho \"Hello LabEx\"\n```\n\nNhấn **Enter**.\n\nBạn sẽ thấy dòng chữ \"Hello LabEx\" xuất hiện ngay bên dưới. Xin chúc mừng, bạn vừa chạy thành công câu lệnh Linux đầu tiên trong đời!\n\n### Những điều then chốt cần ghi nhớ:\n- **Linux phân biệt chữ hoa và chữ thường (Case-sensitive)**: `echo`, `Echo`, và `ECHO` là các câu lệnh hoàn toàn khác nhau.\n- **Khoảng trắng rất quan trọng**: Hãy đảm bảo luôn có khoảng trắng giữa `echo` và dấu ngoặc kép (`\"`).\n- Dấu ngoặc kép báo cho `echo` biết chính xác chuỗi văn bản nào cần được in ra.",
+      "task_vi": "Chạy lệnh echo \"Hello LabEx\" trong terminal.",
+      "hint_vi": "Gõ đúng chữ hoa/thường: echo \"Hello LabEx\"."
+    },
+    {
+      "id": "source-270253-section-2",
+      "title": "Displaying the Current User",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's find out who the computer thinks you are.\n\nType this command and press Enter:\n\n```bash\nwhoami\n```\n\n> **Tips:** Click \"Explain Code\" at the bottom right of the code block to chat with Labby AI for code clarification. After chatting with Labby, click \"Continue\" to return to the lab.\n\nThis is asking the computer, \"Who am I?\" It'll respond with your username.\n\nYou should see:\n\n```plaintext\nlabex\n```\n\n`whoami` is useful when you're working on different machines or using different accounts.\n\nKeep going by clicking **Continue** below.",
+      "task": "Hiện tên tài khoản hiện tại bằng whoami.",
+      "hint": "Môi trường riêng chạy bằng tài khoản labex.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*whoami\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hiển Thị Người Dùng Hiện Tại",
+      "content_vi": "Hãy cùng tìm hiểu xem máy tính nhận diện bạn là ai.\n\nNhập câu lệnh sau vào terminal và nhấn **Enter**:\n\n```bash\nwhoami\n```\n\nCâu lệnh này thực chất là hỏi máy tính: \"Who am I?\" (Tôi là ai?). Hệ thống sẽ phản hồi bằng tên tài khoản người dùng của bạn.\n\nBạn sẽ thấy kết quả:\n\n```plaintext\nlabex\n```\n\nCâu lệnh `whoami` cực kỳ hữu ích khi bạn làm việc trên nhiều máy chủ khác nhau hoặc khi cần xác định quyền của tài khoản bạn đang chuyển đổi qua.",
+      "task_vi": "Chạy lệnh whoami để xem tài khoản hiện tại.",
+      "hint_vi": "Nhập lệnh whoami trong terminal."
+    },
+    {
+      "id": "source-270253-section-3",
+      "title": "Displaying User and Group Information",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's get some more user information with the `id` command. This is a cool way to see what groups you belong to.\n\nIn Linux, users are organized into groups. These groups determine the permissions and access rights a user has.\n\nType this command and press Enter:\n\n```bash\nid\n```\n\nYou'll see something like:\n\n```plaintext\nuid=5000(labex) gid=5000(labex) groups=5000(labex),27(sudo),121(ssl-cert),5002(public)\n```\n\nDon't worry too much about the numbers right now. Here's the breakdown:\n\n- `uid`: Your User ID (a unique numerical identifier).\n- `gid`: Your primary Group ID.\n- `groups`: All the groups you are a member of.\n\nYou can also use `id` to look up other users. Try:\n\n```bash\nid root\n```\n\nYou'll see:\n\n```plaintext\nuid=0(root) gid=0(root) groups=0(root)\n```\n\n`root` is the superuser – like the administrator of the system!\n\nDon't be concerned if this seems a bit complex right now. You'll learn more about users and groups as you progress. Remember, practice makes perfect. The more you use these commands in LabEx, the more comfortable you'll become with them!\n\nClick **Continue** to move on.",
+      "task": "Chạy id để đọc UID, GID và nhóm; có thể thử thêm id root.",
+      "hint": "Các ID là dữ liệu của môi trường, không cần ghi ra file.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*id\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hiển Thị Thông Tin Người Dùng và Nhóm",
+      "content_vi": "Hãy xem thêm nhiều thông tin chi tiết hơn về tài khoản người dùng bằng câu lệnh `id`. Đây là cách tuyệt vời để xem bạn đang thuộc về những nhóm hệ thống nào.\n\nTrong Linux, người dùng được phân chia vào các nhóm (Groups). Các nhóm này quyết định quyền hạn và mức độ truy cập tệp tin mà người dùng được phép thực hiện.\n\nNhập lệnh sau và nhấn **Enter**:\n\n```bash\nid\n```\n\nBạn sẽ thấy kết quả tương tự như sau:\n\n```plaintext\nuid=1000(labex) gid=1000(labex) groups=1000(labex),27(sudo)...\n```\n\nĐừng quá bận tâm về các con số ngay lúc này. Dưới đây là ý nghĩa chi tiết:\n- `uid`: Mã định danh người dùng duy nhất của bạn (User ID).\n- `gid`: Mã nhóm chính của bạn (Primary Group ID).\n- `groups`: Danh sách tất cả các nhóm mà bạn là thành viên.\n\nBạn cũng có thể dùng `id` để tra cứu thông tin của tài khoản khác trên hệ thống. Hãy thử chạy:\n\n```bash\nid root\n```\n\nBạn sẽ thấy:\n\n```plaintext\nuid=0(root) gid=0(root) groups=0(root)\n```\n\nTài khoản `root` là tài khoản siêu quản trị viên (Superuser) – người nắm toàn quyền cao nhất trên hệ thống Linux!",
+      "task_vi": "Chạy lệnh id trong terminal.",
+      "hint_vi": "Gõ id và nhấn Enter."
+    },
+    {
+      "id": "source-270253-section-4",
+      "title": "Extracting Your Username",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In step 2, you used `whoami` to display your username. In step 3, you used `id` to display user and group information.\n\nSometimes `id` prints more detail than you need. A practical skill is learning how to ask for a specific piece of information.\n\nType this command and press Enter:\n\n```bash\nid -un\n```\n\n`id -un` prints only your username (the name for your current UID). You should see:\n\n```plaintext\nlabex\n```\n\nKeep going by clicking **Continue** below.\n\nAfter you click **Continue**, the script verification in this step is designed to fail on purpose, so you'll see an error message. This is expected.\n\nWhen the error appears, click **Re-Inspect**. This triggers **Deep Inspection**, which uses AI to review your operation logs.\n\nFollow the instructions shown by Deep Inspection (for example, re-run a command if asked). Once it passes, you can proceed to the next step.",
+      "task": "Chạy id -un để lấy riêng tên người dùng.",
+      "hint": "id -un chỉ lấy tên ứng với UID hiện tại.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*id\\s+-un\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Trích Xuất Riêng Tên Người Dùng",
+      "content_vi": "Ở bước 2, bạn đã dùng `whoami` để hiển thị tên người dùng. Ở bước 3, bạn đã dùng `id` để hiển thị toàn bộ thông tin tài khoản và nhóm.\n\nĐôi khi, câu lệnh `id` in ra nhiều chi tiết hơn mức bạn cần. Một kỹ năng thực tế rất phổ biến trong viết kịch bản shell (scripting) là yêu cầu hệ thống chỉ xuất ra một mẩu thông tin cụ thể.\n\nHãy nhập câu lệnh sau và nhấn **Enter**:\n\n```bash\nid -un\n```\n\nTùy chọn `-u` (user) kết hợp với `-n` (name) yêu cầu lệnh `id` chỉ in ra riêng tên tài khoản tương ứng với UID hiện tại của bạn:\n\n```plaintext\nlabex\n```\n\nSau khi chạy xong, hãy bấm **Tiếp tục** để chuyển sang bước trải nghiệm tiếp theo.",
+      "task_vi": "Chạy lệnh id -un trong terminal.",
+      "hint_vi": "Gõ id -un và nhấn Enter."
+    },
+    {
+      "id": "source-270253-section-5",
+      "title": "Learn By Doing",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Congratulations on completing your first hands-on lab! You've just experienced LabEx's core learning style: **Learn By Doing**.\n\nWhat you just finished is a **Guided Lab**: clear steps plus automatic checks. Next, you can try **Challenges**, where you solve tasks with fewer hints to test what you learned.\n\n### Ask Labby\n\nDeep Inspection helps when verification fails. During learning, you can also ask Labby questions anytime.\n\nTo use **Ask**, click the first **Ask** button under the Labby chat box. It will open an input field. Ask can understand your current lab context and your recent actions, so you can ask questions like:\n\n- \"Where did I make a mistake, and how do I fix it?\"\n- \"Based on what I did in this lab, generate a learning report.\"\n- \"Grade my performance in this lab and tell me how to improve.\"\n\nThink of Labby as a one-on-one assistant you can talk to while you learn.\n\nClick **Continue** to complete this lab.",
+      "task": "Đọc cách học bằng thực hành rồi bấm Tiếp tục để xác nhận đã đọc.",
+      "hint": "Sau khi đọc, dùng nút Tiếp tục để chuyển sang phần tổng kết.",
+      "verification": {
+        "kind": "acknowledgement",
+        "scope": "informational"
+      },
+      "action": "continue",
+      "title_vi": "Học Qua Thực Hành (Learn By Doing)",
+      "content_vi": "Xin chúc mừng bạn đã hoàn thành bài thực hành đầu tiên! Bạn vừa trải nghiệm phong cách học tập cốt lõi của LabEx: **Học Qua Thực Hành (Learn By Doing)**.\n\nNhững gì bạn vừa hoàn thành là một bài **Guided Lab** (Thực hành có hướng dẫn): các bước đi rõ ràng kết hợp với cơ chế kiểm tra tự động. Ở bài tiếp theo, bạn sẽ được thử sức với bài **Challenge** (Thử thách) – nơi bạn tự vận dụng kiến thức độc lập để giải quyết nhiệm vụ.\n\n### Trợ lý thông minh Labby AI\n\nTrong quá trình học tập, bạn có thể đặt câu hỏi cho trợ lý Labby AI bất cứ lúc nào bằng nút **Hỏi Labby AI**. Labby hiểu được ngữ cảnh bài học hiện tại và các thao tác bạn vừa thực hiện trên terminal, giúp bạn:\n- Giải thích chi tiết các câu lệnh và tùy chọn phức tạp.\n- Phân tích nguyên nhân khi bạn gõ sai cú pháp và hướng dẫn sửa lỗi.\n- Đề xuất các phương án tối ưu hóa khi thao tác với Linux.\n\nHãy bấm **Tiếp tục** để chuyển sang bước tổng kết và hoàn thành bài lab!",
+      "task_vi": "Đọc phần phương pháp học qua thực hành và xác nhận tiếp tục.",
+      "hint_vi": "Bấm nút Tiếp tục để hoàn tất bài học."
+    }
+  ],
+  "title_vi": "Bài Thực Hành Linux Đầu Tiên (Your First Linux Lab)"
+}

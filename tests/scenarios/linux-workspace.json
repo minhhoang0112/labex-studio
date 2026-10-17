@@ -1,0 +1,336 @@
+{
+  "browser": {
+    "mode": "launch",
+    "executable_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "headless": true
+  },
+  "start_url": {
+    "url": "http://127.0.0.1:5000/labs/linux-your-first-linux-lab"
+  },
+  "actions": [
+    {
+      "step_id": "linux_ready",
+      "action": "wait_for_timeout",
+      "duration_ms": 3000
+    },
+    {
+      "step_id": "incorrect_result",
+      "action": "fill",
+      "locator": {
+        "kind": "css",
+        "selector": ".xterm-helper-textarea"
+      },
+      "value": {
+        "source": "literal",
+        "value": "SESSION_MARKER=retained; printf '%s\\n' 'wrong greeting' > \"$HOME/hello.txt\""
+      }
+    },
+    {
+      "step_id": "incorrect_result_run",
+      "action": "press",
+      "locator": {
+        "kind": "css",
+        "selector": ".xterm-helper-textarea"
+      },
+      "key": "Enter"
+    },
+    {
+      "step_id": "incorrect_result_done",
+      "action": "wait_for_timeout",
+      "duration_ms": 500
+    },
+    {
+      "step_id": "check_incorrect",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:has-text('Kiểm tra kết quả')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "failed_as_expected",
+      "action": "wait_for",
+      "locator": {
+        "kind": "css",
+        "selector": "p:has-text('Nhiệm vụ chưa hoàn thành')"
+      },
+      "state": "visible",
+      "timeout_ms": 20000
+    },
+    {
+      "step_id": "correct_result",
+      "action": "fill",
+      "locator": {
+        "kind": "css",
+        "selector": ".xterm-helper-textarea"
+      },
+      "value": {
+        "source": "literal",
+        "value": "printf '%s\\n' 'Hello, LabEx!' > \"$HOME/hello.txt\""
+      }
+    },
+    {
+      "step_id": "correct_result_run",
+      "action": "press",
+      "locator": {
+        "kind": "css",
+        "selector": ".xterm-helper-textarea"
+      },
+      "key": "Enter"
+    },
+    {
+      "step_id": "correct_result_done",
+      "action": "wait_for_timeout",
+      "duration_ms": 500
+    },
+    {
+      "step_id": "check_correct",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:has-text('Kiểm tra kết quả')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "first_passed",
+      "action": "wait_for",
+      "locator": {
+        "kind": "css",
+        "selector": "p:has-text('Chính xác!')"
+      },
+      "state": "visible",
+      "timeout_ms": 20000
+    },
+    {
+      "step_id": "switch_ai",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:text-is('AI Tutor')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "ask_hint",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:text-is('Gợi ý bước này')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "offline_reply",
+      "action": "wait_for",
+      "locator": {
+        "kind": "css",
+        "selector": "h3:has-text('Hướng dẫn offline')"
+      },
+      "state": "visible",
+      "timeout_ms": 20000
+    },
+    {
+      "step_id": "switch_terminal",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:text-is('Terminal')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "preserved_shell",
+      "action": "fill",
+      "locator": {
+        "kind": "css",
+        "selector": ".xterm-helper-textarea"
+      },
+      "value": {
+        "source": "literal",
+        "value": "printf 'SESSION=%s\\n' \"$SESSION_MARKER\"; id > \"$HOME/my_identity.txt\""
+      }
+    },
+    {
+      "step_id": "preserved_shell_run",
+      "action": "press",
+      "locator": {
+        "kind": "css",
+        "selector": ".xterm-helper-textarea"
+      },
+      "key": "Enter"
+    },
+    {
+      "step_id": "preserved_shell_done",
+      "action": "wait_for_timeout",
+      "duration_ms": 500
+    },
+    {
+      "step_id": "step_two",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:text-is('Tiếp tục')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "check_identity",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:has-text('Kiểm tra kết quả')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "second_passed",
+      "action": "wait_for",
+      "locator": {
+        "kind": "css",
+        "selector": "p:has-text('Chính xác!')"
+      },
+      "state": "visible",
+      "timeout_ms": 20000
+    },
+    {
+      "step_id": "step_three",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:text-is('Tiếp tục')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "script",
+      "action": "fill",
+      "locator": {
+        "kind": "css",
+        "selector": ".xterm-helper-textarea"
+      },
+      "value": {
+        "source": "literal",
+        "value": "printf '%s\\n' '#!/usr/bin/env bash' 'echo \"Welcome to Linux\"' 'echo \"Logged in as: $(whoami)\"' > \"$HOME/welcome.sh\"; bash \"$HOME/welcome.sh\" > \"$HOME/welcome.txt\""
+      }
+    },
+    {
+      "step_id": "script_run",
+      "action": "press",
+      "locator": {
+        "kind": "css",
+        "selector": ".xterm-helper-textarea"
+      },
+      "key": "Enter"
+    },
+    {
+      "step_id": "script_done",
+      "action": "wait_for_timeout",
+      "duration_ms": 500
+    },
+    {
+      "step_id": "check_script",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:has-text('Kiểm tra kết quả')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "lab_complete",
+      "action": "wait_for",
+      "locator": {
+        "kind": "css",
+        "selector": "div[role='status']:has-text('Đã hoàn thành mọi bước')"
+      },
+      "state": "visible",
+      "timeout_ms": 20000
+    },
+    {
+      "step_id": "back_course",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:text-is('Khóa học')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "course_progress",
+      "action": "wait_for",
+      "locator": {
+        "kind": "css",
+        "selector": "strong:has-text('1 / 10 bài đã hoàn thành')"
+      },
+      "state": "visible",
+      "timeout_ms": 20000
+    },
+    {
+      "step_id": "reopen_lab",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "#start-first-lab"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "restored_progress",
+      "action": "wait_for",
+      "locator": {
+        "kind": "css",
+        "selector": "div[role='status']:has-text('Đã hoàn thành mọi bước')"
+      },
+      "state": "visible",
+      "timeout_ms": 20000
+    },
+    {
+      "step_id": "next_lab",
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button:has-text('Bài tiếp theo:')"
+      },
+      "button": "left",
+      "click_count": 1
+    },
+    {
+      "step_id": "next_loaded",
+      "action": "wait_for_timeout",
+      "duration_ms": 1200
+    }
+  ],
+  "capture": {
+    "after_each_step": [
+      "accessibility",
+      "url"
+    ],
+    "at_end": [
+      "screenshot",
+      "storage"
+    ],
+    "events": [
+      "page-errors",
+      "websockets"
+    ]
+  },
+  "environment": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  }
+}

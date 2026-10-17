@@ -1,0 +1,477 @@
+{
+  "id": "linux-linux-tr-command-character-translating-219198",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219198,
+  "source_url": "https://labex.io/tutorials/linux-linux-tr-command-character-translating-219198",
+  "order": 29,
+  "title": "Linux tr Command: Character Translating",
+  "title_vi": "Lệnh tr: biến đổi ký tự",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux tr Command: Character Translating",
+  "sections": [
+    {
+      "id": "commands-219198-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux tr Command: Character Translating. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh tr: biến đổi ký tự. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219198-section-1-v1",
+      "title": "Understanding the Basics of tr",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chuyển chữ hoa",
+      "content": "Translate lowercase to uppercase.\n\n```bash\nprintf \"%s\\n\" 'hello, world' > greeting.txt\ncat greeting.txt | tr 'a-z' 'A-Z'\n```",
+      "content_vi": "Chuyển chữ thường thành chữ hoa.\n\n```bash\nprintf \"%s\\n\" 'hello, world' > greeting.txt\ncat greeting.txt | tr 'a-z' 'A-Z'\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+greeting\\.txt\\s*\\|\\s*tr\\s+'a-z'\\s+'A-Z'"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s greeting.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-2-v1",
+      "title": "Deleting Characters with tr",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xóa dấu câu",
+      "content": "Delete punctuation.\n\n```bash\nprintf \"%s\\n\" 'Hello, World! How are you?' > punctuated.txt\ncat punctuated.txt | tr -d '[:punct:]'\n```",
+      "content_vi": "Xóa các dấu câu.\n\n```bash\nprintf \"%s\\n\" 'Hello, World! How are you?' > punctuated.txt\ncat punctuated.txt | tr -d '[:punct:]'\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+punctuated\\.txt\\s*\\|\\s*tr\\s+-d\\s+.*punct"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s punctuated.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-3-v1",
+      "title": "Translating Multiple Characters",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Giải mã dịch ký tự",
+      "content": "Shift encoded letters back by one.\n\n```bash\nprintf \"%s\\n\" 'Uijt jt b tfdsfu nfttbhf.' > encoded.txt\ncat encoded.txt | tr 'b-zaB-ZA' 'a-zA-Z'\n```",
+      "content_vi": "Dịch lùi chữ cái một vị trí.\n\n```bash\nprintf \"%s\\n\" 'Uijt jt b tfdsfu nfttbhf.' > encoded.txt\ncat encoded.txt | tr 'b-zaB-ZA' 'a-zA-Z'\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+encoded\\.txt\\s*\\|\\s*tr\\s+'b-zaB-ZA'"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s encoded.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-4-v1",
+      "title": "Using Character Classes with tr",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Lớp ký tự",
+      "content": "Retain only digits.\n\n```bash\nprintf \"%s\\n\" 'User123 logged in at 09:45 AM on 2023-08-15' > log_entry.txt\ncat log_entry.txt | tr -cd '[:digit:]'\n```",
+      "content_vi": "Chỉ giữ các chữ số.\n\n```bash\nprintf \"%s\\n\" 'User123 logged in at 09:45 AM on 2023-08-15' > log_entry.txt\ncat log_entry.txt | tr -cd '[:digit:]'\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+log_entry\\.txt\\s*\\|\\s*tr\\s+-cd\\s+.*digit"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s log_entry.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-5-v1",
+      "title": "Squeezing Repeats with tr",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Gộp ký tự lặp",
+      "content": "Squeeze repeated spaces.\n\n```bash\nprintf \"%s\\n\" 'This    is    a    test    with    extra    spaces.' > spaced.txt\ncat spaced.txt | tr -s ' '\n```",
+      "content_vi": "Gộp các dấu cách lặp lại.\n\n```bash\nprintf \"%s\\n\" 'This    is    a    test    with    extra    spaces.' > spaced.txt\ncat spaced.txt | tr -s ' '\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+spaced\\.txt\\s*\\|\\s*tr\\s+-s\\s+"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s spaced.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219198-section-1-v1",
+      "title": "Understanding the Basics of tr",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chuyển chữ hoa",
+      "content": "Translate lowercase to uppercase.\n\n```bash\nprintf \"%s\\n\" 'hello, world' > greeting.txt\ncat greeting.txt | tr 'a-z' 'A-Z'\n```",
+      "content_vi": "Chuyển chữ thường thành chữ hoa.\n\n```bash\nprintf \"%s\\n\" 'hello, world' > greeting.txt\ncat greeting.txt | tr 'a-z' 'A-Z'\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+greeting\\.txt\\s*\\|\\s*tr\\s+'a-z'\\s+'A-Z'"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s greeting.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-2-v1",
+      "title": "Deleting Characters with tr",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xóa dấu câu",
+      "content": "Delete punctuation.\n\n```bash\nprintf \"%s\\n\" 'Hello, World! How are you?' > punctuated.txt\ncat punctuated.txt | tr -d '[:punct:]'\n```",
+      "content_vi": "Xóa các dấu câu.\n\n```bash\nprintf \"%s\\n\" 'Hello, World! How are you?' > punctuated.txt\ncat punctuated.txt | tr -d '[:punct:]'\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+punctuated\\.txt\\s*\\|\\s*tr\\s+-d\\s+.*punct"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s punctuated.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-3-v1",
+      "title": "Translating Multiple Characters",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Giải mã dịch ký tự",
+      "content": "Shift encoded letters back by one.\n\n```bash\nprintf \"%s\\n\" 'Uijt jt b tfdsfu nfttbhf.' > encoded.txt\ncat encoded.txt | tr 'b-zaB-ZA' 'a-zA-Z'\n```",
+      "content_vi": "Dịch lùi chữ cái một vị trí.\n\n```bash\nprintf \"%s\\n\" 'Uijt jt b tfdsfu nfttbhf.' > encoded.txt\ncat encoded.txt | tr 'b-zaB-ZA' 'a-zA-Z'\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+encoded\\.txt\\s*\\|\\s*tr\\s+'b-zaB-ZA'"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s encoded.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-4-v1",
+      "title": "Using Character Classes with tr",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Lớp ký tự",
+      "content": "Retain only digits.\n\n```bash\nprintf \"%s\\n\" 'User123 logged in at 09:45 AM on 2023-08-15' > log_entry.txt\ncat log_entry.txt | tr -cd '[:digit:]'\n```",
+      "content_vi": "Chỉ giữ các chữ số.\n\n```bash\nprintf \"%s\\n\" 'User123 logged in at 09:45 AM on 2023-08-15' > log_entry.txt\ncat log_entry.txt | tr -cd '[:digit:]'\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+log_entry\\.txt\\s*\\|\\s*tr\\s+-cd\\s+.*digit"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s log_entry.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219198-section-5-v1",
+      "title": "Squeezing Repeats with tr",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Gộp ký tự lặp",
+      "content": "Squeeze repeated spaces.\n\n```bash\nprintf \"%s\\n\" 'This    is    a    test    with    extra    spaces.' > spaced.txt\ncat spaced.txt | tr -s ' '\n```",
+      "content_vi": "Gộp các dấu cách lặp lại.\n\n```bash\nprintf \"%s\\n\" 'This    is    a    test    with    extra    spaces.' > spaced.txt\ncat spaced.txt | tr -s ' '\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bcat\\s+spaced\\.txt\\s*\\|\\s*tr\\s+-s\\s+"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s spaced.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-tr-command-character-translating-219198.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

@@ -1,0 +1,451 @@
+{
+  "id": "linux-day-2-the-digital-architect-596201",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 2,
+  "title": "The Digital Architect",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "Welcome to Day 2 at LabEx Corporation! After yesterday's successful system reconnaissance, you've been promoted to the role of Digital Architect for Project Phoenix. The development team was impressed with your thorough documentation and attention to detail.",
+  "source_url": "https://labex.io/tutorials/linux-day-2-the-digital-architect-596201",
+  "source_lab_id": 596201,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-2-the-digital-architect-596201",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-2-the-digital-architect-596201.json",
+    "reference_sha256": "10292b3aab34806c6d4a2ab3f20285f4ea0a370b19e79142d411ca0dd2a89479",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "format-normalized-match"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-2-the-digital-architect-596201.json",
+  "sections": [
+    {
+      "id": "source-596201-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nWelcome to Day 2 at LabEx Corporation! After yesterday's successful system reconnaissance, you've been promoted to the role of Digital Architect for Project Phoenix. The development team was impressed with your thorough documentation and attention to detail.\n\nHowever, there's an urgent problem that needs your immediate attention. The previous system administrator left abruptly, and Project Phoenix's files are in complete disarray. Source code, documentation, and configuration files are scattered across a single directory. Critical settings are vulnerable without backups, and outdated log files are cluttering the development server you surveyed yesterday.\n\nYour mission is to architect a clean, logical, and efficient file structure that will support the growing development team. By creating proper directories, organizing files, securing backups, and cleaning up old data, you'll establish the foundation that Project Phoenix needs to succeed.\n\nThe lead developer, Sarah Chen, is counting on you to transform this chaos into an organized, professional development environment. Your work today will directly impact the team's productivity and the project's timeline. Let's get started!\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Introduction\n\nChào mừng bạn đến với Ngày thứ 2 tại Tập đoàn LabEx! Sau buổi trinh sát hệ thống thành công ngày hôm qua, bạn đã được thăng chức lên vị trí Kiến trúc sư Kỹ thuật số cho Dự án Phoenix. Đội ngũ phát triển đã rất ấn tượng với tài liệu chi tiết và sự tỉ mỉ của bạn.\n\nTuy nhiên, có một vấn đề khẩn cấp đang cần sự chú ý ngay lập tức của bạn. Quản trị viên hệ thống trước đây đã đột ngột nghỉ việc, và các tệp của Dự án Phoenix đang ở trong tình trạng hỗn loạn hoàn toàn. Mã nguồn, tài liệu và các tệp cấu hình đang rải rác khắp một thư mục duy nhất. Các cài đặt quan trọng đang dễ bị tổn thương khi không có bản sao lưu, và các tệp nhật ký lỗi thời đang làm lộn xộn máy chủ phát triển mà bạn đã khảo sát ngày hôm qua.\n\nNhiệm vụ của bạn là kiến trúc một cấu trúc tệp sạch sẽ, hợp lý và hiệu quả để hỗ trợ đội ngũ phát triển đang ngày một lớn mạnh. Bằng cách tạo các thư mục phù hợp, tổ chức các tệp tin, bảo mật các bản sao lưu và dọn dẹp dữ liệu cũ, bạn sẽ thiết lập nền tảng mà Dự án Phoenix cần để thành công.\n\nTrưởng nhóm phát triển, Sarah Chen, đang trông chờ vào việc bạn sẽ biến sự hỗn loạn này thành một môi trường phát triển ngăn nắp và chuyên nghiệp. Công việc của bạn ngày hôm nay sẽ tác động trực tiếp đến năng suất của đội ngũ và tiến độ của dự án. Hãy bắt đầu thôi!"
+    },
+    {
+      "id": "source-596201-section-1-v2",
+      "title": "Setting Up the Project Directory Structure",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Setting Up the Project Directory Structure\n\nYour first task is to create a proper directory structure inside the `phoenix_project` directory. A well-defined structure separates different types of files, making the project easier to navigate and maintain.\n\n### Tasks\n\n1. Navigate into the `~/project/phoenix_project` directory.\n2. Create three new subdirectories: `src` for source code, `config` for configuration files, and `docs` for documentation.\n\n### Requirements\n\n- All new directories must be created inside the `~/project/phoenix_project` directory.\n- The directory names must be exactly `src`, `config`, and `docs`.\n- You should use a single command to create all three directories simultaneously.\n\n### Examples\n\nAfter completing this step, your directory structure should look like this:\n\n```bash\n~/project/phoenix_project/\n├── config/\n├── docs/\n├── src/\n├── README.md\n├── config.json\n└── main_app.py\n```\n\nWhen you run `ls -F` in the `~/project/phoenix_project` directory, you should see:\n\n```plaintext\nREADME.md  config/  config.json  docs/  main_app.py  src/\n```\n\nThe `/` symbols after directory names indicate they are directories, not files.\n\n### Hints\n\n- Use the `cd` command to change your current directory.\n- The `mkdir` command is used to create new directories.\n- `mkdir` can accept multiple arguments to create several directories at once.\n",
+      "task": "1. Navigate into the `~/project/phoenix_project` directory.\n2. Create three new subdirectories: `src` for source code, `config` for configuration files, and `docs` for documentation.",
+      "hint": "- Use the `cd` command to change your current directory.\n- The `mkdir` command is used to create new directories.\n- `mkdir` can accept multiple arguments to create several directories at once.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -d /home/labex/project/phoenix_project/src && test -d /home/labex/project/phoenix_project/config && test -d /home/labex/project/phoenix_project/docs"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*mkdir\\s+(?:-p\\s+)?src\\s+config\\s+docs\\s*$"
+              ],
+              [
+                "^\\s*cd\\s+(?:~/project/phoenix_project|/home/labex/project/phoenix_project|phoenix_project)/?\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Thiết lập cấu trúc thư mục dự án",
+      "content_vi": "## Thiết lập Cấu trúc Thư mục Dự án\n\nNhiệm vụ đầu tiên của bạn là tạo một cấu trúc thư mục phù hợp bên trong thư mục `phoenix_project`. Một cấu trúc được định nghĩa rõ ràng giúp phân tách các loại tệp khác nhau, làm cho dự án dễ điều hướng và bảo trì hơn.\n\n### Các nhiệm vụ\n\n1. Di chuyển vào thư mục `~/project/phoenix_project`.\n2. Tạo ba thư mục con mới: `src` dùng cho mã nguồn, `config` dùng for các tệp cấu hình, và `docs` dùng cho tài liệu.\n\n### Các yêu cầu\n\n- Tất cả các thư mục mới phải được tạo bên trong thư mục `~/project/phoenix_project`.\n- Tên các thư mục phải chính xác là `src`, `config`, và `docs`.\n- Bạn nên sử dụng một lệnh duy nhất để tạo đồng thời cả ba thư mục.\n\n### Các ví dụ\n\nSau khi hoàn thành bước này, cấu trúc thư mục của bạn sẽ giống như sau:\n\n```bash\n~/project/phoenix_project/\n├── config/\n├── docs/\n├── src/\n├── README.md\n├── config.json\n└── main_app.py\n```\n\nKhi bạn chạy lệnh `ls -F` trong thư mục `~/project/phoenix_project`, bạn sẽ nhìn thấy:\n\n```plaintext\nREADME.md  config/  config.json  docs/  main_app.py  src/\n```\n\nCác ký hiệu `/` ở sau tên thư mục cho biết chúng là các thư mục, không phải là tệp.\n\n### Gợi ý\n\n- Sử dụng lệnh `cd` để thay đổi thư mục hiện tại của bạn.\n- Lệnh `mkdir` được sử dụng để tạo các thư mục mới.\n- `mkdir` có thể nhận nhiều đối số để tạo ra nhiều thư mục cùng một lúc."
+    },
+    {
+      "id": "source-596201-section-2-v2",
+      "title": "Navigating and Creating Project Files",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Navigating and Creating Project Files\n\nWith the new directory structure in place, it's time to move the existing project files into their designated homes. This will clean up the root of the project and make files easier to find.\n\n### Tasks\n\n1. Move the `main_app.py` file into the `src` directory.\n2. Move the `config.json` file into the `config` directory.\n3. Move the `README.md` file into the `docs` directory.\n\n### Requirements\n\n- Ensure you are in the `~/project/phoenix_project` directory before performing the move operations.\n- Use the `mv` command to relocate each file.\n\n### Examples\n\nAfter moving the files, your project structure should be organized like this:\n\n```bash\n~/project/phoenix_project/\n├── config/\n│ └── config.json\n├── docs/\n│ └── README.md\n└── src/\n└── main_app.py\n```\n\nWhen you run `ls -F` in the root `~/project/phoenix_project` directory, it should show only the directories:\n\n```plaintext\nconfig/  docs/  src/\n```\n\nEach file should now be in its appropriate subdirectory:\n\n- `ls src/` → `main_app.py`\n- `ls config/` → `config.json`\n- `ls docs/` → `README.md`\n\n### Hints\n\n- The `mv` command is used to move or rename files and directories.\n- The basic syntax is `mv [SOURCE] [DESTINATION]`.\n- For example, to move `file.txt` into a directory named `documents`, you would use `mv file.txt documents/`.\n",
+      "task": "1. Move the `main_app.py` file into the `src` directory.\n2. Move the `config.json` file into the `config` directory.\n3. Move the `README.md` file into the `docs` directory.",
+      "hint": "- The `mv` command is used to move or rename files and directories.\n- The basic syntax is `mv [SOURCE] [DESTINATION]`.\n- For example, to move `file.txt` into a directory named `documents`, you would use `mv file.txt documents/`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "cmp -s '/home/labex/project/phoenix_project/src/main_app.py' <(printf '%s' 'print('\\''Phoenix local practice'\\'')\n') && cmp -s '/home/labex/project/phoenix_project/config/config.json' <(printf '%s' '{\"environment\":\"practice\",\"port\":8000}\n') && cmp -s '/home/labex/project/phoenix_project/docs/README.md' <(printf '%s' '# Phoenix practice project\n') && test ! -e /home/labex/project/phoenix_project/main_app.py && test ! -e /home/labex/project/phoenix_project/config.json && test ! -e /home/labex/project/phoenix_project/README.md"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*mv\\s+main_app\\.py\\s+src/\\s*$"
+              ],
+              [
+                "^\\s*mv\\s+config\\.json\\s+config/\\s*$"
+              ],
+              [
+                "^\\s*mv\\s+README\\.md\\s+docs/\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Điều hướng và tạo tệp dự án",
+      "content_vi": "## Điều hướng và Tạo tệp Dự án\n\nVới cấu trúc thư mục mới đã được thiết lập, đã đến lúc di chuyển các tệp dự án hiện có vào các vị trí được chỉ định của chúng. Việc này sẽ dọn dẹp thư mục gốc của dự án và giúp việc tìm kiếm các tệp trở nên dễ dàng hơn.\n\n### Nhiệm vụ\n\n1. Di chuyển tệp `main_app.py` vào thư mục `src`.\n2. Di chuyển tệp `config.json` vào thư mục `config`.\n3. Di chuyển tệp `README.md` vào thư mục `docs`.\n\n### Yêu cầu\n\n- Đảm bảo bạn đang ở trong thư mục `~/project/phoenix_project` trước khi thực hiện các thao tác di chuyển.\n- Sử dụng lệnh `mv` để định vị lại từng tệp.\n\n### Ví dụ\n\nSau khi di chuyển các tệp, cấu trúc dự án của bạn sẽ được tổ chức như sau:\n\n```bash\n~/project/phoenix_project/\n├── config/\n│ └── config.json\n├── docs/\n│ └── README.md\n└── src/\n└── main_app.py\n```\n\nKhi bạn chạy lệnh `ls -F` trong thư mục gốc `~/project/phoenix_project`, nó chỉ hiển thị các thư mục:\n\n```plaintext\nconfig/  docs/  src/\n```\n\nBây giờ, mỗi tệp phải nằm trong thư mục con tương ứng của nó:\n\n- `ls src/` → `main_app.py`\n- `ls config/` → `config.json`\n- `ls docs/` → `README.md`\n\n### Gợi ý\n\n- Lệnh `mv` được sử dụng để di chuyển hoặc đổi tên các tệp và thư mục.\n- Cú pháp cơ bản là `mv [NGUỒN] [ĐÍCH]`.\n- Ví dụ, để di chuyển `file.txt` vào một thư mục có tên là `documents`, bạn sẽ sử dụng `mv file.txt documents/`."
+    },
+    {
+      "id": "source-596201-section-3-v2",
+      "title": "Backing Up Critical Configuration Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Backing Up Critical Configuration Files\n\nThe `config.json` file contains critical settings for Project Phoenix. Before any modifications are made, it's a vital safety measure to create a backup. Your next task is to create a copy of this file.\n\n### Tasks\n\n1. Create a backup copy of the `config.json` file.\n\n### Requirements\n\n- The backup file must be created within the `~/project/phoenix_project/config/` directory.\n- The backup file must be named exactly `config.json.bak`.\n\n### Examples\n\nAfter creating the backup, your `config` directory should contain both files:\n\n```bash\n~/project/phoenix_project/config/\n├── config.json\n└── config.json.bak\n```\n\nWhen you run `ls` in the `~/project/phoenix_project/config/` directory, you should see:\n\n```plaintext\nconfig.json  config.json.bak\n```\n\nBoth files should have identical content, as the `.bak` file is an exact copy of the original:\n\n```bash\n## These commands should show identical output\ncat config.json\ncat config.json.bak\n```\n\n### Hints\n\n- The `cp` command is used to copy files and directories.\n- The syntax is `cp [SOURCE] [DESTINATION]`.\n- You will need to provide the full path to the source file and the full path for the new backup file.\n",
+      "task": "1. Create a backup copy of the `config.json` file.",
+      "hint": "- The `cp` command is used to copy files and directories.\n- The syntax is `cp [SOURCE] [DESTINATION]`.\n- You will need to provide the full path to the source file and the full path for the new backup file.",
+      "verification": {
+        "kind": "state",
+        "command": "test -s /home/labex/project/phoenix_project/config/config.json && cmp -s /home/labex/project/phoenix_project/config/config.json /home/labex/project/phoenix_project/config/config.json.bak"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Sao lưu các tệp cấu hình quan trọng",
+      "content_vi": "## Sao lưu các tệp cấu hình quan trọng\n\nTệp `config.json` chứa các thiết lập quan trọng cho Project Phoenix. Trước khi thực hiện bất kỳ sửa đổi nào, việc tạo bản sao lưu là một biện pháp an toàn thiết yếu. Nhiệm vụ tiếp theo của bạn là tạo một bản sao của tệp này.\n\n### Nhiệm vụ\n\n1. Tạo một bản sao lưu của tệp `config.json`.\n\n### Yêu cầu\n\n- Tệp sao lưu phải được tạo trong thư mục `~/project/phoenix_project/config/`.\n- Tệp sao lưu phải được đặt tên chính xác là `config.json.bak`.\n\n### Ví dụ\n\nSau khi tạo bản sao lưu, thư mục `config` của bạn sẽ chứa cả hai tệp:\n\n```bash\n~/project/phoenix_project/config/\n├── config.json\n└── config.json.bak\n```\n\nKhi bạn chạy lệnh `ls` trong thư mục `~/project/phoenix_project/config/`, bạn sẽ nhìn thấy:\n\n```plaintext\nconfig.json  config.json.bak\n```\n\nCả hai tệp phải có nội dung giống hệt nhau, vì tệp `.bak` là bản sao chính xác của tệp gốc:\n\n```bash\n## Các lệnh này sẽ hiển thị đầu ra giống hệt nhau\ncat config.json\ncat config.json.bak\n```\n\n### Gợi ý\n\n- Lệnh `cp` được sử dụng để sao chép các tệp và thư mục.\n- Cú pháp là `cp [NGUỒN] [ĐÍCH]`.\n- Bạn sẽ cần cung cấp đường dẫn đầy đủ đến tệp nguồn và đường dẫn đầy đủ cho tệp sao lưu mới."
+    },
+    {
+      "id": "source-596201-section-4-v2",
+      "title": "Reorganizing the Team’s Shared Resources",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Reorganizing the Team’s Shared Resources\n\nYou've discovered another piece of the puzzle: a directory named `shared_docs` located at `~/project/shared_docs`. This directory contains important team guidelines and API specifications that belong with the rest of the project's documentation. Your task is to integrate it into the main project structure.\n\n### Tasks\n\n1. Move the entire `shared_docs` directory and all of its contents into the `~/project/phoenix_project/docs/` directory.\n\n### Requirements\n\n- The source directory is `~/project/shared_docs`.\n- The destination path is `~/project/phoenix_project/docs/`.\n- The entire directory, not just its contents, must be moved.\n\n### Examples\n\nAfter moving the `shared_docs` directory, your documentation structure should look like this:\n\n```bash\n~/project/phoenix_project/docs/\n├── README.md\n└── shared_docs/\n├── api_spec.doc\n└── team_guidelines.txt\n```\n\nWhen you run `ls` in the `~/project/phoenix_project/docs/` directory, you should see:\n\n```plaintext\nREADME.md  shared_docs/\n```\n\nThe `shared_docs` directory should contain all its original files:\n\n```bash\nls ~/project/phoenix_project/docs/shared_docs/\n```\n\n```plaintext\napi_spec.doc  team_guidelines.txt\n```\n\nThe original location `~/project/shared_docs` should no longer exist.\n\n### Hints\n\n- The `mv` command works for directories just as it does for files.\n- When you move a directory, all of its contents are moved with it automatically.\n- The command will look like `mv [SOURCE_DIRECTORY] [DESTINATION_DIRECTORY]`.\n",
+      "task": "1. Move the entire `shared_docs` directory and all of its contents into the `~/project/phoenix_project/docs/` directory.",
+      "hint": "- The `mv` command works for directories just as it does for files.\n- When you move a directory, all of its contents are moved with it automatically.\n- The command will look like `mv [SOURCE_DIRECTORY] [DESTINATION_DIRECTORY]`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test ! -e /home/labex/project/shared_docs && cmp -s '/home/labex/project/phoenix_project/docs/shared_docs/api_spec.doc' <(printf '%s' 'Local API fixture: GET /health\n') && cmp -s '/home/labex/project/phoenix_project/docs/shared_docs/team_guidelines.txt' <(printf '%s' 'Keep changes documented.\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*mv\\s+~/project/shared_docs\\s+~/project/phoenix_project/docs/\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Tái tổ chức tài nguyên chung của nhóm",
+      "content_vi": "## Sắp xếp lại các tài nguyên chia sẻ của nhóm\n\nBạn đã khám phá ra một mảnh ghép khác của câu đố: một thư mục có tên là `shared_docs` nằm ở `~/project/shared_docs`. Thư mục này chứa các hướng dẫn quan trọng của nhóm và thông số kỹ thuật API vốn thuộc về phần còn lại của tài liệu dự án. Nhiệm vụ của bạn là tích hợp nó vào cấu trúc dự án chính.\n\n### Các nhiệm vụ\n\n1. Di chuyển toàn bộ thư mục `shared_docs` và tất cả nội dung bên trong vào thư mục `~/project/phoenix_project/docs/`.\n\n### Các yêu cầu\n\n- Thư mục nguồn là `~/project/shared_docs`.\n- Đường dẫn đích là `~/project/phoenix_project/docs/`.\n- Toàn bộ thư mục, chứ không chỉ nội dung bên trong, phải được di chuyển.\n\n### Ví dụ\n\nSau khi di chuyển thư mục `shared_docs`, cấu trúc tài liệu của bạn sẽ giống thế này:\n\n```bash\n~/project/phoenix_project/docs/\n├── README.md\n└── shared_docs/\n├── api_spec.doc\n└── team_guidelines.txt\n```\n\nKhi bạn chạy lệnh `ls` trong thư mục `~/project/phoenix_project/docs/`, bạn sẽ thấy:\n\n```plaintext\nREADME.md  shared_docs/\n```\n\nThư mục `shared_docs` phải chứa tất cả các tệp ban đầu của nó:\n\n```bash\nls ~/project/phoenix_project/docs/shared_docs/\n```\n\n```plaintext\napi_spec.doc  team_guidelines.txt\n```\n\nVị trí ban đầu `~/project/shared_docs` không được phép tồn tại nữa.\n\n### Gợi ý\n\n- Lệnh `mv` hoạt động với các thư mục giống như cách nó hoạt động với các tệp.\n- Khi bạn di chuyển một thư mục, tất cả nội dung bên trong nó sẽ được di chuyển theo tự động.\n- Lệnh sẽ có dạng `mv [THƯ_MỤC_NGUỒN] [THƯ_MỤC_ĐÍCH]`."
+    },
+    {
+      "id": "source-596201-section-5-v2",
+      "title": "Archiving and Removing Outdated Log Files",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Archiving and Removing Outdated Log Files\n\nYour final task is a bit of housekeeping. The `~/project/logs` directory is accumulating log files, and the ones from 2023 are no longer needed for daily operations. To save space and keep things tidy, you need to compress these old logs into a single archive file and then remove the original files.\n\n### Understanding the tar Command\n\nThe `tar` command is a powerful Linux tool for creating and manipulating archive files. \"Tar\" originally stood for \"Tape Archive\" because it was designed to write data to magnetic tapes, but today it's commonly used to create compressed archive files on disk.\n\nWhen you use `tar`, you're essentially bundling multiple files together into a single file (called an archive), and you can optionally compress this archive to save space. The most common compression format is gzip, which adds the `.gz` extension to the filename.\n\nThe `tar` command uses different options (flags) to control its behavior:\n\n- `c`: Create a new archive\n- `z`: Compress the archive using gzip\n- `f`: Specify the filename of the archive\n\nSo `tar -czf archive.tar.gz file1 file2` creates a new compressed archive named `archive.tar.gz` containing `file1` and `file2`.\n\n### Tasks\n\n1. Navigate to the `~/project/logs` directory.\n2. Create a compressed tar archive named `old_logs.tar.gz` that contains all log files from the year 2023.\n3. After the archive is successfully created, delete the original 2023 log files that you just archived.\n\n### Requirements\n\n- The final archive must be named exactly `old_logs.tar.gz`.\n- The archive must be located in the `~/project/logs` directory.\n- Only log files with `2023` in their name should be archived and subsequently removed.\n- The log file from 2024 (`app_2024-05-01.log`) must not be included in the archive and must not be deleted.\n\n### Examples\n\nBefore archiving, your logs directory contains:\n\n```bash\n~/project/logs/\n├── app_2023-01-15.log\n├── app_2024-05-01.log\n└── db_2023-02-20.log\n```\n\nAfter completing the archiving task, your logs directory should look like:\n\n```bash\n~/project/logs/\n├── app_2024-05-01.log\n└── old_logs.tar.gz\n```\n\nWhen you run `ls` in the `~/project/logs/` directory, you should see:\n\n```plaintext\napp_2024-05-01.log  old_logs.tar.gz\n```\n\n### Hints\n\n- Use the `tar` command to create archives. The options `-czf` are a powerful combination: `c` (create), `z` (compress with gzip), and `f` (specify filename).\n- You can use a wildcard (`*`) to select multiple files that match a pattern. For example, `*_2023-*.log` will match all files that end with `.log` and have `_2023-` in their name.\n- The `rm` command is used to remove (delete) files. Be careful when using it with wildcards!\n",
+      "task": "1. Navigate to the `~/project/logs` directory.\n2. Create a compressed tar archive named `old_logs.tar.gz` that contains all log files from the year 2023.\n3. After the archive is successfully created, delete the original 2023 log files that you just archived.",
+      "hint": "- Use the `tar` command to create archives. The options `-czf` are a powerful combination: `c` (create), `z` (compress with gzip), and `f` (specify filename).\n- You can use a wildcard (`*`) to select multiple files that match a pattern. For example, `*_2023-*.log` will match all files that end with `.log` and have `_2023-` in their name.\n- The `rm` command is used to remove (delete) files. Be careful when using it with wildcards!",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "gzip -t /home/labex/project/logs/old_logs.tar.gz && cmp -s <(tar -tzf /home/labex/project/logs/old_logs.tar.gz | LC_ALL=C sort) <(printf 'app_2023-01-15.log\\ndb_2023-02-20.log\\n') && cmp -s <(tar -xOzf /home/labex/project/logs/old_logs.tar.gz app_2023-01-15.log) <(printf '%s' '2023 application fixture\n') && cmp -s <(tar -xOzf /home/labex/project/logs/old_logs.tar.gz db_2023-02-20.log) <(printf '%s' '2023 database fixture\n') && test ! -e /home/labex/project/logs/app_2023-01-15.log && test ! -e /home/labex/project/logs/db_2023-02-20.log && cmp -s '/home/labex/project/logs/app_2024-05-01.log' <(printf '%s' '2024 application fixture to preserve\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tar\\s+[^\\n;]*old_logs\\.tar\\.gz[^\\n;]*2023[^\\n;]*$"
+              ],
+              [
+                "^\\s*rm\\s+[^\\n;]*2023[^\\n;]*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
+      "title_vi": "Lưu trữ và xóa tệp nhật ký cũ",
+      "content_vi": "## Lưu trữ và Xóa các Tệp Nhật ký Cũ\n\nNhiệm vụ cuối cùng của bạn là một công việc dọn dẹp nhỏ. Thư mục `~/project/logs` đang tích lũy các tệp nhật ký, và những tệp từ năm 2023 không còn cần thiết cho các hoạt động hàng ngày nữa. Để tiết kiệm không gian và giữ mọi thứ ngăn nắp, bạn cần nén các tệp nhật ký cũ này thành một tệp lưu trữ duy nhất và sau đó xóa các tệp gốc đi.\n\n### Hiểu về Lệnh tar\n\nLệnh `tar` là một công cụ Linux mạnh mẽ dùng để tạo và thao tác với các tệp lưu trữ. \"Tar\" ban đầu là viết tắt của \"Tape Archive\" vì nó được thiết kế để ghi dữ liệu lên băng từ, nhưng ngày nay nó thường được sử dụng để tạo các tệp lưu trữ được nén trên đĩa.\n\nKhi bạn sử dụng `tar`, bạn thực chất đang gom nhiều tệp lại với nhau thành một tệp duy nhất (được gọi là tệp lưu trữ), và bạn có thể tùy chọn nén tệp lưu trữ này để tiết kiệm không gian. Định dạng nén phổ biến nhất là gzip, định dạng này sẽ thêm phần mở rộng `.gz` vào tên tệp.\n\nLệnh `tar` sử dụng các tùy chọn (cờ) khác nhau để điều khiển hành vi của nó:\n\n- `c`: Tạo một tệp lưu trữ mới\n- `z`: Nén tệp lưu trữ bằng gzip\n- `f`: Chỉ định tên tệp của tệp lưu trữ\n\nVì vậy, `tar -czf archive.tar.gz file1 file2` tạo ra một tệp lưu trữ nén mới có tên là `archive.tar.gz` chứa `file1` và `file2`.\n\n### Các Nhiệm vụ\n\n1. Di chuyển đến thư mục `~/project/logs`.\n2. Tạo một tệp lưu trữ tar được nén có tên là `old_logs.tar.gz` chứa tất cả các tệp nhật ký từ năm 2023.\n3. Sau khi tệp lưu trữ được tạo thành công, hãy xóa các tệp nhật ký gốc năm 2023 mà bạn vừa đưa vào tệp lưu trữ.\n\n### Yêu cầu\n\n- Tệp lưu trữ cuối cùng phải được đặt tên chính xác là `old_logs.tar.gz`.\n- Tệp lưu trữ phải nằm trong thư mục `~/project/logs`.\n- Chỉ các tệp nhật ký có chứa `2023` trong tên của chúng mới được lưu trữ và sau đó bị xóa.\n- Tệp nhật ký từ năm 2024 (`app_2024-05-01.log`) không được đưa vào tệp lưu trữ và không bị xóa.\n\n### Ví dụ\n\nTrước khi lưu trữ, thư mục nhật ký của bạn chứa:\n\n```bash\n~/project/logs/\n├── app_2023-01-15.log\n├── app_2024-05-01.log\n└── db_2023-02-20.log\n```\n\nSau khi hoàn thành nhiệm vụ lưu trữ, thư mục nhật ký của bạn sẽ có dạng:\n\n```bash\n~/project/logs/\n├── app_2024-05-01.log\n└── old_logs.tar.gz\n```\n\nKhi bạn chạy lệnh `ls` trong thư mục `~/project/logs/`, bạn sẽ nhìn thấy:\n\n```plaintext\napp_2024-05-01.log  old_logs.tar.gz\n```\n\n### Gợi ý\n\n- Sử dụng lệnh `tar` để tạo các tệp lưu trữ. Các tùy chọn `-czf` là một sự kết hợp mạnh mẽ: `c` (tạo), `z` (nén bằng gzip), và `f` (chỉ định tên tệp).\n- Bạn có thể sử dụng ký tự đại diện (`*`) để chọn nhiều tệp khớp với một mẫu. Ví dụ: `*_2023-*.log` sẽ khớp với tất cả các tệp kết thúc bằng `.log` và có chứa `_2023-` trong tên của chúng.\n- Lệnh `rm` được sử dụng để loại bỏ (xóa) các tệp. Hãy cẩn thận khi sử dụng nó với các ký tự đại diện!"
+    },
+    {
+      "id": "source-596201-section-6-v2",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nOutstanding work, Digital Architect! You have successfully transformed Project Phoenix from chaos into a well-organized development environment. Sarah Chen and the entire development team are thrilled with your work. You've built a logical directory structure, organized critical files, secured configurations with backups, and cleaned up system resources by archiving old logs.\n\nThese fundamental Linux command-line skills—`mkdir`, `mv`, `cp`, `tar`, and `rm`—form the backbone of professional system administration. Your organizational work today has created a solid foundation that will support Project Phoenix throughout its development lifecycle.\n\nThe development team can now work efficiently in their properly structured environment. Tomorrow, you'll take on a new challenge as the Log Investigator when the team encounters their first technical issues. Your systematic approach to organization will serve you well in troubleshooting!\n",
+      "title_vi": "Tóm tắt",
+      "content_vi": "## Tổng kết\n\nCông việc xuất sắc, Kiến trúc sư Kỹ thuật số! Bạn đã biến Dự án Phoenix thành công từ sự hỗn loạn thành một môi trường phát triển được tổ chức ngăn nắp. Sarah Chen và toàn bộ đội ngũ phát triển vô cùng phấn khích trước công sức của bạn. Bạn đã xây dựng một cấu trúc thư mục hợp lý, sắp xếp các tệp quan trọng, bảo mật các cấu hình bằng các bản sao lưu, và dọn dẹp tài nguyên hệ thống bằng cách lưu trữ các tệp nhật ký cũ.\n\nNhững kỹ năng dòng lệnh Linux cơ bản này—`mkdir`, `mv`, `cp`, `tar`, và `rm`—tạo nên xương sống của công việc quản trị hệ thống chuyên nghiệp. Công việc tổ chức của bạn ngày hôm nay đã tạo ra một nền tảng vững chắc hỗ trợ Dự án Phoenix trong suốt vòng đời phát triển của nó.\n\nĐội ngũ phát triển giờ đây có thể làm việc hiệu quả trong môi trường được cấu trúc đúng đắn của họ. Ngày mai, bạn sẽ đảm nhận một thử thách mới với tư cách là Người điều tra Nhật ký khi đội ngũ gặp phải các sự cố kỹ thuật đầu tiên. Tiếp cận có hệ thống của bạn đối với việc tổ chức sẽ giúp ích rất nhiều cho bạn trong việc khắc phục sự cố!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596201-section-1-v2",
+      "title": "Setting Up the Project Directory Structure",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Setting Up the Project Directory Structure\n\nYour first task is to create a proper directory structure inside the `phoenix_project` directory. A well-defined structure separates different types of files, making the project easier to navigate and maintain.\n\n### Tasks\n\n1. Navigate into the `~/project/phoenix_project` directory.\n2. Create three new subdirectories: `src` for source code, `config` for configuration files, and `docs` for documentation.\n\n### Requirements\n\n- All new directories must be created inside the `~/project/phoenix_project` directory.\n- The directory names must be exactly `src`, `config`, and `docs`.\n- You should use a single command to create all three directories simultaneously.\n\n### Examples\n\nAfter completing this step, your directory structure should look like this:\n\n```bash\n~/project/phoenix_project/\n├── config/\n├── docs/\n├── src/\n├── README.md\n├── config.json\n└── main_app.py\n```\n\nWhen you run `ls -F` in the `~/project/phoenix_project` directory, you should see:\n\n```plaintext\nREADME.md  config/  config.json  docs/  main_app.py  src/\n```\n\nThe `/` symbols after directory names indicate they are directories, not files.\n\n### Hints\n\n- Use the `cd` command to change your current directory.\n- The `mkdir` command is used to create new directories.\n- `mkdir` can accept multiple arguments to create several directories at once.\n",
+      "task": "1. Navigate into the `~/project/phoenix_project` directory.\n2. Create three new subdirectories: `src` for source code, `config` for configuration files, and `docs` for documentation.",
+      "hint": "- Use the `cd` command to change your current directory.\n- The `mkdir` command is used to create new directories.\n- `mkdir` can accept multiple arguments to create several directories at once.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -d /home/labex/project/phoenix_project/src && test -d /home/labex/project/phoenix_project/config && test -d /home/labex/project/phoenix_project/docs"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*mkdir\\s+(?:-p\\s+)?src\\s+config\\s+docs\\s*$"
+              ],
+              [
+                "^\\s*cd\\s+(?:~/project/phoenix_project|/home/labex/project/phoenix_project|phoenix_project)/?\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Thiết lập cấu trúc thư mục dự án",
+      "content_vi": "## Thiết lập Cấu trúc Thư mục Dự án\n\nNhiệm vụ đầu tiên của bạn là tạo một cấu trúc thư mục phù hợp bên trong thư mục `phoenix_project`. Một cấu trúc được định nghĩa rõ ràng giúp phân tách các loại tệp khác nhau, làm cho dự án dễ điều hướng và bảo trì hơn.\n\n### Các nhiệm vụ\n\n1. Di chuyển vào thư mục `~/project/phoenix_project`.\n2. Tạo ba thư mục con mới: `src` dùng cho mã nguồn, `config` dùng for các tệp cấu hình, và `docs` dùng cho tài liệu.\n\n### Các yêu cầu\n\n- Tất cả các thư mục mới phải được tạo bên trong thư mục `~/project/phoenix_project`.\n- Tên các thư mục phải chính xác là `src`, `config`, và `docs`.\n- Bạn nên sử dụng một lệnh duy nhất để tạo đồng thời cả ba thư mục.\n\n### Các ví dụ\n\nSau khi hoàn thành bước này, cấu trúc thư mục của bạn sẽ giống như sau:\n\n```bash\n~/project/phoenix_project/\n├── config/\n├── docs/\n├── src/\n├── README.md\n├── config.json\n└── main_app.py\n```\n\nKhi bạn chạy lệnh `ls -F` trong thư mục `~/project/phoenix_project`, bạn sẽ nhìn thấy:\n\n```plaintext\nREADME.md  config/  config.json  docs/  main_app.py  src/\n```\n\nCác ký hiệu `/` ở sau tên thư mục cho biết chúng là các thư mục, không phải là tệp.\n\n### Gợi ý\n\n- Sử dụng lệnh `cd` để thay đổi thư mục hiện tại của bạn.\n- Lệnh `mkdir` được sử dụng để tạo các thư mục mới.\n- `mkdir` có thể nhận nhiều đối số để tạo ra nhiều thư mục cùng một lúc.",
+      "task_vi": "1. Di chuyển vào thư mục `~/project/phoenix_project`.\n2. Tạo ba thư mục con mới: `src` cho mã nguồn, `config` cho các tệp cấu hình và `docs` cho tài liệu.",
+      "hint_vi": "- Dùng lệnh `cd` để chuyển đổi thư mục hiện tại.\n- Lệnh `mkdir` được dùng để tạo thư mục mới.\n- `mkdir` có thể nhận nhiều đối số để tạo một lúc nhiều thư mục."
+    },
+    {
+      "id": "source-596201-section-2-v2",
+      "title": "Navigating and Creating Project Files",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Navigating and Creating Project Files\n\nWith the new directory structure in place, it's time to move the existing project files into their designated homes. This will clean up the root of the project and make files easier to find.\n\n### Tasks\n\n1. Move the `main_app.py` file into the `src` directory.\n2. Move the `config.json` file into the `config` directory.\n3. Move the `README.md` file into the `docs` directory.\n\n### Requirements\n\n- Ensure you are in the `~/project/phoenix_project` directory before performing the move operations.\n- Use the `mv` command to relocate each file.\n\n### Examples\n\nAfter moving the files, your project structure should be organized like this:\n\n```bash\n~/project/phoenix_project/\n├── config/\n│ └── config.json\n├── docs/\n│ └── README.md\n└── src/\n└── main_app.py\n```\n\nWhen you run `ls -F` in the root `~/project/phoenix_project` directory, it should show only the directories:\n\n```plaintext\nconfig/  docs/  src/\n```\n\nEach file should now be in its appropriate subdirectory:\n\n- `ls src/` → `main_app.py`\n- `ls config/` → `config.json`\n- `ls docs/` → `README.md`\n\n### Hints\n\n- The `mv` command is used to move or rename files and directories.\n- The basic syntax is `mv [SOURCE] [DESTINATION]`.\n- For example, to move `file.txt` into a directory named `documents`, you would use `mv file.txt documents/`.\n",
+      "task": "1. Move the `main_app.py` file into the `src` directory.\n2. Move the `config.json` file into the `config` directory.\n3. Move the `README.md` file into the `docs` directory.",
+      "hint": "- The `mv` command is used to move or rename files and directories.\n- The basic syntax is `mv [SOURCE] [DESTINATION]`.\n- For example, to move `file.txt` into a directory named `documents`, you would use `mv file.txt documents/`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "cmp -s '/home/labex/project/phoenix_project/src/main_app.py' <(printf '%s' 'print('\\''Phoenix local practice'\\'')\n') && cmp -s '/home/labex/project/phoenix_project/config/config.json' <(printf '%s' '{\"environment\":\"practice\",\"port\":8000}\n') && cmp -s '/home/labex/project/phoenix_project/docs/README.md' <(printf '%s' '# Phoenix practice project\n') && test ! -e /home/labex/project/phoenix_project/main_app.py && test ! -e /home/labex/project/phoenix_project/config.json && test ! -e /home/labex/project/phoenix_project/README.md"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*mv\\s+main_app\\.py\\s+src/\\s*$"
+              ],
+              [
+                "^\\s*mv\\s+config\\.json\\s+config/\\s*$"
+              ],
+              [
+                "^\\s*mv\\s+README\\.md\\s+docs/\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Điều hướng và tạo tệp dự án",
+      "content_vi": "## Điều hướng và Tạo tệp Dự án\n\nVới cấu trúc thư mục mới đã được thiết lập, đã đến lúc di chuyển các tệp dự án hiện có vào các vị trí được chỉ định của chúng. Việc này sẽ dọn dẹp thư mục gốc của dự án và giúp việc tìm kiếm các tệp trở nên dễ dàng hơn.\n\n### Nhiệm vụ\n\n1. Di chuyển tệp `main_app.py` vào thư mục `src`.\n2. Di chuyển tệp `config.json` vào thư mục `config`.\n3. Di chuyển tệp `README.md` vào thư mục `docs`.\n\n### Yêu cầu\n\n- Đảm bảo bạn đang ở trong thư mục `~/project/phoenix_project` trước khi thực hiện các thao tác di chuyển.\n- Sử dụng lệnh `mv` để định vị lại từng tệp.\n\n### Ví dụ\n\nSau khi di chuyển các tệp, cấu trúc dự án của bạn sẽ được tổ chức như sau:\n\n```bash\n~/project/phoenix_project/\n├── config/\n│ └── config.json\n├── docs/\n│ └── README.md\n└── src/\n└── main_app.py\n```\n\nKhi bạn chạy lệnh `ls -F` trong thư mục gốc `~/project/phoenix_project`, nó chỉ hiển thị các thư mục:\n\n```plaintext\nconfig/  docs/  src/\n```\n\nBây giờ, mỗi tệp phải nằm trong thư mục con tương ứng của nó:\n\n- `ls src/` → `main_app.py`\n- `ls config/` → `config.json`\n- `ls docs/` → `README.md`\n\n### Gợi ý\n\n- Lệnh `mv` được sử dụng để di chuyển hoặc đổi tên các tệp và thư mục.\n- Cú pháp cơ bản là `mv [NGUỒN] [ĐÍCH]`.\n- Ví dụ, để di chuyển `file.txt` vào một thư mục có tên là `documents`, bạn sẽ sử dụng `mv file.txt documents/`.",
+      "task_vi": "1. Di chuyển tệp `main_app.py` vào thư mục `src`.\n2. Di chuyển tệp `config.json` vào thư mục `config`.\n3. Di chuyển tệp `README.md` vào thư mục `docs`.",
+      "hint_vi": "Lệnh `mv` dùng để di chuyển hoặc đổi tên tệp và thư mục.\nCú pháp cơ bản là `mv [NGUỒN] [ĐÍCH]`.\nVí dụ, để di chuyển `file.txt` vào thư mục `documents`, bạn dùng lệnh `mv file.txt documents/`."
+    },
+    {
+      "id": "source-596201-section-3-v2",
+      "title": "Backing Up Critical Configuration Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Backing Up Critical Configuration Files\n\nThe `config.json` file contains critical settings for Project Phoenix. Before any modifications are made, it's a vital safety measure to create a backup. Your next task is to create a copy of this file.\n\n### Tasks\n\n1. Create a backup copy of the `config.json` file.\n\n### Requirements\n\n- The backup file must be created within the `~/project/phoenix_project/config/` directory.\n- The backup file must be named exactly `config.json.bak`.\n\n### Examples\n\nAfter creating the backup, your `config` directory should contain both files:\n\n```bash\n~/project/phoenix_project/config/\n├── config.json\n└── config.json.bak\n```\n\nWhen you run `ls` in the `~/project/phoenix_project/config/` directory, you should see:\n\n```plaintext\nconfig.json  config.json.bak\n```\n\nBoth files should have identical content, as the `.bak` file is an exact copy of the original:\n\n```bash\n## These commands should show identical output\ncat config.json\ncat config.json.bak\n```\n\n### Hints\n\n- The `cp` command is used to copy files and directories.\n- The syntax is `cp [SOURCE] [DESTINATION]`.\n- You will need to provide the full path to the source file and the full path for the new backup file.\n",
+      "task": "1. Create a backup copy of the `config.json` file.",
+      "hint": "- The `cp` command is used to copy files and directories.\n- The syntax is `cp [SOURCE] [DESTINATION]`.\n- You will need to provide the full path to the source file and the full path for the new backup file.",
+      "verification": {
+        "kind": "state",
+        "command": "test -s /home/labex/project/phoenix_project/config/config.json && cmp -s /home/labex/project/phoenix_project/config/config.json /home/labex/project/phoenix_project/config/config.json.bak"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Sao lưu các tệp cấu hình quan trọng",
+      "content_vi": "## Sao lưu các tệp cấu hình quan trọng\n\nTệp `config.json` chứa các thiết lập quan trọng cho Project Phoenix. Trước khi thực hiện bất kỳ sửa đổi nào, việc tạo bản sao lưu là một biện pháp an toàn thiết yếu. Nhiệm vụ tiếp theo của bạn là tạo một bản sao của tệp này.\n\n### Nhiệm vụ\n\n1. Tạo một bản sao lưu của tệp `config.json`.\n\n### Yêu cầu\n\n- Tệp sao lưu phải được tạo trong thư mục `~/project/phoenix_project/config/`.\n- Tệp sao lưu phải được đặt tên chính xác là `config.json.bak`.\n\n### Ví dụ\n\nSau khi tạo bản sao lưu, thư mục `config` của bạn sẽ chứa cả hai tệp:\n\n```bash\n~/project/phoenix_project/config/\n├── config.json\n└── config.json.bak\n```\n\nKhi bạn chạy lệnh `ls` trong thư mục `~/project/phoenix_project/config/`, bạn sẽ nhìn thấy:\n\n```plaintext\nconfig.json  config.json.bak\n```\n\nCả hai tệp phải có nội dung giống hệt nhau, vì tệp `.bak` là bản sao chính xác của tệp gốc:\n\n```bash\n## Các lệnh này sẽ hiển thị đầu ra giống hệt nhau\ncat config.json\ncat config.json.bak\n```\n\n### Gợi ý\n\n- Lệnh `cp` được sử dụng để sao chép các tệp và thư mục.\n- Cú pháp là `cp [NGUỒN] [ĐÍCH]`.\n- Bạn sẽ cần cung cấp đường dẫn đầy đủ đến tệp nguồn và đường dẫn đầy đủ cho tệp sao lưu mới.",
+      "task_vi": "1. Tạo một bản sao lưu của tệp `config.json`.",
+      "hint_vi": "Lệnh `cp` được dùng để sao chép tệp và thư mục.\nCú pháp là `cp [NGUỒN] [ĐÍCH]`.\nBạn sẽ cần cung cấp đường dẫn đầy đủ đến tệp nguồn và đường dẫn đầy đủ cho tệp sao lưu mới."
+    },
+    {
+      "id": "source-596201-section-4-v2",
+      "title": "Reorganizing the Team’s Shared Resources",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Reorganizing the Team’s Shared Resources\n\nYou've discovered another piece of the puzzle: a directory named `shared_docs` located at `~/project/shared_docs`. This directory contains important team guidelines and API specifications that belong with the rest of the project's documentation. Your task is to integrate it into the main project structure.\n\n### Tasks\n\n1. Move the entire `shared_docs` directory and all of its contents into the `~/project/phoenix_project/docs/` directory.\n\n### Requirements\n\n- The source directory is `~/project/shared_docs`.\n- The destination path is `~/project/phoenix_project/docs/`.\n- The entire directory, not just its contents, must be moved.\n\n### Examples\n\nAfter moving the `shared_docs` directory, your documentation structure should look like this:\n\n```bash\n~/project/phoenix_project/docs/\n├── README.md\n└── shared_docs/\n├── api_spec.doc\n└── team_guidelines.txt\n```\n\nWhen you run `ls` in the `~/project/phoenix_project/docs/` directory, you should see:\n\n```plaintext\nREADME.md  shared_docs/\n```\n\nThe `shared_docs` directory should contain all its original files:\n\n```bash\nls ~/project/phoenix_project/docs/shared_docs/\n```\n\n```plaintext\napi_spec.doc  team_guidelines.txt\n```\n\nThe original location `~/project/shared_docs` should no longer exist.\n\n### Hints\n\n- The `mv` command works for directories just as it does for files.\n- When you move a directory, all of its contents are moved with it automatically.\n- The command will look like `mv [SOURCE_DIRECTORY] [DESTINATION_DIRECTORY]`.\n",
+      "task": "1. Move the entire `shared_docs` directory and all of its contents into the `~/project/phoenix_project/docs/` directory.",
+      "hint": "- The `mv` command works for directories just as it does for files.\n- When you move a directory, all of its contents are moved with it automatically.\n- The command will look like `mv [SOURCE_DIRECTORY] [DESTINATION_DIRECTORY]`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test ! -e /home/labex/project/shared_docs && cmp -s '/home/labex/project/phoenix_project/docs/shared_docs/api_spec.doc' <(printf '%s' 'Local API fixture: GET /health\n') && cmp -s '/home/labex/project/phoenix_project/docs/shared_docs/team_guidelines.txt' <(printf '%s' 'Keep changes documented.\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*mv\\s+~/project/shared_docs\\s+~/project/phoenix_project/docs/\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Tái tổ chức tài nguyên chung của nhóm",
+      "content_vi": "## Sắp xếp lại các tài nguyên chia sẻ của nhóm\n\nBạn đã khám phá ra một mảnh ghép khác của câu đố: một thư mục có tên là `shared_docs` nằm ở `~/project/shared_docs`. Thư mục này chứa các hướng dẫn quan trọng của nhóm và thông số kỹ thuật API vốn thuộc về phần còn lại của tài liệu dự án. Nhiệm vụ của bạn là tích hợp nó vào cấu trúc dự án chính.\n\n### Các nhiệm vụ\n\n1. Di chuyển toàn bộ thư mục `shared_docs` và tất cả nội dung bên trong vào thư mục `~/project/phoenix_project/docs/`.\n\n### Các yêu cầu\n\n- Thư mục nguồn là `~/project/shared_docs`.\n- Đường dẫn đích là `~/project/phoenix_project/docs/`.\n- Toàn bộ thư mục, chứ không chỉ nội dung bên trong, phải được di chuyển.\n\n### Ví dụ\n\nSau khi di chuyển thư mục `shared_docs`, cấu trúc tài liệu của bạn sẽ giống thế này:\n\n```bash\n~/project/phoenix_project/docs/\n├── README.md\n└── shared_docs/\n├── api_spec.doc\n└── team_guidelines.txt\n```\n\nKhi bạn chạy lệnh `ls` trong thư mục `~/project/phoenix_project/docs/`, bạn sẽ thấy:\n\n```plaintext\nREADME.md  shared_docs/\n```\n\nThư mục `shared_docs` phải chứa tất cả các tệp ban đầu của nó:\n\n```bash\nls ~/project/phoenix_project/docs/shared_docs/\n```\n\n```plaintext\napi_spec.doc  team_guidelines.txt\n```\n\nVị trí ban đầu `~/project/shared_docs` không được phép tồn tại nữa.\n\n### Gợi ý\n\n- Lệnh `mv` hoạt động với các thư mục giống như cách nó hoạt động với các tệp.\n- Khi bạn di chuyển một thư mục, tất cả nội dung bên trong nó sẽ được di chuyển theo tự động.\n- Lệnh sẽ có dạng `mv [THƯ_MỤC_NGUỒN] [THƯ_MỤC_ĐÍCH]`.",
+      "task_vi": "1. Di chuyển toàn bộ thư mục `shared_docs` và tất cả nội dung bên trong nó vào thư mục `~/project/phoenix_project/docs/`.",
+      "hint_vi": "Lệnh `mv` hoạt động với thư mục tương tự như với tệp tin.\nKhi bạn di chuyển một thư mục, toàn bộ nội dung bên trong sẽ được di chuyển theo tự động.\nCú pháp lệnh sẽ là `mv [THƯ_MỤC_NGUỒN] [THƯ_MỤC_ĐÍCH]`."
+    },
+    {
+      "id": "source-596201-section-5-v2",
+      "title": "Archiving and Removing Outdated Log Files",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Archiving and Removing Outdated Log Files\n\nYour final task is a bit of housekeeping. The `~/project/logs` directory is accumulating log files, and the ones from 2023 are no longer needed for daily operations. To save space and keep things tidy, you need to compress these old logs into a single archive file and then remove the original files.\n\n### Understanding the tar Command\n\nThe `tar` command is a powerful Linux tool for creating and manipulating archive files. \"Tar\" originally stood for \"Tape Archive\" because it was designed to write data to magnetic tapes, but today it's commonly used to create compressed archive files on disk.\n\nWhen you use `tar`, you're essentially bundling multiple files together into a single file (called an archive), and you can optionally compress this archive to save space. The most common compression format is gzip, which adds the `.gz` extension to the filename.\n\nThe `tar` command uses different options (flags) to control its behavior:\n\n- `c`: Create a new archive\n- `z`: Compress the archive using gzip\n- `f`: Specify the filename of the archive\n\nSo `tar -czf archive.tar.gz file1 file2` creates a new compressed archive named `archive.tar.gz` containing `file1` and `file2`.\n\n### Tasks\n\n1. Navigate to the `~/project/logs` directory.\n2. Create a compressed tar archive named `old_logs.tar.gz` that contains all log files from the year 2023.\n3. After the archive is successfully created, delete the original 2023 log files that you just archived.\n\n### Requirements\n\n- The final archive must be named exactly `old_logs.tar.gz`.\n- The archive must be located in the `~/project/logs` directory.\n- Only log files with `2023` in their name should be archived and subsequently removed.\n- The log file from 2024 (`app_2024-05-01.log`) must not be included in the archive and must not be deleted.\n\n### Examples\n\nBefore archiving, your logs directory contains:\n\n```bash\n~/project/logs/\n├── app_2023-01-15.log\n├── app_2024-05-01.log\n└── db_2023-02-20.log\n```\n\nAfter completing the archiving task, your logs directory should look like:\n\n```bash\n~/project/logs/\n├── app_2024-05-01.log\n└── old_logs.tar.gz\n```\n\nWhen you run `ls` in the `~/project/logs/` directory, you should see:\n\n```plaintext\napp_2024-05-01.log  old_logs.tar.gz\n```\n\n### Hints\n\n- Use the `tar` command to create archives. The options `-czf` are a powerful combination: `c` (create), `z` (compress with gzip), and `f` (specify filename).\n- You can use a wildcard (`*`) to select multiple files that match a pattern. For example, `*_2023-*.log` will match all files that end with `.log` and have `_2023-` in their name.\n- The `rm` command is used to remove (delete) files. Be careful when using it with wildcards!\n",
+      "task": "1. Navigate to the `~/project/logs` directory.\n2. Create a compressed tar archive named `old_logs.tar.gz` that contains all log files from the year 2023.\n3. After the archive is successfully created, delete the original 2023 log files that you just archived.",
+      "hint": "- Use the `tar` command to create archives. The options `-czf` are a powerful combination: `c` (create), `z` (compress with gzip), and `f` (specify filename).\n- You can use a wildcard (`*`) to select multiple files that match a pattern. For example, `*_2023-*.log` will match all files that end with `.log` and have `_2023-` in their name.\n- The `rm` command is used to remove (delete) files. Be careful when using it with wildcards!",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "gzip -t /home/labex/project/logs/old_logs.tar.gz && cmp -s <(tar -tzf /home/labex/project/logs/old_logs.tar.gz | LC_ALL=C sort) <(printf 'app_2023-01-15.log\\ndb_2023-02-20.log\\n') && cmp -s <(tar -xOzf /home/labex/project/logs/old_logs.tar.gz app_2023-01-15.log) <(printf '%s' '2023 application fixture\n') && cmp -s <(tar -xOzf /home/labex/project/logs/old_logs.tar.gz db_2023-02-20.log) <(printf '%s' '2023 database fixture\n') && test ! -e /home/labex/project/logs/app_2023-01-15.log && test ! -e /home/labex/project/logs/db_2023-02-20.log && cmp -s '/home/labex/project/logs/app_2024-05-01.log' <(printf '%s' '2024 application fixture to preserve\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tar\\s+[^\\n;]*old_logs\\.tar\\.gz[^\\n;]*2023[^\\n;]*$"
+              ],
+              [
+                "^\\s*rm\\s+[^\\n;]*2023[^\\n;]*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
+      "title_vi": "Lưu trữ và xóa tệp nhật ký cũ",
+      "content_vi": "## Lưu trữ và Xóa các Tệp Nhật ký Cũ\n\nNhiệm vụ cuối cùng của bạn là một công việc dọn dẹp nhỏ. Thư mục `~/project/logs` đang tích lũy các tệp nhật ký, và những tệp từ năm 2023 không còn cần thiết cho các hoạt động hàng ngày nữa. Để tiết kiệm không gian và giữ mọi thứ ngăn nắp, bạn cần nén các tệp nhật ký cũ này thành một tệp lưu trữ duy nhất và sau đó xóa các tệp gốc đi.\n\n### Hiểu về Lệnh tar\n\nLệnh `tar` là một công cụ Linux mạnh mẽ dùng để tạo và thao tác với các tệp lưu trữ. \"Tar\" ban đầu là viết tắt của \"Tape Archive\" vì nó được thiết kế để ghi dữ liệu lên băng từ, nhưng ngày nay nó thường được sử dụng để tạo các tệp lưu trữ được nén trên đĩa.\n\nKhi bạn sử dụng `tar`, bạn thực chất đang gom nhiều tệp lại với nhau thành một tệp duy nhất (được gọi là tệp lưu trữ), và bạn có thể tùy chọn nén tệp lưu trữ này để tiết kiệm không gian. Định dạng nén phổ biến nhất là gzip, định dạng này sẽ thêm phần mở rộng `.gz` vào tên tệp.\n\nLệnh `tar` sử dụng các tùy chọn (cờ) khác nhau để điều khiển hành vi của nó:\n\n- `c`: Tạo một tệp lưu trữ mới\n- `z`: Nén tệp lưu trữ bằng gzip\n- `f`: Chỉ định tên tệp của tệp lưu trữ\n\nVì vậy, `tar -czf archive.tar.gz file1 file2` tạo ra một tệp lưu trữ nén mới có tên là `archive.tar.gz` chứa `file1` và `file2`.\n\n### Các Nhiệm vụ\n\n1. Di chuyển đến thư mục `~/project/logs`.\n2. Tạo một tệp lưu trữ tar được nén có tên là `old_logs.tar.gz` chứa tất cả các tệp nhật ký từ năm 2023.\n3. Sau khi tệp lưu trữ được tạo thành công, hãy xóa các tệp nhật ký gốc năm 2023 mà bạn vừa đưa vào tệp lưu trữ.\n\n### Yêu cầu\n\n- Tệp lưu trữ cuối cùng phải được đặt tên chính xác là `old_logs.tar.gz`.\n- Tệp lưu trữ phải nằm trong thư mục `~/project/logs`.\n- Chỉ các tệp nhật ký có chứa `2023` trong tên của chúng mới được lưu trữ và sau đó bị xóa.\n- Tệp nhật ký từ năm 2024 (`app_2024-05-01.log`) không được đưa vào tệp lưu trữ và không bị xóa.\n\n### Ví dụ\n\nTrước khi lưu trữ, thư mục nhật ký của bạn chứa:\n\n```bash\n~/project/logs/\n├── app_2023-01-15.log\n├── app_2024-05-01.log\n└── db_2023-02-20.log\n```\n\nSau khi hoàn thành nhiệm vụ lưu trữ, thư mục nhật ký của bạn sẽ có dạng:\n\n```bash\n~/project/logs/\n├── app_2024-05-01.log\n└── old_logs.tar.gz\n```\n\nKhi bạn chạy lệnh `ls` trong thư mục `~/project/logs/`, bạn sẽ nhìn thấy:\n\n```plaintext\napp_2024-05-01.log  old_logs.tar.gz\n```\n\n### Gợi ý\n\n- Sử dụng lệnh `tar` để tạo các tệp lưu trữ. Các tùy chọn `-czf` là một sự kết hợp mạnh mẽ: `c` (tạo), `z` (nén bằng gzip), và `f` (chỉ định tên tệp).\n- Bạn có thể sử dụng ký tự đại diện (`*`) để chọn nhiều tệp khớp với một mẫu. Ví dụ: `*_2023-*.log` sẽ khớp với tất cả các tệp kết thúc bằng `.log` và có chứa `_2023-` trong tên của chúng.\n- Lệnh `rm` được sử dụng để loại bỏ (xóa) các tệp. Hãy cẩn thận khi sử dụng nó với các ký tự đại diện!",
+      "task_vi": "1. Chuyển đến thư mục `~/project/logs`.\n2. Tạo một tệp nén lưu trữ tar có tên là `old_logs.tar.gz` chứa tất cả các tệp nhật ký (log) từ năm 2023.\n3. Sau khi tệp lưu trữ được tạo thành công, hãy xóa các tệp nhật ký gốc năm 2023 mà bạn vừa đưa vào tệp lưu trữ.",
+      "hint_vi": "- Sử dụng lệnh `tar` để tạo kho lưu trữ. Các tùy chọn `-czf` là sự kết hợp mạnh mẽ: `c` (tạo), `z` (nén bằng gzip), và `f` (chỉ định tên tệp).\n- Bạn có thể sử dụng ký tự đại diện (`*`) để chọn nhiều tệp khớp với một mẫu. Ví dụ: `*_2023-*.log` sẽ khớp với tất cả các tệp kết thúc bằng `.log` và có chứa `_2023-` trong tên.\n- Lệnh `rm` được dùng để xóa các tệp. Hãy cẩn thận khi sử dụng lệnh này với các ký tự đại diện!"
+    }
+  ],
+  "title_vi": "Ngày 2: Kiến Trúc Sư Cây Thư Mục"
+}

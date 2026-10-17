@@ -1,0 +1,421 @@
+{
+  "id": "linux-sequence-control-and-pipeline-17994",
+  "course_id": "linux-for-noobs",
+  "order": 16,
+  "title": "Command Sequences and Pipelines",
+  "title_vi": "Kiểm Soát Tuần Tự và Đường Ống Lệnh",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "50 mins",
+  "overview": "Small Linux commands become much more useful when the shell coordinates them. A command reports success or failure through an exit status; sequence operators decide what runs next; a pipe connects one",
+  "source_url": "https://labex.io/tutorials/linux-sequence-control-and-pipeline-17994",
+  "source_lab_id": 17994,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Small Linux commands become much more useful when the shell coordinates them. A command reports success or failure through an exit status; sequence operators decide what runs next; a pipe connects one command's standard output to another command's standard input.\n\nYou will build these ideas one layer at a time, then use `grep`, `cut`, `wc`, `sort`, and `uniq` to transform a small service-event dataset. Later text-processing labs will deepen these filters, so the focus here is how data and decisions move between commands.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Các lệnh Linux nhỏ trở nên hữu ích hơn nhiều khi được shell phối hợp. Một lệnh báo thành công hoặc thất bại qua trạng thái thoát; các toán tử tuần tự quyết định lệnh tiếp theo được chạy; đường ống kết nối đầu ra chuẩn của một lệnh với đầu vào chuẩn của lệnh khác.\n\nBạn sẽ xây dựng từng lớp khái niệm này, rồi dùng `grep`, `cut`, `wc`, `sort` và `uniq` để biến đổi một tập dữ liệu nhỏ về sự kiện dịch vụ. Các bài xử lý văn bản sau sẽ đào sâu những bộ lọc này; ở đây, trọng tâm là cách dữ liệu và quyết định được truyền giữa các lệnh."
+    },
+    {
+      "id": "source-17994-section-1-v3",
+      "title": "Observe Command Exit Status",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will connect visible command behavior with the numeric status the shell records.\n\nAn exit status of `0` means success; a nonzero value means the command could not complete its requested operation. Run a successful file test and immediately print `$?`, which holds the most recent status:\n\n```bash\ncd /home/labex/project/pipeline-lab\ntest -f events.csv\necho $?\n```\n\nThe output is `0`. Now test a missing file:\n\n```bash\ntest -f missing.csv\necho $?\n```\n\nThe status is nonzero. Read `$?` immediately because every later command replaces it.\n\nCreate a stable observation using an `if` statement. You will study full shell scripting later; here it simply converts the status into text:\n\n```bash\nif test -f events.csv; then echo \"events.csv is ready\"; else echo \"events.csv is missing\"; fi > status-result.txt\ncat status-result.txt\n```",
+      "title_vi": "Quan sát trạng thái thoát của lệnh",
+      "task": "Thực hiện hướng dẫn: Observe Command Exit Status",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/status-result.txt <(printf %s 'events.csv is ready\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ liên hệ hành vi nhìn thấy của lệnh với trạng thái dạng số mà shell ghi nhận.\n\nTrạng thái thoát `0` có nghĩa là thành công; giá trị khác không có nghĩa là lệnh không thể hoàn thành thao tác được yêu cầu. Chạy phép kiểm tra tệp thành công rồi lập tức in `$?`, biến chứa trạng thái gần nhất:\n\n```bash\ncd /home/labex/project/pipeline-lab\ntest -f events.csv\necho $?\n```\n\nKết quả là `0`. Bây giờ kiểm tra một tệp không tồn tại:\n\n```bash\ntest -f missing.csv\necho $?\n```\n\nTrạng thái khác không. Hãy đọc `$?` ngay vì mọi lệnh chạy sau đó đều thay thế giá trị này.\n\nTạo kết quả quan sát ổn định bằng câu lệnh `if`. Bạn sẽ học đầy đủ về viết script shell sau; ở đây, câu lệnh chỉ chuyển trạng thái thành văn bản:\n\n```bash\nif test -f events.csv; then echo \"events.csv is ready\"; else echo \"events.csv is missing\"; fi > status-result.txt\ncat status-result.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Quan sát trạng thái thoát của lệnh",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-17994-section-2-v3",
+      "title": "Control Which Command Runs Next",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will compare unconditional and conditional command operators.\n\nA semicolon runs the next command regardless of the previous result:\n\n```bash\nfalse; echo \"semicolon continues\"\n```\n\n`&&` runs the right command only after success:\n\n```bash\ntest -f events.csv && echo \"input found\"\ntest -f missing.csv && echo \"you should not see this\"\n```\n\n`||` runs the right command only after failure:\n\n```bash\ntest -f missing.csv || echo \"input missing\"\n```\n\nThese operators can express a small success/failure decision. Copy the dataset only if it exists, otherwise print an error:\n\n```bash\ntest -f events.csv && cp events.csv working.csv || echo \"Copy failed\"\n```\n\nVerify that the guarded copy matches its source:\n\n```bash\ncmp events.csv working.csv && echo \"guarded copy matches\" > sequence-result.txt\ncat sequence-result.txt\n```\n\nFor complex logic, prefer a readable `if` statement; long `&&`/`||` chains can become ambiguous.",
+      "title_vi": "Điều khiển lệnh nào được chạy tiếp theo",
+      "task": "Thực hiện hướng dẫn: Control Which Command Runs Next",
+      "hint": "Chạy lệnh: false; echo \"semicolon continues\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/events.csv /home/labex/project/pipeline-lab/working.csv && cmp -s /home/labex/project/pipeline-lab/sequence-result.txt <(printf %s 'guarded copy matches\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ so sánh các toán tử chạy lệnh vô điều kiện và có điều kiện.\n\nDấu chấm phẩy chạy lệnh tiếp theo bất kể kết quả của lệnh trước:\n\n```bash\nfalse; echo \"semicolon continues\"\n```\n\n`&&` chỉ chạy lệnh bên phải sau khi lệnh trước thành công:\n\n```bash\ntest -f events.csv && echo \"input found\"\ntest -f missing.csv && echo \"you should not see this\"\n```\n\n`||` chỉ chạy lệnh bên phải sau khi lệnh trước thất bại:\n\n```bash\ntest -f missing.csv || echo \"input missing\"\n```\n\nCác toán tử này có thể biểu diễn một quyết định thành công/thất bại đơn giản. Chỉ sao chép tập dữ liệu nếu tệp tồn tại; nếu không, in thông báo lỗi:\n\n```bash\ntest -f events.csv && cp events.csv working.csv || echo \"Copy failed\"\n```\n\nKiểm tra bản sao có điều kiện có khớp với nguồn hay không:\n\n```bash\ncmp events.csv working.csv && echo \"guarded copy matches\" > sequence-result.txt\ncat sequence-result.txt\n```\n\nVới logic phức tạp, hãy ưu tiên câu lệnh `if` dễ đọc; chuỗi `&&`/`||` dài có thể gây khó hiểu.",
+      "task_vi": "Thực hiện hướng dẫn: Điều khiển lệnh nào được chạy tiếp theo",
+      "hint_vi": "Chạy lệnh: false; echo \"semicolon continues\""
+    },
+    {
+      "id": "source-17994-section-3-v3",
+      "title": "Send Output Through a Pipeline",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will connect commands with `|` and observe how each stage narrows a stream.\n\nThe left command writes standard output into the pipe; the right command reads that data as standard input. Select only `ERROR` records:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncat events.csv | grep ',ERROR,'\n```\n\n`grep` can read a file directly, so this shorter form has the same result:\n\n```bash\ngrep ',ERROR,' events.csv\n```\n\nAdd `wc -l` to count matching lines:\n\n```bash\ngrep ',ERROR,' events.csv | wc -l\n```\n\nSave both the filtered stream and count. `tee` duplicates its standard input: it writes one copy to `error-events.csv` and passes the other copy onward through standard output. The final `wc -l` therefore counts exactly the lines that were saved:\n\n```bash\ngrep ',ERROR,' events.csv | tee error-events.csv | wc -l > error-count.txt\ncat error-events.csv\ncat error-count.txt\n```\n\nInspect both files after the pipeline. `error-events.csv` contains the matching records, while `error-count.txt` contains their count.",
+      "title_vi": "Truyền đầu ra qua đường ống",
+      "task": "Thực hiện hướng dẫn: Send Output Through a Pipeline",
+      "hint": "Chạy lệnh: grep ',ERROR,' events.csv",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/error-events.csv <(grep \",ERROR,\" /home/labex/project/pipeline-lab/events.csv) && cmp -s /home/labex/project/pipeline-lab/error-count.txt <(printf %s '3\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kết nối các lệnh bằng `|` và quan sát cách mỗi giai đoạn thu hẹp một luồng dữ liệu.\n\nLệnh bên trái ghi đầu ra chuẩn vào đường ống; lệnh bên phải đọc dữ liệu đó làm đầu vào chuẩn. Chỉ chọn các bản ghi `ERROR`:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncat events.csv | grep ',ERROR,'\n```\n\n`grep` có thể đọc tệp trực tiếp, nên dạng ngắn hơn này cho cùng kết quả:\n\n```bash\ngrep ',ERROR,' events.csv\n```\n\nThêm `wc -l` để đếm các dòng khớp:\n\n```bash\ngrep ',ERROR,' events.csv | wc -l\n```\n\nLưu cả luồng đã lọc lẫn số lượng. `tee` nhân đôi đầu vào chuẩn: ghi một bản vào `error-events.csv` và truyền bản còn lại qua đầu ra chuẩn. Vì vậy, `wc -l` ở cuối đếm chính xác các dòng đã được lưu:\n\n```bash\ngrep ',ERROR,' events.csv | tee error-events.csv | wc -l > error-count.txt\ncat error-events.csv\ncat error-count.txt\n```\n\nKiểm tra cả hai tệp sau khi chạy pipeline. `error-events.csv` chứa các bản ghi khớp, còn `error-count.txt` chứa số lượng của chúng.",
+      "task_vi": "Thực hiện hướng dẫn: Truyền đầu ra qua đường ống",
+      "hint_vi": "Chạy lệnh: grep ',ERROR,' events.csv"
+    },
+    {
+      "id": "source-17994-section-4-v3",
+      "title": "Extract Fields with Cut",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will treat each CSV line as delimiter-separated fields.\n\n`cut -d, -f1` uses comma as the delimiter and prints field 1, the service name:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv\n```\n\nPrint the service and severity fields together:\n\n```bash\ncut -d, -f1,2 events.csv\n```\n\nCombine filtering and extraction to list only services that produced warnings:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1\n```\n\nSave this intermediate result:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1 > warning-services.txt\ncat warning-services.txt\n```\n\n`cut` works well for simple records whose delimiter never appears inside a field. More complex formats may need `awk` or a format-aware tool.",
+      "title_vi": "Trích xuất các trường bằng Cut",
+      "task": "Thực hiện hướng dẫn: Extract Fields with Cut",
+      "hint": "Chạy lệnh: cut -d, -f1,2 events.csv",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/warning-services.txt <(grep \",WARN,\" /home/labex/project/pipeline-lab/events.csv | cut -d, -f1)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xem mỗi dòng CSV như các trường được ngăn bởi dấu phân cách.\n\n`cut -d, -f1` dùng dấu phẩy làm dấu phân cách và in trường 1, tức tên dịch vụ:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv\n```\n\nIn cả trường dịch vụ lẫn mức độ nghiêm trọng:\n\n```bash\ncut -d, -f1,2 events.csv\n```\n\nKết hợp lọc và trích xuất để chỉ liệt kê những dịch vụ đã tạo cảnh báo:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1\n```\n\nLưu kết quả trung gian này:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1 > warning-services.txt\ncat warning-services.txt\n```\n\n`cut` phù hợp với bản ghi đơn giản mà dấu phân cách không xuất hiện bên trong trường. Định dạng phức tạp hơn có thể cần `awk` hoặc công cụ hiểu cấu trúc định dạng.",
+      "task_vi": "Thực hiện hướng dẫn: Trích xuất các trường bằng Cut",
+      "hint_vi": "Chạy lệnh: cut -d, -f1,2 events.csv"
+    },
+    {
+      "id": "source-17994-section-5-v3",
+      "title": "Sort and Count Repeated Values",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will build a complete frequency pipeline and understand why sorting comes before `uniq`.\n\n`uniq` combines only **adjacent** equal lines. First extract service names, then sort them so identical values are neighbors:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv | sort\n```\n\nAdd `uniq -c` to count each run of equal names:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c\n```\n\nSort the counts numerically in descending order. `sort -k1,1nr` uses the first field as a numeric, reverse-order key:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr\n```\n\nSave the final report:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr > service-frequency.txt\ncat service-frequency.txt\n```\n\nRead this pipeline left to right: extract → sort → count adjacent duplicates → rank counts.",
+      "title_vi": "Sắp xếp và đếm các giá trị lặp",
+      "task": "Thực hiện hướng dẫn: Sort and Count Repeated Values",
+      "hint": "Chạy lệnh: cut -d, -f1 events.csv | sort | uniq -c",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/service-frequency.txt <(cut -d, -f1 /home/labex/project/pipeline-lab/events.csv | sort | uniq -c | sort -k1,1nr)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xây dựng pipeline thống kê tần suất hoàn chỉnh và hiểu vì sao phải sắp xếp trước `uniq`.\n\n`uniq` chỉ gộp những dòng giống nhau **liền kề**. Trước tiên trích xuất tên dịch vụ, rồi sắp xếp để các giá trị giống nhau đứng cạnh nhau:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv | sort\n```\n\nThêm `uniq -c` để đếm mỗi dãy tên giống nhau:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c\n```\n\nSắp xếp số đếm theo giá trị số giảm dần. `sort -k1,1nr` dùng trường đầu tiên làm khóa sắp xếp dạng số theo thứ tự đảo ngược:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr\n```\n\nLưu báo cáo cuối cùng:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr > service-frequency.txt\ncat service-frequency.txt\n```\n\nĐọc pipeline từ trái sang phải: trích xuất → sắp xếp → đếm các giá trị trùng liền kề → xếp hạng số đếm.",
+      "task_vi": "Thực hiện hướng dẫn: Sắp xếp và đếm các giá trị lặp",
+      "hint_vi": "Chạy lệnh: cut -d, -f1 events.csv | sort | uniq -c"
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You used exit status as the shell's success signal, controlled execution with `;`, `&&`, and `||`, and built pipelines with clear stages. You then filtered records, extracted fields, counted lines, sorted values, and counted duplicates—exactly the vocabulary needed for the next data-pipeline Challenge.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã dùng trạng thái thoát làm tín hiệu thành công của shell, điều khiển thực thi bằng `;`, `&&` và `||`, đồng thời xây dựng đường ống với các giai đoạn rõ ràng. Sau đó, bạn lọc bản ghi, trích xuất trường, đếm dòng, sắp xếp giá trị và đếm các giá trị trùng — chính là những khái niệm cần cho thử thách đường ống dữ liệu tiếp theo."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-17994-section-1-v3",
+      "title": "Observe Command Exit Status",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will connect visible command behavior with the numeric status the shell records.\n\nAn exit status of `0` means success; a nonzero value means the command could not complete its requested operation. Run a successful file test and immediately print `$?`, which holds the most recent status:\n\n```bash\ncd /home/labex/project/pipeline-lab\ntest -f events.csv\necho $?\n```\n\nThe output is `0`. Now test a missing file:\n\n```bash\ntest -f missing.csv\necho $?\n```\n\nThe status is nonzero. Read `$?` immediately because every later command replaces it.\n\nCreate a stable observation using an `if` statement. You will study full shell scripting later; here it simply converts the status into text:\n\n```bash\nif test -f events.csv; then echo \"events.csv is ready\"; else echo \"events.csv is missing\"; fi > status-result.txt\ncat status-result.txt\n```",
+      "title_vi": "Quan sát trạng thái thoát của lệnh",
+      "task": "Thực hiện hướng dẫn: Observe Command Exit Status",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/status-result.txt <(printf %s 'events.csv is ready\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/status-result.txt <(printf %s 'events.csv is ready\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ liên hệ hành vi nhìn thấy của lệnh với trạng thái dạng số mà shell ghi nhận.\n\nTrạng thái thoát `0` có nghĩa là thành công; giá trị khác không có nghĩa là lệnh không thể hoàn thành thao tác được yêu cầu. Chạy phép kiểm tra tệp thành công rồi lập tức in `$?`, biến chứa trạng thái gần nhất:\n\n```bash\ncd /home/labex/project/pipeline-lab\ntest -f events.csv\necho $?\n```\n\nKết quả là `0`. Bây giờ kiểm tra một tệp không tồn tại:\n\n```bash\ntest -f missing.csv\necho $?\n```\n\nTrạng thái khác không. Hãy đọc `$?` ngay vì mọi lệnh chạy sau đó đều thay thế giá trị này.\n\nTạo kết quả quan sát ổn định bằng câu lệnh `if`. Bạn sẽ học đầy đủ về viết script shell sau; ở đây, câu lệnh chỉ chuyển trạng thái thành văn bản:\n\n```bash\nif test -f events.csv; then echo \"events.csv is ready\"; else echo \"events.csv is missing\"; fi > status-result.txt\ncat status-result.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Quan sát trạng thái thoát của lệnh",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-17994-section-2-v3",
+      "title": "Control Which Command Runs Next",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will compare unconditional and conditional command operators.\n\nA semicolon runs the next command regardless of the previous result:\n\n```bash\nfalse; echo \"semicolon continues\"\n```\n\n`&&` runs the right command only after success:\n\n```bash\ntest -f events.csv && echo \"input found\"\ntest -f missing.csv && echo \"you should not see this\"\n```\n\n`||` runs the right command only after failure:\n\n```bash\ntest -f missing.csv || echo \"input missing\"\n```\n\nThese operators can express a small success/failure decision. Copy the dataset only if it exists, otherwise print an error:\n\n```bash\ntest -f events.csv && cp events.csv working.csv || echo \"Copy failed\"\n```\n\nVerify that the guarded copy matches its source:\n\n```bash\ncmp events.csv working.csv && echo \"guarded copy matches\" > sequence-result.txt\ncat sequence-result.txt\n```\n\nFor complex logic, prefer a readable `if` statement; long `&&`/`||` chains can become ambiguous.",
+      "title_vi": "Điều khiển lệnh nào được chạy tiếp theo",
+      "task": "Thực hiện hướng dẫn: Control Which Command Runs Next",
+      "hint": "Chạy lệnh: false; echo \"semicolon continues\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/events.csv /home/labex/project/pipeline-lab/working.csv && cmp -s /home/labex/project/pipeline-lab/sequence-result.txt <(printf %s 'guarded copy matches\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/events.csv /home/labex/project/pipeline-lab/working.csv && cmp -s /home/labex/project/pipeline-lab/sequence-result.txt <(printf %s 'guarded copy matches\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ so sánh các toán tử chạy lệnh vô điều kiện và có điều kiện.\n\nDấu chấm phẩy chạy lệnh tiếp theo bất kể kết quả của lệnh trước:\n\n```bash\nfalse; echo \"semicolon continues\"\n```\n\n`&&` chỉ chạy lệnh bên phải sau khi lệnh trước thành công:\n\n```bash\ntest -f events.csv && echo \"input found\"\ntest -f missing.csv && echo \"you should not see this\"\n```\n\n`||` chỉ chạy lệnh bên phải sau khi lệnh trước thất bại:\n\n```bash\ntest -f missing.csv || echo \"input missing\"\n```\n\nCác toán tử này có thể biểu diễn một quyết định thành công/thất bại đơn giản. Chỉ sao chép tập dữ liệu nếu tệp tồn tại; nếu không, in thông báo lỗi:\n\n```bash\ntest -f events.csv && cp events.csv working.csv || echo \"Copy failed\"\n```\n\nKiểm tra bản sao có điều kiện có khớp với nguồn hay không:\n\n```bash\ncmp events.csv working.csv && echo \"guarded copy matches\" > sequence-result.txt\ncat sequence-result.txt\n```\n\nVới logic phức tạp, hãy ưu tiên câu lệnh `if` dễ đọc; chuỗi `&&`/`||` dài có thể gây khó hiểu.",
+      "task_vi": "Thực hiện hướng dẫn: Điều khiển lệnh nào được chạy tiếp theo",
+      "hint_vi": "Chạy lệnh: false; echo \"semicolon continues\""
+    },
+    {
+      "id": "source-17994-section-3-v3",
+      "title": "Send Output Through a Pipeline",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will connect commands with `|` and observe how each stage narrows a stream.\n\nThe left command writes standard output into the pipe; the right command reads that data as standard input. Select only `ERROR` records:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncat events.csv | grep ',ERROR,'\n```\n\n`grep` can read a file directly, so this shorter form has the same result:\n\n```bash\ngrep ',ERROR,' events.csv\n```\n\nAdd `wc -l` to count matching lines:\n\n```bash\ngrep ',ERROR,' events.csv | wc -l\n```\n\nSave both the filtered stream and count. `tee` duplicates its standard input: it writes one copy to `error-events.csv` and passes the other copy onward through standard output. The final `wc -l` therefore counts exactly the lines that were saved:\n\n```bash\ngrep ',ERROR,' events.csv | tee error-events.csv | wc -l > error-count.txt\ncat error-events.csv\ncat error-count.txt\n```\n\nInspect both files after the pipeline. `error-events.csv` contains the matching records, while `error-count.txt` contains their count.",
+      "title_vi": "Truyền đầu ra qua đường ống",
+      "task": "Thực hiện hướng dẫn: Send Output Through a Pipeline",
+      "hint": "Chạy lệnh: grep ',ERROR,' events.csv",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/error-events.csv <(grep \",ERROR,\" /home/labex/project/pipeline-lab/events.csv) && cmp -s /home/labex/project/pipeline-lab/error-count.txt <(printf %s '3\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/error-events.csv <(grep \",ERROR,\" /home/labex/project/pipeline-lab/events.csv) && cmp -s /home/labex/project/pipeline-lab/error-count.txt <(printf %s '3\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kết nối các lệnh bằng `|` và quan sát cách mỗi giai đoạn thu hẹp một luồng dữ liệu.\n\nLệnh bên trái ghi đầu ra chuẩn vào đường ống; lệnh bên phải đọc dữ liệu đó làm đầu vào chuẩn. Chỉ chọn các bản ghi `ERROR`:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncat events.csv | grep ',ERROR,'\n```\n\n`grep` có thể đọc tệp trực tiếp, nên dạng ngắn hơn này cho cùng kết quả:\n\n```bash\ngrep ',ERROR,' events.csv\n```\n\nThêm `wc -l` để đếm các dòng khớp:\n\n```bash\ngrep ',ERROR,' events.csv | wc -l\n```\n\nLưu cả luồng đã lọc lẫn số lượng. `tee` nhân đôi đầu vào chuẩn: ghi một bản vào `error-events.csv` và truyền bản còn lại qua đầu ra chuẩn. Vì vậy, `wc -l` ở cuối đếm chính xác các dòng đã được lưu:\n\n```bash\ngrep ',ERROR,' events.csv | tee error-events.csv | wc -l > error-count.txt\ncat error-events.csv\ncat error-count.txt\n```\n\nKiểm tra cả hai tệp sau khi chạy pipeline. `error-events.csv` chứa các bản ghi khớp, còn `error-count.txt` chứa số lượng của chúng.",
+      "task_vi": "Thực hiện hướng dẫn: Truyền đầu ra qua đường ống",
+      "hint_vi": "Chạy lệnh: grep ',ERROR,' events.csv"
+    },
+    {
+      "id": "source-17994-section-4-v3",
+      "title": "Extract Fields with Cut",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will treat each CSV line as delimiter-separated fields.\n\n`cut -d, -f1` uses comma as the delimiter and prints field 1, the service name:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv\n```\n\nPrint the service and severity fields together:\n\n```bash\ncut -d, -f1,2 events.csv\n```\n\nCombine filtering and extraction to list only services that produced warnings:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1\n```\n\nSave this intermediate result:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1 > warning-services.txt\ncat warning-services.txt\n```\n\n`cut` works well for simple records whose delimiter never appears inside a field. More complex formats may need `awk` or a format-aware tool.",
+      "title_vi": "Trích xuất các trường bằng Cut",
+      "task": "Thực hiện hướng dẫn: Extract Fields with Cut",
+      "hint": "Chạy lệnh: cut -d, -f1,2 events.csv",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/warning-services.txt <(grep \",WARN,\" /home/labex/project/pipeline-lab/events.csv | cut -d, -f1)"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/warning-services.txt <(grep \",WARN,\" /home/labex/project/pipeline-lab/events.csv | cut -d, -f1)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xem mỗi dòng CSV như các trường được ngăn bởi dấu phân cách.\n\n`cut -d, -f1` dùng dấu phẩy làm dấu phân cách và in trường 1, tức tên dịch vụ:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv\n```\n\nIn cả trường dịch vụ lẫn mức độ nghiêm trọng:\n\n```bash\ncut -d, -f1,2 events.csv\n```\n\nKết hợp lọc và trích xuất để chỉ liệt kê những dịch vụ đã tạo cảnh báo:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1\n```\n\nLưu kết quả trung gian này:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1 > warning-services.txt\ncat warning-services.txt\n```\n\n`cut` phù hợp với bản ghi đơn giản mà dấu phân cách không xuất hiện bên trong trường. Định dạng phức tạp hơn có thể cần `awk` hoặc công cụ hiểu cấu trúc định dạng.",
+      "task_vi": "Thực hiện hướng dẫn: Trích xuất các trường bằng Cut",
+      "hint_vi": "Chạy lệnh: cut -d, -f1,2 events.csv"
+    },
+    {
+      "id": "source-17994-section-5-v3",
+      "title": "Sort and Count Repeated Values",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will build a complete frequency pipeline and understand why sorting comes before `uniq`.\n\n`uniq` combines only **adjacent** equal lines. First extract service names, then sort them so identical values are neighbors:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv | sort\n```\n\nAdd `uniq -c` to count each run of equal names:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c\n```\n\nSort the counts numerically in descending order. `sort -k1,1nr` uses the first field as a numeric, reverse-order key:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr\n```\n\nSave the final report:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr > service-frequency.txt\ncat service-frequency.txt\n```\n\nRead this pipeline left to right: extract → sort → count adjacent duplicates → rank counts.",
+      "title_vi": "Sắp xếp và đếm các giá trị lặp",
+      "task": "Thực hiện hướng dẫn: Sort and Count Repeated Values",
+      "hint": "Chạy lệnh: cut -d, -f1 events.csv | sort | uniq -c",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/service-frequency.txt <(cut -d, -f1 /home/labex/project/pipeline-lab/events.csv | sort | uniq -c | sort -k1,1nr)"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/service-frequency.txt <(cut -d, -f1 /home/labex/project/pipeline-lab/events.csv | sort | uniq -c | sort -k1,1nr)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xây dựng pipeline thống kê tần suất hoàn chỉnh và hiểu vì sao phải sắp xếp trước `uniq`.\n\n`uniq` chỉ gộp những dòng giống nhau **liền kề**. Trước tiên trích xuất tên dịch vụ, rồi sắp xếp để các giá trị giống nhau đứng cạnh nhau:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv | sort\n```\n\nThêm `uniq -c` để đếm mỗi dãy tên giống nhau:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c\n```\n\nSắp xếp số đếm theo giá trị số giảm dần. `sort -k1,1nr` dùng trường đầu tiên làm khóa sắp xếp dạng số theo thứ tự đảo ngược:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr\n```\n\nLưu báo cáo cuối cùng:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr > service-frequency.txt\ncat service-frequency.txt\n```\n\nĐọc pipeline từ trái sang phải: trích xuất → sắp xếp → đếm các giá trị trùng liền kề → xếp hạng số đếm.",
+      "task_vi": "Thực hiện hướng dẫn: Sắp xếp và đếm các giá trị lặp",
+      "hint_vi": "Chạy lệnh: cut -d, -f1 events.csv | sort | uniq -c"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-sequence-control-and-pipeline-17994.json"
+}

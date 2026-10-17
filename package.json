@@ -1,0 +1,26 @@
+{
+  "name": "labex-local",
+  "version": "1.0.0",
+  "description": "LabEx Interactive Learning Platform Running Locally with WSL Ubuntu and AI Tutor",
+  "main": "server/server.js",
+  "type": "module",
+  "scripts": {
+    "server": "node server/server.js",
+    "client": "npm run dev --prefix client",
+    "build:client": "npm run build --prefix client",
+    "start": "node server/server.js",
+    "dev": "node scripts/dev.mjs",
+    "test": "node --test",
+    "test:docker": "node scripts/run-docker-checks.mjs",
+    "runtime:docker": "node scripts/select-runtime.mjs docker",
+    "runtime:namespace": "node scripts/select-runtime.mjs namespace",
+    "check:labs": "python server/data/generate_labs.py"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "node-pty": "^1.1.0",
+    "ws": "^8.22.0"
+  }
+}

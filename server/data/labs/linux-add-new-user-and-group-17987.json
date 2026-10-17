@@ -1,0 +1,128 @@
+{
+  "id": "linux-add-new-user-and-group-17987",
+  "course_id": "linux-for-noobs",
+  "order": 7,
+  "title": "Onboard a Practice User",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "overview": "A new team member needs a normal local account before using a shared development area. The account should have a home directory, a Bash login shell, and membership in the existing  developers  group.",
+  "source_url": "https://labex.io/tutorials/linux-add-new-user-and-group-17987",
+  "source_lab_id": 17987,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A new team member needs a normal local account before using a shared development area. The account should have a home directory, a Bash login shell, and membership in the existing `developers` group.\n\nThe preceding guided lab practiced this exact account-creation and supplementary-group workflow. This challenge applies it to one user only.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một thành viên mới trong nhóm cần một tài khoản cục bộ thông thường trước khi sử dụng khu vực phát triển chung. Tài khoản này nên có thư mục chính (home directory), một shell đăng nhập Bash, và thuộc về nhóm `developers` đã tồn tại.\n\nPhòng thực hành có hướng dẫn trước đó đã luyện tập chính xác quy trình tạo tài khoản và thêm nhóm bổ sung này. Thử thách này áp dụng nó cho chỉ một người dùng."
+    },
+    {
+      "id": "source-17987-section-1-v3",
+      "title": "Onboard the User",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe supplementary group `developers` already exists. The user `trainee` does not exist yet.\n\n### Scope\n\n- Create the user `trainee` with its matching private group.\n- Create `/home/trainee`.\n- Use `/bin/bash` as the login shell.\n- Add `trainee` to the existing `developers` group.\n- Do not change the `labex` account.\n\n### Your Goal\n\nLeave one usable `trainee` account with a home directory, a Bash shell, and supplementary access through `developers`.\n\n### Acceptance Criteria\n\n- `trainee` exists and its primary group is `trainee`.\n- `/home/trainee` exists and belongs to `trainee:trainee`.\n- The login shell is `/bin/bash`.\n- `id trainee` includes `developers`.\n\n### Hints\n\nWhich creation pattern did the guided lab use?\n\nReview the `useradd` example that created a home, a matching private group, and selected Bash. Then use the supplementary-group command from the next step.",
+      "task": "Thực hiện hướng dẫn: Onboard the User",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "title_vi": "Tiếp Nhận và Cấp Tài Khoản Người Dùng",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tiếp Nhận và Cấp Tài Khoản Người Dùng",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "users",
+          "sudo"
+        ]
+      },
+      "content_vi": "### Tình hình hiện tại\n\nNhóm phụ `developers` đã tồn tại. Người dùng `trainee` chưa tồn tại.\n\n### Phạm vi\n\n- Tạo người dùng `trainee` với nhóm riêng tư tương ứng của nó.\n- Tạo thư mục `/home/trainee`.\n- Sử dụng `/bin/bash` làm shell đăng nhập.\n- Thêm `trainee` vào nhóm `developers` đã tồn tại.\n- Không thay đổi tài khoản `labex`.\n\n### Mục tiêu của bạn\n\nĐể lại một tài khoản `trainee` có thể sử dụng được với thư mục chính (home directory), shell Bash, và quyền truy cập bổ sung thông qua nhóm `developers`.\n\n### Tiêu chí chấp nhận\n\n- `trainee` tồn tại và nhóm chính của nó là `trainee`.\n- `/home/trainee` tồn tại và thuộc sở hữu của `trainee:trainee`.\n- Shell đăng nhập là `/bin/bash`.\n- Lệnh `id trainee` bao gồm `developers`.\n\n### Gợi ý\n\nMẫu lệnh tạo nào đã được sử dụng trong bài lab có hướng dẫn?\n\nXem lại ví dụ về `useradd` đã tạo thư mục chính, một nhóm riêng tư tương ứng, và chọn Bash. Sau đó, sử dụng lệnh thêm nhóm phụ từ bước tiếp theo.",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You onboarded one Linux user with the same account and group-management commands introduced in the guided lab.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã thêm một người dùng Linux với các lệnh quản lý tài khoản và nhóm tương tự đã được giới thiệu trong phòng thí nghiệm có hướng dẫn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-17987-section-1-v3",
+      "title": "Onboard the User",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe supplementary group `developers` already exists. The user `trainee` does not exist yet.\n\n### Scope\n\n- Create the user `trainee` with its matching private group.\n- Create `/home/trainee`.\n- Use `/bin/bash` as the login shell.\n- Add `trainee` to the existing `developers` group.\n- Do not change the `labex` account.\n\n### Your Goal\n\nLeave one usable `trainee` account with a home directory, a Bash shell, and supplementary access through `developers`.\n\n### Acceptance Criteria\n\n- `trainee` exists and its primary group is `trainee`.\n- `/home/trainee` exists and belongs to `trainee:trainee`.\n- The login shell is `/bin/bash`.\n- `id trainee` includes `developers`.\n\n### Hints\n\nWhich creation pattern did the guided lab use?\n\nReview the `useradd` example that created a home, a matching private group, and selected Bash. Then use the supplementary-group command from the next step.",
+      "task": "Thực hiện hướng dẫn: Onboard the User",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Tiếp Nhận và Cấp Tài Khoản Người Dùng",
+      "task_vi": "Thực hiện hướng dẫn: Tiếp Nhận và Cấp Tài Khoản Người Dùng",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "users",
+          "sudo"
+        ],
+        "namespace": [
+          "terminal",
+          "users",
+          "sudo"
+        ]
+      },
+      "content_vi": "### Tình hình hiện tại\n\nNhóm phụ `developers` đã tồn tại. Người dùng `trainee` chưa tồn tại.\n\n### Phạm vi\n\n- Tạo người dùng `trainee` với nhóm riêng tư tương ứng của nó.\n- Tạo thư mục `/home/trainee`.\n- Sử dụng `/bin/bash` làm shell đăng nhập.\n- Thêm `trainee` vào nhóm `developers` đã tồn tại.\n- Không thay đổi tài khoản `labex`.\n\n### Mục tiêu của bạn\n\nĐể lại một tài khoản `trainee` có thể sử dụng được với thư mục chính (home directory), shell Bash, và quyền truy cập bổ sung thông qua nhóm `developers`.\n\n### Tiêu chí chấp nhận\n\n- `trainee` tồn tại và nhóm chính của nó là `trainee`.\n- `/home/trainee` tồn tại và thuộc sở hữu của `trainee:trainee`.\n- Shell đăng nhập là `/bin/bash`.\n- Lệnh `id trainee` bao gồm `developers`.\n\n### Gợi ý\n\nMẫu lệnh tạo nào đã được sử dụng trong bài lab có hướng dẫn?\n\nXem lại ví dụ về `useradd` đã tạo thư mục chính, một nhóm riêng tư tương ứng, và chọn Bash. Sau đó, sử dụng lệnh thêm nhóm phụ từ bước tiếp theo.",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "title_vi": "Tạo Người Dùng Thực Hành Mới",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-add-new-user-and-group-17987.json"
+}

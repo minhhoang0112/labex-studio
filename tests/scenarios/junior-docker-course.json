@@ -1,0 +1,462 @@
+{
+  "version": 1,
+  "course_id": "become-a-junior-system-administrator",
+  "expected_tasks": 48,
+  "provenance": "Own test solution commands; original hidden solutions not recovered.",
+  "lessons": [
+    {
+      "lab_id": "linux-day-1-the-lay-of-the-land-596200",
+      "source_lab_id": 596200,
+      "setup_manifest": "server/data/environment-setups/linux-day-1-the-lay-of-the-land-596200.json",
+      "steps": [
+        {
+          "id": "source-596200-section-1-v2",
+          "commands": [
+            "whoami",
+            "uname"
+          ]
+        },
+        {
+          "id": "source-596200-section-2-v2",
+          "commands": [
+            "uname -a",
+            "uptime"
+          ]
+        },
+        {
+          "id": "source-596200-section-3-v2",
+          "commands": [
+            "id"
+          ]
+        },
+        {
+          "id": "source-596200-section-4-v2",
+          "commands": [
+            {
+              "command": "top",
+              "input": [
+                {
+                  "wait_for": "PID",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-596200-section-5-v2",
+          "commands": [
+            "whoami > system_report.txt",
+            "uname -a >> system_report.txt",
+            "uptime >> system_report.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-2-the-digital-architect-596201",
+      "source_lab_id": 596201,
+      "setup_manifest": "server/data/environment-setups/linux-day-2-the-digital-architect-596201.json",
+      "steps": [
+        {
+          "id": "source-596201-section-1-v2",
+          "commands": [
+            "cd ~/project/phoenix_project",
+            "mkdir src config docs"
+          ]
+        },
+        {
+          "id": "source-596201-section-2-v2",
+          "commands": [
+            "mv main_app.py src/",
+            "mv config.json config/",
+            "mv README.md docs/"
+          ]
+        },
+        {
+          "id": "source-596201-section-3-v2",
+          "commands": [
+            "cp config/config.json config/config.json.bak"
+          ]
+        },
+        {
+          "id": "source-596201-section-4-v2",
+          "commands": [
+            "mv ~/project/shared_docs ~/project/phoenix_project/docs/"
+          ]
+        },
+        {
+          "id": "source-596201-section-5-v2",
+          "commands": [
+            "cd ~/project/logs",
+            "tar -czf old_logs.tar.gz *2023*.log",
+            "rm -- *2023*.log"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-3-the-log-investigator-596202",
+      "source_lab_id": 596202,
+      "setup_manifest": "server/data/environment-setups/linux-day-3-the-log-investigator-596202.json",
+      "steps": [
+        {
+          "id": "source-596202-section-1-v2",
+          "commands": [
+            "grep 'ERROR' ~/project/logs/app.log > ~/project/error_report.txt"
+          ]
+        },
+        {
+          "id": "source-596202-section-2-v2",
+          "commands": [],
+          "unsupported": true,
+          "reason": "Bài yêu cầu dmesg thật. Môi trường hiện không cấp quyền đọc kernel log (CAP_SYSLOG), nên chưa hỗ trợ kiểm tra bước này."
+        },
+        {
+          "id": "source-596202-section-3-v2",
+          "commands": [
+            "grep 'worker_processes' ~/project/config/nginx.conf >> ~/project/error_report.txt"
+          ]
+        },
+        {
+          "id": "source-596202-section-4-v2",
+          "commands": [
+            {
+              "command": "diff ~/project/config/staging/app.conf ~/project/config/production/app.conf > ~/project/config_diff.txt",
+              "allowed_status": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-596202-section-5-v2",
+          "commands": [
+            {
+              "command": "diff /home/labex/project/server1_files /home/labex/project/server2_files > /home/labex/project/missing_files.txt",
+              "allowed_status": [
+                1
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-4-the-fortress-guardian-596203",
+      "source_lab_id": 596203,
+      "setup_manifest": "server/data/environment-setups/linux-day-4-the-fortress-guardian-596203.json",
+      "steps": [
+        {
+          "id": "source-596203-section-1-v2",
+          "commands": [
+            "touch ~/project/phoenix_project/project_keys.txt",
+            "chmod 600 ~/project/phoenix_project/project_keys.txt"
+          ]
+        },
+        {
+          "id": "source-596203-section-2-v2",
+          "commands": [
+            "sudo chown -R dev_lead:developers ~/project/phoenix_project"
+          ]
+        },
+        {
+          "id": "source-596203-section-3-v2",
+          "commands": [
+            "sudo chmod 750 ~/project/phoenix_project"
+          ]
+        },
+        {
+          "id": "source-596203-section-4-v2",
+          "commands": [
+            "sudo chmod 2770 ~/project/phoenix_project/src"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-5-the-keeper-of-the-keys-596204",
+      "source_lab_id": 596204,
+      "setup_manifest": "server/data/environment-setups/linux-day-5-the-keeper-of-the-keys-596204.json",
+      "steps": [
+        {
+          "id": "source-596204-section-1-v2",
+          "commands": [
+            "sudo useradd b.smith"
+          ]
+        },
+        {
+          "id": "source-596204-section-2-v2",
+          "commands": [
+            "sudo userdel b.smith",
+            "sudo useradd -m b.smith"
+          ]
+        },
+        {
+          "id": "source-596204-section-3-v2",
+          "commands": [
+            {
+              "command": "sudo passwd b.smith",
+              "input": [
+                "ephemeral-test-only",
+                "ephemeral-test-only"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-596204-section-4-v2",
+          "commands": [
+            "sudo usermod -aG developers b.smith"
+          ]
+        },
+        {
+          "id": "source-596204-section-5-v2",
+          "commands": [
+            "sudo passwd -l j.doe"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-6-the-process-overseer-596618",
+      "source_lab_id": 596618,
+      "setup_manifest": "server/data/environment-setups/linux-day-6-the-process-overseer-596618.json",
+      "steps": [
+        {
+          "id": "source-596618-section-1-v2",
+          "commands": [
+            "ps aux"
+          ]
+        },
+        {
+          "id": "source-596618-section-2-v2",
+          "commands": [
+            {
+              "command": "top",
+              "input": [
+                {
+                  "wait_for": "PID",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-596618-section-3-v2",
+          "commands": [
+            "pgrep -f critical_service.sh"
+          ]
+        },
+        {
+          "id": "source-596618-section-4-v2",
+          "commands": [
+            "pkill -f resource_hog.sh"
+          ]
+        },
+        {
+          "id": "source-596618-section-5-v2",
+          "commands": [
+            "cd ~/project",
+            "nohup ./data_processor.sh > processor.log 2>&1 &"
+          ],
+          "wait_for_pass_ms": 10000
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-7-the-network-navigator-596619",
+      "source_lab_id": 596619,
+      "setup_manifest": "server/data/environment-setups/linux-day-7-the-network-navigator-596619.json",
+      "steps": [
+        {
+          "id": "source-596619-section-1-v2",
+          "commands": [
+            "ip addr"
+          ]
+        },
+        {
+          "id": "source-596619-section-2-v2",
+          "commands": [
+            "ifconfig"
+          ]
+        },
+        {
+          "id": "source-596619-section-3-v2",
+          "commands": [
+            "ping -c 3 8.8.8.8"
+          ]
+        },
+        {
+          "id": "source-596619-section-4-v2",
+          "commands": [
+            "ss -tlnp | grep 8000"
+          ]
+        },
+        {
+          "id": "source-596619-section-5-v2",
+          "commands": [
+            "sudo ufw allow 8000",
+            "sudo ufw allow 22",
+            "sudo ufw --force enable"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-8-the-software-steward-596620",
+      "source_lab_id": 596620,
+      "setup_manifest": "server/data/environment-setups/linux-day-8-the-software-steward-596620.json",
+      "steps": [
+        {
+          "id": "source-596620-section-1-v2",
+          "commands": [
+            {
+              "command": "sudo apt update",
+              "timeout_ms": 180000
+            }
+          ]
+        },
+        {
+          "id": "source-596620-section-2-v2",
+          "commands": [
+            {
+              "command": "sudo apt install -y neofetch",
+              "timeout_ms": 180000
+            }
+          ]
+        },
+        {
+          "id": "source-596620-section-3-v2",
+          "commands": [
+            "dpkg -s neofetch"
+          ]
+        },
+        {
+          "id": "source-596620-section-4-v2",
+          "commands": [
+            {
+              "command": "sudo apt remove -y figlet",
+              "timeout_ms": 120000
+            }
+          ]
+        },
+        {
+          "id": "source-596620-section-5-v2",
+          "commands": [
+            {
+              "command": "sudo apt autoremove -y",
+              "timeout_ms": 120000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-9-the-backup-sentinel-596621",
+      "source_lab_id": 596621,
+      "setup_manifest": "server/data/environment-setups/linux-day-9-the-backup-sentinel-596621.json",
+      "steps": [
+        {
+          "id": "source-596621-section-1-v2",
+          "commands": [
+            "printf 'data\\nconfig\\nlogs\\n' > backup-list.txt"
+          ]
+        },
+        {
+          "id": "source-596621-section-2-v2",
+          "commands": [
+            "tar -czf backups/system-backup.tar.gz -T backup-list.txt"
+          ]
+        },
+        {
+          "id": "source-596621-section-3-v2",
+          "commands": [
+            "tar -tzf backups/system-backup.tar.gz > backup-contents.txt"
+          ]
+        },
+        {
+          "id": "source-596621-section-4-v2",
+          "commands": [
+            "rm config/app.conf",
+            "tar -xzf backups/system-backup.tar.gz config/app.conf"
+          ]
+        },
+        {
+          "id": "source-596621-section-5-v2",
+          "commands": [
+            "cat > cron-editor.sh <<'LOCAL_EDITOR'\n#!/bin/bash\nsleep 1\ncat > \"$1\" <<'LOCAL_CRON'\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project data config logs\nLOCAL_CRON\nLOCAL_EDITOR",
+            "chmod +x cron-editor.sh",
+            "EDITOR=/home/labex/project/cron-editor.sh crontab -e"
+          ],
+          "wait_for_pass_ms": 130000
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-day-10-the-script-artisan-596613",
+      "source_lab_id": 596613,
+      "setup_manifest": "server/data/environment-setups/linux-day-10-the-script-artisan-596613.json",
+      "steps": [
+        {
+          "id": "source-596613-section-1-v2",
+          "commands": [
+            "cat > log_manager.sh <<'JUNIOR_SCRIPT'\n#!/bin/bash\necho \"Log Manager Initialized.\"\nJUNIOR_SCRIPT",
+            "chmod +x log_manager.sh",
+            "./log_manager.sh"
+          ]
+        },
+        {
+          "id": "source-596613-section-2-v2",
+          "commands": [
+            "cat > log_manager.sh <<'JUNIOR_SCRIPT'\n#!/bin/bash\necho \"Log Manager Initialized.\"\nLOG_DIR=/home/labex/project/app_logs\necho \"Enter the backup filename: \"\nread -r BACKUP_FILENAME\necho \"Backing up logs to: $BACKUP_FILENAME\"\nJUNIOR_SCRIPT",
+            {
+              "command": "./log_manager.sh",
+              "input": [
+                {
+                  "wait_for": "Enter the backup filename:",
+                  "text": "practice-label"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-596613-section-3-v2",
+          "commands": [
+            "cat > log_manager.sh <<'JUNIOR_SCRIPT'\n#!/bin/bash\necho \"Log Manager Initialized.\"\nLOG_DIR=/home/labex/project/app_logs\nif [ -d \"$LOG_DIR\" ]; then\n  echo \"Enter the backup filename: \"\n  read -r BACKUP_FILENAME\n  echo \"Backing up logs to: $BACKUP_FILENAME\"\nelse\n  echo \"Error: Log directory not found.\"\n  exit 1\nfi\nJUNIOR_SCRIPT",
+            {
+              "command": "./log_manager.sh",
+              "input": [
+                {
+                  "wait_for": "Enter the backup filename:",
+                  "text": "practice-label"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-596613-section-4-v2",
+          "commands": [
+            "mkdir -p ~/project/backups",
+            "cat > log_manager.sh <<'JUNIOR_SCRIPT'\n#!/bin/bash\necho \"Log Manager Initialized.\"\nLOG_DIR=/home/labex/project/app_logs\nif [ -d \"$LOG_DIR\" ]; then\n  echo \"Enter the backup filename: \"\n  read -r BACKUP_FILENAME\n  echo \"Backing up logs to: $BACKUP_FILENAME\"\n  for log in \"$LOG_DIR\"/*.log; do\n    cp \"$log\" /home/labex/project/backups/\n    echo \"Copied $log\"\n  done\nelse\n  echo \"Error: Log directory not found.\"\n  exit 1\nfi\nJUNIOR_SCRIPT",
+            {
+              "command": "./log_manager.sh",
+              "input": [
+                {
+                  "wait_for": "Enter the backup filename:",
+                  "text": "practice-label"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provider": "docker"
+}

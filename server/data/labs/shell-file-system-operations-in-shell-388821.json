@@ -1,0 +1,249 @@
+{
+  "id": "shell-file-system-operations-in-shell-388821",
+  "course_id": "shell-for-beginners",
+  "order": 17,
+  "title": "File System Operations in Shell",
+  "title_vi": "Kiểm Tra và Thao Tác Hệ Thống Tệp Bằng Script",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "20 mins",
+  "overview": "Test file existence (-f), directory existence (-d), permissions (-r, -w, -x), and size (-s).",
+  "source_url": "https://labex.io/tutorials/shell-file-system-operations-in-shell-388821",
+  "source_lab_id": 388821,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388821-section-1-v4",
+      "title": "Creating a Test File",
+      "title_vi": "Tạo tệp thử nghiệm",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create test_file.txt with the provided sample text and inspect it with cat.\n\n`~/project/test_file.txt`:\n\n```bash\nThis is a test file for our lab.\n```\n\nRun:\n\n```bash\nbash ~/project/test_file.txt \n```",
+      "content_vi": "Tạo test_file.txt với câu mẫu rồi xem bằng cat.\n\n`~/project/test_file.txt`:\n\n```bash\nThis is a test file for our lab.\n```\n\nChạy:\n\n```bash\nbash ~/project/test_file.txt \n```",
+      "task": "Create test_file.txt with the provided sample text and inspect it with cat.",
+      "task_vi": "Tạo test_file.txt với câu mẫu rồi xem bằng cat.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/test_file.txt')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['This is a test file for our lab.']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388821-section-2-v4",
+      "title": "Testing File Existence",
+      "title_vi": "Kiểm tra tệp tồn tại",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create file_exists.sh using -e; run before/after renaming test_file.txt to non_existent.txt.\n\n`~/project/file_exists.sh`:\n\n```bash\n#!/bin/bash\nfilename=\"test_file.txt\"\nif [ -e \"$filename\" ]; then echo \"$filename exists\"; else echo \"$filename does not exist\"; fi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/file_exists.sh\n~/project/file_exists.sh \n```",
+      "content_vi": "Tạo file_exists.sh dùng -e; chạy trước/sau khi đổi test_file.txt thành non_existent.txt.\n\n`~/project/file_exists.sh`:\n\n```bash\n#!/bin/bash\nfilename=\"test_file.txt\"\nif [ -e \"$filename\" ]; then echo \"$filename exists\"; else echo \"$filename does not exist\"; fi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/file_exists.sh\n~/project/file_exists.sh \n```",
+      "task": "Create file_exists.sh using -e; run before/after renaming test_file.txt to non_existent.txt.",
+      "task_vi": "Tạo file_exists.sh dùng -e; chạy trước/sau khi đổi test_file.txt thành non_existent.txt.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/file_exists.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['-e']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    (work/'test_file.txt').write_text('sample')\n    assert 'test_file.txt exists' in execute([str(p)]).stdout\n    (work/'test_file.txt').unlink()\n    assert 'test_file.txt does not exist' in execute([str(p)]).stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388821-section-3-v4",
+      "title": "Testing Directory Existence",
+      "title_vi": "Kiểm tra thư mục tồn tại",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create dir_exists.sh using -d; compare output before/after mkdir test_directory.\n\n`~/project/dir_exists.sh`:\n\n```bash\n#!/bin/bash\ndirname=\"test_directory\"\nif [ -d \"$dirname\" ]; then echo \"$dirname exists\"; else echo \"$dirname does not exist\"; fi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/dir_exists.sh\n~/project/dir_exists.sh \n```",
+      "content_vi": "Tạo dir_exists.sh dùng -d; so sánh trước/sau khi mkdir test_directory.\n\n`~/project/dir_exists.sh`:\n\n```bash\n#!/bin/bash\ndirname=\"test_directory\"\nif [ -d \"$dirname\" ]; then echo \"$dirname exists\"; else echo \"$dirname does not exist\"; fi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/dir_exists.sh\n~/project/dir_exists.sh \n```",
+      "task": "Create dir_exists.sh using -d; compare output before/after mkdir test_directory.",
+      "task_vi": "Tạo dir_exists.sh dùng -d; so sánh trước/sau khi mkdir test_directory.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/dir_exists.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['-d']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    assert 'test_directory does not exist' in execute([str(p)]).stdout\n    (work/'test_directory').mkdir()\n    assert 'test_directory exists' in execute([str(p)]).stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388821-section-4-v4",
+      "title": "Testing File Permissions",
+      "title_vi": "Kiểm tra quyền trên tệp",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Restore test_file.txt; use -r in file_readable.sh, remove read permission, test, then restore it.\n\n`~/project/file_readable.sh`:\n\n```bash\n#!/bin/bash\nfilename=\"test_file.txt\"\nif [ -r \"$filename\" ]; then echo \"You have read permission for $filename\"; else echo \"You do not have read permission for $filename\"; fi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/file_readable.sh\n~/project/file_readable.sh \n```",
+      "content_vi": "Khôi phục test_file.txt; dùng -r trong file_readable.sh, bỏ quyền đọc, thử rồi cấp lại.\n\n`~/project/file_readable.sh`:\n\n```bash\n#!/bin/bash\nfilename=\"test_file.txt\"\nif [ -r \"$filename\" ]; then echo \"You have read permission for $filename\"; else echo \"You do not have read permission for $filename\"; fi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/file_readable.sh\n~/project/file_readable.sh \n```",
+      "task": "Restore test_file.txt; use -r in file_readable.sh, remove read permission, test, then restore it.",
+      "task_vi": "Khôi phục test_file.txt; dùng -r trong file_readable.sh, bỏ quyền đọc, thử rồi cấp lại.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/file_readable.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['-r']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    q=work/'test_file.txt'\n    q.write_text('sample'); q.chmod(0o600)\n    assert 'You have read permission for test_file.txt' in execute([str(p)]).stdout\n    q.chmod(0o000)\n    assert 'You do not have read permission for test_file.txt' in execute([str(p)]).stdout\n    q.chmod(0o600)\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-5",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 5,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388821-section-1-v4",
+      "title": "Creating a Test File",
+      "title_vi": "Tạo tệp thử nghiệm",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create test_file.txt with the provided sample text and inspect it with cat.\n\n`~/project/test_file.txt`:\n\n```bash\nThis is a test file for our lab.\n```\n\nRun:\n\n```bash\nbash ~/project/test_file.txt \n```",
+      "content_vi": "Tạo test_file.txt với câu mẫu rồi xem bằng cat.\n\n`~/project/test_file.txt`:\n\n```bash\nThis is a test file for our lab.\n```\n\nChạy:\n\n```bash\nbash ~/project/test_file.txt \n```",
+      "task": "Create test_file.txt with the provided sample text and inspect it with cat.",
+      "task_vi": "Tạo test_file.txt với câu mẫu rồi xem bằng cat.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/test_file.txt')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['This is a test file for our lab.']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388821-section-2-v4",
+      "title": "Testing File Existence",
+      "title_vi": "Kiểm tra tệp tồn tại",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create file_exists.sh using -e; run before/after renaming test_file.txt to non_existent.txt.\n\n`~/project/file_exists.sh`:\n\n```bash\n#!/bin/bash\nfilename=\"test_file.txt\"\nif [ -e \"$filename\" ]; then echo \"$filename exists\"; else echo \"$filename does not exist\"; fi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/file_exists.sh\n~/project/file_exists.sh \n```",
+      "content_vi": "Tạo file_exists.sh dùng -e; chạy trước/sau khi đổi test_file.txt thành non_existent.txt.\n\n`~/project/file_exists.sh`:\n\n```bash\n#!/bin/bash\nfilename=\"test_file.txt\"\nif [ -e \"$filename\" ]; then echo \"$filename exists\"; else echo \"$filename does not exist\"; fi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/file_exists.sh\n~/project/file_exists.sh \n```",
+      "task": "Create file_exists.sh using -e; run before/after renaming test_file.txt to non_existent.txt.",
+      "task_vi": "Tạo file_exists.sh dùng -e; chạy trước/sau khi đổi test_file.txt thành non_existent.txt.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/file_exists.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['-e']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    (work/'test_file.txt').write_text('sample')\n    assert 'test_file.txt exists' in execute([str(p)]).stdout\n    (work/'test_file.txt').unlink()\n    assert 'test_file.txt does not exist' in execute([str(p)]).stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388821-section-3-v4",
+      "title": "Testing Directory Existence",
+      "title_vi": "Kiểm tra thư mục tồn tại",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create dir_exists.sh using -d; compare output before/after mkdir test_directory.\n\n`~/project/dir_exists.sh`:\n\n```bash\n#!/bin/bash\ndirname=\"test_directory\"\nif [ -d \"$dirname\" ]; then echo \"$dirname exists\"; else echo \"$dirname does not exist\"; fi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/dir_exists.sh\n~/project/dir_exists.sh \n```",
+      "content_vi": "Tạo dir_exists.sh dùng -d; so sánh trước/sau khi mkdir test_directory.\n\n`~/project/dir_exists.sh`:\n\n```bash\n#!/bin/bash\ndirname=\"test_directory\"\nif [ -d \"$dirname\" ]; then echo \"$dirname exists\"; else echo \"$dirname does not exist\"; fi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/dir_exists.sh\n~/project/dir_exists.sh \n```",
+      "task": "Create dir_exists.sh using -d; compare output before/after mkdir test_directory.",
+      "task_vi": "Tạo dir_exists.sh dùng -d; so sánh trước/sau khi mkdir test_directory.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/dir_exists.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['-d']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    assert 'test_directory does not exist' in execute([str(p)]).stdout\n    (work/'test_directory').mkdir()\n    assert 'test_directory exists' in execute([str(p)]).stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388821-section-4-v4",
+      "title": "Testing File Permissions",
+      "title_vi": "Kiểm tra quyền trên tệp",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Restore test_file.txt; use -r in file_readable.sh, remove read permission, test, then restore it.\n\n`~/project/file_readable.sh`:\n\n```bash\n#!/bin/bash\nfilename=\"test_file.txt\"\nif [ -r \"$filename\" ]; then echo \"You have read permission for $filename\"; else echo \"You do not have read permission for $filename\"; fi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/file_readable.sh\n~/project/file_readable.sh \n```",
+      "content_vi": "Khôi phục test_file.txt; dùng -r trong file_readable.sh, bỏ quyền đọc, thử rồi cấp lại.\n\n`~/project/file_readable.sh`:\n\n```bash\n#!/bin/bash\nfilename=\"test_file.txt\"\nif [ -r \"$filename\" ]; then echo \"You have read permission for $filename\"; else echo \"You do not have read permission for $filename\"; fi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/file_readable.sh\n~/project/file_readable.sh \n```",
+      "task": "Restore test_file.txt; use -r in file_readable.sh, remove read permission, test, then restore it.",
+      "task_vi": "Khôi phục test_file.txt; dùng -r trong file_readable.sh, bỏ quyền đọc, thử rồi cấp lại.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/file_readable.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['-r']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    q=work/'test_file.txt'\n    q.write_text('sample'); q.chmod(0o600)\n    assert 'You have read permission for test_file.txt' in execute([str(p)]).stdout\n    q.chmod(0o000)\n    assert 'You do not have read permission for test_file.txt' in execute([str(p)]).stdout\n    q.chmod(0o600)\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-file-system-operations-in-shell-388821",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

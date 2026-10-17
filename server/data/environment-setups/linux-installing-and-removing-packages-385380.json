@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "directories": [
+    {
+      "path": "/home/labex/project/software-inventory"
+    },
+    {
+      "path": "/home/labex/project/software-inventory/.package-source",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/software-inventory/.package-source/labex-monitor",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/software-inventory/.package-source/labex-monitor/DEBIAN",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/software-inventory/.package-source/labex-monitor/usr",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/software-inventory/.package-source/labex-monitor/usr/bin",
+      "owner": "labex:labex"
+    }
+  ],
+  "files": [
+    {
+      "path": "/home/labex/project/software-inventory/.package-source/labex-monitor/DEBIAN/control",
+      "content": "Package: labex-monitor\nVersion: 2.0\nArchitecture: all\nMaintainer: Local Lab <lab@example.invalid>\nDescription: Independently reconstructed local course fixture\n"
+    },
+    {
+      "path": "/home/labex/project/software-inventory/.package-source/labex-monitor/usr/bin/labex-monitor",
+      "mode": "0755",
+      "content": "#!/bin/bash\nprintf \"%s\\n\" 'monitor status: ready'\n"
+    },
+    {
+      "path": "/home/labex/project/software-inventory/build-fixture.sh",
+      "mode": "0755",
+      "content": "#!/bin/bash\nset -eu\ndpkg-deb --build /home/labex/project/software-inventory/.package-source/labex-monitor /home/labex/project/software-inventory/labex-monitor_2.0_all.deb >/dev/null\n"
+    }
+  ],
+  "accounts": [],
+  "groups": [],
+  "provenance": {
+    "fixture_fidelity": "independently-reconstructed-from-local-instructions",
+    "original_bytes_recovered": false
+  },
+  "docker": {
+    "startup": [
+      {
+        "script": "/home/labex/project/software-inventory/build-fixture.sh",
+        "user": "labex"
+      }
+    ]
+  }
+}

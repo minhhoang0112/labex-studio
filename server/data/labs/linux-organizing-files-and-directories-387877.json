@@ -1,0 +1,189 @@
+{
+  "id": "linux-organizing-files-and-directories-387877",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 387877,
+  "source_url": "https://labex.io/tutorials/linux-organizing-files-and-directories-387877",
+  "order": 10,
+  "title": "Organizing Files and Directories",
+  "title_vi": "Sắp xếp tệp và thư mục",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "5 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Organizing Files and Directories",
+  "sections": [
+    {
+      "id": "commands-387877-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Organizing Files and Directories. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Sắp xếp tệp và thư mục. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-387877-section-1-v1",
+      "title": "File and Directory Management",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sắp xếp dự án",
+      "content": "Build src and config; move app.js and styles.css to src, rename data.json to config/config.json, copy temp/draft_readme.md to README.md, then remove temp and old_stuff.",
+      "content_vi": "Tạo src và config; chuyển app.js, styles.css vào src; đổi data.json thành config/config.json; chép temp/draft_readme.md thành README.md rồi xóa temp, old_stuff.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project')\nexpected={'src/app.js':'console.log(\"app\");\\n','src/styles.css':'body{}\\n','config/config.json':'{\"app\":\"demo\"}\\n','README.md':'# Project\\n'}\nassert all((p/k).is_file() and (p/k).read_text()==v for k,v in expected.items())\nassert not any((p/k).exists() for k in ['app.js','styles.css','data.json','temp','old_stuff'])\nCHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*cp\\s+[^\\n]*draft_readme\\.md\\s+[^\\n]*README\\.md\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*mv\\s+[^\\n]*data\\.json\\s+[^\\n]*config(?:/config\\.json)?\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*rm\\s+-\\w*[rR]\\w*\\s+[^\\n]*(?:temp|old_stuff)[^\\n]*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-387877-section-2-v1",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-387877-section-1-v1",
+      "title": "File and Directory Management",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sắp xếp dự án",
+      "content": "Build src and config; move app.js and styles.css to src, rename data.json to config/config.json, copy temp/draft_readme.md to README.md, then remove temp and old_stuff.",
+      "content_vi": "Tạo src và config; chuyển app.js, styles.css vào src; đổi data.json thành config/config.json; chép temp/draft_readme.md thành README.md rồi xóa temp, old_stuff.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project')\nexpected={'src/app.js':'console.log(\"app\");\\n','src/styles.css':'body{}\\n','config/config.json':'{\"app\":\"demo\"}\\n','README.md':'# Project\\n'}\nassert all((p/k).is_file() and (p/k).read_text()==v for k,v in expected.items())\nassert not any((p/k).exists() for k in ['app.js','styles.css','data.json','temp','old_stuff'])\nCHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*cp\\s+[^\\n]*draft_readme\\.md\\s+[^\\n]*README\\.md\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*mv\\s+[^\\n]*data\\.json\\s+[^\\n]*config(?:/config\\.json)?\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*rm\\s+-\\w*[rR]\\w*\\s+[^\\n]*(?:temp|old_stuff)[^\\n]*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-organizing-files-and-directories-387877.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

@@ -1,0 +1,425 @@
+{
+  "id": "linux-basic-files-operations",
+  "course_id": "quick-start-with-linux",
+  "order": 3,
+  "title": "Basic Files Operations",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Phân biệt HOME với project; điều hướng, tạo, sao chép, di chuyển và xóa dữ liệu mẫu.",
+  "source_url": "https://labex.io/tutorials/linux-basic-files-operations-270248",
+  "source_lab_id": 270248,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-basic-files-operations-270248",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-or-observed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/linux-basic-files-operations.json",
+  "sections": [
+    {
+      "id": "source-270248-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Welcome to the Basic File Operations in Linux lab! In Linux, almost everything is treated as a file, which makes file operations fundamental to using the system. This lab will guide you through the most common commands for managing files and directories, helping you become more proficient in navigating and organizing your Linux system.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Chào mừng bạn đến với bài thực hành **Các Thao Tác Tệp Cơ Bản trong Linux**! \n\nTrong hệ điều hành Linux, hầu như mọi thứ đều được xem là một tệp (Everything is a file), điều này khiến cho các thao tác quản lý tệp trở thành kỹ năng nền tảng quan trọng nhất để làm việc với hệ thống. \n\nBài thực hành này sẽ hướng dẫn bạn từng bước làm quen với những câu lệnh phổ biến nhất để quản lý tệp và thư mục, giúp bạn thao tác thành thạo và tổ chức hệ thống Linux một cách chuyên nghiệp."
+    },
+    {
+      "id": "source-270248-section-1",
+      "title": "Understanding Your Working Environment",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In Linux, each user typically has a \"home directory,\" represented by `~`. However, in this lab environment, we'll start in the `/home/labex/project` directory, which is our default working directory.\n\nFirst, please open a terminal on the Desktop **OR** switch to the terminal tab in the lab environment.\n\nLet's begin by understanding our current location:\n\n```bash\npwd\n```\n\n`pwd` stands for \"print working directory\". It displays your current location in the file system. This command is crucial for orienting yourself in the Linux file structure. You should see `/home/labex/project` as the output.\n\nNow, let's explore the relationship between the current directory and the home directory:\n\n```bash\necho ~\n```\n\n> Note: If you cannot type the `~` symbol in the Desktop terminal due to keyboard layout differences in certain countries, you can try switching to the standalone Terminal tab in the upper left corner of the VM interface.\n\nThis command will display the path to your home directory, which should be `/home/labex`.\n\nTo see the contents of your current directory, use:\n\n```bash\nls\n```\n\nThis will list the files and directories in your current working directory (`/home/labex/project`).\n\nLet's also check the contents of your home directory:\n\n```bash\nls ~\n```\n\nThis command lists the contents of your home directory, which may be different from your current working directory.\n\nUnderstanding the distinction between your current working directory and your home directory is important for navigating the Linux file system effectively.",
+      "task": "Kiểm tra vị trí hiện tại và HOME; liệt kê project và HOME.",
+      "hint": "Shell bắt đầu tại /home/labex/project, còn ~ là /home/labex.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*pwd\\s*$"
+          ],
+          [
+            "^\\s*echo\\s+~\\s*$"
+          ],
+          [
+            "^\\s*ls\\s*$"
+          ],
+          [
+            "^\\s*ls\\s+~\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Tìm hiểu Môi trường Làm việc",
+      "content_vi": "Trong Linux, mỗi người dùng thường có một \"thư mục cá nhân\" (home directory), được ký hiệu bằng dấu ngã `~`. Tuy nhiên, trong bài thực hành này, chúng ta sẽ bắt đầu từ thư mục `/home/labex/project`, đây là thư mục làm việc mặc định của phiên học.\n\nTrước tiên, hãy đảm bảo bạn đang ở cửa sổ **Terminal**.\n\n### 1. Xác định vị trí hiện tại của bạn:\n\n```bash\npwd\n```\n\nLệnh `pwd` là viết tắt của **\"print working directory\"** (in thư mục làm việc hiện tại). Lệnh này hiển thị chính xác vị trí của bạn trong cây thư mục hệ thống. Bạn sẽ thấy kết quả hiển thị trên terminal là `/home/labex/project`.\n\n### 2. Khám phá mối liên hệ giữa thư mục làm việc và thư mục Home:\n\n```bash\necho ~\n```\n\nLệnh này sẽ hiển thị đường dẫn đến thư mục cá nhân (home directory) của tài khoản hiện tại, kết quả sẽ là `/home/labex`.\n\n### 3. Xem danh sách các tệp trong thư mục hiện tại:\n\n```bash\nls\n```\n\nLệnh này sẽ liệt kê các tệp và thư mục con nằm trong thư mục làm việc hiện tại (`/home/labex/project`).\n\n### 4. Kiểm tra nội dung của thư mục Home:\n\n```bash\nls ~\n```\n\nLệnh này liệt kê nội dung bên trong thư mục cá nhân của bạn, có thể khác với thư mục làm việc hiện tại.\n\n> **Ghi nhớ:** Hiểu rõ sự khác biệt giữa thư mục làm việc hiện tại (`pwd`) và thư mục cá nhân (`~`) là nền tảng cốt lõi để điều hướng hệ thống tệp Linux hiệu quả."
+    },
+    {
+      "id": "source-270248-section-2",
+      "title": "Navigating the File System",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Linux uses what we call a \"hierarchical file system\". Think of it like a big tree with branches. The main trunk is called the \"root directory\", represented by a single forward slash `/`. All other directories and files branch out from this root.\n\nLet's explore how to move around in this tree-like structure:\n\n1. Check your current location:\n\n```bash\npwd\n```\n\nThis should show `/home/labex/project`. If it doesn't, you might be in a different directory. Use `cd /home/labex/project` to get back to the starting point.\n\n1. View the contents of your current directory:\n\n```bash\nls\n```\n\nThis lists all files and folders in your current location. `/home/labex/project` is empty, so you won't see anything.\n\n1. Move up one level to the parent directory:\n\n```bash\ncd ..\n```\n\nThe `..` means \"the directory above\". After this command, do `pwd` again. You should now be in `/home/labex`.\n\n1. Return to your project directory:\n\n```bash\ncd project\n```\n\nThis takes you back to `/home/labex/project`.\n\n1. Go to your home directory:\n\n```bash\ncd ~\n```\n\nThe `~` is a shortcut for your home directory. Do `pwd` to confirm you're in `/home/labex`.\n\n1. Return to the project directory using an absolute path:\n\n```bash\ncd /home/labex/project\n```\n\nThis is called an \"absolute path\" because it starts from the root (`/`) and gives the full location.",
+      "task": "Đi lên HOME, trở lại project, thử ~ rồi quay về project bằng đường dẫn tuyệt đối.",
+      "hint": ".. chỉ thư mục cha; đường dẫn bắt đầu bằng / là tuyệt đối.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*cd\\s+\\.\\.\\s*$"
+          ],
+          [
+            "^\\s*cd\\s+project\\s*$"
+          ],
+          [
+            "^\\s*cd\\s+~\\s*$"
+          ],
+          [
+            "^\\s*cd\\s+/home/labex/project\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Điều hướng Hệ thống Tệp (Navigation)",
+      "content_vi": "Linux sử dụng cấu trúc **\"hệ thống tệp phân cấp\"** (hierarchical file system), tương tự như một cái cây lớn có nhiều nhánh. Gốc cây chính được gọi là **\"thư mục gốc\"** (root directory), ký hiệu bằng một dấu gạch chéo đơn `/`. Mọi tệp và thư mục khác đều phân nhánh xuất phát từ gốc này.\n\nHãy cùng thực hành cách di chuyển trong cây thư mục:\n\n### 1. Kiểm tra vị trí hiện tại:\n```bash\npwd\n```\nKết quả sẽ là `/home/labex/project`. Nếu không phải, bạn có thể chạy lệnh `cd /home/labex/project` để quay lại vị trí ban đầu.\n\n### 2. Xem nội dung thư mục hiện tại:\n```bash\nls\n```\nThư mục `/home/labex/project` lúc này đang trống, nên bạn sẽ chưa thấy tệp nào xuất hiện.\n\n### 3. Di chuyển lên thư mục cha (cấp trên):\n```bash\ncd ..\n```\nKý hiệu hai dấu chấm `..` đại diện cho **\"thư mục cấp trên ngay phía trước\"** (thư mục cha). Sau khi chạy lệnh này, hãy gõ `pwd` để kiểm tra lại; bạn sẽ thấy mình đang ở `/home/labex`.\n\n### 4. Trở lại thư mục project:\n```bash\ncd project\n```\nLệnh này đưa bạn quay trở lại thư mục `/home/labex/project`.\n\n### 5. Di chuyển nhanh về thư mục Home:\n```bash\ncd ~\n```\nDấu ngã `~` là lối tắt đại diện cho thư mục cá nhân. Chạy `pwd` để xác nhận bạn đang ở `/home/labex`.\n\n### 6. Quay lại thư mục project bằng đường dẫn tuyệt đối:\n```bash\ncd /home/labex/project\n```\nĐây được gọi là **\"đường dẫn tuyệt đối\"** (absolute path) vì nó bắt đầu từ gốc (`/`) và chỉ rõ toàn bộ đường đi cụ thể đến đích."
+    },
+    {
+      "id": "source-270248-section-3",
+      "title": "Creating Files and Listing Directory Contents",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now that we know how to navigate, let's create some files and explore how to list directory contents.\n\nFirst, make sure you're in the `/home/labex/project` directory:\n\n```bash\ncd /home/labex/project\n```\n\n1. Let's create a few files:\n\n```bash\ntouch file1.txt\n```\n\nThe `touch` command is used to create an empty file. If the file already exists, it updates the file's timestamp without changing its content. It's a simple way to create new, empty files.\n\n```bash\necho \"Hello, Linux\" > file2.txt\n```\n\nThis command does two things:\n\n- `echo` is a command that prints text.\n- The `>` symbol redirects the output of `echo` into a file named `file2.txt`. If the file doesn't exist, it's created. If it does exist, its content is replaced.\n\n```bash\necho \"Hidden file\" > .hiddenfile\n```\n\nThis creates a hidden file. In Linux, any file or directory name that starts with a dot (.) is considered hidden.\n\n1. Now, let's create a directory:\n\n```bash\nmkdir testdir\n```\n\nThe `mkdir` command (short for \"make directory\") creates a new directory named `testdir`.\n\n1. Basic listing:\n\n```bash\nls\n```\n\nThis shows the contents of your current directory. You should see `file1.txt`, `file2.txt`, and `testdir`.\n\n1. Detailed listing:\n\n```bash\nls -l\n```\n\nThe `-l` option (that's a lowercase L, not the number 1) provides a \"long\" format listing. You'll see additional details like file permissions, owner, size, and modification date.\n\n1. Show hidden files:\n\n```bash\nls -a\n```\n\nThis will show all files, including the hidden `.hiddenfile` we created.\n\n1. Combine options:\n\n```bash\nls -la\n```\n\nThis combines the long format (`-l`) with showing all files (`-a`).\n\n1. List contents of a specific directory:\n\n```bash\nls -l testdir\n```\n\nThis lists the contents of the `testdir` directory (which should be empty at this point).\n\nThe listing commands in this step are for hands-on practice and visual confirmation. Your progress is graded by checking that the required files and directory were created correctly.",
+      "task": "Tạo file1.txt rỗng, file2.txt chứa Hello, Linux, .hiddenfile chứa Hidden file và thư mục testdir; thực hành các kiểu ls.",
+      "hint": "Tên bắt đầu bằng dấu chấm bị ẩn trong ls thông thường.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/project/file1.txt\" && test ! -s \"$HOME/project/file1.txt\" && cmp -s \"$HOME/project/file2.txt\" <(printf 'Hello, Linux\\n') && cmp -s \"$HOME/project/.hiddenfile\" <(printf 'Hidden file\\n') && test -d \"$HOME/project/testdir\""
+      },
+      "title_vi": "Tạo Tệp và Liệt kê Chi tiết Thư mục",
+      "content_vi": "Bây giờ chúng ta đã biết cách điều hướng, hãy cùng tạo các tệp mới và tìm hiểu các tùy chọn liệt kê danh sách tệp nâng cao.\n\nTrước tiên, hãy chắc chắn bạn đang ở thư mục `/home/labex/project`:\n\n```bash\ncd /home/labex/project\n```\n\n### 1. Tạo tệp rỗng với lệnh touch:\n```bash\ntouch file1.txt\n```\nLệnh `touch` dùng để tạo một tệp rỗng mới. Nếu tệp đã tồn tại từ trước, `touch` sẽ cập nhật mốc thời gian sửa đổi của tệp mà không làm thay đổi nội dung bên trong.\n\n### 2. Tạo tệp có nội dung bằng toán tử chuyển hướng (>):\n```bash\necho \"Hello, Linux\" > file2.txt\n```\nCâu lệnh này thực hiện 2 thao tác kết hợp:\n- Lệnh `echo` in ra chuỗi văn bản `Hello, Linux`.\n- Toán tử chuyển hướng `>` ghi kết quả đầu ra của `echo` vào tệp `file2.txt`. Nếu tệp chưa có, hệ thống sẽ tạo mới; nếu tệp đã có, nội dung cũ sẽ bị ghi đè.\n\n### 3. Tạo một tệp ẩn (Hidden file):\n```bash\necho \"Hidden file\" > .hiddenfile\n```\nTrong Linux, bất kỳ tệp hoặc thư mục nào có tên bắt đầu bằng **dấu chấm (`.`)** đều được hệ thống coi là tệp ẩn.\n\n### 4. Tạo một thư mục mới với mkdir:\n```bash\nmkdir testdir\n```\nLệnh `mkdir` (viết tắt của **\"make directory\"**) tạo một thư mục con mới có tên là `testdir`.\n\n### 5. Liệt kê cơ bản:\n```bash\nls\n```\nHiển thị các tệp và thư mục thông thường: bạn sẽ thấy `file1.txt`, `file2.txt` và `testdir`. Tệp `.hiddenfile` sẽ không xuất hiện ở đây.\n\n### 6. Liệt kê chi tiết định dạng dài (-l):\n```bash\nls -l\n```\nTùy chọn `-l` (chữ L thường) hiển thị danh sách theo định dạng chi tiết, bao gồm: quyền truy cập tệp, người sở hữu, nhóm, dung lượng tính theo byte và thời gian chỉnh sửa lần cuối.\n\n### 7. Hiển thị tất cả tệp bao gồm cả tệp ẩn (-a):\n```bash\nls -a\n```\nTùy chọn `-a` (all) sẽ hiển thị mọi tệp, bao gồm cả tệp ẩn `.hiddenfile` cùng các liên kết thư mục `.` và `..`.\n\n### 8. Kết hợp nhiều tùy chọn:\n```bash\nls -la\n```\nKết hợp cả xem chi tiết (`-l`) và hiển thị tệp ẩn (`-a`).\n\n### 9. Xem nội dung của một thư mục cụ thể:\n```bash\nls -l testdir\n```\nXem nội dung bên trong thư mục `testdir` (hiện tại đang rỗng)."
+    },
+    {
+      "id": "source-270248-section-4",
+      "title": "Copying Files and Directories",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now that we have some files to work with, let's learn how to copy them:\n\n1. Copy a file:\n\n```bash\ncp file1.txt file1_copy.txt\n```\n\nThis creates a copy of `file1.txt` named `file1_copy.txt` in the current directory.\n\nLet's verify the copy:\n\n```bash\nls\n```\n\n1. Copy a file to another directory:\n\n```bash\ncp file2.txt testdir/\n```\n\nThis copies `file2.txt` into the `testdir` directory.\n\n1. Copy a directory:\n\n```bash\ncp -r testdir testdir_copy\n```\n\nThe `-r` option stands for \"recursive\". It's necessary when copying directories to ensure all contents are copied.\n\n1. Verify our copies:\n\n```bash\nls\nls testdir\nls testdir_copy\n```",
+      "task": "Copy file1 thành file1_copy.txt, copy file2 vào testdir rồi copy cả testdir thành testdir_copy.",
+      "hint": "cp -r sao chép cả cây thư mục.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/project/file1.txt\" && cmp -s \"$HOME/project/file1.txt\" \"$HOME/project/file1_copy.txt\" && cmp -s \"$HOME/project/file2.txt\" \"$HOME/project/testdir/file2.txt\" && cmp -s \"$HOME/project/file2.txt\" \"$HOME/project/testdir_copy/file2.txt\""
+      },
+      "title_vi": "Sao chép Tệp và Thư mục (cp)",
+      "content_vi": "Bây giờ chúng ta đã có các tệp mẫu, hãy cùng học cách sao chép tệp và thư mục bằng lệnh `cp` (copy):\n\n### 1. Sao chép một tệp sang tệp mới:\n\n```bash\ncp file1.txt file1_copy.txt\n```\n\nLệnh này tạo một bản sao độc lập của `file1.txt` với tên gọi mới là `file1_copy.txt` ngay trong thư mục hiện tại.\n\n**Đối chiếu kết quả:**\nKiểm tra xem bản sao đã xuất hiện chưa bằng lệnh:\n```bash\nls\n```\n\n### 2. Sao chép tệp vào một thư mục khác:\n\n```bash\ncp file2.txt testdir/\n```\n\nLệnh này sao chép tệp `file2.txt` vào bên trong thư mục `testdir/` với tên tệp được giữ nguyên.\n\n### 3. Sao chép toàn bộ một thư mục với cờ đệ quy (-r):\n\n```bash\ncp -r testdir testdir_copy\n```\n\n> **Lưu ý quan trọng:** Tùy chọn `-r` là viết tắt của **\"recursive\"** (đệ quy). Khi sao chép thư mục, bạn bắt buộc phải có cờ `-r` để hệ thống sao chép cả thư mục lẫn toàn bộ tệp con và cấu trúc bên trong nó. Nếu không có `-r`, lệnh `cp` sẽ báo lỗi bỏ qua thư mục.\n\n### 4. Đối chiếu và kiểm tra lại toàn bộ bản sao:\n\n```bash\nls\nls testdir\nls testdir_copy\n```\n\nQuan sát kết quả trên terminal để đảm bảo `file1_copy.txt` đã nằm ở thư mục hiện tại, `file2.txt` đã có trong `testdir`, và thư mục `testdir_copy` đã được nhân bản hoàn chỉnh."
+    },
+    {
+      "id": "source-270248-section-5",
+      "title": "Moving and Renaming Files and Directories",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "The `mv` command is used for both moving and renaming in Linux:\n\n1. Rename a file:\n\n```bash\nmv file1.txt newname.txt\n```\n\nThis renames `file1.txt` to `newname.txt`.\n\n1. Move a file to a directory:\n\n```bash\nmv newname.txt testdir/\n```\n\nThis moves `newname.txt` into the `testdir` directory.\n\n1. Rename a directory:\n\n```bash\nmv testdir_copy new_testdir\n```\n\nThis renames `testdir_copy` to `new_testdir`.\n\n1. Move and rename in one command:\n\n```bash\nmv testdir/newname.txt ./original_file1.txt\n```\n\nThis moves `newname.txt` out of `testdir` and renames it to `original_file1.txt` in the current directory.\n\n1. Verify our changes:\n\n```bash\nls\nls testdir\n```",
+      "task": "Đổi file1.txt thành newname.txt, chuyển vào testdir, đổi testdir_copy thành new_testdir; chuyển newname trở lại project với tên original_file1.txt.",
+      "hint": "mv dùng để đổi tên và chuyển vị trí.",
+      "verification": {
+        "kind": "state",
+        "command": "test ! -e \"$HOME/project/file1.txt\" && test ! -e \"$HOME/project/newname.txt\" && test ! -e \"$HOME/project/testdir/newname.txt\" && test ! -e \"$HOME/project/testdir_copy\" && test -f \"$HOME/project/original_file1.txt\" && test -f \"$HOME/project/new_testdir/file2.txt\""
+      },
+      "title_vi": "Di chuyển và Đổi tên Tệp / Thư mục (mv)",
+      "content_vi": "Lệnh `mv` (move) trong Linux được dùng cho cả 2 mục đích: **di chuyển vị trí** và **đổi tên** tệp/thư mục:\n\n### 1. Đổi tên một tệp:\n\n```bash\nmv file1.txt newname.txt\n```\n\nLệnh này đổi tên `file1.txt` thành `newname.txt` mà không làm thay đổi vị trí hay nội dung của tệp.\n\n### 2. Di chuyển tệp vào trong một thư mục:\n\n```bash\nmv newname.txt testdir/\n```\n\nLệnh này chuyển tệp `newname.txt` từ thư mục hiện tại vào bên trong thư mục `testdir/`.\n\n### 3. Đổi tên một thư mục:\n\n```bash\nmv testdir_copy new_testdir\n```\n\nLệnh này đổi tên thư mục `testdir_copy` thành `new_testdir`.\n\n### 4. Vừa di chuyển vừa đổi tên trong cùng một câu lệnh:\n\n```bash\nmv testdir/newname.txt ./original_file1.txt\n```\n\nLệnh này lấy tệp `newname.txt` từ bên trong `testdir/`, di chuyển ra thư mục hiện tại (`./`) và đồng thời đổi tên thành `original_file1.txt`.\n\n### 5. Đối chiếu kết quả sau khi thay đổi:\n\n```bash\nls\nls testdir\n```\n\nKiểm tra để chắc chắn các tệp đã được di chuyển và đổi tên đúng như yêu cầu."
+    },
+    {
+      "id": "source-270248-section-6",
+      "title": "Removing Files and Directories",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Removing files and directories is a powerful operation. Unlike graphical interfaces, the command line often doesn't have a \"Recycle Bin\" or \"Trash\". Deletions made with `rm` are usually permanent. Always double-check your commands before executing them!\n\nLet's clean up the files and directories we created. Make sure you are in the `/home/labex/project` directory.\n\n```bash\npwd\nls -a\n```\n\nYou should see files like `original_file1.txt`, `.hiddenfile`, `file2.txt`, and directories like `testdir`, `new_testdir`.\n\n```plaintext\n.\n..\n.hiddenfile\nfile1_copy.txt\nfile2.txt\nnew_testdir\noriginal_file1.txt\ntestdir\n```\n\n1. **Remove a single file:**\n\n```bash\nrm original_file1.txt\n```\n\nThe `rm` command (short for \"remove\") deletes files. Let's check:\n\n```bash\nls\n```\n\n`original_file1.txt` should be gone.\n2. **Remove interactively (safer):**\n\nLet's try to remove `file2.txt`, but this time using the interactive flag `-i`:\n\n```bash\nrm -i file2.txt\n```\n\nThe `-i` option prompts you for confirmation before deleting each file. Type `y` (for yes) and press Enter to confirm the deletion. If you type `n` or anything else, the file will not be deleted.\n\n```bash\nls\n```\n\nIf you confirmed, `file2.txt` will be gone.\n3. **See what happens with a non-empty directory:**\n\nRemember the `new_testdir` we created by renaming `testdir_copy`? It still contains the copied `file2.txt`, so `rmdir` will fail. Let's confirm its contents first:\n\n```bash\nls new_testdir\n```\n\nYou should see `file2.txt`. Now try `rmdir`:\n\n```bash\nrmdir new_testdir\n```\n\n`rmdir` (remove directory) only works on **empty** directories.\n\n```bash\nls\n```\n\n`new_testdir` can't be removed because it's not empty, so it should still appear in the listing.\n4. **Attempt to remove a non-empty directory:**\n\nNow, let's try `rmdir` on `testdir`, which still contains `file2.txt` (copied in Step 4):\n\n```bash\nls testdir\nrmdir testdir\n```\n\nYou will likely see an error message like `rmdir: failed to remove 'testdir': Directory not empty`. This is expected because `rmdir` cannot remove directories that contain files or other directories.\n5. **Remove a directory and its contents (recursively):**\n\nTo remove a directory that is *not* empty, we need to use `rm` with the `-r` (recursive) option:\n\n```bash\nrm -r testdir\n```\n\nThis command removes the `testdir` directory and everything inside it. Use this command with caution.\n\n```bash\nls\n```\n\n`testdir` should now be gone.\n6. **Force removal (use with extreme caution):**\n\nSometimes, you might want to remove files without being prompted, even if they are write-protected (though we don't have any here). The `-f` (force) option does this.\n\nLet's remove our hidden file:\n\n```bash\nrm .hiddenfile\nls -a\n```\n\nNow, let's combine `-r` and `-f`. The `rm -rf` command is extremely powerful and potentially dangerous. It removes directories recursively (`-r`) and forces removal without prompting (`-f`).\n\n**!!! DANGER ZONE !!!**\nBe **ABSOLUTELY SURE** you know what you are deleting before running `rm -rf`. A small typo could delete critical system files or your personal data. There is no undo. For example, `rm -rf /` could attempt to delete your entire system (if you have permissions). **Always double-check the path.**\n\nLet's create a temporary directory and file to demonstrate (safely):\n\n```bash\nmkdir temp_dir\ntouch temp_dir/temp_file.txt\nls -R temp_dir\n```\n\nNote: You might notice we used `-R` (uppercase) with `ls` instead of `-r` (lowercase) like we did with `cp` and `rm`. This is not just a case difference - they are completely different options! For `ls`, `-R` means \"recursive listing\" (list subdirectories), while `-r` means \"reverse sort order\". For `cp` and `rm`, the recursive option is `-r` (lowercase). Always check the manual (`man command`) to understand each command's specific options.\n\nNow, let's remove it forcefully:\n\n```bash\nrm -rf temp_dir\n```\n\nVerify the removal:\n\n```bash\nls\n```\n\n`temp_dir` should be gone.\n\nRemember: In Linux command line, deleted files are generally gone forever. Use `rm` carefully!",
+      "task": "Xóa original_file1.txt, file2.txt, testdir và .hiddenfile. Thử rmdir với các thư mục còn file; tạo rồi xóa đệ quy temp_dir. Giữ file1_copy.txt và new_testdir/file2.txt.",
+      "hint": "Kiểm tra đường dẫn trước khi xóa; mọi tệp của bài nằm trong môi trường Linux riêng.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f \"$HOME/project/file1_copy.txt\" && test -f \"$HOME/project/new_testdir/file2.txt\" && test ! -e \"$HOME/project/original_file1.txt\" && test ! -e \"$HOME/project/file2.txt\" && test ! -e \"$HOME/project/testdir\" && test ! -e \"$HOME/project/.hiddenfile\" && test ! -e \"$HOME/project/temp_dir\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*rm\\s+original_file1\\.txt\\s*$"
+              ],
+              [
+                "^\\s*rm\\s+-i\\s+file2\\.txt\\s*$",
+                "^\\s*rm\\s+file2\\.txt\\s*$"
+              ],
+              [
+                "^\\s*rm\\s+-r\\s+testdir\\s*$"
+              ],
+              [
+                "^\\s*rm\\s+\\.hiddenfile\\s*$"
+              ],
+              [
+                "^\\s*rm\\s+-rf\\s+temp_dir\\s*$"
+              ],
+              [
+                "^\\s*mkdir\\s+temp_dir\\s*$"
+              ],
+              [
+                "^\\s*touch\\s+temp_dir/temp_file\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Xóa Tệp và Thư mục (rm)",
+      "content_vi": "Xóa tệp và thư mục là một thao tác có tác động rất lớn trong Linux. Khác với giao diện đồ họa trên máy tính cá nhân, dòng lệnh terminal **không có Thùng rác (Recycle Bin / Trash)**! Mọi thao tác xóa bằng lệnh `rm` đều mang tính chất vĩnh viễn không thể hoàn tác. Hãy luôn cẩn thận kiểm tra kỹ đường dẫn trước khi gõ lệnh!\n\nHãy cùng dọn dẹp các tệp và thư mục mà chúng ta đã tạo ra. Trước hết, hãy chắc chắn bạn đang ở thư mục `/home/labex/project`:\n\n```bash\npwd\nls -a\n```\n\nBạn sẽ thấy danh sách các tệp và thư mục:\n```plaintext\n.\n..\n.hiddenfile\nfile1_copy.txt\nfile2.txt\nnew_testdir\noriginal_file1.txt\ntestdir\n```\n\n### 1. Xóa một tệp đơn lẻ:\n\n```bash\nrm original_file1.txt\n```\n\nLệnh `rm` (viết tắt của **\"remove\"**) dùng để xóa tệp. Kiểm tra lại bằng `ls`, bạn sẽ thấy `original_file1.txt` đã biến mất.\n\n### 2. Xóa ở chế độ tương tác hỏi trước (-i) để an toàn:\n\n```bash\nrm -i file2.txt\n```\n\nTùy chọn `-i` (interactive) sẽ dừng lại và hỏi bạn xác nhận trước khi thực sự xóa. Nhấn `y` (Yes) rồi ấn **Enter** để đồng ý xóa. Nếu gõ `n` (No), tệp sẽ được giữ nguyên an toàn. Kiểm tra lại bằng `ls`.\n\n### 3. Thử xóa thư mục có chứa tệp bằng rmdir:\n\n```bash\nls new_testdir\nrmdir new_testdir\n```\n\nLệnh `rmdir` (remove directory) chỉ xóa được các **thư mục hoàn toàn rỗng**. Vì thư mục `new_testdir` vẫn đang chứa tệp `file2.txt`, hệ thống sẽ từ chối và báo lỗi: `rmdir: failed to remove 'new_testdir': Directory not empty`.\n\n### 4. Xóa toàn bộ thư mục và nội dung bên trong bằng cờ đệ quy (-r):\n\n```bash\nrm -r testdir\n```\n\nĐể xóa một thư mục không rỗng, chúng ta phải dùng lệnh `rm` kết hợp với tùy chọn đệ quy `-r`. Lệnh này sẽ xóa sạch cả thư mục `testdir` cùng mọi tệp bên trong nó.\n\n```bash\nls\n```\nThư mục `testdir` đã được xóa hoàn toàn.\n\n### 5. Xóa tệp ẩn:\n\n```bash\nrm .hiddenfile\nls -a\n```\n\n### 6. Cờ ép buộc (-f) và cảnh báo nguy hiểm khi kết hợp rm -rf:\n\n```bash\nmkdir temp_dir\ntouch temp_dir/temp_file.txt\nls -R temp_dir\n```\n\n> **Lưu ý phân biệt:** Lệnh `ls -R` dùng chữ **R in hoa** để liệt kê cây thư mục con đệ quy (Recursive listing). Ngược lại, lệnh `cp` và `rm` dùng chữ **r thường** (`-r`) để duyệt đệ quy. Đừng nhầm lẫn giữa chữ hoa và chữ thường trong Linux!\n\nBây giờ hãy thử xóa cưỡng bức:\n```bash\nrm -rf temp_dir\n```\n\n> ⚠️ **CẢNH BÁO NGUY HIỂM:** Tùy chọn `-f` (force) sẽ ép buộc xóa mà không bao giờ hỏi xác nhận. Lệnh `rm -rf` là lệnh cực kỳ mạnh mẽ và nguy hiểm bậc nhất trong Linux. Một lỗi gõ nhầm đường dẫn (ví dụ `rm -rf /`) có thể xóa sạch toàn bộ hệ điều hành của bạn. Luôn kiểm tra kỹ từng ký tự trước khi chạy lệnh này!"
+    },
+    {
+      "id": "source-270248-section-7",
+      "title": "Summary",
+      "position": 7,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Congratulations! You've learned the essential file operations in Linux:\n\n- Navigating the file system with `cd` and `pwd`\n- Creating files and directories with `touch` and `mkdir`\n- Listing contents with `ls` and its options\n- Copying files and directories with `cp`\n- Moving and renaming with `mv`\n- Removing files and directories with `rm` and `rmdir`\n\nThese commands form the foundation of file management in Linux. With practice, you'll become proficient in managing your files and directories from the command line.\n\nRemember to use these commands carefully, especially `rm`, as it permanently deletes files and directories without the possibility of recovery.\n\nAs you continue your Linux journey, explore man pages (e.g., `man ls`) to learn more about each command and its options. Happy exploring!",
+      "title_vi": "Tổng kết",
+      "content_vi": "Chúc mừng bạn đã hoàn thành bài thực hành **Các Thao Tác Tệp Cơ Bản**!\n\n### Tóm tắt các câu lệnh cốt lõi bạn đã làm chủ:\n- **`pwd`**: Hiển thị đường dẫn thư mục làm việc hiện tại.\n- **`cd`**: Di chuyển giữa các thư mục (`cd ..` lên cấp trên, `cd ~` về Home, `cd /đường_dẫn_tuyệt_đối`).\n- **`ls`**: Liệt kê tệp và thư mục (`-l` xem chi tiết, `-a` hiện tệp ẩn, `-la` kết hợp cả hai).\n- **`touch`**: Tạo tệp rỗng mới hoặc cập nhật thời gian tệp.\n- **`echo \"nội dung\" > file.txt`**: Tạo tệp và ghi nội dung văn bản.\n- **`mkdir`**: Tạo thư mục mới.\n- **`cp`**: Sao chép tệp; dùng `cp -r` để sao chép cả thư mục đệ quy.\n- **`mv`**: Di chuyển hoặc đổi tên tệp và thư mục.\n- **`rm`**: Xóa tệp; dùng `rm -i` để hỏi xác nhận an toàn, dùng `rm -r` để xóa thư mục đệ quy."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-270248-section-1",
+      "title": "Understanding Your Working Environment",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In Linux, each user typically has a \"home directory,\" represented by `~`. However, in this lab environment, we'll start in the `/home/labex/project` directory, which is our default working directory.\n\nFirst, please open a terminal on the Desktop **OR** switch to the terminal tab in the lab environment.\n\nLet's begin by understanding our current location:\n\n```bash\npwd\n```\n\n`pwd` stands for \"print working directory\". It displays your current location in the file system. This command is crucial for orienting yourself in the Linux file structure. You should see `/home/labex/project` as the output.\n\nNow, let's explore the relationship between the current directory and the home directory:\n\n```bash\necho ~\n```\n\n> Note: If you cannot type the `~` symbol in the Desktop terminal due to keyboard layout differences in certain countries, you can try switching to the standalone Terminal tab in the upper left corner of the VM interface.\n\nThis command will display the path to your home directory, which should be `/home/labex`.\n\nTo see the contents of your current directory, use:\n\n```bash\nls\n```\n\nThis will list the files and directories in your current working directory (`/home/labex/project`).\n\nLet's also check the contents of your home directory:\n\n```bash\nls ~\n```\n\nThis command lists the contents of your home directory, which may be different from your current working directory.\n\nUnderstanding the distinction between your current working directory and your home directory is important for navigating the Linux file system effectively.",
+      "task": "Kiểm tra vị trí hiện tại và HOME; liệt kê project và HOME.",
+      "hint": "Shell bắt đầu tại /home/labex/project, còn ~ là /home/labex.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*pwd\\s*$"
+          ],
+          [
+            "^\\s*echo\\s+~\\s*$"
+          ],
+          [
+            "^\\s*ls\\s*$"
+          ],
+          [
+            "^\\s*ls\\s+~\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Tìm hiểu Môi trường Làm việc",
+      "content_vi": "Trong Linux, mỗi người dùng thường có một \"thư mục cá nhân\" (home directory), được ký hiệu bằng dấu ngã `~`. Tuy nhiên, trong bài thực hành này, chúng ta sẽ bắt đầu từ thư mục `/home/labex/project`, đây là thư mục làm việc mặc định của phiên học.\n\nTrước tiên, hãy đảm bảo bạn đang ở cửa sổ **Terminal**.\n\n### 1. Xác định vị trí hiện tại của bạn:\n\n```bash\npwd\n```\n\nLệnh `pwd` là viết tắt của **\"print working directory\"** (in thư mục làm việc hiện tại). Lệnh này hiển thị chính xác vị trí của bạn trong cây thư mục hệ thống. Bạn sẽ thấy kết quả hiển thị trên terminal là `/home/labex/project`.\n\n### 2. Khám phá mối liên hệ giữa thư mục làm việc và thư mục Home:\n\n```bash\necho ~\n```\n\nLệnh này sẽ hiển thị đường dẫn đến thư mục cá nhân (home directory) của tài khoản hiện tại, kết quả sẽ là `/home/labex`.\n\n### 3. Xem danh sách các tệp trong thư mục hiện tại:\n\n```bash\nls\n```\n\nLệnh này sẽ liệt kê các tệp và thư mục con nằm trong thư mục làm việc hiện tại (`/home/labex/project`).\n\n### 4. Kiểm tra nội dung của thư mục Home:\n\n```bash\nls ~\n```\n\nLệnh này liệt kê nội dung bên trong thư mục cá nhân của bạn, có thể khác với thư mục làm việc hiện tại.\n\n> **Ghi nhớ:** Hiểu rõ sự khác biệt giữa thư mục làm việc hiện tại (`pwd`) và thư mục cá nhân (`~`) là nền tảng cốt lõi để điều hướng hệ thống tệp Linux hiệu quả.",
+      "task_vi": "Kiểm tra vị trí hiện tại và HOME; liệt kê project và HOME.",
+      "hint_vi": "Shell bắt đầu tại /home/labex/project, còn ~ là /home/labex."
+    },
+    {
+      "id": "source-270248-section-2",
+      "title": "Navigating the File System",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Linux uses what we call a \"hierarchical file system\". Think of it like a big tree with branches. The main trunk is called the \"root directory\", represented by a single forward slash `/`. All other directories and files branch out from this root.\n\nLet's explore how to move around in this tree-like structure:\n\n1. Check your current location:\n\n```bash\npwd\n```\n\nThis should show `/home/labex/project`. If it doesn't, you might be in a different directory. Use `cd /home/labex/project` to get back to the starting point.\n\n1. View the contents of your current directory:\n\n```bash\nls\n```\n\nThis lists all files and folders in your current location. `/home/labex/project` is empty, so you won't see anything.\n\n1. Move up one level to the parent directory:\n\n```bash\ncd ..\n```\n\nThe `..` means \"the directory above\". After this command, do `pwd` again. You should now be in `/home/labex`.\n\n1. Return to your project directory:\n\n```bash\ncd project\n```\n\nThis takes you back to `/home/labex/project`.\n\n1. Go to your home directory:\n\n```bash\ncd ~\n```\n\nThe `~` is a shortcut for your home directory. Do `pwd` to confirm you're in `/home/labex`.\n\n1. Return to the project directory using an absolute path:\n\n```bash\ncd /home/labex/project\n```\n\nThis is called an \"absolute path\" because it starts from the root (`/`) and gives the full location.",
+      "task": "Đi lên HOME, trở lại project, thử ~ rồi quay về project bằng đường dẫn tuyệt đối.",
+      "hint": ".. chỉ thư mục cha; đường dẫn bắt đầu bằng / là tuyệt đối.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*cd\\s+\\.\\.\\s*$"
+          ],
+          [
+            "^\\s*cd\\s+project\\s*$"
+          ],
+          [
+            "^\\s*cd\\s+~\\s*$"
+          ],
+          [
+            "^\\s*cd\\s+/home/labex/project\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Điều hướng Hệ thống Tệp (Navigation)",
+      "content_vi": "Linux sử dụng cấu trúc **\"hệ thống tệp phân cấp\"** (hierarchical file system), tương tự như một cái cây lớn có nhiều nhánh. Gốc cây chính được gọi là **\"thư mục gốc\"** (root directory), ký hiệu bằng một dấu gạch chéo đơn `/`. Mọi tệp và thư mục khác đều phân nhánh xuất phát từ gốc này.\n\nHãy cùng thực hành cách di chuyển trong cây thư mục:\n\n### 1. Kiểm tra vị trí hiện tại:\n```bash\npwd\n```\nKết quả sẽ là `/home/labex/project`. Nếu không phải, bạn có thể chạy lệnh `cd /home/labex/project` để quay lại vị trí ban đầu.\n\n### 2. Xem nội dung thư mục hiện tại:\n```bash\nls\n```\nThư mục `/home/labex/project` lúc này đang trống, nên bạn sẽ chưa thấy tệp nào xuất hiện.\n\n### 3. Di chuyển lên thư mục cha (cấp trên):\n```bash\ncd ..\n```\nKý hiệu hai dấu chấm `..` đại diện cho **\"thư mục cấp trên ngay phía trước\"** (thư mục cha). Sau khi chạy lệnh này, hãy gõ `pwd` để kiểm tra lại; bạn sẽ thấy mình đang ở `/home/labex`.\n\n### 4. Trở lại thư mục project:\n```bash\ncd project\n```\nLệnh này đưa bạn quay trở lại thư mục `/home/labex/project`.\n\n### 5. Di chuyển nhanh về thư mục Home:\n```bash\ncd ~\n```\nDấu ngã `~` là lối tắt đại diện cho thư mục cá nhân. Chạy `pwd` để xác nhận bạn đang ở `/home/labex`.\n\n### 6. Quay lại thư mục project bằng đường dẫn tuyệt đối:\n```bash\ncd /home/labex/project\n```\nĐây được gọi là **\"đường dẫn tuyệt đối\"** (absolute path) vì nó bắt đầu từ gốc (`/`) và chỉ rõ toàn bộ đường đi cụ thể đến đích.",
+      "task_vi": "Đi lên HOME, trở lại project, thử ~ rồi quay về project bằng đường dẫn tuyệt đối.",
+      "hint_vi": ".. chỉ thư mục cha; đường dẫn bắt đầu bằng / là tuyệt đối."
+    },
+    {
+      "id": "source-270248-section-3",
+      "title": "Creating Files and Listing Directory Contents",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now that we know how to navigate, let's create some files and explore how to list directory contents.\n\nFirst, make sure you're in the `/home/labex/project` directory:\n\n```bash\ncd /home/labex/project\n```\n\n1. Let's create a few files:\n\n```bash\ntouch file1.txt\n```\n\nThe `touch` command is used to create an empty file. If the file already exists, it updates the file's timestamp without changing its content. It's a simple way to create new, empty files.\n\n```bash\necho \"Hello, Linux\" > file2.txt\n```\n\nThis command does two things:\n\n- `echo` is a command that prints text.\n- The `>` symbol redirects the output of `echo` into a file named `file2.txt`. If the file doesn't exist, it's created. If it does exist, its content is replaced.\n\n```bash\necho \"Hidden file\" > .hiddenfile\n```\n\nThis creates a hidden file. In Linux, any file or directory name that starts with a dot (.) is considered hidden.\n\n1. Now, let's create a directory:\n\n```bash\nmkdir testdir\n```\n\nThe `mkdir` command (short for \"make directory\") creates a new directory named `testdir`.\n\n1. Basic listing:\n\n```bash\nls\n```\n\nThis shows the contents of your current directory. You should see `file1.txt`, `file2.txt`, and `testdir`.\n\n1. Detailed listing:\n\n```bash\nls -l\n```\n\nThe `-l` option (that's a lowercase L, not the number 1) provides a \"long\" format listing. You'll see additional details like file permissions, owner, size, and modification date.\n\n1. Show hidden files:\n\n```bash\nls -a\n```\n\nThis will show all files, including the hidden `.hiddenfile` we created.\n\n1. Combine options:\n\n```bash\nls -la\n```\n\nThis combines the long format (`-l`) with showing all files (`-a`).\n\n1. List contents of a specific directory:\n\n```bash\nls -l testdir\n```\n\nThis lists the contents of the `testdir` directory (which should be empty at this point).\n\nThe listing commands in this step are for hands-on practice and visual confirmation. Your progress is graded by checking that the required files and directory were created correctly.",
+      "task": "Tạo file1.txt rỗng, file2.txt chứa Hello, Linux, .hiddenfile chứa Hidden file và thư mục testdir; thực hành các kiểu ls.",
+      "hint": "Tên bắt đầu bằng dấu chấm bị ẩn trong ls thông thường.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/project/file1.txt\" && test ! -s \"$HOME/project/file1.txt\" && cmp -s \"$HOME/project/file2.txt\" <(printf 'Hello, Linux\\n') && cmp -s \"$HOME/project/.hiddenfile\" <(printf 'Hidden file\\n') && test -d \"$HOME/project/testdir\""
+      },
+      "title_vi": "Tạo Tệp và Liệt kê Chi tiết Thư mục",
+      "content_vi": "Bây giờ chúng ta đã biết cách điều hướng, hãy cùng tạo các tệp mới và tìm hiểu các tùy chọn liệt kê danh sách tệp nâng cao.\n\nTrước tiên, hãy chắc chắn bạn đang ở thư mục `/home/labex/project`:\n\n```bash\ncd /home/labex/project\n```\n\n### 1. Tạo tệp rỗng với lệnh touch:\n```bash\ntouch file1.txt\n```\nLệnh `touch` dùng để tạo một tệp rỗng mới. Nếu tệp đã tồn tại từ trước, `touch` sẽ cập nhật mốc thời gian sửa đổi của tệp mà không làm thay đổi nội dung bên trong.\n\n### 2. Tạo tệp có nội dung bằng toán tử chuyển hướng (>):\n```bash\necho \"Hello, Linux\" > file2.txt\n```\nCâu lệnh này thực hiện 2 thao tác kết hợp:\n- Lệnh `echo` in ra chuỗi văn bản `Hello, Linux`.\n- Toán tử chuyển hướng `>` ghi kết quả đầu ra của `echo` vào tệp `file2.txt`. Nếu tệp chưa có, hệ thống sẽ tạo mới; nếu tệp đã có, nội dung cũ sẽ bị ghi đè.\n\n### 3. Tạo một tệp ẩn (Hidden file):\n```bash\necho \"Hidden file\" > .hiddenfile\n```\nTrong Linux, bất kỳ tệp hoặc thư mục nào có tên bắt đầu bằng **dấu chấm (`.`)** đều được hệ thống coi là tệp ẩn.\n\n### 4. Tạo một thư mục mới với mkdir:\n```bash\nmkdir testdir\n```\nLệnh `mkdir` (viết tắt của **\"make directory\"**) tạo một thư mục con mới có tên là `testdir`.\n\n### 5. Liệt kê cơ bản:\n```bash\nls\n```\nHiển thị các tệp và thư mục thông thường: bạn sẽ thấy `file1.txt`, `file2.txt` và `testdir`. Tệp `.hiddenfile` sẽ không xuất hiện ở đây.\n\n### 6. Liệt kê chi tiết định dạng dài (-l):\n```bash\nls -l\n```\nTùy chọn `-l` (chữ L thường) hiển thị danh sách theo định dạng chi tiết, bao gồm: quyền truy cập tệp, người sở hữu, nhóm, dung lượng tính theo byte và thời gian chỉnh sửa lần cuối.\n\n### 7. Hiển thị tất cả tệp bao gồm cả tệp ẩn (-a):\n```bash\nls -a\n```\nTùy chọn `-a` (all) sẽ hiển thị mọi tệp, bao gồm cả tệp ẩn `.hiddenfile` cùng các liên kết thư mục `.` và `..`.\n\n### 8. Kết hợp nhiều tùy chọn:\n```bash\nls -la\n```\nKết hợp cả xem chi tiết (`-l`) và hiển thị tệp ẩn (`-a`).\n\n### 9. Xem nội dung của một thư mục cụ thể:\n```bash\nls -l testdir\n```\nXem nội dung bên trong thư mục `testdir` (hiện tại đang rỗng).",
+      "task_vi": "Tạo file1.txt rỗng, file2.txt chứa Hello, Linux, .hiddenfile chứa Hidden file và thư mục testdir; thực hành các kiểu ls.",
+      "hint_vi": "Tên bắt đầu bằng dấu chấm bị ẩn trong ls thông thường."
+    },
+    {
+      "id": "source-270248-section-4",
+      "title": "Copying Files and Directories",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now that we have some files to work with, let's learn how to copy them:\n\n1. Copy a file:\n\n```bash\ncp file1.txt file1_copy.txt\n```\n\nThis creates a copy of `file1.txt` named `file1_copy.txt` in the current directory.\n\nLet's verify the copy:\n\n```bash\nls\n```\n\n1. Copy a file to another directory:\n\n```bash\ncp file2.txt testdir/\n```\n\nThis copies `file2.txt` into the `testdir` directory.\n\n1. Copy a directory:\n\n```bash\ncp -r testdir testdir_copy\n```\n\nThe `-r` option stands for \"recursive\". It's necessary when copying directories to ensure all contents are copied.\n\n1. Verify our copies:\n\n```bash\nls\nls testdir\nls testdir_copy\n```",
+      "task": "Copy file1 thành file1_copy.txt, copy file2 vào testdir rồi copy cả testdir thành testdir_copy.",
+      "hint": "cp -r sao chép cả cây thư mục.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/project/file1.txt\" && cmp -s \"$HOME/project/file1.txt\" \"$HOME/project/file1_copy.txt\" && cmp -s \"$HOME/project/file2.txt\" \"$HOME/project/testdir/file2.txt\" && cmp -s \"$HOME/project/file2.txt\" \"$HOME/project/testdir_copy/file2.txt\""
+      },
+      "title_vi": "Sao chép Tệp và Thư mục (cp)",
+      "content_vi": "Bây giờ chúng ta đã có các tệp mẫu, hãy cùng học cách sao chép tệp và thư mục bằng lệnh `cp` (copy):\n\n### 1. Sao chép một tệp sang tệp mới:\n\n```bash\ncp file1.txt file1_copy.txt\n```\n\nLệnh này tạo một bản sao độc lập của `file1.txt` với tên gọi mới là `file1_copy.txt` ngay trong thư mục hiện tại.\n\n**Đối chiếu kết quả:**\nKiểm tra xem bản sao đã xuất hiện chưa bằng lệnh:\n```bash\nls\n```\n\n### 2. Sao chép tệp vào một thư mục khác:\n\n```bash\ncp file2.txt testdir/\n```\n\nLệnh này sao chép tệp `file2.txt` vào bên trong thư mục `testdir/` với tên tệp được giữ nguyên.\n\n### 3. Sao chép toàn bộ một thư mục với cờ đệ quy (-r):\n\n```bash\ncp -r testdir testdir_copy\n```\n\n> **Lưu ý quan trọng:** Tùy chọn `-r` là viết tắt của **\"recursive\"** (đệ quy). Khi sao chép thư mục, bạn bắt buộc phải có cờ `-r` để hệ thống sao chép cả thư mục lẫn toàn bộ tệp con và cấu trúc bên trong nó. Nếu không có `-r`, lệnh `cp` sẽ báo lỗi bỏ qua thư mục.\n\n### 4. Đối chiếu và kiểm tra lại toàn bộ bản sao:\n\n```bash\nls\nls testdir\nls testdir_copy\n```\n\nQuan sát kết quả trên terminal để đảm bảo `file1_copy.txt` đã nằm ở thư mục hiện tại, `file2.txt` đã có trong `testdir`, và thư mục `testdir_copy` đã được nhân bản hoàn chỉnh.",
+      "task_vi": "Copy file1 thành file1_copy.txt, copy file2 vào testdir rồi copy cả testdir thành testdir_copy.",
+      "hint_vi": "cp -r sao chép cả cây thư mục."
+    },
+    {
+      "id": "source-270248-section-5",
+      "title": "Moving and Renaming Files and Directories",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "The `mv` command is used for both moving and renaming in Linux:\n\n1. Rename a file:\n\n```bash\nmv file1.txt newname.txt\n```\n\nThis renames `file1.txt` to `newname.txt`.\n\n1. Move a file to a directory:\n\n```bash\nmv newname.txt testdir/\n```\n\nThis moves `newname.txt` into the `testdir` directory.\n\n1. Rename a directory:\n\n```bash\nmv testdir_copy new_testdir\n```\n\nThis renames `testdir_copy` to `new_testdir`.\n\n1. Move and rename in one command:\n\n```bash\nmv testdir/newname.txt ./original_file1.txt\n```\n\nThis moves `newname.txt` out of `testdir` and renames it to `original_file1.txt` in the current directory.\n\n1. Verify our changes:\n\n```bash\nls\nls testdir\n```",
+      "task": "Đổi file1.txt thành newname.txt, chuyển vào testdir, đổi testdir_copy thành new_testdir; chuyển newname trở lại project với tên original_file1.txt.",
+      "hint": "mv dùng để đổi tên và chuyển vị trí.",
+      "verification": {
+        "kind": "state",
+        "command": "test ! -e \"$HOME/project/file1.txt\" && test ! -e \"$HOME/project/newname.txt\" && test ! -e \"$HOME/project/testdir/newname.txt\" && test ! -e \"$HOME/project/testdir_copy\" && test -f \"$HOME/project/original_file1.txt\" && test -f \"$HOME/project/new_testdir/file2.txt\""
+      },
+      "title_vi": "Di chuyển và Đổi tên Tệp / Thư mục (mv)",
+      "content_vi": "Lệnh `mv` (move) trong Linux được dùng cho cả 2 mục đích: **di chuyển vị trí** và **đổi tên** tệp/thư mục:\n\n### 1. Đổi tên một tệp:\n\n```bash\nmv file1.txt newname.txt\n```\n\nLệnh này đổi tên `file1.txt` thành `newname.txt` mà không làm thay đổi vị trí hay nội dung của tệp.\n\n### 2. Di chuyển tệp vào trong một thư mục:\n\n```bash\nmv newname.txt testdir/\n```\n\nLệnh này chuyển tệp `newname.txt` từ thư mục hiện tại vào bên trong thư mục `testdir/`.\n\n### 3. Đổi tên một thư mục:\n\n```bash\nmv testdir_copy new_testdir\n```\n\nLệnh này đổi tên thư mục `testdir_copy` thành `new_testdir`.\n\n### 4. Vừa di chuyển vừa đổi tên trong cùng một câu lệnh:\n\n```bash\nmv testdir/newname.txt ./original_file1.txt\n```\n\nLệnh này lấy tệp `newname.txt` từ bên trong `testdir/`, di chuyển ra thư mục hiện tại (`./`) và đồng thời đổi tên thành `original_file1.txt`.\n\n### 5. Đối chiếu kết quả sau khi thay đổi:\n\n```bash\nls\nls testdir\n```\n\nKiểm tra để chắc chắn các tệp đã được di chuyển và đổi tên đúng như yêu cầu.",
+      "task_vi": "Đổi file1.txt thành newname.txt, chuyển vào testdir, đổi testdir_copy thành new_testdir; chuyển newname trở lại project với tên original_file1.txt.",
+      "hint_vi": "mv dùng để đổi tên và chuyển vị trí."
+    },
+    {
+      "id": "source-270248-section-6",
+      "title": "Removing Files and Directories",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Removing files and directories is a powerful operation. Unlike graphical interfaces, the command line often doesn't have a \"Recycle Bin\" or \"Trash\". Deletions made with `rm` are usually permanent. Always double-check your commands before executing them!\n\nLet's clean up the files and directories we created. Make sure you are in the `/home/labex/project` directory.\n\n```bash\npwd\nls -a\n```\n\nYou should see files like `original_file1.txt`, `.hiddenfile`, `file2.txt`, and directories like `testdir`, `new_testdir`.\n\n```plaintext\n.\n..\n.hiddenfile\nfile1_copy.txt\nfile2.txt\nnew_testdir\noriginal_file1.txt\ntestdir\n```\n\n1. **Remove a single file:**\n\n```bash\nrm original_file1.txt\n```\n\nThe `rm` command (short for \"remove\") deletes files. Let's check:\n\n```bash\nls\n```\n\n`original_file1.txt` should be gone.\n2. **Remove interactively (safer):**\n\nLet's try to remove `file2.txt`, but this time using the interactive flag `-i`:\n\n```bash\nrm -i file2.txt\n```\n\nThe `-i` option prompts you for confirmation before deleting each file. Type `y` (for yes) and press Enter to confirm the deletion. If you type `n` or anything else, the file will not be deleted.\n\n```bash\nls\n```\n\nIf you confirmed, `file2.txt` will be gone.\n3. **See what happens with a non-empty directory:**\n\nRemember the `new_testdir` we created by renaming `testdir_copy`? It still contains the copied `file2.txt`, so `rmdir` will fail. Let's confirm its contents first:\n\n```bash\nls new_testdir\n```\n\nYou should see `file2.txt`. Now try `rmdir`:\n\n```bash\nrmdir new_testdir\n```\n\n`rmdir` (remove directory) only works on **empty** directories.\n\n```bash\nls\n```\n\n`new_testdir` can't be removed because it's not empty, so it should still appear in the listing.\n4. **Attempt to remove a non-empty directory:**\n\nNow, let's try `rmdir` on `testdir`, which still contains `file2.txt` (copied in Step 4):\n\n```bash\nls testdir\nrmdir testdir\n```\n\nYou will likely see an error message like `rmdir: failed to remove 'testdir': Directory not empty`. This is expected because `rmdir` cannot remove directories that contain files or other directories.\n5. **Remove a directory and its contents (recursively):**\n\nTo remove a directory that is *not* empty, we need to use `rm` with the `-r` (recursive) option:\n\n```bash\nrm -r testdir\n```\n\nThis command removes the `testdir` directory and everything inside it. Use this command with caution.\n\n```bash\nls\n```\n\n`testdir` should now be gone.\n6. **Force removal (use with extreme caution):**\n\nSometimes, you might want to remove files without being prompted, even if they are write-protected (though we don't have any here). The `-f` (force) option does this.\n\nLet's remove our hidden file:\n\n```bash\nrm .hiddenfile\nls -a\n```\n\nNow, let's combine `-r` and `-f`. The `rm -rf` command is extremely powerful and potentially dangerous. It removes directories recursively (`-r`) and forces removal without prompting (`-f`).\n\n**!!! DANGER ZONE !!!**\nBe **ABSOLUTELY SURE** you know what you are deleting before running `rm -rf`. A small typo could delete critical system files or your personal data. There is no undo. For example, `rm -rf /` could attempt to delete your entire system (if you have permissions). **Always double-check the path.**\n\nLet's create a temporary directory and file to demonstrate (safely):\n\n```bash\nmkdir temp_dir\ntouch temp_dir/temp_file.txt\nls -R temp_dir\n```\n\nNote: You might notice we used `-R` (uppercase) with `ls` instead of `-r` (lowercase) like we did with `cp` and `rm`. This is not just a case difference - they are completely different options! For `ls`, `-R` means \"recursive listing\" (list subdirectories), while `-r` means \"reverse sort order\". For `cp` and `rm`, the recursive option is `-r` (lowercase). Always check the manual (`man command`) to understand each command's specific options.\n\nNow, let's remove it forcefully:\n\n```bash\nrm -rf temp_dir\n```\n\nVerify the removal:\n\n```bash\nls\n```\n\n`temp_dir` should be gone.\n\nRemember: In Linux command line, deleted files are generally gone forever. Use `rm` carefully!",
+      "task": "Xóa original_file1.txt, file2.txt, testdir và .hiddenfile. Thử rmdir với các thư mục còn file; tạo rồi xóa đệ quy temp_dir. Giữ file1_copy.txt và new_testdir/file2.txt.",
+      "hint": "Kiểm tra đường dẫn trước khi xóa; mọi tệp của bài nằm trong môi trường Linux riêng.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f \"$HOME/project/file1_copy.txt\" && test -f \"$HOME/project/new_testdir/file2.txt\" && test ! -e \"$HOME/project/original_file1.txt\" && test ! -e \"$HOME/project/file2.txt\" && test ! -e \"$HOME/project/testdir\" && test ! -e \"$HOME/project/.hiddenfile\" && test ! -e \"$HOME/project/temp_dir\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*rm\\s+original_file1\\.txt\\s*$"
+              ],
+              [
+                "^\\s*rm\\s+-i\\s+file2\\.txt\\s*$",
+                "^\\s*rm\\s+file2\\.txt\\s*$"
+              ],
+              [
+                "^\\s*rm\\s+-r\\s+testdir\\s*$"
+              ],
+              [
+                "^\\s*rm\\s+\\.hiddenfile\\s*$"
+              ],
+              [
+                "^\\s*rm\\s+-rf\\s+temp_dir\\s*$"
+              ],
+              [
+                "^\\s*mkdir\\s+temp_dir\\s*$"
+              ],
+              [
+                "^\\s*touch\\s+temp_dir/temp_file\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Xóa Tệp và Thư mục (rm)",
+      "content_vi": "Xóa tệp và thư mục là một thao tác có tác động rất lớn trong Linux. Khác với giao diện đồ họa trên máy tính cá nhân, dòng lệnh terminal **không có Thùng rác (Recycle Bin / Trash)**! Mọi thao tác xóa bằng lệnh `rm` đều mang tính chất vĩnh viễn không thể hoàn tác. Hãy luôn cẩn thận kiểm tra kỹ đường dẫn trước khi gõ lệnh!\n\nHãy cùng dọn dẹp các tệp và thư mục mà chúng ta đã tạo ra. Trước hết, hãy chắc chắn bạn đang ở thư mục `/home/labex/project`:\n\n```bash\npwd\nls -a\n```\n\nBạn sẽ thấy danh sách các tệp và thư mục:\n```plaintext\n.\n..\n.hiddenfile\nfile1_copy.txt\nfile2.txt\nnew_testdir\noriginal_file1.txt\ntestdir\n```\n\n### 1. Xóa một tệp đơn lẻ:\n\n```bash\nrm original_file1.txt\n```\n\nLệnh `rm` (viết tắt của **\"remove\"**) dùng để xóa tệp. Kiểm tra lại bằng `ls`, bạn sẽ thấy `original_file1.txt` đã biến mất.\n\n### 2. Xóa ở chế độ tương tác hỏi trước (-i) để an toàn:\n\n```bash\nrm -i file2.txt\n```\n\nTùy chọn `-i` (interactive) sẽ dừng lại và hỏi bạn xác nhận trước khi thực sự xóa. Nhấn `y` (Yes) rồi ấn **Enter** để đồng ý xóa. Nếu gõ `n` (No), tệp sẽ được giữ nguyên an toàn. Kiểm tra lại bằng `ls`.\n\n### 3. Thử xóa thư mục có chứa tệp bằng rmdir:\n\n```bash\nls new_testdir\nrmdir new_testdir\n```\n\nLệnh `rmdir` (remove directory) chỉ xóa được các **thư mục hoàn toàn rỗng**. Vì thư mục `new_testdir` vẫn đang chứa tệp `file2.txt`, hệ thống sẽ từ chối và báo lỗi: `rmdir: failed to remove 'new_testdir': Directory not empty`.\n\n### 4. Xóa toàn bộ thư mục và nội dung bên trong bằng cờ đệ quy (-r):\n\n```bash\nrm -r testdir\n```\n\nĐể xóa một thư mục không rỗng, chúng ta phải dùng lệnh `rm` kết hợp với tùy chọn đệ quy `-r`. Lệnh này sẽ xóa sạch cả thư mục `testdir` cùng mọi tệp bên trong nó.\n\n```bash\nls\n```\nThư mục `testdir` đã được xóa hoàn toàn.\n\n### 5. Xóa tệp ẩn:\n\n```bash\nrm .hiddenfile\nls -a\n```\n\n### 6. Cờ ép buộc (-f) và cảnh báo nguy hiểm khi kết hợp rm -rf:\n\n```bash\nmkdir temp_dir\ntouch temp_dir/temp_file.txt\nls -R temp_dir\n```\n\n> **Lưu ý phân biệt:** Lệnh `ls -R` dùng chữ **R in hoa** để liệt kê cây thư mục con đệ quy (Recursive listing). Ngược lại, lệnh `cp` và `rm` dùng chữ **r thường** (`-r`) để duyệt đệ quy. Đừng nhầm lẫn giữa chữ hoa và chữ thường trong Linux!\n\nBây giờ hãy thử xóa cưỡng bức:\n```bash\nrm -rf temp_dir\n```\n\n> ⚠️ **CẢNH BÁO NGUY HIỂM:** Tùy chọn `-f` (force) sẽ ép buộc xóa mà không bao giờ hỏi xác nhận. Lệnh `rm -rf` là lệnh cực kỳ mạnh mẽ và nguy hiểm bậc nhất trong Linux. Một lỗi gõ nhầm đường dẫn (ví dụ `rm -rf /`) có thể xóa sạch toàn bộ hệ điều hành của bạn. Luôn kiểm tra kỹ từng ký tự trước khi chạy lệnh này!",
+      "task_vi": "Xóa original_file1.txt, file2.txt, testdir và .hiddenfile. Thử rmdir với các thư mục còn file; tạo rồi xóa đệ quy temp_dir. Giữ file1_copy.txt và new_testdir/file2.txt.",
+      "hint_vi": "Kiểm tra đường dẫn trước khi xóa; mọi tệp của bài nằm trong môi trường Linux riêng."
+    }
+  ],
+  "title_vi": "Các Thao Tác Tệp Cơ Bản",
+  "overview_vi": "Làm chủ các thao tác quản lý tệp và thư mục cơ bản trong Linux: di chuyển, tạo tệp, sao chép (cp), đổi tên/di chuyển (mv) và xóa an toàn (rm)."
+}

@@ -1,0 +1,211 @@
+{
+  "tutorial": {
+    "id": 596618,
+    "name": "The Process Overseer",
+    "fee_type": 2,
+    "type": 1,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/process_inspection",
+        "name": "Process Inspection",
+        "desc": "Process inspection covers listing processes, interpreting identifiers, owners, states, and command lines.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/resource_monitoring",
+        "name": "Resource Monitoring",
+        "desc": "Resource monitoring covers observing CPU, memory, disk, process, and load behavior during system activity.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_pattern_searching",
+        "name": "Text Pattern Searching",
+        "desc": "Text pattern searching covers finding text with literal strings and regular expression patterns.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/process_signals",
+        "name": "Process Signals",
+        "desc": "Process signals cover requesting process termination, interruption, reloads, and other signal-driven behavior.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/detached_command_execution",
+        "name": "Detached Command Execution",
+        "desc": "Detached command execution covers running commands beyond the foreground terminal flow and managing their output and session lifetime.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/terminal_job_control",
+        "name": "Terminal Job Control",
+        "desc": "Terminal job control covers suspending, resuming, foregrounding, and backgrounding commands in interactive terminal sessions.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/output_redirection",
+        "name": "Output Redirection",
+        "desc": "Output redirection covers writing, appending, separating, and combining command output and error streams.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/project-become-a-junior-system-administrator/challenge-day-6-the-process-overseer",
+    "alias": "linux-day-6-the-process-overseer-596618",
+    "icon": "https://icons.labex.io/the-process-overseer.png",
+    "show_in_tutorial": true,
+    "description": "In this challenge, you'll act as a system administrator to manage and monitor Linux processes, from listing and prioritizing them to handling misbehaving and background tasks.",
+    "default_console_type": 2,
+    "meta_title": "Manage Linux Processes: Monitor, Prioritize, and Terminate",
+    "meta_description": "Learn to manage Linux system processes. Master commands like ps, top, kill, and nohup to monitor resource usage, terminate rogue processes, and run background jobs.",
+    "meta_keywords": "linux process management, ps command, top command, kill process, background process",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/projects"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nWelcome, Junior System Administrator! It's a busy Monday morning at \"LabEx,\" and a critical alert just came in: the main application server is experiencing a significant slowdown, affecting all users. The senior administrators are tied up in an emergency meeting, and it's up to you to investigate and stabilize the system.\n\nThis is your moment to shine. Your mission is to dive into the server's command line, diagnose the issue by inspecting the running processes, neutralize any resource-hogging culprits, and ensure essential services remain operational. By the end of this challenge, you'll have proven your ability to manage a live Linux environment under pressure, a core skill for any system administrator.\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Important Notice</div>\n<div class=\"text-sm\">\nThis challenge covers skills beyond <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. If you have not learned these topics yet, skip it for now and continue to <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, the next course in the <a href=\"https://labex.io/learn/linux\" class=\"underline\">Linux learning path</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>When to return:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Complete the <a href=\"https://labex.io/labs/linux-system-information-and-process-management-725419?course=linux-for-noobs\" class=\"underline\">System Information and Process Management</a> Guided Lab, then return and try this challenge again.</li>\n</ol>\n</div>\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Listing Active System Processes",
+      "layout": "doc-workbench-split",
+      "text": "## Listing Active System Processes\n\nYour first step as the Process Overseer is to get a complete picture of what's currently running on the server. A static snapshot of all active processes will help you begin your investigation and identify anything unusual.\n\n### Tasks\n\n- Use a single command to generate a detailed list of all processes running on the system.\n\n### Requirements\n\n- The command must display processes for all users, not just your own.\n- The output format should be user-oriented, showing details like the user who owns the process, CPU/memory usage, and the full command that started it.\n\n### Examples\n\nAfter running the command, you should see output similar to this:\n\n```plaintext\nUSER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         1  0.0  0.1 169848  9064 ?        Ss   08:30   0:02 /sbin/init\nlabex     1234  0.0  0.0   2324   564 pts/0    S+   08:35   0:00 bash /home/labex/project/resource_hog.sh\nlabex     1235  0.0  0.0   2324   564 ?        S    08:35   0:00 bash /home/labex/project/critical_service.sh\n...\n```\n\nThe output will show multiple processes with columns for user, process ID, CPU usage, memory usage, and the command that started each process.\n\n### Hints\n\n- The most common command for this task is `ps`.\n- Think about which options for the `ps` command would show processes for **a**ll users, in a **u**ser-friendly format, and include processes not attached to a te**x**minal.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 2,
+      "title": "Monitoring Process Resource Usage",
+      "layout": "doc-workbench-split",
+      "text": "## Monitoring Process Resource Usage\n\nThe static list from `ps` was a good start, but the server's load is changing every second. You need a live, dynamic view to see which process is actively causing the slowdown. It's time to bring out a more powerful monitoring tool.\n\n### Tasks\n\n- Launch an interactive command-line utility to monitor system processes and their resource usage in real-time.\n- Identify the name of the script that is consuming the most CPU.\n\n### Requirements\n\n- You must use a tool that provides a continuously updated, real-time view of system processes.\n- The tool should allow you to sort processes by CPU usage by default.\n- Once you have identified the top consumer, exit the tool to proceed to the next step.\n\n### Examples\n\nWhen you launch the monitoring tool, you should see an interactive display that updates automatically, showing something like:\n\n```plaintext\ntop - 09:15:30 up  1:45,  1 user,  load average: 1.50, 1.20, 0.85\nTasks: 105 total,   2 running, 103 sleeping,   0 stopped,   0 zombie\n%Cpu(s): 45.0 us,  5.0 sy,  0.0 ni, 50.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   2048.0 total,    850.4 free,    950.2 used,    247.4 buff/cache\nMiB Swap:      0.0 total,      0.0 free,      0.0 used,      0.0 avail Mem\n\n  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n 1234 labex     20   0   12884   1564   1320 R  95.0   0.1   2:15.30 bash /home/labex/project/resource_hog.sh\n 1235 labex     20   0   12884   1564   1320 S   0.0   0.1   0:00.00 bash /home/labex/project/critical_service.sh\n    1 root      20   0  169848   9064   6868 S   0.0   0.4   0:02.15 systemd\n...\n```\n\nThe display will show system statistics at the top and a list of processes sorted by CPU usage, with the highest CPU-consuming process at the top.\n\n### Hints\n\n- This popular command is often referred to as the \"Task Manager\" of the Linux world.\n- You can exit this interactive tool by pressing the `q` key.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 3,
+      "title": "Identifying Key Processes",
+      "layout": "doc-workbench-split",
+      "text": "## Identifying Key Processes\n\nYou've found the troublemaker: `resource_hog.sh`. However, a good sysadmin doesn't just terminate processes wildly. You also noticed `critical_service.sh` running. Before you take any action against the hog, you should identify and understand all the key processes running on the system.\n\n### Tasks\n\n- Find the Process ID (PID) of the `critical_service.sh` script.\n- Verify that the critical service is running properly.\n\n### Requirements\n\n- You must use the `pgrep` command to find the PID of the process running `critical_service.sh`.\n- The command should successfully locate the running process and display its PID.\n\n### Examples\n\nAfter finding the PID with `pgrep`, you should see output like:\n\n```bash\n1235\n```\n\nThis number (1235 in this example) is the Process ID of the critical service process.\n\nYou can verify the process details using:\n\n```bash\nps -p 1235 -o pid,ppid,cmd\n```\n\nWhich should show output similar to:\n\n```bash\nPID PPID CMD\n1235 1 /bin/bash /home/labex/project/critical_service.sh\n```\n\n### Hints\n\n- `pgrep` can find a PID based on a process name.\n- Use `pgrep -f` to match against the full command line.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 4,
+      "title": "Terminating a Misbehaving Process",
+      "layout": "doc-workbench-split",
+      "text": "## Terminating a Misbehaving Process\n\nNow that you've identified the key processes, it's time to deal with the `resource_hog.sh` that has been slowing down the server. You need to terminate this process to restore normal operation.\n\n### Tasks\n\n- Terminate the `resource_hog.sh` process.\n\n### Requirements\n\n- You must use a command that can terminate a process based on its name, without needing to find its PID first.\n- Use the `pkill` command to stop the `resource_hog.sh` script.\n\n### Examples\n\nTo verify that the process has been terminated, you can check the process list afterward. Before termination, you might see:\n\n```bash\nlabex 1234 95.0 0.0 2324 564 pts/0 R+ 09:15 5:00 bash /home/labex/project/resource_hog.sh\n```\n\nAfter successful termination, running the same check command should show no matching processes (only the grep command itself):\n\n```bash\nlabex 2345 0.0 0.0 2324 564 pts/0 S+ 09:20 0:00 grep resource_hog\n```\n\n### Hints\n\n- The `pkill` command sends a termination signal to processes based on their name.\n- After running the command, you can use `ps aux | grep resource_hog` to verify that the process is no longer running.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 5,
+      "title": "Starting and Managing Background Processes",
+      "layout": "doc-workbench-split",
+      "text": "## Starting and Managing Background Processes\n\nThe server is stable again! Excellent work. Just as you're about to take a break, a developer sends you a message. They need you to run a long-running script, `data_processor.sh`, on the server. You can't keep your terminal session open for hours just for this script. You need to run it in the background so it continues even after you log out.\n\n### Tasks\n\n- Start the `data_processor.sh` script so that it runs in the background and is immune to hangups (i.e., it won't stop if you close your terminal).\n\n### Requirements\n\n- You must be in the `~/project` directory.\n- Use the `nohup` command to run the script.\n- Use the `&` operator to send the process to the background.\n- Redirect all output (both standard output and standard error) from the script to a file named `processor.log`.\n\n### Examples\n\nAfter successfully starting the script in the background, you should see output similar to:\n\n```bash\n[1] 3456\nnohup: ignoring input and appending output to 'processor.log'\n```\n\nThe `[1] 3456` indicates the job number and process ID. You can verify the script is running by checking the log file:\n\n```bash\ncat processor.log\n```\n\nThis might show output like:\n\n```plaintext\nStarting data processing at Mon Sep 11 10:30:00 UTC 2025\n```\n\nAnd you can confirm the process is still running:\n\n```bash\nps aux | grep data_processor\n```\n\nWhich should show the background process is active.\n\n### Hints\n\n- The `nohup` command stands for \"no hang up.\"\n- The `&` symbol at the end of a command tells the shell to run it as a background job.\n- You can redirect standard output with `>` and standard error with `2>&1`.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nCongratulations, Administrator! You have successfully navigated a critical server performance issue and demonstrated your mastery of Linux process management. The server is stable, critical services are prioritized, and long-running tasks are humming along in the background.\n\nIn this challenge, you have proven your ability to:\n\n- List and inspect all running processes using `ps`.\n- Monitor system resources in real-time with `top`.\n- Identify important processes using `pgrep`.\n- Terminate misbehaving processes cleanly with `pkill`.\n- Run and manage background jobs that persist after logout using `nohup` and `&`.\n\nThese are fundamental, high-value skills that are essential for any role in system administration, DevOps, or backend development. You've turned a potential crisis into an opportunity to showcase your expertise. Well done!\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

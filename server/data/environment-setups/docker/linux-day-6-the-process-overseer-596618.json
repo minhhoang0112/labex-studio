@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "directories": [],
+  "files": [
+    {
+      "path": "/home/labex/project/critical_service.sh",
+      "content": "#!/bin/bash\ntrap 'exit 0' TERM INT\nwhile :; do sleep 2; done\n",
+      "mode": "0755",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/resource_hog.sh",
+      "content": "#!/bin/bash\ntrap 'exit 0' TERM INT\nwhile :; do :; done\n",
+      "mode": "0755",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/data_processor.sh",
+      "content": "#!/bin/bash\nprintf 'Starting data processing at %s\\n' \"$(date)\"\ntrap 'exit 0' TERM INT\nwhile :; do sleep 2; done\n",
+      "mode": "0755",
+      "owner": "labex:labex"
+    }
+  ],
+  "accounts": [],
+  "groups": [],
+  "provenance": {
+    "fixture_fidelity": "reconstructed_fixture",
+    "original_bytes_recovered": false,
+    "note": "Names and requirements from user-provided official tutorial JSON; unspecified fixture content independently authored locally."
+  },
+  "docker": {
+    "startup": [
+      {
+        "script": "/home/labex/project/critical_service.sh",
+        "user": "labex"
+      },
+      {
+        "script": "/home/labex/project/resource_hog.sh",
+        "user": "labex"
+      }
+    ]
+  }
+}

@@ -1,0 +1,445 @@
+{
+  "id": "linux-linux-mv-command-file-moving-and-renaming-209743",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 209743,
+  "source_url": "https://labex.io/tutorials/linux-linux-mv-command-file-moving-and-renaming-209743",
+  "order": 8,
+  "title": "Linux mv Command: File Moving and Renaming",
+  "title_vi": "Lệnh mv: di chuyển và đổi tên",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux mv Command: File Moving and Renaming",
+  "sections": [
+    {
+      "id": "commands-209743-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux mv Command: File Moving and Renaming. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh mv: di chuyển và đổi tên. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-209743-section-1-v1",
+      "title": "Exploring the Project Directory",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem dự án",
+      "content": "Inspect the starting project.\n\n```bash\npwd\nls\n```",
+      "content_vi": "Xem nội dung dự án ban đầu.\n\n```bash\npwd\nls\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*ls\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-2-v1",
+      "title": "Moving a File",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Di chuyển tệp",
+      "content": "Create css and move styles.css into it.\n\n```bash\nmkdir css\nmv styles.css css/\n```",
+      "content_vi": "Tạo css và chuyển styles.css vào đó.\n\n```bash\nmkdir css\nmv styles.css css/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -e /home/labex/project/css/styles.css"
+          },
+          {
+            "kind": "state",
+            "command": "test ! -e /home/labex/project/styles.css"
+          },
+          {
+            "kind": "state",
+            "command": "grep -Fxq 'body{}' /home/labex/project/css/styles.css"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-3-v1",
+      "title": "Renaming a File",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đổi tên tệp",
+      "content": "Rename index.html to home.html.\n\n```bash\nmv index.html home.html\n```",
+      "content_vi": "Đổi index.html thành home.html.\n\n```bash\nmv index.html home.html\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -e /home/labex/project/home.html"
+          },
+          {
+            "kind": "state",
+            "command": "test ! -e /home/labex/project/index.html"
+          },
+          {
+            "kind": "state",
+            "command": "grep -Fxq '<h1>Home</h1>' /home/labex/project/home.html"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-4-v1",
+      "title": "Moving Multiple Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Di chuyển theo mẫu",
+      "content": "Create scripts and move every .js file into it.\n\n```bash\nmkdir scripts\nmv *.js scripts/\n```",
+      "content_vi": "Tạo scripts và chuyển mọi tệp .js vào đó.\n\n```bash\nmkdir scripts\nmv *.js scripts/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -e /home/labex/project/scripts/script.js && test -e /home/labex/project/scripts/utils.js"
+          },
+          {
+            "kind": "state",
+            "command": "test ! -e /home/labex/project/script.js && test ! -e /home/labex/project/utils.js"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-5-v1",
+      "title": "Using the -i Option for Safe Moves",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Từ chối ghi đè",
+      "content": "Create test.txt containing Test content; run mv -i test.txt home.html and answer n. Both files must survive.\n\n```bash\necho \"Test content\" > test.txt\nmv -i test.txt home.html\n```",
+      "content_vi": "Tạo test.txt chứa Test content; chạy mv -i test.txt home.html và trả lời n. Cả hai tệp phải còn.\n\n```bash\necho \"Test content\" > test.txt\nmv -i test.txt home.html\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -e /home/labex/project/test.txt && test -e /home/labex/project/home.html"
+          },
+          {
+            "kind": "state",
+            "command": "grep -Fxq 'Test content' /home/labex/project/test.txt && grep -Fxq '<h1>Home</h1>' /home/labex/project/home.html"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*mv\\s+-\\w*i\\w*\\s+(?:\\./)?test\\.txt\\s+(?:\\./)?home\\.html\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-209743-section-1-v1",
+      "title": "Exploring the Project Directory",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem dự án",
+      "content": "Inspect the starting project.\n\n```bash\npwd\nls\n```",
+      "content_vi": "Xem nội dung dự án ban đầu.\n\n```bash\npwd\nls\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*ls\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-2-v1",
+      "title": "Moving a File",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Di chuyển tệp",
+      "content": "Create css and move styles.css into it.\n\n```bash\nmkdir css\nmv styles.css css/\n```",
+      "content_vi": "Tạo css và chuyển styles.css vào đó.\n\n```bash\nmkdir css\nmv styles.css css/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -e /home/labex/project/css/styles.css"
+          },
+          {
+            "kind": "state",
+            "command": "test ! -e /home/labex/project/styles.css"
+          },
+          {
+            "kind": "state",
+            "command": "grep -Fxq 'body{}' /home/labex/project/css/styles.css"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-3-v1",
+      "title": "Renaming a File",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đổi tên tệp",
+      "content": "Rename index.html to home.html.\n\n```bash\nmv index.html home.html\n```",
+      "content_vi": "Đổi index.html thành home.html.\n\n```bash\nmv index.html home.html\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -e /home/labex/project/home.html"
+          },
+          {
+            "kind": "state",
+            "command": "test ! -e /home/labex/project/index.html"
+          },
+          {
+            "kind": "state",
+            "command": "grep -Fxq '<h1>Home</h1>' /home/labex/project/home.html"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-4-v1",
+      "title": "Moving Multiple Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Di chuyển theo mẫu",
+      "content": "Create scripts and move every .js file into it.\n\n```bash\nmkdir scripts\nmv *.js scripts/\n```",
+      "content_vi": "Tạo scripts và chuyển mọi tệp .js vào đó.\n\n```bash\nmkdir scripts\nmv *.js scripts/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -e /home/labex/project/scripts/script.js && test -e /home/labex/project/scripts/utils.js"
+          },
+          {
+            "kind": "state",
+            "command": "test ! -e /home/labex/project/script.js && test ! -e /home/labex/project/utils.js"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209743-section-5-v1",
+      "title": "Using the -i Option for Safe Moves",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Từ chối ghi đè",
+      "content": "Create test.txt containing Test content; run mv -i test.txt home.html and answer n. Both files must survive.\n\n```bash\necho \"Test content\" > test.txt\nmv -i test.txt home.html\n```",
+      "content_vi": "Tạo test.txt chứa Test content; chạy mv -i test.txt home.html và trả lời n. Cả hai tệp phải còn.\n\n```bash\necho \"Test content\" > test.txt\nmv -i test.txt home.html\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -e /home/labex/project/test.txt && test -e /home/labex/project/home.html"
+          },
+          {
+            "kind": "state",
+            "command": "grep -Fxq 'Test content' /home/labex/project/test.txt && grep -Fxq '<h1>Home</h1>' /home/labex/project/home.html"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*mv\\s+-\\w*i\\w*\\s+(?:\\./)?test\\.txt\\s+(?:\\./)?home\\.html\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-mv-command-file-moving-and-renaming-209743.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

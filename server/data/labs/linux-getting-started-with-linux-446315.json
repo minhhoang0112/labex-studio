@@ -1,0 +1,365 @@
+{
+  "id": "linux-getting-started-with-linux-446315",
+  "course_id": "linux-for-noobs",
+  "order": 1,
+  "title": "Getting Started with Linux",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "30 mins",
+  "overview": "The terminal is a text-based way to communicate with Linux. You type a command at the prompt, press Enter, and Linux prints output or changes something in the system. At first, the prompt may look unf",
+  "source_url": "https://labex.io/tutorials/linux-getting-started-with-linux-446315",
+  "source_lab_id": 446315,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "The terminal is a text-based way to communicate with Linux. You type a command at the prompt, press Enter, and Linux prints output or changes something in the system. At first, the prompt may look unfamiliar, but every interaction follows this same simple pattern.\n\nIn this first lab, you will run safe commands that print text, show the date, display a calendar, calculate numbers, and create text art. You will also save a few results under `/home/labex/project/first-commands` so you can distinguish temporary terminal output from information stored in a file.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Terminal là một cách dựa trên văn bản để giao tiếp với Linux. Bạn gõ một lệnh tại dấu nhắc lệnh (prompt), nhấn Enter, và Linux sẽ in ra kết quả đầu ra hoặc thay đổi một cái gì đó trong hệ thống. Thoạt đầu, dấu nhắc lệnh có vẻ xa lạ, nhưng mọi tương tác đều tuân theo cùng một mẫu đơn giản này.\n\nTrong phòng thực hành đầu tiên này, bạn sẽ chạy các lệnh an toàn để in văn bản, hiển thị ngày tháng, hiển thị lịch, tính toán các con số và tạo nghệ thuật văn bản (text art). Bạn cũng sẽ lưu một vài kết quả vào thư mục `/home/labex/project/first-commands` để có thể phân biệt giữa kết quả đầu ra tạm thời của terminal với thông tin được lưu trữ trong một tệp."
+    },
+    {
+      "id": "source-446315-section-1-v3",
+      "title": "Run Your First Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "> **Tip:** If you are new to LabEx, we recommend starting with the Linux Learning Path.\n\nIn this step, you will learn how to recognize the terminal prompt, run a command, and read its output.\n\nThe blinking cursor appears after a prompt. The prompt tells you that the shell is ready for a command; you do not type the prompt itself. Start by moving into the workspace prepared for this lab:\n\n```bash\ncd /home/labex/project/first-commands\n```\n\n`cd` means “change directory.” A directory is Linux's name for a folder. Later labs explore directories in detail; for now, this command gives all your saved results one predictable home.\n\nRun `pwd`, which means “print working directory”:\n\n```bash\npwd\n```\n\nThe output should be the directory you just entered:\n\n```text\n/home/labex/project/first-commands\n```\n\nNow use `echo` to ask the shell to print text:\n\n```bash\necho \"Hello, Linux\"\n```\n\nYou should see:\n\n```text\nHello, Linux\n```\n\nThe quotation marks keep the words together as one text value. Now save the greeting in a file. The `>` symbol is called **output redirection**: the shell creates the file named on its right and sends the command's normal output there instead of displaying it. If the file already exists, `>` replaces its previous contents, so check the destination before using it with important data:\n\n```bash\necho \"Hello, Linux\" > greeting.txt\n```\n\nThis command prints nothing on screen because the output went to `greeting.txt`.\n\nRead the saved file with `cat`:\n\n```bash\ncat greeting.txt\n```\n\nSeeing `Hello, Linux` again proves that the text now exists in `greeting.txt`, not only on the terminal screen.",
+      "task": "Thực hiện hướng dẫn: Run Your First Command",
+      "hint": "Chạy lệnh: cd /home/labex/project/first-commands",
+      "title_vi": "Chạy Câu Lệnh Đầu Tiên Của Bạn",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Chạy Câu Lệnh Đầu Tiên Của Bạn",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "> **Mẹo:** Nếu bạn là người mới làm quen với LabEx, chúng tôi khuyên bạn nên bắt đầu với Lộ trình Học tập Linux (Linux Learning Path).\n\nTrong bước này, bạn sẽ học cách nhận diện dấu nhắc lệnh (terminal prompt), chạy một lệnh và đọc kết quả đầu ra của lệnh đó.\n\nCon trỏ nhấp nháy xuất hiện sau dấu nhắc lệnh. Dấu nhắc lệnh cho biết shell đã sẵn sàng nhận lệnh; bạn không cần gõ lại chính dấu nhắc lệnh đó. Hãy bắt đầu bằng cách di chuyển vào không gian làm việc đã được chuẩn bị cho phòng thực hành này:\n\n```bash\ncd /home/labex/project/first-commands\n```\n\n`cd` có nghĩa là “change directory” (thay đổi thư mục). Thư mục là tên gọi trong Linux dùng để chỉ một thư mục (folder). Các phòng thực hành sau sẽ khám phá chi tiết về các thư mục; hiện tại, lệnh này giúp tất cả các kết quả đã lưu của bạn có một vị trí cố định, dễ đoán.\n\nChạy `pwd`, có nghĩa là “print working directory” (in thư mục làm việc hiện tại):\n\n```bash\npwd\n```\n\nKết quả đầu ra sẽ là thư mục bạn vừa truy cập:\n\n```text\n/home/labex/project/first-commands\n```\n\nBây giờ, hãy sử dụng `echo` để yêu cầu shell in ra văn bản:\n\n```bash\necho \"Hello, Linux\"\n```\n\nBạn sẽ thấy:\n\n```text\nHello, Linux\n```\n\nCác dấu ngoặc kép giúp giữ các từ lại với nhau thành một giá trị văn bản duy nhất. Bây giờ, hãy lưu lời chào này vào một tệp. Ký hiệu `>` được gọi là **chuyển hướng đầu ra** (output redirection): shell tạo ra tệp có tên ở bên phải của nó và gửi kết quả đầu ra thông thường của lệnh vào đó thay vì hiển thị lên màn hình. Nếu tệp đã tồn tại, `>` sẽ thay thế nội dung trước đó của nó, vì vậy hãy kiểm tra đích đến trước khi sử dụng nó với dữ liệu quan trọng:\n\n```bash\necho \"Hello, Linux\" > greeting.txt\n```\n\nLệnh này không in gì trên màn hình vì đầu ra đã đi vào tệp `greeting.txt`.\n\nĐọc tệp đã lưu bằng lệnh `cat`:\n\n```bash\ncat greeting.txt\n```\n\nViệc nhìn thấy dòng chữ `Hello, Linux` một lần nữa chứng minh rằng văn bản hiện đã tồn tại trong `greeting.txt`, chứ không chỉ hiển thị trên màn hình terminal.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/first-commands"
+    },
+    {
+      "id": "source-446315-section-2-v3",
+      "title": "Read Dates and Calendars",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will ask Linux for time information and learn that command output can change with the environment.\n\nRun `date` with no options:\n\n```bash\ndate\n```\n\nLinux prints the current weekday, date, time, time zone, and year. The exact value changes every second, so your output will differ from examples you may see elsewhere.\n\nCommands often accept options that change their output. A `date` format beginning with `+` lets you choose stable fields. `%F` means the ISO date format `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nSave today's ISO date. As in the previous step, `>` redirects the output into a file and replaces that file if it already exists:\n\n```bash\ndate +%F > today.txt\n```\n\nThe `cal` command displays the current month as a calendar:\n\n```bash\ncal\n```\n\nThe month and weekday layout depend on the current date and locale. Save that output too:\n\n```bash\ncal > calendar.txt\n```\n\nThe `>` symbol sends output to a file instead of the screen. Display the saved calendar to confirm it was written:\n\n```bash\ncat calendar.txt\n```\n\nYou will learn redirection thoroughly later. For now, remember that terminal output can either be viewed immediately or saved for later use.",
+      "task": "Thực hiện hướng dẫn: Read Dates and Calendars",
+      "hint": "Chạy lệnh: date",
+      "title_vi": "Xem Ngày Giờ và Lịch Hệ Thống",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu lệnh cal; image hiện chưa xác nhận ncal/cal. Không tự báo đạt chỉ từ lệnh date."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Xem Ngày Giờ và Lịch Hệ Thống",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ yêu cầu Linux cung cấp thông tin thời gian và tìm hiểu rằng đầu ra của lệnh có thể thay đổi theo môi trường.\n\nChạy `date` không có tùy chọn nào:\n\n```bash\ndate\n```\n\nLinux in ra ngày trong tuần, ngày tháng, thời gian, múi giờ và năm hiện tại. Giá trị chính xác thay đổi theo từng giây, vì vậy đầu ra của bạn sẽ khác với các ví dụ bạn có thể thấy ở nơi khác.\n\nCác lệnh thường chấp nhận các tùy chọn làm thay đổi đầu ra của chúng. Định dạng `date` bắt đầu bằng `+` cho phép bạn chọn các trường ổn định. `%F` nghĩa là định dạng ngày ISO `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nLưu ngày ISO của hôm nay. Giống như trong bước trước, `>` chuyển hướng đầu ra vào một tệp và ghi đè tệp đó nếu nó đã tồn tại:\n\n```bash\ndate +%F > today.txt\n```\n\nLệnh `cal` hiển thị tháng hiện tại dưới dạng lịch:\n\n```bash\ncal\n```\n\nBố cục tháng và ngày trong tuần phụ thuộc vào ngày hiện tại và locale (vùng). Hãy lưu đầu ra đó lại:\n\n```bash\ncal > calendar.txt\n```\n\nKý hiệu `>` gửi đầu ra đến một tệp thay vì màn hình. Hiển thị lịch đã lưu để xác nhận nó đã được ghi:\n\n```bash\ncat calendar.txt\n```\n\nBạn sẽ tìm hiểu kỹ lưỡng về việc chuyển hướng sau. Hiện tại, hãy nhớ rằng đầu ra của terminal có thể được xem ngay lập tức hoặc được lưu lại để sử dụng sau.",
+      "hint_vi": "Chạy lệnh: date"
+    },
+    {
+      "id": "source-446315-section-3-v3",
+      "title": "Calculate with Expr",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `expr` for integer arithmetic and observe why spaces matter in shell commands.\n\nThe shell separates a command line into words at spaces. `expr` expects the first number, operator, and second number as separate arguments. Add two numbers:\n\n```bash\nexpr 5 + 3\n```\n\nThe result is:\n\n```text\n8\n```\n\nTry subtraction and division:\n\n```bash\nexpr 20 - 7\n```\n\n```bash\nexpr 24 / 6\n```\n\nMultiplication needs one extra detail. The shell treats `*` as a filename wildcard, so escape it with a backslash to pass a literal multiplication operator to `expr`:\n\n```bash\nexpr 6 \\* 7\n```\n\nSave the multiplication result in a file. This uses the same output redirection you practiced earlier, so the terminal stays quiet while `calculation.txt` receives `42`:\n\n```bash\nexpr 6 \\* 7 > calculation.txt\n```\n\nDisplay the file:\n\n```bash\ncat calculation.txt\n```\n\nYou should see `42`. Keeping this first exercise simple lets you focus on the command structure: command name, space-separated arguments, and optional output destination.",
+      "task": "Thực hiện hướng dẫn: Calculate with Expr",
+      "hint": "Chạy lệnh: expr 5 + 3",
+      "title_vi": "Tính Toán Số Học với Expr",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tính Toán Số Học với Expr",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng `expr` để thực hiện phép tính số học số nguyên và quan sát lý do tại sao khoảng trắng lại quan trọng trong các lệnh shell.\n\nShell tách một dòng lệnh thành các từ dựa trên khoảng trắng. `expr` mong đợi số thứ nhất, toán tử và số thứ hai là các đối số riêng biệt. Cộng hai số:\n\n```bash\nexpr 5 + 3\n```\n\nKết quả là:\n\n```text\n8\n```\n\nThử phép trừ và phép chia:\n\n```bash\nexpr 20 - 7\n```\n\n```bash\nexpr 24 / 6\n```\n\nPhép nhân cần thêm một chi tiết. Shell coi `*` là một ký tự đại diện (wildcard) tên tệp, vì vậy hãy thoát nó bằng dấu gạch chéo ngược để chuyển toán tử phép nhân theo nghĩa đen tới `expr`:\n\n```bash\nexpr 6 \\* 7\n```\n\nLưu kết quả phép nhân vào một tệp. Thao tác này sử dụng cùng một tính năng chuyển hướng đầu ra mà bạn đã luyện tập trước đó, do đó terminal sẽ giữ im lặng trong khi tệp `calculation.txt` nhận giá trị `42`:\n\n```bash\nexpr 6 \\* 7 > calculation.txt\n```\n\nHiển thị tệp:\n\n```bash\ncat calculation.txt\n```\n\nBạn sẽ thấy `42`. Việc giữ cho bài tập đầu tiên này đơn giản giúp bạn tập trung vào cấu trúc lệnh: tên lệnh, các đối số được phân tách bằng khoảng trắng và đích đầu ra tùy chọn.",
+      "hint_vi": "Chạy lệnh: expr 5 + 3"
+    },
+    {
+      "id": "source-446315-section-4-v3",
+      "title": "Turn Text into ASCII Art",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use a command option to change how `figlet` formats text.\n\n`figlet` builds large letters from ordinary terminal characters. Run it with a short word:\n\n```bash\nfiglet \"LabEx\"\n```\n\nThe output spans several lines. This is called ASCII art because it uses text characters rather than image pixels.\n\nMany Linux options begin with `-`. For `figlet`, `-f` selects a font, and `slant` is the font name. Try it:\n\n```bash\nfiglet -f slant \"Linux\"\n```\n\nSave the first design to a file:\n\n```bash\nfiglet \"LabEx\" > labex-art.txt\n```\n\nInspect the beginning of the saved art:\n\n```bash\nhead labex-art.txt\n```\n\n`head` displays the first ten lines by default. You should see the same multi-line design that appeared in the terminal.",
+      "task": "Thực hiện hướng dẫn: Turn Text into ASCII Art",
+      "hint": "Chạy lệnh: figlet \"LabEx\"",
+      "title_vi": "Tạo Chữ Nghệ Thuật ASCII",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tạo Chữ Nghệ Thuật ASCII",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng một tùy chọn câu lệnh để thay đổi cách `figlet` định dạng văn bản.\n\n`figlet` tạo ra các chữ cái lớn từ các ký tự terminal thông thường. Hãy chạy nó với một từ ngắn:\n\n```bash\nfiglet \"LabEx\"\n```\n\nĐầu ra kéo dài qua nhiều dòng. Đây được gọi là nghệ thuật ASCII (ASCII art) vì nó sử dụng các ký tự văn bản thay vì các điểm ảnh hình ảnh.\n\nNhiều tùy chọn trong Linux bắt đầu bằng `-`. Đối với `figlet`, `-f` chọn một phông chữ, và `slant` là tên phông chữ. Hãy thử nó:\n\n```bash\nfiglet -f slant \"Linux\"\n```\n\nLưu thiết kế đầu tiên vào một tệp:\n\n```bash\nfiglet \"LabEx\" > labex-art.txt\n```\n\nKiểm tra phần đầu của tác phẩm nghệ thuật đã lưu:\n\n```bash\nhead labex-art.txt\n```\n\n`head` hiển thị mười dòng đầu tiên theo mặc định. Bạn sẽ thấy thiết kế nhiều dòng tương tự đã xuất hiện trong terminal.",
+      "hint_vi": "Chạy lệnh: figlet \"LabEx\""
+    },
+    {
+      "id": "source-446315-section-5-v3",
+      "title": "Reset a Busy Terminal",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will clear old output and distinguish screen cleanup from deleting files.\n\nAfter several commands, the terminal can become visually crowded. Run:\n\n```bash\nclear\n```\n\n`clear` moves the old terminal output out of view. It does not remove commands, files, or directories. Most terminals also support `Ctrl+L` as a keyboard shortcut for the same visual cleanup.\n\nProve that your earlier files still exist by listing the workspace:\n\n```bash\nls\n```\n\nYou should still see `greeting.txt`, `today.txt`, `calendar.txt`, `calculations.txt`, and `labex-art.txt`.\n\nCreate a final marker after cleaning the screen:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nDisplay the marker to check it:\n\n```bash\ncat terminal-ready.txt\n```\n\nThis final command reinforces an important idea: clearing the display changes only what you currently see, while files remain stored on disk.",
+      "task": "Thực hiện hướng dẫn: Reset a Busy Terminal",
+      "hint": "Chạy lệnh: clear",
+      "title_vi": "Khôi Phục và Dọn Sạch Terminal",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Khôi Phục và Dọn Sạch Terminal",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xóa đầu ra cũ và phân biệt giữa việc làm sạch màn hình và việc xóa tệp.\n\nSau một số lệnh, cửa sổ terminal có thể trở nên lộn xộn về mặt thị giác. Chạy:\n\n```bash\nclear\n```\n\n`clear` di chuyển đầu ra terminal cũ ra khỏi tầm nhìn. Nó không xóa các lệnh, tệp hoặc thư mục. Hầu hết các terminal cũng hỗ trợ `Ctrl+L` như một phím tắt để làm sạch trực quan tương tự.\n\nChứng minh rằng các tệp trước đó của bạn vẫn tồn tại bằng cách liệt kê không gian làm việc:\n\n```bash\nls\n```\n\nBạn vẫn sẽ thấy `greeting.txt`, `today.txt`, `calendar.txt`, `calculations.txt` và `labex-art.txt`.\n\nTạo một điểm đánh dấu cuối cùng sau khi làm sạch màn hình:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nHiển thị điểm đánh dấu để kiểm tra nó:\n\n```bash\ncat terminal-ready.txt\n```\n\nLệnh cuối cùng này củng cố một ý tưởng quan trọng: việc xóa màn hình chỉ thay đổi những gì bạn đang nhìn thấy, trong khi các tệp vẫn được lưu trữ trên đĩa.",
+      "hint_vi": "Chạy lệnh: clear"
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You learned the terminal's basic interaction pattern: type a command, press Enter, and interpret the result. You practiced `pwd`, `echo`, `date`, `cal`, `expr`, `figlet`, and `clear`; used simple options; and saved output in files. You are now ready to apply these basics in a small terminal challenge before learning broader file operations.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã học được mẫu tương tác cơ bản của terminal: gõ một lệnh, nhấn Enter và diễn giải kết quả. Bạn đã thực hành các lệnh `pwd`, `echo`, `date`, `cal`, `expr`, `figlet` và `clear`; sử dụng các tùy chọn đơn giản; và lưu đầu ra vào các tệp. Giờ đây, bạn đã sẵn sàng áp dụng những kiến thức cơ bản này vào một thử thách terminal nhỏ trước khi tìm hiểu các thao tác tệp rộng hơn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-446315-section-1-v3",
+      "title": "Run Your First Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "> **Tip:** If you are new to LabEx, we recommend starting with the Linux Learning Path.\n\nIn this step, you will learn how to recognize the terminal prompt, run a command, and read its output.\n\nThe blinking cursor appears after a prompt. The prompt tells you that the shell is ready for a command; you do not type the prompt itself. Start by moving into the workspace prepared for this lab:\n\n```bash\ncd /home/labex/project/first-commands\n```\n\n`cd` means “change directory.” A directory is Linux's name for a folder. Later labs explore directories in detail; for now, this command gives all your saved results one predictable home.\n\nRun `pwd`, which means “print working directory”:\n\n```bash\npwd\n```\n\nThe output should be the directory you just entered:\n\n```text\n/home/labex/project/first-commands\n```\n\nNow use `echo` to ask the shell to print text:\n\n```bash\necho \"Hello, Linux\"\n```\n\nYou should see:\n\n```text\nHello, Linux\n```\n\nThe quotation marks keep the words together as one text value. Now save the greeting in a file. The `>` symbol is called **output redirection**: the shell creates the file named on its right and sends the command's normal output there instead of displaying it. If the file already exists, `>` replaces its previous contents, so check the destination before using it with important data:\n\n```bash\necho \"Hello, Linux\" > greeting.txt\n```\n\nThis command prints nothing on screen because the output went to `greeting.txt`.\n\nRead the saved file with `cat`:\n\n```bash\ncat greeting.txt\n```\n\nSeeing `Hello, Linux` again proves that the text now exists in `greeting.txt`, not only on the terminal screen.",
+      "task": "Thực hiện hướng dẫn: Run Your First Command",
+      "hint": "Chạy lệnh: cd /home/labex/project/first-commands",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Chạy Câu Lệnh Đầu Tiên Của Bạn",
+      "task_vi": "Thực hiện hướng dẫn: Chạy Câu Lệnh Đầu Tiên Của Bạn",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "> **Mẹo:** Nếu bạn là người mới làm quen với LabEx, chúng tôi khuyên bạn nên bắt đầu với Lộ trình Học tập Linux (Linux Learning Path).\n\nTrong bước này, bạn sẽ học cách nhận diện dấu nhắc lệnh (terminal prompt), chạy một lệnh và đọc kết quả đầu ra của lệnh đó.\n\nCon trỏ nhấp nháy xuất hiện sau dấu nhắc lệnh. Dấu nhắc lệnh cho biết shell đã sẵn sàng nhận lệnh; bạn không cần gõ lại chính dấu nhắc lệnh đó. Hãy bắt đầu bằng cách di chuyển vào không gian làm việc đã được chuẩn bị cho phòng thực hành này:\n\n```bash\ncd /home/labex/project/first-commands\n```\n\n`cd` có nghĩa là “change directory” (thay đổi thư mục). Thư mục là tên gọi trong Linux dùng để chỉ một thư mục (folder). Các phòng thực hành sau sẽ khám phá chi tiết về các thư mục; hiện tại, lệnh này giúp tất cả các kết quả đã lưu của bạn có một vị trí cố định, dễ đoán.\n\nChạy `pwd`, có nghĩa là “print working directory” (in thư mục làm việc hiện tại):\n\n```bash\npwd\n```\n\nKết quả đầu ra sẽ là thư mục bạn vừa truy cập:\n\n```text\n/home/labex/project/first-commands\n```\n\nBây giờ, hãy sử dụng `echo` để yêu cầu shell in ra văn bản:\n\n```bash\necho \"Hello, Linux\"\n```\n\nBạn sẽ thấy:\n\n```text\nHello, Linux\n```\n\nCác dấu ngoặc kép giúp giữ các từ lại với nhau thành một giá trị văn bản duy nhất. Bây giờ, hãy lưu lời chào này vào một tệp. Ký hiệu `>` được gọi là **chuyển hướng đầu ra** (output redirection): shell tạo ra tệp có tên ở bên phải của nó và gửi kết quả đầu ra thông thường của lệnh vào đó thay vì hiển thị lên màn hình. Nếu tệp đã tồn tại, `>` sẽ thay thế nội dung trước đó của nó, vì vậy hãy kiểm tra đích đến trước khi sử dụng nó với dữ liệu quan trọng:\n\n```bash\necho \"Hello, Linux\" > greeting.txt\n```\n\nLệnh này không in gì trên màn hình vì đầu ra đã đi vào tệp `greeting.txt`.\n\nĐọc tệp đã lưu bằng lệnh `cat`:\n\n```bash\ncat greeting.txt\n```\n\nViệc nhìn thấy dòng chữ `Hello, Linux` một lần nữa chứng minh rằng văn bản hiện đã tồn tại trong `greeting.txt`, chứ không chỉ hiển thị trên màn hình terminal.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/first-commands"
+    },
+    {
+      "id": "source-446315-section-2-v3",
+      "title": "Read Dates and Calendars",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will ask Linux for time information and learn that command output can change with the environment.\n\nRun `date` with no options:\n\n```bash\ndate\n```\n\nLinux prints the current weekday, date, time, time zone, and year. The exact value changes every second, so your output will differ from examples you may see elsewhere.\n\nCommands often accept options that change their output. A `date` format beginning with `+` lets you choose stable fields. `%F` means the ISO date format `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nSave today's ISO date. As in the previous step, `>` redirects the output into a file and replaces that file if it already exists:\n\n```bash\ndate +%F > today.txt\n```\n\nThe `cal` command displays the current month as a calendar:\n\n```bash\ncal\n```\n\nThe month and weekday layout depend on the current date and locale. Save that output too:\n\n```bash\ncal > calendar.txt\n```\n\nThe `>` symbol sends output to a file instead of the screen. Display the saved calendar to confirm it was written:\n\n```bash\ncat calendar.txt\n```\n\nYou will learn redirection thoroughly later. For now, remember that terminal output can either be viewed immediately or saved for later use.",
+      "task": "Thực hiện hướng dẫn: Read Dates and Calendars",
+      "hint": "Chạy lệnh: date",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu lệnh cal; image hiện chưa xác nhận ncal/cal. Không tự báo đạt chỉ từ lệnh date."
+      },
+      "title_vi": "Xem Ngày Giờ và Lịch Hệ Thống",
+      "task_vi": "Thực hiện hướng dẫn: Xem Ngày Giờ và Lịch Hệ Thống",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ yêu cầu Linux cung cấp thông tin thời gian và tìm hiểu rằng đầu ra của lệnh có thể thay đổi theo môi trường.\n\nChạy `date` không có tùy chọn nào:\n\n```bash\ndate\n```\n\nLinux in ra ngày trong tuần, ngày tháng, thời gian, múi giờ và năm hiện tại. Giá trị chính xác thay đổi theo từng giây, vì vậy đầu ra của bạn sẽ khác với các ví dụ bạn có thể thấy ở nơi khác.\n\nCác lệnh thường chấp nhận các tùy chọn làm thay đổi đầu ra của chúng. Định dạng `date` bắt đầu bằng `+` cho phép bạn chọn các trường ổn định. `%F` nghĩa là định dạng ngày ISO `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nLưu ngày ISO của hôm nay. Giống như trong bước trước, `>` chuyển hướng đầu ra vào một tệp và ghi đè tệp đó nếu nó đã tồn tại:\n\n```bash\ndate +%F > today.txt\n```\n\nLệnh `cal` hiển thị tháng hiện tại dưới dạng lịch:\n\n```bash\ncal\n```\n\nBố cục tháng và ngày trong tuần phụ thuộc vào ngày hiện tại và locale (vùng). Hãy lưu đầu ra đó lại:\n\n```bash\ncal > calendar.txt\n```\n\nKý hiệu `>` gửi đầu ra đến một tệp thay vì màn hình. Hiển thị lịch đã lưu để xác nhận nó đã được ghi:\n\n```bash\ncat calendar.txt\n```\n\nBạn sẽ tìm hiểu kỹ lưỡng về việc chuyển hướng sau. Hiện tại, hãy nhớ rằng đầu ra của terminal có thể được xem ngay lập tức hoặc được lưu lại để sử dụng sau.",
+      "hint_vi": "Chạy lệnh: date"
+    },
+    {
+      "id": "source-446315-section-3-v3",
+      "title": "Calculate with Expr",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `expr` for integer arithmetic and observe why spaces matter in shell commands.\n\nThe shell separates a command line into words at spaces. `expr` expects the first number, operator, and second number as separate arguments. Add two numbers:\n\n```bash\nexpr 5 + 3\n```\n\nThe result is:\n\n```text\n8\n```\n\nTry subtraction and division:\n\n```bash\nexpr 20 - 7\n```\n\n```bash\nexpr 24 / 6\n```\n\nMultiplication needs one extra detail. The shell treats `*` as a filename wildcard, so escape it with a backslash to pass a literal multiplication operator to `expr`:\n\n```bash\nexpr 6 \\* 7\n```\n\nSave the multiplication result in a file. This uses the same output redirection you practiced earlier, so the terminal stays quiet while `calculation.txt` receives `42`:\n\n```bash\nexpr 6 \\* 7 > calculation.txt\n```\n\nDisplay the file:\n\n```bash\ncat calculation.txt\n```\n\nYou should see `42`. Keeping this first exercise simple lets you focus on the command structure: command name, space-separated arguments, and optional output destination.",
+      "task": "Thực hiện hướng dẫn: Calculate with Expr",
+      "hint": "Chạy lệnh: expr 5 + 3",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Tính Toán Số Học với Expr",
+      "task_vi": "Thực hiện hướng dẫn: Tính Toán Số Học với Expr",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng `expr` để thực hiện phép tính số học số nguyên và quan sát lý do tại sao khoảng trắng lại quan trọng trong các lệnh shell.\n\nShell tách một dòng lệnh thành các từ dựa trên khoảng trắng. `expr` mong đợi số thứ nhất, toán tử và số thứ hai là các đối số riêng biệt. Cộng hai số:\n\n```bash\nexpr 5 + 3\n```\n\nKết quả là:\n\n```text\n8\n```\n\nThử phép trừ và phép chia:\n\n```bash\nexpr 20 - 7\n```\n\n```bash\nexpr 24 / 6\n```\n\nPhép nhân cần thêm một chi tiết. Shell coi `*` là một ký tự đại diện (wildcard) tên tệp, vì vậy hãy thoát nó bằng dấu gạch chéo ngược để chuyển toán tử phép nhân theo nghĩa đen tới `expr`:\n\n```bash\nexpr 6 \\* 7\n```\n\nLưu kết quả phép nhân vào một tệp. Thao tác này sử dụng cùng một tính năng chuyển hướng đầu ra mà bạn đã luyện tập trước đó, do đó terminal sẽ giữ im lặng trong khi tệp `calculation.txt` nhận giá trị `42`:\n\n```bash\nexpr 6 \\* 7 > calculation.txt\n```\n\nHiển thị tệp:\n\n```bash\ncat calculation.txt\n```\n\nBạn sẽ thấy `42`. Việc giữ cho bài tập đầu tiên này đơn giản giúp bạn tập trung vào cấu trúc lệnh: tên lệnh, các đối số được phân tách bằng khoảng trắng và đích đầu ra tùy chọn.",
+      "hint_vi": "Chạy lệnh: expr 5 + 3"
+    },
+    {
+      "id": "source-446315-section-4-v3",
+      "title": "Turn Text into ASCII Art",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use a command option to change how `figlet` formats text.\n\n`figlet` builds large letters from ordinary terminal characters. Run it with a short word:\n\n```bash\nfiglet \"LabEx\"\n```\n\nThe output spans several lines. This is called ASCII art because it uses text characters rather than image pixels.\n\nMany Linux options begin with `-`. For `figlet`, `-f` selects a font, and `slant` is the font name. Try it:\n\n```bash\nfiglet -f slant \"Linux\"\n```\n\nSave the first design to a file:\n\n```bash\nfiglet \"LabEx\" > labex-art.txt\n```\n\nInspect the beginning of the saved art:\n\n```bash\nhead labex-art.txt\n```\n\n`head` displays the first ten lines by default. You should see the same multi-line design that appeared in the terminal.",
+      "task": "Thực hiện hướng dẫn: Turn Text into ASCII Art",
+      "hint": "Chạy lệnh: figlet \"LabEx\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Tạo Chữ Nghệ Thuật ASCII",
+      "task_vi": "Thực hiện hướng dẫn: Tạo Chữ Nghệ Thuật ASCII",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng một tùy chọn câu lệnh để thay đổi cách `figlet` định dạng văn bản.\n\n`figlet` tạo ra các chữ cái lớn từ các ký tự terminal thông thường. Hãy chạy nó với một từ ngắn:\n\n```bash\nfiglet \"LabEx\"\n```\n\nĐầu ra kéo dài qua nhiều dòng. Đây được gọi là nghệ thuật ASCII (ASCII art) vì nó sử dụng các ký tự văn bản thay vì các điểm ảnh hình ảnh.\n\nNhiều tùy chọn trong Linux bắt đầu bằng `-`. Đối với `figlet`, `-f` chọn một phông chữ, và `slant` là tên phông chữ. Hãy thử nó:\n\n```bash\nfiglet -f slant \"Linux\"\n```\n\nLưu thiết kế đầu tiên vào một tệp:\n\n```bash\nfiglet \"LabEx\" > labex-art.txt\n```\n\nKiểm tra phần đầu của tác phẩm nghệ thuật đã lưu:\n\n```bash\nhead labex-art.txt\n```\n\n`head` hiển thị mười dòng đầu tiên theo mặc định. Bạn sẽ thấy thiết kế nhiều dòng tương tự đã xuất hiện trong terminal.",
+      "hint_vi": "Chạy lệnh: figlet \"LabEx\""
+    },
+    {
+      "id": "source-446315-section-5-v3",
+      "title": "Reset a Busy Terminal",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will clear old output and distinguish screen cleanup from deleting files.\n\nAfter several commands, the terminal can become visually crowded. Run:\n\n```bash\nclear\n```\n\n`clear` moves the old terminal output out of view. It does not remove commands, files, or directories. Most terminals also support `Ctrl+L` as a keyboard shortcut for the same visual cleanup.\n\nProve that your earlier files still exist by listing the workspace:\n\n```bash\nls\n```\n\nYou should still see `greeting.txt`, `today.txt`, `calendar.txt`, `calculations.txt`, and `labex-art.txt`.\n\nCreate a final marker after cleaning the screen:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nDisplay the marker to check it:\n\n```bash\ncat terminal-ready.txt\n```\n\nThis final command reinforces an important idea: clearing the display changes only what you currently see, while files remain stored on disk.",
+      "task": "Thực hiện hướng dẫn: Reset a Busy Terminal",
+      "hint": "Chạy lệnh: clear",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Khôi Phục và Dọn Sạch Terminal",
+      "task_vi": "Thực hiện hướng dẫn: Khôi Phục và Dọn Sạch Terminal",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xóa đầu ra cũ và phân biệt giữa việc làm sạch màn hình và việc xóa tệp.\n\nSau một số lệnh, cửa sổ terminal có thể trở nên lộn xộn về mặt thị giác. Chạy:\n\n```bash\nclear\n```\n\n`clear` di chuyển đầu ra terminal cũ ra khỏi tầm nhìn. Nó không xóa các lệnh, tệp hoặc thư mục. Hầu hết các terminal cũng hỗ trợ `Ctrl+L` như một phím tắt để làm sạch trực quan tương tự.\n\nChứng minh rằng các tệp trước đó của bạn vẫn tồn tại bằng cách liệt kê không gian làm việc:\n\n```bash\nls\n```\n\nBạn vẫn sẽ thấy `greeting.txt`, `today.txt`, `calendar.txt`, `calculations.txt` và `labex-art.txt`.\n\nTạo một điểm đánh dấu cuối cùng sau khi làm sạch màn hình:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nHiển thị điểm đánh dấu để kiểm tra nó:\n\n```bash\ncat terminal-ready.txt\n```\n\nLệnh cuối cùng này củng cố một ý tưởng quan trọng: việc xóa màn hình chỉ thay đổi những gì bạn đang nhìn thấy, trong khi các tệp vẫn được lưu trữ trên đĩa.",
+      "hint_vi": "Chạy lệnh: clear"
+    }
+  ],
+  "title_vi": "Bắt Đầu Với Terminal Linux",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-getting-started-with-linux-446315.json"
+}

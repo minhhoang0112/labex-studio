@@ -1,0 +1,125 @@
+{
+  "id": "linux-extracting-mails-and-numbers-17991",
+  "course_id": "linux-for-noobs",
+  "order": 21,
+  "title": "Extract Unique Email Addresses",
+  "title_vi": "Trích xuất các địa chỉ email không trùng lặp",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "overview": "An incident handover note mentions several contact addresses, including a repeated address and malformed lookalikes. The next shift needs one clean contact list.  The preceding regular-expression lab",
+  "source_url": "https://labex.io/tutorials/linux-extracting-mails-and-numbers-17991",
+  "source_lab_id": 17991,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "An incident handover note mentions several contact addresses, including a repeated address and malformed lookalikes. The next shift needs one clean contact list.\n\nThe preceding regular-expression lab practiced the email pattern and match-only output. Earlier labs introduced sorting and duplicate removal.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Ghi chú bàn giao sự cố nhắc đến một số địa chỉ liên hệ, trong đó có địa chỉ lặp lại và các chuỗi gần giống nhưng sai định dạng. Ca trực tiếp theo cần một danh sách liên hệ sạch.\n\nBài thực hành biểu thức chính quy trước đó đã luyện mẫu email và cách chỉ xuất phần khớp. Các bài trước đã giới thiệu sắp xếp và loại bỏ bản trùng."
+    },
+    {
+      "id": "source-17991-section-1-v3",
+      "title": "Build the Contact List",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/extraction-challenge/handover.txt` mixes valid email addresses, one duplicate, and malformed lookalikes.\n\n### Scope\n\n- Extract only complete email-address matches.\n- Sort the extracted addresses alphabetically.\n- Keep each distinct address once.\n- Save the result as `emails.txt`.\n\n### Your Goal\n\nCreate one sorted, duplicate-free list of valid email addresses from the handover note.\n\n### Acceptance Criteria\n\n- `emails.txt` contains exactly the three valid addresses, one per line.\n- The addresses are alphabetically sorted and not repeated.\n- The malformed lookalikes are excluded.\n\n### Hints\n\nWhich regular expression can I reuse?\n\nThe preceding guided lab showed an extended `grep` pattern for extracting email-shaped matches. Send those matches through the familiar sort-then-`uniq` pipeline.",
+      "title_vi": "Xây dựng danh sách liên hệ",
+      "task": "Thực hiện hướng dẫn: Build the Contact List",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/extraction-challenge/emails.txt <(printf %s 'alice@example.com\nbob@example.net\ncarol@example.org\n') && cmp -s /home/labex/project/extraction-challenge/handover.txt <(printf %s 'Email alice@example.com then bob@example.net. Duplicate alice@example.com. Owner carol@example.org. Bad user@ and @invalid.\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/extraction-challenge/handover.txt` chứa lẫn địa chỉ email hợp lệ, một địa chỉ trùng và các chuỗi gần giống nhưng sai định dạng.\n\n### Phạm vi\n\n- Chỉ trích xuất phần khớp là địa chỉ email đầy đủ.\n- Sắp xếp các địa chỉ đã trích xuất theo thứ tự chữ cái.\n- Chỉ giữ mỗi địa chỉ khác nhau một lần.\n- Lưu kết quả thành `emails.txt`.\n\n### Mục tiêu của bạn\n\nTạo một danh sách địa chỉ email hợp lệ từ ghi chú bàn giao, đã sắp xếp và không trùng lặp.\n\n### Tiêu chí đạt\n\n- `emails.txt` chứa đúng ba địa chỉ hợp lệ, mỗi dòng một địa chỉ.\n- Các địa chỉ được sắp xếp theo thứ tự chữ cái và không lặp lại.\n- Những chuỗi gần giống nhưng sai định dạng bị loại bỏ.\n\n### Gợi ý\n\nTôi có thể dùng lại biểu thức chính quy nào?\n\nBài hướng dẫn trước đã trình bày mẫu `grep` mở rộng để trích xuất phần khớp có dạng email. Chuyển các phần khớp đó qua pipeline quen thuộc gồm sắp xếp rồi `uniq`.",
+      "task_vi": "Thực hiện hướng dẫn: Xây dựng danh sách liên hệ",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You extracted one kind of value with a taught regular expression and normalized the result with familiar pipeline commands.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã trích xuất một loại giá trị bằng biểu thức chính quy đã học và chuẩn hóa kết quả bằng những lệnh pipeline quen thuộc."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-17991-section-1-v3",
+      "title": "Build the Contact List",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/extraction-challenge/handover.txt` mixes valid email addresses, one duplicate, and malformed lookalikes.\n\n### Scope\n\n- Extract only complete email-address matches.\n- Sort the extracted addresses alphabetically.\n- Keep each distinct address once.\n- Save the result as `emails.txt`.\n\n### Your Goal\n\nCreate one sorted, duplicate-free list of valid email addresses from the handover note.\n\n### Acceptance Criteria\n\n- `emails.txt` contains exactly the three valid addresses, one per line.\n- The addresses are alphabetically sorted and not repeated.\n- The malformed lookalikes are excluded.\n\n### Hints\n\nWhich regular expression can I reuse?\n\nThe preceding guided lab showed an extended `grep` pattern for extracting email-shaped matches. Send those matches through the familiar sort-then-`uniq` pipeline.",
+      "title_vi": "Xây dựng danh sách liên hệ",
+      "task": "Thực hiện hướng dẫn: Build the Contact List",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/extraction-challenge/emails.txt <(printf %s 'alice@example.com\nbob@example.net\ncarol@example.org\n') && cmp -s /home/labex/project/extraction-challenge/handover.txt <(printf %s 'Email alice@example.com then bob@example.net. Duplicate alice@example.com. Owner carol@example.org. Bad user@ and @invalid.\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/extraction-challenge/emails.txt <(printf %s 'alice@example.com\nbob@example.net\ncarol@example.org\n') && cmp -s /home/labex/project/extraction-challenge/handover.txt <(printf %s 'Email alice@example.com then bob@example.net. Duplicate alice@example.com. Owner carol@example.org. Bad user@ and @invalid.\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/extraction-challenge/handover.txt` chứa lẫn địa chỉ email hợp lệ, một địa chỉ trùng và các chuỗi gần giống nhưng sai định dạng.\n\n### Phạm vi\n\n- Chỉ trích xuất phần khớp là địa chỉ email đầy đủ.\n- Sắp xếp các địa chỉ đã trích xuất theo thứ tự chữ cái.\n- Chỉ giữ mỗi địa chỉ khác nhau một lần.\n- Lưu kết quả thành `emails.txt`.\n\n### Mục tiêu của bạn\n\nTạo một danh sách địa chỉ email hợp lệ từ ghi chú bàn giao, đã sắp xếp và không trùng lặp.\n\n### Tiêu chí đạt\n\n- `emails.txt` chứa đúng ba địa chỉ hợp lệ, mỗi dòng một địa chỉ.\n- Các địa chỉ được sắp xếp theo thứ tự chữ cái và không lặp lại.\n- Những chuỗi gần giống nhưng sai định dạng bị loại bỏ.\n\n### Gợi ý\n\nTôi có thể dùng lại biểu thức chính quy nào?\n\nBài hướng dẫn trước đã trình bày mẫu `grep` mở rộng để trích xuất phần khớp có dạng email. Chuyển các phần khớp đó qua pipeline quen thuộc gồm sắp xếp rồi `uniq`.",
+      "task_vi": "Thực hiện hướng dẫn: Xây dựng danh sách liên hệ",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-extracting-mails-and-numbers-17991.json"
+}

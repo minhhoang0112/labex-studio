@@ -1,0 +1,199 @@
+{
+  "id": "linux-disk-usage-detective-388099",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 388099,
+  "source_url": "https://labex.io/tutorials/linux-disk-usage-detective-388099",
+  "order": 40,
+  "title": "Disk Usage Detective",
+  "title_vi": "Điều tra dung lượng đĩa",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "5 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Disk Usage Detective",
+  "sections": [
+    {
+      "id": "commands-388099-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Disk Usage Detective. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Điều tra dung lượng đĩa. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-388099-section-1-v1",
+      "title": "Disk Space Analysis",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Phân tích dung lượng",
+      "content": "Save disk_usage.txt, home_size.txt and the largest immediate subdirectory path in largest_subdir.txt. Read the highest Use% from df; measurements depend on your container.",
+      "content_vi": "Lưu disk_usage.txt, home_size.txt và đường dẫn thư mục con trực tiếp lớn nhất vào largest_subdir.txt. Đọc Use% cao nhất từ df; số liệu phụ thuộc container.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdf\\s+-h\\s*>\\s*disk_usage\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdu\\s+-sh\\s+/home/labex\\s*>\\s*home_size\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bdu\\s+-h\\s+--max-depth=1\\s+/home/labex[^\\n]*largest_subdir\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s disk_usage.txt\ngrep -q '^Filesystem' disk_usage.txt\nawk 'NR>1 && $5 ~ /%$/ {found=1} END {exit !found}' disk_usage.txt\ntest -s home_size.txt\ngrep -Eq '[[:space:]]/home/labex$' home_size.txt\nexpected=$(du -h --max-depth=1 /home/labex | sort -hr | awk '$2 != \"/home/labex\" {print $2; exit}')\ntest -n \"$expected\"\ntest \"$(cat largest_subdir.txt)\" = \"$expected\""
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388099-section-2-v1",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-388099-section-1-v1",
+      "title": "Disk Space Analysis",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Phân tích dung lượng",
+      "content": "Save disk_usage.txt, home_size.txt and the largest immediate subdirectory path in largest_subdir.txt. Read the highest Use% from df; measurements depend on your container.",
+      "content_vi": "Lưu disk_usage.txt, home_size.txt và đường dẫn thư mục con trực tiếp lớn nhất vào largest_subdir.txt. Đọc Use% cao nhất từ df; số liệu phụ thuộc container.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdf\\s+-h\\s*>\\s*disk_usage\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdu\\s+-sh\\s+/home/labex\\s*>\\s*home_size\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bdu\\s+-h\\s+--max-depth=1\\s+/home/labex[^\\n]*largest_subdir\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s disk_usage.txt\ngrep -q '^Filesystem' disk_usage.txt\nawk 'NR>1 && $5 ~ /%$/ {found=1} END {exit !found}' disk_usage.txt\ntest -s home_size.txt\ngrep -Eq '[[:space:]]/home/labex$' home_size.txt\nexpected=$(du -h --max-depth=1 /home/labex | sort -hr | awk '$2 != \"/home/labex\" {print $2; exit}')\ntest -n \"$expected\"\ntest \"$(cat largest_subdir.txt)\" = \"$expected\""
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-disk-usage-detective-388099.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

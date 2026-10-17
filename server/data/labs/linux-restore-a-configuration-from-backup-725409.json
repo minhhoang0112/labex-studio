@@ -1,0 +1,128 @@
+{
+  "id": "linux-restore-a-configuration-from-backup-725409",
+  "course_id": "linux-for-noobs",
+  "order": 37,
+  "title": "Restore a Configuration from Backup",
+  "title_vi": "Khôi phục cấu hình từ bản sao lưu",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "overview": "An application configuration was accidentally removed, but a readable compressed backup is available. The archive also contains a runbook that is not part of this recovery.  The preceding guided lab p",
+  "source_url": "https://labex.io/tutorials/linux-restore-a-configuration-from-backup-725409",
+  "source_lab_id": 725409,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "An application configuration was accidentally removed, but a readable compressed backup is available. The archive also contains a runbook that is not part of this recovery.\n\nThe preceding guided lab practiced listing an archive and extracting one selected path. This final challenge focuses only on that recovery decision.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một cấu hình ứng dụng vô tình bị xóa, nhưng có sẵn bản sao lưu nén đọc được. Tệp lưu trữ cũng chứa một tài liệu quy trình vận hành không thuộc lần khôi phục này.\n\nBài hướng dẫn trước đã luyện liệt kê tệp lưu trữ và giải nén một đường dẫn được chọn. Thử thách cuối này chỉ tập trung vào quyết định khôi phục đó."
+    },
+    {
+      "id": "source-725409-section-1-v3",
+      "title": "Restore the Missing Configuration",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/backup-automation/data/config/app.conf` is missing. The archive `backups/manual-backup.tar.gz` contains the last known-good copy and one unrelated runbook.\n\n### Scope\n\n- Restore only the archived path `config/app.conf`.\n- Restore it below `/home/labex/project/backup-automation/data`.\n- Do not extract or change `documents/runbook.txt`.\n\n### Your Goal\n\nRestore the missing `data/config/app.conf` from the prepared backup.\n\n### Acceptance Criteria\n\n- `data/config/app.conf` exists with:\n\n```text\nmode=production\nport=8080\n```\n- `data/documents/runbook.txt` remains the original prepared file and is not replaced by extraction.\n\n### Hints\n\nHow can I extract one path instead of the whole archive?\n\nThe guided lab placed the selected archived path after the archive and destination options in the `tar -xzf` command.",
+      "title_vi": "Khôi phục cấu hình bị thiếu",
+      "task": "Thực hiện hướng dẫn: Restore the Missing Configuration",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-automation')\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/documents/runbook.txt').read_text() == 'Current runbook: keep this file unchanged.\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/backup-automation/data/config/app.conf` bị thiếu. Tệp lưu trữ `backups/manual-backup.tar.gz` chứa bản tốt gần nhất và một tài liệu quy trình không liên quan.\n\n### Phạm vi\n\n- Chỉ khôi phục đường dẫn trong tệp lưu trữ `config/app.conf`.\n- Khôi phục nó bên dưới `/home/labex/project/backup-automation/data`.\n- Không giải nén hoặc thay đổi `documents/runbook.txt`.\n\n### Mục tiêu của bạn\n\nKhôi phục `data/config/app.conf` bị thiếu từ bản sao lưu đã chuẩn bị.\n\n### Tiêu chí đạt\n\n- `data/config/app.conf` tồn tại với:\n\n```text\nmode=production\nport=8080\n```\n- `data/documents/runbook.txt` vẫn là tệp gốc đã chuẩn bị và không bị thay thế bởi giải nén.\n\n### Gợi ý\n\nLàm thế nào giải nén một đường dẫn thay vì cả tệp lưu trữ?\n\nBài hướng dẫn đã đặt đường dẫn lưu trữ được chọn sau các tùy chọn tệp lưu trữ và thư mục đích trong lệnh `tar -xzf`.",
+      "task_vi": "Thực hiện hướng dẫn: Khôi phục cấu hình bị thiếu",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You inspected a backup and selectively restored one missing configuration file without extracting unrelated content.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã kiểm tra một bản sao lưu và khôi phục có chọn lọc một tệp cấu hình bị thiếu mà không giải nén nội dung không liên quan."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725409-section-1-v3",
+      "title": "Restore the Missing Configuration",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/backup-automation/data/config/app.conf` is missing. The archive `backups/manual-backup.tar.gz` contains the last known-good copy and one unrelated runbook.\n\n### Scope\n\n- Restore only the archived path `config/app.conf`.\n- Restore it below `/home/labex/project/backup-automation/data`.\n- Do not extract or change `documents/runbook.txt`.\n\n### Your Goal\n\nRestore the missing `data/config/app.conf` from the prepared backup.\n\n### Acceptance Criteria\n\n- `data/config/app.conf` exists with:\n\n```text\nmode=production\nport=8080\n```\n- `data/documents/runbook.txt` remains the original prepared file and is not replaced by extraction.\n\n### Hints\n\nHow can I extract one path instead of the whole archive?\n\nThe guided lab placed the selected archived path after the archive and destination options in the `tar -xzf` command.",
+      "title_vi": "Khôi phục cấu hình bị thiếu",
+      "task": "Thực hiện hướng dẫn: Restore the Missing Configuration",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-automation')\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/documents/runbook.txt').read_text() == 'Current runbook: keep this file unchanged.\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-automation')\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/documents/runbook.txt').read_text() == 'Current runbook: keep this file unchanged.\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/backup-automation/data/config/app.conf` bị thiếu. Tệp lưu trữ `backups/manual-backup.tar.gz` chứa bản tốt gần nhất và một tài liệu quy trình không liên quan.\n\n### Phạm vi\n\n- Chỉ khôi phục đường dẫn trong tệp lưu trữ `config/app.conf`.\n- Khôi phục nó bên dưới `/home/labex/project/backup-automation/data`.\n- Không giải nén hoặc thay đổi `documents/runbook.txt`.\n\n### Mục tiêu của bạn\n\nKhôi phục `data/config/app.conf` bị thiếu từ bản sao lưu đã chuẩn bị.\n\n### Tiêu chí đạt\n\n- `data/config/app.conf` tồn tại với:\n\n```text\nmode=production\nport=8080\n```\n- `data/documents/runbook.txt` vẫn là tệp gốc đã chuẩn bị và không bị thay thế bởi giải nén.\n\n### Gợi ý\n\nLàm thế nào giải nén một đường dẫn thay vì cả tệp lưu trữ?\n\nBài hướng dẫn đã đặt đường dẫn lưu trữ được chọn sau các tùy chọn tệp lưu trữ và thư mục đích trong lệnh `tar -xzf`.",
+      "task_vi": "Thực hiện hướng dẫn: Khôi phục cấu hình bị thiếu",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-restore-a-configuration-from-backup-725409.json"
+}

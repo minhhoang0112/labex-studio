@@ -1,0 +1,357 @@
+{
+  "id": "linux-day-4-the-fortress-guardian-596203",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 4,
+  "title": "The Fortress Guardian",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "Welcome to Day 4 at LabEx Corporation, Fortress Guardian! After your brilliant detective work yesterday in solving Project Phoenix's critical issues, the company's Chief Technology Officer has personally assigned you to lead security for the entire project.",
+  "source_url": "https://labex.io/tutorials/linux-day-4-the-fortress-guardian-596203",
+  "source_lab_id": 596203,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-4-the-fortress-guardian-596203",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-4-the-fortress-guardian-596203.json",
+    "reference_sha256": "db026358311942b3f6479002d2b444a86763b128a4057d32e67b97ee84d71b1f",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "format-normalized-match"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-4-the-fortress-guardian-596203.json",
+  "sections": [
+    {
+      "id": "source-596203-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nWelcome to Day 4 at LabEx Corporation, Fortress Guardian! After your brilliant detective work yesterday in solving Project Phoenix's critical issues, the company's Chief Technology Officer has personally assigned you to lead security for the entire project.\n\n\"We can't afford another security incident,\" the CTO explains during your morning briefing. \"Your investigation revealed that our previous security setup was inadequate. Sarah Chen and the development team need a bulletproof environment to complete Project Phoenix on schedule.\"\n\nThe recent crisis has highlighted the need for robust security measures. A new contractor will be joining the team to help accelerate development, and you must ensure that access controls are perfectly configured. You'll need to create secure file systems, assign precise ownership, set granular permissions, and establish collaborative workspaces that protect TechNova's intellectual property.\n\nThe success of Project Phoenix—and the company's future—now depends on the digital fortress you build today. Let's secure this system!\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Giới thiệu\n\nChào mừng bạn đến với Ngày thứ 4 tại Tập đoàn LabEx, Hộ vệ Pháo đài! Sau công việc điều tra xuất sắc của bạn ngày hôm qua trong việc giải quyết các sự cố nghiêm trọng của Dự án Phoenix, Giám đốc Công nghệ (CTO) của công ty đã trực tiếp giao cho bạn nhiệm vụ dẫn dắt vấn đề bảo mật cho toàn bộ dự án.\n\n\"Chúng ta không thể chịu đựng thêm một sự cố bảo mật nào nữa,\" CTO giải thích trong cuộc họp giao ban buổi sáng của bạn. \"Cuộc điều tra của bạn đã tiết lộ rằng thiết lập bảo mật trước đây của chúng ta là chưa thỏa đáng. Sarah Chen và đội ngũ phát triển cần một môi trường tuyệt đối an toàn để hoàn thành Dự án Phoenix đúng tiến độ.\"\n\nCuộc khủng hoảng gần đây đã làm nổi bật sự cần thiết của các biện pháp bảo mật mạnh mẽ. Một nhà thầu mới sẽ tham gia nhóm để giúp thúc đẩy quá trình phát triển, và bạn phải đảm bảo rằng các quyền kiểm soát truy cập được định cấu hình hoàn hảo. Bạn sẽ cần tạo các hệ thống tệp bảo mật, chỉ định quyền sở hữu chính xác, thiết lập các quyền chi tiết và tạo ra không gian làm việc cộng tác giúp bảo vệ tài sản trí tuệ của TechNova.\n\nSự thành công của Dự án Phoenix—và tương lai của công ty—giờ đây phụ thuộc vào pháo đài kỹ thuật số mà bạn xây dựng ngày hôm nay. Hãy bảo mật hệ thống này nào!"
+    },
+    {
+      "id": "source-596203-section-1-v2",
+      "title": "Creating a Secure File for a New Project",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Creating a Secure File for a New Project\n\nYour first task is to create a file that will store sensitive project keys. This file must be strictly confidential and accessible only by its owner.\n\n### Tasks\n\n- Create a new, empty file named `project_keys.txt` inside the `~/project/phoenix_project` directory.\n- Set the permissions for this file so that only the owner has read and write access, and no one else (not even users in the same group) has any access.\n\n### Requirements\n\n- The file must be named `project_keys.txt`.\n- The file must be located at `~/project/phoenix_project/project_keys.txt`.\n- Use the `chmod` command with numeric notation to set the permissions.\n\n### Hints\n\n- You can create an empty file using the `touch` command.\n- Remember the numeric values for permissions: read (4), write (2), and execute (1).\n- The final permission should be `600` (read+write for owner, nothing for group and others).\n\n### Examples\n\nAfter completing this task, you should see something like:\n\n```bash\n$ ls -l ~/project/phoenix_project/\n-rw------- 1 labex labex 0 Sep 3 16:03 project_keys.txt\n```\n\nThe file permissions show `-rw-------`, indicating:\n\n- Owner has read and write permissions\n- Group has no permissions\n- Others have no permissions\n",
+      "task": "- Create a new, empty file named `project_keys.txt` inside the `~/project/phoenix_project` directory.\n- Set the permissions for this file so that only the owner has read and write access, and no one else (not even users in the same group) has any access.",
+      "hint": "- You can create an empty file using the `touch` command.\n- Remember the numeric values for permissions: read (4), write (2), and execute (1).\n- The final permission should be `600` (read+write for owner, nothing for group and others).",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/phoenix_project/project_keys.txt && test ! -s /home/labex/project/phoenix_project/project_keys.txt && test \"$(stat -c '%a' /home/labex/project/phoenix_project/project_keys.txt)\" = 600"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*(?:sudo\\s+)?chmod\\s+600\\s+(?:~/project/phoenix_project/|/home/labex/project/phoenix_project/)?project_keys\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "permissions"
+      ],
+      "title_vi": "Tạo tệp bảo mật cho một dự án mới",
+      "content_vi": "## Tạo một tệp bảo mật cho dự án mới\n\nNhiệm vụ đầu tiên của bạn là tạo một tệp để lưu trữ các khóa dự án nhạy cảm. Tệp này phải được bảo mật tuyệt đối và chỉ chủ sở hữu mới có quyền truy cập.\n\n### Các nhiệm vụ\n\n- Tạo một tệp trống mới có tên là `project_keys.txt` bên trong thư mục `~/project/phoenix_project`.\n- Đặt quyền cho tệp này sao cho chỉ chủ sở hữu mới có quyền đọc và ghi, không ai khác (ngay cả người dùng trong cùng nhóm) có bất kỳ quyền truy cập nào.\n\n### Yêu cầu\n\n- Tệp phải được đặt tên là `project_keys.txt`.\n- Tệp phải nằm tại đường dẫn `~/project/phoenix_project/project_keys.txt`.\n- Sử dụng lệnh `chmod` với ký hiệu dạng số để thiết lập quyền.\n\n### Gợi ý\n\n- Bạn có thể tạo một tệp trống bằng cách sử dụng lệnh `touch`.\n- Hãy ghi nhớ các giá trị số cho các quyền: đọc (4), ghi (2), và thực thi (1).\n- Quyền cuối cùng phải là `600` (đọc+ghi cho chủ sở hữu, không có quyền nào cho nhóm và những người khác).\n\n### Ví dụ\n\nSau khi hoàn thành nhiệm vụ này, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n$ ls -l ~/project/phoenix_project/\n-rw------- 1 labex labex 0 Sep 3 16:03 project_keys.txt\n```\n\nQuyền của tệp hiển thị là `-rw-------`, cho biết:\n\n- Chủ sở hữu có quyền đọc và ghi\n- Nhóm không có quyền nào\n- Những người khác không có quyền nào"
+    },
+    {
+      "id": "source-596203-section-2-v2",
+      "title": "Assigning Ownership of Project Resources",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Assigning Ownership of Project Resources\n\nProject Phoenix is led by Sarah Chen's development team, with the technical lead `dev_lead` managing the core development work. This user belongs to the `developers` group that you've been working with throughout the week. You need to transfer ownership of all project files and directories to ensure proper access control.\n\n### Tasks\n\n- Change the owner of the `~/project/phoenix_project` directory and all its contents to the user `dev_lead`.\n- Change the group owner of the `~/project/phoenix_project` directory and all its contents to the `developers` group.\n\n### Requirements\n\n- The user owner must be `dev_lead`.\n- The group owner must be `developers`.\n- The ownership change must apply recursively to all files and subdirectories within `~/project/phoenix_project`.\n- You must use the `chown` command.\n\n### Hints\n\n- The `chown` command can change both user and group at the same time using the `user:group` syntax.\n- Look for an option in the `chown` command that allows it to operate on files and directories recursively. The `man chown` command is your friend.\n- Since the files are currently owned by root, you will need to use `sudo` to change ownership.\n\n### Examples\n\nAfter completing this task, you should see something like:\n\n```bash\n$ ls -ld ~/project/phoenix_project/\ndrwxrwxr-x 4 dev_lead developers 53 Sep 3 16:00 ~/project/phoenix_project/\n\n$ ls -l ~/project/phoenix_project/\ntotal 0\ndrwxrwxr-x 2 dev_lead developers 27 Sep 3 16:00 docs\n-rw------- 1 dev_lead developers 0 Sep 3 16:03 project_keys.txt\ndrwxrwxr-x 2 dev_lead developers 6 Sep 3 16:00 src\n```\n\nAll files and directories should now be owned by:\n\n- User: `dev_lead`\n- Group: `developers`\n",
+      "task": "- Change the owner of the `~/project/phoenix_project` directory and all its contents to the user `dev_lead`.\n- Change the group owner of the `~/project/phoenix_project` directory and all its contents to the `developers` group.",
+      "hint": "- The `chown` command can change both user and group at the same time using the `user:group` syntax.\n- Look for an option in the `chown` command that allows it to operate on files and directories recursively. The `man chown` command is your friend.\n- Since the files are currently owned by root, you will need to use `sudo` to change ownership.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -d /home/labex/project/phoenix_project && test -z \"$(sudo find /home/labex/project/phoenix_project \\( ! -user dev_lead -o ! -group developers \\) -print -quit)\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+chown\\s+-R\\s+dev_lead:developers\\s+[^\\n;]*phoenix_project/?\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
+      "title_vi": "Phân quyền sở hữu tài nguyên dự án",
+      "content_vi": "## Phân quyền sở hữu tài nguyên dự án\n\nDự án Phoenix được dẫn dắt bởi nhóm phát triển của Sarah Chen, với trưởng nhóm kỹ thuật `dev_lead` quản lý công việc phát triển cốt lõi. Người dùng này thuộc nhóm `developers` mà bạn đã làm việc cùng trong suốt tuần qua. Bạn cần chuyển quyền sở hữu tất cả các tệp và thư mục của dự án để đảm bảo kiểm soát truy cập thích hợp.\n\n### Nhiệm vụ\n\n- Thay đổi chủ sở hữu của thư mục `~/project/phoenix_project` và toàn bộ nội dung bên trong thành người dùng `dev_lead`.\n- Thay đổi nhóm sở hữu của thư mục `~/project/phoenix_project` và toàn bộ nội dung bên trong thành nhóm `developers`.\n\n### Yêu cầu\n\n- Người dùng sở hữu phải là `dev_lead`.\n- Nhóm sở hữu phải là `developers`.\n- Việc thay đổi quyền sở hữu phải áp dụng đệ quy cho tất cả các tệp và thư mục con bên trong `~/project/phoenix_project`.\n- Bạn phải sử dụng lệnh `chown`.\n\n### Gợi ý\n\n- Lệnh `chown` có thể thay đổi cả người dùng và nhóm cùng lúc bằng cách sử dụng cú pháp `user:group`.\n- Tìm kiếm một tùy chọn trong lệnh `chown` cho phép nó thao tác trên các tệp và thư mục một cách đệ quy. Lệnh `man chown` là trợ thủ đắc lực của bạn.\n- Vì các tệp hiện đang thuộc sở hữu của root, bạn sẽ cần sử dụng `sudo` để thay đổi quyền sở hữu.\n\n### Ví dụ\n\nSau khi hoàn thành nhiệm vụ này, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n$ ls -ld ~/project/phoenix_project/\ndrwxrwxr-x 4 dev_lead developers 53 Sep 3 16:00 ~/project/phoenix_project/\n\n$ ls -l ~/project/phoenix_project/\ntotal 0\ndrwxrwxr-x 2 dev_lead developers 27 Sep 3 16:00 docs\n-rw------- 1 dev_lead developers 0 Sep 3 16:03 project_keys.txt\ndrwxrwxr-x 2 dev_lead developers 6 Sep 3 16:00 src\n```\n\nTất cả các tệp và thư mục bây giờ phải thuộc sở hữu của:\n\n- Người dùng: `dev_lead`\n- Nhóm: `developers`"
+    },
+    {
+      "id": "source-596203-section-3-v2",
+      "title": "Securing the Main Project Directory",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Securing the Main Project Directory\n\nNow that the ownership is correct, you need to set the base permissions for the main project directory, `~/project/phoenix_project`. The policy is as follows: the owner should have full control, the group should be able to list files and enter the directory, and outsiders should have no access at all.\n\n### Tasks\n\n- Set the permissions for the `~/project/phoenix_project` directory.\n\n### Requirements\n\n- The owner (`dev_lead`) must have read, write, and execute permissions.\n- The group (`developers`) must have read and execute permissions.\n- Others must have no permissions.\n- Use the `chmod` command to apply these permissions to the `~/project/phoenix_project` directory itself (not recursively).\n- Since the directory is owned by `dev_lead`, you may need to use `sudo` to change permissions.\n\n### Hints\n\n- \"Execute\" permission on a directory allows you to `cd` into it.\n- Calculate the numeric permission value for owner, group, and others.\n- Owner (rwx) = 4+2+1 = 7\n- Group (r-x) = 4+0+1 = 5\n- Others (---) = 0+0+0 = 0\n\n### Examples\n\nAfter completing this task, you should see something like:\n\n```bash\n$ ls -ld ~/project/phoenix_project/\ndrwxr-x--- 4 dev_lead developers 53 Sep 3 16:00 ~/project/phoenix_project/\n```\n\nThe directory permissions show `drwxr-x---`, indicating:\n\n- Owner (`dev_lead`) has read, write, and execute permissions\n- Group (`developers`) has read and execute permissions\n- Others have no permissions\n\nThis means:\n\n- `dev_lead` can fully access the directory\n- `developers` group members can list contents and enter the directory\n- Outsiders have no access to the directory\n",
+      "task": "- Set the permissions for the `~/project/phoenix_project` directory.",
+      "hint": "- \"Execute\" permission on a directory allows you to `cd` into it.\n- Calculate the numeric permission value for owner, group, and others.\n- Owner (rwx) = 4+2+1 = 7\n- Group (r-x) = 4+0+1 = 5\n- Others (---) = 0+0+0 = 0",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(sudo stat -c '%a:%U:%G' /home/labex/project/phoenix_project)\" = 750:dev_lead:developers"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+chmod\\s+750\\s+[^\\n;]*phoenix_project/?\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "sudo",
+        "permissions"
+      ],
+      "title_vi": "Bảo mật thư mục dự án chính",
+      "content_vi": "## Bảo mật Thư mục Dự án Chính\n\nBây giờ quyền sở hữu đã chính xác, bạn cần thiết lập các quyền cơ bản cho thư mục dự án chính, `~/project/phoenix_project`. Chính sách như sau: chủ sở hữu phải có quyền kiểm soát toàn bộ, nhóm có thể liệt kê các tệp và truy cập vào thư mục, và những người bên ngoài hoàn toàn không có quyền truy cập.\n\n### Các Nhiệm vụ\n\n- Thiết lập quyền cho thư mục `~/project/phoenix_project`.\n\n### Các Yêu cầu\n\n- Chủ sở hữu (`dev_lead`) phải có quyền đọc, ghi và thực thi.\n- Nhóm (`developers`) phải có quyền đọc và thực thi.\n- Những người khác không được có bất kỳ quyền nào.\n- Sử dụng lệnh `chmod` để áp dụng các quyền này cho chính thư mục `~/project/phoenix_project` (không áp dụng đệ quy).\n- Vì thư mục thuộc sở hữu của `dev_lead`, bạn có thể cần sử dụng `sudo` để thay đổi quyền.\n\n### Gợi ý\n\n- Quyền \"Execute\" (Thực thi) trên một thư mục cho phép bạn dùng lệnh `cd` để đi vào thư mục đó.\n- Tính toán giá trị quyền số cho chủ sở hữu, nhóm và những người khác.\n- Chủ sở hữu (rwx) = 4+2+1 = 7\n- Nhóm (r-x) = 4+0+1 = 5\n- Những người khác (---) = 0+0+0 = 0\n\n### Ví dụ\n\nSau khi hoàn thành nhiệm vụ này, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n$ ls -ld ~/project/phoenix_project/\ndrwxr-x--- 4 dev_lead developers 53 Sep 3 16:00 ~/project/phoenix_project/\n```\n\nQuyền của thư mục hiển thị là `drwxr-x---`, cho biết:\n\n- Chủ sở hữu (`dev_lead`) có quyền đọc, ghi và thực thi\n- Nhóm (`developers`) có quyền đọc và thực thi\n- Những người khác không có quyền nào\n\nĐiều này có nghĩa là:\n\n- `dev_lead` có thể truy cập hoàn toàn vào thư mục\n- Các thành viên trong nhóm `developers` có thể liệt kê nội dung và đi vào thư mục\n- Những người bên ngoài không có quyền truy cập vào thư mục"
+    },
+    {
+      "id": "source-596203-section-4-v2",
+      "title": "Setting Up Collaborative Permissions for the Dev Team",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Setting Up Collaborative Permissions for the Dev Team\n\n> Note: Make sure you have completed Step 2 first, which sets the ownership of all project directories (including `src`) to `dev_lead:developers`. This step builds upon those ownership settings.\n>\n> The setup script adds the `labex` user to the `developers` group, but your current shell may not pick up that new group membership automatically. Before you test access in `~/project/phoenix_project/src`, run `newgrp developers` in the terminal. Otherwise, you may see `Permission denied` errors even when your ownership and permissions are correct.\n\nThe development team needs to collaborate effectively within the `~/project/phoenix_project/src` directory. To ensure smooth collaboration, any new file or directory created inside `src` should automatically belong to the `developers` group. This special permission affects the group owner only. The user owner will still be the account that creates the file, and the file's read/write permissions will still depend on that user's `umask`.\n\n### Tasks\n\n- Set a special permission on the `~/project/phoenix_project/src` directory that forces all new files and subdirectories created within it to inherit the group ownership from the `src` directory itself (which is `developers`).\n\n### Requirements\n\n- The solution must ensure new files in `~/project/phoenix_project/src` automatically inherit the `developers` group.\n- The final permissions must allow both the owner and the `developers` group to read, write, and enter the `src` directory, while others have no access.\n- You must use the `chmod` command to set this special permission.\n- You may need to use `sudo` to set permissions on directories owned by other users.\n\n### Hints\n\n- This special permission is called the \"set group ID\" or `setgid` bit.\n- You can apply the `setgid` bit using either symbolic (`g+s`) or numeric notation.\n- In numeric notation, the `setgid` bit has a value of `2`. It is placed before the standard three permission digits (e.g., `2770`).\n\n### Examples\n\nAfter completing this task, you should see something like:\n\n```bash\n$ ls -ld ~/project/phoenix_project/src/\ndrwxrws--- 2 dev_lead developers 6 Sep 3 16:00 ~/project/phoenix_project/src/\n```\n\nThe `s` in the group execute position indicates the setgid bit is set and the group has execute permission. Now when you create a new file:\n\n```bash\n$ touch ~/project/phoenix_project/src/new_file.txt\n$ ls -l ~/project/phoenix_project/src/new_file.txt\n-rw-rw-r-- 1 labex developers 0 Apr 15 18:28 /home/labex/project/phoenix_project/src/new_file.txt\n```\n\nNotice that the new file automatically belongs to the `developers` group, even if you are logged in as a different user. The file owner still remains the user who created the file, while the group owner is inherited from the `src` directory. This ensures collaborative work within the development team while maintaining proper group ownership.\n\nThe permissions show:\n\n- Owner (`dev_lead`) has read, write, and execute permissions\n- Group (`developers`) has read, write, and execute permissions\n- Others have no permissions\n- The lowercase `s` in the group execute position indicates the setgid bit is set and the group has execute permission\n",
+      "task": "- Set a special permission on the `~/project/phoenix_project/src` directory that forces all new files and subdirectories created within it to inherit the group ownership from the `src` directory itself (which is `developers`).",
+      "hint": "- This special permission is called the \"set group ID\" or `setgid` bit.\n- You can apply the `setgid` bit using either symbolic (`g+s`) or numeric notation.\n- In numeric notation, the `setgid` bit has a value of `2`. It is placed before the standard three permission digits (e.g., `2770`).",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(sudo stat -c '%a:%G' /home/labex/project/phoenix_project/src)\" = 2770:developers && probe=$(mktemp /home/labex/project/phoenix_project/src/inheritance-XXXXXX) && group=$(sudo stat -c '%G' \"$probe\") && sudo rm -- \"$probe\" && test \"$group\" = developers"
+      },
+      "required_capabilities": [
+        "terminal",
+        "sudo",
+        "permissions"
+      ],
+      "title_vi": "Thiết lập quyền cộng tác cho nhóm phát triển",
+      "content_vi": "## Thiết lập quyền cộng tác cho Nhóm Phát triển\n\n> Lưu ý: Hãy đảm bảo rằng bạn đã hoàn thành Bước 2 trước, bước này thiết lập quyền sở hữu của tất cả các thư mục dự án (bao gồm cả `src`) thành `dev_lead:developers`. Bước này được xây dựng dựa trên các cài đặt quyền sở hữu đó.\n>\n> Tập lệnh thiết lập sẽ thêm người dùng `labex` vào nhóm `developers`, nhưng shell hiện tại của bạn có thể không tự động nhận được tư cách thành viên nhóm mới đó. Trước khi bạn kiểm tra quyền truy cập trong `~/project/phoenix_project/src`, hãy chạy `newgrp developers` trong terminal. Nếu không, bạn có thể gặp lỗi `Permission denied` ngay cả khi quyền sở hữu và quyền hạn của bạn đã chính xác.\n\nNhóm phát triển cần cộng tác hiệu quả trong thư mục `~/project/phoenix_project/src`. Để đảm bảo quá trình cộng tác diễn ra suôn sẻ, bất kỳ tệp hoặc thư mục mới nào được tạo bên trong `src` đều phải tự động thuộc về nhóm `developers`. Quyền đặc biệt này chỉ ảnh hưởng đến chủ sở hữu nhóm. Chủ sở hữu người dùng vẫn sẽ là tài khoản tạo ra tệp và quyền đọc/ghi của tệp sẽ vẫn phụ thuộc vào `umask` của người dùng đó.\n\n### Nhiệm vụ\n\n- Thiết lập quyền đặc biệt trên thư mục `~/project/phoenix_project/src` để buộc tất cả các tệp mới và thư mục con được tạo bên trong nó phải kế thừa quyền sở hữu nhóm từ chính thư mục `src` (đó là `developers`).\n\n### Yêu cầu\n\n- Giải pháp phải đảm bảo các tệp mới trong `~/project/phoenix_project/src` tự động kế thừa nhóm `developers`.\n- Các quyền cuối cùng phải cho phép cả chủ sở hữu và nhóm `developers` có quyền đọc, ghi và truy cập (enter) vào thư mục `src`, trong khi những người khác không có quyền truy cập.\n- Bạn phải sử dụng lệnh `chmod` để thiết lập quyền đặc biệt này.\n- Bạn có thể cần sử dụng `sudo` để thiết lập quyền trên các thư mục thuộc sở hữu của người dùng khác.\n\n### Gợi ý\n\n- Quyền đặc biệt này được gọi là \"set group ID\" hoặc bit `setgid`.\n- Bạn có thể áp dụng bit `setgid` bằng cách sử dụng ký hiệu tượng trưng (`g+s`) hoặc ký hiệu dạng số.\n- Trong ký hiệu dạng số, bit `setgid` có giá trị là `2`. Nó được đặt trước ba chữ số quyền tiêu chuẩn (ví dụ: `2770`).\n\n### Ví dụ\n\nSau khi hoàn thành nhiệm vụ này, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n$ ls -ld ~/project/phoenix_project/src/\ndrwxrws--- 2 dev_lead developers 6 Sep 3 16:00 ~/project/phoenix_project/src/\n```\n\nKý tự `s` ở vị trí thực thi của nhóm cho biết bit setgid đã được thiết lập và nhóm có quyền thực thi. Bây giờ khi bạn tạo một tệp mới:\n\n```bash\n$ touch ~/project/phoenix_project/src/new_file.txt\n$ ls -l ~/project/phoenix_project/src/new_file.txt\n-rw-rw-r-- 1 labex developers 0 Apr 15 18:28 /home/labex/project/phoenix_project/src/new_file.txt\n```\n\nLưu ý rằng tệp mới tự động thuộc về nhóm `developers`, ngay cả khi bạn đang đăng nhập với tư cách là một người dùng khác. Chủ sở hữu tệp vẫn là người dùng đã tạo tệp, trong khi chủ sở hữu nhóm được kế thừa từ thư mục `src`. Điều này đảm bảo công việc cộng tác trong nhóm phát triển đồng thời duy trì quyền sở hữu nhóm phù hợp.\n\nCác quyền hiển thị:\n\n- Chủ sở hữu (`dev_lead`) có quyền đọc, ghi và thực thi\n- Nhóm (`developers`) có quyền đọc, ghi và thực thi\n- Những người khác không có quyền nào\n- Chữ `s` viết thường ở vị trí thực thi của nhóm cho biết bit setgid được thiết lập và nhóm có quyền thực thi"
+    },
+    {
+      "id": "source-596203-section-5-v2",
+      "title": "Summary",
+      "position": 5,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nOutstanding work, Fortress Guardian! You have successfully built an impenetrable security foundation for Project Phoenix. The CTO and Sarah Chen are amazed by your comprehensive security implementation. The project directory is now a fortress that will protect TechNova's intellectual property while enabling seamless collaboration.\n\nThroughout this challenge, you've mastered critical Linux security skills:\n\n- **Creating Files and Basic Permissions**: You secured sensitive project keys with precise permission controls.\n- **Ownership Management**: You expertly assigned ownership to Sarah's development team and technical leadership.\n- **Directory Security**: You balanced access and security for the main project infrastructure.\n- **Advanced Permissions**: You configured setgid permissions to ensure collaborative team workspaces with automatic group ownership inheritance.\n- **Collaborative Workspaces**: You configured team collaboration spaces that maintain security while enabling productivity.\n\nThese advanced security skills have proven your readiness for senior system administration responsibilities. Tomorrow, you'll take on your final challenge as the Keeper of the Keys, managing the human element of Project Phoenix's security by controlling user access to the system!\n",
+      "title_vi": "Tóm tắt",
+      "content_vi": "## Tóm tắt\n\nCông việc xuất sắc, Người bảo vệ Pháo đài! Bạn đã xây dựng thành công một nền tảng bảo mật kiên cố cho Dự án Phoenix. Giám đốc Công nghệ (CTO) và Sarah Chen vô cùng ngạc nhiên trước việc thực thi bảo mật toàn diện của bạn. Thư mục dự án giờ đây là một pháo đài sẽ bảo vệ tài sản trí tuệ của TechNova đồng thời cho phép cộng tác liền mạch.\n\nTrong suốt thử thách này, bạn đã làm chủ được các kỹ năng bảo mật Linux quan trọng:\n\n- **Tạo tệp và quyền cơ bản**: Bạn đã bảo mật các khóa dự án nhạy cảm bằng các điều khiển quyền chính xác.\n- **Quản lý quyền sở hữu**: Bạn đã gán quyền sở hữu một cách chuyên nghiệp cho nhóm phát triển của Sarah và ban lãnh đạo kỹ thuật.\n- **Bảo mật thư mục**: Bạn đã cân bằng giữa quyền truy cập và bảo mật cho cơ sở hạ tầng dự án chính.\n- **Quyền nâng cao**: Bạn đã cấu hình các quyền setgid để đảm bảo không gian làm việc nhóm cộng tác với tính năng kế thừa quyền sở hữu nhóm tự động.\n- **Không gian làm việc cộng tác**: Bạn đã cấu hình không gian cộng tác nhóm vừa duy trì bảo mật vừa nâng cao năng suất.\n\nNhững kỹ năng bảo mật nâng cao này đã chứng minh sự sẵn sàng của bạn đối với các trách nhiệm quản trị hệ thống cấp cao. Ngày mai, bạn sẽ đảm nhận thử thách cuối cùng với tư cách là Người giữ các chiếc khóa, quản lý yếu tố con người trong bảo mật của Dự án Phoenix bằng cách kiểm soát quyền truy cập của người dùng vào hệ thống!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596203-section-1-v2",
+      "title": "Creating a Secure File for a New Project",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Creating a Secure File for a New Project\n\nYour first task is to create a file that will store sensitive project keys. This file must be strictly confidential and accessible only by its owner.\n\n### Tasks\n\n- Create a new, empty file named `project_keys.txt` inside the `~/project/phoenix_project` directory.\n- Set the permissions for this file so that only the owner has read and write access, and no one else (not even users in the same group) has any access.\n\n### Requirements\n\n- The file must be named `project_keys.txt`.\n- The file must be located at `~/project/phoenix_project/project_keys.txt`.\n- Use the `chmod` command with numeric notation to set the permissions.\n\n### Hints\n\n- You can create an empty file using the `touch` command.\n- Remember the numeric values for permissions: read (4), write (2), and execute (1).\n- The final permission should be `600` (read+write for owner, nothing for group and others).\n\n### Examples\n\nAfter completing this task, you should see something like:\n\n```bash\n$ ls -l ~/project/phoenix_project/\n-rw------- 1 labex labex 0 Sep 3 16:03 project_keys.txt\n```\n\nThe file permissions show `-rw-------`, indicating:\n\n- Owner has read and write permissions\n- Group has no permissions\n- Others have no permissions\n",
+      "task": "- Create a new, empty file named `project_keys.txt` inside the `~/project/phoenix_project` directory.\n- Set the permissions for this file so that only the owner has read and write access, and no one else (not even users in the same group) has any access.",
+      "hint": "- You can create an empty file using the `touch` command.\n- Remember the numeric values for permissions: read (4), write (2), and execute (1).\n- The final permission should be `600` (read+write for owner, nothing for group and others).",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/phoenix_project/project_keys.txt && test ! -s /home/labex/project/phoenix_project/project_keys.txt && test \"$(stat -c '%a' /home/labex/project/phoenix_project/project_keys.txt)\" = 600"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*(?:sudo\\s+)?chmod\\s+600\\s+(?:~/project/phoenix_project/|/home/labex/project/phoenix_project/)?project_keys\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "permissions"
+      ],
+      "title_vi": "Tạo tệp bảo mật cho một dự án mới",
+      "content_vi": "## Tạo một tệp bảo mật cho dự án mới\n\nNhiệm vụ đầu tiên của bạn là tạo một tệp để lưu trữ các khóa dự án nhạy cảm. Tệp này phải được bảo mật tuyệt đối và chỉ chủ sở hữu mới có quyền truy cập.\n\n### Các nhiệm vụ\n\n- Tạo một tệp trống mới có tên là `project_keys.txt` bên trong thư mục `~/project/phoenix_project`.\n- Đặt quyền cho tệp này sao cho chỉ chủ sở hữu mới có quyền đọc và ghi, không ai khác (ngay cả người dùng trong cùng nhóm) có bất kỳ quyền truy cập nào.\n\n### Yêu cầu\n\n- Tệp phải được đặt tên là `project_keys.txt`.\n- Tệp phải nằm tại đường dẫn `~/project/phoenix_project/project_keys.txt`.\n- Sử dụng lệnh `chmod` với ký hiệu dạng số để thiết lập quyền.\n\n### Gợi ý\n\n- Bạn có thể tạo một tệp trống bằng cách sử dụng lệnh `touch`.\n- Hãy ghi nhớ các giá trị số cho các quyền: đọc (4), ghi (2), và thực thi (1).\n- Quyền cuối cùng phải là `600` (đọc+ghi cho chủ sở hữu, không có quyền nào cho nhóm và những người khác).\n\n### Ví dụ\n\nSau khi hoàn thành nhiệm vụ này, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n$ ls -l ~/project/phoenix_project/\n-rw------- 1 labex labex 0 Sep 3 16:03 project_keys.txt\n```\n\nQuyền của tệp hiển thị là `-rw-------`, cho biết:\n\n- Chủ sở hữu có quyền đọc và ghi\n- Nhóm không có quyền nào\n- Những người khác không có quyền nào",
+      "task_vi": "- Tạo một tệp mới, trống có tên là `project_keys.txt` bên trong thư mục `~/project/phoenix_project`.\n- Đặt quyền cho tệp này sao cho chỉ chủ sở hữu mới có quyền đọc và ghi, và không ai khác (thậm chí cả người dùng trong cùng nhóm) có bất kỳ quyền truy cập nào.",
+      "hint_vi": "- Bạn có thể tạo một tệp trống bằng lệnh `touch`.\n- Hãy ghi nhớ các giá trị số cho quyền hạn: đọc (4), ghi (2), và thực thi (1).\n- Quyền cuối cùng phải là `600` (chủ sở hữu có quyền đọc+ghi, nhóm và người khác không có quyền)."
+    },
+    {
+      "id": "source-596203-section-2-v2",
+      "title": "Assigning Ownership of Project Resources",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Assigning Ownership of Project Resources\n\nProject Phoenix is led by Sarah Chen's development team, with the technical lead `dev_lead` managing the core development work. This user belongs to the `developers` group that you've been working with throughout the week. You need to transfer ownership of all project files and directories to ensure proper access control.\n\n### Tasks\n\n- Change the owner of the `~/project/phoenix_project` directory and all its contents to the user `dev_lead`.\n- Change the group owner of the `~/project/phoenix_project` directory and all its contents to the `developers` group.\n\n### Requirements\n\n- The user owner must be `dev_lead`.\n- The group owner must be `developers`.\n- The ownership change must apply recursively to all files and subdirectories within `~/project/phoenix_project`.\n- You must use the `chown` command.\n\n### Hints\n\n- The `chown` command can change both user and group at the same time using the `user:group` syntax.\n- Look for an option in the `chown` command that allows it to operate on files and directories recursively. The `man chown` command is your friend.\n- Since the files are currently owned by root, you will need to use `sudo` to change ownership.\n\n### Examples\n\nAfter completing this task, you should see something like:\n\n```bash\n$ ls -ld ~/project/phoenix_project/\ndrwxrwxr-x 4 dev_lead developers 53 Sep 3 16:00 ~/project/phoenix_project/\n\n$ ls -l ~/project/phoenix_project/\ntotal 0\ndrwxrwxr-x 2 dev_lead developers 27 Sep 3 16:00 docs\n-rw------- 1 dev_lead developers 0 Sep 3 16:03 project_keys.txt\ndrwxrwxr-x 2 dev_lead developers 6 Sep 3 16:00 src\n```\n\nAll files and directories should now be owned by:\n\n- User: `dev_lead`\n- Group: `developers`\n",
+      "task": "- Change the owner of the `~/project/phoenix_project` directory and all its contents to the user `dev_lead`.\n- Change the group owner of the `~/project/phoenix_project` directory and all its contents to the `developers` group.",
+      "hint": "- The `chown` command can change both user and group at the same time using the `user:group` syntax.\n- Look for an option in the `chown` command that allows it to operate on files and directories recursively. The `man chown` command is your friend.\n- Since the files are currently owned by root, you will need to use `sudo` to change ownership.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -d /home/labex/project/phoenix_project && test -z \"$(sudo find /home/labex/project/phoenix_project \\( ! -user dev_lead -o ! -group developers \\) -print -quit)\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+chown\\s+-R\\s+dev_lead:developers\\s+[^\\n;]*phoenix_project/?\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
+      "title_vi": "Phân quyền sở hữu tài nguyên dự án",
+      "content_vi": "## Phân quyền sở hữu tài nguyên dự án\n\nDự án Phoenix được dẫn dắt bởi nhóm phát triển của Sarah Chen, với trưởng nhóm kỹ thuật `dev_lead` quản lý công việc phát triển cốt lõi. Người dùng này thuộc nhóm `developers` mà bạn đã làm việc cùng trong suốt tuần qua. Bạn cần chuyển quyền sở hữu tất cả các tệp và thư mục của dự án để đảm bảo kiểm soát truy cập thích hợp.\n\n### Nhiệm vụ\n\n- Thay đổi chủ sở hữu của thư mục `~/project/phoenix_project` và toàn bộ nội dung bên trong thành người dùng `dev_lead`.\n- Thay đổi nhóm sở hữu của thư mục `~/project/phoenix_project` và toàn bộ nội dung bên trong thành nhóm `developers`.\n\n### Yêu cầu\n\n- Người dùng sở hữu phải là `dev_lead`.\n- Nhóm sở hữu phải là `developers`.\n- Việc thay đổi quyền sở hữu phải áp dụng đệ quy cho tất cả các tệp và thư mục con bên trong `~/project/phoenix_project`.\n- Bạn phải sử dụng lệnh `chown`.\n\n### Gợi ý\n\n- Lệnh `chown` có thể thay đổi cả người dùng và nhóm cùng lúc bằng cách sử dụng cú pháp `user:group`.\n- Tìm kiếm một tùy chọn trong lệnh `chown` cho phép nó thao tác trên các tệp và thư mục một cách đệ quy. Lệnh `man chown` là trợ thủ đắc lực của bạn.\n- Vì các tệp hiện đang thuộc sở hữu của root, bạn sẽ cần sử dụng `sudo` để thay đổi quyền sở hữu.\n\n### Ví dụ\n\nSau khi hoàn thành nhiệm vụ này, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n$ ls -ld ~/project/phoenix_project/\ndrwxrwxr-x 4 dev_lead developers 53 Sep 3 16:00 ~/project/phoenix_project/\n\n$ ls -l ~/project/phoenix_project/\ntotal 0\ndrwxrwxr-x 2 dev_lead developers 27 Sep 3 16:00 docs\n-rw------- 1 dev_lead developers 0 Sep 3 16:03 project_keys.txt\ndrwxrwxr-x 2 dev_lead developers 6 Sep 3 16:00 src\n```\n\nTất cả các tệp và thư mục bây giờ phải thuộc sở hữu của:\n\n- Người dùng: `dev_lead`\n- Nhóm: `developers`",
+      "task_vi": "- Thay đổi chủ sở hữu của thư mục `~/project/phoenix_project` và tất cả nội dung bên trong thành người dùng `dev_lead`.\n- Thay đổi nhóm sở hữu của thư mục `~/project/phoenix_project` và tất cả nội dung bên trong thành nhóm `developers`.",
+      "hint_vi": "- Lệnh `chown` có thể thay đổi cả người dùng và nhóm cùng lúc bằng cú pháp `user:group`.\n- Tìm tùy chọn trong lệnh `chown` cho phép thực hiện đệ quy trên tệp và thư mục. Lệnh `man chown` là trợ thủ đắc lực.\n- Vì các tệp hiện do root sở hữu, bạn cần dùng `sudo` để thay đổi quyền sở hữu."
+    },
+    {
+      "id": "source-596203-section-3-v2",
+      "title": "Securing the Main Project Directory",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Securing the Main Project Directory\n\nNow that the ownership is correct, you need to set the base permissions for the main project directory, `~/project/phoenix_project`. The policy is as follows: the owner should have full control, the group should be able to list files and enter the directory, and outsiders should have no access at all.\n\n### Tasks\n\n- Set the permissions for the `~/project/phoenix_project` directory.\n\n### Requirements\n\n- The owner (`dev_lead`) must have read, write, and execute permissions.\n- The group (`developers`) must have read and execute permissions.\n- Others must have no permissions.\n- Use the `chmod` command to apply these permissions to the `~/project/phoenix_project` directory itself (not recursively).\n- Since the directory is owned by `dev_lead`, you may need to use `sudo` to change permissions.\n\n### Hints\n\n- \"Execute\" permission on a directory allows you to `cd` into it.\n- Calculate the numeric permission value for owner, group, and others.\n- Owner (rwx) = 4+2+1 = 7\n- Group (r-x) = 4+0+1 = 5\n- Others (---) = 0+0+0 = 0\n\n### Examples\n\nAfter completing this task, you should see something like:\n\n```bash\n$ ls -ld ~/project/phoenix_project/\ndrwxr-x--- 4 dev_lead developers 53 Sep 3 16:00 ~/project/phoenix_project/\n```\n\nThe directory permissions show `drwxr-x---`, indicating:\n\n- Owner (`dev_lead`) has read, write, and execute permissions\n- Group (`developers`) has read and execute permissions\n- Others have no permissions\n\nThis means:\n\n- `dev_lead` can fully access the directory\n- `developers` group members can list contents and enter the directory\n- Outsiders have no access to the directory\n",
+      "task": "- Set the permissions for the `~/project/phoenix_project` directory.",
+      "hint": "- \"Execute\" permission on a directory allows you to `cd` into it.\n- Calculate the numeric permission value for owner, group, and others.\n- Owner (rwx) = 4+2+1 = 7\n- Group (r-x) = 4+0+1 = 5\n- Others (---) = 0+0+0 = 0",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(sudo stat -c '%a:%U:%G' /home/labex/project/phoenix_project)\" = 750:dev_lead:developers"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+chmod\\s+750\\s+[^\\n;]*phoenix_project/?\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "sudo",
+        "permissions"
+      ],
+      "title_vi": "Bảo mật thư mục dự án chính",
+      "content_vi": "## Bảo mật Thư mục Dự án Chính\n\nBây giờ quyền sở hữu đã chính xác, bạn cần thiết lập các quyền cơ bản cho thư mục dự án chính, `~/project/phoenix_project`. Chính sách như sau: chủ sở hữu phải có quyền kiểm soát toàn bộ, nhóm có thể liệt kê các tệp và truy cập vào thư mục, và những người bên ngoài hoàn toàn không có quyền truy cập.\n\n### Các Nhiệm vụ\n\n- Thiết lập quyền cho thư mục `~/project/phoenix_project`.\n\n### Các Yêu cầu\n\n- Chủ sở hữu (`dev_lead`) phải có quyền đọc, ghi và thực thi.\n- Nhóm (`developers`) phải có quyền đọc và thực thi.\n- Những người khác không được có bất kỳ quyền nào.\n- Sử dụng lệnh `chmod` để áp dụng các quyền này cho chính thư mục `~/project/phoenix_project` (không áp dụng đệ quy).\n- Vì thư mục thuộc sở hữu của `dev_lead`, bạn có thể cần sử dụng `sudo` để thay đổi quyền.\n\n### Gợi ý\n\n- Quyền \"Execute\" (Thực thi) trên một thư mục cho phép bạn dùng lệnh `cd` để đi vào thư mục đó.\n- Tính toán giá trị quyền số cho chủ sở hữu, nhóm và những người khác.\n- Chủ sở hữu (rwx) = 4+2+1 = 7\n- Nhóm (r-x) = 4+0+1 = 5\n- Những người khác (---) = 0+0+0 = 0\n\n### Ví dụ\n\nSau khi hoàn thành nhiệm vụ này, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n$ ls -ld ~/project/phoenix_project/\ndrwxr-x--- 4 dev_lead developers 53 Sep 3 16:00 ~/project/phoenix_project/\n```\n\nQuyền của thư mục hiển thị là `drwxr-x---`, cho biết:\n\n- Chủ sở hữu (`dev_lead`) có quyền đọc, ghi và thực thi\n- Nhóm (`developers`) có quyền đọc và thực thi\n- Những người khác không có quyền nào\n\nĐiều này có nghĩa là:\n\n- `dev_lead` có thể truy cập hoàn toàn vào thư mục\n- Các thành viên trong nhóm `developers` có thể liệt kê nội dung và đi vào thư mục\n- Những người bên ngoài không có quyền truy cập vào thư mục",
+      "task_vi": "- Đặt quyền cho thư mục `~/project/phoenix_project`.",
+      "hint_vi": "Quyền \"Execute\" trên thư mục cho phép bạn `cd` vào đó.\nTính giá trị phân quyền dạng số cho owner, group và others.\nOwner (rwx) = 4+2+1 = 7\nGroup (r-x) = 4+0+1 = 5\nOthers (---) = 0+0+0 = 0"
+    },
+    {
+      "id": "source-596203-section-4-v2",
+      "title": "Setting Up Collaborative Permissions for the Dev Team",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Setting Up Collaborative Permissions for the Dev Team\n\n> Note: Make sure you have completed Step 2 first, which sets the ownership of all project directories (including `src`) to `dev_lead:developers`. This step builds upon those ownership settings.\n>\n> The setup script adds the `labex` user to the `developers` group, but your current shell may not pick up that new group membership automatically. Before you test access in `~/project/phoenix_project/src`, run `newgrp developers` in the terminal. Otherwise, you may see `Permission denied` errors even when your ownership and permissions are correct.\n\nThe development team needs to collaborate effectively within the `~/project/phoenix_project/src` directory. To ensure smooth collaboration, any new file or directory created inside `src` should automatically belong to the `developers` group. This special permission affects the group owner only. The user owner will still be the account that creates the file, and the file's read/write permissions will still depend on that user's `umask`.\n\n### Tasks\n\n- Set a special permission on the `~/project/phoenix_project/src` directory that forces all new files and subdirectories created within it to inherit the group ownership from the `src` directory itself (which is `developers`).\n\n### Requirements\n\n- The solution must ensure new files in `~/project/phoenix_project/src` automatically inherit the `developers` group.\n- The final permissions must allow both the owner and the `developers` group to read, write, and enter the `src` directory, while others have no access.\n- You must use the `chmod` command to set this special permission.\n- You may need to use `sudo` to set permissions on directories owned by other users.\n\n### Hints\n\n- This special permission is called the \"set group ID\" or `setgid` bit.\n- You can apply the `setgid` bit using either symbolic (`g+s`) or numeric notation.\n- In numeric notation, the `setgid` bit has a value of `2`. It is placed before the standard three permission digits (e.g., `2770`).\n\n### Examples\n\nAfter completing this task, you should see something like:\n\n```bash\n$ ls -ld ~/project/phoenix_project/src/\ndrwxrws--- 2 dev_lead developers 6 Sep 3 16:00 ~/project/phoenix_project/src/\n```\n\nThe `s` in the group execute position indicates the setgid bit is set and the group has execute permission. Now when you create a new file:\n\n```bash\n$ touch ~/project/phoenix_project/src/new_file.txt\n$ ls -l ~/project/phoenix_project/src/new_file.txt\n-rw-rw-r-- 1 labex developers 0 Apr 15 18:28 /home/labex/project/phoenix_project/src/new_file.txt\n```\n\nNotice that the new file automatically belongs to the `developers` group, even if you are logged in as a different user. The file owner still remains the user who created the file, while the group owner is inherited from the `src` directory. This ensures collaborative work within the development team while maintaining proper group ownership.\n\nThe permissions show:\n\n- Owner (`dev_lead`) has read, write, and execute permissions\n- Group (`developers`) has read, write, and execute permissions\n- Others have no permissions\n- The lowercase `s` in the group execute position indicates the setgid bit is set and the group has execute permission\n",
+      "task": "- Set a special permission on the `~/project/phoenix_project/src` directory that forces all new files and subdirectories created within it to inherit the group ownership from the `src` directory itself (which is `developers`).",
+      "hint": "- This special permission is called the \"set group ID\" or `setgid` bit.\n- You can apply the `setgid` bit using either symbolic (`g+s`) or numeric notation.\n- In numeric notation, the `setgid` bit has a value of `2`. It is placed before the standard three permission digits (e.g., `2770`).",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(sudo stat -c '%a:%G' /home/labex/project/phoenix_project/src)\" = 2770:developers && probe=$(mktemp /home/labex/project/phoenix_project/src/inheritance-XXXXXX) && group=$(sudo stat -c '%G' \"$probe\") && sudo rm -- \"$probe\" && test \"$group\" = developers"
+      },
+      "required_capabilities": [
+        "terminal",
+        "sudo",
+        "permissions"
+      ],
+      "title_vi": "Thiết lập quyền cộng tác cho nhóm phát triển",
+      "content_vi": "## Thiết lập quyền cộng tác cho Nhóm Phát triển\n\n> Lưu ý: Hãy đảm bảo rằng bạn đã hoàn thành Bước 2 trước, bước này thiết lập quyền sở hữu của tất cả các thư mục dự án (bao gồm cả `src`) thành `dev_lead:developers`. Bước này được xây dựng dựa trên các cài đặt quyền sở hữu đó.\n>\n> Tập lệnh thiết lập sẽ thêm người dùng `labex` vào nhóm `developers`, nhưng shell hiện tại của bạn có thể không tự động nhận được tư cách thành viên nhóm mới đó. Trước khi bạn kiểm tra quyền truy cập trong `~/project/phoenix_project/src`, hãy chạy `newgrp developers` trong terminal. Nếu không, bạn có thể gặp lỗi `Permission denied` ngay cả khi quyền sở hữu và quyền hạn của bạn đã chính xác.\n\nNhóm phát triển cần cộng tác hiệu quả trong thư mục `~/project/phoenix_project/src`. Để đảm bảo quá trình cộng tác diễn ra suôn sẻ, bất kỳ tệp hoặc thư mục mới nào được tạo bên trong `src` đều phải tự động thuộc về nhóm `developers`. Quyền đặc biệt này chỉ ảnh hưởng đến chủ sở hữu nhóm. Chủ sở hữu người dùng vẫn sẽ là tài khoản tạo ra tệp và quyền đọc/ghi của tệp sẽ vẫn phụ thuộc vào `umask` của người dùng đó.\n\n### Nhiệm vụ\n\n- Thiết lập quyền đặc biệt trên thư mục `~/project/phoenix_project/src` để buộc tất cả các tệp mới và thư mục con được tạo bên trong nó phải kế thừa quyền sở hữu nhóm từ chính thư mục `src` (đó là `developers`).\n\n### Yêu cầu\n\n- Giải pháp phải đảm bảo các tệp mới trong `~/project/phoenix_project/src` tự động kế thừa nhóm `developers`.\n- Các quyền cuối cùng phải cho phép cả chủ sở hữu và nhóm `developers` có quyền đọc, ghi và truy cập (enter) vào thư mục `src`, trong khi những người khác không có quyền truy cập.\n- Bạn phải sử dụng lệnh `chmod` để thiết lập quyền đặc biệt này.\n- Bạn có thể cần sử dụng `sudo` để thiết lập quyền trên các thư mục thuộc sở hữu của người dùng khác.\n\n### Gợi ý\n\n- Quyền đặc biệt này được gọi là \"set group ID\" hoặc bit `setgid`.\n- Bạn có thể áp dụng bit `setgid` bằng cách sử dụng ký hiệu tượng trưng (`g+s`) hoặc ký hiệu dạng số.\n- Trong ký hiệu dạng số, bit `setgid` có giá trị là `2`. Nó được đặt trước ba chữ số quyền tiêu chuẩn (ví dụ: `2770`).\n\n### Ví dụ\n\nSau khi hoàn thành nhiệm vụ này, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n$ ls -ld ~/project/phoenix_project/src/\ndrwxrws--- 2 dev_lead developers 6 Sep 3 16:00 ~/project/phoenix_project/src/\n```\n\nKý tự `s` ở vị trí thực thi của nhóm cho biết bit setgid đã được thiết lập và nhóm có quyền thực thi. Bây giờ khi bạn tạo một tệp mới:\n\n```bash\n$ touch ~/project/phoenix_project/src/new_file.txt\n$ ls -l ~/project/phoenix_project/src/new_file.txt\n-rw-rw-r-- 1 labex developers 0 Apr 15 18:28 /home/labex/project/phoenix_project/src/new_file.txt\n```\n\nLưu ý rằng tệp mới tự động thuộc về nhóm `developers`, ngay cả khi bạn đang đăng nhập với tư cách là một người dùng khác. Chủ sở hữu tệp vẫn là người dùng đã tạo tệp, trong khi chủ sở hữu nhóm được kế thừa từ thư mục `src`. Điều này đảm bảo công việc cộng tác trong nhóm phát triển đồng thời duy trì quyền sở hữu nhóm phù hợp.\n\nCác quyền hiển thị:\n\n- Chủ sở hữu (`dev_lead`) có quyền đọc, ghi và thực thi\n- Nhóm (`developers`) có quyền đọc, ghi và thực thi\n- Những người khác không có quyền nào\n- Chữ `s` viết thường ở vị trí thực thi của nhóm cho biết bit setgid được thiết lập và nhóm có quyền thực thi",
+      "task_vi": "- Đặt quyền đặc biệt trên thư mục `~/project/phoenix_project/src` để ép buộc tất cả các tệp và thư mục con mới được tạo bên trong nó kế thừa quyền sở hữu nhóm từ chính thư mục `src` (đó là `developers`).",
+      "hint_vi": "Quyền đặc biệt này được gọi là \"set group ID\" hoặc bit `setgid`.\nBạn có thể áp dụng bit `setgid` bằng ký hiệu tượng trưng (`g+s`) hoặc ký hiệu số.\nỞ ký hiệu số, bit `setgid` có giá trị là `2`. Nó được đặt trước ba chữ số quyền chuẩn (ví dụ: `2770`)."
+    }
+  ],
+  "title_vi": "Ngày 4: Vệ Binh Pháo Đài Bảo Mật"
+}

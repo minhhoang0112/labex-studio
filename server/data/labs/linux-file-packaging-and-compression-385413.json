@@ -1,0 +1,513 @@
+{
+  "id": "linux-file-packaging-and-compression-385413",
+  "course_id": "linux-for-noobs",
+  "order": 12,
+  "title": "File Packaging and Compression",
+  "title_vi": "Đóng Gói và Nén Tệp Tin",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "50 mins",
+  "overview": "Packaging and compression solve related but different problems. An   archive   combines a directory tree into one data stream while preserving names and structure.   Compression   represents data more",
+  "source_url": "https://labex.io/tutorials/linux-file-packaging-and-compression-385413",
+  "source_lab_id": 385413,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Packaging and compression solve related but different problems. An **archive** combines a directory tree into one data stream while preserving names and structure. **Compression** represents data more compactly. A `.tar` file is an archive; a `.gz` file is gzip-compressed data; a `.tar.gz` file is a tar archive compressed with gzip.\n\nYou will build a small project, create each format, inspect an archive before extraction, restore into a separate directory, and compare restored data with the source. This inspect–extract–verify workflow avoids overwriting originals blindly.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Đóng gói (packaging) và nén (compression) giải quyết các vấn đề có liên quan nhưng khác nhau. Một **kho lưu trữ (archive)** kết hợp một cây thư mục thành một luồng dữ liệu duy nhất trong khi vẫn giữ nguyên tên và cấu trúc. **Nén (Compression)** biểu diễn dữ liệu một cách gọn gàng hơn. Tệp `.tar` là một kho lưu trữ; tệp `.gz` là dữ liệu được nén bằng gzip; tệp `.tar.gz` là một kho lưu trữ tar được nén bằng gzip.\n\nBạn sẽ xây dựng một dự án nhỏ, tạo từng định dạng, kiểm tra một kho lưu trữ trước khi giải nén, khôi phục vào một thư mục riêng biệt, và so sánh dữ liệu đã khôi phục với nguồn. Quy trình làm việc kiểm tra - giải nén - xác minh này giúp tránh việc ghi đè lên các tệp gốc một cách mù quáng."
+    },
+    {
+      "id": "source-385413-section-1-v3",
+      "title": "Build a Directory Tree to Preserve",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a small source tree and record what must survive packaging and extraction.\n\nCreate configuration, notes, and data directories:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir -p source/{config,notes,data}\n```\n\nWrite three files with distinct content:\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > source/config/app.conf\nprintf 'Archive the complete project tree.\\n' > source/notes/README.txt\nprintf 'alpha,beta,gamma\\n1,2,3\\n' > source/data/sample.csv\n```\n\nUse `find` to inspect regular files relative to the source directory:\n\n```bash\nfind source -type f -printf '%P\\n' | sort\n```",
+      "title_vi": "Tạo cây thư mục để bảo toàn",
+      "task": "Thực hiện hướng dẫn: Build a Directory Tree to Preserve",
+      "hint": "Chạy lệnh: find source -type f -printf '%P\\n' | sort",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/archive-lab/source/config/app.conf <(printf %s 'mode=training\nport=8080\n') && cmp -s /home/labex/project/archive-lab/source/notes/README.txt <(printf %s 'Archive the complete project tree.\n') && cmp -s /home/labex/project/archive-lab/source/data/sample.csv <(printf %s 'alpha,beta,gamma\n1,2,3\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một cây mã nguồn nhỏ và ghi lại những thứ phải được giữ lại sau khi đóng gói và giải nén.\n\nTạo các thư mục cấu hình, ghi chú và dữ liệu:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir -p source/{config,notes,data}\n```\n\nViết ba tệp với nội dung khác nhau:\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > source/config/app.conf\nprintf 'Archive the complete project tree.\\n' > source/notes/README.txt\nprintf 'alpha,beta,gamma\\n1,2,3\\n' > source/data/sample.csv\n```\n\nSử dụng `find` để kiểm tra các tệp thông thường tính từ thư mục nguồn:\n\n```bash\nfind source -type f -printf '%P\\n' | sort\n```",
+      "task_vi": "Thực hiện hướng dẫn: Tạo cây thư mục để bảo toàn",
+      "hint_vi": "Chạy lệnh: find source -type f -printf '%P\\n' | sort"
+    },
+    {
+      "id": "source-385413-section-2-v3",
+      "title": "Create and Inspect a Tar Archive",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will package the source tree without compression and inspect its member names.\n\nThe main `tar` operation letters are `c` for create, `t` for list, `x` for extract, and `f` for the archive filename. Use `-C` to change tar's working directory before adding `source`; this avoids storing a long absolute path:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -cf project.tar -C /home/labex/project/archive-lab source\n```\n\nThe source tree still exists because archive creation reads rather than moves it. Inspect both the archive and one original file:\n\n```bash\nls -lh project.tar\nls -l source/config/app.conf\n```\n\nList members before extracting:\n\n```bash\ntar -tf project.tar > tar-members.txt\ncat tar-members.txt\n```\n\nEvery member should begin with `source/`, and there should be no leading `/`. Relative member names make restoration safer and portable.",
+      "title_vi": "Tạo và Kiểm tra một Lưu trữ Tar",
+      "task": "Thực hiện hướng dẫn: Create and Inspect a Tar Archive",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "tar -tf /home/labex/project/archive-lab/project.tar >/dev/null && cmp -s /home/labex/project/archive-lab/tar-members.txt <(tar -tf /home/labex/project/archive-lab/project.tar) && cmp -s <(tar -xOf /home/labex/project/archive-lab/project.tar source/config/app.conf) /home/labex/project/archive-lab/source/config/app.conf"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ đóng gói cây mã nguồn mà không cần nén và kiểm tra tên các thành phần bên trong nó.\n\nCác chữ cái thao tác `c` chính của `tar` dùng để tạo, `t` để liệt kê, `x` để giải nén, và `f` dùng cho tên tệp lưu trữ (archive). Sử dụng `-C` để thay đổi thư mục làm việc của tar trước khi thêm `source`; điều này giúp tránh việc lưu trữ một đường dẫn tuyệt đối dài:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -cf project.tar -C /home/labex/project/archive-lab source\n```\n\nCây mã nguồn vẫn tồn tại vì quá trình tạo tệp lưu trữ chỉ đọc chứ không di chuyển nó. Kiểm tra cả tệp lưu trữ và một tệp gốc:\n\n```bash\nls -lh project.tar\nls -l source/config/app.conf\n```\n\nLiệt kê các thành phần trước khi giải nén:\n\n```bash\ntar -tf project.tar > tar-members.txt\ncat tar-members.txt\n```\n\nMỗi thành phần phải bắt đầu bằng `source/` và không được có dấu `/` ở đầu. Tên thành phần dạng tương đối giúp cho việc khôi phục trở nên an toàn và dễ dàng di chuyển hơn.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và Kiểm tra một Lưu trữ Tar",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-385413-section-3-v3",
+      "title": "Extract Safely and Compare the Result",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will extract into an empty destination instead of over the source, then compare both trees.\n\nCreate a restore directory and use `-C` as the extraction destination:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir tar-restore\ntar -xf project.tar -C tar-restore\n```\n\nInspect the restored paths:\n\n```bash\nfind tar-restore -type f -printf '%P\\n' | sort\n```\n\nCompare recursively. `diff -r` prints nothing and exits successfully when the trees match:\n\n```bash\ndiff -r source tar-restore/source\necho \"tar restore matches source\" > tar-restore-ok.txt\ncat tar-restore-ok.txt\n```",
+      "title_vi": "Giải nén an toàn và so sánh kết quả",
+      "task": "Thực hiện hướng dẫn: Extract Safely and Compare the Result",
+      "hint": "Chạy lệnh: find tar-restore -type f -printf '%P\\n' | sort",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/archive-lab/tar-restore-ok.txt && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/tar-restore/source >/dev/null"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ giải nén vào một thư mục đích trống thay vì đè lên thư mục nguồn, sau đó so sánh cả hai cây thư mục.\n\nTạo một thư mục khôi phục và sử dụng `-C` làm thư mục đích giải nén:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir tar-restore\ntar -xf project.tar -C tar-restore\n```\n\nKiểm tra các đường dẫn đã được khôi phục:\n\n```bash\nfind tar-restore -type f -printf '%P\\n' | sort\n```\n\nSo sánh đệ quy. `diff -r` không in ra gì và thoát thành công khi hai cây thư mục khớp nhau:\n\n```bash\ndiff -r source tar-restore/source\necho \"tar restore matches source\" > tar-restore-ok.txt\ncat tar-restore-ok.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Giải nén an toàn và so sánh kết quả",
+      "hint_vi": "Chạy lệnh: find tar-restore -type f -printf '%P\\n' | sort"
+    },
+    {
+      "id": "source-385413-section-4-v3",
+      "title": "Compress and Decompress One File with Gzip",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will see how gzip differs from an archive by operating on one regular file.\n\nCopy a file so the source tree remains untouched, then compress the copy:\n\n```bash\ncd /home/labex/project/archive-lab\ncp source/data/sample.csv sample-copy.csv\ngzip sample-copy.csv\n```\n\nBy default, gzip replaces the input with `sample-copy.csv.gz`:\n\n```bash\nls -lh sample-copy.csv.gz\nfile sample-copy.csv.gz\n```\n\nDecompress it and compare its content with the original:\n\n```bash\ngunzip sample-copy.csv.gz\ncmp source/data/sample.csv sample-copy.csv\necho \"gzip round trip matches\" > gzip-round-trip-ok.txt\ncat gzip-round-trip-ok.txt\n```\n\nGzip does not package a directory tree by itself; tar provides that structure.",
+      "title_vi": "Nén và giải nén một tệp bằng gzip",
+      "task": "Thực hiện hướng dẫn: Compress and Decompress One File with Gzip",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test ! -e /home/labex/project/archive-lab/sample-copy.csv.gz && cmp -s /home/labex/project/archive-lab/sample-copy.csv /home/labex/project/archive-lab/source/data/sample.csv && cmp -s /home/labex/project/archive-lab/gzip-round-trip-ok.txt <(printf %s 'gzip round trip matches\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ thấy gzip khác với một tệp lưu trữ (archive) như thế nào bằng cách thao tác trên một tệp thông thường.\n\nSao chép một tệp để cây mã nguồn được giữ nguyên không thay đổi, sau đó nén bản sao đó:\n\n```bash\ncd /home/labex/project/archive-lab\ncp source/data/sample.csv sample-copy.csv\ngzip sample-copy.csv\n```\n\nTheo mặc định, gzip thay thế tệp đầu vào bằng `sample-copy.csv.gz`:\n\n```bash\nls -lh sample-copy.csv.gz\nfile sample-copy.csv.gz\n```\n\nGiải nén nó và so sánh nội dung của nó với tệp gốc:\n\n```bash\ngunzip sample-copy.csv.gz\ncmp source/data/sample.csv sample-copy.csv\necho \"gzip round trip matches\" > gzip-round-trip-ok.txt\ncat gzip-round-trip-ok.txt\n```\n\nBản thân Gzip không đóng gói một cây thư mục; tar cung cấp cấu trúc đó.",
+      "task_vi": "Thực hiện hướng dẫn: Nén và giải nén một tệp bằng gzip",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-385413-section-5-v3",
+      "title": "Create and Restore a Compressed Tar Archive",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will combine tar packaging with gzip compression. The `z` option tells tar to pass archive data through gzip.\n\nCreate `project.tar.gz` and inspect it with the matching `-tzf` options:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -czf project.tar.gz -C /home/labex/project/archive-lab source\ntar -tzf project.tar.gz > targz-members.txt\ncat targz-members.txt\n```\n\nExtract into a separate destination and verify the tree:\n\n```bash\nmkdir targz-restore\ntar -xzf project.tar.gz -C targz-restore\ndiff -r source targz-restore/source\necho \"tar.gz restore matches source\" > targz-restore-ok.txt\ncat targz-restore-ok.txt\n```\n\nExtensions communicate the format to people and tools: `.tar.gz` clearly indicates a gzip-compressed tar archive.",
+      "title_vi": "Tạo và Khôi phục một Bản lưu trữ Tar nén",
+      "task": "Thực hiện hướng dẫn: Create and Restore a Compressed Tar Archive",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "gzip -t /home/labex/project/archive-lab/project.tar.gz && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/targz-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/targz-restore-ok.txt <(printf %s 'tar.gz restore matches source\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kết hợp việc đóng gói tar với nén gzip. Tùy chọn `z` báo cho tar truyền dữ liệu lưu trữ thông qua gzip.\n\nTạo `project.tar.gz` và kiểm tra nó với các tùy chọn khớp `-tzf`:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -czf project.tar.gz -C /home/labex/project/archive-lab source\ntar -tzf project.tar.gz > targz-members.txt\ncat targz-members.txt\n```\n\nGiải nén vào một thư mục đích riêng biệt và xác minh cây thư mục:\n\n```bash\nmkdir targz-restore\ntar -xzf project.tar.gz -C targz-restore\ndiff -r source targz-restore/source\necho \"tar.gz restore matches source\" > targz-restore-ok.txt\ncat targz-restore-ok.txt\n```\n\nPhần mở rộng (extension) truyền đạt định dạng cho con người và các công cụ: `.tar.gz` chỉ định rõ ràng một kho lưu trữ tar được nén bằng gzip.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và Khôi phục một Bản lưu trữ Tar nén",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-385413-section-6-v3",
+      "title": "Exchange the Project as a Zip Archive",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create and inspect a Zip archive, a common format on Linux, macOS, and Windows.\n\n`zip -r` recursively adds a directory tree. Run it from the lab root so stored paths begin with `source/`:\n\n```bash\ncd /home/labex/project/archive-lab\nzip -r project.zip source\n```\n\nList members without extracting:\n\n```bash\nunzip -l project.zip\n```\n\nUse `-d` to choose a separate destination, then compare the result:\n\n```bash\nunzip -q project.zip -d zip-restore\ndiff -r source zip-restore/source\necho \"zip restore matches source\" > zip-restore-ok.txt\ncat zip-restore-ok.txt\n```",
+      "title_vi": "Xuất dự án dưới dạng tệp nén Zip",
+      "task": "Thực hiện hướng dẫn: Exchange the Project as a Zip Archive",
+      "hint": "Chạy lệnh: unzip -l project.zip",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "unzip -t /home/labex/project/archive-lab/project.zip >/dev/null && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/zip-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/zip-restore-ok.txt <(printf %s 'zip restore matches source\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo và kiểm tra một tệp nén Zip, một định dạng phổ biến trên Linux, macOS và Windows.\n\n`zip -r` thêm một cây thư mục một cách đệ quy. Chạy lệnh này từ thư mục gốc của lab để các đường dẫn được lưu bắt đầu bằng `source/`:\n\n```bash\ncd /home/labex/project/archive-lab\nzip -r project.zip source\n```\n\nLiệt kê các thành phần bên trong mà không cần giải nén:\n\n```bash\nunzip -l project.zip\n```\n\nSử dụng `-d` để chọn một thư mục đích khác, sau đó so sánh kết quả:\n\n```bash\nunzip -q project.zip -d zip-restore\ndiff -r source zip-restore/source\necho \"zip restore matches source\" > zip-restore-ok.txt\ncat zip-restore-ok.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Xuất dự án dưới dạng tệp nén Zip",
+      "hint_vi": "Chạy lệnh: unzip -l project.zip"
+    },
+    {
+      "id": "section-7",
+      "title": "Summary",
+      "position": 7,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You separated packaging from compression, created and listed tar archives, completed a gzip round trip, combined both operations in `.tar.gz`, and exchanged the same tree through Zip. Most importantly, you restored into separate directories and compared content rather than assuming that archive creation was enough.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã tách biệt việc đóng gói khỏi việc nén, tạo và liệt kê danh sách các tệp nén tar, hoàn thành một chu trình gzip, kết hợp cả hai thao tác trong tệp `.tar.gz`, và trao đổi cùng một cây thư mục thông через Zip. Quan trọng nhất, bạn đã khôi phục vào các thư mục riêng biệt và so sánh nội dung thay vì giả định rằng việc tạo tệp nén là đủ."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-385413-section-1-v3",
+      "title": "Build a Directory Tree to Preserve",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a small source tree and record what must survive packaging and extraction.\n\nCreate configuration, notes, and data directories:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir -p source/{config,notes,data}\n```\n\nWrite three files with distinct content:\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > source/config/app.conf\nprintf 'Archive the complete project tree.\\n' > source/notes/README.txt\nprintf 'alpha,beta,gamma\\n1,2,3\\n' > source/data/sample.csv\n```\n\nUse `find` to inspect regular files relative to the source directory:\n\n```bash\nfind source -type f -printf '%P\\n' | sort\n```",
+      "title_vi": "Tạo cây thư mục để bảo toàn",
+      "task": "Thực hiện hướng dẫn: Build a Directory Tree to Preserve",
+      "hint": "Chạy lệnh: find source -type f -printf '%P\\n' | sort",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/archive-lab/source/config/app.conf <(printf %s 'mode=training\nport=8080\n') && cmp -s /home/labex/project/archive-lab/source/notes/README.txt <(printf %s 'Archive the complete project tree.\n') && cmp -s /home/labex/project/archive-lab/source/data/sample.csv <(printf %s 'alpha,beta,gamma\n1,2,3\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/archive-lab/source/config/app.conf <(printf %s 'mode=training\nport=8080\n') && cmp -s /home/labex/project/archive-lab/source/notes/README.txt <(printf %s 'Archive the complete project tree.\n') && cmp -s /home/labex/project/archive-lab/source/data/sample.csv <(printf %s 'alpha,beta,gamma\n1,2,3\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một cây mã nguồn nhỏ và ghi lại những thứ phải được giữ lại sau khi đóng gói và giải nén.\n\nTạo các thư mục cấu hình, ghi chú và dữ liệu:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir -p source/{config,notes,data}\n```\n\nViết ba tệp với nội dung khác nhau:\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > source/config/app.conf\nprintf 'Archive the complete project tree.\\n' > source/notes/README.txt\nprintf 'alpha,beta,gamma\\n1,2,3\\n' > source/data/sample.csv\n```\n\nSử dụng `find` để kiểm tra các tệp thông thường tính từ thư mục nguồn:\n\n```bash\nfind source -type f -printf '%P\\n' | sort\n```",
+      "task_vi": "Thực hiện hướng dẫn: Tạo cây thư mục để bảo toàn",
+      "hint_vi": "Chạy lệnh: find source -type f -printf '%P\\n' | sort"
+    },
+    {
+      "id": "source-385413-section-2-v3",
+      "title": "Create and Inspect a Tar Archive",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will package the source tree without compression and inspect its member names.\n\nThe main `tar` operation letters are `c` for create, `t` for list, `x` for extract, and `f` for the archive filename. Use `-C` to change tar's working directory before adding `source`; this avoids storing a long absolute path:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -cf project.tar -C /home/labex/project/archive-lab source\n```\n\nThe source tree still exists because archive creation reads rather than moves it. Inspect both the archive and one original file:\n\n```bash\nls -lh project.tar\nls -l source/config/app.conf\n```\n\nList members before extracting:\n\n```bash\ntar -tf project.tar > tar-members.txt\ncat tar-members.txt\n```\n\nEvery member should begin with `source/`, and there should be no leading `/`. Relative member names make restoration safer and portable.",
+      "title_vi": "Tạo và Kiểm tra một Lưu trữ Tar",
+      "task": "Thực hiện hướng dẫn: Create and Inspect a Tar Archive",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "tar -tf /home/labex/project/archive-lab/project.tar >/dev/null && cmp -s /home/labex/project/archive-lab/tar-members.txt <(tar -tf /home/labex/project/archive-lab/project.tar) && cmp -s <(tar -xOf /home/labex/project/archive-lab/project.tar source/config/app.conf) /home/labex/project/archive-lab/source/config/app.conf"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "tar -tf /home/labex/project/archive-lab/project.tar >/dev/null && cmp -s /home/labex/project/archive-lab/tar-members.txt <(tar -tf /home/labex/project/archive-lab/project.tar) && cmp -s <(tar -xOf /home/labex/project/archive-lab/project.tar source/config/app.conf) /home/labex/project/archive-lab/source/config/app.conf"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ đóng gói cây mã nguồn mà không cần nén và kiểm tra tên các thành phần bên trong nó.\n\nCác chữ cái thao tác `c` chính của `tar` dùng để tạo, `t` để liệt kê, `x` để giải nén, và `f` dùng cho tên tệp lưu trữ (archive). Sử dụng `-C` để thay đổi thư mục làm việc của tar trước khi thêm `source`; điều này giúp tránh việc lưu trữ một đường dẫn tuyệt đối dài:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -cf project.tar -C /home/labex/project/archive-lab source\n```\n\nCây mã nguồn vẫn tồn tại vì quá trình tạo tệp lưu trữ chỉ đọc chứ không di chuyển nó. Kiểm tra cả tệp lưu trữ và một tệp gốc:\n\n```bash\nls -lh project.tar\nls -l source/config/app.conf\n```\n\nLiệt kê các thành phần trước khi giải nén:\n\n```bash\ntar -tf project.tar > tar-members.txt\ncat tar-members.txt\n```\n\nMỗi thành phần phải bắt đầu bằng `source/` và không được có dấu `/` ở đầu. Tên thành phần dạng tương đối giúp cho việc khôi phục trở nên an toàn và dễ dàng di chuyển hơn.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và Kiểm tra một Lưu trữ Tar",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-385413-section-3-v3",
+      "title": "Extract Safely and Compare the Result",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will extract into an empty destination instead of over the source, then compare both trees.\n\nCreate a restore directory and use `-C` as the extraction destination:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir tar-restore\ntar -xf project.tar -C tar-restore\n```\n\nInspect the restored paths:\n\n```bash\nfind tar-restore -type f -printf '%P\\n' | sort\n```\n\nCompare recursively. `diff -r` prints nothing and exits successfully when the trees match:\n\n```bash\ndiff -r source tar-restore/source\necho \"tar restore matches source\" > tar-restore-ok.txt\ncat tar-restore-ok.txt\n```",
+      "title_vi": "Giải nén an toàn và so sánh kết quả",
+      "task": "Thực hiện hướng dẫn: Extract Safely and Compare the Result",
+      "hint": "Chạy lệnh: find tar-restore -type f -printf '%P\\n' | sort",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/archive-lab/tar-restore-ok.txt && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/tar-restore/source >/dev/null"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/archive-lab/tar-restore-ok.txt && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/tar-restore/source >/dev/null"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ giải nén vào một thư mục đích trống thay vì đè lên thư mục nguồn, sau đó so sánh cả hai cây thư mục.\n\nTạo một thư mục khôi phục và sử dụng `-C` làm thư mục đích giải nén:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir tar-restore\ntar -xf project.tar -C tar-restore\n```\n\nKiểm tra các đường dẫn đã được khôi phục:\n\n```bash\nfind tar-restore -type f -printf '%P\\n' | sort\n```\n\nSo sánh đệ quy. `diff -r` không in ra gì và thoát thành công khi hai cây thư mục khớp nhau:\n\n```bash\ndiff -r source tar-restore/source\necho \"tar restore matches source\" > tar-restore-ok.txt\ncat tar-restore-ok.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Giải nén an toàn và so sánh kết quả",
+      "hint_vi": "Chạy lệnh: find tar-restore -type f -printf '%P\\n' | sort"
+    },
+    {
+      "id": "source-385413-section-4-v3",
+      "title": "Compress and Decompress One File with Gzip",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will see how gzip differs from an archive by operating on one regular file.\n\nCopy a file so the source tree remains untouched, then compress the copy:\n\n```bash\ncd /home/labex/project/archive-lab\ncp source/data/sample.csv sample-copy.csv\ngzip sample-copy.csv\n```\n\nBy default, gzip replaces the input with `sample-copy.csv.gz`:\n\n```bash\nls -lh sample-copy.csv.gz\nfile sample-copy.csv.gz\n```\n\nDecompress it and compare its content with the original:\n\n```bash\ngunzip sample-copy.csv.gz\ncmp source/data/sample.csv sample-copy.csv\necho \"gzip round trip matches\" > gzip-round-trip-ok.txt\ncat gzip-round-trip-ok.txt\n```\n\nGzip does not package a directory tree by itself; tar provides that structure.",
+      "title_vi": "Nén và giải nén một tệp bằng gzip",
+      "task": "Thực hiện hướng dẫn: Compress and Decompress One File with Gzip",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test ! -e /home/labex/project/archive-lab/sample-copy.csv.gz && cmp -s /home/labex/project/archive-lab/sample-copy.csv /home/labex/project/archive-lab/source/data/sample.csv && cmp -s /home/labex/project/archive-lab/gzip-round-trip-ok.txt <(printf %s 'gzip round trip matches\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test ! -e /home/labex/project/archive-lab/sample-copy.csv.gz && cmp -s /home/labex/project/archive-lab/sample-copy.csv /home/labex/project/archive-lab/source/data/sample.csv && cmp -s /home/labex/project/archive-lab/gzip-round-trip-ok.txt <(printf %s 'gzip round trip matches\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ thấy gzip khác với một tệp lưu trữ (archive) như thế nào bằng cách thao tác trên một tệp thông thường.\n\nSao chép một tệp để cây mã nguồn được giữ nguyên không thay đổi, sau đó nén bản sao đó:\n\n```bash\ncd /home/labex/project/archive-lab\ncp source/data/sample.csv sample-copy.csv\ngzip sample-copy.csv\n```\n\nTheo mặc định, gzip thay thế tệp đầu vào bằng `sample-copy.csv.gz`:\n\n```bash\nls -lh sample-copy.csv.gz\nfile sample-copy.csv.gz\n```\n\nGiải nén nó và so sánh nội dung của nó với tệp gốc:\n\n```bash\ngunzip sample-copy.csv.gz\ncmp source/data/sample.csv sample-copy.csv\necho \"gzip round trip matches\" > gzip-round-trip-ok.txt\ncat gzip-round-trip-ok.txt\n```\n\nBản thân Gzip không đóng gói một cây thư mục; tar cung cấp cấu trúc đó.",
+      "task_vi": "Thực hiện hướng dẫn: Nén và giải nén một tệp bằng gzip",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-385413-section-5-v3",
+      "title": "Create and Restore a Compressed Tar Archive",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will combine tar packaging with gzip compression. The `z` option tells tar to pass archive data through gzip.\n\nCreate `project.tar.gz` and inspect it with the matching `-tzf` options:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -czf project.tar.gz -C /home/labex/project/archive-lab source\ntar -tzf project.tar.gz > targz-members.txt\ncat targz-members.txt\n```\n\nExtract into a separate destination and verify the tree:\n\n```bash\nmkdir targz-restore\ntar -xzf project.tar.gz -C targz-restore\ndiff -r source targz-restore/source\necho \"tar.gz restore matches source\" > targz-restore-ok.txt\ncat targz-restore-ok.txt\n```\n\nExtensions communicate the format to people and tools: `.tar.gz` clearly indicates a gzip-compressed tar archive.",
+      "title_vi": "Tạo và Khôi phục một Bản lưu trữ Tar nén",
+      "task": "Thực hiện hướng dẫn: Create and Restore a Compressed Tar Archive",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "gzip -t /home/labex/project/archive-lab/project.tar.gz && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/targz-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/targz-restore-ok.txt <(printf %s 'tar.gz restore matches source\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "gzip -t /home/labex/project/archive-lab/project.tar.gz && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/targz-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/targz-restore-ok.txt <(printf %s 'tar.gz restore matches source\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kết hợp việc đóng gói tar với nén gzip. Tùy chọn `z` báo cho tar truyền dữ liệu lưu trữ thông qua gzip.\n\nTạo `project.tar.gz` và kiểm tra nó với các tùy chọn khớp `-tzf`:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -czf project.tar.gz -C /home/labex/project/archive-lab source\ntar -tzf project.tar.gz > targz-members.txt\ncat targz-members.txt\n```\n\nGiải nén vào một thư mục đích riêng biệt và xác minh cây thư mục:\n\n```bash\nmkdir targz-restore\ntar -xzf project.tar.gz -C targz-restore\ndiff -r source targz-restore/source\necho \"tar.gz restore matches source\" > targz-restore-ok.txt\ncat targz-restore-ok.txt\n```\n\nPhần mở rộng (extension) truyền đạt định dạng cho con người và các công cụ: `.tar.gz` chỉ định rõ ràng một kho lưu trữ tar được nén bằng gzip.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và Khôi phục một Bản lưu trữ Tar nén",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-385413-section-6-v3",
+      "title": "Exchange the Project as a Zip Archive",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create and inspect a Zip archive, a common format on Linux, macOS, and Windows.\n\n`zip -r` recursively adds a directory tree. Run it from the lab root so stored paths begin with `source/`:\n\n```bash\ncd /home/labex/project/archive-lab\nzip -r project.zip source\n```\n\nList members without extracting:\n\n```bash\nunzip -l project.zip\n```\n\nUse `-d` to choose a separate destination, then compare the result:\n\n```bash\nunzip -q project.zip -d zip-restore\ndiff -r source zip-restore/source\necho \"zip restore matches source\" > zip-restore-ok.txt\ncat zip-restore-ok.txt\n```",
+      "title_vi": "Xuất dự án dưới dạng tệp nén Zip",
+      "task": "Thực hiện hướng dẫn: Exchange the Project as a Zip Archive",
+      "hint": "Chạy lệnh: unzip -l project.zip",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "unzip -t /home/labex/project/archive-lab/project.zip >/dev/null && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/zip-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/zip-restore-ok.txt <(printf %s 'zip restore matches source\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "unzip -t /home/labex/project/archive-lab/project.zip >/dev/null && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/zip-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/zip-restore-ok.txt <(printf %s 'zip restore matches source\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo và kiểm tra một tệp nén Zip, một định dạng phổ biến trên Linux, macOS và Windows.\n\n`zip -r` thêm một cây thư mục một cách đệ quy. Chạy lệnh này từ thư mục gốc của lab để các đường dẫn được lưu bắt đầu bằng `source/`:\n\n```bash\ncd /home/labex/project/archive-lab\nzip -r project.zip source\n```\n\nLiệt kê các thành phần bên trong mà không cần giải nén:\n\n```bash\nunzip -l project.zip\n```\n\nSử dụng `-d` để chọn một thư mục đích khác, sau đó so sánh kết quả:\n\n```bash\nunzip -q project.zip -d zip-restore\ndiff -r source zip-restore/source\necho \"zip restore matches source\" > zip-restore-ok.txt\ncat zip-restore-ok.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Xuất dự án dưới dạng tệp nén Zip",
+      "hint_vi": "Chạy lệnh: unzip -l project.zip"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-file-packaging-and-compression-385413.json"
+}

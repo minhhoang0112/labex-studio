@@ -1,0 +1,946 @@
+{
+  "version": 1,
+  "course_id": "become-a-junior-system-administrator",
+  "audited_at": "2026-10-16",
+  "provenance": {
+    "raw_source_directory": "server/data/reference/junior-sysadmin",
+    "source": "User-provided tutorial/steps JSON; factual requirements derived from Tasks and Requirements; not original grader source.",
+    "private_graders": "unknown",
+    "fixture_bytes": "Only filenames and examples observed; unspecified bytes must be marked reconstructed.",
+    "live_comparison_path": "server/data/reference/junior-live-comparison.json",
+    "live_outline": "All ten outlines match authenticated source",
+    "live_body_scope": "First five lesson bodies visible; last five only Introduction visible, task bodies remain user-provided and not live-confirmed.",
+    "known_content_difference": "Day3 diff example stored ## Staging/Production headings versus single # live; raw text preserved."
+  },
+  "expected": {
+    "lessons": 10,
+    "sections": 68,
+    "tasks": 48
+  },
+  "critical_findings": [
+    "Day5 invented usernames in current checks; actual b.smith/j.doe.",
+    "Day9 broad 'Backup' branch shadows all5 task verifiers.",
+    "No Junior environment setup manifests currently present.",
+    "Current runtime blocks dmesg, external network/firewall, apt writes; process persistence and cron require explicit capability work.",
+    "Generic fallback groups [[\".\"]] exists in generator; currently no known task reaches it, but unmatched future task would accept any completed command."
+  ],
+  "lessons": [
+    {
+      "order": 1,
+      "summary": "Khảo sát danh tính, kernel, uptime, nhóm, top và báo cáo hệ thống.",
+      "expected_fixtures": [],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "Hiện username bằng whoami và tên kernel bằng uname.",
+          "support_assessment": "supported",
+          "current_issue": "Matcher uname chưa giới hạn tên kernel; id -un được chấp nhận dù nguồn yêu cầu whoami.",
+          "suggested_check": "Trace hai lệnh cụ thể.",
+          "title": "First Login and Environment Check",
+          "local_step_id": "source-596200-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "commands",
+          "required_capabilities": [
+            "terminal"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "Chạy uname -a và uptime.",
+          "support_assessment": "supported",
+          "current_issue": "Uptime matcher không neo cuối; chưa phân biệt đối số ngoài yêu cầu.",
+          "suggested_check": "Trace uname -a, uptime hoàn tất.",
+          "title": "Checking System Information and Uptime",
+          "local_step_id": "source-596200-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "commands",
+          "required_capabilities": [
+            "terminal"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "Chạy id xem UID/GID và nhóm.",
+          "support_assessment": "supported",
+          "current_issue": "Check đúng lệnh cơ bản.",
+          "suggested_check": "Trace id chính xác, không hard-code UID ví dụ.",
+          "title": "Gathering User and Group Details",
+          "local_step_id": "source-596200-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "commands",
+          "required_capabilities": [
+            "terminal"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "Mở top tương tác, quan sát rồi thoát bằng q.",
+          "support_assessment": "supported",
+          "current_issue": "top batch cũng qua matcher hiện tại.",
+          "suggested_check": "Trace top tương tác và hoàn tất; PTY test gửi q.",
+          "title": "Monitoring Real-time System Performance",
+          "local_step_id": "source-596200-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "commands",
+          "required_capabilities": [
+            "terminal"
+          ]
+        },
+        {
+          "position": 5,
+          "requirement": "Tạo ~/project/system_report.txt gồm output whoami, uname -a, uptime bằng > và >>.",
+          "support_assessment": "supported",
+          "current_issue": "File chứa bất kỳ labex và Linux là đủ; không cần uptime hoặc output thật.",
+          "suggested_check": "Kiểm ba phần nội dung và trace redirection của đủ ba lệnh.",
+          "title": "Generating a System Status Report",
+          "local_step_id": "source-596200-section-5-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        }
+      ],
+      "local_id": "linux-day-1-the-lay-of-the-land-596200",
+      "source_lab_id": 596200,
+      "source_url": "https://labex.io/tutorials/linux-day-1-the-lay-of-the-land-596200",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-1-the-lay-of-the-land-596200.json",
+      "section_count": 7,
+      "task_count": 5
+    },
+    {
+      "order": 2,
+      "summary": "Tổ chức Phoenix, sao lưu config, chuyển shared_docs và nén/xóa chỉ log 2023.",
+      "expected_fixtures": [
+        "~/project/phoenix_project/{main_app.py,config.json,README.md}",
+        "~/project/shared_docs/{api_spec.doc,team_guidelines.txt}",
+        "~/project/logs/{app_2023-01-15.log,db_2023-02-20.log,app_2024-05-01.log}"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "Trong phoenix_project, tạo src/config/docs bằng một lệnh.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Chỉ kiểm thư mục, bỏ điều kiện một lệnh.",
+          "suggested_check": "State ba thư mục + trace mkdir tạo đồng thời.",
+          "title": "Setting Up the Project Directory Structure",
+          "local_step_id": "source-596201-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "Dùng mv chuyển main_app.py/config.json/README.md vào src/config/docs tương ứng.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Chỉ main_app.py HOẶC app.py tự bịa là đủ; thiếu hai file còn lại và yêu cầu move.",
+          "suggested_check": "Kiểm đủ ba file, nội dung giữ nguyên và nguồn biến mất; trace mv.",
+          "title": "Navigating and Creating Project Files",
+          "local_step_id": "source-596201-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "Sao lưu config/config.json thành config/config.json.bak.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Cho phép config.bak sai vị trí/tên; không so nội dung.",
+          "suggested_check": "cmp bản sao với nguồn, đúng đường dẫn.",
+          "title": "Backing Up Critical Configuration Files",
+          "local_step_id": "source-596201-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "state",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "Chuyển nguyên ~/project/shared_docs vào phoenix_project/docs.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Bất kỳ một file guidelines.md/api_spec.md bịa cũng qua.",
+          "suggested_check": "Kiểm cả cây, đủ file gốc, nguồn không còn.",
+          "title": "Reorganizing the Team’s Shared Resources",
+          "local_step_id": "source-596201-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        },
+        {
+          "position": 5,
+          "requirement": "Tạo logs/old_logs.tar.gz chứa log tên có 2023, xóa log nguồn2023; giữ nguyên app_2024-05-01.log.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Bất kỳ .tar.gz ở project/logs cũng qua; không mở archive hay kiểm năm2024.",
+          "suggested_check": "gzip integrity, danh sách/nội dung archive, nguồn2023 mất và2024 không đổi.",
+          "title": "Archiving and Removing Outdated Log Files",
+          "local_step_id": "source-596201-section-5-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "archives"
+          ]
+        }
+      ],
+      "local_id": "linux-day-2-the-digital-architect-596201",
+      "source_lab_id": 596201,
+      "source_url": "https://labex.io/tutorials/linux-day-2-the-digital-architect-596201",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-2-the-digital-architect-596201.json",
+      "section_count": 7,
+      "task_count": 5
+    },
+    {
+      "order": 3,
+      "summary": "Lọc ERROR, dmesg fail/error, append nginx directive và lưu diff file/thư mục.",
+      "expected_fixtures": [
+        "~/project/logs/app.log",
+        "~/project/config/nginx.conf",
+        "~/project/config/{staging,production}/app.conf",
+        "~/project/server1_files/asset2.js",
+        "~/project/server2_files"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "Lọc mọi dòng ERROR trong logs/app.log thành error_report.txt.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Đọc bất kỳ tên có log bằng cat/less/tail/grep/head cũng qua, không cần artifact.",
+          "suggested_check": "So output chính xác với ERROR nguồn và baseline.",
+          "title": "Reviewing Application Log File Contents",
+          "local_step_id": "source-596202-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "state",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "Dùng dmesg tìm fail/error không phân biệt hoa/thường, lưu boot_issues.txt.",
+          "support_assessment": "unsupported",
+          "current_issue": "journalctl hoặc cat/var/log được chấp nhận dù nguồn bắt dmesg; không kiểm output.",
+          "suggested_check": "Hiện unsupported: namespace không có CAP_SYSLOG; không giả kernel log.",
+          "title": "Investigating System Boot Messages",
+          "local_step_id": "source-596202-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "kernel-log"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "Lấy dòng worker_processes từ config/nginx.conf và append vào error_report.txt.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Chỉ đọc bất kỳ conf/nginx/apache là qua; không kiểm append.",
+          "suggested_check": "So file gồm ERROR gốc rồi đúng directive; kiểm >> nếu nguồn yêu cầu phương thức.",
+          "title": "Examining the Web Server Configuration File",
+          "local_step_id": "source-596202-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "diff staging/app.conf với production/app.conf, lưu config_diff.txt.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "diff bất kỳ cặp nào cũng qua; không cần file kết quả.",
+          "suggested_check": "So nội dung diff thật đúng operands; chấp nhận status1 cho khác biệt.",
+          "title": "Comparing Staging and Production Configuration Files",
+          "local_step_id": "source-596202-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        },
+        {
+          "position": 5,
+          "requirement": "diff server1_files/server2_files, lưu complete comparison trong missing_files.txt.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "ls bất kỳ cũng qua, trái yêu cầu diff.",
+          "suggested_check": "So diff thật đúng thư mục; file chứa asset2.js chỉ ở server1.",
+          "title": "Verifying Directory Consistency Between Servers",
+          "local_step_id": "source-596202-section-5-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        }
+      ],
+      "local_id": "linux-day-3-the-log-investigator-596202",
+      "source_lab_id": 596202,
+      "source_url": "https://labex.io/tutorials/linux-day-3-the-log-investigator-596202",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-3-the-log-investigator-596202.json",
+      "section_count": 7,
+      "task_count": 5
+    },
+    {
+      "order": 4,
+      "summary": "File khóa600, owner dev_lead:developers đệ quy, project750, src setgid2770.",
+      "expected_fixtures": [
+        "~/project/phoenix_project/{src,docs}",
+        "account dev_lead",
+        "group developers"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "Tạo phoenix_project/project_keys.txt rỗng, dùng chmod numeric đặt600.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Bất kỳ *.txt/key/conf đủ; không kiểm path, rỗng hay quyền.",
+          "suggested_check": "Exact file/empty/mode600 + numeric chmod trace.",
+          "title": "Creating a Secure File for a New Project",
+          "local_step_id": "source-596203-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "permissions"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "chown toàn bộ phoenix_project sang dev_lead:developers.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "chown/chgrp bất kỳ là đủ.",
+          "suggested_check": "sudo find kiểm không có phần tử sai UID/GID + chown-R trace.",
+          "title": "Assigning Ownership of Project Resources",
+          "local_step_id": "source-596203-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "users",
+            "sudo",
+            "permissions"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "Đặt riêng phoenix_project mode750, không recursive.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Bất kỳ chmod được chấp nhận.",
+          "suggested_check": "Exact directory mode750, owner/group, command không-R.",
+          "title": "Securing the Main Project Directory",
+          "local_step_id": "source-596203-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "sudo",
+            "permissions"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "Đặt src setgid và owner/group rwx, othersnone =>2770, file mới kế thừa developers.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Matcher chấp nhận cả2771..2775 sai quyền others; không kiểm target, owner/group hoặc kế thừa.",
+          "suggested_check": "Exact2770 + groupdevelopers; probe tạo file tạm bằng dev_lead rồi kiểm kế thừa.",
+          "title": "Setting Up Collaborative Permissions for the Dev Team",
+          "local_step_id": "source-596203-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "state",
+          "required_capabilities": [
+            "terminal",
+            "sudo",
+            "permissions"
+          ]
+        }
+      ],
+      "local_id": "linux-day-4-the-fortress-guardian-596203",
+      "source_lab_id": 596203,
+      "source_url": "https://labex.io/tutorials/linux-day-4-the-fortress-guardian-596203",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-4-the-fortress-guardian-596203.json",
+      "section_count": 6,
+      "task_count": 4
+    },
+    {
+      "order": 5,
+      "summary": "Tạo b.smith, HOME, mật khẩu, nhóm developers; khóa j.doe nhưng giữ account/HOME.",
+      "expected_fixtures": [
+        "account j.doe initially unlocked",
+        "/home/j.doe",
+        "group developers"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "useradd tạo đúng người dùng b.smith.",
+          "support_assessment": "needs_runtime_extension",
+          "current_issue": "Checks alex/devuser/UID100x không liên quan b.smith.",
+          "suggested_check": "getent b.smith + exact useradd trace.",
+          "title": "Onboarding a New Developer to the System",
+          "local_step_id": "source-596204-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "users",
+            "sudo"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "Tạo /home/b.smith bằng useradd -m/--create-home; có thể xóa/recreate account trước.",
+          "support_assessment": "needs_runtime_extension",
+          "current_issue": "Dùng lại check account bất kỳ; không cần HOME hay-m.",
+          "suggested_check": "HOME tồn tại/đúng owner, trace useradd với-m hoặc longflag.",
+          "title": "Creating a Dedicated Home Directory for the New User",
+          "local_step_id": "source-596204-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "users",
+            "sudo",
+            "files"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "passwd đặt mật khẩu b.smith bằng hai prompt.",
+          "support_assessment": "needs_runtime_extension",
+          "current_issue": "passwd bất kỳ người dùng cũng qua.",
+          "suggested_check": "passwd -S b.smith cóP + completed passwd b.smith.",
+          "title": "Assigning an Initial Password for the New User",
+          "local_step_id": "source-596204-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "users",
+            "sudo"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "Thêm b.smith vào developers, giữ nhóm cũ.",
+          "support_assessment": "needs_runtime_extension",
+          "current_issue": "Chỉ cần dòng developers tồn tại là qua từ fixture.",
+          "suggested_check": "Membership của b.smith, primarygroup và trace append semantics.",
+          "title": "Adding the New Developer to the \"developers\" Group",
+          "local_step_id": "source-596204-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "users",
+            "sudo"
+          ]
+        },
+        {
+          "position": 5,
+          "requirement": "Khóa j.doe, không xóa account hoặc HOME.",
+          "support_assessment": "needs_runtime_extension",
+          "current_issue": "Lock bất kỳ tài khoản là đủ; fixturej.doe chưa có.",
+          "suggested_check": "getent j.doe, HOME giữ nguyên, trạng tháiL; fixture ban đầuP.",
+          "title": "Temporarily Disabling a Departing Employee’s Account",
+          "local_step_id": "source-596204-section-5-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "users",
+            "sudo",
+            "files"
+          ]
+        }
+      ],
+      "local_id": "linux-day-5-the-keeper-of-the-keys-596204",
+      "source_lab_id": 596204,
+      "source_url": "https://labex.io/tutorials/linux-day-5-the-keeper-of-the-keys-596204",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-5-the-keeper-of-the-keys-596204.json",
+      "section_count": 7,
+      "task_count": 5
+    },
+    {
+      "order": 6,
+      "summary": "ps aux/top, pgrep critical_service, pkill resource_hog, nohup data_processor có2>&1&.",
+      "expected_fixtures": [
+        "critical_service.sh running",
+        "resource_hog.sh running and consumingCPU",
+        "data_processor.sh"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "Hiện mọi process, user-oriented có CPU/memory/fullcommand.",
+          "support_assessment": "supported",
+          "current_issue": "ps bất kỳ đối số cũng qua, kể cả chỉ ownprocess hoặc thiếucột.",
+          "suggested_check": "Trace ps aux hoặc format tương đương đã xác nhận.",
+          "title": "Listing Active System Processes",
+          "local_step_id": "source-596618-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "commands",
+          "required_capabilities": [
+            "terminal"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "Mở monitor tương tác, nhận diện script dùngCPU cao nhất rồi thoát.",
+          "support_assessment": "unsupported",
+          "current_issue": "top/htop bất kỳ qua dù không có resource_hog fixture.",
+          "suggested_check": "Cần process fixtures trong namespace sống xuyên bước; chưa hỗ trợ.",
+          "title": "Monitoring Process Resource Usage",
+          "local_step_id": "source-596618-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "persistent-process-fixtures"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "Dùng pgrep tìm PID critical_service.sh đang chạy.",
+          "support_assessment": "unsupported",
+          "current_issue": "pidof/psgrep hoặc pgrep khôngđích cũng qua.",
+          "suggested_check": "Cần pgrep đúng tên và process hiện hữu trong cùngPIDnamespace.",
+          "title": "Identifying Key Processes",
+          "local_step_id": "source-596618-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "persistent-process-fixtures"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "Dùng pkill dừng resource_hog.sh.",
+          "support_assessment": "unsupported",
+          "current_issue": "kill/killall được chấp nhận dù nguồn bắtpkill; không target/check còn sống.",
+          "suggested_check": "Cần fixture ban đầu sống, pkill đúng process, criticalservice vẫn sống.",
+          "title": "Terminating a Misbehaving Process",
+          "local_step_id": "source-596618-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "persistent-process-fixtures"
+          ]
+        },
+        {
+          "position": 5,
+          "requirement": "Từ project, nohup data_processor.sh >processor.log 2>&1 & và process còn sống sau hangup.",
+          "support_assessment": "unsupported",
+          "current_issue": "jobs/bg/fg hay bất kỳ & cũng qua; không log/target/nohup.",
+          "suggested_check": "Cần namespace/supervisor tồn tại ngoài PTY, marker process và output2streams.",
+          "title": "Starting and Managing Background Processes",
+          "local_step_id": "source-596618-section-5-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "persistent-process-fixtures"
+          ]
+        }
+      ],
+      "local_id": "linux-day-6-the-process-overseer-596618",
+      "source_lab_id": 596618,
+      "source_url": "https://labex.io/tutorials/linux-day-6-the-process-overseer-596618",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-6-the-process-overseer-596618.json",
+      "section_count": 7,
+      "task_count": 5
+    },
+    {
+      "order": 7,
+      "summary": "ip addr, ifconfig, ping đúng3 gói8.8.8.8, ss listeningTCP8000 và UFW8000/22 enabled.",
+      "expected_fixtures": [
+        "network tools ip,ifconfig,ping,ss,ufw",
+        "reachable8.8.8.8",
+        "portal TCP8000",
+        "private firewall ruleset"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "Dùng ip addr hiện interfaces.",
+          "support_assessment": "supported",
+          "current_issue": "ifconfig/iplink vẫn qua dù khác yêu cầu.",
+          "suggested_check": "Trace ip addr chính xác; môi trường có thể chỉlo, không giảIP.",
+          "title": "Checking Network Interface Status",
+          "local_step_id": "source-596619-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "commands",
+          "required_capabilities": [
+            "terminal"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "Dùng ifconfig hiện cấu hình IP.",
+          "support_assessment": "unsupported",
+          "current_issue": "Lặp checkipaddr cho stepnày: chưa chạyifconfig đã cóthểqua.",
+          "suggested_check": "Trace ifconfig, kiểm tool available.",
+          "title": "Verifying IP Address Configuration",
+          "local_step_id": "source-596619-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "ifconfig-tool"
+          ],
+          "runtime_observation": "ip and ss available; ifconfig absent; no installation performed"
+        },
+        {
+          "position": 3,
+          "requirement": "ping gửi đúng3 ICMP tới8.8.8.8.",
+          "support_assessment": "unsupported",
+          "current_issue": "curl/nc/traceroute hoặc pingđíchkhác/countkhác đềuqua.",
+          "suggested_check": "Không có routeInternet, NET_RAW. Không đổi sanglocalhost vàclaimparity.",
+          "title": "Testing Connectivity to Remote Hosts",
+          "local_step_id": "source-596619-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "internet-icmp"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "ss kiểm listeningTCP port8000.",
+          "support_assessment": "unsupported",
+          "current_issue": "netstat/lsof hay ss bất kỳ qua.",
+          "suggested_check": "Cần ss listenTCP đúng8000 và portalfixture; processnamespace hiện chưaseed.",
+          "title": "Inspecting Open Network Ports",
+          "local_step_id": "source-596619-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "portal-network-fixture"
+          ]
+        },
+        {
+          "position": 5,
+          "requirement": "sudo ufw allow8000, allow22 rồi enable.",
+          "support_assessment": "unsupported",
+          "current_issue": "iptables hoặc ufwstatus cũngqua; thiếu cả2rules/enabledstate.",
+          "suggested_check": "Cần netnamespace riêng cóNET_ADMIN và UFW config riêng; hiện không có.",
+          "title": "Configuring Basic Firewall Rules",
+          "local_step_id": "source-596619-section-5-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "private-firewall"
+          ]
+        }
+      ],
+      "local_id": "linux-day-7-the-network-navigator-596619",
+      "source_lab_id": 596619,
+      "source_url": "https://labex.io/tutorials/linux-day-7-the-network-navigator-596619",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-7-the-network-navigator-596619.json",
+      "section_count": 7,
+      "task_count": 5
+    },
+    {
+      "order": 8,
+      "summary": "sudo apt update/installneofetch; queryversion; removefiglet; autoremove.",
+      "expected_fixtures": [
+        "private writable usr/dpkg/apt database",
+        "configured package repositories and network",
+        "figlet initially installed",
+        "orphan automatic dependency"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "sudo apt update configuredsources.",
+          "support_assessment": "unsupported",
+          "current_issue": "apt update cóthểzero khi khôngsources, regexkhôngsudo hoặcindexstate.",
+          "suggested_check": "Cần imagepackage manager riêng, repo/network vàindexproof.",
+          "title": "Updating System Package Repositories",
+          "local_step_id": "source-596620-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "private-package-image"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "sudo apt install neofetch.",
+          "support_assessment": "unsupported",
+          "current_issue": "Install bất kỳ package cũng qua.",
+          "suggested_check": "Cần neofetch thựcinstalled dpkgstate/toolfiles riêng.",
+          "title": "Installing Essential Software Packages",
+          "local_step_id": "source-596620-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "private-package-image"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "Query installed neofetch details includingversion.",
+          "support_assessment": "unsupported",
+          "current_issue": "which bất kỳ binary cũngqua;khôngpackage/version.",
+          "suggested_check": "Cần query neofetch metadata +actualinstalledstate.",
+          "title": "Verifying Installed Package Versions",
+          "local_step_id": "source-596620-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "private-package-image"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "sudo apt remove figlet.",
+          "support_assessment": "unsupported",
+          "current_issue": "purge/autoremove/removebấtkỳcùngmatcher;noconditioninitialfiglet.",
+          "suggested_check": "Cần figlet fixturetrướcexists vàsauabsent.",
+          "title": "Removing Unnecessary Software Packages",
+          "local_step_id": "source-596620-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "private-package-image"
+          ]
+        },
+        {
+          "position": 5,
+          "requirement": "sudo apt autoremove unneeded dependencies.",
+          "support_assessment": "unsupported",
+          "current_issue": "Checkcopyremove bấtkỳ, khôngautoremovespecific.",
+          "suggested_check": "Cần orphan dependencyfixture, actualautoremove outcome.",
+          "title": "Managing Package Dependencies",
+          "local_step_id": "source-596620-section-5-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "private-package-image"
+          ]
+        }
+      ],
+      "local_id": "linux-day-8-the-software-steward-596620",
+      "source_lab_id": 596620,
+      "source_url": "https://labex.io/tutorials/linux-day-8-the-software-steward-596620",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-8-the-software-steward-596620.json",
+      "section_count": 7,
+      "task_count": 5
+    },
+    {
+      "order": 9,
+      "summary": "Manifest data/config/logs, tar-Tgzip, listreport, restoreonlyapp.conf và crontab-e timestampmỗi phút.",
+      "expected_fixtures": [
+        "~/project/{data,config,logs,backups}",
+        "data/transactions.csv",
+        "config/app.conf",
+        "logs/app.log",
+        "private crontab spool and daemon"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "Tạo backup-list.txt gồm đúngdata/config/logs mỗi dòng.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Bị broadBackupbranch biến thànhchecktar-create, saihoàntoàn.",
+          "suggested_check": "cmp exactmanifest.",
+          "title": "Identifying Critical Data for Backup",
+          "local_step_id": "source-596621-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "state",
+          "required_capabilities": [
+            "terminal",
+            "files"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "Tạo backups/system-backup.tar.gz bằngtar-z và-Tbackup-list.txt.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Chỉ bất kỳtarcreate, khôngpath/manifest/nộidung.",
+          "suggested_check": "gzip+exactentries/content+trace-T đúngmanifest.",
+          "title": "Creating a Full System Backup Archive",
+          "local_step_id": "source-596621-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "archives"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "tar listkhôngextract, lưu outputbackup-contents.txt.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "BroadBackupbranch chấmcreate-thaylist; nhánhlistkhôngbao giờtới.",
+          "suggested_check": "Report khớptar-t/tvarchive, commandhistory listoption.",
+          "title": "Verifying Backup Integrity",
+          "local_step_id": "source-596621-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "archives"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "Xóa config/app.conf rồi extractduynhất file đó vềgốc.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "BroadBackupbranch chấmcreate-thayrestore.",
+          "suggested_check": "Trace rm vàtar-x chỉmộtentry +cmprestoredbytes; khôngchoautopassfilecósẵn.",
+          "title": "Restoring Files from a Backup",
+          "local_step_id": "source-596621-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "archives"
+          ]
+        },
+        {
+          "position": 5,
+          "requirement": "crontab-e schedule* * * * *, absoluteoutdir,timestamp, backdata/config/logs.",
+          "support_assessment": "needs_runtime_extension",
+          "current_issue": "BroadBackupbranch bỏquacron, nhánhSchedulingkhôngtới.",
+          "suggested_check": "Đọcprivatecrontab, exactschedule/commandscope/timestamp; daemonneededđểclaimactualrun.",
+          "title": "Scheduling Automated Backup Tasks",
+          "local_step_id": "source-596621-section-5-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "unsupported",
+          "required_capabilities": [
+            "private-cron"
+          ]
+        }
+      ],
+      "local_id": "linux-day-9-the-backup-sentinel-596621",
+      "source_lab_id": 596621,
+      "source_url": "https://labex.io/tutorials/linux-day-9-the-backup-sentinel-596621",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-9-the-backup-sentinel-596621.json",
+      "section_count": 7,
+      "task_count": 5
+    },
+    {
+      "order": 10,
+      "summary": "log_manager.sh shebang/echo, LOG_DIR/readBACKUP_FILENAME, missingdirif-exit1, forlogcopy.",
+      "expected_fixtures": [
+        "~/project/app_logs/{access.log,debug.log,error.log}",
+        "a non-log fixture to testfilter"
+      ],
+      "tasks": [
+        {
+          "position": 1,
+          "requirement": "log_manager.sh shebang#!/bin/bash, echo Log Manager Initialized., executable.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Bất kỳ*.sh executablequa; khôngtarget/output/shebang.",
+          "suggested_check": "Exactpath/shebang/x; executebehavioroutput.",
+          "title": "Writing a Simple Shell Script",
+          "local_step_id": "source-596613-section-1-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "shell",
+            "permissions"
+          ]
+        },
+        {
+          "position": 2,
+          "requirement": "LOG_DIR=/home/labex/project/app_logs; prompt/readBACKUP_FILENAME rồi echo giátrị.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "grep read|$1 trongbấtkỳscript/comment làđủ.",
+          "suggested_check": "Exactvariables +dynamicstdin token observedoutput, timeout.",
+          "title": "Adding Variables and User Input",
+          "local_step_id": "source-596613-section-2-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "state",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "shell"
+          ]
+        },
+        {
+          "position": 3,
+          "requirement": "if -d LOG_DIR; missingdir echoexacterror vàexit1 ngaykhôngprompt.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "Từif/elif/else trongcomment cũngqua.",
+          "suggested_check": "Runwithdirpresent; isolate temporarilymissingfixture; assertstatus1/error/noinputprompt, restorealways.",
+          "title": "Implementing Conditional Logic",
+          "local_step_id": "source-596613-section-3-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "state",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "shell"
+          ]
+        },
+        {
+          "position": 4,
+          "requirement": "mkdirbackups; for *.log trongLOG_DIR, cp từngfile, echoCopiedfilename.",
+          "support_assessment": "needs_fixture",
+          "current_issue": "grep for|while trongbấtkỳfile/commentqua; khôngcopy hoặcfilter.",
+          "suggested_check": "Actualfilescopiedbyteidentical +freshlogprobe prevents hardcodednames; structuralfor/cp plusbehavior.",
+          "title": "Looping Through File Operations",
+          "local_step_id": "source-596613-section-4-v2",
+          "original_private_verifier": "unknown",
+          "local_verification_kind": "all",
+          "required_capabilities": [
+            "terminal",
+            "files",
+            "shell"
+          ]
+        }
+      ],
+      "local_id": "linux-day-10-the-script-artisan-596613",
+      "source_lab_id": 596613,
+      "source_url": "https://labex.io/tutorials/linux-day-10-the-script-artisan-596613",
+      "reference_path": "server/data/reference/junior-sysadmin/linux-day-10-the-script-artisan-596613.json",
+      "section_count": 6,
+      "task_count": 4
+    }
+  ],
+  "audit_snapshot": "Findings refer to pre-correction generated checks; implementation metadata below reflects corrected definitions, not a claim of runtime test completion.",
+  "runtime_observations": {
+    "ifconfig": false,
+    "ip": true,
+    "ss": true,
+    "private_crontab_registration": true,
+    "persistent_cron_execution": false,
+    "supported_plan_tasks": 33,
+    "unsupported_plan_tasks": 15,
+    "dotted_account_names": true,
+    "initially_unlocked_account_fixture": true,
+    "setgid_2770_and_group_inheritance": true,
+    "private_fsetid_added": true
+  },
+  "runtime_validation": {
+    "complete": true,
+    "lessons": 10,
+    "supported_passed": 33,
+    "before_work_negative_passed": 33,
+    "explicitly_blocked": 15,
+    "host_account_metadata_unchanged": true,
+    "artifact": ".artifacts/source-course-smoke-mvamooig.json",
+    "scope": "Supported local implementation; not original private graders or complete original VM parity"
+  }
+}

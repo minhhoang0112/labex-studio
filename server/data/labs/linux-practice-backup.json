@@ -1,0 +1,48 @@
+{
+  "id": "linux-practice-backup",
+  "course_id": "linux-commands-practice-online",
+  "title": "Luyện tập: Bản sao lưu có kiểm chứng",
+  "order": 3,
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Tạo checksum SHA-256, sao lưu tar.gz và xác minh dữ liệu khôi phục. Không ghi đè thư mục nguồn khi giải nén.",
+  "steps": [
+    {
+      "id": "backup-1",
+      "title": "1. Tạo dữ liệu và checksum",
+      "content": "### 1. Tạo dữ liệu và checksum\n\nsha256sum tạo dấu vân tay nội dung. Chạy trong thư mục nguồn để checksum lưu tên tương đối và có thể kiểm tra ở nơi khôi phục.\n\n```bash\nmkdir -p \"$HOME/backup-practice/source\"\nprintf 'project=linux\\n' > \"$HOME/backup-practice/source/config.txt\"\nprintf 'finished lesson 1\\n' > \"$HOME/backup-practice/source/notes.txt\"\ncd \"$HOME/backup-practice/source\"\nsha256sum config.txt notes.txt > SHA256SUMS\ncd \"$HOME\"\n```\n\nTạo hai file mẫu và SHA256SUMS hợp lệ.",
+      "task": "Tạo hai file mẫu và SHA256SUMS hợp lệ.",
+      "verify_command": "cmp -s \"$HOME/backup-practice/source/config.txt\" <(printf 'project=linux\\n') && cmp -s \"$HOME/backup-practice/source/notes.txt\" <(printf 'finished lesson 1\\n') && cd \"$HOME/backup-practice/source\" && cmp -s SHA256SUMS <(sha256sum config.txt notes.txt) && sha256sum -c SHA256SUMS",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "1. Tạo dữ liệu và checksum",
+      "content_vi": "### 1. Tạo dữ liệu và checksum\n\nsha256sum tạo dấu vân tay nội dung. Chạy trong thư mục nguồn để checksum lưu tên tương đối và có thể kiểm tra ở nơi khôi phục.\n\n```bash\nmkdir -p \"$HOME/backup-practice/source\"\nprintf 'project=linux\\n' > \"$HOME/backup-practice/source/config.txt\"\nprintf 'finished lesson 1\\n' > \"$HOME/backup-practice/source/notes.txt\"\ncd \"$HOME/backup-practice/source\"\nsha256sum config.txt notes.txt > SHA256SUMS\ncd \"$HOME\"\n```\n\nTạo hai file mẫu và SHA256SUMS hợp lệ.",
+      "task_vi": "Tạo hai file mẫu và SHA256SUMS hợp lệ.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    },
+    {
+      "id": "backup-2",
+      "title": "2. Đóng gói đủ dữ liệu",
+      "content": "### 2. Đóng gói đủ dữ liệu\n\nArchive gồm cả hai file và checksum. gzip -t kiểm tra cấu trúc nén; bước tiếp theo mới kiểm chứng nội dung.\n\n```bash\ntar -czf \"$HOME/backup-practice/snapshot.tar.gz\" -C \"$HOME/backup-practice/source\" config.txt notes.txt SHA256SUMS\ngzip -t \"$HOME/backup-practice/snapshot.tar.gz\"\n```\n\nTạo snapshot.tar.gz chứa hai file và SHA256SUMS.",
+      "task": "Tạo snapshot.tar.gz chứa hai file và SHA256SUMS.",
+      "verify_command": "gzip -t \"$HOME/backup-practice/snapshot.tar.gz\" && cmp -s <(tar -tzf \"$HOME/backup-practice/snapshot.tar.gz\" | LC_ALL=C sort) <(printf 'SHA256SUMS\\nconfig.txt\\nnotes.txt\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "2. Đóng gói đủ dữ liệu",
+      "content_vi": "### 2. Đóng gói đủ dữ liệu\n\nArchive gồm cả hai file và checksum. gzip -t kiểm tra cấu trúc nén; bước tiếp theo mới kiểm chứng nội dung.\n\n```bash\ntar -czf \"$HOME/backup-practice/snapshot.tar.gz\" -C \"$HOME/backup-practice/source\" config.txt notes.txt SHA256SUMS\ngzip -t \"$HOME/backup-practice/snapshot.tar.gz\"\n```\n\nTạo snapshot.tar.gz chứa hai file và SHA256SUMS.",
+      "task_vi": "Tạo snapshot.tar.gz chứa hai file và SHA256SUMS.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    },
+    {
+      "id": "backup-3",
+      "title": "3. Khôi phục và kiểm tra checksum",
+      "content": "### 3. Khôi phục và kiểm tra checksum\n\nsha256sum -c đọc từng hash rồi kiểm tra file tương ứng. Exit code 0 nghĩa là tất cả khớp; kết quả được lưu làm báo cáo.\n\n```bash\nmkdir -p \"$HOME/backup-practice/restored\"\ntar -xzf \"$HOME/backup-practice/snapshot.tar.gz\" -C \"$HOME/backup-practice/restored\"\ncd \"$HOME/backup-practice/restored\"\nLC_ALL=C sha256sum -c SHA256SUMS > \"$HOME/backup-practice/check.txt\"\ncat \"$HOME/backup-practice/check.txt\"\ncd \"$HOME\"\n```\n\nKhôi phục đầy đủ và tạo check.txt báo OK cho hai file.",
+      "task": "Khôi phục đầy đủ và tạo check.txt báo OK cho hai file.",
+      "verify_command": "cd \"$HOME/backup-practice/restored\" && sha256sum -c SHA256SUMS && cmp -s config.txt ../source/config.txt && cmp -s notes.txt ../source/notes.txt && cmp -s \"$HOME/backup-practice/check.txt\" <(printf 'config.txt: OK\\nnotes.txt: OK\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "3. Khôi phục và kiểm tra checksum",
+      "content_vi": "### 3. Khôi phục và kiểm tra checksum\n\nsha256sum -c đọc từng hash rồi kiểm tra file tương ứng. Exit code 0 nghĩa là tất cả khớp; kết quả được lưu làm báo cáo.\n\n```bash\nmkdir -p \"$HOME/backup-practice/restored\"\ntar -xzf \"$HOME/backup-practice/snapshot.tar.gz\" -C \"$HOME/backup-practice/restored\"\ncd \"$HOME/backup-practice/restored\"\nLC_ALL=C sha256sum -c SHA256SUMS > \"$HOME/backup-practice/check.txt\"\ncat \"$HOME/backup-practice/check.txt\"\ncd \"$HOME\"\n```\n\nKhôi phục đầy đủ và tạo check.txt báo OK cho hai file.",
+      "task_vi": "Khôi phục đầy đủ và tạo check.txt báo OK cho hai file.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    }
+  ],
+  "title_vi": "Luyện tập: Bản sao lưu có kiểm chứng"
+}

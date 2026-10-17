@@ -1,0 +1,534 @@
+{
+  "id": "linux-user-account-management",
+  "course_id": "quick-start-with-linux",
+  "order": 9,
+  "title": "User Account Management",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Tạo, đổi thông tin, đặt mật khẩu, thêm nhóm, khóa/mở và xóa tài khoản; chỉ chạy trong môi trường bài riêng.",
+  "source_url": "https://labex.io/tutorials/linux-user-account-management-49",
+  "source_lab_id": 49,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-user-account-management-49",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-or-observed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/linux-user-account-management.json",
+  "sections": [
+    {
+      "id": "source-49-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "This lab will guide you through basic user account management operations in Linux systems. You'll learn how to create, modify, and delete user accounts, as well as how to set and change passwords. These are fundamental skills for Linux system administration. Don't worry if you're new to Linux - we'll explain everything step by step!",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Bài thực hành này sẽ hướng dẫn bạn các thao tác quản lý tài khoản người dùng cơ bản trong các hệ thống Linux. Bạn sẽ học cách tạo mới, sửa đổi và xóa các tài khoản người dùng, cũng như cách thiết lập và thay đổi mật khẩu. Đây là những kỹ năng nền tảng sống còn đối với quản trị viên hệ thống Linux. Đừng lo lắng nếu bạn là người mới làm quen với Linux - chúng tôi sẽ giải thích chi tiết từng bước một!"
+    },
+    {
+      "id": "source-49-section-1",
+      "title": "Creating a New User",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's start by creating a new user account named \"joker\".\n\n1. Open a terminal. In Linux, the terminal is a text interface where you can enter commands.\n2. Type the following command and press Enter:\n\n```bash\nsudo useradd joker\n```\n\nLet's break this down:\n\n- `sudo` is a command that gives you temporary superuser (administrator) privileges. We use it because creating a new user requires these higher-level permissions.\n- `useradd` is the command to create a new user.\n- `joker` is the username we're creating.\n\nNote: If you try to run this command without `sudo`, you'll get a \"permission denied\" error. This is because regular users aren't allowed to create new user accounts - it's a task reserved for system administrators.\n\nThis highlights the difference between a superuser and a common user. As a common user, you can't create new user accounts, but by using `sudo`, you can temporarily elevate your privileges to perform this administrative task.\n\n1. To verify that the user was created, we'll examine the `/etc/passwd` file:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nThe `/etc/passwd` file is like a phonebook for user accounts. Each line represents one user account, with different pieces of information separated by colons (:).\n\nYou should see output similar to:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\n```\n\nThis line shows:\n\n- Username: joker\n- Password: x (the actual password is stored securely elsewhere)\n- User ID: 5001\n- Group ID: 5001\n- Home Directory: `/home/joker`, but it hasn't been created yet\n- Default Shell: `/bin/sh`",
+      "task": "Tạo người dùng joker và tra bản ghi passwd.",
+      "hint": "useradd tạo bản ghi tài khoản; -m ở bước sau tạo HOME rõ ràng.",
+      "verification": {
+        "kind": "state",
+        "command": "getent passwd joker >/dev/null"
+      },
+      "title_vi": "Tạo một Người Dùng Mới",
+      "content_vi": "Hãy bắt đầu bằng việc tạo một tài khoản người dùng mới có tên \"joker\".\n\n1. Mở cửa sổ terminal. Trong Linux, terminal là giao diện dòng lệnh bằng văn bản nơi bạn có thể nhập các câu lệnh.\n2. Nhập câu lệnh sau và nhấn Enter:\n\n```bash\nsudo useradd joker\n```\n\nHãy cùng phân tích câu lệnh này:\n\n- `sudo`: Câu lệnh cấp cho bạn quyền siêu người dùng (quản trị viên - administrator) tạm thời. Chúng ta sử dụng `sudo` vì việc tạo người dùng mới yêu cầu các quyền hạn cấp cao này.\n- `useradd`: Lệnh dùng để tạo một người dùng mới trên hệ thống.\n- `joker`: Tên đăng nhập (username) của tài khoản mà chúng ta đang tạo.\n\nLưu ý: Nếu bạn thử chạy lệnh này mà không có `sudo`, bạn sẽ nhận được thông báo lỗi \"permission denied\". Điều này là do người dùng thông thường không được phép tạo tài khoản người dùng mới - đây là nhiệm vụ được bảo lưu riêng cho quản trị viên hệ thống.\n\nĐiều này làm nổi bật sự khác biệt giữa siêu người dùng (superuser) và người dùng thông thường (common user). Với tư cách người dùng thông thường, bạn không thể tự ý tạo tài khoản mới, nhưng bằng cách sử dụng `sudo`, bạn có thể nâng cao đặc quyền của mình một cách tạm thời để thực thi tác vụ quản trị này.\n\n3. Để xác minh người dùng đã được tạo thành công, chúng ta sẽ kiểm tra tệp `/etc/passwd`:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nTệp `/etc/passwd` giống như một danh bạ lưu trữ thông tin các tài khoản người dùng. Mỗi dòng đại diện cho một tài khoản, với các trường thông tin khác nhau được phân tách bằng dấu hai chấm (`:`).\n\nBạn sẽ thấy kết quả tương tự như sau:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\n```\n\nDòng này hiển thị:\n\n- **Tên đăng nhập (Username)**: `joker`\n- **Mật khẩu (Password)**: `x` (mật khẩu mã hóa thực tế được lưu trữ an toàn ở một nơi khác)\n- **Mã định danh người dùng (User ID - UID)**: `5001`\n- **Mã định danh nhóm (Group ID - GID)**: `5001`\n- **Thư mục cá nhân (Home Directory)**: `/home/joker`, nhưng thư mục này chưa được tạo ra trên đĩa\n- **Shell mặc định (Default Shell)**: `/bin/sh`",
+      "task_vi": "Tạo người dùng joker bằng lệnh sudo useradd joker và kiểm tra trong /etc/passwd.",
+      "hint_vi": "Chạy sudo useradd joker rồi sudo grep -w 'joker' /etc/passwd."
+    },
+    {
+      "id": "source-49-section-2",
+      "title": "Creating a User with a Home Directory",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now, let's create another user named \"bob\" and give them a home directory.\n\n1. Run the following command:\n\n```bash\nsudo useradd -m bob\n```\n\nThe `-m` option tells the system to create a home directory for the user. A home directory is like a personal folder where a user can store their files and settings.\n\n1. Let's verify that the home directory was created:\n\n```bash\nsudo ls -ld /home/bob\n```\n\nYou should see output similar to:\n\n```plaintext\ndrwxr-x--- 2 bob bob 57 Jan 19 13:33 /home/bob\n```\n\nThis output shows:\n\n- `d` at the start means it's a directory\n- `rwxr-x---` shows who can read, write, or execute in this directory\n- The two `bob` entries show that both the user and group owner of this directory is bob\n- `57` is the size of the directory in bytes\n- `Jan 19 13:33` is when the directory was created\n- `/home/bob` is the location of the directory",
+      "task": "Tạo bob kèm HOME bằng useradd -m.",
+      "hint": "Không dùng tài khoản có sẵn của máy host.",
+      "verification": {
+        "kind": "state",
+        "command": "getent passwd bob >/dev/null && test -d /home/bob && test \"$(stat -c '%U' /home/bob)\" = bob"
+      },
+      "title_vi": "Tạo Người Dùng Kèm Thư Mục Cá Nhân",
+      "content_vi": "Bây giờ, hãy tạo một người dùng khác có tên \"bob\" và tự động cấp cho người này một thư mục cá nhân (home directory).\n\n1. Chạy câu lệnh sau:\n\n```bash\nsudo useradd -m bob\n```\n\nTùy chọn `-m` yêu cầu hệ thống tự động khởi tạo một thư mục cá nhân cho người dùng. Thư mục cá nhân giống như một thư mục riêng biệt nơi người dùng có thể lưu trữ các tệp tin và cài đặt cá nhân của mình.\n\n2. Hãy xác minh rằng thư mục cá nhân đã được tạo thành công:\n\n```bash\nsudo ls -ld /home/bob\n```\n\nBạn sẽ thấy kết quả tương tự như sau:\n\n```plaintext\ndrwxr-x--- 2 bob bob 57 Jan 19 13:33 /home/bob\n```\n\nKết quả này hiển thị:\n\n- Ký tự `d` ở đầu dòng biểu thị đây là một thư mục (directory).\n- `rwxr-x---`: Quyền hạn cho biết ai có thể đọc, ghi hoặc thực thi bên trong thư mục này.\n- Hai mục `bob bob`: Cho biết cả người dùng sở hữu lẫn nhóm sở hữu của thư mục này đều là `bob`.\n- `57`: Kích thước của thư mục tính bằng byte.\n- `Jan 19 13:33`: Thời điểm thư mục được tạo ra.\n- `/home/bob`: Đường dẫn vị trí của thư mục trên hệ thống.",
+      "task_vi": "Tạo người dùng bob có thư mục cá nhân bằng lệnh sudo useradd -m bob.",
+      "hint_vi": "Chạy sudo useradd -m bob rồi kiểm tra bằng sudo ls -ld /home/bob."
+    },
+    {
+      "id": "source-49-section-3",
+      "title": "Setting a User Password",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now we need to set a password for our new users. Let's set a password for \"joker\".\n\n1. Run the following command:\n\n```bash\nsudo passwd joker\n```\n\n1. You'll be asked to enter a new password twice. For this lab, use a simple password like \"password123\".\n\n> **Important**: The password will not be displayed as you type it. This is a security feature in Linux to prevent others from seeing your password as you type it. If you accidentally enter the wrong password, you can try again.\n> **Important**: Remember this password! You'll need it later in the lab.\n\n1. If successful, you'll see a message saying \"passwd: password updated successfully\".\n\nNote: In a real-world scenario, always use strong, unique passwords!\n\nBehind the scenes, Linux stores encrypted passwords in a secure file called `/etc/shadow`. This is more secure than storing them in the `/etc/passwd` file where anyone could see them.",
+      "task": "Đặt mật khẩu thực hành cho joker bằng passwd; nhập hai lần khi được hỏi.",
+      "hint": "Terminal không hiện ký tự mật khẩu. Nhập cùng một mật khẩu thực hành hai lần; không dùng mật khẩu cá nhân.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(sudo passwd -S joker | awk '{print $2}')\" = P"
+      },
+      "title_vi": "Thiết Lập Mật Khẩu Người Dùng",
+      "content_vi": "Bây giờ chúng ta cần thiết lập mật khẩu cho người dùng mới. Hãy đặt mật khẩu cho \"joker\".\n\n1. Chạy câu lệnh sau:\n\n```bash\nsudo passwd joker\n```\n\n2. Bạn sẽ được yêu cầu nhập mật khẩu mới hai lần để xác nhận. Đối với bài thực hành này, hãy sử dụng một mật khẩu đơn giản như `password123`.\n\n> **Quan trọng**: Mật khẩu sẽ **không hiển thị bất kỳ ký tự nào** trên màn hình khi bạn gõ. Đây là một tính năng bảo mật chuẩn trong Linux để ngăn người khác nhìn lén mật khẩu của bạn khi bạn đang gõ. Nếu bạn vô tình nhập sai mật khẩu, bạn hoàn toàn có thể thử nhập lại.\n\n> **Quan trọng**: Hãy ghi nhớ mật khẩu này! Bạn sẽ cần sử dụng nó ở các bước tiếp theo trong bài lab.\n\n3. Nếu thiết lập thành công, bạn sẽ thấy thông báo: `passwd: password updated successfully`.\n\nLưu ý: Trong các môi trường thực tế, hãy luôn sử dụng mật khẩu mạnh và độc nhất!\n\nVề mặt vận hành hệ thống, Linux lưu trữ các mật khẩu đã được mã hóa trong một tệp bảo mật đặc biệt có tên `/etc/shadow`. Điều này an toàn hơn rất nhiều so với việc lưu trữ trong tệp `/etc/passwd` nơi bất kỳ ai cũng có thể đọc được.",
+      "task_vi": "Đặt mật khẩu cho người dùng joker bằng lệnh sudo passwd joker.",
+      "hint_vi": "Chạy sudo passwd joker và nhập mật khẩu (ví dụ: password123)."
+    },
+    {
+      "id": "source-49-section-4",
+      "title": "Modifying User Properties",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Linux allows us to change various settings for a user account after it's been created. Let's change joker's home directory as an example.\n\n1. Run the following command:\n\n```bash\nsudo usermod -d /home/wayne joker\n```\n\nHere's what this does:\n\n- `usermod` is the command to modify user account settings\n- `-d /home/wayne` specifies the new home directory\n- `joker` is the user we're modifying\n\n1. Let's verify the change:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\n`-w` is used to match the whole word, and `grep` is used to search for the word in the file. You should see that joker's home directory has been updated in the output.",
+      "task": "Đổi trường HOME của joker thành /home/wayne.",
+      "hint": "-d đổi đường dẫn đăng ký; không có -m thì không tự chuyển dữ liệu.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(getent passwd joker | cut -d: -f6)\" = /home/wayne"
+      },
+      "title_vi": "Sửa Đổi Thuộc Tính Người Dùng",
+      "content_vi": "Linux cho phép chúng ta thay đổi các thiết lập khác nhau của tài khoản người dùng sau khi tài khoản đã được tạo. Hãy đổi thư mục cá nhân của joker làm ví dụ.\n\n1. Chạy câu lệnh sau:\n\n```bash\nsudo usermod -d /home/wayne joker\n```\n\nÝ nghĩa của câu lệnh này:\n\n- `usermod`: Câu lệnh dùng để sửa đổi (modify) các thiết lập tài khoản người dùng.\n- `-d /home/wayne`: Chỉ định đường dẫn thư mục cá nhân mới (`/home/wayne`).\n- `joker`: Tên người dùng mà chúng ta đang sửa đổi.\n\n2. Hãy xác minh sự thay đổi:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nTùy chọn `-w` được dùng để khớp chính xác toàn bộ từ cần tìm, và `grep` dùng để tìm kiếm từ khóa đó trong tệp. Bạn sẽ thấy trong kết quả xuất ra rằng thư mục cá nhân của joker đã được cập nhật thành `/home/wayne`.",
+      "task_vi": "Đổi thư mục cá nhân của joker thành /home/wayne bằng lệnh sudo usermod -d /home/wayne joker.",
+      "hint_vi": "Chạy sudo usermod -d /home/wayne joker."
+    },
+    {
+      "id": "source-49-section-5",
+      "title": "Changing User Shell",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Another important setting we can modify is the user's default shell. The shell is the program that interprets and runs the commands you type in the terminal.\n\nBy default, the user 'joker' is using `/bin/sh` as their shell. While `sh` (Bourne Shell) is a basic shell that's present on most Unix-like systems, `bash` (Bourne Again Shell) offers more features and is generally more user-friendly.\n\nChanging joker's shell to bash provides several benefits:\n\n- More intuitive command-line interface\n- Enhanced scripting capabilities\n- Better customization options for the user's environment\n\nHere's how to make the change:\n\n1. Change joker's default shell to bash:\n\n```bash\nsudo usermod -s /bin/bash joker\n```\n\n1. Verify the change:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nYou should see `/bin/bash` at the end of joker's entry. This means bash is now joker's default shell.\n\nAfter making this change, joker will have access to the more feature-rich bash environment whenever they log in or open a new terminal session.",
+      "task": "Đổi shell đăng nhập của joker thành /bin/bash.",
+      "hint": "Xem trường cuối bản ghi passwd.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(getent passwd joker | cut -d: -f7)\" = /bin/bash"
+      },
+      "title_vi": "Thay Đổi Shell Mặc Định Của Người Dùng",
+      "content_vi": "Một thiết lập quan trọng khác mà chúng ta có thể sửa đổi là shell mặc định của người dùng. Shell là chương trình thông dịch và thực thi các câu lệnh mà bạn nhập vào trong terminal.\n\nTheo mặc định, người dùng 'joker' đang sử dụng `/bin/sh` làm shell của mình. Trong khi `sh` (Bourne Shell) là một shell cơ bản có mặt trên hầu hết các hệ thống dạng Unix, thì `bash` (Bourne Again Shell) lại cung cấp nhiều tính năng hiện đại hơn và thân thiện hơn với người dùng.\n\nThay đổi shell của joker sang bash mang lại nhiều lợi ích:\n\n- Giao diện dòng lệnh trực quan và tiện dụng hơn (hỗ trợ phím mũi tên, auto-complete bằng phím Tab).\n- Khả năng viết kịch bản (scripting) nâng cao.\n- Khả năng tùy biến môi trường làm việc tốt hơn cho người dùng.\n\nDưới đây là cách thực hiện thay đổi:\n\n1. Đổi shell mặc định của joker sang bash:\n\n```bash\nsudo usermod -s /bin/bash joker\n```\n\n2. Xác minh sự thay đổi:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nBạn sẽ thấy đường dẫn `/bin/bash` xuất hiện ở cuối dòng thông tin của joker. Điều này có nghĩa là bash hiện đã là shell mặc định của tài khoản joker.\n\nSau khi thực hiện thay đổi này, joker sẽ được tiếp cận môi trường bash phong phú tính năng bất cứ khi nào họ đăng nhập hoặc mở một phiên terminal mới.",
+      "task_vi": "Đổi shell mặc định của joker thành /bin/bash bằng sudo usermod -s /bin/bash joker.",
+      "hint_vi": "Chạy sudo usermod -s /bin/bash joker."
+    },
+    {
+      "id": "source-49-section-6",
+      "title": "Adding a User to a Group",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In Linux, we use groups to organize users and manage permissions. One important group is the `sudo` group, which gives users administrative privileges. Let's add joker to the `sudo` group as an example.\n\nWhy would we add a user to the sudo group?\n\n1. System administration: Users in the sudo group can perform system-wide administrative tasks.\n2. Software installation: Sudo group members can install and update software packages.\n3. Configuration changes: They can modify system configuration files.\n4. User management: They can create, modify, or delete other user accounts.\n\nYou might wonder: \"Why add someone to the sudo group when we can always use the 'sudo' command?\" Here's why:\n\n- Convenience: Users in the sudo group can use sudo without needing to know the root password. They use their own password instead.\n- Granular control: System administrators can configure sudo to allow specific users to run only certain commands with superuser privileges.\n- Accountability: Unlike sharing the root password, sudo logs who ran what command, improving security and traceability.\n- Security: It's generally more secure to have named accounts with sudo access than to share the root password among multiple admins.\n\nIn a real-world scenario, you would typically add a user to the sudo group if:\n\n- They are a system administrator or IT staff member who needs to perform regular maintenance tasks.\n- They are a developer who needs to install specific software or make system changes for their work.\n- They are a power user who needs elevated privileges for certain tasks, but you don't want to give them the root password.\n\nRemember, adding a user to the sudo group gives them significant power over the system, so this should be done cautiously and only when necessary.\n\nNow, let's add joker to the sudo group:\n\n1. Run this command:\n\n```bash\nsudo usermod -aG sudo joker\n```\n\nHere's what this does:\n\n- `usermod` is the command to modify user accounts\n- `-aG` means \"append to Group\" (add to a group without removing from other groups)\n- `sudo` is the group we're adding the user to\n- `joker` is the user we're modifying\n\n1. Verify the change:\n\n```bash\ngroups joker\n```\n\nYou should see `sudo` listed among joker's groups.\n\n1. To see the effect of this change, we need to switch to the joker user and try a command that requires sudo privileges:\n\n```bash\nsu - joker\n```\n\nThis command switches from your current user (labex) to the joker user. You will be prompted to enter joker's password. Remember, this is the password you set earlier (`password123`). As you type the password, you won't see any characters on the screen - this is a security feature.\n\n1. Once logged in as joker, let's try to view a file that normally requires root privileges:\n\n```bash\nsudo cat /etc/shadow\n```\n\nEnter joker's password again when prompted. You should be able to see the contents of the `/etc/shadow` file, which is usually only accessible to root. This confirms that joker now has sudo privileges.\n\n1. After you're done, type `exit` to return to your original user account (labex).\n\nNote: In a production environment, you should be very careful about who you add to the sudo group. With great power comes great responsibility!",
+      "task": "Thêm joker vào nhóm sudo, xem groups rồi đăng nhập bằng su để thử một lệnh cần quyền quản trị.",
+      "hint": "Nhập mật khẩu joker khi su hỏi, rồi nhập lại nếu sudo hỏi. -c chạy lệnh rồi quay lại shell ban đầu; sudo -S đọc mật khẩu qua đầu vào của phiên này.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "id -nG joker | tr ' ' '\\n' | grep -Fxq sudo"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*su\\s+-\\s+joker\\s+-c\\s+['\"]sudo\\s+(?:-S\\s+)?cat\\s+/etc/shadow['\"]\\s*$",
+                "^\\s*su\\s+-\\s+joker\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Thêm Người Dùng Vào Nhóm",
+      "content_vi": "Trong Linux, chúng ta sử dụng nhóm (Group) để tổ chức người dùng và quản lý quyền hạn tập trung. Một nhóm đặc biệt quan trọng là nhóm `sudo`, cấp cho người dùng các đặc quyền quản trị viên hệ thống. Hãy thêm joker vào nhóm `sudo` làm ví dụ thực tế.\n\n### Tại sao chúng ta lại thêm một người dùng vào nhóm sudo?\n\n1. **Quản trị hệ thống (System administration)**: Người dùng trong nhóm sudo có thể thực thi các tác vụ quản trị trên toàn hệ thống.\n2. **Cài đặt phần mềm (Software installation)**: Thành viên nhóm sudo có thể cài đặt và cập nhật các gói phần mềm.\n3. **Thay đổi cấu hình (Configuration changes)**: Họ có thể chỉnh sửa các tệp cấu hình hệ thống cốt lõi.\n4. **Quản lý người dùng (User management)**: Họ có thể tạo, sửa đổi hoặc xóa các tài khoản người dùng khác.\n\nBạn có thể tự hỏi: *\"Tại sao phải thêm ai đó vào nhóm sudo khi chúng ta luôn có thể dùng lệnh 'sudo'?\"* Dưới đây là lý do:\n\n- **Sự tiện lợi**: Người dùng trong nhóm sudo có thể sử dụng sudo mà không cần biết mật khẩu của tài khoản `root`. Họ chỉ cần sử dụng mật khẩu của chính họ.\n- **Kiểm soát chi tiết (Granular control)**: Quản trị viên hệ thống có thể cấu hình sudo để chỉ cho phép những người dùng cụ thể chạy một số lệnh nhất định với quyền siêu người dùng.\n- **Trách nhiệm giải trình (Accountability)**: Khác với việc chia sẻ mật khẩu root cho nhiều người, `sudo` ghi lại nhật ký (log) rõ ràng ai đã chạy câu lệnh nào, nâng cao tính bảo mật và khả năng truy vết.\n- **Bảo mật**: Có các tài khoản định danh riêng biệt được cấp quyền sudo luôn an toàn hơn nhiều so với việc chia sẻ mật khẩu root dùng chung.\n\nTrong kịch bản thực tế, thông thường bạn sẽ thêm người dùng vào nhóm sudo nếu:\n\n- Họ là quản trị viên hệ thống hoặc nhân viên CNTT cần thực hiện các công việc bảo trì định kỳ.\n- Họ là nhà phát triển cần cài đặt phần mềm chuyên biệt hoặc thay đổi cài đặt hệ thống phục vụ công việc.\n- Họ là người dùng nâng cao cần quyền hạn đặc biệt cho một số tác vụ nhất định, nhưng bạn không muốn trao cho họ mật khẩu root.\n\nHãy nhớ rằng việc thêm người dùng vào nhóm sudo trao cho họ quyền lực rất lớn đối với hệ thống, vì vậy thao tác này phải được thực hiện một cách thận trọng và chỉ khi thực sự cần thiết.\n\nBây giờ, hãy thêm joker vào nhóm sudo:\n\n1. Chạy câu lệnh sau:\n\n```bash\nsudo usermod -aG sudo joker\n```\n\nÝ nghĩa của câu lệnh này:\n\n- `usermod`: Lệnh sửa đổi tài khoản người dùng.\n- `-aG`: Có nghĩa là **\"append to Group\"** (thêm người dùng vào nhóm phụ mới mà không xóa bỏ họ khỏi các nhóm hiện có). Hãy luôn nhớ cờ `-a` khi thêm nhóm phụ!\n- `sudo`: Tên nhóm mà chúng ta đang thêm người dùng vào.\n- `joker`: Tên người dùng đang được sửa đổi.\n\n2. Xác minh sự thay đổi:\n\n```bash\ngroups joker\n```\n\nBạn sẽ thấy `sudo` được liệt kê trong danh sách các nhóm của joker.\n\n3. Để xem hiệu lực thực tế của thay đổi này, chúng ta cần chuyển sang tài khoản người dùng joker và thử chạy một lệnh yêu cầu quyền sudo:\n\n```bash\nsu - joker\n```\n\nCâu lệnh này chuyển từ người dùng hiện tại (`labex`) sang người dùng `joker`. Bạn sẽ được nhắc nhập mật khẩu của joker. Hãy nhớ lại, đây là mật khẩu bạn đã đặt ở bước trước (`password123`). Khi bạn gõ mật khẩu, bạn sẽ không thấy ký tự nào trên màn hình - đây là cơ chế bảo mật.\n\n4. Sau khi đã đăng nhập với tư cách joker, hãy thử xem nội dung một tệp tin bình thường chỉ dành riêng cho quyền root:\n\n```bash\nsudo cat /etc/shadow\n```\n\nNhập lại mật khẩu của joker khi được nhắc. Bạn sẽ thấy nội dung của tệp `/etc/shadow`, tệp thường chỉ có root mới truy cập được. Điều này xác nhận rằng joker hiện đã có đầy đủ quyền hạn sudo.\n\n5. Sau khi hoàn thành kiểm tra, hãy gõ `exit` để quay trở lại tài khoản ban đầu của bạn (`labex`).\n\nLưu ý: Trong môi trường sản xuất (production), hãy hết sức cẩn trọng về việc bạn trao quyền sudo cho ai. Quyền lực càng lớn thì trách nhiệm càng cao!",
+      "task_vi": "Thêm joker vào nhóm sudo bằng lệnh sudo usermod -aG sudo joker và kiểm tra quyền.",
+      "hint_vi": "Chạy sudo usermod -aG sudo joker rồi su - joker kiểm tra sudo cat /etc/shadow."
+    },
+    {
+      "id": "source-49-section-7",
+      "title": "Locking and Unlocking User Accounts",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Sometimes, you might need to temporarily disable a user account without deleting it.\n\n1. Lock the joker account:\n\n```bash\nsudo passwd -l joker\n```\n\nThe `-l` option locks the password.\n\n1. Try to switch to the joker user:\n\n```bash\nsu - joker\n```\n\nYou'll be asked for a password. Enter the password you set for joker earlier (\"password123\" if you followed our suggestion).\n\nYou should see an \"authentication failure\" message. This means the account is successfully locked.\n\n1. Now, let's unlock the account:\n\n```bash\nsudo passwd -u joker\n```\n\nThe `-u` option unlocks the password.\n\n1. Try switching to the joker user again:\n\n```bash\nsu - joker\n```\n\nEnter the password when prompted. This time, you should be able to switch to the joker user successfully.\n\n**Type `exit` to return to your original user account before continuing to the next step.**",
+      "task": "Khóa rồi mở mật khẩu joker bằng passwd -l/-u; thử đăng nhập ở từng trạng thái.",
+      "hint": "Khi bị khóa, đăng nhập bằng mật khẩu thất bại. Sau thử su, thoát về labex trước khi tiếp tục.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+passwd\\s+-l\\s+joker\\s*$"
+              ],
+              [
+                "^\\s*sudo\\s+passwd\\s+-u\\s+joker\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "test \"$(sudo passwd -S joker | awk '{print $2}')\" = P"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              1
+            ],
+            "groups": [
+              [
+                "^\\s*su\\s+-\\s+joker(?:\\s+-c\\s+['\"]whoami['\"])?\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*su\\s+-\\s+joker(?:\\s+-c\\s+['\"]whoami['\"])?\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Khóa và Mở Khóa Tài Khoản Người Dùng",
+      "content_vi": "Đôi khi, bạn có thể cần tạm thời vô hiệu hóa quyền truy cập của một tài khoản người dùng mà không muốn xóa tài khoản đó khỏi hệ thống.\n\n1. Khóa tài khoản joker:\n\n```bash\nsudo passwd -l joker\n```\n\nTùy chọn `-l` (lock) sẽ khóa mật khẩu của tài khoản.\n\n2. Thử chuyển sang người dùng joker:\n\n```bash\nsu - joker\n```\n\nHệ thống sẽ yêu cầu bạn nhập mật khẩu. Hãy nhập mật khẩu bạn đã đặt cho joker trước đó (\"password123\" nếu bạn làm theo gợi ý của chúng tôi).\n\nBạn sẽ thấy thông báo lỗi **\"authentication failure\"** (xác thực thất bại). Điều này chứng minh tài khoản đã được khóa thành công.\n\n3. Bây giờ, hãy mở khóa tài khoản:\n\n```bash\nsudo passwd -u joker\n```\n\nTùy chọn `-u` (unlock) sẽ mở khóa mật khẩu của người dùng.\n\n4. Thử chuyển sang tài khoản người dùng joker một lần nữa:\n\n```bash\nsu - joker\n```\n\nNhập mật khẩu khi được nhắc. Lần này, bạn sẽ chuyển sang tài khoản joker thành công.\n\n**Hãy gõ `exit` để quay trở lại tài khoản người dùng ban đầu (labex) trước khi tiếp tục bước tiếp theo.**",
+      "task_vi": "Khóa tài khoản joker bằng sudo passwd -l joker, thử su - joker, sau đó mở khóa bằng sudo passwd -u joker.",
+      "hint_vi": "Chạy sudo passwd -l joker rồi thử su - joker, sau đó mở lại bằng sudo passwd -u joker."
+    },
+    {
+      "id": "source-49-section-8",
+      "title": "Deleting a User",
+      "position": 8,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Finally, let's learn how to delete a user. We'll delete the \"bob\" user we created earlier.\n\n1. Delete bob and their home directory:\n\n```bash\nsudo userdel -r bob\n```\n\nThe `userdel` command deletes user accounts. The `-r` option removes the user's home directory and mail spool.\n\n1. Verify that the user has been deleted:\n\n```bash\nsudo grep -w 'bob' /etc/passwd\nsudo ls -ld /home/bob\n```\n\nBoth commands should return no results. This means the user and their home directory have been successfully removed.",
+      "task": "Xóa bob cùng HOME bằng userdel -r.",
+      "hint": "Xóa tài khoản và HOME là hai tác động cần phân biệt.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "! getent passwd bob >/dev/null && test ! -e /home/bob"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+userdel\\s+-r\\s+bob\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Xóa Tài Khoản Người Dùng",
+      "content_vi": "Cuối cùng, hãy học cách xóa một người dùng. Chúng ta sẽ xóa người dùng \"bob\" mà chúng ta đã tạo trước đó.\n\n1. Xóa bob cùng thư mục cá nhân của người này:\n\n```bash\nsudo userdel -r bob\n```\n\nLệnh `userdel` dùng để xóa các tài khoản người dùng khỏi hệ thống. Tùy chọn `-r` loại bỏ cả thư mục cá nhân (home directory) và hàng đợi thư (mail spool) của người dùng đó.\n\n2. Xác minh rằng người dùng đã bị xóa hoàn toàn:\n\n```bash\nsudo grep -w 'bob' /etc/passwd\nsudo ls -ld /home/bob\n```\n\nCả hai câu lệnh đều không được trả về kết quả nào (tệp không tồn tại). Điều này khẳng định rằng cả người dùng lẫn thư mục cá nhân của họ đã được xóa bỏ thành công khỏi hệ thống.",
+      "task_vi": "Xóa người dùng bob cùng thư mục cá nhân bằng lệnh sudo userdel -r bob.",
+      "hint_vi": "Chạy sudo userdel -r bob rồi kiểm tra bằng grep và ls."
+    },
+    {
+      "id": "source-49-section-9",
+      "title": "Summary",
+      "position": 9,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Congratulations! You've completed the Linux User Account Management lab. You've learned how to:\n\n1. Create new user accounts\n2. Set user passwords\n3. Modify user properties like home directory and default shell\n4. Add users to groups\n5. Lock and unlock user accounts\n6. Delete user accounts\n\nYou've also been introduced to important Linux concepts like the `/etc/passwd` file, home directories, shells, and user groups. These are fundamental skills for Linux system administration. Remember, in real-world scenarios, always follow your organization's security policies when managing user accounts.",
+      "title_vi": "Tổng Kết Bài Học",
+      "content_vi": "Xin chúc mừng! Bạn đã hoàn thành toàn diện bài thực hành Quản Lý Tài Khoản Người Dùng Linux (User Account Management). Bạn đã học được cách:\n\n1. Tạo các tài khoản người dùng mới (`useradd` và `useradd -m`).\n2. Thiết lập mật khẩu cho người dùng (`passwd`).\n3. Sửa đổi các thuộc tính người dùng như thư mục cá nhân và shell mặc định (`usermod -d`, `usermod -s`).\n4. Thêm người dùng vào nhóm để cấp quyền quản trị (`usermod -aG sudo`).\n5. Khóa và mở khóa tài khoản người dùng (`passwd -l`, `passwd -u`).\n6. Xóa tài khoản người dùng cùng thư mục cá nhân (`userdel -r`).\n\nBạn cũng đã được làm quen với các khái niệm cốt lõi trong Linux như tệp danh bạ `/etc/passwd`, thư mục cá nhân (home directory), các trình thông dịch lệnh (shell), và các nhóm người dùng (groups). Đây là những kỹ năng thiết yếu đối với bất kỳ quản trị viên hệ thống Linux nào. Hãy nhớ rằng, trong các kịch bản thực tế, hãy luôn tuân thủ các chính sách bảo mật nghiêm ngặt của tổ chức khi quản lý tài khoản người dùng."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-49-section-1",
+      "title": "Creating a New User",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's start by creating a new user account named \"joker\".\n\n1. Open a terminal. In Linux, the terminal is a text interface where you can enter commands.\n2. Type the following command and press Enter:\n\n```bash\nsudo useradd joker\n```\n\nLet's break this down:\n\n- `sudo` is a command that gives you temporary superuser (administrator) privileges. We use it because creating a new user requires these higher-level permissions.\n- `useradd` is the command to create a new user.\n- `joker` is the username we're creating.\n\nNote: If you try to run this command without `sudo`, you'll get a \"permission denied\" error. This is because regular users aren't allowed to create new user accounts - it's a task reserved for system administrators.\n\nThis highlights the difference between a superuser and a common user. As a common user, you can't create new user accounts, but by using `sudo`, you can temporarily elevate your privileges to perform this administrative task.\n\n1. To verify that the user was created, we'll examine the `/etc/passwd` file:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nThe `/etc/passwd` file is like a phonebook for user accounts. Each line represents one user account, with different pieces of information separated by colons (:).\n\nYou should see output similar to:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\n```\n\nThis line shows:\n\n- Username: joker\n- Password: x (the actual password is stored securely elsewhere)\n- User ID: 5001\n- Group ID: 5001\n- Home Directory: `/home/joker`, but it hasn't been created yet\n- Default Shell: `/bin/sh`",
+      "task": "Tạo người dùng joker và tra bản ghi passwd.",
+      "hint": "useradd tạo bản ghi tài khoản; -m ở bước sau tạo HOME rõ ràng.",
+      "verification": {
+        "kind": "state",
+        "command": "getent passwd joker >/dev/null"
+      },
+      "title_vi": "Tạo Người Dùng Mới (useradd)",
+      "content_vi": "Hãy bắt đầu bằng việc tạo một tài khoản người dùng mới có tên là \"joker\".\n\nTrong Linux, lệnh `useradd` (hoặc `adduser`) được sử dụng để tạo người dùng mới. Vì đây là thao tác quản trị hệ thống, bạn cần sử dụng quyền `sudo`.\n\n1. Chạy câu lệnh sau trong terminal:\n```bash\nsudo useradd joker\n```\n\n2. Xác minh rằng tài khoản người dùng đã được tạo thành công:\n```bash\nid joker\n```\n\nKết quả sẽ hiển thị mã định danh người dùng (UID), mã nhóm chính (GID) và các nhóm mà `joker` trực thuộc:\n```plaintext\nuid=1001(joker) gid=1001(joker) groups=1001(joker)\n```\n\nTheo mặc định, lệnh `useradd` tạo một nhóm riêng có cùng tên với người dùng và gán người dùng đó vào nhóm.",
+      "task_vi": "Chạy sudo useradd joker và kiểm tra tài khoản bằng id joker.",
+      "hint_vi": "Dùng sudo useradd joker rồi kiểm tra id joker."
+    },
+    {
+      "id": "source-49-section-2",
+      "title": "Creating a User with a Home Directory",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now, let's create another user named \"bob\" and give them a home directory.\n\n1. Run the following command:\n\n```bash\nsudo useradd -m bob\n```\n\nThe `-m` option tells the system to create a home directory for the user. A home directory is like a personal folder where a user can store their files and settings.\n\n1. Let's verify that the home directory was created:\n\n```bash\nsudo ls -ld /home/bob\n```\n\nYou should see output similar to:\n\n```plaintext\ndrwxr-x--- 2 bob bob 57 Jan 19 13:33 /home/bob\n```\n\nThis output shows:\n\n- `d` at the start means it's a directory\n- `rwxr-x---` shows who can read, write, or execute in this directory\n- The two `bob` entries show that both the user and group owner of this directory is bob\n- `57` is the size of the directory in bytes\n- `Jan 19 13:33` is when the directory was created\n- `/home/bob` is the location of the directory",
+      "task": "Tạo bob kèm HOME bằng useradd -m.",
+      "hint": "Không dùng tài khoản có sẵn của máy host.",
+      "verification": {
+        "kind": "state",
+        "command": "getent passwd bob >/dev/null && test -d /home/bob && test \"$(stat -c '%U' /home/bob)\" = bob"
+      },
+      "title_vi": "Tạo Người Dùng Kèm Thư Mục Cá Nhân (-m)",
+      "content_vi": "Bây giờ, chúng ta hãy tạo một người dùng khác có tên là \"bob\" và tự động cấp cho người này một thư mục cá nhân (home directory).\n\nTheo mặc định trên một số bản phân phối Linux, lệnh `useradd` đơn thuần có thể không tự động tạo thư mục `/home/username`. Tùy chọn `-m` sẽ yêu cầu hệ thống tạo thư mục này.\n\n1. Chạy câu lệnh sau:\n```bash\nsudo useradd -m bob\n```\n\n2. Xác minh thư mục cá nhân của bob đã được tạo:\n```bash\nls -ld /home/bob\n```\n\nBạn sẽ thấy thư mục `/home/bob` được tạo ra với quyền sở hữu thuộc về người dùng `bob`.",
+      "task_vi": "Chạy sudo useradd -m bob để tạo người dùng bob kèm thư mục home.",
+      "hint_vi": "Dùng sudo useradd -m bob rồi ls -ld /home/bob."
+    },
+    {
+      "id": "source-49-section-3",
+      "title": "Setting a User Password",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now we need to set a password for our new users. Let's set a password for \"joker\".\n\n1. Run the following command:\n\n```bash\nsudo passwd joker\n```\n\n1. You'll be asked to enter a new password twice. For this lab, use a simple password like \"password123\".\n\n> **Important**: The password will not be displayed as you type it. This is a security feature in Linux to prevent others from seeing your password as you type it. If you accidentally enter the wrong password, you can try again.\n> **Important**: Remember this password! You'll need it later in the lab.\n\n1. If successful, you'll see a message saying \"passwd: password updated successfully\".\n\nNote: In a real-world scenario, always use strong, unique passwords!\n\nBehind the scenes, Linux stores encrypted passwords in a secure file called `/etc/shadow`. This is more secure than storing them in the `/etc/passwd` file where anyone could see them.",
+      "task": "Đặt mật khẩu thực hành cho joker bằng passwd; nhập hai lần khi được hỏi.",
+      "hint": "Terminal không hiện ký tự mật khẩu. Nhập cùng một mật khẩu thực hành hai lần; không dùng mật khẩu cá nhân.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(sudo passwd -S joker | awk '{print $2}')\" = P"
+      },
+      "title_vi": "Thiết Lập Mật Khẩu Cho Người Dùng (passwd)",
+      "content_vi": "Khi tài khoản người dùng mới được tạo, tài khoản đó chưa có mật khẩu và thường bị khóa đăng nhập. Chúng ta cần thiết lập mật khẩu bằng lệnh `passwd`.\n\n1. Chạy lệnh đổi mật khẩu cho `joker`:\n```bash\nsudo passwd joker\n```\n\n2. Terminal sẽ yêu cầu bạn nhập mật khẩu mới hai lần:\n```plaintext\nNew password:\nRetype new password:\npasswd: password updated successfully\n```\n\n> **Lưu ý bảo mật trong Linux**: Khi bạn gõ mật khẩu trong terminal, màn hình sẽ **không hiển thị bất kỳ ký tự nào** (kể cả dấu sao `*`). Đây là tính năng bảo mật chuẩn của Linux để ngăn người khác nhìn thấy độ dài mật khẩu của bạn. Hãy cứ gõ bình thường và nhấn Enter!",
+      "task_vi": "Thiết lập mật khẩu cho tài khoản joker bằng sudo passwd joker.",
+      "hint_vi": "Chạy sudo passwd joker và nhập mật khẩu mới."
+    },
+    {
+      "id": "source-49-section-4",
+      "title": "Modifying User Properties",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Linux allows us to change various settings for a user account after it's been created. Let's change joker's home directory as an example.\n\n1. Run the following command:\n\n```bash\nsudo usermod -d /home/wayne joker\n```\n\nHere's what this does:\n\n- `usermod` is the command to modify user account settings\n- `-d /home/wayne` specifies the new home directory\n- `joker` is the user we're modifying\n\n1. Let's verify the change:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\n`-w` is used to match the whole word, and `grep` is used to search for the word in the file. You should see that joker's home directory has been updated in the output.",
+      "task": "Đổi trường HOME của joker thành /home/wayne.",
+      "hint": "-d đổi đường dẫn đăng ký; không có -m thì không tự chuyển dữ liệu.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(getent passwd joker | cut -d: -f6)\" = /home/wayne"
+      },
+      "title_vi": "Sửa Đổi Thuộc Tính Người Dùng (usermod)",
+      "content_vi": "Linux cho phép chúng ta thay đổi các thiết lập khác nhau của tài khoản sau khi đã tạo thông qua lệnh `usermod` (user modify).\n\nHãy thay đổi thư mục cá nhân của `joker` thành `/home/joker_home`:\n\n1. Chạy câu lệnh `usermod` với cờ `-d` (đường dẫn mới) và `-m` (di chuyển dữ liệu hiện có):\n```bash\nsudo usermod -d /home/joker_home -m joker\n```\n\n2. Xác minh thay đổi trong tệp cấu hình người dùng `/etc/passwd`:\n```bash\ngrep joker /etc/passwd\n```\n\nKết quả sẽ phản ánh đường dẫn thư mục mới:\n```plaintext\njoker:x:1001:1001::/home/joker_home:/bin/sh\n```",
+      "task_vi": "Thay đổi thư mục cá nhân của joker thành /home/joker_home bằng sudo usermod -d -m.",
+      "hint_vi": "Chạy sudo usermod -d /home/joker_home -m joker."
+    },
+    {
+      "id": "source-49-section-5",
+      "title": "Changing User Shell",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Another important setting we can modify is the user's default shell. The shell is the program that interprets and runs the commands you type in the terminal.\n\nBy default, the user 'joker' is using `/bin/sh` as their shell. While `sh` (Bourne Shell) is a basic shell that's present on most Unix-like systems, `bash` (Bourne Again Shell) offers more features and is generally more user-friendly.\n\nChanging joker's shell to bash provides several benefits:\n\n- More intuitive command-line interface\n- Enhanced scripting capabilities\n- Better customization options for the user's environment\n\nHere's how to make the change:\n\n1. Change joker's default shell to bash:\n\n```bash\nsudo usermod -s /bin/bash joker\n```\n\n1. Verify the change:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nYou should see `/bin/bash` at the end of joker's entry. This means bash is now joker's default shell.\n\nAfter making this change, joker will have access to the more feature-rich bash environment whenever they log in or open a new terminal session.",
+      "task": "Đổi shell đăng nhập của joker thành /bin/bash.",
+      "hint": "Xem trường cuối bản ghi passwd.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(getent passwd joker | cut -d: -f7)\" = /bin/bash"
+      },
+      "title_vi": "Thay Đổi Shell Mặc Định Của Người Dùng (-s)",
+      "content_vi": "Một thiết lập quan trọng khác là shell mặc định của người dùng. Shell là chương trình thông dịch các câu lệnh mà người dùng gõ vào terminal.\n\n1. Hãy đổi shell của `joker` thành `/bin/bash`:\n```bash\nsudo usermod -s /bin/bash joker\n```\n\n2. Kiểm tra lại thông tin trong `/etc/passwd`:\n```bash\ngrep joker /etc/passwd\n```\n\nBạn sẽ thấy trường cuối cùng đã chuyển thành `/bin/bash`:\n```plaintext\njoker:x:1001:1001::/home/joker_home:/bin/bash\n```",
+      "task_vi": "Đổi shell mặc định của joker thành /bin/bash bằng sudo usermod -s /bin/bash joker.",
+      "hint_vi": "Dùng sudo usermod -s /bin/bash joker."
+    },
+    {
+      "id": "source-49-section-6",
+      "title": "Adding a User to a Group",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In Linux, we use groups to organize users and manage permissions. One important group is the `sudo` group, which gives users administrative privileges. Let's add joker to the `sudo` group as an example.\n\nWhy would we add a user to the sudo group?\n\n1. System administration: Users in the sudo group can perform system-wide administrative tasks.\n2. Software installation: Sudo group members can install and update software packages.\n3. Configuration changes: They can modify system configuration files.\n4. User management: They can create, modify, or delete other user accounts.\n\nYou might wonder: \"Why add someone to the sudo group when we can always use the 'sudo' command?\" Here's why:\n\n- Convenience: Users in the sudo group can use sudo without needing to know the root password. They use their own password instead.\n- Granular control: System administrators can configure sudo to allow specific users to run only certain commands with superuser privileges.\n- Accountability: Unlike sharing the root password, sudo logs who ran what command, improving security and traceability.\n- Security: It's generally more secure to have named accounts with sudo access than to share the root password among multiple admins.\n\nIn a real-world scenario, you would typically add a user to the sudo group if:\n\n- They are a system administrator or IT staff member who needs to perform regular maintenance tasks.\n- They are a developer who needs to install specific software or make system changes for their work.\n- They are a power user who needs elevated privileges for certain tasks, but you don't want to give them the root password.\n\nRemember, adding a user to the sudo group gives them significant power over the system, so this should be done cautiously and only when necessary.\n\nNow, let's add joker to the sudo group:\n\n1. Run this command:\n\n```bash\nsudo usermod -aG sudo joker\n```\n\nHere's what this does:\n\n- `usermod` is the command to modify user accounts\n- `-aG` means \"append to Group\" (add to a group without removing from other groups)\n- `sudo` is the group we're adding the user to\n- `joker` is the user we're modifying\n\n1. Verify the change:\n\n```bash\ngroups joker\n```\n\nYou should see `sudo` listed among joker's groups.\n\n1. To see the effect of this change, we need to switch to the joker user and try a command that requires sudo privileges:\n\n```bash\nsu - joker\n```\n\nThis command switches from your current user (labex) to the joker user. You will be prompted to enter joker's password. Remember, this is the password you set earlier (`password123`). As you type the password, you won't see any characters on the screen - this is a security feature.\n\n1. Once logged in as joker, let's try to view a file that normally requires root privileges:\n\n```bash\nsudo cat /etc/shadow\n```\n\nEnter joker's password again when prompted. You should be able to see the contents of the `/etc/shadow` file, which is usually only accessible to root. This confirms that joker now has sudo privileges.\n\n1. After you're done, type `exit` to return to your original user account (labex).\n\nNote: In a production environment, you should be very careful about who you add to the sudo group. With great power comes great responsibility!",
+      "task": "Thêm joker vào nhóm sudo, xem groups rồi đăng nhập bằng su để thử một lệnh cần quyền quản trị.",
+      "hint": "Nhập mật khẩu joker khi su hỏi, rồi nhập lại nếu sudo hỏi. -c chạy lệnh rồi quay lại shell ban đầu; sudo -S đọc mật khẩu qua đầu vào của phiên này.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "id -nG joker | tr ' ' '\\n' | grep -Fxq sudo"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*su\\s+-\\s+joker\\s+-c\\s+['\"]sudo\\s+(?:-S\\s+)?cat\\s+/etc/shadow['\"]\\s*$",
+                "^\\s*su\\s+-\\s+joker\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Thêm Người Dùng Vào Nhóm (usermod -aG)",
+      "content_vi": "Trong Linux, nhóm (Group) dùng để gom nhóm các tài khoản và phân quyền chung. Một nhóm đặc biệt quan trọng là nhóm `sudo`, cấp quyền quản trị viên cho các thành viên.\n\nĐể thêm người dùng vào nhóm phụ mà không làm mất các nhóm hiện có, chúng ta **luôn luôn kết hợp hai cờ**:\n- `-a` (append): Thêm vào.\n- `-G` (supplementary group): Chỉ định nhóm phụ.\n\n1. Thêm `joker` vào nhóm `sudo`:\n```bash\nsudo usermod -aG sudo joker\n```\n\n2. Xác minh các nhóm của `joker`:\n```bash\ngroups joker\n```\n\nKết quả sẽ hiển thị `joker` đã là thành viên của nhóm `sudo`:\n```plaintext\njoker : joker sudo\n```\n\n> ⚠️ **Cảnh báo cực kỳ quan trọng**: Nếu bạn quên cờ `-a` mà chỉ dùng `usermod -G group user`, người dùng sẽ bị **xóa khỏi toàn bộ các nhóm phụ khác**! Hãy luôn nhớ `-aG`.",
+      "task_vi": "Thêm joker vào nhóm sudo bằng sudo usermod -aG sudo joker.",
+      "hint_vi": "Sử dụng sudo usermod -aG sudo joker rồi kiểm tra bằng groups joker."
+    },
+    {
+      "id": "source-49-section-7",
+      "title": "Locking and Unlocking User Accounts",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Sometimes, you might need to temporarily disable a user account without deleting it.\n\n1. Lock the joker account:\n\n```bash\nsudo passwd -l joker\n```\n\nThe `-l` option locks the password.\n\n1. Try to switch to the joker user:\n\n```bash\nsu - joker\n```\n\nYou'll be asked for a password. Enter the password you set for joker earlier (\"password123\" if you followed our suggestion).\n\nYou should see an \"authentication failure\" message. This means the account is successfully locked.\n\n1. Now, let's unlock the account:\n\n```bash\nsudo passwd -u joker\n```\n\nThe `-u` option unlocks the password.\n\n1. Try switching to the joker user again:\n\n```bash\nsu - joker\n```\n\nEnter the password when prompted. This time, you should be able to switch to the joker user successfully.\n\n**Type `exit` to return to your original user account before continuing to the next step.**",
+      "task": "Khóa rồi mở mật khẩu joker bằng passwd -l/-u; thử đăng nhập ở từng trạng thái.",
+      "hint": "Khi bị khóa, đăng nhập bằng mật khẩu thất bại. Sau thử su, thoát về labex trước khi tiếp tục.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+passwd\\s+-l\\s+joker\\s*$"
+              ],
+              [
+                "^\\s*sudo\\s+passwd\\s+-u\\s+joker\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "test \"$(sudo passwd -S joker | awk '{print $2}')\" = P"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              1
+            ],
+            "groups": [
+              [
+                "^\\s*su\\s+-\\s+joker(?:\\s+-c\\s+['\"]whoami['\"])?\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*su\\s+-\\s+joker(?:\\s+-c\\s+['\"]whoami['\"])?\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Khóa và Mở Khóa Tài Khoản (usermod -L / -U)",
+      "content_vi": "Đôi khi bạn cần tạm thời vô hiệu hóa quyền truy cập của một tài khoản mà không muốn xóa dữ liệu của họ (ví dụ khi nhân viên nghỉ phép hoặc nghi vấn bảo mật).\n\n1. Khóa tài khoản `joker`:\n```bash\nsudo usermod -L joker\n```\nCờ `-L` (Lock) sẽ thêm dấu chấm than `!` vào trước chuỗi mật khẩu trong tệp `/etc/shadow`, khiến không mật khẩu nào có thể khớp để đăng nhập.\n\n2. Xác minh trạng thái bị khóa:\n```bash\nsudo grep joker /etc/shadow\n```\n\n3. Mở khóa tài khoản `joker` trở lại:\n```bash\nsudo usermod -U joker\n```\nCờ `-U` (Unlock) sẽ gỡ bỏ dấu chấm than, khôi phục lại mật khẩu ban đầu.",
+      "task_vi": "Khóa tài khoản joker bằng sudo usermod -L joker rồi mở lại bằng sudo usermod -U joker.",
+      "hint_vi": "Dùng sudo usermod -L joker rồi sudo usermod -U joker."
+    },
+    {
+      "id": "source-49-section-8",
+      "title": "Deleting a User",
+      "position": 8,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Finally, let's learn how to delete a user. We'll delete the \"bob\" user we created earlier.\n\n1. Delete bob and their home directory:\n\n```bash\nsudo userdel -r bob\n```\n\nThe `userdel` command deletes user accounts. The `-r` option removes the user's home directory and mail spool.\n\n1. Verify that the user has been deleted:\n\n```bash\nsudo grep -w 'bob' /etc/passwd\nsudo ls -ld /home/bob\n```\n\nBoth commands should return no results. This means the user and their home directory have been successfully removed.",
+      "task": "Xóa bob cùng HOME bằng userdel -r.",
+      "hint": "Xóa tài khoản và HOME là hai tác động cần phân biệt.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "! getent passwd bob >/dev/null && test ! -e /home/bob"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+userdel\\s+-r\\s+bob\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Xóa Tài Khoản Người Dùng (userdel -r)",
+      "content_vi": "Khi một tài khoản không còn cần thiết, chúng ta sử dụng câu lệnh `userdel` để xóa bỏ khỏi hệ thống.\n\n1. Xóa người dùng `bob` cùng toàn bộ thư mục cá nhân và hộp thư của họ bằng cờ `-r` (remove home):\n```bash\nsudo userdel -r bob\n```\n\n2. Xác minh người dùng `bob` đã bị xóa:\n```bash\nid bob\n```\nHệ thống sẽ trả về: `id: ‘bob’: no such user`.\n\n3. Xác minh thư mục `/home/bob` cũng đã được dọn sạch:\n```bash\nls /home/bob\n```\nHệ thống sẽ báo `No such file or directory`.",
+      "task_vi": "Xóa tài khoản bob và thư mục cá nhân bằng sudo userdel -r bob.",
+      "hint_vi": "Dùng sudo userdel -r bob rồi kiểm tra id bob."
+    }
+  ],
+  "title_vi": "Quản Trị Tài Khoản Người Dùng (User Account Management)"
+}

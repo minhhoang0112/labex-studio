@@ -1,0 +1,676 @@
+{
+  "id": "linux-file-and-directory-operations-17997",
+  "course_id": "linux-for-noobs",
+  "order": 8,
+  "title": "File and Directory Operations",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "Linux organizes files in one directory tree that begins at  / , the root directory. Every file and directory has a path that describes its location in that tree. Learning to read and use paths makes n",
+  "source_url": "https://labex.io/tutorials/linux-file-and-directory-operations-17997",
+  "source_lab_id": 17997,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Linux organizes files in one directory tree that begins at `/`, the root directory. Every file and directory has a path that describes its location in that tree. Learning to read and use paths makes nearly every later Linux task easier.\n\nIn this lab, you will build a small workspace while learning the operations used in everyday terminal work. You will navigate directories, create and edit files, copy and move data, find files, inspect metadata and inodes, experiment with hard and symbolic links, and compare files and directory trees with `diff`.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Linux tổ chức các tệp trong một cấu trúc cây thư mục bắt đầu từ `/`, thư mục gốc. Mọi tệp và thư mục đều có một đường dẫn mô tả vị trí của chúng trong cây đó. Việc học cách đọc và sử dụng các đường dẫn sẽ làm cho hầu hết mọi tác vụ Linux sau này trở nên dễ dàng hơn.\n\nTrong phòng thực hành này, bạn sẽ xây dựng một không gian làm việc nhỏ trong khi tìm hiểu các thao tác được sử dụng trong công việc terminal hàng ngày. Bạn sẽ điều hướng các thư mục, tạo và chỉnh sửa tệp, sao chép và di chuyển dữ liệu, tìm kiếm tệp, kiểm tra siêu dữ liệu (metadata) và inode, thử nghiệm các liên kết cứng (hard link) và liên kết tượng trưng (symbolic link), đồng thời so sánh các tệp và cây thư mục bằng lệnh `diff`."
+    },
+    {
+      "id": "source-17997-section-1-v3",
+      "title": "Explore the Linux Directory Tree",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify your current location, inspect important top-level directories, and create a dedicated workspace for the rest of the lab.\n\nThe `pwd` command means \"print working directory.\" Run it first so that you know where the terminal started:\n\n```bash\npwd\n```\n\nThe result should be `/home/labex/project`. An absolute path begins with `/` and describes a location from the root of the filesystem.\n\nList the top level of the filesystem:\n\n```bash\nls /\n```\n\nYou will see standard directories such as `etc`, `home`, `tmp`, `usr`, and `var`. Their common purposes are:\n\n- `/etc` stores system-wide configuration.\n- `/home` stores ordinary users' home directories.\n- `/tmp` stores temporary data.\n- `/usr` contains many installed programs and shared resources.\n- `/var` contains changing data such as logs and caches.\n\nThe `-d` option tells `ls` to describe the named directories instead of listing their contents. The `-l` option selects the long format:\n\n```bash\nls -ld /etc /home /tmp /usr /var\n```\n\nThe first character of each line is `d`, showing that the object is a directory. The remaining columns contain permissions, ownership, size, time, and name.\n\nCreate a workspace for this lab. The `-p` option lets `mkdir` create missing parent directories and avoids an error if the directory already exists:\n\n```bash\nmkdir -p /home/labex/project/file-ops-lab\n```\n\nMove into it and confirm your new location:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\npwd\n```\n\nThe final output should be `/home/labex/project/file-ops-lab`.",
+      "task": "Thực hiện hướng dẫn: Explore the Linux Directory Tree",
+      "hint": "Chạy lệnh: mkdir -p /home/labex/project/file-ops-lab",
+      "title_vi": "Khám Phá Cây Thư Mục Linux",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Khám Phá Cây Thư Mục Linux",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ls\\s+/\\s*$"
+            ],
+            [
+              "^\\s*ls\\s+\\-ld\\s+/etc\\s+/home\\s+/tmp\\s+/usr\\s+/var\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xác định vị trí hiện tại của mình, kiểm tra các thư mục cấp cao quan trọng và tạo một không gian làm việc chuyên dụng cho phần còn lại của phòng thí nghiệm (lab).\n\nLệnh `pwd` có nghĩa là \"print working directory\" (in thư mục làm việc). Hãy chạy lệnh này trước tiên để bạn biết terminal bắt đầu từ đâu:\n\n```bash\npwd\n```\n\nKết quả sẽ là `/home/labex/project`. Một đường dẫn tuyệt đối (absolute path) bắt đầu bằng `/` và mô tả một vị trí từ gốc (root) của hệ thống tệp.\n\nLiệt kê cấp cao nhất của hệ thống tệp:\n\n```bash\nls /\n```\n\nBạn sẽ thấy các thư mục tiêu chuẩn như `etc`, `home`, `tmp`, `usr` và `var`. Mục đích chung của chúng là:\n\n- `/etc` lưu trữ các cấu hình trên toàn hệ thống.\n- `/home` lưu trữ thư mục chính (home directory) của người dùng thông thường.\n- `/tmp` lưu trữ dữ liệu tạm thời.\n- `/usr` chứa nhiều chương trình đã cài đặt và tài nguyên được chia sẻ.\n- `/var` chứa dữ liệu thay đổi như nhật ký (log) và bộ nhớ đệm (cache).\n\nTùy chọn `-d` bảo `ls` mô tả các thư mục được chỉ định thay vì liệt kê nội dung của chúng. Tùy chọn `-l` chọn định dạng chi tiết (long format):\n\n```bash\nls -ld /etc /home /tmp /usr /var\n```\n\nKý tự đầu tiên của mỗi dòng là `d`, cho thấy đối tượng là một thư mục. Các cột còn lại chứa quyền hạn, quyền sở hữu, kích thước, thời gian và tên.\n\nTạo một không gian làm việc cho lab này. Tùy chọn `-p` cho phép `mkdir` tạo các thư mục cha còn thiếu và tránh lỗi nếu thư mục đã tồn tại:\n\n```bash\nmkdir -p /home/labex/project/file-ops-lab\n```\n\nDi chuyển vào thư mục đó và xác nhận vị trí mới của bạn:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\npwd\n```\n\nKết quả cuối cùng sẽ là `/home/labex/project/file-ops-lab`.",
+      "hint_vi": "Chạy lệnh: mkdir -p /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-2-v3",
+      "title": "Navigate with Absolute and Relative Paths",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a nested directory tree and move through it using absolute paths, relative paths, and navigation shortcuts.\n\nMake sure you begin in the lab workspace:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\nCreate three nested directories in one command:\n\n```bash\nmkdir -p navigation/alpha/beta\n```\n\nHere, `navigation/alpha/beta` is a relative path because it does not start with `/`. The shell resolves it from your current directory.\n\nUse an absolute path to enter the deepest directory:\n\n```bash\ncd /home/labex/project/file-ops-lab/navigation/alpha/beta\n```\n\n```bash\npwd\n```\n\nThe special path `..` means the parent directory. Move from `beta` to `alpha`:\n\n```bash\ncd ..\n```\n\n```bash\npwd\n```\n\nThe output should end in `/navigation/alpha`. The `cd -` command returns to the previous working directory:\n\n```bash\ncd -\n```\n\n```bash\npwd\n```\n\nYou should be back in `beta`. Finally, `~` represents your home directory. Use it as the beginning of a path to return to the lab workspace:\n\n```bash\ncd ~/project/file-ops-lab\n```\n\n```bash\npwd\n```\n\nAbsolute paths work from any location. Relative paths are shorter when you already know your current location.",
+      "task": "Thực hiện hướng dẫn: Navigate with Absolute and Relative Paths",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "title_vi": "Điều Hướng với Đường Dẫn Tuyệt Đối và Tương Đối",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Điều Hướng với Đường Dẫn Tuyệt Đối và Tương Đối",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -d /home/labex/project/file-ops-lab/navigation/alpha/beta"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một cây thư mục lồng nhau và di chuyển qua lại trong đó bằng cách sử dụng đường dẫn tuyệt đối, đường dẫn tương đối và các phím tắt điều hướng.\n\nĐảm bảo rằng bạn bắt đầu trong không gian làm việc của phòng thí nghiệm:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\nTạo ba thư mục lồng nhau trong một lệnh duy nhất:\n\n```bash\nmkdir -p navigation/alpha/beta\n```\n\nỞ đây, `navigation/alpha/beta` là một đường dẫn tương đối vì nó không bắt đầu bằng `/`. Shell sẽ phân giải đường dẫn này từ thư mục hiện tại của bạn.\n\nSử dụng đường dẫn tuyệt đối để đi vào thư mục sâu nhất:\n\n```bash\ncd /home/labex/project/file-ops-lab/navigation/alpha/beta\n```\n\n```bash\npwd\n```\n\nĐường dẫn đặc biệt `..` có nghĩa là thư mục cha. Di chuyển từ `beta` sang `alpha`:\n\n```bash\ncd ..\n```\n\n```bash\npwd\n```\n\nKết quả đầu ra sẽ kết thúc bằng `/navigation/alpha`. Lệnh `cd -` quay trở lại thư mục làm việc trước đó:\n\n```bash\ncd -\n```\n\n```bash\npwd\n```\n\nBạn sẽ quay lại thư mục `beta`. Cuối cùng, `~` đại diện cho thư mục chính (home directory) của bạn. Sử dụng nó làm phần đầu của đường dẫn để quay lại không gian làm việc của phòng thí nghiệm:\n\n```bash\ncd ~/project/file-ops-lab\n```\n\n```bash\npwd\n```\n\nĐường dẫn tuyệt đối hoạt động từ bất kỳ vị trí nào. Đường dẫn tương đối ngắn hơn khi bạn đã biết rõ vị trí hiện tại của mình.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-3-v3",
+      "title": "Create Directories and Write Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create directories and files, then learn the difference between overwriting and appending with shell redirection.\n\nStart in the lab workspace and create two directories at once:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir documents archive\n```\n\nThe `touch` command creates an empty file when the named file does not exist:\n\n```bash\ntouch documents/empty.txt\n```\n\nInspect the empty file with the long listing format:\n\n```bash\nls -l documents/empty.txt\n```\n\nIts size should be `0` bytes. Next, `>` redirects command output into a file. It creates the file or replaces its previous contents:\n\n```bash\necho \"Linux file practice\" > documents/notes.txt\n```\n\nThe `>>` operator appends output without removing the existing content:\n\n```bash\necho \"Paths identify each filesystem object\" >> documents/notes.txt\n```\n\nDisplay the complete file with `cat`:\n\n```bash\ncat documents/notes.txt\n```\n\nYou should see two lines in their original order. Use `wc -l` to count them; `-l` asks `wc` to count lines:\n\n```bash\nwc -l documents/notes.txt\n```\n\nThe first field should be `2`.",
+      "task": "Thực hiện hướng dẫn: Create Directories and Write Files",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "title_vi": "Tạo Thư Mục và Ghi Nội Dung Tệp",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tạo Thư Mục và Ghi Nội Dung Tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt <(printf %s 'Linux file practice\nPaths identify each filesystem object\n') && test -f /home/labex/project/file-ops-lab/documents/empty.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo các thư mục và tệp, sau đó tìm hiểu sự khác biệt giữa việc ghi đè và nối thêm với tính năng chuyển hướng trong shell.\n\nBắt đầu trong không gian làm việc của lab và tạo đồng thời hai thư mục:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir documents archive\n```\n\nLệnh `touch` tạo ra một tệp trống khi tệp có tên chưa tồn tại:\n\n```bash\ntouch documents/empty.txt\n```\n\nKiểm tra tệp trống với định dạng liệt kê chi tiết:\n\n```bash\nls -l documents/empty.txt\n```\n\nKích thước của nó phải là `0` byte. Tiếp theo, `>` chuyển hướng đầu ra của lệnh vào một tệp. Nó tạo tệp hoặc thay thế nội dung trước đó của tệp:\n\n```bash\necho \"Linux file practice\" > documents/notes.txt\n```\n\nToán tử `>>` nối thêm đầu ra mà không xóa nội dung hiện có:\n\n```bash\necho \"Paths identify each filesystem object\" >> documents/notes.txt\n```\n\nHiển thị toàn bộ tệp bằng `cat`:\n\n```bash\ncat documents/notes.txt\n```\n\nBạn sẽ thấy hai dòng theo thứ tự ban đầu của chúng. Sử dụng `wc -l` để đếm chúng; `-l` yêu cầu `wc` đếm số dòng:\n\n```bash\nwc -l documents/notes.txt\n```\n\nTrường đầu tiên phải là `2`.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-4-v3",
+      "title": "Copy, Move, Rename, and Remove Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will practice the four common ways that filesystem objects change: copying, moving, renaming, and removing.\n\nReturn to the lab workspace:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\nThe `cp` command copies a source to a destination. Copy `notes.txt` into the archive with a new name:\n\n```bash\ncp documents/notes.txt archive/notes-backup.txt\n```\n\nConfirm that the source and copy both exist:\n\n```bash\nls -l documents/notes.txt archive/notes-backup.txt\n```\n\nCreate a temporary file, then use `mv` to move and rename it in one operation:\n\n```bash\necho \"draft\" > documents/draft.txt\n```\n\n```bash\nmv documents/draft.txt archive/final-draft.txt\n```\n\nThe old path should no longer exist, while the new path does:\n\n```bash\nls -l archive/final-draft.txt\n```\n\nTo copy a directory and all of its contents, use the recursive `-r` option:\n\n```bash\ncp -r documents archive/documents-copy\n```\n\n```bash\nfind archive/documents-copy -maxdepth 1 -type f\n```\n\nThe `rm` command permanently removes files; there is no terminal recycle bin. Create and remove a disposable file:\n\n```bash\ntouch disposable.tmp\n```\n\n```bash\nrm disposable.tmp\n```\n\nList the current directory to confirm that the path is gone:\n\n```bash\nls\n```\n\n`disposable.tmp` should not appear. Always check a path carefully before using `rm`.",
+      "task": "Thực hiện hướng dẫn: Copy, Move, Rename, and Remove Files",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "title_vi": "Sao Chép, Di Chuyển, Đổi Tên và Xóa Tệp",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Sao Chép, Di Chuyển, Đổi Tên và Xóa Tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/notes-backup.txt && cmp -s /home/labex/project/file-ops-lab/archive/final-draft.txt <(printf %s 'draft\n') && test ! -e /home/labex/project/file-ops-lab/documents/draft.txt && test ! -e /home/labex/project/file-ops-lab/disposable.tmp && cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/documents-copy/notes.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ thực hành bốn cách phổ biến để thay đổi các đối tượng hệ thống tệp: sao chép, di chuyển, đổi tên và xóa.\n\nTrở lại không gian làm việc của lab:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\nLệnh `cp` sao chép một nguồn đến một đích. Sao chép `notes.txt` vào thư mục archive với một tên mới:\n\n```bash\ncp documents/notes.txt archive/notes-backup.txt\n```\n\nXác nhận rằng cả tệp nguồn và tệp sao chép đều tồn tại:\n\n```bash\nls -l documents/notes.txt archive/notes-backup.txt\n```\n\nTạo một tệp tạm thời, sau đó sử dụng `mv` để di chuyển và đổi tên nó trong một thao tác:\n\n```bash\necho \"draft\" > documents/draft.txt\n```\n\n```bash\nmv documents/draft.txt archive/final-draft.txt\n```\n\nĐường dẫn cũ không còn nên tồn tại nữa, trong khi đường dẫn mới thì có:\n\n```bash\nls -l archive/final-draft.txt\n```\n\nĐể sao chép một thư mục và tất cả nội dung bên trong nó, hãy sử dụng tùy chọn đệ quy `-r`:\n\n```bash\ncp -r documents archive/documents-copy\n```\n\n```bash\nfind archive/documents-copy -maxdepth 1 -type f\n```\n\nLệnh `rm` xóa vĩnh viễn các tệp; không có thùng rác (recycle bin) trên terminal. Tạo và xóa một tệp dùng một lần:\n\n```bash\ntouch disposable.tmp\n```\n\n```bash\nrm disposable.tmp\n```\n\nLiệt kê thư mục hiện tại để xác nhận rằng đường dẫn đã biến mất:\n\n```bash\nls\n```\n\n`disposable.tmp` không nên xuất hiện. Luôn kiểm tra kỹ đường dẫn trước khi sử dụng `rm`.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-5-v3",
+      "title": "View, Update, and Find Files",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a multiline file, inspect different parts of it, update it with append redirection, and find it by name.\n\nReturn to the lab workspace. A here-document sends several lines to a command until the shell reaches a line containing only the chosen marker, here `EOF`:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\ncat > documents/journal.txt <<'EOF'\nFirst entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nEOF\n```\n\nQuoting `'EOF'` prevents the shell from expanding special characters inside the document. Display the file with line numbers:\n\n```bash\nnl -ba documents/journal.txt\n```\n\nThe `-ba` option numbers all lines. Use `head -n 2` for the first two lines and `tail -n 1` for the last line:\n\n```bash\nhead -n 2 documents/journal.txt\n```\n\n```bash\ntail -n 1 documents/journal.txt\n```\n\nAppend a fourth entry. You used `>>` earlier; it adds output to the end without replacing the existing three lines:\n\n```bash\necho \"Fourth entry: reviewed the results\" >> documents/journal.txt\n```\n\nCheck the result:\n\n```bash\ntail -n 2 documents/journal.txt\n```\n\nNow search the workspace for text files. In `find`, `.` means the current directory, `-type f` limits results to regular files, and `-name` matches a filename pattern. Quotes prevent the shell from expanding `*.txt` before `find` receives it:\n\n```bash\nfind . -type f -name \"*.txt\"\n```\n\nThe output should include `./documents/journal.txt` along with the other text files you created.",
+      "task": "Thực hiện hướng dẫn: View, Update, and Find Files",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "title_vi": "Xem, Cập Nhật và Tìm Kiếm Tệp",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Xem, Cập Nhật và Tìm Kiếm Tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/journal.txt <(printf %s 'First entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nFourth entry: reviewed the results\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một tệp nhiều dòng, kiểm tra các phần khác nhau của nó, cập nhật tệp bằng lệnh chuyển hướng nối thêm (append redirection), và tìm kiếm tệp theo tên.\n\nQuay lại không gian làm việc của phòng thí nghiệm (lab workspace). Một here-document sẽ gửi nhiều dòng đến một lệnh cho đến khi shell gặp một dòng chỉ chứa dấu hiệu được chọn, ở đây là `EOF`:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\ncat > documents/journal.txt <<'EOF'\nFirst entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nEOF\n```\n\nViệc đặt `'EOF'` trong dấu nháy đơn giúp ngăn shell mở rộng các ký tự đặc biệt bên trong tài liệu. Hiển thị tệp kèm theo số dòng:\n\n```bash\nnl -ba documents/journal.txt\n```\n\nTùy chọn `-ba` đánh số tất cả các dòng. Sử dụng `head -n 2` cho hai dòng đầu tiên và `tail -n 1` cho dòng cuối cùng:\n\n```bash\nhead -n 2 documents/journal.txt\n```\n\n```bash\ntail -n 1 documents/journal.txt\n```\n\nNối thêm mục thứ tư vào. Bạn đã sử dụng `>>` trước đó; nó thêm đầu ra vào cuối tệp mà không làm thay đổi ba dòng hiện có:\n\n```bash\necho \"Fourth entry: reviewed the results\" >> documents/journal.txt\n```\n\nKiểm tra kết quả:\n\n```bash\ntail -n 2 documents/journal.txt\n```\n\nBây giờ hãy tìm kiếm các tệp văn bản trong không gian làm việc. Trong lệnh `find`, `.` nghĩa là thư mục hiện tại, `-type f` giới hạn kết quả ở các tệp thông thường, và `-name` khớp với một mẫu tên tệp. Dấu nháy ngăn shell mở rộng `*.txt` trước khi `find` nhận được nó:\n\n```bash\nfind . -type f -name \"*.txt\"\n```\n\nĐầu ra sẽ bao gồm `./documents/journal.txt` cùng với các tệp văn bản khác mà bạn đã tạo.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-6-v3",
+      "title": "Inspect File Types, Metadata, and Inodes",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will look beyond a filename and inspect the information Linux stores about a filesystem object.\n\nBegin in the lab workspace and ask `file` to identify two different objects:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nfile documents/journal.txt /bin/ls\n```\n\nThe journal is identified as text, while `/bin/ls` is identified as an executable program. Linux does not rely only on filename extensions to identify data.\n\nThe `stat` command displays metadata such as size, permissions, owner, timestamps, and inode number:\n\n```bash\nstat documents/journal.txt\n```\n\nAn inode is the filesystem record that stores a file's metadata and points to its data. A filename is a directory entry that refers to an inode. Use a custom `stat` format to show stable fields:\n\n```bash\nstat -c 'name=%n type=%F size=%s inode=%i links=%h' documents/journal.txt\n```\n\nThe `%i` field is the inode number, while `%h` is the number of hard links that refer to that inode.\n\nThe `-i` option of `ls` also shows inode numbers. Create a metadata practice file and inspect it:\n\n```bash\necho \"inode practice\" > metadata-sample.txt\n```\n\n```bash\nls -li metadata-sample.txt\n```\n\nThe number at the beginning of the line is the inode number. It may differ between environments, so focus on what the field represents rather than memorizing its value.",
+      "task": "Thực hiện hướng dẫn: Inspect File Types, Metadata, and Inodes",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "title_vi": "Kiểm Tra Loại Tệp, Siêu Dữ Liệu và Inode",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Kiểm Tra Loại Tệp, Siêu Dữ Liệu và Inode",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/metadata-sample.txt <(printf %s 'inode practice\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ nhìn sâu hơn tên tệp và kiểm tra thông tin mà Linux lưu trữ về một đối tượng hệ thống tệp.\n\nBắt đầu trong không gian làm việc của phòng thí nghiệm và yêu cầu `file` nhận diện hai đối tượng khác nhau:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nfile documents/journal.txt /bin/ls\n```\n\nNhật ký được nhận diện là văn bản, trong khi `/bin/ls` được nhận diện là một chương trình thực thi. Linux không chỉ dựa vào phần mở rộng tên tệp để nhận diện dữ liệu.\n\nLệnh `stat` hiển thị siêu dữ liệu (metadata) như kích thước, quyền, chủ sở hữu, dấu thời gian và số inode:\n\n```bash\nstat documents/journal.txt\n```\n\nInode là bản ghi hệ thống tệp lưu trữ siêu dữ liệu của tệp và trỏ đến dữ liệu của tệp đó. Tên tệp là một mục nhập thư mục trỏ đến một inode. Sử dụng định dạng `stat` tùy chỉnh để hiển thị các trường ổn định:\n\n```bash\nstat -c 'name=%n type=%F size=%s inode=%i links=%h' documents/journal.txt\n```\n\nTrường `%i` là số inode, trong khi `%h` là số liên kết cứng (hard link) trỏ đến inode đó.\n\nTùy chọn `-i` của `ls` cũng hiển thị số inode. Tạo một tệp thực hành siêu dữ liệu và kiểm tra nó:\n\n```bash\necho \"inode practice\" > metadata-sample.txt\n```\n\n```bash\nls -li metadata-sample.txt\n```\n\nSố ở đầu dòng là số inode. Nó có thể khác nhau giữa các môi trường, vì vậy hãy tập trung vào ý nghĩa của trường đại diện thay vì ghi nhớ giá trị của nó.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-7-v3",
+      "title": "Work with Hard Links and Symbolic Links",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create both kinds of Linux links and observe how each behaves when the original filename is removed.\n\nCreate a directory and a source file for the experiment:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir links\n```\n\n```bash\necho \"shared inode data\" > links/source.txt\n```\n\nThe `ln` command without an option creates a hard link. Both names refer to the same inode and file data:\n\n```bash\nln links/source.txt links/hard-link.txt\n```\n\nThe `-s` option creates a symbolic link, sometimes called a symlink. A symbolic link stores a path to another file:\n\n```bash\nln -s source.txt links/symbolic-link.txt\n```\n\nCompare inode numbers and link information:\n\n```bash\nls -li links\n```\n\n`source.txt` and `hard-link.txt` should have the same inode number. The symbolic link has its own inode and displays `-> source.txt`.\n\nUse `readlink` to display the path stored inside the symbolic link:\n\n```bash\nreadlink links/symbolic-link.txt\n```\n\nRemove the original filename:\n\n```bash\nrm links/source.txt\n```\n\nThe hard link still reaches the inode and its data:\n\n```bash\ncat links/hard-link.txt\n```\n\nThe symbolic link now points to a name that no longer exists. Try to read it:\n\n```bash\ncat links/symbolic-link.txt\n```\n\nThe `No such file or directory` error is expected and is useful evidence: the link object remains, but its stored target path is broken. This experiment shows why deleting one hard-link name does not delete the data while another hard link remains, whereas a symbolic link depends on its stored target path.",
+      "task": "Thực hiện hướng dẫn: Work with Hard Links and Symbolic Links",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "title_vi": "Làm Việc với Hard Link và Soft Link (Symlink)",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Làm Việc với Hard Link và Soft Link (Symlink)",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test ! -e /home/labex/project/file-ops-lab/links/source.txt && test -L /home/labex/project/file-ops-lab/links/symbolic-link.txt && test \"$(readlink /home/labex/project/file-ops-lab/links/symbolic-link.txt)\" = source.txt && cmp -s /home/labex/project/file-ops-lab/links/hard-link.txt <(printf %s 'shared inode data\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo cả hai loại liên kết Linux và quan sát cách mỗi loại hoạt động khi tên tệp gốc bị xóa.\n\nTạo một thư mục và một tệp nguồn cho thí nghiệm:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir links\n```\n\n```bash\necho \"shared inode data\" > links/source.txt\n```\n\nLệnh `ln` không đi kèm tùy chọn sẽ tạo một liên kết cứng (hard link). Cả hai tên đều trỏ đến cùng một inode và dữ liệu tệp:\n\n```bash\nln links/source.txt links/hard-link.txt\n```\n\nTùy chọn `-s` tạo một liên kết tượng trưng (symbolic link), đôi khi được gọi là symlink. Liên kết tượng trưng lưu trữ một đường dẫn trỏ đến tệp khác:\n\n```bash\nln -s source.txt links/symbolic-link.txt\n```\n\nSo sánh số inode và thông tin liên kết:\n\n```bash\nls -li links\n```\n\n`source.txt` và `hard-link.txt` phải có cùng số inode. Liên kết tượng trưng có inode riêng của nó và hiển thị `-> source.txt`.\n\nSử dụng `readlink` để hiển thị đường dẫn được lưu trữ bên trong liên kết tượng trưng:\n\n```bash\nreadlink links/symbolic-link.txt\n```\n\nXóa tên tệp gốc:\n\n```bash\nrm links/source.txt\n```\n\nLiên kết cứng vẫn truy cập được vào inode và dữ liệu của nó:\n\n```bash\ncat links/hard-link.txt\n```\n\nLiên kết tượng trưng bây giờ trỏ đến một tên không còn tồn tại nữa. Thử đọc nó:\n\n```bash\ncat links/symbolic-link.txt\n```\n\nLỗi `No such file or directory` là điều được dự đoán trước và là bằng chứng hữu ích: đối tượng liên kết vẫn còn, nhưng đường dẫn đích được lưu trữ trong đó đã bị hỏng. Thí nghiệm này cho thấy lý do tại sao việc xóa một tên liên kết cứng không làm mất dữ liệu chừng nào vẫn còn liên kết cứng khác, trong khi liên kết tượng trưng phụ thuộc hoàn toàn vào đường dẫn đích mà nó lưu trữ.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-8-v3",
+      "title": "Compare Files and Directories with Diff",
+      "position": 8,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `diff` to locate differences and then synchronize two small directory trees.\n\nCreate two version directories:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir -p comparison/version-a comparison/version-b\n```\n\nCreate configuration files that differ on one line:\n\n```bash\nprintf 'mode=production\\nport=8080\\n' > comparison/version-a/app.conf\n```\n\n```bash\nprintf 'mode=production\\nport=9090\\n' > comparison/version-b/app.conf\n```\n\nThe `-u` option asks `diff` for a unified view with context around each change:\n\n```bash\ndiff -u comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\n`diff` marks lines from the first file with `-` and lines from the second with `+`. Its nonzero exit status means the files differ; this is expected.\n\nMake the second file match the first, then use `-q` for a quiet equality check:\n\n```bash\ncp comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\n```bash\ndiff -q comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\nNo output means the files match. Now add a file to only one directory:\n\n```bash\necho \"release notes\" > comparison/version-a/README.txt\n```\n\nThe `-r` option recursively compares directory trees:\n\n```bash\ndiff -r comparison/version-a comparison/version-b\n```\n\nThe output reports that `README.txt` exists only in `version-a`. Copy it and compare again:\n\n```bash\ncp comparison/version-a/README.txt comparison/version-b/README.txt\n```\n\n```bash\ndiff -r comparison/version-a comparison/version-b\n```\n\nThe final command should produce no output, proving that both directory trees now contain the same file contents.",
+      "task": "Thực hiện hướng dẫn: Compare Files and Directories with Diff",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "title_vi": "So Sánh Tệp và Thư Mục Bằng Lệnh Diff",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: So Sánh Tệp và Thư Mục Bằng Lệnh Diff",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "diff -r /home/labex/project/file-ops-lab/comparison/version-a /home/labex/project/file-ops-lab/comparison/version-b >/dev/null && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/app.conf <(printf %s 'mode=production\nport=8080\n') && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/README.txt <(printf %s 'release notes\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng `diff` để xác định các điểm khác biệt và sau đó đồng bộ hóa hai cây thư mục nhỏ.\n\nTạo hai thư mục phiên bản:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir -p comparison/version-a comparison/version-b\n```\n\nTạo các tệp cấu hình khác nhau ở một dòng:\n\n```bash\nprintf 'mode=production\\nport=8080\\n' > comparison/version-a/app.conf\n```\n\n```bash\nprintf 'mode=production\\nport=9090\\n' > comparison/version-b/app.conf\n```\n\nTùy chọn `-u` yêu cầu `diff` hiển thị dạng hợp nhất (unified view) kèm theo ngữ cảnh xung quanh mỗi thay đổi:\n\n```bash\ndiff -u comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\n`diff` đánh dấu các dòng từ tệp đầu tiên bằng dấu `-` và các dòng từ tệp thứ hai bằng dấu `+`. Trạng thái thoát khác không của nó có nghĩa là các tệp khác nhau; điều này là dự kiến.\n\nLàm cho tệp thứ hai khớp với tệp đầu tiên, sau đó sử dụng `-q` để kiểm tra sự giống nhau mà không in ra chi tiết:\n\n```bash\ncp comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\n```bash\ndiff -q comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\nKhông có đầu ra có nghĩa là các tệp khớp nhau. Bây giờ, thêm một tệp chỉ vào một thư mục:\n\n```bash\necho \"release notes\" > comparison/version-a/README.txt\n```\n\nTùy chọn `-r` thực hiện so sánh đệ quy các cây thư mục:\n\n```bash\ndiff -r comparison/version-a comparison/version-b\n```\n\nĐầu ra báo cáo rằng `README.txt` chỉ tồn tại trong `version-a`. Hãy sao chép nó và so sánh lại:\n\n```bash\ncp comparison/version-a/README.txt comparison/version-b/README.txt\n```\n\n```bash\ndiff -r comparison/version-a comparison/version-b\n```\n\nLệnh cuối cùng sẽ không tạo ra đầu ra nào, chứng minh rằng cả hai cây thư mục giờ đây đều chứa nội dung tệp giống nhau.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "section-9",
+      "title": "Summary",
+      "position": 9,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You practiced the core file and directory operations used in Linux terminal work. You navigated with absolute and relative paths, created and edited files, copied and moved data, removed a disposable file safely, and searched by filename.\n\nYou also inspected file types and metadata, learned how filenames relate to inodes, compared hard links with symbolic links, and used `diff` to compare both individual files and complete directory trees. These concepts prepare you to reason about Linux files instead of treating commands as isolated recipes.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã thực hành các thao tác tệp và thư mục cốt lõi được sử dụng trong công việc trên terminal Linux. Bạn đã điều hướng bằng đường dẫn tuyệt đối và tương đối, tạo và chỉnh sửa tệp, sao chép và di chuyển dữ liệu, xóa một tệp tạm thời một cách an toàn, và tìm kiếm theo tên tệp.\n\nBạn cũng đã kiểm tra các loại tệp và siêu dữ liệu (metadata), tìm hiểu cách tên tệp liên quan đến inode, so sánh liên kết cứng (hard link) với liên kết tượng trưng (symbolic link), và sử dụng `diff` để so sánh cả tệp đơn lẻ lẫn toàn bộ cây thư mục. Các khái niệm này chuẩn bị cho bạn tư duy về các tệp Linux thay vì coi các lệnh như những công thức cô lập."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-17997-section-1-v3",
+      "title": "Explore the Linux Directory Tree",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify your current location, inspect important top-level directories, and create a dedicated workspace for the rest of the lab.\n\nThe `pwd` command means \"print working directory.\" Run it first so that you know where the terminal started:\n\n```bash\npwd\n```\n\nThe result should be `/home/labex/project`. An absolute path begins with `/` and describes a location from the root of the filesystem.\n\nList the top level of the filesystem:\n\n```bash\nls /\n```\n\nYou will see standard directories such as `etc`, `home`, `tmp`, `usr`, and `var`. Their common purposes are:\n\n- `/etc` stores system-wide configuration.\n- `/home` stores ordinary users' home directories.\n- `/tmp` stores temporary data.\n- `/usr` contains many installed programs and shared resources.\n- `/var` contains changing data such as logs and caches.\n\nThe `-d` option tells `ls` to describe the named directories instead of listing their contents. The `-l` option selects the long format:\n\n```bash\nls -ld /etc /home /tmp /usr /var\n```\n\nThe first character of each line is `d`, showing that the object is a directory. The remaining columns contain permissions, ownership, size, time, and name.\n\nCreate a workspace for this lab. The `-p` option lets `mkdir` create missing parent directories and avoids an error if the directory already exists:\n\n```bash\nmkdir -p /home/labex/project/file-ops-lab\n```\n\nMove into it and confirm your new location:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\npwd\n```\n\nThe final output should be `/home/labex/project/file-ops-lab`.",
+      "task": "Thực hiện hướng dẫn: Explore the Linux Directory Tree",
+      "hint": "Chạy lệnh: mkdir -p /home/labex/project/file-ops-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Khám Phá Cây Thư Mục Linux",
+      "task_vi": "Thực hiện hướng dẫn: Khám Phá Cây Thư Mục Linux",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ls\\s+/\\s*$"
+            ],
+            [
+              "^\\s*ls\\s+\\-ld\\s+/etc\\s+/home\\s+/tmp\\s+/usr\\s+/var\\s*$"
+            ]
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ls\\s+/\\s*$"
+            ],
+            [
+              "^\\s*ls\\s+\\-ld\\s+/etc\\s+/home\\s+/tmp\\s+/usr\\s+/var\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xác định vị trí hiện tại của mình, kiểm tra các thư mục cấp cao quan trọng và tạo một không gian làm việc chuyên dụng cho phần còn lại của phòng thí nghiệm (lab).\n\nLệnh `pwd` có nghĩa là \"print working directory\" (in thư mục làm việc). Hãy chạy lệnh này trước tiên để bạn biết terminal bắt đầu từ đâu:\n\n```bash\npwd\n```\n\nKết quả sẽ là `/home/labex/project`. Một đường dẫn tuyệt đối (absolute path) bắt đầu bằng `/` và mô tả một vị trí từ gốc (root) của hệ thống tệp.\n\nLiệt kê cấp cao nhất của hệ thống tệp:\n\n```bash\nls /\n```\n\nBạn sẽ thấy các thư mục tiêu chuẩn như `etc`, `home`, `tmp`, `usr` và `var`. Mục đích chung của chúng là:\n\n- `/etc` lưu trữ các cấu hình trên toàn hệ thống.\n- `/home` lưu trữ thư mục chính (home directory) của người dùng thông thường.\n- `/tmp` lưu trữ dữ liệu tạm thời.\n- `/usr` chứa nhiều chương trình đã cài đặt và tài nguyên được chia sẻ.\n- `/var` chứa dữ liệu thay đổi như nhật ký (log) và bộ nhớ đệm (cache).\n\nTùy chọn `-d` bảo `ls` mô tả các thư mục được chỉ định thay vì liệt kê nội dung của chúng. Tùy chọn `-l` chọn định dạng chi tiết (long format):\n\n```bash\nls -ld /etc /home /tmp /usr /var\n```\n\nKý tự đầu tiên của mỗi dòng là `d`, cho thấy đối tượng là một thư mục. Các cột còn lại chứa quyền hạn, quyền sở hữu, kích thước, thời gian và tên.\n\nTạo một không gian làm việc cho lab này. Tùy chọn `-p` cho phép `mkdir` tạo các thư mục cha còn thiếu và tránh lỗi nếu thư mục đã tồn tại:\n\n```bash\nmkdir -p /home/labex/project/file-ops-lab\n```\n\nDi chuyển vào thư mục đó và xác nhận vị trí mới của bạn:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\npwd\n```\n\nKết quả cuối cùng sẽ là `/home/labex/project/file-ops-lab`.",
+      "hint_vi": "Chạy lệnh: mkdir -p /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-2-v3",
+      "title": "Navigate with Absolute and Relative Paths",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a nested directory tree and move through it using absolute paths, relative paths, and navigation shortcuts.\n\nMake sure you begin in the lab workspace:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\nCreate three nested directories in one command:\n\n```bash\nmkdir -p navigation/alpha/beta\n```\n\nHere, `navigation/alpha/beta` is a relative path because it does not start with `/`. The shell resolves it from your current directory.\n\nUse an absolute path to enter the deepest directory:\n\n```bash\ncd /home/labex/project/file-ops-lab/navigation/alpha/beta\n```\n\n```bash\npwd\n```\n\nThe special path `..` means the parent directory. Move from `beta` to `alpha`:\n\n```bash\ncd ..\n```\n\n```bash\npwd\n```\n\nThe output should end in `/navigation/alpha`. The `cd -` command returns to the previous working directory:\n\n```bash\ncd -\n```\n\n```bash\npwd\n```\n\nYou should be back in `beta`. Finally, `~` represents your home directory. Use it as the beginning of a path to return to the lab workspace:\n\n```bash\ncd ~/project/file-ops-lab\n```\n\n```bash\npwd\n```\n\nAbsolute paths work from any location. Relative paths are shorter when you already know your current location.",
+      "task": "Thực hiện hướng dẫn: Navigate with Absolute and Relative Paths",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Điều Hướng với Đường Dẫn Tuyệt Đối và Tương Đối",
+      "task_vi": "Thực hiện hướng dẫn: Điều Hướng với Đường Dẫn Tuyệt Đối và Tương Đối",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -d /home/labex/project/file-ops-lab/navigation/alpha/beta"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -d /home/labex/project/file-ops-lab/navigation/alpha/beta"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một cây thư mục lồng nhau và di chuyển qua lại trong đó bằng cách sử dụng đường dẫn tuyệt đối, đường dẫn tương đối và các phím tắt điều hướng.\n\nĐảm bảo rằng bạn bắt đầu trong không gian làm việc của phòng thí nghiệm:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\nTạo ba thư mục lồng nhau trong một lệnh duy nhất:\n\n```bash\nmkdir -p navigation/alpha/beta\n```\n\nỞ đây, `navigation/alpha/beta` là một đường dẫn tương đối vì nó không bắt đầu bằng `/`. Shell sẽ phân giải đường dẫn này từ thư mục hiện tại của bạn.\n\nSử dụng đường dẫn tuyệt đối để đi vào thư mục sâu nhất:\n\n```bash\ncd /home/labex/project/file-ops-lab/navigation/alpha/beta\n```\n\n```bash\npwd\n```\n\nĐường dẫn đặc biệt `..` có nghĩa là thư mục cha. Di chuyển từ `beta` sang `alpha`:\n\n```bash\ncd ..\n```\n\n```bash\npwd\n```\n\nKết quả đầu ra sẽ kết thúc bằng `/navigation/alpha`. Lệnh `cd -` quay trở lại thư mục làm việc trước đó:\n\n```bash\ncd -\n```\n\n```bash\npwd\n```\n\nBạn sẽ quay lại thư mục `beta`. Cuối cùng, `~` đại diện cho thư mục chính (home directory) của bạn. Sử dụng nó làm phần đầu của đường dẫn để quay lại không gian làm việc của phòng thí nghiệm:\n\n```bash\ncd ~/project/file-ops-lab\n```\n\n```bash\npwd\n```\n\nĐường dẫn tuyệt đối hoạt động từ bất kỳ vị trí nào. Đường dẫn tương đối ngắn hơn khi bạn đã biết rõ vị trí hiện tại của mình.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-3-v3",
+      "title": "Create Directories and Write Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create directories and files, then learn the difference between overwriting and appending with shell redirection.\n\nStart in the lab workspace and create two directories at once:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir documents archive\n```\n\nThe `touch` command creates an empty file when the named file does not exist:\n\n```bash\ntouch documents/empty.txt\n```\n\nInspect the empty file with the long listing format:\n\n```bash\nls -l documents/empty.txt\n```\n\nIts size should be `0` bytes. Next, `>` redirects command output into a file. It creates the file or replaces its previous contents:\n\n```bash\necho \"Linux file practice\" > documents/notes.txt\n```\n\nThe `>>` operator appends output without removing the existing content:\n\n```bash\necho \"Paths identify each filesystem object\" >> documents/notes.txt\n```\n\nDisplay the complete file with `cat`:\n\n```bash\ncat documents/notes.txt\n```\n\nYou should see two lines in their original order. Use `wc -l` to count them; `-l` asks `wc` to count lines:\n\n```bash\nwc -l documents/notes.txt\n```\n\nThe first field should be `2`.",
+      "task": "Thực hiện hướng dẫn: Create Directories and Write Files",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Tạo Thư Mục và Ghi Nội Dung Tệp",
+      "task_vi": "Thực hiện hướng dẫn: Tạo Thư Mục và Ghi Nội Dung Tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt <(printf %s 'Linux file practice\nPaths identify each filesystem object\n') && test -f /home/labex/project/file-ops-lab/documents/empty.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt <(printf %s 'Linux file practice\nPaths identify each filesystem object\n') && test -f /home/labex/project/file-ops-lab/documents/empty.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo các thư mục và tệp, sau đó tìm hiểu sự khác biệt giữa việc ghi đè và nối thêm với tính năng chuyển hướng trong shell.\n\nBắt đầu trong không gian làm việc của lab và tạo đồng thời hai thư mục:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir documents archive\n```\n\nLệnh `touch` tạo ra một tệp trống khi tệp có tên chưa tồn tại:\n\n```bash\ntouch documents/empty.txt\n```\n\nKiểm tra tệp trống với định dạng liệt kê chi tiết:\n\n```bash\nls -l documents/empty.txt\n```\n\nKích thước của nó phải là `0` byte. Tiếp theo, `>` chuyển hướng đầu ra của lệnh vào một tệp. Nó tạo tệp hoặc thay thế nội dung trước đó của tệp:\n\n```bash\necho \"Linux file practice\" > documents/notes.txt\n```\n\nToán tử `>>` nối thêm đầu ra mà không xóa nội dung hiện có:\n\n```bash\necho \"Paths identify each filesystem object\" >> documents/notes.txt\n```\n\nHiển thị toàn bộ tệp bằng `cat`:\n\n```bash\ncat documents/notes.txt\n```\n\nBạn sẽ thấy hai dòng theo thứ tự ban đầu của chúng. Sử dụng `wc -l` để đếm chúng; `-l` yêu cầu `wc` đếm số dòng:\n\n```bash\nwc -l documents/notes.txt\n```\n\nTrường đầu tiên phải là `2`.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-4-v3",
+      "title": "Copy, Move, Rename, and Remove Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will practice the four common ways that filesystem objects change: copying, moving, renaming, and removing.\n\nReturn to the lab workspace:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\nThe `cp` command copies a source to a destination. Copy `notes.txt` into the archive with a new name:\n\n```bash\ncp documents/notes.txt archive/notes-backup.txt\n```\n\nConfirm that the source and copy both exist:\n\n```bash\nls -l documents/notes.txt archive/notes-backup.txt\n```\n\nCreate a temporary file, then use `mv` to move and rename it in one operation:\n\n```bash\necho \"draft\" > documents/draft.txt\n```\n\n```bash\nmv documents/draft.txt archive/final-draft.txt\n```\n\nThe old path should no longer exist, while the new path does:\n\n```bash\nls -l archive/final-draft.txt\n```\n\nTo copy a directory and all of its contents, use the recursive `-r` option:\n\n```bash\ncp -r documents archive/documents-copy\n```\n\n```bash\nfind archive/documents-copy -maxdepth 1 -type f\n```\n\nThe `rm` command permanently removes files; there is no terminal recycle bin. Create and remove a disposable file:\n\n```bash\ntouch disposable.tmp\n```\n\n```bash\nrm disposable.tmp\n```\n\nList the current directory to confirm that the path is gone:\n\n```bash\nls\n```\n\n`disposable.tmp` should not appear. Always check a path carefully before using `rm`.",
+      "task": "Thực hiện hướng dẫn: Copy, Move, Rename, and Remove Files",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Sao Chép, Di Chuyển, Đổi Tên và Xóa Tệp",
+      "task_vi": "Thực hiện hướng dẫn: Sao Chép, Di Chuyển, Đổi Tên và Xóa Tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/notes-backup.txt && cmp -s /home/labex/project/file-ops-lab/archive/final-draft.txt <(printf %s 'draft\n') && test ! -e /home/labex/project/file-ops-lab/documents/draft.txt && test ! -e /home/labex/project/file-ops-lab/disposable.tmp && cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/documents-copy/notes.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/notes-backup.txt && cmp -s /home/labex/project/file-ops-lab/archive/final-draft.txt <(printf %s 'draft\n') && test ! -e /home/labex/project/file-ops-lab/documents/draft.txt && test ! -e /home/labex/project/file-ops-lab/disposable.tmp && cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/documents-copy/notes.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ thực hành bốn cách phổ biến để thay đổi các đối tượng hệ thống tệp: sao chép, di chuyển, đổi tên và xóa.\n\nTrở lại không gian làm việc của lab:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\nLệnh `cp` sao chép một nguồn đến một đích. Sao chép `notes.txt` vào thư mục archive với một tên mới:\n\n```bash\ncp documents/notes.txt archive/notes-backup.txt\n```\n\nXác nhận rằng cả tệp nguồn và tệp sao chép đều tồn tại:\n\n```bash\nls -l documents/notes.txt archive/notes-backup.txt\n```\n\nTạo một tệp tạm thời, sau đó sử dụng `mv` để di chuyển và đổi tên nó trong một thao tác:\n\n```bash\necho \"draft\" > documents/draft.txt\n```\n\n```bash\nmv documents/draft.txt archive/final-draft.txt\n```\n\nĐường dẫn cũ không còn nên tồn tại nữa, trong khi đường dẫn mới thì có:\n\n```bash\nls -l archive/final-draft.txt\n```\n\nĐể sao chép một thư mục và tất cả nội dung bên trong nó, hãy sử dụng tùy chọn đệ quy `-r`:\n\n```bash\ncp -r documents archive/documents-copy\n```\n\n```bash\nfind archive/documents-copy -maxdepth 1 -type f\n```\n\nLệnh `rm` xóa vĩnh viễn các tệp; không có thùng rác (recycle bin) trên terminal. Tạo và xóa một tệp dùng một lần:\n\n```bash\ntouch disposable.tmp\n```\n\n```bash\nrm disposable.tmp\n```\n\nLiệt kê thư mục hiện tại để xác nhận rằng đường dẫn đã biến mất:\n\n```bash\nls\n```\n\n`disposable.tmp` không nên xuất hiện. Luôn kiểm tra kỹ đường dẫn trước khi sử dụng `rm`.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-5-v3",
+      "title": "View, Update, and Find Files",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a multiline file, inspect different parts of it, update it with append redirection, and find it by name.\n\nReturn to the lab workspace. A here-document sends several lines to a command until the shell reaches a line containing only the chosen marker, here `EOF`:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\ncat > documents/journal.txt <<'EOF'\nFirst entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nEOF\n```\n\nQuoting `'EOF'` prevents the shell from expanding special characters inside the document. Display the file with line numbers:\n\n```bash\nnl -ba documents/journal.txt\n```\n\nThe `-ba` option numbers all lines. Use `head -n 2` for the first two lines and `tail -n 1` for the last line:\n\n```bash\nhead -n 2 documents/journal.txt\n```\n\n```bash\ntail -n 1 documents/journal.txt\n```\n\nAppend a fourth entry. You used `>>` earlier; it adds output to the end without replacing the existing three lines:\n\n```bash\necho \"Fourth entry: reviewed the results\" >> documents/journal.txt\n```\n\nCheck the result:\n\n```bash\ntail -n 2 documents/journal.txt\n```\n\nNow search the workspace for text files. In `find`, `.` means the current directory, `-type f` limits results to regular files, and `-name` matches a filename pattern. Quotes prevent the shell from expanding `*.txt` before `find` receives it:\n\n```bash\nfind . -type f -name \"*.txt\"\n```\n\nThe output should include `./documents/journal.txt` along with the other text files you created.",
+      "task": "Thực hiện hướng dẫn: View, Update, and Find Files",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Xem, Cập Nhật và Tìm Kiếm Tệp",
+      "task_vi": "Thực hiện hướng dẫn: Xem, Cập Nhật và Tìm Kiếm Tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/journal.txt <(printf %s 'First entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nFourth entry: reviewed the results\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/journal.txt <(printf %s 'First entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nFourth entry: reviewed the results\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một tệp nhiều dòng, kiểm tra các phần khác nhau của nó, cập nhật tệp bằng lệnh chuyển hướng nối thêm (append redirection), và tìm kiếm tệp theo tên.\n\nQuay lại không gian làm việc của phòng thí nghiệm (lab workspace). Một here-document sẽ gửi nhiều dòng đến một lệnh cho đến khi shell gặp một dòng chỉ chứa dấu hiệu được chọn, ở đây là `EOF`:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\ncat > documents/journal.txt <<'EOF'\nFirst entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nEOF\n```\n\nViệc đặt `'EOF'` trong dấu nháy đơn giúp ngăn shell mở rộng các ký tự đặc biệt bên trong tài liệu. Hiển thị tệp kèm theo số dòng:\n\n```bash\nnl -ba documents/journal.txt\n```\n\nTùy chọn `-ba` đánh số tất cả các dòng. Sử dụng `head -n 2` cho hai dòng đầu tiên và `tail -n 1` cho dòng cuối cùng:\n\n```bash\nhead -n 2 documents/journal.txt\n```\n\n```bash\ntail -n 1 documents/journal.txt\n```\n\nNối thêm mục thứ tư vào. Bạn đã sử dụng `>>` trước đó; nó thêm đầu ra vào cuối tệp mà không làm thay đổi ba dòng hiện có:\n\n```bash\necho \"Fourth entry: reviewed the results\" >> documents/journal.txt\n```\n\nKiểm tra kết quả:\n\n```bash\ntail -n 2 documents/journal.txt\n```\n\nBây giờ hãy tìm kiếm các tệp văn bản trong không gian làm việc. Trong lệnh `find`, `.` nghĩa là thư mục hiện tại, `-type f` giới hạn kết quả ở các tệp thông thường, và `-name` khớp với một mẫu tên tệp. Dấu nháy ngăn shell mở rộng `*.txt` trước khi `find` nhận được nó:\n\n```bash\nfind . -type f -name \"*.txt\"\n```\n\nĐầu ra sẽ bao gồm `./documents/journal.txt` cùng với các tệp văn bản khác mà bạn đã tạo.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-6-v3",
+      "title": "Inspect File Types, Metadata, and Inodes",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will look beyond a filename and inspect the information Linux stores about a filesystem object.\n\nBegin in the lab workspace and ask `file` to identify two different objects:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nfile documents/journal.txt /bin/ls\n```\n\nThe journal is identified as text, while `/bin/ls` is identified as an executable program. Linux does not rely only on filename extensions to identify data.\n\nThe `stat` command displays metadata such as size, permissions, owner, timestamps, and inode number:\n\n```bash\nstat documents/journal.txt\n```\n\nAn inode is the filesystem record that stores a file's metadata and points to its data. A filename is a directory entry that refers to an inode. Use a custom `stat` format to show stable fields:\n\n```bash\nstat -c 'name=%n type=%F size=%s inode=%i links=%h' documents/journal.txt\n```\n\nThe `%i` field is the inode number, while `%h` is the number of hard links that refer to that inode.\n\nThe `-i` option of `ls` also shows inode numbers. Create a metadata practice file and inspect it:\n\n```bash\necho \"inode practice\" > metadata-sample.txt\n```\n\n```bash\nls -li metadata-sample.txt\n```\n\nThe number at the beginning of the line is the inode number. It may differ between environments, so focus on what the field represents rather than memorizing its value.",
+      "task": "Thực hiện hướng dẫn: Inspect File Types, Metadata, and Inodes",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Kiểm Tra Loại Tệp, Siêu Dữ Liệu và Inode",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm Tra Loại Tệp, Siêu Dữ Liệu và Inode",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/metadata-sample.txt <(printf %s 'inode practice\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/metadata-sample.txt <(printf %s 'inode practice\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ nhìn sâu hơn tên tệp và kiểm tra thông tin mà Linux lưu trữ về một đối tượng hệ thống tệp.\n\nBắt đầu trong không gian làm việc của phòng thí nghiệm và yêu cầu `file` nhận diện hai đối tượng khác nhau:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nfile documents/journal.txt /bin/ls\n```\n\nNhật ký được nhận diện là văn bản, trong khi `/bin/ls` được nhận diện là một chương trình thực thi. Linux không chỉ dựa vào phần mở rộng tên tệp để nhận diện dữ liệu.\n\nLệnh `stat` hiển thị siêu dữ liệu (metadata) như kích thước, quyền, chủ sở hữu, dấu thời gian và số inode:\n\n```bash\nstat documents/journal.txt\n```\n\nInode là bản ghi hệ thống tệp lưu trữ siêu dữ liệu của tệp và trỏ đến dữ liệu của tệp đó. Tên tệp là một mục nhập thư mục trỏ đến một inode. Sử dụng định dạng `stat` tùy chỉnh để hiển thị các trường ổn định:\n\n```bash\nstat -c 'name=%n type=%F size=%s inode=%i links=%h' documents/journal.txt\n```\n\nTrường `%i` là số inode, trong khi `%h` là số liên kết cứng (hard link) trỏ đến inode đó.\n\nTùy chọn `-i` của `ls` cũng hiển thị số inode. Tạo một tệp thực hành siêu dữ liệu và kiểm tra nó:\n\n```bash\necho \"inode practice\" > metadata-sample.txt\n```\n\n```bash\nls -li metadata-sample.txt\n```\n\nSố ở đầu dòng là số inode. Nó có thể khác nhau giữa các môi trường, vì vậy hãy tập trung vào ý nghĩa của trường đại diện thay vì ghi nhớ giá trị của nó.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-7-v3",
+      "title": "Work with Hard Links and Symbolic Links",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create both kinds of Linux links and observe how each behaves when the original filename is removed.\n\nCreate a directory and a source file for the experiment:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir links\n```\n\n```bash\necho \"shared inode data\" > links/source.txt\n```\n\nThe `ln` command without an option creates a hard link. Both names refer to the same inode and file data:\n\n```bash\nln links/source.txt links/hard-link.txt\n```\n\nThe `-s` option creates a symbolic link, sometimes called a symlink. A symbolic link stores a path to another file:\n\n```bash\nln -s source.txt links/symbolic-link.txt\n```\n\nCompare inode numbers and link information:\n\n```bash\nls -li links\n```\n\n`source.txt` and `hard-link.txt` should have the same inode number. The symbolic link has its own inode and displays `-> source.txt`.\n\nUse `readlink` to display the path stored inside the symbolic link:\n\n```bash\nreadlink links/symbolic-link.txt\n```\n\nRemove the original filename:\n\n```bash\nrm links/source.txt\n```\n\nThe hard link still reaches the inode and its data:\n\n```bash\ncat links/hard-link.txt\n```\n\nThe symbolic link now points to a name that no longer exists. Try to read it:\n\n```bash\ncat links/symbolic-link.txt\n```\n\nThe `No such file or directory` error is expected and is useful evidence: the link object remains, but its stored target path is broken. This experiment shows why deleting one hard-link name does not delete the data while another hard link remains, whereas a symbolic link depends on its stored target path.",
+      "task": "Thực hiện hướng dẫn: Work with Hard Links and Symbolic Links",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Làm Việc với Hard Link và Soft Link (Symlink)",
+      "task_vi": "Thực hiện hướng dẫn: Làm Việc với Hard Link và Soft Link (Symlink)",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test ! -e /home/labex/project/file-ops-lab/links/source.txt && test -L /home/labex/project/file-ops-lab/links/symbolic-link.txt && test \"$(readlink /home/labex/project/file-ops-lab/links/symbolic-link.txt)\" = source.txt && cmp -s /home/labex/project/file-ops-lab/links/hard-link.txt <(printf %s 'shared inode data\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test ! -e /home/labex/project/file-ops-lab/links/source.txt && test -L /home/labex/project/file-ops-lab/links/symbolic-link.txt && test \"$(readlink /home/labex/project/file-ops-lab/links/symbolic-link.txt)\" = source.txt && cmp -s /home/labex/project/file-ops-lab/links/hard-link.txt <(printf %s 'shared inode data\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo cả hai loại liên kết Linux và quan sát cách mỗi loại hoạt động khi tên tệp gốc bị xóa.\n\nTạo một thư mục và một tệp nguồn cho thí nghiệm:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir links\n```\n\n```bash\necho \"shared inode data\" > links/source.txt\n```\n\nLệnh `ln` không đi kèm tùy chọn sẽ tạo một liên kết cứng (hard link). Cả hai tên đều trỏ đến cùng một inode và dữ liệu tệp:\n\n```bash\nln links/source.txt links/hard-link.txt\n```\n\nTùy chọn `-s` tạo một liên kết tượng trưng (symbolic link), đôi khi được gọi là symlink. Liên kết tượng trưng lưu trữ một đường dẫn trỏ đến tệp khác:\n\n```bash\nln -s source.txt links/symbolic-link.txt\n```\n\nSo sánh số inode và thông tin liên kết:\n\n```bash\nls -li links\n```\n\n`source.txt` và `hard-link.txt` phải có cùng số inode. Liên kết tượng trưng có inode riêng của nó và hiển thị `-> source.txt`.\n\nSử dụng `readlink` để hiển thị đường dẫn được lưu trữ bên trong liên kết tượng trưng:\n\n```bash\nreadlink links/symbolic-link.txt\n```\n\nXóa tên tệp gốc:\n\n```bash\nrm links/source.txt\n```\n\nLiên kết cứng vẫn truy cập được vào inode và dữ liệu của nó:\n\n```bash\ncat links/hard-link.txt\n```\n\nLiên kết tượng trưng bây giờ trỏ đến một tên không còn tồn tại nữa. Thử đọc nó:\n\n```bash\ncat links/symbolic-link.txt\n```\n\nLỗi `No such file or directory` là điều được dự đoán trước và là bằng chứng hữu ích: đối tượng liên kết vẫn còn, nhưng đường dẫn đích được lưu trữ trong đó đã bị hỏng. Thí nghiệm này cho thấy lý do tại sao việc xóa một tên liên kết cứng không làm mất dữ liệu chừng nào vẫn còn liên kết cứng khác, trong khi liên kết tượng trưng phụ thuộc hoàn toàn vào đường dẫn đích mà nó lưu trữ.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    },
+    {
+      "id": "source-17997-section-8-v3",
+      "title": "Compare Files and Directories with Diff",
+      "position": 8,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `diff` to locate differences and then synchronize two small directory trees.\n\nCreate two version directories:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir -p comparison/version-a comparison/version-b\n```\n\nCreate configuration files that differ on one line:\n\n```bash\nprintf 'mode=production\\nport=8080\\n' > comparison/version-a/app.conf\n```\n\n```bash\nprintf 'mode=production\\nport=9090\\n' > comparison/version-b/app.conf\n```\n\nThe `-u` option asks `diff` for a unified view with context around each change:\n\n```bash\ndiff -u comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\n`diff` marks lines from the first file with `-` and lines from the second with `+`. Its nonzero exit status means the files differ; this is expected.\n\nMake the second file match the first, then use `-q` for a quiet equality check:\n\n```bash\ncp comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\n```bash\ndiff -q comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\nNo output means the files match. Now add a file to only one directory:\n\n```bash\necho \"release notes\" > comparison/version-a/README.txt\n```\n\nThe `-r` option recursively compares directory trees:\n\n```bash\ndiff -r comparison/version-a comparison/version-b\n```\n\nThe output reports that `README.txt` exists only in `version-a`. Copy it and compare again:\n\n```bash\ncp comparison/version-a/README.txt comparison/version-b/README.txt\n```\n\n```bash\ndiff -r comparison/version-a comparison/version-b\n```\n\nThe final command should produce no output, proving that both directory trees now contain the same file contents.",
+      "task": "Thực hiện hướng dẫn: Compare Files and Directories with Diff",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "So Sánh Tệp và Thư Mục Bằng Lệnh Diff",
+      "task_vi": "Thực hiện hướng dẫn: So Sánh Tệp và Thư Mục Bằng Lệnh Diff",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "diff -r /home/labex/project/file-ops-lab/comparison/version-a /home/labex/project/file-ops-lab/comparison/version-b >/dev/null && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/app.conf <(printf %s 'mode=production\nport=8080\n') && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/README.txt <(printf %s 'release notes\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "diff -r /home/labex/project/file-ops-lab/comparison/version-a /home/labex/project/file-ops-lab/comparison/version-b >/dev/null && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/app.conf <(printf %s 'mode=production\nport=8080\n') && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/README.txt <(printf %s 'release notes\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng `diff` để xác định các điểm khác biệt và sau đó đồng bộ hóa hai cây thư mục nhỏ.\n\nTạo hai thư mục phiên bản:\n\n```bash\ncd /home/labex/project/file-ops-lab\n```\n\n```bash\nmkdir -p comparison/version-a comparison/version-b\n```\n\nTạo các tệp cấu hình khác nhau ở một dòng:\n\n```bash\nprintf 'mode=production\\nport=8080\\n' > comparison/version-a/app.conf\n```\n\n```bash\nprintf 'mode=production\\nport=9090\\n' > comparison/version-b/app.conf\n```\n\nTùy chọn `-u` yêu cầu `diff` hiển thị dạng hợp nhất (unified view) kèm theo ngữ cảnh xung quanh mỗi thay đổi:\n\n```bash\ndiff -u comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\n`diff` đánh dấu các dòng từ tệp đầu tiên bằng dấu `-` và các dòng từ tệp thứ hai bằng dấu `+`. Trạng thái thoát khác không của nó có nghĩa là các tệp khác nhau; điều này là dự kiến.\n\nLàm cho tệp thứ hai khớp với tệp đầu tiên, sau đó sử dụng `-q` để kiểm tra sự giống nhau mà không in ra chi tiết:\n\n```bash\ncp comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\n```bash\ndiff -q comparison/version-a/app.conf comparison/version-b/app.conf\n```\n\nKhông có đầu ra có nghĩa là các tệp khớp nhau. Bây giờ, thêm một tệp chỉ vào một thư mục:\n\n```bash\necho \"release notes\" > comparison/version-a/README.txt\n```\n\nTùy chọn `-r` thực hiện so sánh đệ quy các cây thư mục:\n\n```bash\ndiff -r comparison/version-a comparison/version-b\n```\n\nĐầu ra báo cáo rằng `README.txt` chỉ tồn tại trong `version-a`. Hãy sao chép nó và so sánh lại:\n\n```bash\ncp comparison/version-a/README.txt comparison/version-b/README.txt\n```\n\n```bash\ndiff -r comparison/version-a comparison/version-b\n```\n\nLệnh cuối cùng sẽ không tạo ra đầu ra nào, chứng minh rằng cả hai cây thư mục giờ đây đều chứa nội dung tệp giống nhau.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-ops-lab"
+    }
+  ],
+  "title_vi": "Thao Tác Quản Lý Tệp và Thư Mục Nâng Cao",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-file-and-directory-operations-17997.json"
+}

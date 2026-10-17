@@ -1,0 +1,645 @@
+{
+  "id": "shell-arithmetic-operations-in-shell-388813",
+  "course_id": "shell-for-beginners",
+  "order": 7,
+  "title": "Arithmetic Operations in Shell",
+  "title_vi": "Các Phép Toán Số Học Trong Shell",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Practice addition, subtraction, multiplication, division, and modulo in Bash.",
+  "source_url": "https://labex.io/tutorials/shell-arithmetic-operations-in-shell-388813",
+  "source_lab_id": 388813,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice Arithmetic Operations in Shell. The tasks below retain the source filenames, data and required behavior; explanations are locally written.",
+      "content_vi": "Thực hành Các Phép Toán Số Học Trong Shell. Các bước dưới giữ đúng tên tệp, dữ kiện và hành vi nguồn; phần giải thích do dự án biên soạn."
+    },
+    {
+      "id": "source-388813-section-1-v4",
+      "title": "Create a new Bash script",
+      "title_vi": "Tạo script fruits.sh",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create fruit_basket.sh with a Bash shebang.\n\n```bash\ntouch fruit_basket.sh\n```",
+      "content_vi": "Tạo fruit_basket.sh với shebang Bash.\n\n```bash\ntouch fruit_basket.sh\n```",
+      "task": "Create fruit_basket.sh with a Bash shebang.",
+      "task_vi": "Tạo fruit_basket.sh với shebang Bash.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/fruit_basket.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388813-section-2-v4",
+      "title": "Define variables for fruit costs",
+      "title_vi": "Khai báo giá hoa quả",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Set pineapple, banana, watermelon and basket costs to 50, 4, 23 and 1 cents.\n\n```bash\nCOST_PINEAPPLE=50\nCOST_BANANA=4\nCOST_WATERMELON=23\nCOST_BASKET=1\n```",
+      "content_vi": "Đặt giá dứa, chuối, dưa hấu và giỏ lần lượt là 50, 4, 23 và 1 xu.\n\n```bash\nCOST_PINEAPPLE=50\nCOST_BANANA=4\nCOST_WATERMELON=23\nCOST_BASKET=1\n```",
+      "task": "Set pineapple, banana, watermelon and basket costs to 50, 4, 23 and 1 cents.",
+      "task_vi": "Đặt giá dứa, chuối, dưa hấu và giỏ lần lượt là 50, 4, 23 và 1 xu.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$COST_PINEAPPLE:$COST_BANANA:$COST_WATERMELON:$COST_BASKET\" = \"50:4:23:1\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$COST_PINEAPPLE:$COST_BANANA:$COST_WATERMELON:$COST_BASKET\" = \"50:4:23:1\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$COST_PINEAPPLE:$COST_BANANA:$COST_WATERMELON:$COST_BASKET\" = \"50:4:23:1\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388813-section-3-v4",
+      "title": "Calculate the total cost",
+      "title_vi": "Tính tổng chi phí",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Calculate one pineapple, two bananas, three watermelons and one basket in TOTAL.\n\n```bash\nTOTAL=$((COST_PINEAPPLE + COST_BANANA*2 + COST_WATERMELON*3 + COST_BASKET))\n```",
+      "content_vi": "Tính TOTAL cho một quả dứa, hai quả chuối, ba quả dưa hấu và một giỏ.\n\n```bash\nTOTAL=$((COST_PINEAPPLE + COST_BANANA*2 + COST_WATERMELON*3 + COST_BASKET))\n```",
+      "task": "Calculate one pineapple, two bananas, three watermelons and one basket in TOTAL.",
+      "task_vi": "Tính TOTAL cho một quả dứa, hai quả chuối, ba quả dưa hấu và một giỏ.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$TOTAL\" = 128) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$TOTAL\" = 128) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$TOTAL\" = 128) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388813-section-4-v4",
+      "title": "Display the total cost",
+      "title_vi": "In ra tổng chi phí",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Display the computed total in cents.\n\n```bash\necho \"Total Cost is $TOTAL cents\"\n```",
+      "content_vi": "In tổng chi phí tính được theo đơn vị xu.\n\n```bash\necho \"Total Cost is $TOTAL cents\"\n```",
+      "task": "Display the computed total in cents.",
+      "task_vi": "In tổng chi phí tính được theo đơn vị xu.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388813-section-5-v4",
+      "title": "Make the script executable and run it",
+      "title_vi": "Chạy và kiểm tra kết quả",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Make fruit_basket.sh executable and run it.\n\n```bash\nchmod +x fruit_basket.sh\n./fruit_basket.sh\n```",
+      "content_vi": "Cấp quyền thực thi rồi chạy fruit_basket.sh.\n\n```bash\nchmod +x fruit_basket.sh\n./fruit_basket.sh\n```",
+      "task": "Make fruit_basket.sh executable and run it.",
+      "task_vi": "Cấp quyền thực thi rồi chạy fruit_basket.sh.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/fruit_basket.sh && test -x /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh"
+          },
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*(?:\\./|~/project/|/home/labex/project/)fruit_basket\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/fruit_basket.sh && test -x /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*(?:\\./|~/project/|/home/labex/project/)fruit_basket\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/fruit_basket.sh && test -x /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*(?:\\./|~/project/|/home/labex/project/)fruit_basket\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "### Summary\n\nCongratulations! You have successfully completed **Arithmetic Operations in Shell**.",
+      "content_vi": "### Tổng kết bài học\n\nChúc mừng! Bạn đã hoàn thành xuất sắc bài thực hành **Các Phép Toán Số Học Trong Shell**."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388813-section-1-v4",
+      "title": "Create a new Bash script",
+      "title_vi": "Tạo script fruits.sh",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create fruit_basket.sh with a Bash shebang.\n\n```bash\ntouch fruit_basket.sh\n```",
+      "content_vi": "Tạo fruit_basket.sh với shebang Bash.\n\n```bash\ntouch fruit_basket.sh\n```",
+      "task": "Create fruit_basket.sh with a Bash shebang.",
+      "task_vi": "Tạo fruit_basket.sh với shebang Bash.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/fruit_basket.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388813-section-2-v4",
+      "title": "Define variables for fruit costs",
+      "title_vi": "Khai báo giá hoa quả",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Set pineapple, banana, watermelon and basket costs to 50, 4, 23 and 1 cents.\n\n```bash\nCOST_PINEAPPLE=50\nCOST_BANANA=4\nCOST_WATERMELON=23\nCOST_BASKET=1\n```",
+      "content_vi": "Đặt giá dứa, chuối, dưa hấu và giỏ lần lượt là 50, 4, 23 và 1 xu.\n\n```bash\nCOST_PINEAPPLE=50\nCOST_BANANA=4\nCOST_WATERMELON=23\nCOST_BASKET=1\n```",
+      "task": "Set pineapple, banana, watermelon and basket costs to 50, 4, 23 and 1 cents.",
+      "task_vi": "Đặt giá dứa, chuối, dưa hấu và giỏ lần lượt là 50, 4, 23 và 1 xu.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$COST_PINEAPPLE:$COST_BANANA:$COST_WATERMELON:$COST_BASKET\" = \"50:4:23:1\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$COST_PINEAPPLE:$COST_BANANA:$COST_WATERMELON:$COST_BASKET\" = \"50:4:23:1\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$COST_PINEAPPLE:$COST_BANANA:$COST_WATERMELON:$COST_BASKET\" = \"50:4:23:1\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388813-section-3-v4",
+      "title": "Calculate the total cost",
+      "title_vi": "Tính tổng chi phí",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Calculate one pineapple, two bananas, three watermelons and one basket in TOTAL.\n\n```bash\nTOTAL=$((COST_PINEAPPLE + COST_BANANA*2 + COST_WATERMELON*3 + COST_BASKET))\n```",
+      "content_vi": "Tính TOTAL cho một quả dứa, hai quả chuối, ba quả dưa hấu và một giỏ.\n\n```bash\nTOTAL=$((COST_PINEAPPLE + COST_BANANA*2 + COST_WATERMELON*3 + COST_BASKET))\n```",
+      "task": "Calculate one pineapple, two bananas, three watermelons and one basket in TOTAL.",
+      "task_vi": "Tính TOTAL cho một quả dứa, hai quả chuối, ba quả dưa hấu và một giỏ.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$TOTAL\" = 128) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$TOTAL\" = 128) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$TOTAL\" = 128) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/fruit_basket.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388813-section-4-v4",
+      "title": "Display the total cost",
+      "title_vi": "In ra tổng chi phí",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Display the computed total in cents.\n\n```bash\necho \"Total Cost is $TOTAL cents\"\n```",
+      "content_vi": "In tổng chi phí tính được theo đơn vị xu.\n\n```bash\necho \"Total Cost is $TOTAL cents\"\n```",
+      "task": "Display the computed total in cents.",
+      "task_vi": "In tổng chi phí tính được theo đơn vị xu.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388813-section-5-v4",
+      "title": "Make the script executable and run it",
+      "title_vi": "Chạy và kiểm tra kết quả",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Make fruit_basket.sh executable and run it.\n\n```bash\nchmod +x fruit_basket.sh\n./fruit_basket.sh\n```",
+      "content_vi": "Cấp quyền thực thi rồi chạy fruit_basket.sh.\n\n```bash\nchmod +x fruit_basket.sh\n./fruit_basket.sh\n```",
+      "task": "Make fruit_basket.sh executable and run it.",
+      "task_vi": "Cấp quyền thực thi rồi chạy fruit_basket.sh.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/fruit_basket.sh && test -x /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh"
+          },
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*(?:\\./|~/project/|/home/labex/project/)fruit_basket\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/fruit_basket.sh && test -x /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*(?:\\./|~/project/|/home/labex/project/)fruit_basket\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/fruit_basket.sh && test -x /home/labex/project/fruit_basket.sh && bash -n /home/labex/project/fruit_basket.sh"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('fruit_basket.sh'); assert p.returncode==0 and p.stdout=='Total Cost is 128 cents\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*(?:\\./|~/project/|/home/labex/project/)fruit_basket\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "date": "2026-10-17",
+    "fidelity": "public-requirements-aligned-local-wording",
+    "private_grader_recovered": false,
+    "integration_status": "requires-current-smoke-proof"
+  },
+  "environment_setup": "server/data/environment-setups/shell-arithmetic-operations-in-shell-388813.json"
+}

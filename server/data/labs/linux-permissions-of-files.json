@@ -1,0 +1,378 @@
+{
+  "id": "linux-permissions-of-files",
+  "course_id": "quick-start-with-linux",
+  "order": 7,
+  "title": "Permissions of Files",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Tạo file, đổi chủ file/cây thư mục và đặt quyền bằng số, ký hiệu trong Linux riêng.",
+  "source_url": "https://labex.io/tutorials/linux-permissions-of-files-270252",
+  "source_lab_id": 270252,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-permissions-of-files-270252",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-or-observed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/linux-permissions-of-files.json",
+  "sections": [
+    {
+      "id": "source-270252-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "In this lab, we'll dive into the world of file permissions in Linux. We'll explore three essential commands: `chown`, `touch`, and `chmod`. These tools are crucial for managing access to files and directories on a Linux system. By the end of this lab, you'll have a solid grasp on creating files, changing file ownership, and modifying file permissions. Understanding these commands will empower you to control who can read, write, and execute files on your system.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Trong bài thực hành này, chúng ta sẽ đi sâu vào thế giới phân quyền tệp tin trong Linux. Chúng ta sẽ khám phá ba câu lệnh thiết yếu: `chown`, `touch`, và `chmod`.\n\nCác lệnh này là nền tảng để quản lý quyền truy cập và bảo mật tệp trong các hệ điều hành tương thích UNIX. Thông qua các bài tập thực hành, bạn sẽ học cách thay đổi quyền sở hữu tệp và thư mục, tạo tệp mới, và sửa đổi quyền truy cập bằng cả ký pháp số (numeric notation) và ký pháp biểu tượng (symbolic notation).\n\nĐến cuối bài thực hành này, bạn sẽ nắm vững cách kiểm soát quyền truy cập vào các tệp và thư mục của mình, nâng cao tính bảo mật và tổ chức cho hệ thống Linux của bạn."
+    },
+    {
+      "id": "source-270252-section-1",
+      "title": "Creating a New File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's start by creating a new file using the `touch` command. This versatile command can create new, empty files and update the timestamps of existing ones. Think of it as a quick way to \"touch\" a file, either bringing it into existence or updating its last accessed time.\n\nFirst, make sure you're in the right directory. We'll be working in your `project` directory:\n\n```bash\ncd ~/project\n```\n\nThe `cd` command stands for \"change directory.\" The `~` symbol represents your home directory, and `/project` specifies the subdirectory we want to move into. If the `project` directory doesn't exist, this command will likely fail. It's generally a good practice to create the directory first if you're unsure. However, in this lab environment, the directory should already exist.\n\nNow, let's create a new file named `example.txt`:\n\n```bash\ntouch example.txt\n```\n\nThis command creates an empty file called `example.txt` in your current directory. To confirm that the file was created, use the `ls` command:\n\n```bash\nls\n```\n\n`ls` stands for \"list.\" It shows you the files and directories in your current location. You should see `example.txt` listed in the output. If you don't see it, double-check that you ran the `touch` command correctly and that you are indeed in the `~/project` directory.",
+      "task": "Vào ~/project và tạo example.txt rỗng.",
+      "hint": "touch tạo file mới hoặc cập nhật timestamp.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/project/example.txt\" && test ! -s \"$HOME/project/example.txt\""
+      },
+      "title_vi": "Tạo một Tệp Mới",
+      "content_vi": "Hãy bắt đầu bằng cách tạo một tệp mới bằng lệnh `touch`. Lệnh đa năng này có thể tạo các tệp rỗng mới và cập nhật dấu thời gian (timestamps) của các tệp hiện có mà không làm thay đổi nội dung của chúng.\n\nĐầu tiên, hãy điều hướng đến thư mục dự án của chúng ta:\n\n```bash\ncd ~/project\n```\n\nBây giờ, hãy tạo một tệp mới có tên `example.txt`:\n\n```bash\ntouch example.txt\n```\n\nLệnh này tạo một tệp rỗng có tên `example.txt` trong thư mục hiện tại (`~/project`). Nếu `example.txt` đã tồn tại, `touch` sẽ chỉ cập nhật thời gian truy cập và sửa đổi của nó thành thời điểm hiện tại.\n\nHãy xác minh rằng tệp đã được tạo và kiểm tra các thuộc tính của nó:\n\n```bash\nls -l example.txt\n```\n\nBạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n-rw-rw-r-- 1 labex labex 0 Jul 29 14:30 example.txt\n```\n\nHãy phân tích kết quả này:\n\n- `-rw-rw-r--`: Đây là các quyền của tệp (chúng ta sẽ thảo luận chi tiết sau).\n- `1`: Số lượng hard link liên kết đến tệp.\n- `labex`: Tên người dùng sở hữu tệp (owner).\n- `labex`: Tên nhóm sở hữu tệp (group).\n- `0`: Kích thước tệp tính bằng byte (0 vì tệp rỗng).\n- `Jul 29 14:30`: Ngày và giờ sửa đổi lần cuối.\n- `example.txt`: Tên của tệp tin.\n\nTheo mặc định, tệp mới được tạo sẽ thuộc quyền sở hữu của người dùng đã tạo ra nó (trong trường hợp này là `labex`) và nhóm chính của người dùng đó (cũng là `labex`).",
+      "task_vi": "Tạo tệp rỗng example.txt trong thư mục ~/project bằng lệnh touch.",
+      "hint_vi": "Chuyển vào ~/project rồi chạy touch example.txt."
+    },
+    {
+      "id": "source-270252-section-2",
+      "title": "Changing the Ownership of a File",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now that we've created a file, let's learn how to change its ownership. The `chown` command allows us to modify both the user and group ownership of a file. Ownership determines who has control over the file.\n\nFirst, let's check the current ownership of our `example.txt` file:\n\n```bash\nls -l example.txt\n```\n\nThe `ls -l` command (list with long format) provides detailed information about the file, including its permissions, owner, and group. You should see output similar to this:\n\n```bash\n-rw-rw-r-- 1 labex labex 0 Jul 29 15:11 example.txt\n```\n\nLet's break down this output:\n\n1. `-rw-rw-r--` represents the file permissions (we'll explore this more in Step 4). The first character indicates the file type ( `-` for a regular file, `d` for directory, etc.). The remaining characters represent read, write, and execute permissions for the owner, group, and others.\n2. The first `labex` is the current owner of the file. This is the username that owns the file.\n3. The second `labex` is the current group of the file. A group is a collection of users that can share permissions.\n4. `0` is the file size in bytes. Since the file is empty, its size is zero.\n5. `Jul 29 15:11` is the last modified date and time.\n6. `example.txt` is the file name.\n\nNow, let's change the ownership of the file to the `root` user. `root` is the administrator account on Linux systems, and it has special privileges.\n\n```bash\nsudo chown root:root example.txt\n```\n\nHere's what this command does:\n\n- `sudo` runs the command with root privileges. You'll likely be prompted for your password. `chown` requires elevated privileges because it's a powerful command that can affect system security. Without `sudo`, you'll get a \"Permission denied\" error.\n- `chown` is the command to change ownership.\n- `root:root` specifies the new owner and group (both set to root). The syntax is `owner:group`.\n- `example.txt` is the target file.\n\nLet's verify the change:\n\n```bash\nls -l example.txt\n```\n\nYou should now see that both the owner and group have changed to `root`:\n\n```bash\n-rw-rw-r-- 1 root root 0 Jul 29 15:11 example.txt\n```\n\nIf you still see `labex` instead of `root`, make sure you used `sudo` when running the `chown` command and entered your password correctly.",
+      "task": "Xem chi tiết rồi đổi chủ và nhóm example.txt thành root:root.",
+      "hint": "sudo ở đây chỉ tác động môi trường bài riêng.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c '%u:%g' \"$HOME/project/example.txt\")\" = 0:0"
+      },
+      "title_vi": "Thay Đổi Quyền Sở Hữu của Tệp",
+      "content_vi": "Bây giờ chúng ta đã tạo một tệp, hãy học cách thay đổi quyền sở hữu của nó. Lệnh `chown` cho phép chúng ta sửa đổi cả người dùng sở hữu (owner) và nhóm sở hữu (group) của một tệp hoặc thư mục.\n\nCú pháp cơ bản của lệnh `chown` là:\n\n```bash\nchown [OPTIONS] USER[:GROUP] FILE(s)\n```\n\nĐể thay đổi quyền sở hữu tệp sang người dùng khác, bạn thường cần quyền quản trị viên (root). Chúng ta sẽ sử dụng `sudo` để thực thi các lệnh này với tư cách siêu người dùng (superuser).\n\nHãy thay đổi chủ sở hữu của `example.txt` thành người dùng `root` và nhóm thành `root`:\n\n```bash\nsudo chown root:root example.txt\n```\n\nTrong lệnh này:\n\n- `sudo` chạy lệnh với quyền siêu người dùng (superuser).\n- `chown` là lệnh thay đổi quyền sở hữu.\n- `root:root` chỉ định cả người dùng mới (`root`) và nhóm mới (`root`), được phân tách bằng dấu hai chấm.\n- `example.txt` là tệp chúng ta đang sửa đổi.\n\nBây giờ, hãy xác minh thay đổi:\n\n```bash\nls -l example.txt\n```\n\nBây giờ bạn sẽ thấy:\n\n```bash\n-rw-rw-r-- 1 root root 0 Jul 29 14:30 example.txt\n```\n\nLưu ý rằng cả người dùng và nhóm hiện tại đã đổi thành `root`.\n\nBạn cũng có thể chỉ thay đổi người dùng sở hữu bằng cách bỏ qua phần nhóm:\n\n```bash\nsudo chown labex example.txt\n```\n\nHoặc chỉ thay đổi nhóm bằng cách đặt dấu hai chấm trước tên nhóm:\n\n```bash\nsudo chown :labex example.txt\n```\n\nHãy đổi nó lại thành `root:root` cho các bước tiếp theo:\n\n```bash\nsudo chown root:root example.txt\n```\n\nThay đổi quyền sở hữu tệp là một kỹ năng quan trọng đối với các quản trị viên hệ thống, đặc biệt khi quản lý quyền truy cập tệp cho nhiều người dùng hoặc dịch vụ khác nhau.",
+      "task_vi": "Đổi quyền sở hữu của example.txt sang root:root bằng sudo chown.",
+      "hint_vi": "Dùng sudo chown root:root example.txt."
+    },
+    {
+      "id": "source-270252-section-3",
+      "title": "Changing the Ownership of a Directory",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "The `chown` command can also change the ownership of entire directories and their contents. Let's see this in action. This is particularly useful for managing complex directory structures where you want to ensure all files and subdirectories have the same owner.\n\nFirst, let's create a new directory with some files:\n\n```bash\nmkdir -p new-dir/subdir\necho \"Hello, world\" > new-dir/file1.txt\necho \"Another file\" > new-dir/subdir/file2.txt\n```\n\nLet's break down these commands:\n\n- `mkdir -p new-dir/subdir` creates the `new-dir` directory and its `subdir` subdirectory. The `-p` option tells `mkdir` to create parent directories as needed. Without `-p`, if `new-dir` didn't exist, creating `new-dir/subdir` would fail.\n- `echo \"Hello, world\" > new-dir/file1.txt` creates a file named `file1.txt` inside the `new-dir` directory and writes the text \"Hello, world\" into it. The `>` symbol is used for redirection; it takes the output of the `echo` command and redirects it into the specified file.\n- `echo \"Another file\" > new-dir/subdir/file2.txt` similarly creates a file named `file2.txt` inside the `new-dir/subdir` directory and writes the text \"Another file\" into it.\n\nNow, let's check the current ownership:\n\n```bash\nls -lR new-dir\n```\n\n`ls -lR` lists the contents of `new-dir` recursively. The `-R` option (recursive) makes `ls` list all files and subdirectories within `new-dir` and their contents.\n\nYou should see something like this:\n\n```bash\nnew-dir:\ntotal 4\n-rw-rw-r-- 1 labex labex 13 Jul 29 09:15 file1.txt\ndrwxrwxr-x 2 labex labex 23 Jul 29 09:15 subdir\n\nnew-dir/subdir:\ntotal 4\n-rw-rw-r-- 1 labex labex 13 Jul 29 09:15 file2.txt\n```\n\nThis shows that the directory `new-dir`, its subdirectory `subdir`, and the files `file1.txt` and `file2.txt` are all owned by `labex`.\n\nNow, let's change the ownership of `new-dir` and all its contents to the `root` user:\n\n```bash\nsudo chown -R root:root new-dir\n```\n\nIn this command:\n\n- The `-R` option tells `chown` to operate recursively, changing the ownership of all files and subdirectories within `new-dir`. This is crucial; without `-R`, only the `new-dir` directory's ownership would change, but the files and subdirectories within it would still be owned by `labex`.\n\nLet's verify the change:\n\n```bash\nls -lR new-dir\n```\n\nYou should now see:\n\n```bash\nnew-dir:\ntotal 4\n-rw-rw-r-- 1 root root 13 Jul 29 09:15 file1.txt\ndrwxrwxr-x 2 root root 23 Jul 29 09:15 subdir\n\nnew-dir/subdir:\ntotal 4\n-rw-rw-r-- 1 root root 13 Jul 29 09:15 file2.txt\n```\n\nAs you can see, the ownership of the directory and all its contents has changed to root. This demonstrates the power of the `-R` option for making widespread changes to ownership within a directory structure.",
+      "task": "Tạo new-dir/subdir với file1.txt, file2.txt như mẫu, rồi đổi toàn bộ cây sang root:root.",
+      "hint": "chown -R đổi cả các phần tử bên trong.",
+      "verification": {
+        "kind": "state",
+        "command": "test -d \"$HOME/project/new-dir/subdir\" && test -f \"$HOME/project/new-dir/file1.txt\" && test -f \"$HOME/project/new-dir/subdir/file2.txt\" && test -z \"$(find \"$HOME/project/new-dir\" \\( ! -uid 0 -o ! -gid 0 \\) -print -quit)\" && cmp -s \"$HOME/project/new-dir/file1.txt\" <(printf 'Hello, world\\n') && cmp -s \"$HOME/project/new-dir/subdir/file2.txt\" <(printf 'Another file\\n')"
+      },
+      "title_vi": "Thay Đổi Quyền Sở Hữu của Thư Mục",
+      "content_vi": "Lệnh `chown` cũng có thể thay đổi quyền sở hữu của toàn bộ thư mục và nội dung bên trong chúng. Hãy cùng theo dõi điều này trong thực tế. Điều này đặc biệt hữu ích khi bạn cần quản lý quyền cho toàn bộ cấu trúc dự án.\n\nĐầu tiên, hãy tạo một thư mục mới có một số tệp và thư mục con bên trong:\n\n```bash\nmkdir -p new-dir/subdir\necho \"Hello, world\" > new-dir/file1.txt\necho \"Another file\" > new-dir/subdir/file2.txt\n```\n\nCác lệnh này thực hiện:\n\n- `mkdir -p new-dir/subdir`: Tạo `new-dir` và thư mục con `subdir` bên trong nó. Cờ `-p` cho phép tạo các thư mục cha nếu chưa tồn tại.\n- Các lệnh `echo` tạo hai tệp văn bản có nội dung ở các cấp độ khác nhau của cấu trúc thư mục.\n\nHãy kiểm tra quyền sở hữu hiện tại:\n\n```bash\nls -l new-dir\nls -l new-dir/subdir\n```\n\nBạn sẽ thấy rằng tất cả các mục đều thuộc quyền sở hữu của người dùng và nhóm `labex`.\n\nĐể thay đổi quyền sở hữu của một thư mục cùng tất cả nội dung bên trong nó (tệp và thư mục con), chúng ta sử dụng cờ `-R` (hoặc `--recursive`):\n\n```bash\nsudo chown -R root:root new-dir\n```\n\nBây giờ, hãy kiểm tra lại quyền sở hữu:\n\n```bash\nls -ld new-dir\nls -l new-dir\nls -l new-dir/subdir\n```\n\nLưu ý:\n\n- Chúng ta sử dụng `ls -ld new-dir` để xem các thuộc tính của chính thư mục đó, chứ không phải nội dung bên trong nó.\n- Cả `new-dir`, các tệp bên trong nó, và thư mục con `subdir` cùng tệp con đều đã thuộc quyền sở hữu của `root:root`.\n\nTùy chọn đệ quy `-R` là một công cụ mạnh mẽ, nhưng hãy sử dụng nó một cách cẩn thận. Áp dụng nó cho sai thư mục (như `/` hoặc `/usr`) với quyền `sudo` có thể làm hỏng quyền hệ thống và gây ra lỗi nghiêm trọng.",
+      "task_vi": "Tạo thư mục new-dir/subdir và các tệp bên trong, sau đó đổi sở hữu đệ quy sang root:root.",
+      "hint_vi": "Dùng sudo chown -R root:root new-dir."
+    },
+    {
+      "id": "source-270252-section-4",
+      "title": "Changing the Permissions of a File",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In Linux, file permissions are represented by a series of letters or numbers. Let's explore how to read and change these permissions. Understanding permissions is vital for securing your files and preventing unauthorized access.\n\nFirst, let's look at the current permissions of our `example.txt` file:\n\n```bash\nls -l example.txt\n```\n\nYou might see something like this:\n\n```bash\n-rw-rw-r-- 1 root root 0 Jul 29 15:11 example.txt\n```\n\nThe `-rw-rw-r--` part represents the file permissions. This is where the numeric and symbolic notations come in. Let's break it down:\n\n- The first character (`-`) indicates this is a regular file. Other common indicators are `d` for directory and `l` for symbolic link.\n- The next three characters (`rw-`) represent the owner's permissions (read and write, but not execute).\n- `r` stands for read permission: The owner can open and read the file.\n- `w` stands for write permission: The owner can modify the file.\n- `x` stands for execute permission: The owner can run the file (if it's a program or script). A `-` means the permission is denied.\n- The next three (`rw-`) are for the group. They have the same meaning as above, but apply to members of the file's group.\n- The last three (`r--`) are for others (everyone else). They also have the same meaning, but apply to users who are neither the owner nor members of the file's group.\n\nNow, let's change these permissions using the `chmod` command. `chmod` stands for \"change mode,\" and it allows you to modify these permissions. We'll start with the **numeric notation**.\n\n```bash\nsudo chmod 700 example.txt\n```\n\nIn this command:\n\n- `700` is a numeric representation of permissions:\n- The first digit (`7`) represents the owner's permissions.\n- The second digit (`0`) represents the group's permissions.\n- The third digit (`0`) represents the others' permissions.\n\nEach digit is a number from 0 to 7, calculated by adding the values for read (4), write (2), and execute (1) permissions:\n\n- `4`: Read permission\n- `2`: Write permission\n- `1`: Execute permission\n- `0`: No permission\n\nSo, `7` (first digit) gives the owner read (4), write (2), and execute (1) permissions: 4+2+1=7\n`0` (second digit) gives the group no permissions (0+0+0=0).\n`0` (third digit) gives others no permissions (0+0+0=0).\n\nTherefore, `700` means: Owner: read, write, execute. Group: none. Others: none.\n\nLet's verify the change:\n\n```bash\nls -l example.txt\n```\n\nYou should now see:\n\n```bash\n-rwx------ 1 root root 0 Jul 29 15:11 example.txt\n```\n\nThe owner now has `rwx` (read, write, and execute) permissions, while the group and others have no permissions.",
+      "task": "Đặt example.txt thành mode 700.",
+      "hint": "7=rwx; 0 không cấp quyền.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c '%a' \"$HOME/project/example.txt\")\" = 700 && test \"$(stat -c '%u:%g' \"$HOME/project/example.txt\")\" = 0:0"
+      },
+      "title_vi": "Thay Đổi Quyền Truy Cập của Tệp",
+      "content_vi": "Trong Linux, quyền truy cập tệp được biểu diễn bằng một chuỗi các ký tự hoặc chữ số. Hãy cùng khám phá cách đọc và thay đổi các quyền này bằng lệnh `chmod` (change mode).\n\nĐầu tiên, hãy hiểu cách biểu diễn quyền truy cập:\n\nMột chuỗi quyền điển hình trông như thế này: `-rw-rw-r--`\n\n- Ký tự đầu tiên cho biết loại tệp (`-` cho tệp thông thường, `d` cho thư mục).\n- Chín ký tự tiếp theo được chia thành ba nhóm, mỗi nhóm gồm ba ký tự:\n  1. Quyền của chủ sở hữu (User/Owner): `rw-` (đọc, ghi, không thực thi)\n  2. Quyền của nhóm (Group): `rw-` (đọc, ghi, không thực thi)\n  3. Quyền của người khác (Others): `r--` (chỉ đọc)\n\nMỗi vị trí có thể có một trong các ký tự sau:\n\n- `r` (Read - Đọc): Quyền xem nội dung tệp (giá trị số: 4)\n- `w` (Write - Ghi): Quyền sửa đổi hoặc xóa tệp (giá trị số: 2)\n- `x` (Execute - Thực thi): Quyền chạy tệp như một chương trình/kịch bản (giá trị số: 1)\n- `-`: Không có quyền tương ứng (giá trị số: 0)\n\nTrong **ký pháp số (numeric notation)**, mỗi nhóm ba quyền được biểu diễn bằng tổng các giá trị số của nó:\n\n- `rwx` = 4 + 2 + 1 = 7\n- `rw-` = 4 + 2 + 0 = 6\n- `r-x` = 4 + 0 + 1 = 5\n- `r--` = 4 + 0 + 0 = 4\n- `---` = 0 + 0 + 0 = 0\n\nVì vậy, `-rw-rw-r--` chuyển đổi thành `664` ở dạng số.\n\nBây giờ, hãy thay đổi quyền của `example.txt`. Hiện tại, nó thuộc quyền sở hữu của `root:root`. Hãy thay đổi quyền của nó để chỉ người sở hữu (root) mới có toàn quyền đọc, ghi, và thực thi, còn nhóm và người khác không có quyền nào (700):\n\n```bash\nsudo chmod 700 example.txt\n```\n\nHãy xác minh thay đổi:\n\n```bash\nls -l example.txt\n```\n\nBây giờ bạn sẽ thấy:\n\n```bash\n-rwx------ 1 root root 0 Jul 29 14:30 example.txt\n```\n\nBây giờ, hãy thử đọc tệp này với tư cách người dùng thông thường (`labex`):\n\n```bash\ncat example.txt\n```\n\nBạn sẽ nhận được thông báo lỗi \"Permission denied\" vì người dùng `labex` (thuộc mục Others) không có quyền đọc đối với tệp này nữa. Điều này minh họa cách quyền truy cập tệp bảo vệ dữ liệu khỏi việc truy cập trái phép.",
+      "task_vi": "Dùng chmod 700 example.txt để chỉ cấp toàn quyền cho chủ sở hữu root.",
+      "hint_vi": "Chạy sudo chmod 700 example.txt."
+    },
+    {
+      "id": "source-270252-section-5",
+      "title": "Changing the Permissions of a Directory",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Changing permissions for directories works similarly to changing permissions for files. Let's practice by creating a new directory and modifying its permissions. Directory permissions control who can list the directory's contents, create new files within the directory, and access files already in the directory.\n\nFirst, let's create a new directory and set some non-standard permissions:\n\n```bash\nmkdir ~/test-dir\nchmod 700 ~/test-dir\n```\n\nNow, let's check the current permissions:\n\n```bash\nls -ld ~/test-dir\n```\n\nThe `-d` option in `ls -l` tells `ls` to list the directory itself, rather than its contents. Without `-d`, `ls` would list the files and subdirectories *inside* `test-dir`, which is empty right now. You should see:\n\n```bash\ndrwx------ 2 labex labex 4096 Jul 29 15:45 /home/labex/test-dir\n```\n\nThe `d` at the beginning indicates that it's a directory. The `rwx------` indicates that the owner has read, write, and execute permissions, while the group and others have no permissions. For directories:\n\n- Read permission (`r`) allows you to list the contents of the directory using `ls`.\n- Write permission (`w`) allows you to create new files and subdirectories within the directory.\n- Execute permission (`x`) allows you to access files and subdirectories within the directory (i.e., `cd` into it).\n\nNow, let's change the permissions:\n\n```bash\nchmod -R 755 ~/test-dir\n```\n\nIn this command:\n\n- `-R` applies the change recursively to all files and subdirectories (though our directory is empty in this case). It's good practice to include it when dealing with directories, even if they're currently empty, in case you add files later.\n- `755` gives read, write, and execute permissions to the owner, and read and execute permissions to group and others.\n\nLet's break down `755`:\n\n- Owner (7): Read (4) + Write (2) + Execute (1) = 7\n- Group (5): Read (4) + Execute (1) = 5\n- Others (5): Read (4) + Execute (1) = 5\n\nLet's verify the change:\n\n```bash\nls -ld ~/test-dir\n```\n\nYou should now see:\n\n```bash\ndrwxr-xr-x 2 labex labex 4096 Jul 29 15:45 /home/labex/test-dir\n```\n\nThis clearly shows the change in permissions, from only the owner having access (700) to the owner having full access while others can read and execute (755). Now, anyone can list the contents of `test-dir` and access files within it, but only the owner can create new files or modify existing ones.",
+      "task": "Tạo ~/test-dir, thử 700 rồi đổi thành 755.",
+      "hint": "x trên thư mục cho phép đi qua/tham chiếu nội dung.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -d \"$HOME/test-dir\" && test \"$(stat -c '%a' \"$HOME/test-dir\")\" = 755"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*chmod\\s+700\\s+~/test-dir\\s*$"
+              ],
+              [
+                "^\\s*chmod\\s+-R\\s+755\\s+~/test-dir\\s*$",
+                "^\\s*chmod\\s+755\\s+~/test-dir\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Thay Đổi Quyền Truy Cập của Thư Mục",
+      "content_vi": "Thay đổi quyền truy cập cho thư mục hoạt động tương tự như tệp tin. Hãy cùng thực hành bằng cách tạo một thư mục mới trong thư mục cá nhân (home directory) của chúng ta.\n\nĐầu tiên, hãy tạo một thư mục mới có tên `test-dir` trong thư mục gốc của người dùng (`~`):\n\n```bash\nmkdir ~/test-dir\n```\n\nBây giờ, hãy kiểm tra quyền mặc định của thư mục mới tạo:\n\n```bash\nls -ld ~/test-dir\n```\n\nBạn sẽ thấy kết quả tương tự như sau:\n\n```bash\ndrwxrwxr-x 2 labex labex 4096 Jul 29 15:40 /home/labex/test-dir\n```\n\nHãy thay đổi quyền của thư mục này thành `700` (chỉ chủ sở hữu mới có quyền đọc, ghi, và thực thi):\n\n```bash\nchmod 700 ~/test-dir\n```\n\nLưu ý: Chúng ta không cần `sudo` ở đây vì chúng ta sở hữu thư mục này.\n\nHãy xác minh thay đổi:\n\n```bash\nls -ld ~/test-dir\n```\n\nBây giờ bạn sẽ thấy:\n\n```bash\ndrwx------ 2 labex labex 4096 Jul 29 15:40 /home/labex/test-dir\n```\n\nĐối với thư mục, ý nghĩa của các quyền có đôi chút khác biệt so với tệp thông thường:\n\n- **Quyền đọc (`r`)**: Cho phép bạn liệt kê danh sách tệp trong thư mục bằng lệnh `ls`.\n- **Quyền ghi (`w`)**: Cho phép bạn tạo tệp mới và thư mục con bên trong thư mục này.\n- **Quyền thực thi (`x`)**: Cho phép bạn truy cập tệp và thư mục con bên trong thư mục (tức là lệnh `cd` vào trong đó).\n\nBây giờ, hãy đổi quyền thành `755`:\n\n```bash\nchmod -R 755 ~/test-dir\n```\n\nTrong câu lệnh này:\n\n- `-R`: Áp dụng thay đổi đệ quy cho toàn bộ tệp và thư mục con (dù thư mục hiện tại đang rỗng). Đây là thói quen tốt khi làm việc với thư mục.\n- `755`: Cấp quyền đọc, ghi, thực thi cho chủ sở hữu (7), và quyền đọc, thực thi cho nhóm (5) và người khác (5).\n\nHãy phân tích `755`:\n\n- Owner (7): Read (4) + Write (2) + Execute (1) = 7\n- Group (5): Read (4) + Execute (1) = 5\n- Others (5): Read (4) + Execute (1) = 5\n\nHãy xác minh thay đổi:\n\n```bash\nls -ld ~/test-dir\n```\n\nBây giờ bạn sẽ thấy:\n\n```bash\ndrwxr-xr-x 2 labex labex 4096 Jul 29 15:45 /home/labex/test-dir\n```\n\nKết quả này thể hiện rõ sự thay đổi quyền, từ chỉ chủ sở hữu có quyền truy cập (700) sang việc chủ sở hữu có toàn quyền trong khi người khác có thể đọc và thực thi (755). Bây giờ, bất kỳ ai cũng có thể liệt kê nội dung và truy cập tệp bên trong `test-dir`, nhưng chỉ chủ sở hữu mới có thể tạo tệp mới hoặc sửa đổi các tệp hiện có.",
+      "task_vi": "Tạo ~/test-dir, thử chmod 700 rồi dùng chmod -R 755 để cấp quyền đọc/thực thi cho mọi người.",
+      "hint_vi": "Dùng chmod 700 ~/test-dir rồi chmod -R 755 ~/test-dir."
+    },
+    {
+      "id": "source-270252-section-6",
+      "title": "Using Symbolic Notation for Permissions",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "While numeric notation is concise, symbolic notation can be more intuitive, especially when you only want to change a single permission. Symbolic notation uses letters to represent the user, group, and others, and operators to add or remove permissions.\n\nIn this step, you'll create a small shell script and then add execute permission to it.\n\nFirst, let's create a new script file with some content:\n\n```bash\ncd ~/project\necho '#!/bin/bash' > script.sh\necho 'echo \"Hello, World\"' >> script.sh\n```\n\nThese commands do two things:\n\n- The first `echo` command creates `script.sh` and writes the first line, `#!/bin/bash`, into it. This line is called a shebang, and it tells Linux to run the script with Bash.\n- The second `echo` command adds a new line to the end of the file with `>>`. It writes `echo \"Hello, World\"`, which will display `Hello, World` when the script runs.\n\nYou can confirm that the file now contains two separate lines with:\n\n```bash\ncat script.sh\n```\n\nYou should see:\n\n```text\n#!/bin/bash\necho \"Hello, World\"\n```\n\nNow, let's check its initial permissions:\n\n```bash\nls -l script.sh\n```\n\nYou should see something like:\n\n```bash\n-rw-rw-r-- 1 labex labex 32 Jul 29 16:30 script.sh\n```\n\nAs you can see, initially, the script only has read and write permissions for the owner and group, and read permission for others. It doesn't have execute permission, which is required to run it as a program.\n\nLet's try to run the script:\n\n```bash\n./script.sh\n```\n\nYou should see a \"Permission denied\" error because the script doesn't have execute permissions yet. The `./` part tells the shell to execute the script located in the current directory.\n\nNow, let's add execute permission for the owner using **symbolic notation**:\n\n```bash\nchmod u+x script.sh\n```\n\nIn this command:\n\n- `u` refers to the user (owner). Other options are `g` for group, `o` for others, and `a` for all (user, group, and others).\n- `+x` adds execute permission. The `+` symbol adds a permission, while the `-` symbol removes a permission.\n\nSo, `u+x` means \"add execute permission for the owner.\"\n\nLet's verify the change:\n\n```bash\nls -l script.sh\n```\n\nYou should now see:\n\n```bash\n-rwxrw-r-- 1 labex labex 32 Jul 29 16:30 script.sh\n```\n\nThe owner now has `rwx` (read, write, and execute) permissions.\n\nNow, let's try running the script again:\n\n```bash\n./script.sh\n```\n\nThis time, you should see the output:\n\n```text\nHello, World\n```\n\nThis example clearly demonstrates why we need to add execute permissions to scripts, and the difference before and after adding these permissions. Symbolic notation makes it easy to modify specific permissions without having to recalculate the entire numeric representation.",
+      "task": "Tạo script.sh in Hello, World; thêm quyền chạy cho chủ bằng chmod u+x rồi chạy script.",
+      "hint": "Một file văn bản cần quyền x để gọi trực tiếp bằng ./script.sh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f \"$HOME/project/script.sh\" && test -x \"$HOME/project/script.sh\" && test \"$(stat -c '%u' \"$HOME/project/script.sh\")\" = \"$(id -u)\" && cmp -s <(bash \"$HOME/project/script.sh\") <(printf 'Hello, World\\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*chmod\\s+u\\+x\\s+script\\.sh\\s*$"
+              ],
+              [
+                "^\\s*\\./script\\.sh\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Sử Dụng Ký Pháp Biểu Tượng Cho Quyền Truy Cập",
+      "content_vi": "Trong khi ký pháp số rất súc tích, ký pháp biểu tượng (symbolic notation) lại trực quan hơn, đặc biệt là khi bạn chỉ muốn thay đổi một quyền duy nhất mà không cần tính toán lại tất cả các quyền khác. Ký pháp biểu tượng sử dụng các chữ cái để đại diện cho người dùng, nhóm, và người khác, cùng các toán tử để thêm hoặc bớt quyền.\n\nTrong bước này, bạn sẽ tạo một kịch bản shell nhỏ và sau đó thêm quyền thực thi cho nó.\n\nĐầu tiên, hãy tạo một tệp script mới với một số nội dung:\n\n```bash\ncd ~/project\necho '#!/bin/bash' > script.sh\necho 'echo \"Hello, World\"' >> script.sh\n```\n\nCác lệnh này thực hiện hai việc:\n\n- Lệnh `echo` đầu tiên tạo `script.sh` và ghi dòng đầu tiên, `#!/bin/bash`, vào tệp. Dòng này được gọi là **shebang**, nó báo cho Linux biết chạy script này bằng trình thông dịch Bash.\n- Lệnh `echo` thứ hai thêm một dòng mới vào cuối tệp bằng `>>`. Nó ghi `echo \"Hello, World\"`, dòng này sẽ in ra dòng chữ `Hello, World` khi script được thực thi.\n\nBạn có thể xác nhận tệp hiện chứa hai dòng riêng biệt bằng lệnh:\n\n```bash\ncat script.sh\n```\n\nBạn sẽ thấy:\n\n```text\n#!/bin/bash\necho \"Hello, World\"\n```\n\nBây giờ, hãy kiểm tra quyền ban đầu của nó:\n\n```bash\nls -l script.sh\n```\n\nBạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n-rw-rw-r-- 1 labex labex 32 Jul 29 16:30 script.sh\n```\n\nNhư bạn có thể thấy, ban đầu script chỉ có quyền đọc và ghi cho chủ sở hữu và nhóm, và quyền đọc cho người khác. Nó không có quyền thực thi (`x`), điều kiện bắt buộc để chạy nó như một chương trình.\n\nHãy thử chạy script:\n\n```bash\n./script.sh\n```\n\nBạn sẽ thấy thông báo lỗi **\"Permission denied\"** vì script chưa có quyền thực thi. Phần `./` báo cho shell thực thi kịch bản nằm trong thư mục hiện tại.\n\nBây giờ, hãy thêm quyền thực thi cho chủ sở hữu bằng **ký pháp biểu tượng**:\n\n```bash\nchmod u+x script.sh\n```\n\nTrong lệnh này:\n\n- `u`: Chỉ người dùng sở hữu (user/owner). Các tùy chọn khác là `g` cho nhóm (group), `o` cho người khác (others), và `a` cho tất cả (all).\n- `+x`: Thêm quyền thực thi. Ký hiệu `+` thêm quyền, trong khi ký hiệu `-` gỡ bỏ quyền.\n\nVì vậy, `u+x` có nghĩa là **\"thêm quyền thực thi cho chủ sở hữu\"**.\n\nHãy xác minh sự thay đổi:\n\n```bash\nls -l script.sh\n```\n\nBây giờ bạn sẽ thấy:\n\n```bash\n-rwxrw-r-- 1 labex labex 32 Jul 29 16:30 script.sh\n```\n\nChủ sở hữu hiện đã có quyền `rwx` (đọc, ghi, và thực thi).\n\nBây giờ, hãy thử chạy lại script:\n\n```bash\n./script.sh\n```\n\nLần này, bạn sẽ thấy kết quả xuất ra thành công:\n\n```text\nHello, World\n```\n\nVí dụ này thể hiện rất rõ tại sao chúng ta cần thêm quyền thực thi cho các script, và sự khác biệt trước và sau khi thêm quyền. Ký pháp biểu tượng giúp bạn dễ dàng sửa đổi các quyền cụ thể mà không cần phải tính toán lại toàn bộ biểu diễn số.",
+      "task_vi": "Tạo kịch bản script.sh trong ~/project, thêm quyền thực thi bằng chmod u+x script.sh và chạy ./script.sh.",
+      "hint_vi": "Tạo script.sh với shebang và echo, chạy chmod u+x script.sh rồi ./script.sh."
+    },
+    {
+      "id": "source-270252-section-7",
+      "title": "Summary",
+      "position": 7,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "In this lab, we've explored essential Linux commands for managing file permissions:\n\n1. We used `touch` to create new files and update existing ones.\n2. We learned how to use `chown` to change file and directory ownership, including recursive changes for entire directory structures.\n3. We practiced using `chmod` with both numeric and symbolic notation to modify file and directory permissions, understanding the different permission levels for owner, group, and others.\n4. We saw practical examples of why permissions matter, such as needing execute permissions to run scripts.\n5. We clarified the differences between numeric and symbolic notation for `chmod` and when each might be more appropriate.\n\nThese commands are crucial for maintaining security and controlling access in Linux systems. Remember to always be cautious when changing permissions, especially when using sudo, as incorrect changes can have significant consequences for system security and functionality. Always double-check your commands before executing them, and understand the implications of the changes you're making.",
+      "title_vi": "Tổng Kết Bài Học",
+      "content_vi": "Trong bài thực hành này, chúng ta đã khám phá các câu lệnh thiết yếu của Linux để quản lý quyền truy cập tệp:\n\n1. Chúng ta đã sử dụng `touch` để tạo các tệp mới và cập nhật tệp hiện có.\n2. Chúng ta đã học cách sử dụng `chown` để thay đổi quyền sở hữu tệp và thư mục, bao gồm các thay đổi đệ quy cho toàn bộ cấu trúc thư mục.\n3. Chúng ta đã thực hành sử dụng `chmod` với cả ký pháp số và ký pháp biểu tượng để sửa đổi quyền truy cập tệp và thư mục, hiểu các cấp độ quyền khác nhau cho chủ sở hữu, nhóm, và người khác.\n4. Chúng ta đã thấy các ví dụ thực tế về lý do tại sao quyền truy cập lại quan trọng, chẳng hạn như nhu cầu về quyền thực thi để chạy các script shell.\n5. Chúng ta đã làm rõ sự khác biệt giữa ký pháp số và ký pháp biểu tượng cho `chmod` và khi nào nên áp dụng từng loại.\n\nCác lệnh này rất quan trọng để duy trì tính bảo mật và kiểm soát quyền truy cập trong các hệ thống Linux. Hãy nhớ luôn thận trọng khi thay đổi quyền, đặc biệt khi sử dụng `sudo`, vì những thay đổi không chính xác có thể gây ra hậu quả đáng kể cho tính bảo mật và hoạt động của hệ thống. Luôn kiểm tra kỹ các lệnh của bạn trước khi thực thi và hiểu rõ tác động của những thay đổi bạn đang thực hiện."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-270252-section-1",
+      "title": "Creating a New File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Let's start by creating a new file using the `touch` command. This versatile command can create new, empty files and update the timestamps of existing ones. Think of it as a quick way to \"touch\" a file, either bringing it into existence or updating its last accessed time.\n\nFirst, make sure you're in the right directory. We'll be working in your `project` directory:\n\n```bash\ncd ~/project\n```\n\nThe `cd` command stands for \"change directory.\" The `~` symbol represents your home directory, and `/project` specifies the subdirectory we want to move into. If the `project` directory doesn't exist, this command will likely fail. It's generally a good practice to create the directory first if you're unsure. However, in this lab environment, the directory should already exist.\n\nNow, let's create a new file named `example.txt`:\n\n```bash\ntouch example.txt\n```\n\nThis command creates an empty file called `example.txt` in your current directory. To confirm that the file was created, use the `ls` command:\n\n```bash\nls\n```\n\n`ls` stands for \"list.\" It shows you the files and directories in your current location. You should see `example.txt` listed in the output. If you don't see it, double-check that you ran the `touch` command correctly and that you are indeed in the `~/project` directory.",
+      "task": "Vào ~/project và tạo example.txt rỗng.",
+      "hint": "touch tạo file mới hoặc cập nhật timestamp.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/project/example.txt\" && test ! -s \"$HOME/project/example.txt\""
+      },
+      "title_vi": "Tạo Tệp Tin Mới",
+      "content_vi": "Hãy bắt đầu bằng việc tạo một tệp tin mới sử dụng câu lệnh `touch`. Câu lệnh đa năng này vừa có thể tạo tệp rỗng mới, vừa có thể cập nhật dấu thời gian truy cập của tệp hiện có.\n\n1. Mở cửa sổ terminal và tạo tệp tin mẫu:\n```bash\ntouch sample_file.txt\n```\n\n2. Kiểm tra thông tin chi tiết và quyền mặc định của tệp vừa tạo:\n```bash\nls -l sample_file.txt\n```\n\nKết quả sẽ có dạng tương tự như sau:\n```plaintext\n-rw-rw-r-- 1 labex labex 0 Jan 15 10:30 sample_file.txt\n```\n\n### Giải mã các trường thông tin:\n- Ký tự đầu tiên `-`: Biểu thị đây là một tệp thông thường (regular file). Nếu là thư mục sẽ bắt đầu bằng chữ `d`.\n- 9 ký tự tiếp theo `rw-rw-r--`: Chuỗi phân quyền (3 ký tự cho Chủ sở hữu User, 3 cho Nhóm Group, 3 cho Người khác Others).\n- `1`: Số lượng liên kết cứng (hard links).\n- `labex`: Tên tài khoản người dùng sở hữu tệp (Owner).\n- `labex`: Tên nhóm sở hữu tệp (Group).\n- `0`: Kích thước tệp tính bằng byte.\n- `sample_file.txt`: Tên tệp tin.",
+      "task_vi": "Chạy touch sample_file.txt và kiểm tra quyền bằng ls -l.",
+      "hint_vi": "Dùng touch sample_file.txt sau đó ls -l sample_file.txt."
+    },
+    {
+      "id": "source-270252-section-2",
+      "title": "Changing the Ownership of a File",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now that we've created a file, let's learn how to change its ownership. The `chown` command allows us to modify both the user and group ownership of a file. Ownership determines who has control over the file.\n\nFirst, let's check the current ownership of our `example.txt` file:\n\n```bash\nls -l example.txt\n```\n\nThe `ls -l` command (list with long format) provides detailed information about the file, including its permissions, owner, and group. You should see output similar to this:\n\n```bash\n-rw-rw-r-- 1 labex labex 0 Jul 29 15:11 example.txt\n```\n\nLet's break down this output:\n\n1. `-rw-rw-r--` represents the file permissions (we'll explore this more in Step 4). The first character indicates the file type ( `-` for a regular file, `d` for directory, etc.). The remaining characters represent read, write, and execute permissions for the owner, group, and others.\n2. The first `labex` is the current owner of the file. This is the username that owns the file.\n3. The second `labex` is the current group of the file. A group is a collection of users that can share permissions.\n4. `0` is the file size in bytes. Since the file is empty, its size is zero.\n5. `Jul 29 15:11` is the last modified date and time.\n6. `example.txt` is the file name.\n\nNow, let's change the ownership of the file to the `root` user. `root` is the administrator account on Linux systems, and it has special privileges.\n\n```bash\nsudo chown root:root example.txt\n```\n\nHere's what this command does:\n\n- `sudo` runs the command with root privileges. You'll likely be prompted for your password. `chown` requires elevated privileges because it's a powerful command that can affect system security. Without `sudo`, you'll get a \"Permission denied\" error.\n- `chown` is the command to change ownership.\n- `root:root` specifies the new owner and group (both set to root). The syntax is `owner:group`.\n- `example.txt` is the target file.\n\nLet's verify the change:\n\n```bash\nls -l example.txt\n```\n\nYou should now see that both the owner and group have changed to `root`:\n\n```bash\n-rw-rw-r-- 1 root root 0 Jul 29 15:11 example.txt\n```\n\nIf you still see `labex` instead of `root`, make sure you used `sudo` when running the `chown` command and entered your password correctly.",
+      "task": "Xem chi tiết rồi đổi chủ và nhóm example.txt thành root:root.",
+      "hint": "sudo ở đây chỉ tác động môi trường bài riêng.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c '%u:%g' \"$HOME/project/example.txt\")\" = 0:0"
+      },
+      "title_vi": "Thay Đổi Quyền Sở Hữu Của Tệp (chown)",
+      "content_vi": "Bây giờ chúng ta đã có tệp tin, hãy học cách thay đổi quyền sở hữu của nó. Câu lệnh `chown` (change owner) cho phép chúng ta thay đổi người dùng sở hữu (User Owner) và nhóm sở hữu (Group Owner) của tệp.\n\nLưu ý: Thay đổi quyền sở hữu thường yêu cầu đặc quyền quản trị viên (root), do đó chúng ta cần dùng thêm tiền tố `sudo`.\n\n1. Thay đổi người sở hữu tệp thành `root`:\n```bash\nsudo chown root sample_file.txt\nls -l sample_file.txt\n```\n\nBạn sẽ thấy cột người sở hữu đã chuyển từ `labex` sang `root`.\n\n2. Thay đổi cả người sở hữu lẫn nhóm sở hữu cùng lúc:\n```bash\nsudo chown root:root sample_file.txt\nls -l sample_file.txt\n```\n\n3. Chuyển quyền sở hữu trở lại cho người dùng `labex`:\n```bash\nsudo chown labex:labex sample_file.txt\nls -l sample_file.txt\n```\n\nCú pháp tổng quát: `chown [người_dùng]:[nhóm] [tên_tệp]`.",
+      "task_vi": "Thay đổi quyền sở hữu của sample_file.txt cho user và group khác bằng lệnh chown.",
+      "hint_vi": "Sử dụng sudo chown root:root sample_file.txt rồi đổi lại sudo chown labex:labex sample_file.txt."
+    },
+    {
+      "id": "source-270252-section-3",
+      "title": "Changing the Ownership of a Directory",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "The `chown` command can also change the ownership of entire directories and their contents. Let's see this in action. This is particularly useful for managing complex directory structures where you want to ensure all files and subdirectories have the same owner.\n\nFirst, let's create a new directory with some files:\n\n```bash\nmkdir -p new-dir/subdir\necho \"Hello, world\" > new-dir/file1.txt\necho \"Another file\" > new-dir/subdir/file2.txt\n```\n\nLet's break down these commands:\n\n- `mkdir -p new-dir/subdir` creates the `new-dir` directory and its `subdir` subdirectory. The `-p` option tells `mkdir` to create parent directories as needed. Without `-p`, if `new-dir` didn't exist, creating `new-dir/subdir` would fail.\n- `echo \"Hello, world\" > new-dir/file1.txt` creates a file named `file1.txt` inside the `new-dir` directory and writes the text \"Hello, world\" into it. The `>` symbol is used for redirection; it takes the output of the `echo` command and redirects it into the specified file.\n- `echo \"Another file\" > new-dir/subdir/file2.txt` similarly creates a file named `file2.txt` inside the `new-dir/subdir` directory and writes the text \"Another file\" into it.\n\nNow, let's check the current ownership:\n\n```bash\nls -lR new-dir\n```\n\n`ls -lR` lists the contents of `new-dir` recursively. The `-R` option (recursive) makes `ls` list all files and subdirectories within `new-dir` and their contents.\n\nYou should see something like this:\n\n```bash\nnew-dir:\ntotal 4\n-rw-rw-r-- 1 labex labex 13 Jul 29 09:15 file1.txt\ndrwxrwxr-x 2 labex labex 23 Jul 29 09:15 subdir\n\nnew-dir/subdir:\ntotal 4\n-rw-rw-r-- 1 labex labex 13 Jul 29 09:15 file2.txt\n```\n\nThis shows that the directory `new-dir`, its subdirectory `subdir`, and the files `file1.txt` and `file2.txt` are all owned by `labex`.\n\nNow, let's change the ownership of `new-dir` and all its contents to the `root` user:\n\n```bash\nsudo chown -R root:root new-dir\n```\n\nIn this command:\n\n- The `-R` option tells `chown` to operate recursively, changing the ownership of all files and subdirectories within `new-dir`. This is crucial; without `-R`, only the `new-dir` directory's ownership would change, but the files and subdirectories within it would still be owned by `labex`.\n\nLet's verify the change:\n\n```bash\nls -lR new-dir\n```\n\nYou should now see:\n\n```bash\nnew-dir:\ntotal 4\n-rw-rw-r-- 1 root root 13 Jul 29 09:15 file1.txt\ndrwxrwxr-x 2 root root 23 Jul 29 09:15 subdir\n\nnew-dir/subdir:\ntotal 4\n-rw-rw-r-- 1 root root 13 Jul 29 09:15 file2.txt\n```\n\nAs you can see, the ownership of the directory and all its contents has changed to root. This demonstrates the power of the `-R` option for making widespread changes to ownership within a directory structure.",
+      "task": "Tạo new-dir/subdir với file1.txt, file2.txt như mẫu, rồi đổi toàn bộ cây sang root:root.",
+      "hint": "chown -R đổi cả các phần tử bên trong.",
+      "verification": {
+        "kind": "state",
+        "command": "test -d \"$HOME/project/new-dir/subdir\" && test -f \"$HOME/project/new-dir/file1.txt\" && test -f \"$HOME/project/new-dir/subdir/file2.txt\" && test -z \"$(find \"$HOME/project/new-dir\" \\( ! -uid 0 -o ! -gid 0 \\) -print -quit)\" && cmp -s \"$HOME/project/new-dir/file1.txt\" <(printf 'Hello, world\\n') && cmp -s \"$HOME/project/new-dir/subdir/file2.txt\" <(printf 'Another file\\n')"
+      },
+      "title_vi": "Thay Đổi Quyền Sở Hữu Của Thư Mục",
+      "content_vi": "Câu lệnh `chown` cũng có thể thay đổi quyền sở hữu của toàn bộ thư mục cùng tất cả các tệp con bên trong thông qua cờ đệ quy `-R`.\n\n1. Tạo thư mục mẫu và tệp con bên trong:\n```bash\nmkdir sample_dir\ntouch sample_dir/file1.txt sample_dir/file2.txt\n```\n\n2. Kiểm tra quyền sở hữu hiện tại:\n```bash\nls -ld sample_dir\nls -l sample_dir\n```\n\n3. Thay đổi quyền sở hữu toàn bộ thư mục và tệp con sang `root`:\n```bash\nsudo chown -R root:root sample_dir\nls -ld sample_dir\nls -l sample_dir\n```\n\nTùy chọn `-R` (recursive - đệ quy) đảm bảo áp dụng thay đổi từ thư mục cha xuống mọi tệp và thư mục con.\n\n4. Chuyển quyền sở hữu trở lại cho tài khoản `labex`:\n```bash\nsudo chown -R labex:labex sample_dir\nls -ld sample_dir\n```",
+      "task_vi": "Tạo thư mục sample_dir và đổi quyền sở hữu đệ quy bằng sudo chown -R.",
+      "hint_vi": "Sử dụng sudo chown -R root:root sample_dir."
+    },
+    {
+      "id": "source-270252-section-4",
+      "title": "Changing the Permissions of a File",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In Linux, file permissions are represented by a series of letters or numbers. Let's explore how to read and change these permissions. Understanding permissions is vital for securing your files and preventing unauthorized access.\n\nFirst, let's look at the current permissions of our `example.txt` file:\n\n```bash\nls -l example.txt\n```\n\nYou might see something like this:\n\n```bash\n-rw-rw-r-- 1 root root 0 Jul 29 15:11 example.txt\n```\n\nThe `-rw-rw-r--` part represents the file permissions. This is where the numeric and symbolic notations come in. Let's break it down:\n\n- The first character (`-`) indicates this is a regular file. Other common indicators are `d` for directory and `l` for symbolic link.\n- The next three characters (`rw-`) represent the owner's permissions (read and write, but not execute).\n- `r` stands for read permission: The owner can open and read the file.\n- `w` stands for write permission: The owner can modify the file.\n- `x` stands for execute permission: The owner can run the file (if it's a program or script). A `-` means the permission is denied.\n- The next three (`rw-`) are for the group. They have the same meaning as above, but apply to members of the file's group.\n- The last three (`r--`) are for others (everyone else). They also have the same meaning, but apply to users who are neither the owner nor members of the file's group.\n\nNow, let's change these permissions using the `chmod` command. `chmod` stands for \"change mode,\" and it allows you to modify these permissions. We'll start with the **numeric notation**.\n\n```bash\nsudo chmod 700 example.txt\n```\n\nIn this command:\n\n- `700` is a numeric representation of permissions:\n- The first digit (`7`) represents the owner's permissions.\n- The second digit (`0`) represents the group's permissions.\n- The third digit (`0`) represents the others' permissions.\n\nEach digit is a number from 0 to 7, calculated by adding the values for read (4), write (2), and execute (1) permissions:\n\n- `4`: Read permission\n- `2`: Write permission\n- `1`: Execute permission\n- `0`: No permission\n\nSo, `7` (first digit) gives the owner read (4), write (2), and execute (1) permissions: 4+2+1=7\n`0` (second digit) gives the group no permissions (0+0+0=0).\n`0` (third digit) gives others no permissions (0+0+0=0).\n\nTherefore, `700` means: Owner: read, write, execute. Group: none. Others: none.\n\nLet's verify the change:\n\n```bash\nls -l example.txt\n```\n\nYou should now see:\n\n```bash\n-rwx------ 1 root root 0 Jul 29 15:11 example.txt\n```\n\nThe owner now has `rwx` (read, write, and execute) permissions, while the group and others have no permissions.",
+      "task": "Đặt example.txt thành mode 700.",
+      "hint": "7=rwx; 0 không cấp quyền.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c '%a' \"$HOME/project/example.txt\")\" = 700 && test \"$(stat -c '%u:%g' \"$HOME/project/example.txt\")\" = 0:0"
+      },
+      "title_vi": "Thay Đổi Quyền Truy Cập Tệp (chmod dạng Số)",
+      "content_vi": "Trong Linux, quyền truy cập tệp được biểu diễn bằng các ký tự hoặc hệ số Bát phân (Octal notation):\n\n- `r` (Read - Đọc) = **4**\n- `w` (Write - Ghi/Sửa) = **2**\n- `x` (Execute - Thực thi) = **1**\n- `-` (Không có quyền) = **0**\n\nTổng của các giá trị tạo nên quyền cho từng nhóm đối tượng:\n- `7` = 4 + 2 + 1 = Đọc, Ghi và Thực thi (`rwx`)\n- `6` = 4 + 2 + 0 = Đọc và Ghi (`rw-`)\n- `5` = 4 + 0 + 1 = Đọc và Thực thi (`r-x`)\n- `4` = 4 + 0 + 0 = Chỉ Đọc (`r--`)\n\n### Thực hành thay đổi quyền tệp bằng lệnh `chmod`:\n\n1. Gán quyền `755` (Chủ sở hữu toàn quyền, Nhóm và Người khác chỉ được đọc và chạy):\n```bash\nchmod 755 sample_file.txt\nls -l sample_file.txt\n```\nKết quả: `-rwxr-xr-x`\n\n2. Gán quyền chuẩn cho tài liệu `644` (Chủ sở hữu đọc/ghi, người khác chỉ đọc):\n```bash\nchmod 644 sample_file.txt\nls -l sample_file.txt\n```\nKết quả: `-rw-r--r--`\n\n3. Gán quyền chỉ đọc cho chủ sở hữu `400`:\n```bash\nchmod 400 sample_file.txt\nls -l sample_file.txt\n```\nKết quả: `-r--------`",
+      "task_vi": "Thực hành đổi quyền tệp bằng lệnh chmod dạng số như 755, 644, 400.",
+      "hint_vi": "Chạy chmod 755 sample_file.txt rồi kiểm tra bằng ls -l."
+    },
+    {
+      "id": "source-270252-section-5",
+      "title": "Changing the Permissions of a Directory",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Changing permissions for directories works similarly to changing permissions for files. Let's practice by creating a new directory and modifying its permissions. Directory permissions control who can list the directory's contents, create new files within the directory, and access files already in the directory.\n\nFirst, let's create a new directory and set some non-standard permissions:\n\n```bash\nmkdir ~/test-dir\nchmod 700 ~/test-dir\n```\n\nNow, let's check the current permissions:\n\n```bash\nls -ld ~/test-dir\n```\n\nThe `-d` option in `ls -l` tells `ls` to list the directory itself, rather than its contents. Without `-d`, `ls` would list the files and subdirectories *inside* `test-dir`, which is empty right now. You should see:\n\n```bash\ndrwx------ 2 labex labex 4096 Jul 29 15:45 /home/labex/test-dir\n```\n\nThe `d` at the beginning indicates that it's a directory. The `rwx------` indicates that the owner has read, write, and execute permissions, while the group and others have no permissions. For directories:\n\n- Read permission (`r`) allows you to list the contents of the directory using `ls`.\n- Write permission (`w`) allows you to create new files and subdirectories within the directory.\n- Execute permission (`x`) allows you to access files and subdirectories within the directory (i.e., `cd` into it).\n\nNow, let's change the permissions:\n\n```bash\nchmod -R 755 ~/test-dir\n```\n\nIn this command:\n\n- `-R` applies the change recursively to all files and subdirectories (though our directory is empty in this case). It's good practice to include it when dealing with directories, even if they're currently empty, in case you add files later.\n- `755` gives read, write, and execute permissions to the owner, and read and execute permissions to group and others.\n\nLet's break down `755`:\n\n- Owner (7): Read (4) + Write (2) + Execute (1) = 7\n- Group (5): Read (4) + Execute (1) = 5\n- Others (5): Read (4) + Execute (1) = 5\n\nLet's verify the change:\n\n```bash\nls -ld ~/test-dir\n```\n\nYou should now see:\n\n```bash\ndrwxr-xr-x 2 labex labex 4096 Jul 29 15:45 /home/labex/test-dir\n```\n\nThis clearly shows the change in permissions, from only the owner having access (700) to the owner having full access while others can read and execute (755). Now, anyone can list the contents of `test-dir` and access files within it, but only the owner can create new files or modify existing ones.",
+      "task": "Tạo ~/test-dir, thử 700 rồi đổi thành 755.",
+      "hint": "x trên thư mục cho phép đi qua/tham chiếu nội dung.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -d \"$HOME/test-dir\" && test \"$(stat -c '%a' \"$HOME/test-dir\")\" = 755"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*chmod\\s+700\\s+~/test-dir\\s*$"
+              ],
+              [
+                "^\\s*chmod\\s+-R\\s+755\\s+~/test-dir\\s*$",
+                "^\\s*chmod\\s+755\\s+~/test-dir\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Thay Đổi Quyền Truy Cập Thư Mục",
+      "content_vi": "Phân quyền đối với thư mục có ý nghĩa đặc biệt:\n- **Đọc (`r`)**: Cho phép liệt kê danh sách tệp trong thư mục (chạy lệnh `ls`).\n- **Ghi (`w`)**: Cho phép tạo mới, xóa bỏ hoặc đổi tên tệp trong thư mục.\n- **Thực thi (`x`)**: Cho phép đi vào bên trong thư mục (chạy lệnh `cd`).\n\nNếu một thư mục thiếu quyền `x`, bạn sẽ không thể mở thư mục đó hoặc truy cập các tệp con!\n\n1. Gán quyền tiêu chuẩn cho thư mục `755`:\n```bash\nchmod 755 sample_dir\nls -ld sample_dir\n```\n\n2. Gán quyền riêng tư `700` (chỉ chủ sở hữu mới có quyền truy cập):\n```bash\nchmod 700 sample_dir\nls -ld sample_dir\n```\n\n3. Thay đổi quyền đệ quy cho cả thư mục và các tệp bên trong bằng cờ `-R`:\n```bash\nchmod -R 755 sample_dir\nls -ld sample_dir\nls -l sample_dir\n```",
+      "task_vi": "Thực hành đổi quyền thư mục sample_dir bằng chmod 755 và chmod 700.",
+      "hint_vi": "Chạy chmod 755 sample_dir và chmod 700 sample_dir."
+    },
+    {
+      "id": "source-270252-section-6",
+      "title": "Using Symbolic Notation for Permissions",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "While numeric notation is concise, symbolic notation can be more intuitive, especially when you only want to change a single permission. Symbolic notation uses letters to represent the user, group, and others, and operators to add or remove permissions.\n\nIn this step, you'll create a small shell script and then add execute permission to it.\n\nFirst, let's create a new script file with some content:\n\n```bash\ncd ~/project\necho '#!/bin/bash' > script.sh\necho 'echo \"Hello, World\"' >> script.sh\n```\n\nThese commands do two things:\n\n- The first `echo` command creates `script.sh` and writes the first line, `#!/bin/bash`, into it. This line is called a shebang, and it tells Linux to run the script with Bash.\n- The second `echo` command adds a new line to the end of the file with `>>`. It writes `echo \"Hello, World\"`, which will display `Hello, World` when the script runs.\n\nYou can confirm that the file now contains two separate lines with:\n\n```bash\ncat script.sh\n```\n\nYou should see:\n\n```text\n#!/bin/bash\necho \"Hello, World\"\n```\n\nNow, let's check its initial permissions:\n\n```bash\nls -l script.sh\n```\n\nYou should see something like:\n\n```bash\n-rw-rw-r-- 1 labex labex 32 Jul 29 16:30 script.sh\n```\n\nAs you can see, initially, the script only has read and write permissions for the owner and group, and read permission for others. It doesn't have execute permission, which is required to run it as a program.\n\nLet's try to run the script:\n\n```bash\n./script.sh\n```\n\nYou should see a \"Permission denied\" error because the script doesn't have execute permissions yet. The `./` part tells the shell to execute the script located in the current directory.\n\nNow, let's add execute permission for the owner using **symbolic notation**:\n\n```bash\nchmod u+x script.sh\n```\n\nIn this command:\n\n- `u` refers to the user (owner). Other options are `g` for group, `o` for others, and `a` for all (user, group, and others).\n- `+x` adds execute permission. The `+` symbol adds a permission, while the `-` symbol removes a permission.\n\nSo, `u+x` means \"add execute permission for the owner.\"\n\nLet's verify the change:\n\n```bash\nls -l script.sh\n```\n\nYou should now see:\n\n```bash\n-rwxrw-r-- 1 labex labex 32 Jul 29 16:30 script.sh\n```\n\nThe owner now has `rwx` (read, write, and execute) permissions.\n\nNow, let's try running the script again:\n\n```bash\n./script.sh\n```\n\nThis time, you should see the output:\n\n```text\nHello, World\n```\n\nThis example clearly demonstrates why we need to add execute permissions to scripts, and the difference before and after adding these permissions. Symbolic notation makes it easy to modify specific permissions without having to recalculate the entire numeric representation.",
+      "task": "Tạo script.sh in Hello, World; thêm quyền chạy cho chủ bằng chmod u+x rồi chạy script.",
+      "hint": "Một file văn bản cần quyền x để gọi trực tiếp bằng ./script.sh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f \"$HOME/project/script.sh\" && test -x \"$HOME/project/script.sh\" && test \"$(stat -c '%u' \"$HOME/project/script.sh\")\" = \"$(id -u)\" && cmp -s <(bash \"$HOME/project/script.sh\") <(printf 'Hello, World\\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*chmod\\s+u\\+x\\s+script\\.sh\\s*$"
+              ],
+              [
+                "^\\s*\\./script\\.sh\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Sử Dụng Ký Hiệu Biểu Tượng (Symbolic Notation)",
+      "content_vi": "Ngoài cách tính số bát phân, Linux còn hỗ trợ ký pháp biểu tượng (Symbolic Notation), rất trực quan khi bạn chỉ muốn thêm hoặc bớt một quyền cụ thể mà không cần tính toán lại toàn bộ:\n\n### Các ký hiệu đối tượng:\n- `u` (User): Chủ sở hữu\n- `g` (Group): Nhóm sở hữu\n- `o` (Others): Người khác\n- `a` (All): Tất cả mọi đối tượng (`u`, `g`, và `o`)\n\n### Các toán tử:\n- `+`: Thêm quyền\n- `-`: Gỡ bỏ quyền\n- `=`: Thiết lập quyền chính xác\n\n### Ví dụ thực hành:\n\n1. Thêm quyền thực thi cho chủ sở hữu:\n```bash\nchmod u+x sample_file.txt\nls -l sample_file.txt\n```\n\n2. Bớt quyền đọc và ghi của nhóm:\n```bash\nchmod g-rw sample_file.txt\nls -l sample_file.txt\n```\n\n3. Thêm quyền đọc cho tất cả mọi người:\n```bash\nchmod a+r sample_file.txt\nls -l sample_file.txt\n```\n\n4. Kết hợp nhiều thao tác bằng dấu phẩy:\n```bash\nchmod u=rwx,g=rx,o=r sample_file.txt\nls -l sample_file.txt\n```",
+      "task_vi": "Thực hành chmod bằng ký hiệu biểu tượng như u+x, g-w, o=r, a+x.",
+      "hint_vi": "Sử dụng chmod u+x, g-w, a+r trên sample_file.txt."
+    }
+  ],
+  "title_vi": "Quyền Truy Cập Tệp Tin (Permissions of Files)"
+}

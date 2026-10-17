@@ -1,0 +1,159 @@
+{
+  "id": "linux-needle-in-the-haystack-388109",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 388109,
+  "source_url": "https://labex.io/tutorials/linux-needle-in-the-haystack-388109",
+  "order": 24,
+  "title": "Needle in the Haystack",
+  "title_vi": "Tìm kim trong đống cỏ",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "5 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Needle in the Haystack",
+  "sections": [
+    {
+      "id": "commands-388109-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Needle in the Haystack. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Tìm kim trong đống cỏ. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-388109-section-1-v1",
+      "title": "Needle in the Haystack",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Trích xuất bốn kết quả",
+      "content": "Save counts, POST requests, warning queries and authentications to task1_output.txt through task4_output.txt. Keep the original logs unchanged.",
+      "content_vi": "Lưu số lỗi, yêu cầu POST, cảnh báo query và xác thực vào task1_output.txt đến task4_output.txt. Giữ nguyên log đầu vào.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '89c2b16e5923f2e2123dac272ce988f8798dc49ceb921006da3049a06ecd5f80  /home/labex/project/system.log\n1be8873f2c9f7b144897265f9ee20bad28ae2588fbe14e8e446d22c7ab11a799  /home/labex/project/access.log\n048b171c4d2a1cd458ac6dd1badf0573b4324903430c210cd0fc1bac56e34cb9  /home/labex/project/application.log\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bgrep\\b[^\\n]*task4_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ncmp -s task1_output.txt <(grep -c ERROR system.log)\ncmp -s task2_output.txt <(grep POST access.log)\ncmp -s task3_output.txt <(grep -i WARNING application.log | grep -i query)\ncmp -s task4_output.txt <(grep \"User authenticated\" *.log)"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388109-section-2-v1",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-388109-section-1-v1",
+      "title": "Needle in the Haystack",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Trích xuất bốn kết quả",
+      "content": "Save counts, POST requests, warning queries and authentications to task1_output.txt through task4_output.txt. Keep the original logs unchanged.",
+      "content_vi": "Lưu số lỗi, yêu cầu POST, cảnh báo query và xác thực vào task1_output.txt đến task4_output.txt. Giữ nguyên log đầu vào.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '89c2b16e5923f2e2123dac272ce988f8798dc49ceb921006da3049a06ecd5f80  /home/labex/project/system.log\n1be8873f2c9f7b144897265f9ee20bad28ae2588fbe14e8e446d22c7ab11a799  /home/labex/project/access.log\n048b171c4d2a1cd458ac6dd1badf0573b4324903430c210cd0fc1bac56e34cb9  /home/labex/project/application.log\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bgrep\\b[^\\n]*task4_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ncmp -s task1_output.txt <(grep -c ERROR system.log)\ncmp -s task2_output.txt <(grep POST access.log)\ncmp -s task3_output.txt <(grep -i WARNING application.log | grep -i query)\ncmp -s task4_output.txt <(grep \"User authenticated\" *.log)"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-needle-in-the-haystack-388109.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

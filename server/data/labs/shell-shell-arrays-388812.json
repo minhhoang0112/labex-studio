@@ -1,0 +1,833 @@
+{
+  "id": "shell-shell-arrays-388812",
+  "course_id": "shell-for-beginners",
+  "order": 5,
+  "title": "Shell Arrays",
+  "title_vi": "Mảng Dữ Liệu Trong Shell",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "overview": "Learn how to define indexed arrays, append elements, read elements by index, and inspect array length in Bash.",
+  "source_url": "https://labex.io/tutorials/shell-shell-arrays-388812",
+  "source_lab_id": 388812,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice Shell Arrays. The tasks below retain the source filenames, data and required behavior; explanations are locally written.",
+      "content_vi": "Thực hành Mảng Dữ Liệu Trong Shell. Các bước dưới giữ đúng tên tệp, dữ kiện và hành vi nguồn; phần giải thích do dự án biên soạn."
+    },
+    {
+      "id": "source-388812-section-1-v4",
+      "title": "Create a new shell script file",
+      "title_vi": "Tạo tệp arrays.sh",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create arrays.sh.\n\n```bash\ntouch arrays.sh\n```",
+      "content_vi": "Tạo tệp arrays.sh.\n\n```bash\ntouch arrays.sh\n```",
+      "task": "Create arrays.sh.",
+      "task_vi": "Tạo tệp arrays.sh.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-2-v4",
+      "title": "Initialize empty arrays",
+      "title_vi": "Khởi tạo mảng rỗng",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Initialize NUMBERS, STRINGS and NAMES as empty arrays.\n\n```bash\n#!/bin/bash\nNUMBERS=()\nSTRINGS=()\nNAMES=()\n```",
+      "content_vi": "Khởi tạo ba mảng rỗng NUMBERS, STRINGS và NAMES.\n\n```bash\n#!/bin/bash\nNUMBERS=()\nSTRINGS=()\nNAMES=()\n```",
+      "task": "Initialize NUMBERS, STRINGS and NAMES as empty arrays.",
+      "task_vi": "Khởi tạo ba mảng rỗng NUMBERS, STRINGS và NAMES.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (declare -p NUMBERS STRINGS NAMES >/dev/null && test \"${#NUMBERS[@]}:${#STRINGS[@]}:${#NAMES[@]}\" = \"0:0:0\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (declare -p NUMBERS STRINGS NAMES >/dev/null && test \"${#NUMBERS[@]}:${#STRINGS[@]}:${#NAMES[@]}\" = \"0:0:0\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (declare -p NUMBERS STRINGS NAMES >/dev/null && test \"${#NUMBERS[@]}:${#STRINGS[@]}:${#NAMES[@]}\" = \"0:0:0\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-3-v4",
+      "title": "Add elements to the arrays",
+      "title_vi": "Thêm phần tử vào mảng",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Append numbers 1–3, hello/world and John/Eric/Jessica.\n\n```bash\nNUMBERS+=(1 2 3)\nSTRINGS+=(\"hello\" \"world\")\nNAMES+=(\"John\" \"Eric\" \"Jessica\")\n```",
+      "content_vi": "Thêm các số 1–3, hello/world và John/Eric/Jessica.\n\n```bash\nNUMBERS+=(1 2 3)\nSTRINGS+=(\"hello\" \"world\")\nNAMES+=(\"John\" \"Eric\" \"Jessica\")\n```",
+      "task": "Append numbers 1–3, hello/world and John/Eric/Jessica.",
+      "task_vi": "Thêm các số 1–3, hello/world và John/Eric/Jessica.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${NUMBERS[*]}\" = \"1 2 3\" && test \"${STRINGS[*]}\" = \"hello world\" && test \"${NAMES[*]}\" = \"John Eric Jessica\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${NUMBERS[*]}\" = \"1 2 3\" && test \"${STRINGS[*]}\" = \"hello world\" && test \"${NAMES[*]}\" = \"John Eric Jessica\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${NUMBERS[*]}\" = \"1 2 3\" && test \"${STRINGS[*]}\" = \"hello world\" && test \"${NAMES[*]}\" = \"John Eric Jessica\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-4-v4",
+      "title": "Determine the number of elements in an array",
+      "title_vi": "Đếm số phần tử trong mảng",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Store the NAMES length in NumberOfNames.\n\n```bash\nNumberOfNames=${#NAMES[@]}\n```",
+      "content_vi": "Lưu số phần tử NAMES vào NumberOfNames.\n\n```bash\nNumberOfNames=${#NAMES[@]}\n```",
+      "task": "Store the NAMES length in NumberOfNames.",
+      "task_vi": "Lưu số phần tử NAMES vào NumberOfNames.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$NumberOfNames\" = 3) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$NumberOfNames\" = 3) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$NumberOfNames\" = 3) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-5-v4",
+      "title": "Access a specific element in an array",
+      "title_vi": "Truy xuất phần tử theo chỉ số",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Store NAMES index one in second_name.\n\n```bash\nsecond_name=${NAMES[1]}\n```",
+      "content_vi": "Lưu phần tử chỉ số một của NAMES vào second_name.\n\n```bash\nsecond_name=${NAMES[1]}\n```",
+      "task": "Store NAMES index one in second_name.",
+      "task_vi": "Lưu phần tử chỉ số một của NAMES vào second_name.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$second_name\" = Eric) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$second_name\" = Eric) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$second_name\" = Eric) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-6-v4",
+      "title": "Print the arrays and variables",
+      "title_vi": "In toàn bộ mảng với [@] hoặc [*]",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Print the arrays, their count and the second name.\n\n```bash\necho \"NUMBERS array: ${NUMBERS[@]}\"\necho \"STRINGS array: ${STRINGS[@]}\"\necho \"The number of names listed in the NAMES array: $NumberOfNames\"\necho \"The second name on the NAMES list is: $second_name\"\n```",
+      "content_vi": "In các mảng, số phần tử và tên thứ hai.\n\n```bash\necho \"NUMBERS array: ${NUMBERS[@]}\"\necho \"STRINGS array: ${STRINGS[@]}\"\necho \"The number of names listed in the NAMES array: $NumberOfNames\"\necho \"The second name on the NAMES list is: $second_name\"\n```",
+      "task": "Print the arrays, their count and the second name.",
+      "task_vi": "In các mảng, số phần tử và tên thứ hai.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-7-v4",
+      "title": "Run the script",
+      "title_vi": "Chạy thử script",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Make arrays.sh executable and run it.\n\n```bash\nchmod +x arrays.sh\n./arrays.sh\n```",
+      "content_vi": "Cấp quyền thực thi rồi chạy arrays.sh.\n\n```bash\nchmod +x arrays.sh\n./arrays.sh\n```",
+      "task": "Make arrays.sh executable and run it.",
+      "task_vi": "Cấp quyền thực thi rồi chạy arrays.sh.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/arrays.sh && test -x /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh"
+          },
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*\\./arrays\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/arrays.sh && test -x /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*\\./arrays\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/arrays.sh && test -x /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*\\./arrays\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "section-8",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "### Summary\n\nCongratulations! You have successfully completed **Shell Arrays**.",
+      "content_vi": "### Tổng kết bài học\n\nChúc mừng! Bạn đã hoàn thành xuất sắc bài thực hành **Mảng Dữ Liệu Trong Shell**."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388812-section-1-v4",
+      "title": "Create a new shell script file",
+      "title_vi": "Tạo tệp arrays.sh",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create arrays.sh.\n\n```bash\ntouch arrays.sh\n```",
+      "content_vi": "Tạo tệp arrays.sh.\n\n```bash\ntouch arrays.sh\n```",
+      "task": "Create arrays.sh.",
+      "task_vi": "Tạo tệp arrays.sh.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-2-v4",
+      "title": "Initialize empty arrays",
+      "title_vi": "Khởi tạo mảng rỗng",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Initialize NUMBERS, STRINGS and NAMES as empty arrays.\n\n```bash\n#!/bin/bash\nNUMBERS=()\nSTRINGS=()\nNAMES=()\n```",
+      "content_vi": "Khởi tạo ba mảng rỗng NUMBERS, STRINGS và NAMES.\n\n```bash\n#!/bin/bash\nNUMBERS=()\nSTRINGS=()\nNAMES=()\n```",
+      "task": "Initialize NUMBERS, STRINGS and NAMES as empty arrays.",
+      "task_vi": "Khởi tạo ba mảng rỗng NUMBERS, STRINGS và NAMES.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (declare -p NUMBERS STRINGS NAMES >/dev/null && test \"${#NUMBERS[@]}:${#STRINGS[@]}:${#NAMES[@]}\" = \"0:0:0\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (declare -p NUMBERS STRINGS NAMES >/dev/null && test \"${#NUMBERS[@]}:${#STRINGS[@]}:${#NAMES[@]}\" = \"0:0:0\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (declare -p NUMBERS STRINGS NAMES >/dev/null && test \"${#NUMBERS[@]}:${#STRINGS[@]}:${#NAMES[@]}\" = \"0:0:0\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-3-v4",
+      "title": "Add elements to the arrays",
+      "title_vi": "Thêm phần tử vào mảng",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Append numbers 1–3, hello/world and John/Eric/Jessica.\n\n```bash\nNUMBERS+=(1 2 3)\nSTRINGS+=(\"hello\" \"world\")\nNAMES+=(\"John\" \"Eric\" \"Jessica\")\n```",
+      "content_vi": "Thêm các số 1–3, hello/world và John/Eric/Jessica.\n\n```bash\nNUMBERS+=(1 2 3)\nSTRINGS+=(\"hello\" \"world\")\nNAMES+=(\"John\" \"Eric\" \"Jessica\")\n```",
+      "task": "Append numbers 1–3, hello/world and John/Eric/Jessica.",
+      "task_vi": "Thêm các số 1–3, hello/world và John/Eric/Jessica.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${NUMBERS[*]}\" = \"1 2 3\" && test \"${STRINGS[*]}\" = \"hello world\" && test \"${NAMES[*]}\" = \"John Eric Jessica\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${NUMBERS[*]}\" = \"1 2 3\" && test \"${STRINGS[*]}\" = \"hello world\" && test \"${NAMES[*]}\" = \"John Eric Jessica\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${NUMBERS[*]}\" = \"1 2 3\" && test \"${STRINGS[*]}\" = \"hello world\" && test \"${NAMES[*]}\" = \"John Eric Jessica\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-4-v4",
+      "title": "Determine the number of elements in an array",
+      "title_vi": "Đếm số phần tử trong mảng",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Store the NAMES length in NumberOfNames.\n\n```bash\nNumberOfNames=${#NAMES[@]}\n```",
+      "content_vi": "Lưu số phần tử NAMES vào NumberOfNames.\n\n```bash\nNumberOfNames=${#NAMES[@]}\n```",
+      "task": "Store the NAMES length in NumberOfNames.",
+      "task_vi": "Lưu số phần tử NAMES vào NumberOfNames.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$NumberOfNames\" = 3) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$NumberOfNames\" = 3) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$NumberOfNames\" = 3) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-5-v4",
+      "title": "Access a specific element in an array",
+      "title_vi": "Truy xuất phần tử theo chỉ số",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Store NAMES index one in second_name.\n\n```bash\nsecond_name=${NAMES[1]}\n```",
+      "content_vi": "Lưu phần tử chỉ số một của NAMES vào second_name.\n\n```bash\nsecond_name=${NAMES[1]}\n```",
+      "task": "Store NAMES index one in second_name.",
+      "task_vi": "Lưu phần tử chỉ số một của NAMES vào second_name.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$second_name\" = Eric) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$second_name\" = Eric) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$second_name\" = Eric) && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arrays.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-6-v4",
+      "title": "Print the arrays and variables",
+      "title_vi": "In toàn bộ mảng với [@] hoặc [*]",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Print the arrays, their count and the second name.\n\n```bash\necho \"NUMBERS array: ${NUMBERS[@]}\"\necho \"STRINGS array: ${STRINGS[@]}\"\necho \"The number of names listed in the NAMES array: $NumberOfNames\"\necho \"The second name on the NAMES list is: $second_name\"\n```",
+      "content_vi": "In các mảng, số phần tử và tên thứ hai.\n\n```bash\necho \"NUMBERS array: ${NUMBERS[@]}\"\necho \"STRINGS array: ${STRINGS[@]}\"\necho \"The number of names listed in the NAMES array: $NumberOfNames\"\necho \"The second name on the NAMES list is: $second_name\"\n```",
+      "task": "Print the arrays, their count and the second name.",
+      "task_vi": "In các mảng, số phần tử và tên thứ hai.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388812-section-7-v4",
+      "title": "Run the script",
+      "title_vi": "Chạy thử script",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Make arrays.sh executable and run it.\n\n```bash\nchmod +x arrays.sh\n./arrays.sh\n```",
+      "content_vi": "Cấp quyền thực thi rồi chạy arrays.sh.\n\n```bash\nchmod +x arrays.sh\n./arrays.sh\n```",
+      "task": "Make arrays.sh executable and run it.",
+      "task_vi": "Cấp quyền thực thi rồi chạy arrays.sh.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/arrays.sh && test -x /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh"
+          },
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*\\./arrays\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/arrays.sh && test -x /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*\\./arrays\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/arrays.sh && test -x /home/labex/project/arrays.sh && bash -n /home/labex/project/arrays.sh"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('arrays.sh'); assert p.returncode==0\nassert p.stdout=='NUMBERS array: 1 2 3\\nSTRINGS array: hello world\\nThe number of names listed in the NAMES array: 3\\nThe second name on the NAMES list is: Eric\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*\\./arrays\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "date": "2026-10-17",
+    "fidelity": "public-requirements-aligned-local-wording",
+    "private_grader_recovered": false,
+    "integration_status": "requires-current-smoke-proof"
+  },
+  "environment_setup": "server/data/environment-setups/shell-shell-arrays-388812.json"
+}

@@ -1,0 +1,491 @@
+{
+  "version": 1,
+  "course_id": "quick-start-with-linux",
+  "notes": "Own solution commands for integration tests; no original hidden solution recovered.",
+  "lessons": [
+    {
+      "lab_id": "linux-your-first-linux-lab",
+      "source_lab_id": 270253,
+      "setup_manifest": "server/data/environment-setups/linux-your-first-linux-lab.json",
+      "steps": [
+        {
+          "id": "source-270253-section-1",
+          "commands": [
+            "echo \"Hello LabEx\""
+          ]
+        },
+        {
+          "id": "source-270253-section-2",
+          "commands": [
+            "whoami"
+          ]
+        },
+        {
+          "id": "source-270253-section-3",
+          "commands": [
+            "id",
+            "id root"
+          ]
+        },
+        {
+          "id": "source-270253-section-4",
+          "commands": [
+            "id -un"
+          ]
+        },
+        {
+          "id": "source-270253-section-5",
+          "commands": [],
+          "acknowledge": true
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-display-user-and-group-information",
+      "source_lab_id": 8718,
+      "setup_manifest": "server/data/environment-setups/linux-display-user-and-group-information.json",
+      "steps": [
+        {
+          "id": "source-8718-section-1",
+          "commands": [
+            "whoami"
+          ]
+        },
+        {
+          "id": "source-8718-section-2",
+          "commands": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-basic-files-operations",
+      "source_lab_id": 270248,
+      "setup_manifest": "server/data/environment-setups/linux-basic-files-operations.json",
+      "steps": [
+        {
+          "id": "source-270248-section-1",
+          "commands": [
+            "pwd",
+            "echo ~",
+            "ls",
+            "ls ~"
+          ]
+        },
+        {
+          "id": "source-270248-section-2",
+          "commands": [
+            "pwd",
+            "ls",
+            "cd ..",
+            "pwd",
+            "cd project",
+            "cd ~",
+            "pwd",
+            "cd /home/labex/project"
+          ]
+        },
+        {
+          "id": "source-270248-section-3",
+          "commands": [
+            "touch file1.txt",
+            "echo \"Hello, Linux\" > file2.txt",
+            "echo \"Hidden file\" > .hiddenfile",
+            "mkdir testdir",
+            "ls",
+            "ls -l",
+            "ls -a",
+            "ls -la",
+            "ls -l testdir"
+          ]
+        },
+        {
+          "id": "source-270248-section-4",
+          "commands": [
+            "cp file1.txt file1_copy.txt",
+            "cp file2.txt testdir/",
+            "cp -r testdir testdir_copy"
+          ]
+        },
+        {
+          "id": "source-270248-section-5",
+          "commands": [
+            "mv file1.txt newname.txt",
+            "mv newname.txt testdir/",
+            "mv testdir_copy new_testdir",
+            "mv testdir/newname.txt ./original_file1.txt"
+          ]
+        },
+        {
+          "id": "source-270248-section-6",
+          "commands": [
+            "rm original_file1.txt",
+            {
+              "command": "rm -i file2.txt",
+              "input": [
+                {
+                  "wait_for": "?",
+                  "text": "y"
+                }
+              ]
+            },
+            {
+              "command": "rmdir new_testdir",
+              "allowed_status": [
+                1
+              ]
+            },
+            {
+              "command": "rmdir testdir",
+              "allowed_status": [
+                1
+              ]
+            },
+            "rm -r testdir",
+            "rm .hiddenfile",
+            "mkdir temp_dir",
+            "touch temp_dir/temp_file.txt",
+            "ls -R temp_dir",
+            "rm -rf temp_dir"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-files-and-directories",
+      "source_lab_id": 270246,
+      "setup_manifest": "server/data/environment-setups/linux-files-and-directories.json",
+      "steps": [
+        {
+          "id": "source-270246-section-1",
+          "commands": [
+            "cp ~/.zshrc ~/Desktop/zshrc-copy",
+            "cp -r ~/Code ~/Desktop/"
+          ]
+        },
+        {
+          "id": "source-270246-section-2",
+          "commands": [
+            "mv ~/Desktop/zshrc-copy ~/Desktop/zshrc-move",
+            "mv ~/Desktop/Code ~/Desktop/Code-move"
+          ]
+        },
+        {
+          "id": "source-270246-section-3",
+          "commands": [
+            "rm ~/Desktop/zshrc-move",
+            "rm -r ~/Desktop/Code-move"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-file-contents-and-comparing",
+      "source_lab_id": 270251,
+      "setup_manifest": "server/data/environment-setups/linux-file-contents-and-comparing.json",
+      "steps": [
+        {
+          "id": "source-270251-section-1",
+          "commands": [
+            "cat /tmp/hello"
+          ]
+        },
+        {
+          "id": "source-270251-section-2",
+          "commands": [
+            "cat -n /tmp/hello"
+          ]
+        },
+        {
+          "id": "source-270251-section-3",
+          "commands": [
+            "head -n1 /tmp/hello"
+          ]
+        },
+        {
+          "id": "source-270251-section-4",
+          "commands": [
+            "head -c1 /tmp/hello"
+          ]
+        },
+        {
+          "id": "source-270251-section-5",
+          "commands": [
+            "tail -n1 /tmp/hello"
+          ]
+        },
+        {
+          "id": "source-270251-section-6",
+          "commands": [
+            "tail -c1 /tmp/hello",
+            "tail -c2 /tmp/hello"
+          ]
+        },
+        {
+          "id": "source-270251-section-7",
+          "commands": [
+            "cd ~/project",
+            "diff file1 file2"
+          ]
+        },
+        {
+          "id": "source-270251-section-8",
+          "commands": [
+            "diff -r ~/Desktop ~/Code"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-the-manuscript-mystery",
+      "source_lab_id": 384742,
+      "setup_manifest": "server/data/environment-setups/linux-the-manuscript-mystery.json",
+      "steps": [
+        {
+          "id": "source-384742-section-1",
+          "commands": [
+            "cat /home/labex/project/manuscript_v1.txt",
+            "head -n2 /home/labex/project/manuscript_v2.txt",
+            "tail -n1 /home/labex/project/manuscript_v1.txt",
+            "tail -n1 /home/labex/project/manuscript_v2.txt"
+          ]
+        },
+        {
+          "id": "source-384742-section-2",
+          "commands": [
+            "diff /home/labex/project/manuscript_v1.txt /home/labex/project/manuscript_v2.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-permissions-of-files",
+      "source_lab_id": 270252,
+      "setup_manifest": "server/data/environment-setups/linux-permissions-of-files.json",
+      "steps": [
+        {
+          "id": "source-270252-section-1",
+          "commands": [
+            "cd ~/project",
+            "touch example.txt",
+            "ls"
+          ]
+        },
+        {
+          "id": "source-270252-section-2",
+          "commands": [
+            "ls -l example.txt",
+            "sudo chown root:root example.txt",
+            "ls -l example.txt"
+          ]
+        },
+        {
+          "id": "source-270252-section-3",
+          "commands": [
+            "mkdir -p new-dir/subdir",
+            "echo \"Hello, world\" > new-dir/file1.txt",
+            "echo \"Another file\" > new-dir/subdir/file2.txt",
+            "sudo chown -R root:root new-dir",
+            "ls -lR new-dir"
+          ]
+        },
+        {
+          "id": "source-270252-section-4",
+          "commands": [
+            "sudo chmod 700 example.txt",
+            "ls -l example.txt"
+          ]
+        },
+        {
+          "id": "source-270252-section-5",
+          "commands": [
+            "mkdir ~/test-dir",
+            "chmod 700 ~/test-dir",
+            "ls -ld ~/test-dir",
+            "chmod -R 755 ~/test-dir",
+            "ls -ld ~/test-dir"
+          ]
+        },
+        {
+          "id": "source-270252-section-6",
+          "commands": [
+            "cd ~/project",
+            "printf '#!/bin/bash\\necho \"Hello, World\"\\n' > script.sh",
+            "chmod u+x script.sh",
+            "./script.sh"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "shell-change-file-ownership",
+      "source_lab_id": 270254,
+      "setup_manifest": "server/data/environment-setups/shell-change-file-ownership.json",
+      "steps": [
+        {
+          "id": "source-270254-section-1",
+          "commands": [
+            "touch ~/project/target_file"
+          ]
+        },
+        {
+          "id": "source-270254-section-2",
+          "commands": [
+            "sudo chown user1:group1 ~/project/target_file"
+          ]
+        },
+        {
+          "id": "source-270254-section-3",
+          "commands": [
+            "sudo chmod 760 ~/project/target_file"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-user-account-management",
+      "source_lab_id": 49,
+      "setup_manifest": "server/data/environment-setups/linux-user-account-management.json",
+      "steps": [
+        {
+          "id": "source-49-section-1",
+          "commands": [
+            "sudo useradd joker",
+            "getent passwd joker"
+          ]
+        },
+        {
+          "id": "source-49-section-2",
+          "commands": [
+            "sudo useradd -m bob",
+            "ls -ld /home/bob"
+          ]
+        },
+        {
+          "id": "source-49-section-3",
+          "commands": [
+            {
+              "command": "sudo passwd joker",
+              "input": [
+                "ephemeral-test-only",
+                "ephemeral-test-only"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-49-section-4",
+          "commands": [
+            "sudo usermod -d /home/wayne joker",
+            "getent passwd joker"
+          ]
+        },
+        {
+          "id": "source-49-section-5",
+          "commands": [
+            "sudo usermod -s /bin/bash joker",
+            "getent passwd joker"
+          ]
+        },
+        {
+          "id": "source-49-section-6",
+          "commands": [
+            "sudo usermod -aG sudo joker",
+            "groups joker",
+            {
+              "command": "su - joker -c 'sudo -S cat /etc/shadow'",
+              "input": [
+                {
+                  "wait_for": "Password:",
+                  "text": "ephemeral-test-only"
+                },
+                {
+                  "wait_for": "password for joker:",
+                  "text": "ephemeral-test-only"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-49-section-7",
+          "commands": [
+            "sudo passwd -l joker",
+            "sudo passwd -S joker",
+            {
+              "command": "su - joker -c 'whoami'",
+              "input": [
+                "ephemeral-test-only"
+              ],
+              "allowed_status": [
+                1
+              ]
+            },
+            "sudo passwd -u joker",
+            "sudo passwd -S joker",
+            {
+              "command": "su - joker -c 'whoami'",
+              "input": [
+                "ephemeral-test-only"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-49-section-8",
+          "commands": [
+            "sudo userdel -r bob"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-the-jokers-trick",
+      "source_lab_id": 270247,
+      "setup_manifest": "server/data/environment-setups/linux-the-jokers-trick.json",
+      "steps": [
+        {
+          "id": "source-270247-section-1",
+          "commands": [
+            "sudo useradd -m joker",
+            "sudo useradd -m -d /home/gotham batman"
+          ]
+        },
+        {
+          "id": "source-270247-section-2",
+          "commands": [
+            {
+              "command": "sudo passwd joker",
+              "input": [
+                "ephemeral-test-only",
+                "ephemeral-test-only"
+              ]
+            },
+            {
+              "command": "sudo passwd batman",
+              "input": [
+                "ephemeral-test-only",
+                "ephemeral-test-only"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source-270247-section-3",
+          "commands": [
+            "sudo usermod -d /home/arkham joker",
+            "sudo usermod -s /bin/bash batman"
+          ]
+        },
+        {
+          "id": "source-270247-section-4",
+          "commands": [
+            "sudo userdel joker",
+            "sudo userdel -r batman"
+          ]
+        }
+      ]
+    }
+  ]
+}

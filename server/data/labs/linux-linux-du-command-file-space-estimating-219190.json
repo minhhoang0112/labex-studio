@@ -1,0 +1,405 @@
+{
+  "id": "linux-linux-du-command-file-space-estimating-219190",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219190,
+  "source_url": "https://labex.io/tutorials/linux-linux-du-command-file-space-estimating-219190",
+  "order": 39,
+  "title": "Linux du Command: File Space Estimating",
+  "title_vi": "Lệnh du: dung lượng tệp và thư mục",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux du Command: File Space Estimating",
+  "sections": [
+    {
+      "id": "commands-219190-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux du Command: File Space Estimating. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh du: dung lượng tệp và thư mục. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219190-section-1-v1",
+      "title": "Understanding the Basics of du",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Dung lượng thư mục",
+      "content": "Read recursive directory sizes.\n\n```bash\ndu -h\n```",
+      "content_vi": "Đọc dung lượng thư mục đệ quy.\n\n```bash\ndu -h\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^du\\s+-h$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-2-v1",
+      "title": "Investigating Specific Directories",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Giới hạn độ sâu",
+      "content": "Limit results to immediate subdirectories.\n\n```bash\ndu -h --max-depth=1\n```",
+      "content_vi": "Giới hạn kết quả ở thư mục con trực tiếp.\n\n```bash\ndu -h --max-depth=1\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^du\\s+-h\\s+--max-depth=1$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-3-v1",
+      "title": "Sorting and Analyzing Disk Usage",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sắp xếp dung lượng",
+      "content": "Sort sizes largest first.\n\n```bash\ndu -h --max-depth=1 | sort -hr\n```",
+      "content_vi": "Xếp dung lượng lớn trước.\n\n```bash\ndu -h --max-depth=1 | sort -hr\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bdu\\s+-h\\s+--max-depth=1\\s*\\|\\s*sort\\s+-hr"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-4-v1",
+      "title": "Finding the Largest Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Năm tệp lớn nhất",
+      "content": "Rank individual files by allocated size.\n\n```bash\nfind . -type f -exec du -h {} + | sort -hr | head -n 5\n```",
+      "content_vi": "Xếp hạng tệp theo dung lượng đã cấp phát.\n\n```bash\nfind . -type f -exec du -h {} + | sort -hr | head -n 5\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bfind\\s+\\.\\s+-type\\s+f\\s+-exec\\s+du\\s+-h.*sort\\s+-hr.*head\\s+-n\\s+5"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-5-v1",
+      "title": "Generating a Disk Usage Report",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Báo cáo dung lượng",
+      "content": "Save a depth-two usage report.\n\n```bash\ndu -h --max-depth=2 | sort -hr > disk_usage_report.txt\n```",
+      "content_vi": "Lưu báo cáo dung lượng đến độ sâu hai.\n\n```bash\ndu -h --max-depth=2 | sort -hr > disk_usage_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdu\\s+-h\\s+--max-depth=2\\s*\\|\\s*sort\\s+-hr\\s*>\\s*disk_usage_report\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s disk_usage_report.txt\ngrep -Eq '[[:space:]]\\./data$' disk_usage_report.txt\ngrep -Eq '[[:space:]]\\./documents$' disk_usage_report.txt\nsort -hcr disk_usage_report.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219190-section-1-v1",
+      "title": "Understanding the Basics of du",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Dung lượng thư mục",
+      "content": "Read recursive directory sizes.\n\n```bash\ndu -h\n```",
+      "content_vi": "Đọc dung lượng thư mục đệ quy.\n\n```bash\ndu -h\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^du\\s+-h$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-2-v1",
+      "title": "Investigating Specific Directories",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Giới hạn độ sâu",
+      "content": "Limit results to immediate subdirectories.\n\n```bash\ndu -h --max-depth=1\n```",
+      "content_vi": "Giới hạn kết quả ở thư mục con trực tiếp.\n\n```bash\ndu -h --max-depth=1\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^du\\s+-h\\s+--max-depth=1$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-3-v1",
+      "title": "Sorting and Analyzing Disk Usage",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sắp xếp dung lượng",
+      "content": "Sort sizes largest first.\n\n```bash\ndu -h --max-depth=1 | sort -hr\n```",
+      "content_vi": "Xếp dung lượng lớn trước.\n\n```bash\ndu -h --max-depth=1 | sort -hr\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bdu\\s+-h\\s+--max-depth=1\\s*\\|\\s*sort\\s+-hr"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-4-v1",
+      "title": "Finding the Largest Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Năm tệp lớn nhất",
+      "content": "Rank individual files by allocated size.\n\n```bash\nfind . -type f -exec du -h {} + | sort -hr | head -n 5\n```",
+      "content_vi": "Xếp hạng tệp theo dung lượng đã cấp phát.\n\n```bash\nfind . -type f -exec du -h {} + | sort -hr | head -n 5\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bfind\\s+\\.\\s+-type\\s+f\\s+-exec\\s+du\\s+-h.*sort\\s+-hr.*head\\s+-n\\s+5"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219190-section-5-v1",
+      "title": "Generating a Disk Usage Report",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Báo cáo dung lượng",
+      "content": "Save a depth-two usage report.\n\n```bash\ndu -h --max-depth=2 | sort -hr > disk_usage_report.txt\n```",
+      "content_vi": "Lưu báo cáo dung lượng đến độ sâu hai.\n\n```bash\ndu -h --max-depth=2 | sort -hr > disk_usage_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdu\\s+-h\\s+--max-depth=2\\s*\\|\\s*sort\\s+-hr\\s*>\\s*disk_usage_report\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s disk_usage_report.txt\ngrep -Eq '[[:space:]]\\./data$' disk_usage_report.txt\ngrep -Eq '[[:space:]]\\./documents$' disk_usage_report.txt\nsort -hcr disk_usage_report.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-du-command-file-space-estimating-219190.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

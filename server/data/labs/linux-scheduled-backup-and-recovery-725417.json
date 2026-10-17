@@ -1,0 +1,589 @@
+{
+  "id": "linux-scheduled-backup-and-recovery-725417",
+  "course_id": "linux-for-noobs",
+  "order": 36,
+  "title": "Scheduled Backup and Recovery",
+  "title_vi": "Sao lưu theo lịch và khôi phục",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "A useful backup is more than an archive command. You must know what it contains, verify that it can be read, restore the file you need, and make unattended runs observable.  In this lab, you will back",
+  "source_url": "https://labex.io/tutorials/linux-scheduled-backup-and-recovery-725417",
+  "source_lab_id": 725417,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A useful backup is more than an archive command. You must know what it contains, verify that it can be read, restore the file you need, and make unattended runs observable.\n\nIn this lab, you will back up a small application workspace from a manifest, restore one selected file, turn the workflow into a timestamped script, and install a Cron schedule. Every automated path is absolute so the job does not depend on an interactive shell's current directory.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một bản sao lưu hữu ích không chỉ là lệnh tạo tệp lưu trữ. Bạn phải biết nó chứa gì, xác minh có thể đọc, khôi phục tệp cần thiết và làm cho những lần chạy không giám sát có thể quan sát được.\n\nTrong bài này, bạn sẽ sao lưu một thư mục ứng dụng nhỏ theo manifest, khôi phục một tệp được chọn, biến quy trình thành script có dấu thời gian và cài lịch Cron. Mọi đường dẫn tự động đều là tuyệt đối để tác vụ không phụ thuộc thư mục hiện tại của shell tương tác."
+    },
+    {
+      "id": "source-725417-section-1-v3",
+      "title": "Define the Backup Scope with a Manifest",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a manifest: a plain-text list of paths that makes the backup scope visible and reviewable.\n\nEnter the workspace:\n\n```bash\ncd /home/labex/project/backup-lab\n```\n\nCreate a manifest containing paths relative to the `data` directory:\n\n```bash\ncat > backup-manifest.txt <<'EOF'\nconfig/app.conf\ndocuments/runbook.txt\nEOF\n```\n\nNumber the entries so they are easy to review:\n\n```bash\nnl -ba backup-manifest.txt\n```\n\nConfirm that every listed source exists with a `while` loop. Read its structure before running it:\n\n- `IFS=` prevents the shell from trimming whitespace at the start or end of a line;\n- `read -r item` reads one complete line into `item` without treating backslashes specially;\n- `do ... done` encloses the command repeated for each line;\n- `< backup-manifest.txt` supplies the manifest as the loop's input;\n- `test -f` checks that the corresponding path is a regular file, and `&&` prints `ready` only when that check succeeds.\n\n```bash\nwhile IFS= read -r item; do\n  test -f \"data/$item\" && echo \"ready: $item\"\ndone < backup-manifest.txt\n```\n\nThe unlisted `documents/scratch.txt` file is intentionally outside this managed backup.",
+      "title_vi": "Xác định phạm vi sao lưu bằng manifest",
+      "task": "Thực hiện hướng dẫn: Define the Backup Scope with a Manifest",
+      "hint": "Chạy lệnh: cd /home/labex/project/backup-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project/backup-lab')\nassert (p/'backup-manifest.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nassert all((p/'data'/name).is_file() for name in ['config/app.conf', 'documents/runbook.txt'])\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo manifest: danh sách đường dẫn dạng văn bản thuần giúp phạm vi sao lưu rõ ràng và có thể xem xét.\n\nVào thư mục làm việc:\n\n```bash\ncd /home/labex/project/backup-lab\n```\n\nTạo manifest chứa các đường dẫn tương đối so với thư mục `data`:\n\n```bash\ncat > backup-manifest.txt <<'EOF'\nconfig/app.conf\ndocuments/runbook.txt\nEOF\n```\n\nĐánh số các mục để dễ xem xét:\n\n```bash\nnl -ba backup-manifest.txt\n```\n\nXác nhận mọi nguồn được liệt kê đều tồn tại bằng vòng lặp `while`. Đọc cấu trúc trước khi chạy:\n\n- `IFS=` ngăn shell cắt khoảng trắng ở đầu hoặc cuối dòng;\n- `read -r item` đọc một dòng đầy đủ vào `item` mà không xử lý đặc biệt dấu gạch chéo ngược;\n- `do ... done` bao quanh lệnh được lặp cho mỗi dòng;\n- `< backup-manifest.txt` cung cấp manifest làm đầu vào vòng lặp;\n- `test -f` kiểm tra đường dẫn tương ứng là tệp thông thường và `&&` chỉ in `ready` khi kiểm tra thành công.\n\n```bash\nwhile IFS= read -r item; do\n  test -f \"data/$item\" && echo \"ready: $item\"\ndone < backup-manifest.txt\n```\n\nTệp `documents/scratch.txt` không được liệt kê chủ ý nằm ngoài bản sao lưu được quản lý này.",
+      "task_vi": "Thực hiện hướng dẫn: Xác định phạm vi sao lưu bằng manifest",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/backup-lab"
+    },
+    {
+      "id": "source-725417-section-2-v3",
+      "title": "Create an Archive from the Manifest",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `tar -T` to read filenames from the manifest. The `-C data` option makes the archive use short relative paths.\n\n```bash\ntar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt\n```\n\nThe options mean:\n\n- `-c`: create an archive;\n- `-z`: compress it with gzip;\n- `-f`: use the following archive filename;\n- `-C data`: operate relative to `data`;\n- `-T backup-manifest.txt`: read the backup members from the manifest.\n\nInspect the resulting file:\n\n```bash\nls -lh backups/manual-backup.tar.gz\n```\n\nCompare its timestamp and size with the source files:\n\n```bash\nstat -c '%n size=%s modified=%y' backups/manual-backup.tar.gz data/config/app.conf data/documents/runbook.txt\n```",
+      "title_vi": "Tạo tệp lưu trữ từ manifest",
+      "task": "Thực hiện hướng dẫn: Create an Archive from the Manifest",
+      "hint": "Chạy lệnh: tar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `tar -T` để đọc tên tệp từ manifest. Tùy chọn `-C data` khiến tệp lưu trữ dùng đường dẫn tương đối ngắn.\n\n```bash\ntar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt\n```\n\nCác tùy chọn có nghĩa:\n\n- `-c`: tạo tệp lưu trữ;\n- `-z`: nén bằng gzip;\n- `-f`: dùng tên tệp lưu trữ theo sau;\n- `-C data`: thao tác tương đối với `data`;\n- `-T backup-manifest.txt`: đọc các thành viên sao lưu từ manifest.\n\nKiểm tra tệp được tạo:\n\n```bash\nls -lh backups/manual-backup.tar.gz\n```\n\nSo sánh dấu thời gian và kích thước với các tệp nguồn:\n\n```bash\nstat -c '%n size=%s modified=%y' backups/manual-backup.tar.gz data/config/app.conf data/documents/runbook.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Tạo tệp lưu trữ từ manifest",
+      "hint_vi": "Chạy lệnh: tar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt"
+    },
+    {
+      "id": "source-725417-section-3-v3",
+      "title": "Verify the Archive without Extracting It",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will test the archive before relying on it. First test the gzip stream:\n\n```bash\ngzip -t backups/manual-backup.tar.gz\n```\n\nNo output means the compressed stream passed its integrity check. Now list the tar members without extracting them:\n\n```bash\ntar -tzf backups/manual-backup.tar.gz | tee archive-contents.txt\n```\n\nCompare the saved listing with the manifest:\n\n```bash\ndiff -u backup-manifest.txt archive-contents.txt\n```\n\nThe command should show no differences. Confirm that the unmanaged scratch file is absent:\n\n```bash\nif tar -tzf backups/manual-backup.tar.gz | grep -qx 'documents/scratch.txt'; then\n  echo \"Unexpected scratch file found\"\nelse\n  echo \"Archive scope is correct\"\nfi\n```",
+      "title_vi": "Xác minh tệp lưu trữ mà không giải nén",
+      "task": "Thực hiện hướng dẫn: Verify the Archive without Extracting It",
+      "hint": "Chạy lệnh: gzip -t backups/manual-backup.tar.gz",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nassert (root/'archive-contents.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra tệp lưu trữ trước khi dựa vào nó. Trước hết kiểm tra luồng gzip:\n\n```bash\ngzip -t backups/manual-backup.tar.gz\n```\n\nKhông có đầu ra nghĩa là luồng nén đã vượt qua kiểm tra tính toàn vẹn. Bây giờ liệt kê các thành viên tar mà không giải nén:\n\n```bash\ntar -tzf backups/manual-backup.tar.gz | tee archive-contents.txt\n```\n\nSo sánh danh sách đã lưu với manifest:\n\n```bash\ndiff -u backup-manifest.txt archive-contents.txt\n```\n\nLệnh phải không hiển thị khác biệt. Xác nhận tệp tạm không được quản lý không có trong đó:\n\n```bash\nif tar -tzf backups/manual-backup.tar.gz | grep -qx 'documents/scratch.txt'; then\n  echo \"Unexpected scratch file found\"\nelse\n  echo \"Archive scope is correct\"\nfi\n```",
+      "task_vi": "Thực hiện hướng dẫn: Xác minh tệp lưu trữ mà không giải nén",
+      "hint_vi": "Chạy lệnh: gzip -t backups/manual-backup.tar.gz"
+    },
+    {
+      "id": "source-725417-section-4-v3",
+      "title": "Restore One Selected File",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will restore only one selected file so unrelated data is not overwritten. Simulate accidental deletion of the configuration:\n\n```bash\nrm data/config/app.conf\n```\n\n```bash\ntest -e data/config/app.conf || echo \"app.conf is missing\"\n```\n\nExtract only `config/app.conf` into the separate restore directory:\n\n```bash\nrm -rf restore/*\n```\n\n```bash\ntar -xzf backups/manual-backup.tar.gz -C restore config/app.conf\n```\n\nInspect the recovered file, then copy it back to its working location:\n\n```bash\ncat restore/config/app.conf\n```\n\n```bash\ncp restore/config/app.conf data/config/app.conf\n```\n\n```bash\ncmp -s restore/config/app.conf data/config/app.conf && echo \"Configuration restored\"\n```\n\nOnly the requested archive member was extracted.",
+      "title_vi": "Khôi phục một tệp được chọn",
+      "task": "Thực hiện hướng dẫn: Restore One Selected File",
+      "hint": "Chạy lệnh: rm data/config/app.conf",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-lab')\nassert (root/'restore/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert sorted(str(p.relative_to(root/'restore')) for p in (root/'restore').rglob('*') if p.is_file()) == ['config/app.conf']\nassert (root/'data/documents/runbook.txt').read_text() == 'Production runbook: inspect logs before restarting a service.\\n'\nassert (root/'data/documents/scratch.txt').read_text() == 'Unmanaged scratch notes\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ chỉ khôi phục một tệp được chọn để không ghi đè dữ liệu không liên quan. Mô phỏng vô tình xóa cấu hình:\n\n```bash\nrm data/config/app.conf\n```\n\n```bash\ntest -e data/config/app.conf || echo \"app.conf is missing\"\n```\n\nChỉ giải nén `config/app.conf` vào thư mục khôi phục riêng:\n\n```bash\nrm -rf restore/*\n```\n\n```bash\ntar -xzf backups/manual-backup.tar.gz -C restore config/app.conf\n```\n\nKiểm tra tệp đã phục hồi rồi sao chép về vị trí làm việc:\n\n```bash\ncat restore/config/app.conf\n```\n\n```bash\ncp restore/config/app.conf data/config/app.conf\n```\n\n```bash\ncmp -s restore/config/app.conf data/config/app.conf && echo \"Configuration restored\"\n```\n\nChỉ thành viên tệp lưu trữ được yêu cầu đã được giải nén.",
+      "task_vi": "Thực hiện hướng dẫn: Khôi phục một tệp được chọn",
+      "hint_vi": "Chạy lệnh: rm data/config/app.conf"
+    },
+    {
+      "id": "source-725417-section-5-v3",
+      "title": "Build a Timestamped Backup Script",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will build a timestamped backup script. Cron starts jobs with a limited environment, so use absolute paths inside unattended scripts.\n\nCreate `backup.sh`:\n\n```bash\ncat > backup.sh <<'EOF'\n#!/bin/bash\n\nsource_dir=/home/labex/project/backup-lab/data\nmanifest=/home/labex/project/backup-lab/backup-manifest.txt\nbackup_dir=/home/labex/project/backup-lab/backups\ntimestamp=$(date +%Y%m%d-%H%M%S)\narchive=\"$backup_dir/backup-$timestamp.tar.gz\"\n\nmkdir -p \"$backup_dir\"\n\nif [ ! -d \"$source_dir\" ] || [ ! -f \"$manifest\" ]; then\n  echo \"Backup source or manifest is missing\" >&2\n  exit 1\nfi\n\n/bin/tar -czf \"$archive\" -C \"$source_dir\" -T \"$manifest\" || exit 1\n/bin/tar -tzf \"$archive\" > \"$archive.contents\" || exit 1\n\necho \"Created $archive\"\nexit 0\nEOF\n```\n\nMake the script executable and test it now instead of waiting for Cron:\n\n```bash\nchmod u+x backup.sh\n```\n\n```bash\n./backup.sh | tee last-backup.txt\n```\n\n```bash\nls -1 backups\n```\n\nThe timestamp gives each run a unique filename. The companion `.contents` file records exactly what the archive contains.",
+      "title_vi": "Xây dựng script sao lưu có dấu thời gian",
+      "task": "Thực hiện hướng dẫn: Build a Timestamped Backup Script",
+      "hint": "Chạy lệnh: chmod u+x backup.sh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nimport os, re\nassert os.access(root/'backup.sh', os.X_OK)\narchives=[p for p in (root/'backups').glob('backup-*.tar.gz') if re.fullmatch(r'backup-\\d{8}-\\d{6}\\.tar\\.gz',p.name)]\nassert archives\nfor path in archives:\n    inspect(path)\n    assert pathlib.Path(str(path)+'.contents').read_text() == (root/'backup-manifest.txt').read_text()\nassert 'Created ' in (root/'last-backup.txt').read_text()\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xây dựng script sao lưu có dấu thời gian. Cron khởi chạy tác vụ với môi trường giới hạn nên hãy dùng đường dẫn tuyệt đối trong script không giám sát.\n\nTạo `backup.sh`:\n\n```bash\ncat > backup.sh <<'EOF'\n#!/bin/bash\n\nsource_dir=/home/labex/project/backup-lab/data\nmanifest=/home/labex/project/backup-lab/backup-manifest.txt\nbackup_dir=/home/labex/project/backup-lab/backups\ntimestamp=$(date +%Y%m%d-%H%M%S)\narchive=\"$backup_dir/backup-$timestamp.tar.gz\"\n\nmkdir -p \"$backup_dir\"\n\nif [ ! -d \"$source_dir\" ] || [ ! -f \"$manifest\" ]; then\n  echo \"Backup source or manifest is missing\" >&2\n  exit 1\nfi\n\n/bin/tar -czf \"$archive\" -C \"$source_dir\" -T \"$manifest\" || exit 1\n/bin/tar -tzf \"$archive\" > \"$archive.contents\" || exit 1\n\necho \"Created $archive\"\nexit 0\nEOF\n```\n\nCho phép thực thi script và thử ngay thay vì chờ Cron:\n\n```bash\nchmod u+x backup.sh\n```\n\n```bash\n./backup.sh | tee last-backup.txt\n```\n\n```bash\nls -1 backups\n```\n\nDấu thời gian cho mỗi lần chạy một tên tệp riêng. Tệp `.contents` đi kèm ghi chính xác những gì tệp lưu trữ chứa.",
+      "task_vi": "Thực hiện hướng dẫn: Xây dựng script sao lưu có dấu thời gian",
+      "hint_vi": "Chạy lệnh: chmod u+x backup.sh"
+    },
+    {
+      "id": "source-725417-section-6-v3",
+      "title": "Install and Inspect a Cron Schedule",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will install and inspect a personal Cron schedule. A crontab line begins with five scheduling fields, followed by the command:\n\nPosition\nField\nUsual range\n\n1\nminute\n`0`–`59`\n\n2\nhour\n`0`–`23`\n\n3\nday of month\n`1`–`31`\n\n4\nmonth\n`1`–`12`\n\n5\nday of week\n`0`–`7`, where Sunday is `0` or `7`\n\nAn asterisk `*` means every allowed value. A step such as `*/5` means every five units in that field.\n\n```text\nminute hour day-of-month month day-of-week command\n```\n\nFor example, `*/5 * * * *` means every five minutes. `0 2 * * *` means 02:00 every day.\n\n`crontab -e` opens your personal crontab in an editor. A reliable workflow is to prepare and install a known-good entry first, then make a small interactive edit. Create one entry that uses absolute paths and captures both standard output and standard error:\n\n```bash\ncat > backup.crontab <<'EOF'\n*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\nEOF\n```\n\nReview and install it:\n\n```bash\ncat backup.crontab\n```\n\n```bash\ncrontab backup.crontab\n```\n\nNow open the installed crontab in Nano:\n\n```bash\nEDITOR=nano crontab -e\n```\n\nAdd this comment on the line above the schedule:\n\n```text\n## LabEx managed backup schedule\n```\n\nPress `Ctrl+O`, then `Enter` to save. Press `Ctrl+X` to leave Nano and return to the shell. Use `crontab -l` to confirm exactly what Cron will read and save that output:\n\n```bash\ncrontab -l | tee installed-crontab.txt\n```\n\nThe output should contain the comment followed by the every-five-minutes entry. Inspecting the installed result catches editor mistakes before you depend on the schedule.",
+      "title_vi": "Cài và kiểm tra lịch Cron",
+      "task": "Thực hiện hướng dẫn: Install and Inspect a Cron Schedule",
+      "hint": "Chạy lệnh: minute hour day-of-month month day-of-week command",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess\nroot=pathlib.Path('/home/labex/project/backup-lab')\np=subprocess.run(['crontab','-l'],text=True,capture_output=True,timeout=2)\nassert p.returncode==0\nlines=[line for line in p.stdout.splitlines() if line.strip()]\nassert lines == ['## LabEx managed backup schedule', '*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1']\nassert (root/'installed-crontab.txt').read_text()==p.stdout\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ cài và kiểm tra lịch Cron cá nhân. Một dòng crontab bắt đầu bằng năm trường lịch, tiếp theo là lệnh:\n\nVị trí\nTrường\nPhạm vi thường dùng\n\n1\nphút\n`0`–`59`\n\n2\ngiờ\n`0`–`23`\n\n3\nngày trong tháng\n`1`–`31`\n\n4\ntháng\n`1`–`12`\n\n5\nngày trong tuần\n`0`–`7`, trong đó Chủ nhật là `0` hoặc `7`\n\nDấu sao `*` nghĩa là mọi giá trị được phép. Bước như `*/5` nghĩa là mỗi năm đơn vị trong trường đó.\n\n```text\nminute hour day-of-month month day-of-week command\n```\n\nVí dụ, `*/5 * * * *` nghĩa là mỗi năm phút. `0 2 * * *` nghĩa là 02:00 hằng ngày.\n\n`crontab -e` mở crontab cá nhân trong trình soạn thảo. Quy trình đáng tin cậy là chuẩn bị và cài một mục tốt đã biết trước, rồi chỉnh sửa tương tác nhỏ. Tạo một mục dùng đường dẫn tuyệt đối và ghi lại cả đầu ra chuẩn lẫn lỗi chuẩn:\n\n```bash\ncat > backup.crontab <<'EOF'\n*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\nEOF\n```\n\nXem lại và cài nó:\n\n```bash\ncat backup.crontab\n```\n\n```bash\ncrontab backup.crontab\n```\n\nBây giờ mở crontab đã cài trong Nano:\n\n```bash\nEDITOR=nano crontab -e\n```\n\nThêm chú thích này vào dòng trên lịch:\n\n```text\n## LabEx managed backup schedule\n```\n\nNhấn `Ctrl+O`, rồi `Enter` để lưu. Nhấn `Ctrl+X` để rời Nano và trở lại shell. Dùng `crontab -l` để xác nhận chính xác những gì Cron sẽ đọc và lưu đầu ra đó:\n\n```bash\ncrontab -l | tee installed-crontab.txt\n```\n\nĐầu ra phải chứa chú thích rồi đến mục mỗi năm phút. Kiểm tra kết quả đã cài giúp phát hiện lỗi soạn thảo trước khi bạn phụ thuộc lịch đó.",
+      "task_vi": "Thực hiện hướng dẫn: Cài và kiểm tra lịch Cron",
+      "hint_vi": "Chạy lệnh: minute hour day-of-month month day-of-week command"
+    },
+    {
+      "id": "source-725417-section-7-v3",
+      "title": "Test Logging and Understand Percent Escaping",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will test backup logging and learn Cron's special handling of percent signs. First run the scheduled command manually:\n\n```bash\n/home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\n```\n\n```bash\ntail -n 5 logs/backup.log\n```\n\n```bash\nfind backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%f\\n' | sort\n```\n\nThe timestamp is created inside `backup.sh`, where ordinary `%` characters are safe. Cron treats an unescaped `%` in a crontab command specially, however. If you place `date` directly in a crontab line, escape each percent sign with a backslash.\n\nSave a correctly escaped example for reference:\n\n```bash\ncat > cron-date-example.txt <<'EOF'\n0 2 * * * /bin/echo \"backup-$(/bin/date +\\%Y\\%m\\%d-\\%H\\%M\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\nEOF\n```\n\n```bash\ncat cron-date-example.txt\n```\n\nYour installed job remains the simpler script-based entry. It uses absolute paths, gives every archive a timestamp, and leaves a log that can be inspected after unattended runs.",
+      "title_vi": "Kiểm tra ghi log và hiểu cách escape dấu phần trăm",
+      "task": "Thực hiện hướng dẫn: Test Logging and Understand Percent Escaping",
+      "hint": "Chạy lệnh: tail -n 5 logs/backup.log",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nassert 'Created /home/labex/project/backup-lab/backups/backup-' in (root/'logs/backup.log').read_text()\nexpected_example = '0 2 * * * /bin/echo \"backup-$(/bin/date +\\\\%Y\\\\%m\\\\%d-\\\\%H\\\\%M\\\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\\n'\nassert (root/'cron-date-example.txt').read_text()==expected_example\nfor archive in (root/'backups').glob('backup-*.tar.gz'): inspect(archive)\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra ghi log sao lưu và học cách Cron xử lý đặc biệt dấu phần trăm. Trước hết chạy thủ công lệnh được lên lịch:\n\n```bash\n/home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\n```\n\n```bash\ntail -n 5 logs/backup.log\n```\n\n```bash\nfind backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%f\\n' | sort\n```\n\nDấu thời gian được tạo bên trong `backup.sh`, nơi các ký tự `%` thông thường an toàn. Tuy nhiên, Cron xử lý đặc biệt `%` không được escape trong lệnh crontab. Nếu đặt `date` trực tiếp trong một dòng crontab, hãy escape mỗi dấu phần trăm bằng dấu gạch chéo ngược.\n\nLưu ví dụ đã escape đúng để tham khảo:\n\n```bash\ncat > cron-date-example.txt <<'EOF'\n0 2 * * * /bin/echo \"backup-$(/bin/date +\\%Y\\%m\\%d-\\%H\\%M\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\nEOF\n```\n\n```bash\ncat cron-date-example.txt\n```\n\nTác vụ đã cài của bạn vẫn là mục đơn giản dựa trên script. Nó dùng đường dẫn tuyệt đối, gán dấu thời gian cho mỗi tệp lưu trữ và để lại log có thể kiểm tra sau những lần chạy không giám sát.",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra ghi log và hiểu cách escape dấu phần trăm",
+      "hint_vi": "Chạy lệnh: tail -n 5 logs/backup.log"
+    },
+    {
+      "id": "section-8",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You defined a backup scope in a manifest, created an archive with `tar -T`, verified it without extraction, and recovered one selected file. You then wrote a timestamped backup script with absolute paths, installed and inspected a Cron schedule, redirected unattended output to a log, and learned why percent signs must be escaped when `date` appears directly in a crontab command.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã định nghĩa phạm vi sao lưu trong manifest, tạo tệp lưu trữ bằng `tar -T`, xác minh mà không giải nén và khôi phục một tệp được chọn. Sau đó bạn viết script sao lưu có dấu thời gian với đường dẫn tuyệt đối, cài và kiểm tra lịch Cron, chuyển hướng đầu ra không giám sát vào log, đồng thời hiểu vì sao phải escape dấu phần trăm khi `date` xuất hiện trực tiếp trong lệnh crontab."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725417-section-1-v3",
+      "title": "Define the Backup Scope with a Manifest",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a manifest: a plain-text list of paths that makes the backup scope visible and reviewable.\n\nEnter the workspace:\n\n```bash\ncd /home/labex/project/backup-lab\n```\n\nCreate a manifest containing paths relative to the `data` directory:\n\n```bash\ncat > backup-manifest.txt <<'EOF'\nconfig/app.conf\ndocuments/runbook.txt\nEOF\n```\n\nNumber the entries so they are easy to review:\n\n```bash\nnl -ba backup-manifest.txt\n```\n\nConfirm that every listed source exists with a `while` loop. Read its structure before running it:\n\n- `IFS=` prevents the shell from trimming whitespace at the start or end of a line;\n- `read -r item` reads one complete line into `item` without treating backslashes specially;\n- `do ... done` encloses the command repeated for each line;\n- `< backup-manifest.txt` supplies the manifest as the loop's input;\n- `test -f` checks that the corresponding path is a regular file, and `&&` prints `ready` only when that check succeeds.\n\n```bash\nwhile IFS= read -r item; do\n  test -f \"data/$item\" && echo \"ready: $item\"\ndone < backup-manifest.txt\n```\n\nThe unlisted `documents/scratch.txt` file is intentionally outside this managed backup.",
+      "title_vi": "Xác định phạm vi sao lưu bằng manifest",
+      "task": "Thực hiện hướng dẫn: Define the Backup Scope with a Manifest",
+      "hint": "Chạy lệnh: cd /home/labex/project/backup-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project/backup-lab')\nassert (p/'backup-manifest.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nassert all((p/'data'/name).is_file() for name in ['config/app.conf', 'documents/runbook.txt'])\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo manifest: danh sách đường dẫn dạng văn bản thuần giúp phạm vi sao lưu rõ ràng và có thể xem xét.\n\nVào thư mục làm việc:\n\n```bash\ncd /home/labex/project/backup-lab\n```\n\nTạo manifest chứa các đường dẫn tương đối so với thư mục `data`:\n\n```bash\ncat > backup-manifest.txt <<'EOF'\nconfig/app.conf\ndocuments/runbook.txt\nEOF\n```\n\nĐánh số các mục để dễ xem xét:\n\n```bash\nnl -ba backup-manifest.txt\n```\n\nXác nhận mọi nguồn được liệt kê đều tồn tại bằng vòng lặp `while`. Đọc cấu trúc trước khi chạy:\n\n- `IFS=` ngăn shell cắt khoảng trắng ở đầu hoặc cuối dòng;\n- `read -r item` đọc một dòng đầy đủ vào `item` mà không xử lý đặc biệt dấu gạch chéo ngược;\n- `do ... done` bao quanh lệnh được lặp cho mỗi dòng;\n- `< backup-manifest.txt` cung cấp manifest làm đầu vào vòng lặp;\n- `test -f` kiểm tra đường dẫn tương ứng là tệp thông thường và `&&` chỉ in `ready` khi kiểm tra thành công.\n\n```bash\nwhile IFS= read -r item; do\n  test -f \"data/$item\" && echo \"ready: $item\"\ndone < backup-manifest.txt\n```\n\nTệp `documents/scratch.txt` không được liệt kê chủ ý nằm ngoài bản sao lưu được quản lý này.",
+      "task_vi": "Thực hiện hướng dẫn: Xác định phạm vi sao lưu bằng manifest",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/backup-lab"
+    },
+    {
+      "id": "source-725417-section-2-v3",
+      "title": "Create an Archive from the Manifest",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `tar -T` to read filenames from the manifest. The `-C data` option makes the archive use short relative paths.\n\n```bash\ntar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt\n```\n\nThe options mean:\n\n- `-c`: create an archive;\n- `-z`: compress it with gzip;\n- `-f`: use the following archive filename;\n- `-C data`: operate relative to `data`;\n- `-T backup-manifest.txt`: read the backup members from the manifest.\n\nInspect the resulting file:\n\n```bash\nls -lh backups/manual-backup.tar.gz\n```\n\nCompare its timestamp and size with the source files:\n\n```bash\nstat -c '%n size=%s modified=%y' backups/manual-backup.tar.gz data/config/app.conf data/documents/runbook.txt\n```",
+      "title_vi": "Tạo tệp lưu trữ từ manifest",
+      "task": "Thực hiện hướng dẫn: Create an Archive from the Manifest",
+      "hint": "Chạy lệnh: tar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `tar -T` để đọc tên tệp từ manifest. Tùy chọn `-C data` khiến tệp lưu trữ dùng đường dẫn tương đối ngắn.\n\n```bash\ntar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt\n```\n\nCác tùy chọn có nghĩa:\n\n- `-c`: tạo tệp lưu trữ;\n- `-z`: nén bằng gzip;\n- `-f`: dùng tên tệp lưu trữ theo sau;\n- `-C data`: thao tác tương đối với `data`;\n- `-T backup-manifest.txt`: đọc các thành viên sao lưu từ manifest.\n\nKiểm tra tệp được tạo:\n\n```bash\nls -lh backups/manual-backup.tar.gz\n```\n\nSo sánh dấu thời gian và kích thước với các tệp nguồn:\n\n```bash\nstat -c '%n size=%s modified=%y' backups/manual-backup.tar.gz data/config/app.conf data/documents/runbook.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Tạo tệp lưu trữ từ manifest",
+      "hint_vi": "Chạy lệnh: tar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt"
+    },
+    {
+      "id": "source-725417-section-3-v3",
+      "title": "Verify the Archive without Extracting It",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will test the archive before relying on it. First test the gzip stream:\n\n```bash\ngzip -t backups/manual-backup.tar.gz\n```\n\nNo output means the compressed stream passed its integrity check. Now list the tar members without extracting them:\n\n```bash\ntar -tzf backups/manual-backup.tar.gz | tee archive-contents.txt\n```\n\nCompare the saved listing with the manifest:\n\n```bash\ndiff -u backup-manifest.txt archive-contents.txt\n```\n\nThe command should show no differences. Confirm that the unmanaged scratch file is absent:\n\n```bash\nif tar -tzf backups/manual-backup.tar.gz | grep -qx 'documents/scratch.txt'; then\n  echo \"Unexpected scratch file found\"\nelse\n  echo \"Archive scope is correct\"\nfi\n```",
+      "title_vi": "Xác minh tệp lưu trữ mà không giải nén",
+      "task": "Thực hiện hướng dẫn: Verify the Archive without Extracting It",
+      "hint": "Chạy lệnh: gzip -t backups/manual-backup.tar.gz",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nassert (root/'archive-contents.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra tệp lưu trữ trước khi dựa vào nó. Trước hết kiểm tra luồng gzip:\n\n```bash\ngzip -t backups/manual-backup.tar.gz\n```\n\nKhông có đầu ra nghĩa là luồng nén đã vượt qua kiểm tra tính toàn vẹn. Bây giờ liệt kê các thành viên tar mà không giải nén:\n\n```bash\ntar -tzf backups/manual-backup.tar.gz | tee archive-contents.txt\n```\n\nSo sánh danh sách đã lưu với manifest:\n\n```bash\ndiff -u backup-manifest.txt archive-contents.txt\n```\n\nLệnh phải không hiển thị khác biệt. Xác nhận tệp tạm không được quản lý không có trong đó:\n\n```bash\nif tar -tzf backups/manual-backup.tar.gz | grep -qx 'documents/scratch.txt'; then\n  echo \"Unexpected scratch file found\"\nelse\n  echo \"Archive scope is correct\"\nfi\n```",
+      "task_vi": "Thực hiện hướng dẫn: Xác minh tệp lưu trữ mà không giải nén",
+      "hint_vi": "Chạy lệnh: gzip -t backups/manual-backup.tar.gz"
+    },
+    {
+      "id": "source-725417-section-4-v3",
+      "title": "Restore One Selected File",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will restore only one selected file so unrelated data is not overwritten. Simulate accidental deletion of the configuration:\n\n```bash\nrm data/config/app.conf\n```\n\n```bash\ntest -e data/config/app.conf || echo \"app.conf is missing\"\n```\n\nExtract only `config/app.conf` into the separate restore directory:\n\n```bash\nrm -rf restore/*\n```\n\n```bash\ntar -xzf backups/manual-backup.tar.gz -C restore config/app.conf\n```\n\nInspect the recovered file, then copy it back to its working location:\n\n```bash\ncat restore/config/app.conf\n```\n\n```bash\ncp restore/config/app.conf data/config/app.conf\n```\n\n```bash\ncmp -s restore/config/app.conf data/config/app.conf && echo \"Configuration restored\"\n```\n\nOnly the requested archive member was extracted.",
+      "title_vi": "Khôi phục một tệp được chọn",
+      "task": "Thực hiện hướng dẫn: Restore One Selected File",
+      "hint": "Chạy lệnh: rm data/config/app.conf",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-lab')\nassert (root/'restore/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert sorted(str(p.relative_to(root/'restore')) for p in (root/'restore').rglob('*') if p.is_file()) == ['config/app.conf']\nassert (root/'data/documents/runbook.txt').read_text() == 'Production runbook: inspect logs before restarting a service.\\n'\nassert (root/'data/documents/scratch.txt').read_text() == 'Unmanaged scratch notes\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ chỉ khôi phục một tệp được chọn để không ghi đè dữ liệu không liên quan. Mô phỏng vô tình xóa cấu hình:\n\n```bash\nrm data/config/app.conf\n```\n\n```bash\ntest -e data/config/app.conf || echo \"app.conf is missing\"\n```\n\nChỉ giải nén `config/app.conf` vào thư mục khôi phục riêng:\n\n```bash\nrm -rf restore/*\n```\n\n```bash\ntar -xzf backups/manual-backup.tar.gz -C restore config/app.conf\n```\n\nKiểm tra tệp đã phục hồi rồi sao chép về vị trí làm việc:\n\n```bash\ncat restore/config/app.conf\n```\n\n```bash\ncp restore/config/app.conf data/config/app.conf\n```\n\n```bash\ncmp -s restore/config/app.conf data/config/app.conf && echo \"Configuration restored\"\n```\n\nChỉ thành viên tệp lưu trữ được yêu cầu đã được giải nén.",
+      "task_vi": "Thực hiện hướng dẫn: Khôi phục một tệp được chọn",
+      "hint_vi": "Chạy lệnh: rm data/config/app.conf"
+    },
+    {
+      "id": "source-725417-section-5-v3",
+      "title": "Build a Timestamped Backup Script",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will build a timestamped backup script. Cron starts jobs with a limited environment, so use absolute paths inside unattended scripts.\n\nCreate `backup.sh`:\n\n```bash\ncat > backup.sh <<'EOF'\n#!/bin/bash\n\nsource_dir=/home/labex/project/backup-lab/data\nmanifest=/home/labex/project/backup-lab/backup-manifest.txt\nbackup_dir=/home/labex/project/backup-lab/backups\ntimestamp=$(date +%Y%m%d-%H%M%S)\narchive=\"$backup_dir/backup-$timestamp.tar.gz\"\n\nmkdir -p \"$backup_dir\"\n\nif [ ! -d \"$source_dir\" ] || [ ! -f \"$manifest\" ]; then\n  echo \"Backup source or manifest is missing\" >&2\n  exit 1\nfi\n\n/bin/tar -czf \"$archive\" -C \"$source_dir\" -T \"$manifest\" || exit 1\n/bin/tar -tzf \"$archive\" > \"$archive.contents\" || exit 1\n\necho \"Created $archive\"\nexit 0\nEOF\n```\n\nMake the script executable and test it now instead of waiting for Cron:\n\n```bash\nchmod u+x backup.sh\n```\n\n```bash\n./backup.sh | tee last-backup.txt\n```\n\n```bash\nls -1 backups\n```\n\nThe timestamp gives each run a unique filename. The companion `.contents` file records exactly what the archive contains.",
+      "title_vi": "Xây dựng script sao lưu có dấu thời gian",
+      "task": "Thực hiện hướng dẫn: Build a Timestamped Backup Script",
+      "hint": "Chạy lệnh: chmod u+x backup.sh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nimport os, re\nassert os.access(root/'backup.sh', os.X_OK)\narchives=[p for p in (root/'backups').glob('backup-*.tar.gz') if re.fullmatch(r'backup-\\d{8}-\\d{6}\\.tar\\.gz',p.name)]\nassert archives\nfor path in archives:\n    inspect(path)\n    assert pathlib.Path(str(path)+'.contents').read_text() == (root/'backup-manifest.txt').read_text()\nassert 'Created ' in (root/'last-backup.txt').read_text()\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xây dựng script sao lưu có dấu thời gian. Cron khởi chạy tác vụ với môi trường giới hạn nên hãy dùng đường dẫn tuyệt đối trong script không giám sát.\n\nTạo `backup.sh`:\n\n```bash\ncat > backup.sh <<'EOF'\n#!/bin/bash\n\nsource_dir=/home/labex/project/backup-lab/data\nmanifest=/home/labex/project/backup-lab/backup-manifest.txt\nbackup_dir=/home/labex/project/backup-lab/backups\ntimestamp=$(date +%Y%m%d-%H%M%S)\narchive=\"$backup_dir/backup-$timestamp.tar.gz\"\n\nmkdir -p \"$backup_dir\"\n\nif [ ! -d \"$source_dir\" ] || [ ! -f \"$manifest\" ]; then\n  echo \"Backup source or manifest is missing\" >&2\n  exit 1\nfi\n\n/bin/tar -czf \"$archive\" -C \"$source_dir\" -T \"$manifest\" || exit 1\n/bin/tar -tzf \"$archive\" > \"$archive.contents\" || exit 1\n\necho \"Created $archive\"\nexit 0\nEOF\n```\n\nCho phép thực thi script và thử ngay thay vì chờ Cron:\n\n```bash\nchmod u+x backup.sh\n```\n\n```bash\n./backup.sh | tee last-backup.txt\n```\n\n```bash\nls -1 backups\n```\n\nDấu thời gian cho mỗi lần chạy một tên tệp riêng. Tệp `.contents` đi kèm ghi chính xác những gì tệp lưu trữ chứa.",
+      "task_vi": "Thực hiện hướng dẫn: Xây dựng script sao lưu có dấu thời gian",
+      "hint_vi": "Chạy lệnh: chmod u+x backup.sh"
+    },
+    {
+      "id": "source-725417-section-6-v3",
+      "title": "Install and Inspect a Cron Schedule",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will install and inspect a personal Cron schedule. A crontab line begins with five scheduling fields, followed by the command:\n\nPosition\nField\nUsual range\n\n1\nminute\n`0`–`59`\n\n2\nhour\n`0`–`23`\n\n3\nday of month\n`1`–`31`\n\n4\nmonth\n`1`–`12`\n\n5\nday of week\n`0`–`7`, where Sunday is `0` or `7`\n\nAn asterisk `*` means every allowed value. A step such as `*/5` means every five units in that field.\n\n```text\nminute hour day-of-month month day-of-week command\n```\n\nFor example, `*/5 * * * *` means every five minutes. `0 2 * * *` means 02:00 every day.\n\n`crontab -e` opens your personal crontab in an editor. A reliable workflow is to prepare and install a known-good entry first, then make a small interactive edit. Create one entry that uses absolute paths and captures both standard output and standard error:\n\n```bash\ncat > backup.crontab <<'EOF'\n*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\nEOF\n```\n\nReview and install it:\n\n```bash\ncat backup.crontab\n```\n\n```bash\ncrontab backup.crontab\n```\n\nNow open the installed crontab in Nano:\n\n```bash\nEDITOR=nano crontab -e\n```\n\nAdd this comment on the line above the schedule:\n\n```text\n## LabEx managed backup schedule\n```\n\nPress `Ctrl+O`, then `Enter` to save. Press `Ctrl+X` to leave Nano and return to the shell. Use `crontab -l` to confirm exactly what Cron will read and save that output:\n\n```bash\ncrontab -l | tee installed-crontab.txt\n```\n\nThe output should contain the comment followed by the every-five-minutes entry. Inspecting the installed result catches editor mistakes before you depend on the schedule.",
+      "title_vi": "Cài và kiểm tra lịch Cron",
+      "task": "Thực hiện hướng dẫn: Install and Inspect a Cron Schedule",
+      "hint": "Chạy lệnh: minute hour day-of-month month day-of-week command",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess\nroot=pathlib.Path('/home/labex/project/backup-lab')\np=subprocess.run(['crontab','-l'],text=True,capture_output=True,timeout=2)\nassert p.returncode==0\nlines=[line for line in p.stdout.splitlines() if line.strip()]\nassert lines == ['## LabEx managed backup schedule', '*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1']\nassert (root/'installed-crontab.txt').read_text()==p.stdout\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ cài và kiểm tra lịch Cron cá nhân. Một dòng crontab bắt đầu bằng năm trường lịch, tiếp theo là lệnh:\n\nVị trí\nTrường\nPhạm vi thường dùng\n\n1\nphút\n`0`–`59`\n\n2\ngiờ\n`0`–`23`\n\n3\nngày trong tháng\n`1`–`31`\n\n4\ntháng\n`1`–`12`\n\n5\nngày trong tuần\n`0`–`7`, trong đó Chủ nhật là `0` hoặc `7`\n\nDấu sao `*` nghĩa là mọi giá trị được phép. Bước như `*/5` nghĩa là mỗi năm đơn vị trong trường đó.\n\n```text\nminute hour day-of-month month day-of-week command\n```\n\nVí dụ, `*/5 * * * *` nghĩa là mỗi năm phút. `0 2 * * *` nghĩa là 02:00 hằng ngày.\n\n`crontab -e` mở crontab cá nhân trong trình soạn thảo. Quy trình đáng tin cậy là chuẩn bị và cài một mục tốt đã biết trước, rồi chỉnh sửa tương tác nhỏ. Tạo một mục dùng đường dẫn tuyệt đối và ghi lại cả đầu ra chuẩn lẫn lỗi chuẩn:\n\n```bash\ncat > backup.crontab <<'EOF'\n*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\nEOF\n```\n\nXem lại và cài nó:\n\n```bash\ncat backup.crontab\n```\n\n```bash\ncrontab backup.crontab\n```\n\nBây giờ mở crontab đã cài trong Nano:\n\n```bash\nEDITOR=nano crontab -e\n```\n\nThêm chú thích này vào dòng trên lịch:\n\n```text\n## LabEx managed backup schedule\n```\n\nNhấn `Ctrl+O`, rồi `Enter` để lưu. Nhấn `Ctrl+X` để rời Nano và trở lại shell. Dùng `crontab -l` để xác nhận chính xác những gì Cron sẽ đọc và lưu đầu ra đó:\n\n```bash\ncrontab -l | tee installed-crontab.txt\n```\n\nĐầu ra phải chứa chú thích rồi đến mục mỗi năm phút. Kiểm tra kết quả đã cài giúp phát hiện lỗi soạn thảo trước khi bạn phụ thuộc lịch đó.",
+      "task_vi": "Thực hiện hướng dẫn: Cài và kiểm tra lịch Cron",
+      "hint_vi": "Chạy lệnh: minute hour day-of-month month day-of-week command"
+    },
+    {
+      "id": "source-725417-section-7-v3",
+      "title": "Test Logging and Understand Percent Escaping",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will test backup logging and learn Cron's special handling of percent signs. First run the scheduled command manually:\n\n```bash\n/home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\n```\n\n```bash\ntail -n 5 logs/backup.log\n```\n\n```bash\nfind backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%f\\n' | sort\n```\n\nThe timestamp is created inside `backup.sh`, where ordinary `%` characters are safe. Cron treats an unescaped `%` in a crontab command specially, however. If you place `date` directly in a crontab line, escape each percent sign with a backslash.\n\nSave a correctly escaped example for reference:\n\n```bash\ncat > cron-date-example.txt <<'EOF'\n0 2 * * * /bin/echo \"backup-$(/bin/date +\\%Y\\%m\\%d-\\%H\\%M\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\nEOF\n```\n\n```bash\ncat cron-date-example.txt\n```\n\nYour installed job remains the simpler script-based entry. It uses absolute paths, gives every archive a timestamp, and leaves a log that can be inspected after unattended runs.",
+      "title_vi": "Kiểm tra ghi log và hiểu cách escape dấu phần trăm",
+      "task": "Thực hiện hướng dẫn: Test Logging and Understand Percent Escaping",
+      "hint": "Chạy lệnh: tail -n 5 logs/backup.log",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nassert 'Created /home/labex/project/backup-lab/backups/backup-' in (root/'logs/backup.log').read_text()\nexpected_example = '0 2 * * * /bin/echo \"backup-$(/bin/date +\\\\%Y\\\\%m\\\\%d-\\\\%H\\\\%M\\\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\\n'\nassert (root/'cron-date-example.txt').read_text()==expected_example\nfor archive in (root/'backups').glob('backup-*.tar.gz'): inspect(archive)\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra ghi log sao lưu và học cách Cron xử lý đặc biệt dấu phần trăm. Trước hết chạy thủ công lệnh được lên lịch:\n\n```bash\n/home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\n```\n\n```bash\ntail -n 5 logs/backup.log\n```\n\n```bash\nfind backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%f\\n' | sort\n```\n\nDấu thời gian được tạo bên trong `backup.sh`, nơi các ký tự `%` thông thường an toàn. Tuy nhiên, Cron xử lý đặc biệt `%` không được escape trong lệnh crontab. Nếu đặt `date` trực tiếp trong một dòng crontab, hãy escape mỗi dấu phần trăm bằng dấu gạch chéo ngược.\n\nLưu ví dụ đã escape đúng để tham khảo:\n\n```bash\ncat > cron-date-example.txt <<'EOF'\n0 2 * * * /bin/echo \"backup-$(/bin/date +\\%Y\\%m\\%d-\\%H\\%M\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\nEOF\n```\n\n```bash\ncat cron-date-example.txt\n```\n\nTác vụ đã cài của bạn vẫn là mục đơn giản dựa trên script. Nó dùng đường dẫn tuyệt đối, gán dấu thời gian cho mỗi tệp lưu trữ và để lại log có thể kiểm tra sau những lần chạy không giám sát.",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra ghi log và hiểu cách escape dấu phần trăm",
+      "hint_vi": "Chạy lệnh: tail -n 5 logs/backup.log"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-scheduled-backup-and-recovery-725417.json"
+}

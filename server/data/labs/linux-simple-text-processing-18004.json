@@ -1,0 +1,347 @@
+{
+  "id": "linux-simple-text-processing-18004",
+  "course_id": "linux-for-noobs",
+  "order": 18,
+  "title": "Combine and Transform Text Files",
+  "title_vi": "Xử Lý Văn Bản Cơ Bản Trong Linux",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "40 mins",
+  "overview": "Text files can relate in different ways. Sometimes characters need normalization; sometimes two files correspond by line position; sometimes records share a key. Choosing the matching tool is more imp",
+  "source_url": "https://labex.io/tutorials/linux-simple-text-processing-18004",
+  "source_lab_id": 18004,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Text files can relate in different ways. Sometimes characters need normalization; sometimes two files correspond by line position; sometimes records share a key. Choosing the matching tool is more important than memorizing options.\n\nThis lab introduces three focused tools: `tr` transforms a character stream, `paste` combines lines by position, and `join` combines sorted records by a shared field. You will observe each input and verify the resulting file before building a small report.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Các tệp văn bản có thể liên hệ với nhau theo nhiều cách. Đôi khi cần chuẩn hóa ký tự; đôi khi hai tệp tương ứng theo vị trí dòng; đôi khi các bản ghi có chung một khóa. Chọn công cụ phù hợp quan trọng hơn ghi nhớ tùy chọn.\n\nBài này giới thiệu ba công cụ chuyên biệt: `tr` biến đổi luồng ký tự, `paste` ghép dòng theo vị trí, còn `join` ghép các bản ghi đã sắp xếp dựa trên trường chung. Bạn sẽ quan sát từng đầu vào và kiểm tra tệp kết quả trước khi xây dựng báo cáo nhỏ."
+    },
+    {
+      "id": "source-18004-section-1-v3",
+      "title": "Translate and Clean a Character Stream",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `tr` to translate characters, squeeze repeated separators, and delete unwanted characters.\n\nCreate a deliberately inconsistent line. `cat -A` then makes normally invisible details visible: spaces remain visible as gaps, and `$` marks the line ending. This helps you see exactly what needs cleaning:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '  API,,,Worker,,WEB  \\n' > raw-services.txt\ncat -A raw-services.txt\n```\n\n`tr SET1 SET2` replaces characters from the first set with corresponding characters from the second. The portable classes `[:upper:]` and `[:lower:]` represent uppercase and lowercase letters:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt\n```\n\nNow pipe three stages together. The first translates letter case; `tr -s ','` **squeezes** each run of repeated commas into one comma; `tr -d ' '` **deletes** space characters; and `tee` displays and saves the final stream:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt | tr -s ',' | tr -d ' ' | tee clean-services.txt\n```\n\nThe result should be `api,worker,web`. `tr` reads a stream; it does not edit the input file in place.",
+      "title_vi": "Chuyển đổi và làm sạch luồng ký tự",
+      "task": "Thực hiện hướng dẫn: Translate and Clean a Character Stream",
+      "hint": "Chạy lệnh: tr '[:upper:]' '[:lower:]' < raw-services.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/clean-services.txt <(printf %s 'api,worker,web\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `tr` để chuyển đổi ký tự, gộp dấu phân cách lặp và xóa các ký tự không mong muốn.\n\nTạo một dòng cố ý không nhất quán. Sau đó, `cat -A` hiển thị những chi tiết thường không nhìn thấy: khoảng trắng hiện thành các khoảng trống và `$` đánh dấu cuối dòng. Nhờ vậy, bạn thấy chính xác những gì cần làm sạch:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '  API,,,Worker,,WEB  \\n' > raw-services.txt\ncat -A raw-services.txt\n```\n\n`tr SET1 SET2` thay các ký tự thuộc tập thứ nhất bằng ký tự tương ứng trong tập thứ hai. Các lớp ký tự có tính khả chuyển `[:upper:]` và `[:lower:]` biểu diễn chữ hoa và chữ thường:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt\n```\n\nBây giờ nối ba giai đoạn bằng đường ống. Giai đoạn đầu chuyển chữ hoa thành chữ thường; `tr -s ','` **gộp** mỗi dãy dấu phẩy lặp thành một dấu phẩy; `tr -d ' '` **xóa** các ký tự khoảng trắng; còn `tee` hiển thị và lưu luồng cuối cùng:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt | tr -s ',' | tr -d ' ' | tee clean-services.txt\n```\n\nKết quả phải là `api,worker,web`. `tr` đọc một luồng dữ liệu; nó không sửa trực tiếp tệp đầu vào.",
+      "task_vi": "Thực hiện hướng dẫn: Chuyển đổi và làm sạch luồng ký tự",
+      "hint_vi": "Chạy lệnh: tr '[:upper:]' '[:lower:]' < raw-services.txt"
+    },
+    {
+      "id": "source-18004-section-2-v3",
+      "title": "Merge Corresponding Lines with Paste",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will combine files whose first lines correspond, whose second lines correspond, and so on.\n\nCreate one column of service names and one column of owners:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' api worker web > services.txt\nprintf '%s\\n' team-blue team-green team-blue > owners.txt\n```\n\n`paste` places corresponding lines side by side, using a tab by default:\n\n```bash\npaste services.txt owners.txt\n```\n\nChoose comma as the delimiter with `-d,` and use `tee` to display and save a CSV-like file:\n\n```bash\npaste -d, services.txt owners.txt | tee service-owners.csv\n```\n\n`paste` does not compare keys. If one file has missing or reordered lines, the pairing changes.",
+      "title_vi": "Ghép các dòng tương ứng bằng Paste",
+      "task": "Thực hiện hướng dẫn: Merge Corresponding Lines with Paste",
+      "hint": "Chạy lệnh: paste services.txt owners.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-owners.csv <(printf %s 'api,team-blue\nworker,team-green\nweb,team-blue\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ ghép những tệp có dòng thứ nhất tương ứng với nhau, dòng thứ hai tương ứng với nhau, và cứ như vậy.\n\nTạo một cột tên dịch vụ và một cột nhóm phụ trách:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' api worker web > services.txt\nprintf '%s\\n' team-blue team-green team-blue > owners.txt\n```\n\n`paste` đặt các dòng tương ứng cạnh nhau, mặc định dùng ký tự tab:\n\n```bash\npaste services.txt owners.txt\n```\n\nChọn dấu phẩy làm dấu phân cách bằng `-d,` và dùng `tee` để hiển thị đồng thời lưu một tệp dạng CSV:\n\n```bash\npaste -d, services.txt owners.txt | tee service-owners.csv\n```\n\n`paste` không so sánh khóa. Nếu một tệp thiếu dòng hoặc đổi thứ tự dòng thì cách ghép cặp cũng thay đổi.",
+      "task_vi": "Thực hiện hướng dẫn: Ghép các dòng tương ứng bằng Paste",
+      "hint_vi": "Chạy lệnh: paste services.txt owners.txt"
+    },
+    {
+      "id": "source-18004-section-3-v3",
+      "title": "Join Records by a Shared Key",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will combine records by a matching first field rather than by line position.\n\nCreate two space-delimited tables in different orders:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' 'web 8080' 'api 9000' 'worker 9100' > ports-unsorted.txt\nprintf '%s\\n' 'worker active' 'web active' 'api maintenance' > states-unsorted.txt\n```\n\n`join` expects both inputs sorted by the join field. Prepare sorted copies. In `sort -k1,1`, `-k` selects a key and `1,1` means “start and end with field 1,” so only the service name controls ordering:\n\n```bash\nsort -k1,1 ports-unsorted.txt > ports.txt\nsort -k1,1 states-unsorted.txt > states.txt\n```\n\nInspect them, then join matching field 1 values:\n\n```bash\ncat ports.txt\ncat states.txt\njoin ports.txt states.txt | tee service-details.txt\n```\n\nEach result contains the shared service key once, followed by the port and state.",
+      "title_vi": "Ghép các bản ghi theo khóa chung",
+      "task": "Thực hiện hướng dẫn: Join Records by a Shared Key",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-details.txt <(printf %s 'api 9000 maintenance\nweb 8080 active\nworker 9100 active\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ ghép các bản ghi bằng trường đầu tiên trùng nhau thay vì theo vị trí dòng.\n\nTạo hai bảng phân cách bằng khoảng trắng với thứ tự khác nhau:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' 'web 8080' 'api 9000' 'worker 9100' > ports-unsorted.txt\nprintf '%s\\n' 'worker active' 'web active' 'api maintenance' > states-unsorted.txt\n```\n\n`join` yêu cầu cả hai đầu vào được sắp xếp theo trường dùng để ghép. Chuẩn bị các bản sao đã sắp xếp. Trong `sort -k1,1`, `-k` chọn khóa và `1,1` có nghĩa là “bắt đầu và kết thúc ở trường 1”, nên chỉ tên dịch vụ quyết định thứ tự:\n\n```bash\nsort -k1,1 ports-unsorted.txt > ports.txt\nsort -k1,1 states-unsorted.txt > states.txt\n```\n\nKiểm tra các tệp, rồi ghép các giá trị trường 1 trùng nhau:\n\n```bash\ncat ports.txt\ncat states.txt\njoin ports.txt states.txt | tee service-details.txt\n```\n\nMỗi bản ghi kết quả chứa khóa dịch vụ chung một lần, theo sau là cổng và trạng thái.",
+      "task_vi": "Thực hiện hướng dẫn: Ghép các bản ghi theo khóa chung",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-18004-section-4-v3",
+      "title": "Build a Readable Service Report",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will reshape the joined records without changing the source tables.\n\nConvert spaces to commas to produce a simple report:\n\n```bash\ncd /home/labex/project/text-combine-lab\ntr ' ' ',' < service-details.txt | tee service-report.csv\n```\n\nAdd a header by grouping two commands. Braces send both commands' output into one redirection:\n\n```bash\n{ echo 'service,port,state'; cat service-report.csv; } > service-report-with-header.csv\ncat service-report-with-header.csv\n```\n\nCount data records without counting the header:\n\n```bash\ntail -n +2 service-report-with-header.csv | wc -l | tr -d ' ' > service-count.txt\ncat service-count.txt\n```\n\nThis workflow preserves small, inspectable stages: normalized data, joined data, formatted data, then a final report.",
+      "title_vi": "Tạo báo cáo dịch vụ dễ đọc",
+      "task": "Thực hiện hướng dẫn: Build a Readable Service Report",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-report-with-header.csv <(printf %s 'service,port,state\napi,9000,maintenance\nweb,8080,active\nworker,9100,active\n') && cmp -s /home/labex/project/text-combine-lab/service-count.txt <(printf %s '3\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ định dạng lại các bản ghi đã ghép mà không thay đổi bảng nguồn.\n\nChuyển khoảng trắng thành dấu phẩy để tạo báo cáo đơn giản:\n\n```bash\ncd /home/labex/project/text-combine-lab\ntr ' ' ',' < service-details.txt | tee service-report.csv\n```\n\nThêm dòng tiêu đề bằng cách nhóm hai lệnh. Cặp ngoặc nhọn đưa đầu ra của cả hai lệnh vào cùng một phép chuyển hướng:\n\n```bash\n{ echo 'service,port,state'; cat service-report.csv; } > service-report-with-header.csv\ncat service-report-with-header.csv\n```\n\nĐếm bản ghi dữ liệu mà không tính dòng tiêu đề:\n\n```bash\ntail -n +2 service-report-with-header.csv | wc -l | tr -d ' ' > service-count.txt\ncat service-count.txt\n```\n\nQuy trình này giữ các giai đoạn nhỏ, dễ kiểm tra: dữ liệu đã chuẩn hóa, dữ liệu đã ghép, dữ liệu đã định dạng, rồi báo cáo cuối cùng.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo báo cáo dịch vụ dễ đọc",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-5",
+      "title": "Summary",
+      "position": 5,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You used `tr` for character-level normalization, `paste` for positional columns, and `join` for sorted key relationships. You then combined small stages into a readable CSV report while keeping the original inputs intact.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã dùng `tr` để chuẩn hóa ở cấp ký tự, `paste` để ghép cột theo vị trí và `join` để kết hợp các quan hệ theo khóa đã sắp xếp. Sau đó, bạn kết hợp các giai đoạn nhỏ thành báo cáo CSV dễ đọc trong khi vẫn giữ nguyên các đầu vào ban đầu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-18004-section-1-v3",
+      "title": "Translate and Clean a Character Stream",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `tr` to translate characters, squeeze repeated separators, and delete unwanted characters.\n\nCreate a deliberately inconsistent line. `cat -A` then makes normally invisible details visible: spaces remain visible as gaps, and `$` marks the line ending. This helps you see exactly what needs cleaning:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '  API,,,Worker,,WEB  \\n' > raw-services.txt\ncat -A raw-services.txt\n```\n\n`tr SET1 SET2` replaces characters from the first set with corresponding characters from the second. The portable classes `[:upper:]` and `[:lower:]` represent uppercase and lowercase letters:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt\n```\n\nNow pipe three stages together. The first translates letter case; `tr -s ','` **squeezes** each run of repeated commas into one comma; `tr -d ' '` **deletes** space characters; and `tee` displays and saves the final stream:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt | tr -s ',' | tr -d ' ' | tee clean-services.txt\n```\n\nThe result should be `api,worker,web`. `tr` reads a stream; it does not edit the input file in place.",
+      "title_vi": "Chuyển đổi và làm sạch luồng ký tự",
+      "task": "Thực hiện hướng dẫn: Translate and Clean a Character Stream",
+      "hint": "Chạy lệnh: tr '[:upper:]' '[:lower:]' < raw-services.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/clean-services.txt <(printf %s 'api,worker,web\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/clean-services.txt <(printf %s 'api,worker,web\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `tr` để chuyển đổi ký tự, gộp dấu phân cách lặp và xóa các ký tự không mong muốn.\n\nTạo một dòng cố ý không nhất quán. Sau đó, `cat -A` hiển thị những chi tiết thường không nhìn thấy: khoảng trắng hiện thành các khoảng trống và `$` đánh dấu cuối dòng. Nhờ vậy, bạn thấy chính xác những gì cần làm sạch:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '  API,,,Worker,,WEB  \\n' > raw-services.txt\ncat -A raw-services.txt\n```\n\n`tr SET1 SET2` thay các ký tự thuộc tập thứ nhất bằng ký tự tương ứng trong tập thứ hai. Các lớp ký tự có tính khả chuyển `[:upper:]` và `[:lower:]` biểu diễn chữ hoa và chữ thường:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt\n```\n\nBây giờ nối ba giai đoạn bằng đường ống. Giai đoạn đầu chuyển chữ hoa thành chữ thường; `tr -s ','` **gộp** mỗi dãy dấu phẩy lặp thành một dấu phẩy; `tr -d ' '` **xóa** các ký tự khoảng trắng; còn `tee` hiển thị và lưu luồng cuối cùng:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt | tr -s ',' | tr -d ' ' | tee clean-services.txt\n```\n\nKết quả phải là `api,worker,web`. `tr` đọc một luồng dữ liệu; nó không sửa trực tiếp tệp đầu vào.",
+      "task_vi": "Thực hiện hướng dẫn: Chuyển đổi và làm sạch luồng ký tự",
+      "hint_vi": "Chạy lệnh: tr '[:upper:]' '[:lower:]' < raw-services.txt"
+    },
+    {
+      "id": "source-18004-section-2-v3",
+      "title": "Merge Corresponding Lines with Paste",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will combine files whose first lines correspond, whose second lines correspond, and so on.\n\nCreate one column of service names and one column of owners:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' api worker web > services.txt\nprintf '%s\\n' team-blue team-green team-blue > owners.txt\n```\n\n`paste` places corresponding lines side by side, using a tab by default:\n\n```bash\npaste services.txt owners.txt\n```\n\nChoose comma as the delimiter with `-d,` and use `tee` to display and save a CSV-like file:\n\n```bash\npaste -d, services.txt owners.txt | tee service-owners.csv\n```\n\n`paste` does not compare keys. If one file has missing or reordered lines, the pairing changes.",
+      "title_vi": "Ghép các dòng tương ứng bằng Paste",
+      "task": "Thực hiện hướng dẫn: Merge Corresponding Lines with Paste",
+      "hint": "Chạy lệnh: paste services.txt owners.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-owners.csv <(printf %s 'api,team-blue\nworker,team-green\nweb,team-blue\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-owners.csv <(printf %s 'api,team-blue\nworker,team-green\nweb,team-blue\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ ghép những tệp có dòng thứ nhất tương ứng với nhau, dòng thứ hai tương ứng với nhau, và cứ như vậy.\n\nTạo một cột tên dịch vụ và một cột nhóm phụ trách:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' api worker web > services.txt\nprintf '%s\\n' team-blue team-green team-blue > owners.txt\n```\n\n`paste` đặt các dòng tương ứng cạnh nhau, mặc định dùng ký tự tab:\n\n```bash\npaste services.txt owners.txt\n```\n\nChọn dấu phẩy làm dấu phân cách bằng `-d,` và dùng `tee` để hiển thị đồng thời lưu một tệp dạng CSV:\n\n```bash\npaste -d, services.txt owners.txt | tee service-owners.csv\n```\n\n`paste` không so sánh khóa. Nếu một tệp thiếu dòng hoặc đổi thứ tự dòng thì cách ghép cặp cũng thay đổi.",
+      "task_vi": "Thực hiện hướng dẫn: Ghép các dòng tương ứng bằng Paste",
+      "hint_vi": "Chạy lệnh: paste services.txt owners.txt"
+    },
+    {
+      "id": "source-18004-section-3-v3",
+      "title": "Join Records by a Shared Key",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will combine records by a matching first field rather than by line position.\n\nCreate two space-delimited tables in different orders:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' 'web 8080' 'api 9000' 'worker 9100' > ports-unsorted.txt\nprintf '%s\\n' 'worker active' 'web active' 'api maintenance' > states-unsorted.txt\n```\n\n`join` expects both inputs sorted by the join field. Prepare sorted copies. In `sort -k1,1`, `-k` selects a key and `1,1` means “start and end with field 1,” so only the service name controls ordering:\n\n```bash\nsort -k1,1 ports-unsorted.txt > ports.txt\nsort -k1,1 states-unsorted.txt > states.txt\n```\n\nInspect them, then join matching field 1 values:\n\n```bash\ncat ports.txt\ncat states.txt\njoin ports.txt states.txt | tee service-details.txt\n```\n\nEach result contains the shared service key once, followed by the port and state.",
+      "title_vi": "Ghép các bản ghi theo khóa chung",
+      "task": "Thực hiện hướng dẫn: Join Records by a Shared Key",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-details.txt <(printf %s 'api 9000 maintenance\nweb 8080 active\nworker 9100 active\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-details.txt <(printf %s 'api 9000 maintenance\nweb 8080 active\nworker 9100 active\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ ghép các bản ghi bằng trường đầu tiên trùng nhau thay vì theo vị trí dòng.\n\nTạo hai bảng phân cách bằng khoảng trắng với thứ tự khác nhau:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' 'web 8080' 'api 9000' 'worker 9100' > ports-unsorted.txt\nprintf '%s\\n' 'worker active' 'web active' 'api maintenance' > states-unsorted.txt\n```\n\n`join` yêu cầu cả hai đầu vào được sắp xếp theo trường dùng để ghép. Chuẩn bị các bản sao đã sắp xếp. Trong `sort -k1,1`, `-k` chọn khóa và `1,1` có nghĩa là “bắt đầu và kết thúc ở trường 1”, nên chỉ tên dịch vụ quyết định thứ tự:\n\n```bash\nsort -k1,1 ports-unsorted.txt > ports.txt\nsort -k1,1 states-unsorted.txt > states.txt\n```\n\nKiểm tra các tệp, rồi ghép các giá trị trường 1 trùng nhau:\n\n```bash\ncat ports.txt\ncat states.txt\njoin ports.txt states.txt | tee service-details.txt\n```\n\nMỗi bản ghi kết quả chứa khóa dịch vụ chung một lần, theo sau là cổng và trạng thái.",
+      "task_vi": "Thực hiện hướng dẫn: Ghép các bản ghi theo khóa chung",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "source-18004-section-4-v3",
+      "title": "Build a Readable Service Report",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will reshape the joined records without changing the source tables.\n\nConvert spaces to commas to produce a simple report:\n\n```bash\ncd /home/labex/project/text-combine-lab\ntr ' ' ',' < service-details.txt | tee service-report.csv\n```\n\nAdd a header by grouping two commands. Braces send both commands' output into one redirection:\n\n```bash\n{ echo 'service,port,state'; cat service-report.csv; } > service-report-with-header.csv\ncat service-report-with-header.csv\n```\n\nCount data records without counting the header:\n\n```bash\ntail -n +2 service-report-with-header.csv | wc -l | tr -d ' ' > service-count.txt\ncat service-count.txt\n```\n\nThis workflow preserves small, inspectable stages: normalized data, joined data, formatted data, then a final report.",
+      "title_vi": "Tạo báo cáo dịch vụ dễ đọc",
+      "task": "Thực hiện hướng dẫn: Build a Readable Service Report",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-report-with-header.csv <(printf %s 'service,port,state\napi,9000,maintenance\nweb,8080,active\nworker,9100,active\n') && cmp -s /home/labex/project/text-combine-lab/service-count.txt <(printf %s '3\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-report-with-header.csv <(printf %s 'service,port,state\napi,9000,maintenance\nweb,8080,active\nworker,9100,active\n') && cmp -s /home/labex/project/text-combine-lab/service-count.txt <(printf %s '3\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ định dạng lại các bản ghi đã ghép mà không thay đổi bảng nguồn.\n\nChuyển khoảng trắng thành dấu phẩy để tạo báo cáo đơn giản:\n\n```bash\ncd /home/labex/project/text-combine-lab\ntr ' ' ',' < service-details.txt | tee service-report.csv\n```\n\nThêm dòng tiêu đề bằng cách nhóm hai lệnh. Cặp ngoặc nhọn đưa đầu ra của cả hai lệnh vào cùng một phép chuyển hướng:\n\n```bash\n{ echo 'service,port,state'; cat service-report.csv; } > service-report-with-header.csv\ncat service-report-with-header.csv\n```\n\nĐếm bản ghi dữ liệu mà không tính dòng tiêu đề:\n\n```bash\ntail -n +2 service-report-with-header.csv | wc -l | tr -d ' ' > service-count.txt\ncat service-count.txt\n```\n\nQuy trình này giữ các giai đoạn nhỏ, dễ kiểm tra: dữ liệu đã chuẩn hóa, dữ liệu đã ghép, dữ liệu đã định dạng, rồi báo cáo cuối cùng.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo báo cáo dịch vụ dễ đọc",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-simple-text-processing-18004.json"
+}

@@ -1,0 +1,48 @@
+{
+  "id": "linux-practice-file-inventory",
+  "course_id": "linux-commands-practice-online",
+  "title": "Luyện tập: Kiểm kê tệp",
+  "order": 2,
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Tạo cây dữ liệu riêng, tìm tệp theo phần mở rộng và ghi kích thước byte chính xác. Không quét thư mục cá nhân trên máy.",
+  "steps": [
+    {
+      "id": "inventory-1",
+      "title": "1. Tạo cây dữ liệu",
+      "content": "### 1. Tạo cây dữ liệu\n\nprintf không có \\n tạo số byte dễ dự đoán. Dữ liệu chỉ dùng ký tự ASCII để một ký tự tương ứng một byte.\n\n```bash\nmkdir -p \"$HOME/inventory/docs\" \"$HOME/inventory/images\"\nprintf 'alpha' > \"$HOME/inventory/docs/a.txt\"\nprintf 'beta' > \"$HOME/inventory/docs/b.txt\"\nprintf 'PNG' > \"$HOME/inventory/images/sample.png\"\n```\n\nTạo a.txt (5 byte), b.txt (4 byte), sample.png (3 byte).",
+      "task": "Tạo a.txt (5 byte), b.txt (4 byte), sample.png (3 byte).",
+      "verify_command": "test \"$(stat -c '%s' \"$HOME/inventory/docs/a.txt\")\" -eq 5 && test \"$(stat -c '%s' \"$HOME/inventory/docs/b.txt\")\" -eq 4 && test \"$(stat -c '%s' \"$HOME/inventory/images/sample.png\")\" -eq 3",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "1. Tạo cây dữ liệu",
+      "content_vi": "### 1. Tạo cây dữ liệu\n\nprintf không có \\n tạo số byte dễ dự đoán. Dữ liệu chỉ dùng ký tự ASCII để một ký tự tương ứng một byte.\n\n```bash\nmkdir -p \"$HOME/inventory/docs\" \"$HOME/inventory/images\"\nprintf 'alpha' > \"$HOME/inventory/docs/a.txt\"\nprintf 'beta' > \"$HOME/inventory/docs/b.txt\"\nprintf 'PNG' > \"$HOME/inventory/images/sample.png\"\n```\n\nTạo a.txt (5 byte), b.txt (4 byte), sample.png (3 byte).",
+      "task_vi": "Tạo a.txt (5 byte), b.txt (4 byte), sample.png (3 byte).",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    },
+    {
+      "id": "inventory-2",
+      "title": "2. Tìm và lập danh sách",
+      "content": "### 2. Tìm và lập danh sách\n\nfind -printf '%P\\n' in đường dẫn tương đối so với gốc tìm kiếm. Báo cáo đặt ngoài gốc để không lẫn dữ liệu báo cáo vào danh sách.\n\n```bash\nfind \"$HOME/inventory\" -type f -name '*.txt' -printf '%P\\n' | LC_ALL=C sort > \"$HOME/text-inventory.txt\"\n```\n\nTạo text-inventory.txt liệt kê docs/a.txt và docs/b.txt.",
+      "task": "Tạo text-inventory.txt liệt kê docs/a.txt và docs/b.txt.",
+      "verify_command": "cmp -s \"$HOME/text-inventory.txt\" <(printf 'docs/a.txt\\ndocs/b.txt\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "2. Tìm và lập danh sách",
+      "content_vi": "### 2. Tìm và lập danh sách\n\nfind -printf '%P\\n' in đường dẫn tương đối so với gốc tìm kiếm. Báo cáo đặt ngoài gốc để không lẫn dữ liệu báo cáo vào danh sách.\n\n```bash\nfind \"$HOME/inventory\" -type f -name '*.txt' -printf '%P\\n' | LC_ALL=C sort > \"$HOME/text-inventory.txt\"\n```\n\nTạo text-inventory.txt liệt kê docs/a.txt và docs/b.txt.",
+      "task_vi": "Tạo text-inventory.txt liệt kê docs/a.txt và docs/b.txt.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    },
+    {
+      "id": "inventory-3",
+      "title": "3. Lập báo cáo kích thước",
+      "content": "### 3. Lập báo cáo kích thước\n\n%s của find là kích thước byte, %P là tên tương đối. du đo dung lượng cấp phát và có thể khác kích thước nội dung, nên ta dùng find ở đây.\n\n```bash\nfind \"$HOME/inventory\" -type f -printf '%P %s\\n' | LC_ALL=C sort > \"$HOME/size-report.txt\"\ncat \"$HOME/size-report.txt\"\n```\n\nTạo báo cáo gồm ba tên file và kích thước chính xác.",
+      "task": "Tạo báo cáo gồm ba tên file và kích thước chính xác.",
+      "verify_command": "cmp -s \"$HOME/size-report.txt\" <(printf 'docs/a.txt 5\\ndocs/b.txt 4\\nimages/sample.png 3\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "3. Lập báo cáo kích thước",
+      "content_vi": "### 3. Lập báo cáo kích thước\n\n%s của find là kích thước byte, %P là tên tương đối. du đo dung lượng cấp phát và có thể khác kích thước nội dung, nên ta dùng find ở đây.\n\n```bash\nfind \"$HOME/inventory\" -type f -printf '%P %s\\n' | LC_ALL=C sort > \"$HOME/size-report.txt\"\ncat \"$HOME/size-report.txt\"\n```\n\nTạo báo cáo gồm ba tên file và kích thước chính xác.",
+      "task_vi": "Tạo báo cáo gồm ba tên file và kích thước chính xác.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    }
+  ],
+  "title_vi": "Luyện tập: Kiểm kê tệp"
+}

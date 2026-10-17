@@ -1,0 +1,345 @@
+{
+  "id": "linux-managing-services-and-system-logs-725415",
+  "course_id": "linux-for-noobs",
+  "order": 28,
+  "title": "Managing Services and System Logs",
+  "title_vi": "Quản lý dịch vụ và log hệ thống",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "A process is a running program. A service is a long-running system function managed according to a definition and lifecycle policy. On Ubuntu, systemd reads unit definitions, starts and stops services",
+  "source_url": "https://labex.io/tutorials/linux-managing-services-and-system-logs-725415",
+  "source_lab_id": 725415,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A process is a running program. A service is a long-running system function managed according to a definition and lifecycle policy. On Ubuntu, systemd reads unit definitions, starts and stops services, tracks their states, and records their output in the system journal.\n\nIn this lab, you will use an isolated `labex-heartbeat` practice service. You will inspect its unit, control its runtime state, configure boot-time enablement, query journal and traditional text logs, follow live output, diagnose a controlled failure, and restore healthy operation. You will not edit unit files or touch the SSH service.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Tiến trình là một chương trình đang chạy. Dịch vụ là một chức năng hệ thống chạy lâu dài, được quản lý theo định nghĩa và chính sách vòng đời. Trên Ubuntu, systemd đọc định nghĩa unit, khởi chạy và dừng dịch vụ, theo dõi trạng thái và ghi đầu ra của chúng vào journal hệ thống.\n\nTrong bài này, bạn sẽ dùng dịch vụ thực hành biệt lập `labex-heartbeat`. Bạn sẽ kiểm tra unit, điều khiển trạng thái chạy, cấu hình bật khi khởi động máy, truy vấn journal và log văn bản truyền thống, theo dõi đầu ra trực tiếp, chẩn đoán lỗi được kiểm soát và khôi phục hoạt động bình thường. Bạn sẽ không sửa tệp unit hoặc tác động dịch vụ SSH."
+    },
+    {
+      "id": "source-725415-section-1-v3",
+      "title": "Recognize systemd and Service Units",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will confirm that systemd is available and distinguish running units from installed unit files.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\nDisplay the systemd version. The first line is enough for identification:\n\n```bash\nsystemctl --version | head -n 1\n```\n\nAsk systemd for its overall state:\n\n```bash\nsystemctl is-system-running || true\n```\n\n`running` means all required units are healthy. A training VM can report `degraded` because an unrelated optional unit failed; the command still proves that systemd is responding.\n\nList a sample of services that are currently running:\n\n```bash\nsystemctl list-units --type=service --state=running --no-pager | head -n 12\n```\n\nA unit is an object managed by systemd. Service units end in `.service`. Unit files describe what can be managed, even when it is not currently running:\n\n```bash\nsystemctl list-unit-files --type=service --no-pager | head -n 12\n```\n\nSave a compact systemd summary. Command substitution `$(...)` inserts command output into the text written by `printf`:\n\n```bash\nprintf 'systemd=%s\\nstate=%s\\n' \"$(systemctl --version | head -n 1)\" \"$(systemctl is-system-running)\" > systemd-summary.txt\n```\n\n```bash\ncat systemd-summary.txt\n```",
+      "title_vi": "Nhận biết systemd và unit dịch vụ",
+      "task": "Thực hiện hướng dẫn: Recognize systemd and Service Units",
+      "hint": "Chạy lệnh: cd /home/labex/project/service-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ xác nhận systemd có sẵn và phân biệt unit đang chạy với tệp unit đã cài.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\nHiển thị phiên bản systemd. Dòng đầu đủ để nhận diện:\n\n```bash\nsystemctl --version | head -n 1\n```\n\nHỏi systemd về trạng thái tổng thể:\n\n```bash\nsystemctl is-system-running || true\n```\n\n`running` nghĩa là mọi unit bắt buộc đều hoạt động tốt. VM đào tạo có thể báo `degraded` vì một unit tùy chọn không liên quan bị lỗi; lệnh vẫn chứng minh systemd đang phản hồi.\n\nLiệt kê một số dịch vụ hiện đang chạy:\n\n```bash\nsystemctl list-units --type=service --state=running --no-pager | head -n 12\n```\n\nUnit là một đối tượng được systemd quản lý. Unit dịch vụ kết thúc bằng `.service`. Tệp unit mô tả những gì có thể được quản lý, kể cả khi hiện không chạy:\n\n```bash\nsystemctl list-unit-files --type=service --no-pager | head -n 12\n```\n\nLưu bản tóm tắt systemd ngắn gọn. Phép thay thế lệnh `$(...)` chèn đầu ra lệnh vào văn bản được `printf` ghi:\n\n```bash\nprintf 'systemd=%s\\nstate=%s\\n' \"$(systemctl --version | head -n 1)\" \"$(systemctl is-system-running)\" > systemd-summary.txt\n```\n\n```bash\ncat systemd-summary.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Nhận biết systemd và unit dịch vụ",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/service-lab"
+    },
+    {
+      "id": "source-725415-section-2-v3",
+      "title": "Inspect a Service Definition and State",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect the prepared practice service before starting it.\n\n`systemctl status` combines the loaded unit path, enablement, runtime state, process information, and recent log lines:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nThe service should be `inactive (dead)` and `disabled`. Inactive means it is not currently running; disabled means it is not configured to start through its install target at boot. These are separate properties.\n\nDisplay the unit definition:\n\n```bash\nsystemctl cat labex-heartbeat.service\n```\n\nThe `[Unit]` section describes identity and ordering, `[Service]` defines the process, and `[Install]` describes enablement. You only inspect this prepared unit; you do not need to write one.\n\nUse `systemctl show` for machine-readable properties:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState\n```\n\nSave those properties for verification:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState > service-properties.txt\n```\n\n```bash\ncat service-properties.txt\n```",
+      "title_vi": "Kiểm tra định nghĩa và trạng thái dịch vụ",
+      "task": "Thực hiện hướng dẫn: Inspect a Service Definition and State",
+      "hint": "Chạy lệnh: cd /home/labex/project/service-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra dịch vụ thực hành đã chuẩn bị trước khi khởi chạy nó.\n\n`systemctl status` kết hợp đường dẫn unit đã nạp, trạng thái bật khi khởi động, trạng thái chạy, thông tin tiến trình và các dòng log gần đây:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nDịch vụ phải ở trạng thái `inactive (dead)` và `disabled`. Inactive nghĩa là hiện không chạy; disabled nghĩa là chưa được cấu hình khởi chạy qua target cài đặt khi máy khởi động. Đây là hai thuộc tính riêng.\n\nHiển thị định nghĩa unit:\n\n```bash\nsystemctl cat labex-heartbeat.service\n```\n\nPhần `[Unit]` mô tả nhận diện và thứ tự, `[Service]` định nghĩa tiến trình và `[Install]` mô tả việc bật dịch vụ. Bạn chỉ kiểm tra unit đã chuẩn bị này; không cần viết unit mới.\n\nDùng `systemctl show` để lấy thuộc tính máy có thể đọc:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState\n```\n\nLưu các thuộc tính đó để xác minh:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState > service-properties.txt\n```\n\n```bash\ncat service-properties.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra định nghĩa và trạng thái dịch vụ",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/service-lab"
+    },
+    {
+      "id": "source-725415-section-3-v3",
+      "title": "Start, Stop, and Restart a Service",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will change the runtime state of the practice service and confirm each result.\n\nStarting and stopping system services requires elevated privileges. Start the service:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nCheck the concise active state:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\nThe expected output is `active`. View the fuller status:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nThe status now includes a main PID. Stop the service and inspect the result:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsystemctl is-active labex-heartbeat.service || true\n```\n\nThe expected state is `inactive`. Start it again, then use restart to replace the running process in one operation:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\n```bash\nsudo systemctl restart labex-heartbeat.service\n```\n\n```bash\nsystemctl show labex-heartbeat.service -p ActiveState -p SubState -p MainPID\n```\n\nThe service should finish this step with `ActiveState=active` and `SubState=running`.",
+      "title_vi": "Khởi chạy, dừng và khởi động lại dịch vụ",
+      "task": "Thực hiện hướng dẫn: Start, Stop, and Restart a Service",
+      "hint": "Chạy lệnh: sudo systemctl start labex-heartbeat.service",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ thay đổi trạng thái chạy của dịch vụ thực hành và xác nhận từng kết quả.\n\nKhởi chạy và dừng dịch vụ hệ thống cần quyền nâng cao. Khởi chạy dịch vụ:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nKiểm tra trạng thái hoạt động ngắn gọn:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\nĐầu ra dự kiến là `active`. Xem trạng thái đầy đủ hơn:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nTrạng thái giờ có PID chính. Dừng dịch vụ và kiểm tra kết quả:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsystemctl is-active labex-heartbeat.service || true\n```\n\nTrạng thái dự kiến là `inactive`. Khởi chạy lại, rồi dùng restart để thay tiến trình đang chạy trong một thao tác:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\n```bash\nsudo systemctl restart labex-heartbeat.service\n```\n\n```bash\nsystemctl show labex-heartbeat.service -p ActiveState -p SubState -p MainPID\n```\n\nKết thúc bước này, dịch vụ phải có `ActiveState=active` và `SubState=running`.",
+      "task_vi": "Thực hiện hướng dẫn: Khởi chạy, dừng và khởi động lại dịch vụ",
+      "hint_vi": "Chạy lệnh: sudo systemctl start labex-heartbeat.service"
+    },
+    {
+      "id": "source-725415-section-4-v3",
+      "title": "Configure Boot-Time Enablement",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will distinguish a service's current runtime state from whether it is enabled for future boots.\n\nThe service is active from the previous step, but setup left its unit file disabled. Check enablement:\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nEnable the service:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```\n\nEnablement creates links that connect the service to a boot target. It does not need to restart an already running service.\n\nPractice removing those boot links:\n\n```bash\nsudo systemctl disable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nThe service can remain active even though the output is now `disabled`. Re-enable it for the final lab state:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\nConfirm both independent properties:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```",
+      "title_vi": "Cấu hình bật dịch vụ khi khởi động máy",
+      "task": "Thực hiện hướng dẫn: Configure Boot-Time Enablement",
+      "hint": "Chạy lệnh: systemctl is-enabled labex-heartbeat.service || true",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ phân biệt trạng thái chạy hiện tại của dịch vụ với việc nó có được bật cho những lần khởi động máy sau hay không.\n\nDịch vụ đang hoạt động từ bước trước, nhưng thiết lập ban đầu để tệp unit ở trạng thái disabled. Kiểm tra việc bật:\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nBật dịch vụ:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```\n\nThao tác bật tạo các liên kết nối dịch vụ với một target khởi động. Nó không cần khởi động lại một dịch vụ đang chạy.\n\nThực hành gỡ các liên kết khởi động đó:\n\n```bash\nsudo systemctl disable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nDịch vụ có thể vẫn hoạt động dù đầu ra giờ là `disabled`. Bật lại để có trạng thái cuối bài:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\nXác nhận cả hai thuộc tính độc lập:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```",
+      "task_vi": "Thực hiện hướng dẫn: Cấu hình bật dịch vụ khi khởi động máy",
+      "hint_vi": "Chạy lệnh: systemctl is-enabled labex-heartbeat.service || true"
+    },
+    {
+      "id": "source-725415-section-5-v3",
+      "title": "Query Service Logs with journalctl",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will read recent service output from the systemd journal and save a focused snapshot.\n\nServices managed by systemd normally send standard output and standard error to the journal. Query only the practice unit:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nThe `-u` option selects a unit, `-n 10` keeps the ten most recent records, and `--no-pager` prints them directly. You should see recent heartbeat records. The startup message may have scrolled outside this limited view while the service continued to run.\n\nLimit results to a recent time window:\n\n```bash\nsudo journalctl -u labex-heartbeat.service --since \"5 minutes ago\" --no-pager\n```\n\nFilter by warning-or-higher priority. No output is a healthy and valid result when the service has not logged a warning:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -p warning --since \"5 minutes ago\" --no-pager\n```\n\nSave a recent unit-specific snapshot in the project workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 20 --no-pager > service-journal.txt\n```\n\n```bash\ntail -n 5 service-journal.txt\n```",
+      "title_vi": "Truy vấn log dịch vụ bằng journalctl",
+      "task": "Thực hiện hướng dẫn: Query Service Logs with journalctl",
+      "hint": "Chạy lệnh: sudo journalctl -u labex-heartbeat.service -n 10 --no-pager",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ đọc đầu ra dịch vụ gần đây từ journal của systemd và lưu ảnh chụp có chọn lọc.\n\nDịch vụ do systemd quản lý thường gửi đầu ra chuẩn và lỗi chuẩn vào journal. Chỉ truy vấn unit thực hành:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nTùy chọn `-u` chọn unit, `-n 10` giữ mười bản ghi gần nhất và `--no-pager` in trực tiếp. Bạn sẽ thấy các bản ghi heartbeat gần đây. Thông báo khởi chạy có thể đã nằm ngoài phần hiển thị giới hạn này trong lúc dịch vụ tiếp tục chạy.\n\nGiới hạn kết quả vào một khoảng thời gian gần đây:\n\n```bash\nsudo journalctl -u labex-heartbeat.service --since \"5 minutes ago\" --no-pager\n```\n\nLọc mức ưu tiên từ cảnh báo trở lên. Không có đầu ra là kết quả hợp lệ và bình thường khi dịch vụ chưa ghi cảnh báo:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -p warning --since \"5 minutes ago\" --no-pager\n```\n\nLưu ảnh chụp gần đây dành riêng cho unit vào thư mục dự án:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 20 --no-pager > service-journal.txt\n```\n\n```bash\ntail -n 5 service-journal.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Truy vấn log dịch vụ bằng journalctl",
+      "hint_vi": "Chạy lệnh: sudo journalctl -u labex-heartbeat.service -n 10 --no-pager"
+    },
+    {
+      "id": "source-725415-section-6-v3",
+      "title": "Follow a Traditional Text Log",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect `/var/log` and follow a text log as new records arrive.\n\nThe `/var/log` hierarchy stores many traditional system and application logs. List a small sample:\n\n```bash\nls -lh /var/log | head -n 12\n```\n\nRead the latest practice-service records:\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log\n```\n\nThe `-f` option follows a file and displays new lines as another process appends them:\n\n```bash\ntail -f /var/log/labex-heartbeat.log\n```\n\nWait until you see at least two new heartbeat lines, then press `Ctrl+C`. This interrupts `tail`; it does not stop the service that is writing the log.\n\nFilter heartbeat lines and view the most recent three:\n\n```bash\ngrep '^heartbeat ' /var/log/labex-heartbeat.log | tail -n 3\n```\n\nSave a five-line sample in the project workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log > traditional-log-sample.txt\n```\n\n```bash\ncat traditional-log-sample.txt\n```",
+      "title_vi": "Theo dõi log văn bản truyền thống",
+      "task": "Thực hiện hướng dẫn: Follow a Traditional Text Log",
+      "hint": "Chạy lệnh: tail -n 5 /var/log/labex-heartbeat.log",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra `/var/log` và theo dõi log văn bản khi có bản ghi mới.\n\nCây thư mục `/var/log` lưu nhiều log hệ thống và ứng dụng truyền thống. Liệt kê một số mục:\n\n```bash\nls -lh /var/log | head -n 12\n```\n\nĐọc bản ghi mới nhất của dịch vụ thực hành:\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log\n```\n\nTùy chọn `-f` theo dõi tệp và hiển thị dòng mới khi tiến trình khác nối thêm:\n\n```bash\ntail -f /var/log/labex-heartbeat.log\n```\n\nChờ đến khi thấy ít nhất hai dòng heartbeat mới rồi nhấn `Ctrl+C`. Thao tác này ngắt `tail`; nó không dừng dịch vụ đang ghi log.\n\nLọc các dòng heartbeat và xem ba dòng gần nhất:\n\n```bash\ngrep '^heartbeat ' /var/log/labex-heartbeat.log | tail -n 3\n```\n\nLưu mẫu năm dòng vào thư mục dự án:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log > traditional-log-sample.txt\n```\n\n```bash\ncat traditional-log-sample.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Theo dõi log văn bản truyền thống",
+      "hint_vi": "Chạy lệnh: tail -n 5 /var/log/labex-heartbeat.log"
+    },
+    {
+      "id": "source-725415-section-7-v3",
+      "title": "Diagnose and Recover a Failed Service",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a controlled configuration failure, use service state and logs to identify it, and restore healthy operation.\n\nStop the practice service and back up its simple configuration:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsudo cp /etc/labex-heartbeat.conf /etc/labex-heartbeat.conf.bak\n```\n\nReplace the numeric interval with an invalid value. This intentionally breaks only the practice service:\n\n```bash\nsudo sed -i 's/^INTERVAL=2$/INTERVAL=invalid/' /etc/labex-heartbeat.conf\n```\n\nAttempt to start the service. A failure message is expected:\n\n```bash\nsudo systemctl start labex-heartbeat.service || true\n```\n\nInspect the failed state:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager || true\n```\n\n```bash\nsystemctl is-failed labex-heartbeat.service\n```\n\nThe status tells you that the process exited, but the journal gives the application-specific reason:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nLook for `configuration error: INTERVAL must be a positive integer`. Restore the known-good configuration, clear the recorded failed state, and start the service again:\n\n```bash\nsudo mv /etc/labex-heartbeat.conf.bak /etc/labex-heartbeat.conf\n```\n\n```bash\nsudo systemctl reset-failed labex-heartbeat.service\n```\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nConfirm the recovery:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\ncat /etc/labex-heartbeat.conf\n```\n\nThe service should be `active`, and the configuration should again contain `INTERVAL=2`.",
+      "title_vi": "Chẩn đoán và khôi phục dịch vụ lỗi",
+      "task": "Thực hiện hướng dẫn: Diagnose and Recover a Failed Service",
+      "hint": "Chạy lệnh: sudo systemctl stop labex-heartbeat.service",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tạo một lỗi cấu hình được kiểm soát, dùng trạng thái dịch vụ và log để xác định nó, rồi khôi phục hoạt động bình thường.\n\nDừng dịch vụ thực hành và sao lưu cấu hình đơn giản của nó:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsudo cp /etc/labex-heartbeat.conf /etc/labex-heartbeat.conf.bak\n```\n\nThay khoảng thời gian dạng số bằng giá trị không hợp lệ. Việc này chủ ý chỉ làm hỏng dịch vụ thực hành:\n\n```bash\nsudo sed -i 's/^INTERVAL=2$/INTERVAL=invalid/' /etc/labex-heartbeat.conf\n```\n\nThử khởi chạy dịch vụ. Thông báo lỗi là điều dự kiến:\n\n```bash\nsudo systemctl start labex-heartbeat.service || true\n```\n\nKiểm tra trạng thái lỗi:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager || true\n```\n\n```bash\nsystemctl is-failed labex-heartbeat.service\n```\n\nTrạng thái cho biết tiến trình đã thoát, còn journal cung cấp lý do cụ thể của ứng dụng:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nTìm `configuration error: INTERVAL must be a positive integer`. Khôi phục cấu hình tốt đã biết, xóa trạng thái lỗi được ghi nhận rồi khởi chạy lại dịch vụ:\n\n```bash\nsudo mv /etc/labex-heartbeat.conf.bak /etc/labex-heartbeat.conf\n```\n\n```bash\nsudo systemctl reset-failed labex-heartbeat.service\n```\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nXác nhận việc khôi phục:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\ncat /etc/labex-heartbeat.conf\n```\n\nDịch vụ phải là `active` và cấu hình phải lại chứa `INTERVAL=2`.",
+      "task_vi": "Thực hiện hướng dẫn: Chẩn đoán và khôi phục dịch vụ lỗi",
+      "hint_vi": "Chạy lệnh: sudo systemctl stop labex-heartbeat.service"
+    },
+    {
+      "id": "section-8",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You distinguished processes, services, active state, and boot-time enablement. You inspected a systemd unit, controlled a safe practice service with `systemctl`, and queried its records with `journalctl`.\n\nYou also inspected `/var/log`, followed live text output with `tail -f`, used status and logs together to explain a controlled failure, and restored the service. This state-first, logs-second workflow is a practical foundation for beginner service troubleshooting.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã phân biệt tiến trình, dịch vụ, trạng thái hoạt động và việc bật khi khởi động máy. Bạn đã kiểm tra một unit systemd, điều khiển dịch vụ thực hành an toàn bằng `systemctl` và truy vấn bản ghi của nó bằng `journalctl`.\n\nBạn cũng kiểm tra `/var/log`, theo dõi đầu ra văn bản trực tiếp bằng `tail -f`, kết hợp trạng thái và log để giải thích một lỗi được kiểm soát và khôi phục dịch vụ. Quy trình xem trạng thái trước, log sau là nền tảng thực tế cho người mới xử lý sự cố dịch vụ."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725415-section-1-v3",
+      "title": "Recognize systemd and Service Units",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will confirm that systemd is available and distinguish running units from installed unit files.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\nDisplay the systemd version. The first line is enough for identification:\n\n```bash\nsystemctl --version | head -n 1\n```\n\nAsk systemd for its overall state:\n\n```bash\nsystemctl is-system-running || true\n```\n\n`running` means all required units are healthy. A training VM can report `degraded` because an unrelated optional unit failed; the command still proves that systemd is responding.\n\nList a sample of services that are currently running:\n\n```bash\nsystemctl list-units --type=service --state=running --no-pager | head -n 12\n```\n\nA unit is an object managed by systemd. Service units end in `.service`. Unit files describe what can be managed, even when it is not currently running:\n\n```bash\nsystemctl list-unit-files --type=service --no-pager | head -n 12\n```\n\nSave a compact systemd summary. Command substitution `$(...)` inserts command output into the text written by `printf`:\n\n```bash\nprintf 'systemd=%s\\nstate=%s\\n' \"$(systemctl --version | head -n 1)\" \"$(systemctl is-system-running)\" > systemd-summary.txt\n```\n\n```bash\ncat systemd-summary.txt\n```",
+      "title_vi": "Nhận biết systemd và unit dịch vụ",
+      "task": "Thực hiện hướng dẫn: Recognize systemd and Service Units",
+      "hint": "Chạy lệnh: cd /home/labex/project/service-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ xác nhận systemd có sẵn và phân biệt unit đang chạy với tệp unit đã cài.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\nHiển thị phiên bản systemd. Dòng đầu đủ để nhận diện:\n\n```bash\nsystemctl --version | head -n 1\n```\n\nHỏi systemd về trạng thái tổng thể:\n\n```bash\nsystemctl is-system-running || true\n```\n\n`running` nghĩa là mọi unit bắt buộc đều hoạt động tốt. VM đào tạo có thể báo `degraded` vì một unit tùy chọn không liên quan bị lỗi; lệnh vẫn chứng minh systemd đang phản hồi.\n\nLiệt kê một số dịch vụ hiện đang chạy:\n\n```bash\nsystemctl list-units --type=service --state=running --no-pager | head -n 12\n```\n\nUnit là một đối tượng được systemd quản lý. Unit dịch vụ kết thúc bằng `.service`. Tệp unit mô tả những gì có thể được quản lý, kể cả khi hiện không chạy:\n\n```bash\nsystemctl list-unit-files --type=service --no-pager | head -n 12\n```\n\nLưu bản tóm tắt systemd ngắn gọn. Phép thay thế lệnh `$(...)` chèn đầu ra lệnh vào văn bản được `printf` ghi:\n\n```bash\nprintf 'systemd=%s\\nstate=%s\\n' \"$(systemctl --version | head -n 1)\" \"$(systemctl is-system-running)\" > systemd-summary.txt\n```\n\n```bash\ncat systemd-summary.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Nhận biết systemd và unit dịch vụ",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/service-lab"
+    },
+    {
+      "id": "source-725415-section-2-v3",
+      "title": "Inspect a Service Definition and State",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect the prepared practice service before starting it.\n\n`systemctl status` combines the loaded unit path, enablement, runtime state, process information, and recent log lines:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nThe service should be `inactive (dead)` and `disabled`. Inactive means it is not currently running; disabled means it is not configured to start through its install target at boot. These are separate properties.\n\nDisplay the unit definition:\n\n```bash\nsystemctl cat labex-heartbeat.service\n```\n\nThe `[Unit]` section describes identity and ordering, `[Service]` defines the process, and `[Install]` describes enablement. You only inspect this prepared unit; you do not need to write one.\n\nUse `systemctl show` for machine-readable properties:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState\n```\n\nSave those properties for verification:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState > service-properties.txt\n```\n\n```bash\ncat service-properties.txt\n```",
+      "title_vi": "Kiểm tra định nghĩa và trạng thái dịch vụ",
+      "task": "Thực hiện hướng dẫn: Inspect a Service Definition and State",
+      "hint": "Chạy lệnh: cd /home/labex/project/service-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra dịch vụ thực hành đã chuẩn bị trước khi khởi chạy nó.\n\n`systemctl status` kết hợp đường dẫn unit đã nạp, trạng thái bật khi khởi động, trạng thái chạy, thông tin tiến trình và các dòng log gần đây:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nDịch vụ phải ở trạng thái `inactive (dead)` và `disabled`. Inactive nghĩa là hiện không chạy; disabled nghĩa là chưa được cấu hình khởi chạy qua target cài đặt khi máy khởi động. Đây là hai thuộc tính riêng.\n\nHiển thị định nghĩa unit:\n\n```bash\nsystemctl cat labex-heartbeat.service\n```\n\nPhần `[Unit]` mô tả nhận diện và thứ tự, `[Service]` định nghĩa tiến trình và `[Install]` mô tả việc bật dịch vụ. Bạn chỉ kiểm tra unit đã chuẩn bị này; không cần viết unit mới.\n\nDùng `systemctl show` để lấy thuộc tính máy có thể đọc:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState\n```\n\nLưu các thuộc tính đó để xác minh:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState > service-properties.txt\n```\n\n```bash\ncat service-properties.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra định nghĩa và trạng thái dịch vụ",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/service-lab"
+    },
+    {
+      "id": "source-725415-section-3-v3",
+      "title": "Start, Stop, and Restart a Service",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will change the runtime state of the practice service and confirm each result.\n\nStarting and stopping system services requires elevated privileges. Start the service:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nCheck the concise active state:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\nThe expected output is `active`. View the fuller status:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nThe status now includes a main PID. Stop the service and inspect the result:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsystemctl is-active labex-heartbeat.service || true\n```\n\nThe expected state is `inactive`. Start it again, then use restart to replace the running process in one operation:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\n```bash\nsudo systemctl restart labex-heartbeat.service\n```\n\n```bash\nsystemctl show labex-heartbeat.service -p ActiveState -p SubState -p MainPID\n```\n\nThe service should finish this step with `ActiveState=active` and `SubState=running`.",
+      "title_vi": "Khởi chạy, dừng và khởi động lại dịch vụ",
+      "task": "Thực hiện hướng dẫn: Start, Stop, and Restart a Service",
+      "hint": "Chạy lệnh: sudo systemctl start labex-heartbeat.service",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ thay đổi trạng thái chạy của dịch vụ thực hành và xác nhận từng kết quả.\n\nKhởi chạy và dừng dịch vụ hệ thống cần quyền nâng cao. Khởi chạy dịch vụ:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nKiểm tra trạng thái hoạt động ngắn gọn:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\nĐầu ra dự kiến là `active`. Xem trạng thái đầy đủ hơn:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nTrạng thái giờ có PID chính. Dừng dịch vụ và kiểm tra kết quả:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsystemctl is-active labex-heartbeat.service || true\n```\n\nTrạng thái dự kiến là `inactive`. Khởi chạy lại, rồi dùng restart để thay tiến trình đang chạy trong một thao tác:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\n```bash\nsudo systemctl restart labex-heartbeat.service\n```\n\n```bash\nsystemctl show labex-heartbeat.service -p ActiveState -p SubState -p MainPID\n```\n\nKết thúc bước này, dịch vụ phải có `ActiveState=active` và `SubState=running`.",
+      "task_vi": "Thực hiện hướng dẫn: Khởi chạy, dừng và khởi động lại dịch vụ",
+      "hint_vi": "Chạy lệnh: sudo systemctl start labex-heartbeat.service"
+    },
+    {
+      "id": "source-725415-section-4-v3",
+      "title": "Configure Boot-Time Enablement",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will distinguish a service's current runtime state from whether it is enabled for future boots.\n\nThe service is active from the previous step, but setup left its unit file disabled. Check enablement:\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nEnable the service:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```\n\nEnablement creates links that connect the service to a boot target. It does not need to restart an already running service.\n\nPractice removing those boot links:\n\n```bash\nsudo systemctl disable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nThe service can remain active even though the output is now `disabled`. Re-enable it for the final lab state:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\nConfirm both independent properties:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```",
+      "title_vi": "Cấu hình bật dịch vụ khi khởi động máy",
+      "task": "Thực hiện hướng dẫn: Configure Boot-Time Enablement",
+      "hint": "Chạy lệnh: systemctl is-enabled labex-heartbeat.service || true",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ phân biệt trạng thái chạy hiện tại của dịch vụ với việc nó có được bật cho những lần khởi động máy sau hay không.\n\nDịch vụ đang hoạt động từ bước trước, nhưng thiết lập ban đầu để tệp unit ở trạng thái disabled. Kiểm tra việc bật:\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nBật dịch vụ:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```\n\nThao tác bật tạo các liên kết nối dịch vụ với một target khởi động. Nó không cần khởi động lại một dịch vụ đang chạy.\n\nThực hành gỡ các liên kết khởi động đó:\n\n```bash\nsudo systemctl disable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nDịch vụ có thể vẫn hoạt động dù đầu ra giờ là `disabled`. Bật lại để có trạng thái cuối bài:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\nXác nhận cả hai thuộc tính độc lập:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```",
+      "task_vi": "Thực hiện hướng dẫn: Cấu hình bật dịch vụ khi khởi động máy",
+      "hint_vi": "Chạy lệnh: systemctl is-enabled labex-heartbeat.service || true"
+    },
+    {
+      "id": "source-725415-section-5-v3",
+      "title": "Query Service Logs with journalctl",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will read recent service output from the systemd journal and save a focused snapshot.\n\nServices managed by systemd normally send standard output and standard error to the journal. Query only the practice unit:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nThe `-u` option selects a unit, `-n 10` keeps the ten most recent records, and `--no-pager` prints them directly. You should see recent heartbeat records. The startup message may have scrolled outside this limited view while the service continued to run.\n\nLimit results to a recent time window:\n\n```bash\nsudo journalctl -u labex-heartbeat.service --since \"5 minutes ago\" --no-pager\n```\n\nFilter by warning-or-higher priority. No output is a healthy and valid result when the service has not logged a warning:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -p warning --since \"5 minutes ago\" --no-pager\n```\n\nSave a recent unit-specific snapshot in the project workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 20 --no-pager > service-journal.txt\n```\n\n```bash\ntail -n 5 service-journal.txt\n```",
+      "title_vi": "Truy vấn log dịch vụ bằng journalctl",
+      "task": "Thực hiện hướng dẫn: Query Service Logs with journalctl",
+      "hint": "Chạy lệnh: sudo journalctl -u labex-heartbeat.service -n 10 --no-pager",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ đọc đầu ra dịch vụ gần đây từ journal của systemd và lưu ảnh chụp có chọn lọc.\n\nDịch vụ do systemd quản lý thường gửi đầu ra chuẩn và lỗi chuẩn vào journal. Chỉ truy vấn unit thực hành:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nTùy chọn `-u` chọn unit, `-n 10` giữ mười bản ghi gần nhất và `--no-pager` in trực tiếp. Bạn sẽ thấy các bản ghi heartbeat gần đây. Thông báo khởi chạy có thể đã nằm ngoài phần hiển thị giới hạn này trong lúc dịch vụ tiếp tục chạy.\n\nGiới hạn kết quả vào một khoảng thời gian gần đây:\n\n```bash\nsudo journalctl -u labex-heartbeat.service --since \"5 minutes ago\" --no-pager\n```\n\nLọc mức ưu tiên từ cảnh báo trở lên. Không có đầu ra là kết quả hợp lệ và bình thường khi dịch vụ chưa ghi cảnh báo:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -p warning --since \"5 minutes ago\" --no-pager\n```\n\nLưu ảnh chụp gần đây dành riêng cho unit vào thư mục dự án:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 20 --no-pager > service-journal.txt\n```\n\n```bash\ntail -n 5 service-journal.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Truy vấn log dịch vụ bằng journalctl",
+      "hint_vi": "Chạy lệnh: sudo journalctl -u labex-heartbeat.service -n 10 --no-pager"
+    },
+    {
+      "id": "source-725415-section-6-v3",
+      "title": "Follow a Traditional Text Log",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect `/var/log` and follow a text log as new records arrive.\n\nThe `/var/log` hierarchy stores many traditional system and application logs. List a small sample:\n\n```bash\nls -lh /var/log | head -n 12\n```\n\nRead the latest practice-service records:\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log\n```\n\nThe `-f` option follows a file and displays new lines as another process appends them:\n\n```bash\ntail -f /var/log/labex-heartbeat.log\n```\n\nWait until you see at least two new heartbeat lines, then press `Ctrl+C`. This interrupts `tail`; it does not stop the service that is writing the log.\n\nFilter heartbeat lines and view the most recent three:\n\n```bash\ngrep '^heartbeat ' /var/log/labex-heartbeat.log | tail -n 3\n```\n\nSave a five-line sample in the project workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log > traditional-log-sample.txt\n```\n\n```bash\ncat traditional-log-sample.txt\n```",
+      "title_vi": "Theo dõi log văn bản truyền thống",
+      "task": "Thực hiện hướng dẫn: Follow a Traditional Text Log",
+      "hint": "Chạy lệnh: tail -n 5 /var/log/labex-heartbeat.log",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra `/var/log` và theo dõi log văn bản khi có bản ghi mới.\n\nCây thư mục `/var/log` lưu nhiều log hệ thống và ứng dụng truyền thống. Liệt kê một số mục:\n\n```bash\nls -lh /var/log | head -n 12\n```\n\nĐọc bản ghi mới nhất của dịch vụ thực hành:\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log\n```\n\nTùy chọn `-f` theo dõi tệp và hiển thị dòng mới khi tiến trình khác nối thêm:\n\n```bash\ntail -f /var/log/labex-heartbeat.log\n```\n\nChờ đến khi thấy ít nhất hai dòng heartbeat mới rồi nhấn `Ctrl+C`. Thao tác này ngắt `tail`; nó không dừng dịch vụ đang ghi log.\n\nLọc các dòng heartbeat và xem ba dòng gần nhất:\n\n```bash\ngrep '^heartbeat ' /var/log/labex-heartbeat.log | tail -n 3\n```\n\nLưu mẫu năm dòng vào thư mục dự án:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log > traditional-log-sample.txt\n```\n\n```bash\ncat traditional-log-sample.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Theo dõi log văn bản truyền thống",
+      "hint_vi": "Chạy lệnh: tail -n 5 /var/log/labex-heartbeat.log"
+    },
+    {
+      "id": "source-725415-section-7-v3",
+      "title": "Diagnose and Recover a Failed Service",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a controlled configuration failure, use service state and logs to identify it, and restore healthy operation.\n\nStop the practice service and back up its simple configuration:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsudo cp /etc/labex-heartbeat.conf /etc/labex-heartbeat.conf.bak\n```\n\nReplace the numeric interval with an invalid value. This intentionally breaks only the practice service:\n\n```bash\nsudo sed -i 's/^INTERVAL=2$/INTERVAL=invalid/' /etc/labex-heartbeat.conf\n```\n\nAttempt to start the service. A failure message is expected:\n\n```bash\nsudo systemctl start labex-heartbeat.service || true\n```\n\nInspect the failed state:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager || true\n```\n\n```bash\nsystemctl is-failed labex-heartbeat.service\n```\n\nThe status tells you that the process exited, but the journal gives the application-specific reason:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nLook for `configuration error: INTERVAL must be a positive integer`. Restore the known-good configuration, clear the recorded failed state, and start the service again:\n\n```bash\nsudo mv /etc/labex-heartbeat.conf.bak /etc/labex-heartbeat.conf\n```\n\n```bash\nsudo systemctl reset-failed labex-heartbeat.service\n```\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nConfirm the recovery:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\ncat /etc/labex-heartbeat.conf\n```\n\nThe service should be `active`, and the configuration should again contain `INTERVAL=2`.",
+      "title_vi": "Chẩn đoán và khôi phục dịch vụ lỗi",
+      "task": "Thực hiện hướng dẫn: Diagnose and Recover a Failed Service",
+      "hint": "Chạy lệnh: sudo systemctl stop labex-heartbeat.service",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tạo một lỗi cấu hình được kiểm soát, dùng trạng thái dịch vụ và log để xác định nó, rồi khôi phục hoạt động bình thường.\n\nDừng dịch vụ thực hành và sao lưu cấu hình đơn giản của nó:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsudo cp /etc/labex-heartbeat.conf /etc/labex-heartbeat.conf.bak\n```\n\nThay khoảng thời gian dạng số bằng giá trị không hợp lệ. Việc này chủ ý chỉ làm hỏng dịch vụ thực hành:\n\n```bash\nsudo sed -i 's/^INTERVAL=2$/INTERVAL=invalid/' /etc/labex-heartbeat.conf\n```\n\nThử khởi chạy dịch vụ. Thông báo lỗi là điều dự kiến:\n\n```bash\nsudo systemctl start labex-heartbeat.service || true\n```\n\nKiểm tra trạng thái lỗi:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager || true\n```\n\n```bash\nsystemctl is-failed labex-heartbeat.service\n```\n\nTrạng thái cho biết tiến trình đã thoát, còn journal cung cấp lý do cụ thể của ứng dụng:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nTìm `configuration error: INTERVAL must be a positive integer`. Khôi phục cấu hình tốt đã biết, xóa trạng thái lỗi được ghi nhận rồi khởi chạy lại dịch vụ:\n\n```bash\nsudo mv /etc/labex-heartbeat.conf.bak /etc/labex-heartbeat.conf\n```\n\n```bash\nsudo systemctl reset-failed labex-heartbeat.service\n```\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nXác nhận việc khôi phục:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\ncat /etc/labex-heartbeat.conf\n```\n\nDịch vụ phải là `active` và cấu hình phải lại chứa `INTERVAL=2`.",
+      "task_vi": "Thực hiện hướng dẫn: Chẩn đoán và khôi phục dịch vụ lỗi",
+      "hint_vi": "Chạy lệnh: sudo systemctl stop labex-heartbeat.service"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-managing-services-and-system-logs-725415.json"
+}

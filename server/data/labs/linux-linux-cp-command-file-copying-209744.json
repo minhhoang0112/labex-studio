@@ -1,0 +1,509 @@
+{
+  "id": "linux-linux-cp-command-file-copying-209744",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 209744,
+  "source_url": "https://labex.io/tutorials/linux-linux-cp-command-file-copying-209744",
+  "order": 7,
+  "title": "Linux cp Command: File Copying",
+  "title_vi": "Lệnh cp: sao chép tệp",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux cp Command: File Copying",
+  "sections": [
+    {
+      "id": "commands-209744-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux cp Command: File Copying. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh cp: sao chép tệp. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-209744-section-1-v1",
+      "title": "Understanding the Basic cp Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sao lưu một tệp",
+      "content": "Copy important_report.txt to important_report_backup.txt.\n\n```bash\ncp important_report.txt important_report_backup.txt\n```",
+      "content_vi": "Chép important_report.txt thành important_report_backup.txt.\n\n```bash\ncp important_report.txt important_report_backup.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/important_report_backup.txt && cmp -s /home/labex/project/important_report.txt /home/labex/project/important_report_backup.txt"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-2-v1",
+      "title": "Copying Files to Different Directories",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chép sang thư mục khác",
+      "content": "Copy favorite_song.mp3 into music.\n\n```bash\ncp favorite_song.mp3 music/\n```",
+      "content_vi": "Chép favorite_song.mp3 vào music.\n\n```bash\ncp favorite_song.mp3 music/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/music/favorite_song.mp3 && cmp -s /home/labex/project/favorite_song.mp3 /home/labex/project/music/favorite_song.mp3"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-3-v1",
+      "title": "Copying Multiple Files at Once",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chép nhiều tệp",
+      "content": "Copy report1.txt, report2.txt and notes.txt into documents.\n\n```bash\ncp report1.txt report2.txt notes.txt documents/\n```",
+      "content_vi": "Chép report1.txt, report2.txt và notes.txt vào documents.\n\n```bash\ncp report1.txt report2.txt notes.txt documents/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/documents/report1.txt && cmp -s /home/labex/project/report1.txt /home/labex/project/documents/report1.txt"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/documents/report2.txt && cmp -s /home/labex/project/report2.txt /home/labex/project/documents/report2.txt"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/documents/notes.txt && cmp -s /home/labex/project/notes.txt /home/labex/project/documents/notes.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-4-v1",
+      "title": "Using the -i Option for Interactive Copying",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xác nhận ghi đè",
+      "content": "Run cp -i new_test_file.txt test_file.txt; answer y to replace the original.\n\n```bash\ncp -i new_test_file.txt test_file.txt\n```",
+      "content_vi": "Chạy cp -i new_test_file.txt test_file.txt; trả lời y để ghi đè.\n\n```bash\ncp -i new_test_file.txt test_file.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/test_file.txt && cmp -s /home/labex/project/new_test_file.txt /home/labex/project/test_file.txt"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*cp\\s+-\\w*i\\w*\\s+[^\\n]*new_test_file\\.txt\\s+[^\\n]*test_file\\.txt\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-5-v1",
+      "title": "Recursive Copying with the -r Option",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sao chép đệ quy",
+      "content": "Copy the website directory into website_backup.\n\n```bash\ncp -r website website_backup\n```",
+      "content_vi": "Sao chép cả website thành website_backup.\n\n```bash\ncp -r website website_backup\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -d /home/labex/project/website_backup && diff -qr /home/labex/project/website /home/labex/project/website_backup"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-6-v1",
+      "title": "Preserving File Attributes with the -p Option",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Giữ thuộc tính",
+      "content": "Copy old_file.txt to preserved_file.txt with -p; compare metadata.\n\n```bash\ncp -p old_file.txt preserved_file.txt\n```",
+      "content_vi": "Chép old_file.txt thành preserved_file.txt bằng -p; so sánh thuộc tính.\n\n```bash\ncp -p old_file.txt preserved_file.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/preserved_file.txt && cmp -s /home/labex/project/old_file.txt /home/labex/project/preserved_file.txt"
+          },
+          {
+            "kind": "state",
+            "command": "test \"$(stat -c %a:%u:%g:%Y /home/labex/project/old_file.txt)\" = \"$(stat -c %a:%u:%g:%Y /home/labex/project/preserved_file.txt)\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*cp\\s+-\\w*p\\w*\\s+[^\\n]*old_file\\.txt\\s+[^\\n]*preserved_file\\.txt\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-7-v1",
+      "title": "Using Wildcards for Selective Copying",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sao chép theo mẫu",
+      "content": "Copy *.txt into text_files and *.pdf into pdf_files.\n\n```bash\ncp *.txt text_files/\ncp *.pdf pdf_files/\n```",
+      "content_vi": "Chép *.txt vào text_files và *.pdf vào pdf_files.\n\n```bash\ncp *.txt text_files/\ncp *.pdf pdf_files/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "for src in /home/labex/project/*.txt; do cmp -s \"$src\" /home/labex/project/text_files/\"${src##*/}\" || exit 1; done; for src in /home/labex/project/*.pdf; do cmp -s \"$src\" /home/labex/project/pdf_files/\"${src##*/}\" || exit 1; done"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-8-v1",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-209744-section-1-v1",
+      "title": "Understanding the Basic cp Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sao lưu một tệp",
+      "content": "Copy important_report.txt to important_report_backup.txt.\n\n```bash\ncp important_report.txt important_report_backup.txt\n```",
+      "content_vi": "Chép important_report.txt thành important_report_backup.txt.\n\n```bash\ncp important_report.txt important_report_backup.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/important_report_backup.txt && cmp -s /home/labex/project/important_report.txt /home/labex/project/important_report_backup.txt"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-2-v1",
+      "title": "Copying Files to Different Directories",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chép sang thư mục khác",
+      "content": "Copy favorite_song.mp3 into music.\n\n```bash\ncp favorite_song.mp3 music/\n```",
+      "content_vi": "Chép favorite_song.mp3 vào music.\n\n```bash\ncp favorite_song.mp3 music/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/music/favorite_song.mp3 && cmp -s /home/labex/project/favorite_song.mp3 /home/labex/project/music/favorite_song.mp3"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-3-v1",
+      "title": "Copying Multiple Files at Once",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chép nhiều tệp",
+      "content": "Copy report1.txt, report2.txt and notes.txt into documents.\n\n```bash\ncp report1.txt report2.txt notes.txt documents/\n```",
+      "content_vi": "Chép report1.txt, report2.txt và notes.txt vào documents.\n\n```bash\ncp report1.txt report2.txt notes.txt documents/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/documents/report1.txt && cmp -s /home/labex/project/report1.txt /home/labex/project/documents/report1.txt"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/documents/report2.txt && cmp -s /home/labex/project/report2.txt /home/labex/project/documents/report2.txt"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/documents/notes.txt && cmp -s /home/labex/project/notes.txt /home/labex/project/documents/notes.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-4-v1",
+      "title": "Using the -i Option for Interactive Copying",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xác nhận ghi đè",
+      "content": "Run cp -i new_test_file.txt test_file.txt; answer y to replace the original.\n\n```bash\ncp -i new_test_file.txt test_file.txt\n```",
+      "content_vi": "Chạy cp -i new_test_file.txt test_file.txt; trả lời y để ghi đè.\n\n```bash\ncp -i new_test_file.txt test_file.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/test_file.txt && cmp -s /home/labex/project/new_test_file.txt /home/labex/project/test_file.txt"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*cp\\s+-\\w*i\\w*\\s+[^\\n]*new_test_file\\.txt\\s+[^\\n]*test_file\\.txt\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-5-v1",
+      "title": "Recursive Copying with the -r Option",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sao chép đệ quy",
+      "content": "Copy the website directory into website_backup.\n\n```bash\ncp -r website website_backup\n```",
+      "content_vi": "Sao chép cả website thành website_backup.\n\n```bash\ncp -r website website_backup\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -d /home/labex/project/website_backup && diff -qr /home/labex/project/website /home/labex/project/website_backup"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-6-v1",
+      "title": "Preserving File Attributes with the -p Option",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Giữ thuộc tính",
+      "content": "Copy old_file.txt to preserved_file.txt with -p; compare metadata.\n\n```bash\ncp -p old_file.txt preserved_file.txt\n```",
+      "content_vi": "Chép old_file.txt thành preserved_file.txt bằng -p; so sánh thuộc tính.\n\n```bash\ncp -p old_file.txt preserved_file.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/preserved_file.txt && cmp -s /home/labex/project/old_file.txt /home/labex/project/preserved_file.txt"
+          },
+          {
+            "kind": "state",
+            "command": "test \"$(stat -c %a:%u:%g:%Y /home/labex/project/old_file.txt)\" = \"$(stat -c %a:%u:%g:%Y /home/labex/project/preserved_file.txt)\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*cp\\s+-\\w*p\\w*\\s+[^\\n]*old_file\\.txt\\s+[^\\n]*preserved_file\\.txt\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-209744-section-7-v1",
+      "title": "Using Wildcards for Selective Copying",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sao chép theo mẫu",
+      "content": "Copy *.txt into text_files and *.pdf into pdf_files.\n\n```bash\ncp *.txt text_files/\ncp *.pdf pdf_files/\n```",
+      "content_vi": "Chép *.txt vào text_files và *.pdf vào pdf_files.\n\n```bash\ncp *.txt text_files/\ncp *.pdf pdf_files/\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "for src in /home/labex/project/*.txt; do cmp -s \"$src\" /home/labex/project/text_files/\"${src##*/}\" || exit 1; done; for src in /home/labex/project/*.pdf; do cmp -s \"$src\" /home/labex/project/pdf_files/\"${src##*/}\" || exit 1; done"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-cp-command-file-copying-209744.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

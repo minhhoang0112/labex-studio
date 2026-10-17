@@ -1,0 +1,37 @@
+@echo off
+setlocal
+cd /d "%~dp0"
+title LabEx Local - Linux Learning
+echo ========================================================
+echo       LABEX LOCAL - LINUX HANDS-ON LABS
+echo ========================================================
+where node >nul 2>nul
+if errorlevel 1 (
+  echo Node.js is required. Install Node.js 24 LTS, then try again.
+  pause
+  exit /b 1
+)
+if not exist node_modules (
+  call npm ci
+  if errorlevel 1 goto failed
+)
+if not exist client\node_modules (
+  call npm ci --prefix client
+  if errorlevel 1 goto failed
+)
+echo Building the current frontend...
+call npm run build:client
+if errorlevel 1 goto failed
+echo Starting the local runtime and server...
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\start-local.ps1 -Restart
+if errorlevel 1 goto failed
+start "" "http://127.0.0.1:5000/learn"
+echo LabEx Local is running at http://127.0.0.1:5000/learn
+exit /b 0
+
+:failed
+echo.
+echo Startup failed. Review the error above.
+pause
+exit /b 1
+

@@ -1,0 +1,299 @@
+{
+  "id": "linux-conditional-statements-in-shell-388815",
+  "course_id": "shell-for-beginners",
+  "order": 9,
+  "title": "Conditional Statements in Shell",
+  "title_vi": "Câu Lệnh Điều Kiện If-Else Trong Shell",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Learn if, else, elif, numeric comparisons (-eq, -gt), string comparisons, and logical operators.",
+  "source_url": "https://labex.io/tutorials/linux-conditional-statements-in-shell-388815",
+  "source_lab_id": 388815,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388815-section-1-v4",
+      "title": "Create Your First If Statement",
+      "title_vi": "Viết câu lệnh if đầu tiên",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Write if.sh: compare NAME=John and execute the matching branch.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"John\"\nif [ \"$NAME\" = \"John\" ]; then\n  echo \"The name is John\"\nfi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "content_vi": "Viết if.sh: so sánh NAME=John rồi chạy nhánh phù hợp.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"John\"\nif [ \"$NAME\" = \"John\" ]; then\n  echo \"The name is John\"\nfi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "task": "Write if.sh: compare NAME=John and execute the matching branch.",
+      "task_vi": "Viết if.sh: so sánh NAME=John rồi chạy nhánh phù hợp.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/if.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['if', 'NAME=', 'fi']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The name is John']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388815-section-2-v4",
+      "title": "Add an Else Clause",
+      "title_vi": "Thêm nhánh else",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Set NAME=Alice and add the else branch; compare with John.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"Alice\"\nif [ \"$NAME\" = \"John\" ]; then\n  echo \"The name is John\"\nelse\n  echo \"The name is not John\"\nfi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "content_vi": "Đặt NAME=Alice và thêm nhánh else; so sánh với trường hợp John.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"Alice\"\nif [ \"$NAME\" = \"John\" ]; then\n  echo \"The name is John\"\nelse\n  echo \"The name is not John\"\nfi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "task": "Set NAME=Alice and add the else branch; compare with John.",
+      "task_vi": "Đặt NAME=Alice và thêm nhánh else; so sánh với trường hợp John.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/if.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['else', 'Alice']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The name is not John']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388815-section-3-v4",
+      "title": "Introducing Elif",
+      "title_vi": "Làm quen với elif",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use elif for John, Paul, George and Ringo; test George.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"George\"\nif [ \"$NAME\" = John ]; then echo \"John Lennon\"\nelif [ \"$NAME\" = Paul ]; then echo \"Paul McCartney\"\nelif [ \"$NAME\" = George ]; then echo \"George Harrison\"\nelif [ \"$NAME\" = Ringo ]; then echo \"Ringo Starr\"\nelse echo \"Unknown member\"\nfi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "content_vi": "Dùng elif cho John, Paul, George và Ringo; chạy với George.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"George\"\nif [ \"$NAME\" = John ]; then echo \"John Lennon\"\nelif [ \"$NAME\" = Paul ]; then echo \"Paul McCartney\"\nelif [ \"$NAME\" = George ]; then echo \"George Harrison\"\nelif [ \"$NAME\" = Ringo ]; then echo \"Ringo Starr\"\nelse echo \"Unknown member\"\nfi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "task": "Use elif for John, Paul, George and Ringo; test George.",
+      "task_vi": "Dùng elif cho John, Paul, George và Ringo; chạy với George.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/if.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['elif', 'Ringo', 'Paul']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['George Harrison']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388815-section-4-v4",
+      "title": "Numeric Comparisons",
+      "title_vi": "So sánh số",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create numeric.sh using -lt, -eq and -gt, initially NUMBER=10.\n\n`~/project/numeric.sh`:\n\n```bash\n#!/bin/bash\nNUMBER=10\nif [ \"$NUMBER\" -lt 5 ]; then echo \"The number is less than 5\"\nelif [ \"$NUMBER\" -eq 10 ]; then echo \"The number is exactly 10\"\nelif [ \"$NUMBER\" -gt 15 ]; then echo \"The number is greater than 15\"\nelse echo \"The number is between 5 and 15, but not 10\"\nfi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/numeric.sh\n~/project/numeric.sh \n```",
+      "content_vi": "Tạo numeric.sh dùng -lt, -eq và -gt, ban đầu NUMBER=10.\n\n`~/project/numeric.sh`:\n\n```bash\n#!/bin/bash\nNUMBER=10\nif [ \"$NUMBER\" -lt 5 ]; then echo \"The number is less than 5\"\nelif [ \"$NUMBER\" -eq 10 ]; then echo \"The number is exactly 10\"\nelif [ \"$NUMBER\" -gt 15 ]; then echo \"The number is greater than 15\"\nelse echo \"The number is between 5 and 15, but not 10\"\nfi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/numeric.sh\n~/project/numeric.sh \n```",
+      "task": "Create numeric.sh using -lt, -eq and -gt, initially NUMBER=10.",
+      "task_vi": "Tạo numeric.sh dùng -lt, -eq và -gt, ban đầu NUMBER=10.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/numeric.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['-lt', '-eq', '-gt']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The number is exactly 10']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388815-section-5-v4",
+      "title": "String Comparisons and Logical Operators",
+      "title_vi": "So sánh chuỗi và toán tử logic",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use string_logic.sh to compare strings, combine conditions and detect an unset variable.\n\n`~/project/string_logic.sh`:\n\n```bash\n#!/bin/bash\nSTRING1=\"hello\"; STRING2=\"world\"; NUMBER1=5; NUMBER2=10\nif [ \"$STRING1\" = hello ] && [ \"$STRING2\" = world ]; then echo \"Both strings match\"; fi\nif [ \"$NUMBER1\" -lt 10 ] || [ \"$NUMBER2\" -gt 5 ]; then echo \"At least one of the number conditions is true\"; fi\nif [[ \"$STRING1\" != \"$STRING2\" ]]; then echo \"The strings are different\"; fi\nif [[ -z \"$STRING3\" ]]; then echo \"STRING3 is empty or not set\"; fi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_logic.sh\n~/project/string_logic.sh \n```",
+      "content_vi": "Dùng string_logic.sh so sánh chuỗi, kết hợp điều kiện và nhận biết biến chưa đặt.\n\n`~/project/string_logic.sh`:\n\n```bash\n#!/bin/bash\nSTRING1=\"hello\"; STRING2=\"world\"; NUMBER1=5; NUMBER2=10\nif [ \"$STRING1\" = hello ] && [ \"$STRING2\" = world ]; then echo \"Both strings match\"; fi\nif [ \"$NUMBER1\" -lt 10 ] || [ \"$NUMBER2\" -gt 5 ]; then echo \"At least one of the number conditions is true\"; fi\nif [[ \"$STRING1\" != \"$STRING2\" ]]; then echo \"The strings are different\"; fi\nif [[ -z \"$STRING3\" ]]; then echo \"STRING3 is empty or not set\"; fi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_logic.sh\n~/project/string_logic.sh \n```",
+      "task": "Use string_logic.sh to compare strings, combine conditions and detect an unset variable.",
+      "task_vi": "Dùng string_logic.sh so sánh chuỗi, kết hợp điều kiện và nhận biết biến chưa đặt.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_logic.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['&&', '||', '!=', '-z']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Both strings match', 'The strings are different', 'STRING3 is empty or not set']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388815-section-1-v4",
+      "title": "Create Your First If Statement",
+      "title_vi": "Viết câu lệnh if đầu tiên",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Write if.sh: compare NAME=John and execute the matching branch.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"John\"\nif [ \"$NAME\" = \"John\" ]; then\n  echo \"The name is John\"\nfi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "content_vi": "Viết if.sh: so sánh NAME=John rồi chạy nhánh phù hợp.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"John\"\nif [ \"$NAME\" = \"John\" ]; then\n  echo \"The name is John\"\nfi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "task": "Write if.sh: compare NAME=John and execute the matching branch.",
+      "task_vi": "Viết if.sh: so sánh NAME=John rồi chạy nhánh phù hợp.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/if.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['if', 'NAME=', 'fi']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The name is John']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388815-section-2-v4",
+      "title": "Add an Else Clause",
+      "title_vi": "Thêm nhánh else",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Set NAME=Alice and add the else branch; compare with John.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"Alice\"\nif [ \"$NAME\" = \"John\" ]; then\n  echo \"The name is John\"\nelse\n  echo \"The name is not John\"\nfi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "content_vi": "Đặt NAME=Alice và thêm nhánh else; so sánh với trường hợp John.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"Alice\"\nif [ \"$NAME\" = \"John\" ]; then\n  echo \"The name is John\"\nelse\n  echo \"The name is not John\"\nfi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "task": "Set NAME=Alice and add the else branch; compare with John.",
+      "task_vi": "Đặt NAME=Alice và thêm nhánh else; so sánh với trường hợp John.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/if.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['else', 'Alice']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The name is not John']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388815-section-3-v4",
+      "title": "Introducing Elif",
+      "title_vi": "Làm quen với elif",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use elif for John, Paul, George and Ringo; test George.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"George\"\nif [ \"$NAME\" = John ]; then echo \"John Lennon\"\nelif [ \"$NAME\" = Paul ]; then echo \"Paul McCartney\"\nelif [ \"$NAME\" = George ]; then echo \"George Harrison\"\nelif [ \"$NAME\" = Ringo ]; then echo \"Ringo Starr\"\nelse echo \"Unknown member\"\nfi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "content_vi": "Dùng elif cho John, Paul, George và Ringo; chạy với George.\n\n`~/project/if.sh`:\n\n```bash\n#!/bin/bash\nNAME=\"George\"\nif [ \"$NAME\" = John ]; then echo \"John Lennon\"\nelif [ \"$NAME\" = Paul ]; then echo \"Paul McCartney\"\nelif [ \"$NAME\" = George ]; then echo \"George Harrison\"\nelif [ \"$NAME\" = Ringo ]; then echo \"Ringo Starr\"\nelse echo \"Unknown member\"\nfi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/if.sh\n~/project/if.sh \n```",
+      "task": "Use elif for John, Paul, George and Ringo; test George.",
+      "task_vi": "Dùng elif cho John, Paul, George và Ringo; chạy với George.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/if.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['elif', 'Ringo', 'Paul']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['George Harrison']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388815-section-4-v4",
+      "title": "Numeric Comparisons",
+      "title_vi": "So sánh số",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create numeric.sh using -lt, -eq and -gt, initially NUMBER=10.\n\n`~/project/numeric.sh`:\n\n```bash\n#!/bin/bash\nNUMBER=10\nif [ \"$NUMBER\" -lt 5 ]; then echo \"The number is less than 5\"\nelif [ \"$NUMBER\" -eq 10 ]; then echo \"The number is exactly 10\"\nelif [ \"$NUMBER\" -gt 15 ]; then echo \"The number is greater than 15\"\nelse echo \"The number is between 5 and 15, but not 10\"\nfi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/numeric.sh\n~/project/numeric.sh \n```",
+      "content_vi": "Tạo numeric.sh dùng -lt, -eq và -gt, ban đầu NUMBER=10.\n\n`~/project/numeric.sh`:\n\n```bash\n#!/bin/bash\nNUMBER=10\nif [ \"$NUMBER\" -lt 5 ]; then echo \"The number is less than 5\"\nelif [ \"$NUMBER\" -eq 10 ]; then echo \"The number is exactly 10\"\nelif [ \"$NUMBER\" -gt 15 ]; then echo \"The number is greater than 15\"\nelse echo \"The number is between 5 and 15, but not 10\"\nfi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/numeric.sh\n~/project/numeric.sh \n```",
+      "task": "Create numeric.sh using -lt, -eq and -gt, initially NUMBER=10.",
+      "task_vi": "Tạo numeric.sh dùng -lt, -eq và -gt, ban đầu NUMBER=10.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/numeric.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['-lt', '-eq', '-gt']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The number is exactly 10']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388815-section-5-v4",
+      "title": "String Comparisons and Logical Operators",
+      "title_vi": "So sánh chuỗi và toán tử logic",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use string_logic.sh to compare strings, combine conditions and detect an unset variable.\n\n`~/project/string_logic.sh`:\n\n```bash\n#!/bin/bash\nSTRING1=\"hello\"; STRING2=\"world\"; NUMBER1=5; NUMBER2=10\nif [ \"$STRING1\" = hello ] && [ \"$STRING2\" = world ]; then echo \"Both strings match\"; fi\nif [ \"$NUMBER1\" -lt 10 ] || [ \"$NUMBER2\" -gt 5 ]; then echo \"At least one of the number conditions is true\"; fi\nif [[ \"$STRING1\" != \"$STRING2\" ]]; then echo \"The strings are different\"; fi\nif [[ -z \"$STRING3\" ]]; then echo \"STRING3 is empty or not set\"; fi\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_logic.sh\n~/project/string_logic.sh \n```",
+      "content_vi": "Dùng string_logic.sh so sánh chuỗi, kết hợp điều kiện và nhận biết biến chưa đặt.\n\n`~/project/string_logic.sh`:\n\n```bash\n#!/bin/bash\nSTRING1=\"hello\"; STRING2=\"world\"; NUMBER1=5; NUMBER2=10\nif [ \"$STRING1\" = hello ] && [ \"$STRING2\" = world ]; then echo \"Both strings match\"; fi\nif [ \"$NUMBER1\" -lt 10 ] || [ \"$NUMBER2\" -gt 5 ]; then echo \"At least one of the number conditions is true\"; fi\nif [[ \"$STRING1\" != \"$STRING2\" ]]; then echo \"The strings are different\"; fi\nif [[ -z \"$STRING3\" ]]; then echo \"STRING3 is empty or not set\"; fi\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_logic.sh\n~/project/string_logic.sh \n```",
+      "task": "Use string_logic.sh to compare strings, combine conditions and detect an unset variable.",
+      "task_vi": "Dùng string_logic.sh so sánh chuỗi, kết hợp điều kiện và nhận biết biến chưa đặt.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_logic.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['&&', '||', '!=', '-z']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Both strings match', 'The strings are different', 'STRING3 is empty or not set']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/linux-conditional-statements-in-shell-388815",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

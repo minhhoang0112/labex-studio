@@ -1,0 +1,331 @@
+{
+  "id": "shell-comparing-arrays-in-shell-388817",
+  "course_id": "shell-for-beginners",
+  "order": 12,
+  "title": "Comparing Arrays in Shell",
+  "title_vi": "So Sánh Mảng Dữ Liệu Trong Shell",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Implement nested loops to find intersection elements common to three arrays.",
+  "source_url": "https://labex.io/tutorials/shell-comparing-arrays-in-shell-388817",
+  "source_lab_id": 388817,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388817-section-1-v4",
+      "title": "Create the script file",
+      "title_vi": "Tạo tệp kịch bản",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create array-comparison.sh in ~/project.",
+      "content_vi": "Tạo array-comparison.sh trong ~/project.",
+      "task": "Create array-comparison.sh in ~/project.",
+      "task_vi": "Tạo array-comparison.sh trong ~/project.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/array-comparison.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388817-section-2-v4",
+      "title": "Add the shebang and initialize the arrays",
+      "title_vi": "Thêm shebang và khởi tạo mảng",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Initialize a=(3 5 8 10 6), b=(6 5 4 12), c=(14 7 5 7).\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\n```\n\nRun:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "content_vi": "Khai báo a=(3 5 8 10 6), b=(6 5 4 12), c=(14 7 5 7).\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\n```\n\nChạy:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "task": "Initialize a=(3 5 8 10 6), b=(6 5 4 12), c=(14 7 5 7).",
+      "task_vi": "Khai báo a=(3 5 8 10 6), b=(6 5 4 12), c=(14 7 5 7).",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/array-comparison.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['a=(3 5 8 10 6)', 'b=(6 5 4 12)', 'c=(14 7 5 7)']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388817-section-3-v4",
+      "title": "Implement the first comparison loop",
+      "title_vi": "Viết vòng lặp so sánh thứ nhất",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Collect shared values of a and b into z using nested loops.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\n```\n\nRun:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "content_vi": "Dùng vòng lặp lồng nhau lưu phần tử chung của a và b vào z.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\n```\n\nChạy:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "task": "Collect shared values of a and b into z using nested loops.",
+      "task_vi": "Dùng vòng lặp lồng nhau lưu phần tử chung của a và b vào z.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/array-comparison.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['for ', 'z+=(']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Common elements between a and b: 5 6']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388817-section-4-v4",
+      "title": "Implement the second comparison loop",
+      "title_vi": "Viết vòng lặp so sánh thứ hai",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Compare c with z and store their shared values in j.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\nj=()\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ \"$i\" = \"$k\" ]; then j+=(\"$i\"); fi\n  done\ndone\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nRun:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "content_vi": "So sánh c với z và lưu phần tử chung vào j.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\nj=()\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ \"$i\" = \"$k\" ]; then j+=(\"$i\"); fi\n  done\ndone\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nChạy:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "task": "Compare c with z and store their shared values in j.",
+      "task_vi": "So sánh c với z và lưu phần tử chung vào j.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/array-comparison.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['j+=(']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Common elements among a, b, and c: 5']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388817-section-5-v4",
+      "title": "Make the script executable and run it",
+      "title_vi": "Cấp quyền thực thi và chạy kịch bản",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Make array-comparison.sh executable and run it; the intersection of all three arrays is 5.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\nj=()\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ \"$i\" = \"$k\" ]; then j+=(\"$i\"); fi\n  done\ndone\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/array-comparison.sh\n~/project/array-comparison.sh \n```",
+      "content_vi": "Cấp quyền thực thi rồi chạy array-comparison.sh; giao của ba mảng là 5.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\nj=()\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ \"$i\" = \"$k\" ]; then j+=(\"$i\"); fi\n  done\ndone\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/array-comparison.sh\n~/project/array-comparison.sh \n```",
+      "task": "Make array-comparison.sh executable and run it; the intersection of all three arrays is 5.",
+      "task_vi": "Cấp quyền thực thi rồi chạy array-comparison.sh; giao của ba mảng là 5.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/array-comparison.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in []), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Common elements between a and b: 5 6', 'Common elements among a, b, and c: 5']),result.stdout\nLABEX_CHECK"
+          },
+          {
+            "kind": "commands",
+            "groups": [
+              [
+                "(?:^|[;&|]\\s*)(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?array-comparison\\.sh(?:\\s|$)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388817-section-1-v4",
+      "title": "Create the script file",
+      "title_vi": "Tạo tệp kịch bản",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create array-comparison.sh in ~/project.",
+      "content_vi": "Tạo array-comparison.sh trong ~/project.",
+      "task": "Create array-comparison.sh in ~/project.",
+      "task_vi": "Tạo array-comparison.sh trong ~/project.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/array-comparison.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388817-section-2-v4",
+      "title": "Add the shebang and initialize the arrays",
+      "title_vi": "Thêm shebang và khởi tạo mảng",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Initialize a=(3 5 8 10 6), b=(6 5 4 12), c=(14 7 5 7).\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\n```\n\nRun:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "content_vi": "Khai báo a=(3 5 8 10 6), b=(6 5 4 12), c=(14 7 5 7).\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\n```\n\nChạy:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "task": "Initialize a=(3 5 8 10 6), b=(6 5 4 12), c=(14 7 5 7).",
+      "task_vi": "Khai báo a=(3 5 8 10 6), b=(6 5 4 12), c=(14 7 5 7).",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/array-comparison.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['a=(3 5 8 10 6)', 'b=(6 5 4 12)', 'c=(14 7 5 7)']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388817-section-3-v4",
+      "title": "Implement the first comparison loop",
+      "title_vi": "Viết vòng lặp so sánh thứ nhất",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Collect shared values of a and b into z using nested loops.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\n```\n\nRun:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "content_vi": "Dùng vòng lặp lồng nhau lưu phần tử chung của a và b vào z.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\n```\n\nChạy:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "task": "Collect shared values of a and b into z using nested loops.",
+      "task_vi": "Dùng vòng lặp lồng nhau lưu phần tử chung của a và b vào z.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/array-comparison.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['for ', 'z+=(']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Common elements between a and b: 5 6']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388817-section-4-v4",
+      "title": "Implement the second comparison loop",
+      "title_vi": "Viết vòng lặp so sánh thứ hai",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Compare c with z and store their shared values in j.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\nj=()\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ \"$i\" = \"$k\" ]; then j+=(\"$i\"); fi\n  done\ndone\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nRun:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "content_vi": "So sánh c với z và lưu phần tử chung vào j.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\nj=()\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ \"$i\" = \"$k\" ]; then j+=(\"$i\"); fi\n  done\ndone\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nChạy:\n\n```bash\nbash ~/project/array-comparison.sh \n```",
+      "task": "Compare c with z and store their shared values in j.",
+      "task_vi": "So sánh c với z và lưu phần tử chung vào j.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/array-comparison.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['j+=(']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Common elements among a, b, and c: 5']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388817-section-5-v4",
+      "title": "Make the script executable and run it",
+      "title_vi": "Cấp quyền thực thi và chạy kịch bản",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Make array-comparison.sh executable and run it; the intersection of all three arrays is 5.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\nj=()\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ \"$i\" = \"$k\" ]; then j+=(\"$i\"); fi\n  done\ndone\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/array-comparison.sh\n~/project/array-comparison.sh \n```",
+      "content_vi": "Cấp quyền thực thi rồi chạy array-comparison.sh; giao của ba mảng là 5.\n\n`~/project/array-comparison.sh`:\n\n```bash\n#!/bin/bash\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\nz=()\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ \"$x\" = \"$y\" ]; then z+=(\"$x\"); fi\n  done\ndone\necho \"Common elements between a and b: ${z[@]}\"\nj=()\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ \"$i\" = \"$k\" ]; then j+=(\"$i\"); fi\n  done\ndone\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/array-comparison.sh\n~/project/array-comparison.sh \n```",
+      "task": "Make array-comparison.sh executable and run it; the intersection of all three arrays is 5.",
+      "task_vi": "Cấp quyền thực thi rồi chạy array-comparison.sh; giao của ba mảng là 5.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/array-comparison.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in []), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Common elements between a and b: 5 6', 'Common elements among a, b, and c: 5']),result.stdout\nLABEX_CHECK"
+          },
+          {
+            "kind": "commands",
+            "groups": [
+              [
+                "(?:^|[;&|]\\s*)(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?array-comparison\\.sh(?:\\s|$)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-comparing-arrays-in-shell-388817",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

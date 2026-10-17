@@ -1,0 +1,403 @@
+{
+  "id": "linux-day-1-the-lay-of-the-land-596200",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 1,
+  "title": "The Lay of the Land",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "Congratulations! You've just been hired as a Junior System Administrator at LabEx Corporation, a rapidly growing tech startup. It's your first day, and your supervisor has assigned you to work on the company's most ambitious project yet: \"Project Phoenix\" - a revolutionary application that will transform how businesses manage their digital workflows.",
+  "source_url": "https://labex.io/tutorials/linux-day-1-the-lay-of-the-land-596200",
+  "source_lab_id": 596200,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-1-the-lay-of-the-land-596200",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-1-the-lay-of-the-land-596200.json",
+    "reference_sha256": "11cc3a230ffcdb6e520aba40653ba46cb425b285612a0740bfe0b6662d328104",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "format-normalized-match"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-1-the-lay-of-the-land-596200.json",
+  "sections": [
+    {
+      "id": "source-596200-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nCongratulations! You've just been hired as a Junior System Administrator at LabEx Corporation, a rapidly growing tech startup. It's your first day, and your supervisor has assigned you to work on the company's most ambitious project yet: \"Project Phoenix\" - a revolutionary application that will transform how businesses manage their digital workflows.\n\nYour first mission is to get \"the lay of the land\" on the development server that will host Project Phoenix. This involves performing essential reconnaissance to understand the system's identity, who is using it, and its current operational state.\n\nIn this challenge, you will use fundamental Linux commands to gather critical information about your new environment. You'll identify your user account, check system details, see who else is logged in, inspect user and group information, monitor real-time performance, and compile your findings into a comprehensive report.\n\nThis initial assessment will serve as the foundation for all future work on Project Phoenix. Your thoroughness today will ensure the project's success tomorrow.\n\n> Before starting this course, it's recommended to have basic Linux knowledge. If you're new to Linux, we suggest beginning with the [Linux learning path at LabEx](https://labex.io/learn/linux). This course is designed to test, consolidate, and deepen your Linux fundamentals through a series of hands-on challenges. Throughout your learning journey, feel free to discuss unfamiliar, forgotten, or unknown concepts with Labby, our AI assistant. This interactive approach simulates the problem-solving process you'll encounter in real work environments.\n\n> **Important Notice**: If you encounter difficulties during the challenge:\n>\n> 1. Discuss with Labby or view the solution.\n> 2. Temporarily skip the challenge and continue with subsequent Guided Labs in the [Linux learning path](https://labex.io/learn/linux).\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Giới thiệu\n\nChúc mừng! Bạn vừa được tuyển dụng làm Quản trị viên Hệ thống Sơ cấp (Junior System Administrator) tại Tập đoàn LabEx, một công ty khởi nghiệp công nghệ đang phát triển nhanh chóng. Hôm nay là ngày đầu tiên của bạn, và người giám sát đã phân công bạn làm việc trong dự án tham vọng nhất của công ty từ trước đến nay: \"Project Phoenix\" - một ứng dụng mang tính cách mạng sẽ thay đổi cách các doanh nghiệp quản lý quy trình làm việc kỹ thuật số của họ.\n\nNhiệm vụ đầu tiên của bạn là \"tìm hiểu tình hình\" trên máy chủ phát triển sẽ lưu trữ Project Phoenix. Điều này bao gồm việc thực hiện do thám thiết yếu để hiểu danh tính của hệ thống, ai đang sử dụng nó và trạng thái hoạt động hiện tại của nó.\n\nTrong thử thách này, bạn sẽ sử dụng các lệnh Linux cơ bản để thu thập thông tin quan trọng về môi trường mới của mình. Bạn sẽ xác định tài khoản người dùng của mình, kiểm tra chi tiết hệ thống, xem ai khác đang đăng nhập, kiểm tra thông tin người dùng và nhóm, theo dõi hiệu suất theo thời gian thực và tổng hợp các phát hiện của bạn thành một báo cáo toàn diện.\n\nĐánh giá ban đầu này sẽ làm nền tảng cho tất cả công việc trong tương lai trên Project Phoenix. Sự tỉ mỉ của bạn hôm nay sẽ đảm bảo sự thành công của dự án vào ngày mai.\n\n> Trước khi bắt đầu khóa học này, bạn nên có kiến thức Linux cơ bản. Nếu bạn là người mới làm quen với Linux, chúng tôi khuyên bạn nên bắt đầu với [lộ trình học Linux tại LabEx](https://labex.io/learn/linux). Khóa học này được thiết kế để kiểm tra, củng cố và đào sâu kiến thức nền tảng Linux của bạn thông qua một chuỗi các thử thách thực hành. Trong suốt hành trình học tập, đừng ngần ngại thảo luận về các khái niệm chưa quen, đã quên hoặc chưa biết với Labby, trợ lý AI của chúng tôi. Phương pháp tương tác này mô phỏng quá trình giải quyết vấn đề mà bạn sẽ gặp phải trong môi trường làm việc thực tế.\n\n> **Thông báo quan trọng**: Nếu bạn gặp khó khăn trong quá trình thực hiện thử thách:\n>\n> 1. Thảo luận với Labby hoặc xem lời giải.\n> 2. Tạm thời bỏ qua thử thách và tiếp tục với các Guided Lab tiếp theo trong [lộ trình học Linux](https://labex.io/learn/linux)."
+    },
+    {
+      "id": "source-596200-section-1-v2",
+      "title": "First Login and Environment Check",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## First Login and Environment Check\n\nYour first action on a new system is to verify your own identity and the basic characteristics of the operating system. This confirms you are who you think you are and you're on the correct machine.\n\n### Tasks\n\n- Find out the username of the current user.\n- Display the kernel name of the operating system.\n\n### Requirements\n\n- All commands must be executed in the terminal.\n- Use the `whoami` command to identify the current user.\n- Use the `uname` command to show the kernel name.\n\n### Examples\n\nAfter completing this step, you should see output similar to:\n\n```bash\n## Command output showing current user\nlabex\n\n## Command output showing kernel name\nLinux\n```\n\nThese results confirm your identity as the `labex` user on a Linux system, which is essential for establishing your working environment.\n",
+      "task": "- Find out the username of the current user.\n- Display the kernel name of the operating system.",
+      "hint": "Read Tasks and Requirements; check the exact names and paths.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*whoami\\s*$"
+          ],
+          [
+            "^\\s*uname\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Lần đăng nhập đầu tiên và kiểm tra môi trường",
+      "content_vi": "## Đăng nhập lần đầu và Kiểm tra Môi trường\n\nThao tác đầu tiên của bạn trên một hệ thống mới là xác minh danh tính của chính bạn và các đặc điểm cơ bản của hệ điều hành. Điều này xác nhận bạn là ai và bạn đang ở trên đúng cỗ máy.\n\n### Các tác vụ\n\n- Tìm tên người dùng của người dùng hiện tại.\n- Hiển thị tên kernel của hệ điều hành.\n\n### Yêu cầu\n\n- Tất cả các lệnh phải được thực thi trong terminal.\n- Sử dụng lệnh `whoami` để xác định người dùng hiện tại.\n- Sử dụng lệnh `uname` để hiển thị tên kernel.\n\n### Ví dụ\n\nSau khi hoàn thành bước này, bạn sẽ thấy đầu ra tương tự như sau:\n\n```bash\n## Command output showing current user\nlabex\n\n## Command output showing kernel name\nLinux\n```\n\nNhững kết quả này xác nhận danh tính của bạn là người dùng `labex` trên một hệ thống Linux, điều này rất cần thiết để thiết lập môi trường làm việc của bạn."
+    },
+    {
+      "id": "source-596200-section-2-v2",
+      "title": "Checking System Information and Uptime",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Checking System Information and Uptime\n\nAfter confirming your own identity, it's important to understand the complete system environment and how long it has been running. This information is crucial for system monitoring and maintenance planning.\n\n### Tasks\n\n- Display comprehensive system information including operating system details, kernel version, and hardware architecture.\n- Check how long the system has been running and current system load.\n\n### Requirements\n\n- Use the `uname -a` command to display all system information.\n- Use the `uptime` command to show system uptime and load average.\n\n### Examples\n\nAfter running the required commands, you should see output similar to:\n\n```bash\n## Comprehensive system information\nLinux labex-virtual-machine 5.15.0-76-generic #83-Ubuntu SMP Thu Jun 15 19:16:32 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux\n\n## System uptime and load information\n14:51:52 up 183 days, 2:55, 0 users, load average: 6.02, 1.80, 0.94\n```\n\nThe first output shows detailed system information including kernel version, hostname, and architecture. The second output indicates the system has been running for 183 days with current load averages showing system performance over different time periods.\n\n### Hints\n\n- The `uname -a` command displays all available system information in one line.\n- The `uptime` command shows how long the system has been running, number of users, and system load averages.\n- System load averages represent the average system load over 1, 5, and 15 minute periods.\n",
+      "task": "- Display comprehensive system information including operating system details, kernel version, and hardware architecture.\n- Check how long the system has been running and current system load.",
+      "hint": "- The `uname -a` command displays all available system information in one line.\n- The `uptime` command shows how long the system has been running, number of users, and system load averages.\n- System load averages represent the average system load over 1, 5, and 15 minute periods.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*uname\\s+-a\\s*$"
+          ],
+          [
+            "^\\s*uptime\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Kiểm tra thông tin hệ thống và Uptime",
+      "content_vi": "## Kiểm tra Thông tin Hệ thống và Thời gian Hoạt động (Uptime)\n\nSau khi xác nhận danh tính của chính mình, điều quan trọng là phải hiểu rõ toàn bộ môi trường hệ thống và thời gian hệ thống đã hoạt động. Thông tin này rất quan trọng đối với việc giám sát hệ thống và lập kế hoạch bảo trì.\n\n### Nhiệm vụ\n\n- Hiển thị thông tin toàn diện về hệ thống bao gồm chi tiết hệ điều hành, phiên bản kernel và kiến trúc phần cứng.\n- Kiểm tra thời gian hệ thống đã chạy và tải hiện tại của hệ thống.\n\n### Yêu cầu\n\n- Sử dụng lệnh `uname -a` để hiển thị tất cả thông tin hệ thống.\n- Sử dụng lệnh `uptime` để hiển thị thời gian hoạt động của hệ thống và tải trung bình.\n\n### Ví dụ\n\nSau khi chạy các lệnh được yêu cầu, bạn sẽ thấy đầu ra tương tự như:\n\n```bash\n## Comprehensive system information\nLinux labex-virtual-machine 5.15.0-76-generic #83-Ubuntu SMP Thu Jun 15 19:16:32 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux\n\n## System uptime and load information\n14:51:52 up 183 days, 2:55, 0 users, load average: 6.02, 1.80, 0.94\n```\n\nĐầu ra đầu tiên hiển thị thông tin chi tiết về hệ thống bao gồm phiên bản kernel, tên máy (hostname) và kiến trúc. Đầu ra thứ hai cho biết hệ thống đã chạy được 183 ngày với mức tải trung bình hiện tại thể hiện hiệu suất hệ thống trong các khoảng thời gian khác nhau.\n\n### Gợi ý\n\n- Lệnh `uname -a` hiển thị tất cả thông tin hệ thống có sẵn trên một dòng.\n- Lệnh `uptime` hiển thị thời gian hệ thống đã hoạt động, số lượng người dùng và mức tải trung bình của hệ thống.\n- Mức tải trung bình của hệ thống thể hiện tải trung bình của hệ thống trong các khoảng thời gian 1, 5 và 15 phút."
+    },
+    {
+      "id": "source-596200-section-3-v2",
+      "title": "Gathering User and Group Details",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Gathering User and Group Details\n\nUnderstanding your user's permissions is fundamental. You need to know your user ID (UID), primary group ID (GID), and any other groups you belong to, as these determine your access rights on the system.\n\n### Tasks\n\n- Display the detailed user and group information for your current user account.\n\n### Requirements\n\n- Use the `id` command to retrieve your user and group identifiers.\n\n### Examples\n\nWhen you run the required command, you should see output similar to:\n\n```bash\nuid=5000(labex) gid=5000(labex) groups=5000(labex),27(sudo),121(ssl-cert),5002(public)\n```\n\nThis output shows:\n\n- **uid=5000(labex)**: Your user ID is 5000 with username \"labex\"\n- **gid=5000(labex)**: Your primary group ID is 5000 with group name \"labex\"\n- **groups=...**: You belong to multiple groups including \"sudo\" (administrative privileges), \"ssl-cert\" (SSL certificate access), and \"public\" (shared resources)\n\nUnderstanding these permissions is crucial for knowing what system resources you can access and modify.\n\n### Hints\n\n- The `id` command, when run without any arguments, defaults to showing information for the current user.\n- The output will clearly label the UID, GID, and supplementary groups.\n",
+      "task": "- Display the detailed user and group information for your current user account.",
+      "hint": "- The `id` command, when run without any arguments, defaults to showing information for the current user.\n- The output will clearly label the UID, GID, and supplementary groups.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*id\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Thu thập thông tin người dùng và nhóm",
+      "content_vi": "## Thu Thập Chi Tiết Người Dùng và Nhóm\n\nHiểu rõ quyền hạn của người dùng là điều cơ bản. Bạn cần biết ID người dùng (UID), ID nhóm chính (GID) và bất kỳ nhóm nào khác mà bạn thuộc về, vì chúng quyết định quyền truy cập của bạn trên hệ thống.\n\n### Nhiệm vụ\n\n- Hiển thị thông tin chi tiết về người dùng và nhóm cho tài khoản người dùng hiện tại của bạn.\n\n### Yêu cầu\n\n- Sử dụng lệnh `id` để truy xuất định danh người dùng và nhóm của bạn.\n\n### Ví dụ\n\nKhi bạn chạy lệnh được yêu cầu, bạn sẽ thấy đầu ra tương tự như:\n\n```bash\nuid=5000(labex) gid=5000(labex) groups=5000(labex),27(sudo),121(ssl-cert),5002(public)\n```\n\nĐầu ra này cho thấy:\n\n- **uid=5000(labex)**: ID người dùng của bạn là 5000 với tên người dùng là \"labex\"\n- **gid=5000(labex)**: ID nhóm chính của bạn là 5000 với tên nhóm là \"labex\"\n- **groups=...**: Bạn thuộc nhiều nhóm bao gồm \"sudo\" (quyền quản trị), \"ssl-cert\" (truy cập chứng chỉ SSL) và \"public\" (tài nguyên chia sẻ)\n\nHiểu rõ các quyền hạn này là rất quan trọng để biết tài nguyên hệ thống nào bạn có thể truy cập và chỉnh sửa.\n\n### Gợi ý\n\n- Lệnh `id`, khi được chạy mà không có bất kỳ đối số nào, mặc định sẽ hiển thị thông tin cho người dùng hiện tại.\n- Đầu ra sẽ dán nhãn rõ ràng UID, GID và các nhóm bổ trợ."
+    },
+    {
+      "id": "source-596200-section-4-v2",
+      "title": "Monitoring Real-time System Performance",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Monitoring Real-time System Performance\n\nA key part of system reconnaissance is observing its current performance. This includes checking CPU and memory usage, and seeing which processes are running. The `top` command is the standard tool for this task.\n\n### Tasks\n\n- Launch the interactive system monitoring tool to view active processes and resource usage.\n- Exit the tool after observing the output for a few moments.\n\n### Requirements\n\n- Use the `top` command to start the monitoring interface.\n- After `top` is running, press the `q` key to exit and return to the command prompt.\n\n### Examples\n\nWhen you launch the system monitoring tool, you'll see a dynamic display similar to:\n\n```bash\ntop - 10:45:00 up 1:15,  1 user,  load average: 0.00, 0.01, 0.05\nTasks: 123 total,   1 running, 122 sleeping,   0 stopped,   0 zombie\n%Cpu(s):  0.1 us,  0.1 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   1987.2 total,    890.5 free,    540.1 used,    556.6 buff/cache\nMiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   1234.5 avail Mem\n\n    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n      1 root      20   0  169404  12920   8584 S   0.0   0.6   0:01.50 systemd\n      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd\n    ...\n```\n\nThis display shows:\n\n- **System summary**: Current time, uptime, users, and load averages\n- **Task summary**: Total processes and their states (running, sleeping, etc.)\n- **CPU usage**: Breakdown of CPU utilization by category\n- **Memory usage**: Total, free, used, and available memory\n- **Process list**: Running processes sorted by CPU usage with PID, user, and resource consumption\n\nThe display updates automatically every few seconds, providing real-time system monitoring.\n\n### Hints\n\n- `top` provides a dynamic, real-time view of a running system. It refreshes automatically.\n- The `q` key is the standard way to quit the `top` program.\n",
+      "task": "- Launch the interactive system monitoring tool to view active processes and resource usage.\n- Exit the tool after observing the output for a few moments.",
+      "hint": "- `top` provides a dynamic, real-time view of a running system. It refreshes automatically.\n- The `q` key is the standard way to quit the `top` program.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*top\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Giám sát hiệu năng hệ thống thời gian thực",
+      "content_vi": "## Giám sát hiệu năng hệ thống thời gian thực\n\nMột phần quan trọng của việc khảo sát hệ thống là quan sát hiệu năng hiện tại của nó. Điều này bao gồm việc kiểm tra mức sử dụng CPU và bộ nhớ, cũng như xem các tiến trình nào đang chạy. Lệnh `top` là công cụ tiêu chuẩn cho tác vụ này.\n\n### Các tác vụ\n\n- Khởi động công cụ giám sát hệ thống tương tác để xem các tiến trình đang hoạt động và mức sử dụng tài nguyên.\n- Thoát khỏi công cụ sau khi quan sát đầu ra trong vài khoảnh khắc.\n\n### Yêu cầu\n\n- Sử dụng lệnh `top` để khởi động giao diện giám sát.\n- Sau khi `top` đang chạy, nhấn phím `q` để thoát và quay lại dấu nhắc lệnh.\n\n### Ví dụ\n\nKhi bạn khởi động công cụ giám sát hệ thống, bạn sẽ thấy một màn hình hiển thị động tương tự như sau:\n\n```bash\ntop - 10:45:00 up 1:15,  1 user,  load average: 0.00, 0.01, 0.05\nTasks: 123 total,   1 running, 122 sleeping,   0 stopped,   0 zombie\n%Cpu(s):  0.1 us,  0.1 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   1987.2 total,    890.5 free,    540.1 used,    556.6 buff/cache\nMiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   1234.5 avail Mem\n\n    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n      1 root      20   0  169404  12920   8584 S   0.0   0.6   0:01.50 systemd\n      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd\n    ...\n```\n\nMàn hình này hiển thị:\n\n- **Tóm tắt hệ thống**: Thời gian hiện tại, thời gian hoạt động (uptime), số lượng người dùng và tải trung bình (load averages)\n- **Tóm tắt tiến trình**: Tổng số tiến trình và trạng thái của chúng (đang chạy, đang ngủ, v.v.)\n- **Mức sử dụng CPU**: Phân tích chi tiết mức sử dụng CPU theo danh mục\n- **Mức sử dụng bộ nhớ**: Tổng bộ nhớ, bộ nhớ trống, bộ nhớ đã sử dụng và bộ nhớ khả dụng\n- **Danh sách tiến trình**: Các tiến trình đang chạy được sắp xếp theo mức sử dụng CPU với PID, người dùng và mức tiêu thụ tài nguyên\n\nMàn hình hiển thị tự động cập nhật sau mỗi vài giây, cung cấp khả năng giám sát hệ thống theo thời gian thực.\n\n### Gợi ý\n\n- `top` cung cấp một góc nhìn động, theo thời gian thực về một hệ thống đang chạy. Nó tự động làm mới.\n- Phím `q` là cách tiêu chuẩn để thoát khỏi chương trình `top`."
+    },
+    {
+      "id": "source-596200-section-5-v2",
+      "title": "Generating a System Status Report",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Generating a System Status Report\n\nFinally, you will consolidate your findings into a simple text file. This is a common practice for logging the state of a system at a specific point in time. You will use output redirection to save the output of several commands to a single file.\n\n### Tasks\n\n- Create a file named `system_report.txt` in your current directory (`~/project`).\n- The file must contain the output of the `whoami`, `uname -a` (all system information), and `uptime` commands.\n\n### Requirements\n\n- The final report file must be named `system_report.txt`.\n- You must use output redirection operators (`>` and `>>`) to write the command outputs into the file.\n- The file must be created in the `~/project` directory.\n\n### Examples\n\nAfter completing this step, your `system_report.txt` file should contain output similar to:\n\n```plaintext\nlabex\nLinux labex-virtual-machine 5.15.0-76-generic #83-Ubuntu SMP Thu Jun 15 19:16:32 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux\n 10:50:01 up  1:20,  1 user,  load average: 0.00, 0.01, 0.05\n```\n\nThis report file demonstrates:\n\n- **Line 1**: Current user identity (from `whoami` command)\n- **Line 2**: Complete system information including kernel version, hostname, and architecture (from `uname -a` command)\n- **Line 3**: System uptime and current load averages (from `uptime` command)\n\nThe file serves as a snapshot of the system's current state, which is valuable for documentation and troubleshooting purposes. You can verify the file contents using the `cat` command after creation.\n\n### Hints\n\n- Use the `>` operator to redirect the output of the first command. This will create the file (or overwrite it if it already exists).\n- Use the `>>` operator to *append* the output of the subsequent commands to the file without deleting its existing content.\n- The `uptime` command shows how long the system has been running.\n",
+      "task": "- Create a file named `system_report.txt` in your current directory (`~/project`).\n- The file must contain the output of the `whoami`, `uname -a` (all system information), and `uptime` commands.",
+      "hint": "- Use the `>` operator to redirect the output of the first command. This will create the file (or overwrite it if it already exists).\n- Use the `>>` operator to *append* the output of the subsequent commands to the file without deleting its existing content.\n- The `uptime` command shows how long the system has been running.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/system_report.txt && test \"$(sed -n '1p' /home/labex/project/system_report.txt)\" = \"$(whoami)\" && test \"$(sed -n '2p' /home/labex/project/system_report.txt)\" = \"$(uname -a)\" && sed -n '3p' /home/labex/project/system_report.txt | grep -Eq 'up .*(load average|load averages):.*[0-9]'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*whoami\\s*>\\s*(?:~/project/|/home/labex/project/)?system_report\\.txt\\s*$"
+              ],
+              [
+                "^\\s*uname\\s+-a\\s*>>\\s*(?:~/project/|/home/labex/project/)?system_report\\.txt\\s*$"
+              ],
+              [
+                "^\\s*uptime\\s*>>\\s*(?:~/project/|/home/labex/project/)?system_report\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Tạo báo cáo trạng thái hệ thống",
+      "content_vi": "## Tạo Báo cáo Trạng thái Hệ thống\n\nCuối cùng, bạn sẽ tổng hợp các phát hiện của mình vào một tệp văn bản đơn giản. Đây là một thực tiễn phổ biến để ghi lại trạng thái của hệ thống tại một thời điểm cụ thể. Bạn sẽ sử dụng tính năng chuyển hướng đầu ra để lưu đầu ra của một số lệnh vào một tệp duy nhất.\n\n### Nhiệm vụ\n\n- Tạo một tệp có tên là `system_report.txt` trong thư mục hiện tại của bạn (`~/project`).\n- Tệp phải chứa đầu ra của các lệnh `whoami`, `uname -a` (tất cả thông tin hệ thống) và `uptime`.\n\n### Yêu cầu\n\n- Tệp báo cáo cuối cùng phải được đặt tên là `system_report.txt`.\n- Bạn phải sử dụng các toán tử chuyển hướng đầu ra (`>` và `>>`) để ghi đầu ra của lệnh vào tệp.\n- Tệp phải được tạo trong thư mục `~/project`.\n\n### Ví dụ\n\nSau khi hoàn thành bước này, tệp `system_report.txt` của bạn sẽ chứa đầu ra tương tự như:\n\n```plaintext\nlabex\nLinux labex-virtual-machine 5.15.0-76-generic #83-Ubuntu SMP Thu Jun 15 19:16:32 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux\n 10:50:01 up  1:20,  1 user,  load average: 0.00, 0.01, 0.05\n```\n\nTệp báo cáo này thể hiện:\n\n- **Dòng 1**: Danh tính người dùng hiện tại (từ lệnh `whoami`)\n- **Dòng 2**: Thông tin hệ thống hoàn chỉnh bao gồm phiên bản kernel, tên máy chủ và kiến trúc (từ lệnh `uname -a`)\n- **Dòng 3**: Thời gian hoạt động của hệ thống và mức tải trung bình hiện tại (từ lệnh `uptime`)\n\nTệp này đóng vai trò là một ảnh chụp nhanh (snapshot) về trạng thái hiện tại của hệ thống, rất hữu ích cho mục đích tài liệu và khắc phục sự cố. Bạn có thể xác minh nội dung tệp bằng cách sử dụng lệnh `cat` sau khi tạo.\n\n### Gợi ý\n\n- Sử dụng toán tử `>` để chuyển hướng đầu ra của lệnh đầu tiên. Thao tác này sẽ tạo tệp (hoặc ghi đè lên tệp nếu tệp đã tồn tại).\n- Sử dụng toán tử `>>` để *gắn thêm* (append) đầu ra của các lệnh tiếp theo vào tệp mà không làm mất nội dung hiện có của nó.\n- Lệnh `uptime` hiển thị thời gian hệ thống đã chạy được bao lâu."
+    },
+    {
+      "id": "source-596200-section-6-v2",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nExcellent work! You have successfully completed your first day at LabEx Corporation and established the groundwork for Project Phoenix.\n\nIn this challenge, you practiced using several essential commands that every system administrator must master:\n\n- `whoami`: To confirm your user identity on the Project Phoenix server.\n- `uname`: To check operating system information and ensure compatibility.\n- `who`: To see who else is working on the development server.\n- `id`: To inspect your user and group memberships for proper access control.\n- `top`: To monitor system processes and resource usage to ensure optimal performance.\n- Output Redirection (`>` and `>>`): To document your findings in professional reports.\n\nThese commands form the foundation of your system administrator toolkit. Your thorough assessment today has prepared the Project Phoenix environment for the exciting development work ahead. Tomorrow, you'll begin organizing the project's file structure as the Digital Architect!\n",
+      "title_vi": "Tóm tắt",
+      "content_vi": "## Tóm tắt\n\nLàm xuất sắc lắm! Bạn đã hoàn thành xuất sắc ngày làm việc đầu tiên tại Tập đoàn LabEx và đặt nền móng cho Dự án Phoenix (Project Phoenix).\n\nTrong thử thách này, bạn đã thực hành sử dụng một số lệnh thiết yếu mà mọi quản trị viên hệ thống đều phải nắm vững:\n\n- `whoami`: Để xác nhận danh tính người dùng của bạn trên máy chủ Dự án Phoenix.\n- `uname`: Để kiểm tra thông tin hệ điều hành và đảm bảo tính tương thích.\n- `who`: Để xem những ai khác đang làm việc trên máy chủ phát triển.\n- `id`: Để kiểm tra tư cách thành viên người dùng và nhóm của bạn nhằm kiểm soát truy cập thích hợp.\n- `top`: Để theo dõi các tiến trình hệ thống và mức sử dụng tài nguyên nhằm đảm bảo hiệusuất tối ưu.\n- Chuyển hướng đầu ra (`>` và `>>`): Để ghi lại các phát hiện của bạn trong các báo cáo chuyên nghiệp.\n\nCác lệnh này tạo thành nền tảng cho bộ công cụ quản trị hệ thống của bạn. Đánh giá kỹ lưỡng của bạn ngày hôm nay đã chuẩn bị sẵn sàng môi trường Dự án Phoenix cho công việc phát triển thú vị phía trước. Ngày mai, bạn sẽ bắt đầu tổ chức cấu trúc tệp của dự án với tư cách là Kiến trúc sư Kỹ thuật số (Digital Architect)!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596200-section-1-v2",
+      "title": "First Login and Environment Check",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## First Login and Environment Check\n\nYour first action on a new system is to verify your own identity and the basic characteristics of the operating system. This confirms you are who you think you are and you're on the correct machine.\n\n### Tasks\n\n- Find out the username of the current user.\n- Display the kernel name of the operating system.\n\n### Requirements\n\n- All commands must be executed in the terminal.\n- Use the `whoami` command to identify the current user.\n- Use the `uname` command to show the kernel name.\n\n### Examples\n\nAfter completing this step, you should see output similar to:\n\n```bash\n## Command output showing current user\nlabex\n\n## Command output showing kernel name\nLinux\n```\n\nThese results confirm your identity as the `labex` user on a Linux system, which is essential for establishing your working environment.\n",
+      "task": "- Find out the username of the current user.\n- Display the kernel name of the operating system.",
+      "hint": "Read Tasks and Requirements; check the exact names and paths.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*whoami\\s*$"
+          ],
+          [
+            "^\\s*uname\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Lần đăng nhập đầu tiên và kiểm tra môi trường",
+      "content_vi": "## Đăng nhập lần đầu và Kiểm tra Môi trường\n\nThao tác đầu tiên của bạn trên một hệ thống mới là xác minh danh tính của chính bạn và các đặc điểm cơ bản của hệ điều hành. Điều này xác nhận bạn là ai và bạn đang ở trên đúng cỗ máy.\n\n### Các tác vụ\n\n- Tìm tên người dùng của người dùng hiện tại.\n- Hiển thị tên kernel của hệ điều hành.\n\n### Yêu cầu\n\n- Tất cả các lệnh phải được thực thi trong terminal.\n- Sử dụng lệnh `whoami` để xác định người dùng hiện tại.\n- Sử dụng lệnh `uname` để hiển thị tên kernel.\n\n### Ví dụ\n\nSau khi hoàn thành bước này, bạn sẽ thấy đầu ra tương tự như sau:\n\n```bash\n## Command output showing current user\nlabex\n\n## Command output showing kernel name\nLinux\n```\n\nNhững kết quả này xác nhận danh tính của bạn là người dùng `labex` trên một hệ thống Linux, điều này rất cần thiết để thiết lập môi trường làm việc của bạn.",
+      "task_vi": "- Tìm tên người dùng của người dùng hiện tại.\n- Hiển thị tên kernel của hệ điều hành.",
+      "hint_vi": "Đọc Nhiệm vụ và Yêu cầu; kiểm tra chính xác tên và đường dẫn."
+    },
+    {
+      "id": "source-596200-section-2-v2",
+      "title": "Checking System Information and Uptime",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Checking System Information and Uptime\n\nAfter confirming your own identity, it's important to understand the complete system environment and how long it has been running. This information is crucial for system monitoring and maintenance planning.\n\n### Tasks\n\n- Display comprehensive system information including operating system details, kernel version, and hardware architecture.\n- Check how long the system has been running and current system load.\n\n### Requirements\n\n- Use the `uname -a` command to display all system information.\n- Use the `uptime` command to show system uptime and load average.\n\n### Examples\n\nAfter running the required commands, you should see output similar to:\n\n```bash\n## Comprehensive system information\nLinux labex-virtual-machine 5.15.0-76-generic #83-Ubuntu SMP Thu Jun 15 19:16:32 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux\n\n## System uptime and load information\n14:51:52 up 183 days, 2:55, 0 users, load average: 6.02, 1.80, 0.94\n```\n\nThe first output shows detailed system information including kernel version, hostname, and architecture. The second output indicates the system has been running for 183 days with current load averages showing system performance over different time periods.\n\n### Hints\n\n- The `uname -a` command displays all available system information in one line.\n- The `uptime` command shows how long the system has been running, number of users, and system load averages.\n- System load averages represent the average system load over 1, 5, and 15 minute periods.\n",
+      "task": "- Display comprehensive system information including operating system details, kernel version, and hardware architecture.\n- Check how long the system has been running and current system load.",
+      "hint": "- The `uname -a` command displays all available system information in one line.\n- The `uptime` command shows how long the system has been running, number of users, and system load averages.\n- System load averages represent the average system load over 1, 5, and 15 minute periods.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*uname\\s+-a\\s*$"
+          ],
+          [
+            "^\\s*uptime\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Kiểm tra thông tin hệ thống và Uptime",
+      "content_vi": "## Kiểm tra Thông tin Hệ thống và Thời gian Hoạt động (Uptime)\n\nSau khi xác nhận danh tính của chính mình, điều quan trọng là phải hiểu rõ toàn bộ môi trường hệ thống và thời gian hệ thống đã hoạt động. Thông tin này rất quan trọng đối với việc giám sát hệ thống và lập kế hoạch bảo trì.\n\n### Nhiệm vụ\n\n- Hiển thị thông tin toàn diện về hệ thống bao gồm chi tiết hệ điều hành, phiên bản kernel và kiến trúc phần cứng.\n- Kiểm tra thời gian hệ thống đã chạy và tải hiện tại của hệ thống.\n\n### Yêu cầu\n\n- Sử dụng lệnh `uname -a` để hiển thị tất cả thông tin hệ thống.\n- Sử dụng lệnh `uptime` để hiển thị thời gian hoạt động của hệ thống và tải trung bình.\n\n### Ví dụ\n\nSau khi chạy các lệnh được yêu cầu, bạn sẽ thấy đầu ra tương tự như:\n\n```bash\n## Comprehensive system information\nLinux labex-virtual-machine 5.15.0-76-generic #83-Ubuntu SMP Thu Jun 15 19:16:32 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux\n\n## System uptime and load information\n14:51:52 up 183 days, 2:55, 0 users, load average: 6.02, 1.80, 0.94\n```\n\nĐầu ra đầu tiên hiển thị thông tin chi tiết về hệ thống bao gồm phiên bản kernel, tên máy (hostname) và kiến trúc. Đầu ra thứ hai cho biết hệ thống đã chạy được 183 ngày với mức tải trung bình hiện tại thể hiện hiệu suất hệ thống trong các khoảng thời gian khác nhau.\n\n### Gợi ý\n\n- Lệnh `uname -a` hiển thị tất cả thông tin hệ thống có sẵn trên một dòng.\n- Lệnh `uptime` hiển thị thời gian hệ thống đã hoạt động, số lượng người dùng và mức tải trung bình của hệ thống.\n- Mức tải trung bình của hệ thống thể hiện tải trung bình của hệ thống trong các khoảng thời gian 1, 5 và 15 phút.",
+      "task_vi": "- Hiển thị thông tin hệ thống toàn diện bao gồm chi tiết hệ điều hành, phiên bản kernel và kiến trúc phần cứng.\n- Kiểm tra thời gian hệ thống đã chạy và tải hệ thống hiện tại.",
+      "hint_vi": "- Lệnh `uname -a` hiển thị tất cả thông tin hệ thống có sẵn trên một dòng.\n- Lệnh `uptime` cho biết thời gian hệ thống đã chạy, số lượng người dùng và tải trung bình của hệ thống.\n- Tải trung bình hệ thống thể hiện mức tải trung bình trong các khoảng thời gian 1, 5 và 15 phút."
+    },
+    {
+      "id": "source-596200-section-3-v2",
+      "title": "Gathering User and Group Details",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Gathering User and Group Details\n\nUnderstanding your user's permissions is fundamental. You need to know your user ID (UID), primary group ID (GID), and any other groups you belong to, as these determine your access rights on the system.\n\n### Tasks\n\n- Display the detailed user and group information for your current user account.\n\n### Requirements\n\n- Use the `id` command to retrieve your user and group identifiers.\n\n### Examples\n\nWhen you run the required command, you should see output similar to:\n\n```bash\nuid=5000(labex) gid=5000(labex) groups=5000(labex),27(sudo),121(ssl-cert),5002(public)\n```\n\nThis output shows:\n\n- **uid=5000(labex)**: Your user ID is 5000 with username \"labex\"\n- **gid=5000(labex)**: Your primary group ID is 5000 with group name \"labex\"\n- **groups=...**: You belong to multiple groups including \"sudo\" (administrative privileges), \"ssl-cert\" (SSL certificate access), and \"public\" (shared resources)\n\nUnderstanding these permissions is crucial for knowing what system resources you can access and modify.\n\n### Hints\n\n- The `id` command, when run without any arguments, defaults to showing information for the current user.\n- The output will clearly label the UID, GID, and supplementary groups.\n",
+      "task": "- Display the detailed user and group information for your current user account.",
+      "hint": "- The `id` command, when run without any arguments, defaults to showing information for the current user.\n- The output will clearly label the UID, GID, and supplementary groups.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*id\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Thu thập thông tin người dùng và nhóm",
+      "content_vi": "## Thu Thập Chi Tiết Người Dùng và Nhóm\n\nHiểu rõ quyền hạn của người dùng là điều cơ bản. Bạn cần biết ID người dùng (UID), ID nhóm chính (GID) và bất kỳ nhóm nào khác mà bạn thuộc về, vì chúng quyết định quyền truy cập của bạn trên hệ thống.\n\n### Nhiệm vụ\n\n- Hiển thị thông tin chi tiết về người dùng và nhóm cho tài khoản người dùng hiện tại của bạn.\n\n### Yêu cầu\n\n- Sử dụng lệnh `id` để truy xuất định danh người dùng và nhóm của bạn.\n\n### Ví dụ\n\nKhi bạn chạy lệnh được yêu cầu, bạn sẽ thấy đầu ra tương tự như:\n\n```bash\nuid=5000(labex) gid=5000(labex) groups=5000(labex),27(sudo),121(ssl-cert),5002(public)\n```\n\nĐầu ra này cho thấy:\n\n- **uid=5000(labex)**: ID người dùng của bạn là 5000 với tên người dùng là \"labex\"\n- **gid=5000(labex)**: ID nhóm chính của bạn là 5000 với tên nhóm là \"labex\"\n- **groups=...**: Bạn thuộc nhiều nhóm bao gồm \"sudo\" (quyền quản trị), \"ssl-cert\" (truy cập chứng chỉ SSL) và \"public\" (tài nguyên chia sẻ)\n\nHiểu rõ các quyền hạn này là rất quan trọng để biết tài nguyên hệ thống nào bạn có thể truy cập và chỉnh sửa.\n\n### Gợi ý\n\n- Lệnh `id`, khi được chạy mà không có bất kỳ đối số nào, mặc định sẽ hiển thị thông tin cho người dùng hiện tại.\n- Đầu ra sẽ dán nhãn rõ ràng UID, GID và các nhóm bổ trợ.",
+      "task_vi": "- Hiển thị thông tin chi tiết về người dùng và nhóm cho tài khoản người dùng hiện tại của bạn.",
+      "hint_vi": "Khi chạy lệnh `id` mà không có bất kỳ đối số nào, nó sẽ mặc định hiển thị thông tin của người dùng hiện tại.\nĐầu ra sẽ hiển thị rõ ràng UID, GID và các nhóm phụ."
+    },
+    {
+      "id": "source-596200-section-4-v2",
+      "title": "Monitoring Real-time System Performance",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Monitoring Real-time System Performance\n\nA key part of system reconnaissance is observing its current performance. This includes checking CPU and memory usage, and seeing which processes are running. The `top` command is the standard tool for this task.\n\n### Tasks\n\n- Launch the interactive system monitoring tool to view active processes and resource usage.\n- Exit the tool after observing the output for a few moments.\n\n### Requirements\n\n- Use the `top` command to start the monitoring interface.\n- After `top` is running, press the `q` key to exit and return to the command prompt.\n\n### Examples\n\nWhen you launch the system monitoring tool, you'll see a dynamic display similar to:\n\n```bash\ntop - 10:45:00 up 1:15,  1 user,  load average: 0.00, 0.01, 0.05\nTasks: 123 total,   1 running, 122 sleeping,   0 stopped,   0 zombie\n%Cpu(s):  0.1 us,  0.1 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   1987.2 total,    890.5 free,    540.1 used,    556.6 buff/cache\nMiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   1234.5 avail Mem\n\n    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n      1 root      20   0  169404  12920   8584 S   0.0   0.6   0:01.50 systemd\n      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd\n    ...\n```\n\nThis display shows:\n\n- **System summary**: Current time, uptime, users, and load averages\n- **Task summary**: Total processes and their states (running, sleeping, etc.)\n- **CPU usage**: Breakdown of CPU utilization by category\n- **Memory usage**: Total, free, used, and available memory\n- **Process list**: Running processes sorted by CPU usage with PID, user, and resource consumption\n\nThe display updates automatically every few seconds, providing real-time system monitoring.\n\n### Hints\n\n- `top` provides a dynamic, real-time view of a running system. It refreshes automatically.\n- The `q` key is the standard way to quit the `top` program.\n",
+      "task": "- Launch the interactive system monitoring tool to view active processes and resource usage.\n- Exit the tool after observing the output for a few moments.",
+      "hint": "- `top` provides a dynamic, real-time view of a running system. It refreshes automatically.\n- The `q` key is the standard way to quit the `top` program.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*top\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Giám sát hiệu năng hệ thống thời gian thực",
+      "content_vi": "## Giám sát hiệu năng hệ thống thời gian thực\n\nMột phần quan trọng của việc khảo sát hệ thống là quan sát hiệu năng hiện tại của nó. Điều này bao gồm việc kiểm tra mức sử dụng CPU và bộ nhớ, cũng như xem các tiến trình nào đang chạy. Lệnh `top` là công cụ tiêu chuẩn cho tác vụ này.\n\n### Các tác vụ\n\n- Khởi động công cụ giám sát hệ thống tương tác để xem các tiến trình đang hoạt động và mức sử dụng tài nguyên.\n- Thoát khỏi công cụ sau khi quan sát đầu ra trong vài khoảnh khắc.\n\n### Yêu cầu\n\n- Sử dụng lệnh `top` để khởi động giao diện giám sát.\n- Sau khi `top` đang chạy, nhấn phím `q` để thoát và quay lại dấu nhắc lệnh.\n\n### Ví dụ\n\nKhi bạn khởi động công cụ giám sát hệ thống, bạn sẽ thấy một màn hình hiển thị động tương tự như sau:\n\n```bash\ntop - 10:45:00 up 1:15,  1 user,  load average: 0.00, 0.01, 0.05\nTasks: 123 total,   1 running, 122 sleeping,   0 stopped,   0 zombie\n%Cpu(s):  0.1 us,  0.1 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   1987.2 total,    890.5 free,    540.1 used,    556.6 buff/cache\nMiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   1234.5 avail Mem\n\n    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n      1 root      20   0  169404  12920   8584 S   0.0   0.6   0:01.50 systemd\n      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd\n    ...\n```\n\nMàn hình này hiển thị:\n\n- **Tóm tắt hệ thống**: Thời gian hiện tại, thời gian hoạt động (uptime), số lượng người dùng và tải trung bình (load averages)\n- **Tóm tắt tiến trình**: Tổng số tiến trình và trạng thái của chúng (đang chạy, đang ngủ, v.v.)\n- **Mức sử dụng CPU**: Phân tích chi tiết mức sử dụng CPU theo danh mục\n- **Mức sử dụng bộ nhớ**: Tổng bộ nhớ, bộ nhớ trống, bộ nhớ đã sử dụng và bộ nhớ khả dụng\n- **Danh sách tiến trình**: Các tiến trình đang chạy được sắp xếp theo mức sử dụng CPU với PID, người dùng và mức tiêu thụ tài nguyên\n\nMàn hình hiển thị tự động cập nhật sau mỗi vài giây, cung cấp khả năng giám sát hệ thống theo thời gian thực.\n\n### Gợi ý\n\n- `top` cung cấp một góc nhìn động, theo thời gian thực về một hệ thống đang chạy. Nó tự động làm mới.\n- Phím `q` là cách tiêu chuẩn để thoát khỏi chương trình `top`.",
+      "task_vi": "- Khởi động công cụ giám sát hệ thống tương tác để xem các tiến trình đang hoạt động và mức sử dụng tài nguyên.\n- Thoát khỏi công cụ sau khi quan sát đầu ra trong vài phút.",
+      "hint_vi": "`top` cung cấp cái nhìn động, thời gian thực về hệ thống đang chạy. Nó tự động làm mới.\nNhấn phím `q` là cách thông dụng để thoát chương trình `top`."
+    },
+    {
+      "id": "source-596200-section-5-v2",
+      "title": "Generating a System Status Report",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Generating a System Status Report\n\nFinally, you will consolidate your findings into a simple text file. This is a common practice for logging the state of a system at a specific point in time. You will use output redirection to save the output of several commands to a single file.\n\n### Tasks\n\n- Create a file named `system_report.txt` in your current directory (`~/project`).\n- The file must contain the output of the `whoami`, `uname -a` (all system information), and `uptime` commands.\n\n### Requirements\n\n- The final report file must be named `system_report.txt`.\n- You must use output redirection operators (`>` and `>>`) to write the command outputs into the file.\n- The file must be created in the `~/project` directory.\n\n### Examples\n\nAfter completing this step, your `system_report.txt` file should contain output similar to:\n\n```plaintext\nlabex\nLinux labex-virtual-machine 5.15.0-76-generic #83-Ubuntu SMP Thu Jun 15 19:16:32 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux\n 10:50:01 up  1:20,  1 user,  load average: 0.00, 0.01, 0.05\n```\n\nThis report file demonstrates:\n\n- **Line 1**: Current user identity (from `whoami` command)\n- **Line 2**: Complete system information including kernel version, hostname, and architecture (from `uname -a` command)\n- **Line 3**: System uptime and current load averages (from `uptime` command)\n\nThe file serves as a snapshot of the system's current state, which is valuable for documentation and troubleshooting purposes. You can verify the file contents using the `cat` command after creation.\n\n### Hints\n\n- Use the `>` operator to redirect the output of the first command. This will create the file (or overwrite it if it already exists).\n- Use the `>>` operator to *append* the output of the subsequent commands to the file without deleting its existing content.\n- The `uptime` command shows how long the system has been running.\n",
+      "task": "- Create a file named `system_report.txt` in your current directory (`~/project`).\n- The file must contain the output of the `whoami`, `uname -a` (all system information), and `uptime` commands.",
+      "hint": "- Use the `>` operator to redirect the output of the first command. This will create the file (or overwrite it if it already exists).\n- Use the `>>` operator to *append* the output of the subsequent commands to the file without deleting its existing content.\n- The `uptime` command shows how long the system has been running.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/system_report.txt && test \"$(sed -n '1p' /home/labex/project/system_report.txt)\" = \"$(whoami)\" && test \"$(sed -n '2p' /home/labex/project/system_report.txt)\" = \"$(uname -a)\" && sed -n '3p' /home/labex/project/system_report.txt | grep -Eq 'up .*(load average|load averages):.*[0-9]'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*whoami\\s*>\\s*(?:~/project/|/home/labex/project/)?system_report\\.txt\\s*$"
+              ],
+              [
+                "^\\s*uname\\s+-a\\s*>>\\s*(?:~/project/|/home/labex/project/)?system_report\\.txt\\s*$"
+              ],
+              [
+                "^\\s*uptime\\s*>>\\s*(?:~/project/|/home/labex/project/)?system_report\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Tạo báo cáo trạng thái hệ thống",
+      "content_vi": "## Tạo Báo cáo Trạng thái Hệ thống\n\nCuối cùng, bạn sẽ tổng hợp các phát hiện của mình vào một tệp văn bản đơn giản. Đây là một thực tiễn phổ biến để ghi lại trạng thái của hệ thống tại một thời điểm cụ thể. Bạn sẽ sử dụng tính năng chuyển hướng đầu ra để lưu đầu ra của một số lệnh vào một tệp duy nhất.\n\n### Nhiệm vụ\n\n- Tạo một tệp có tên là `system_report.txt` trong thư mục hiện tại của bạn (`~/project`).\n- Tệp phải chứa đầu ra của các lệnh `whoami`, `uname -a` (tất cả thông tin hệ thống) và `uptime`.\n\n### Yêu cầu\n\n- Tệp báo cáo cuối cùng phải được đặt tên là `system_report.txt`.\n- Bạn phải sử dụng các toán tử chuyển hướng đầu ra (`>` và `>>`) để ghi đầu ra của lệnh vào tệp.\n- Tệp phải được tạo trong thư mục `~/project`.\n\n### Ví dụ\n\nSau khi hoàn thành bước này, tệp `system_report.txt` của bạn sẽ chứa đầu ra tương tự như:\n\n```plaintext\nlabex\nLinux labex-virtual-machine 5.15.0-76-generic #83-Ubuntu SMP Thu Jun 15 19:16:32 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux\n 10:50:01 up  1:20,  1 user,  load average: 0.00, 0.01, 0.05\n```\n\nTệp báo cáo này thể hiện:\n\n- **Dòng 1**: Danh tính người dùng hiện tại (từ lệnh `whoami`)\n- **Dòng 2**: Thông tin hệ thống hoàn chỉnh bao gồm phiên bản kernel, tên máy chủ và kiến trúc (từ lệnh `uname -a`)\n- **Dòng 3**: Thời gian hoạt động của hệ thống và mức tải trung bình hiện tại (từ lệnh `uptime`)\n\nTệp này đóng vai trò là một ảnh chụp nhanh (snapshot) về trạng thái hiện tại của hệ thống, rất hữu ích cho mục đích tài liệu và khắc phục sự cố. Bạn có thể xác minh nội dung tệp bằng cách sử dụng lệnh `cat` sau khi tạo.\n\n### Gợi ý\n\n- Sử dụng toán tử `>` để chuyển hướng đầu ra của lệnh đầu tiên. Thao tác này sẽ tạo tệp (hoặc ghi đè lên tệp nếu tệp đã tồn tại).\n- Sử dụng toán tử `>>` để *gắn thêm* (append) đầu ra của các lệnh tiếp theo vào tệp mà không làm mất nội dung hiện có của nó.\n- Lệnh `uptime` hiển thị thời gian hệ thống đã chạy được bao lâu.",
+      "task_vi": "- Tạo một tệp có tên là `system_report.txt` trong thư mục hiện tại của bạn (`~/project`).\n- Tệp này phải chứa đầu ra của các lệnh `whoami`, `uname -a` (tất cả thông tin hệ thống), và `uptime`.",
+      "hint_vi": "- Sử dụng toán tử `>` để chuyển hướng đầu ra của lệnh đầu tiên. Thao tác này sẽ tạo tệp (hoặc ghi đè nếu tệp đã tồn tại).\n- Sử dụng toán tử `>>` để *ghi nối* đầu ra của các lệnh tiếp theo vào tệp mà không làm mất nội dung hiện có.\n- Lệnh `uptime` hiển thị thời gian hệ thống đã hoạt động."
+    }
+  ],
+  "title_vi": "Ngày 1: Thám Hiểm Bản Đồ Hệ Thống"
+}

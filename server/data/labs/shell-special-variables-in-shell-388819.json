@@ -1,0 +1,331 @@
+{
+  "id": "shell-special-variables-in-shell-388819",
+  "course_id": "shell-for-beginners",
+  "order": 15,
+  "title": "Special Variables in Shell",
+  "title_vi": "Các Biến Đặc Biệt Trong Shell: $?, $$, $!, $@",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Learn how to use $0, $#, $?, $$, $!, and understand the distinction between $@ and $*.",
+  "source_url": "https://labex.io/tutorials/shell-special-variables-in-shell-388819",
+  "source_lab_id": 388819,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388819-section-1-v4",
+      "title": "Creating Your First Script",
+      "title_vi": "Tạo kịch bản đầu tiên",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create special_vars.sh to display $0, $1, $2, $@, $# and $$.\n\n`~/project/special_vars.sh`:\n\n```bash\n#!/bin/bash\necho \"Script Name: $0\"\necho \"First Argument: $1\"\necho \"Second Argument: $2\"\necho \"All Arguments: $@\"\necho \"Number of Arguments: $#\"\necho \"Process ID: $$\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/special_vars.sh\n~/project/special_vars.sh \n```",
+      "content_vi": "Tạo special_vars.sh hiển thị $0, $1, $2, $@, $# và $$.\n\n`~/project/special_vars.sh`:\n\n```bash\n#!/bin/bash\necho \"Script Name: $0\"\necho \"First Argument: $1\"\necho \"Second Argument: $2\"\necho \"All Arguments: $@\"\necho \"Number of Arguments: $#\"\necho \"Process ID: $$\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/special_vars.sh\n~/project/special_vars.sh \n```",
+      "task": "Create special_vars.sh to display $0, $1, $2, $@, $# and $$.",
+      "task_vi": "Tạo special_vars.sh hiển thị $0, $1, $2, $@, $# và $$.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/special_vars.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['$0', '$1', '$2', '$@', '$#', '$$']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Number of Arguments: 0']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388819-section-2-v4",
+      "title": "Running the Script with Arguments",
+      "title_vi": "Chạy kịch bản với tham số",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Run without arguments, then run with hello world; compare counts 0 and 2.\n\n`~/project/special_vars.sh`:\n\n```bash\n#!/bin/bash\necho \"Script Name: $0\"\necho \"First Argument: $1\"\necho \"Second Argument: $2\"\necho \"All Arguments: $@\"\necho \"Number of Arguments: $#\"\necho \"Process ID: $$\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/special_vars.sh\n~/project/special_vars.sh hello world\n```",
+      "content_vi": "Chạy không tham số, rồi chạy với hello world; so sánh số lượng 0 và 2.\n\n`~/project/special_vars.sh`:\n\n```bash\n#!/bin/bash\necho \"Script Name: $0\"\necho \"First Argument: $1\"\necho \"Second Argument: $2\"\necho \"All Arguments: $@\"\necho \"Number of Arguments: $#\"\necho \"Process ID: $$\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/special_vars.sh\n~/project/special_vars.sh hello world\n```",
+      "task": "Run without arguments, then run with hello world; compare counts 0 and 2.",
+      "task_vi": "Chạy không tham số, rồi chạy với hello world; so sánh số lượng 0 và 2.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/special_vars.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in []), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*['hello', 'world']],'')\n    assert all(item in result.stdout for item in ['First Argument: hello', 'Second Argument: world', 'Number of Arguments: 2']),result.stdout\nLABEX_CHECK"
+          },
+          {
+            "kind": "commands",
+            "groups": [
+              [
+                "(?:^|[;&|]\\s*)(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?special_vars\\.sh(?:\\s|$)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388819-section-3-v4",
+      "title": "Understanding `$?` and `$!`",
+      "title_vi": "Tìm hiểu $? và $!",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use exit_status.sh to compare successful/failed ls status and the background PID from $!.\n\n`~/project/exit_status.sh`:\n\n```bash\n#!/bin/bash\necho \"Running a successful command:\"\nls /home\necho \"Exit status: $?\"\necho \"Running a command that will fail:\"\nls /nonexistent_directory\necho \"Exit status: $?\"\nsleep 2 &\necho \"Process ID of last background command: $!\"\nwait\n```\n\nRun:\n\n```bash\nchmod +x ~/project/exit_status.sh\n~/project/exit_status.sh \n```",
+      "content_vi": "Dùng exit_status.sh so sánh mã thoát ls thành công/thất bại và PID nền từ $!.\n\n`~/project/exit_status.sh`:\n\n```bash\n#!/bin/bash\necho \"Running a successful command:\"\nls /home\necho \"Exit status: $?\"\necho \"Running a command that will fail:\"\nls /nonexistent_directory\necho \"Exit status: $?\"\nsleep 2 &\necho \"Process ID of last background command: $!\"\nwait\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/exit_status.sh\n~/project/exit_status.sh \n```",
+      "task": "Use exit_status.sh to compare successful/failed ls status and the background PID from $!.",
+      "task_vi": "Dùng exit_status.sh so sánh mã thoát ls thành công/thất bại và PID nền từ $!.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/exit_status.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['$?', '$!', '/nonexistent_directory', '&']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Exit status: 0', 'Exit status: 2']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388819-section-4-v4",
+      "title": "Using Special Variables in Functions",
+      "title_vi": "Dùng biến đặc biệt trong hàm",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create function_vars.sh; print_args receives two arguments then four.\n\n`~/project/function_vars.sh`:\n\n```bash\n#!/bin/bash\nprint_args() {\n  echo \"Function Name: $0\"\n  echo \"First Argument: $1\"\n  echo \"Second Argument: $2\"\n  echo \"All Arguments: $@\"\n  echo \"Number of Arguments: $#\"\n}\nprint_args hello world\nprint_args one two three four\n```\n\nRun:\n\n```bash\nchmod +x ~/project/function_vars.sh\n~/project/function_vars.sh \n```",
+      "content_vi": "Tạo function_vars.sh; gọi print_args lần lượt với hai và bốn tham số.\n\n`~/project/function_vars.sh`:\n\n```bash\n#!/bin/bash\nprint_args() {\n  echo \"Function Name: $0\"\n  echo \"First Argument: $1\"\n  echo \"Second Argument: $2\"\n  echo \"All Arguments: $@\"\n  echo \"Number of Arguments: $#\"\n}\nprint_args hello world\nprint_args one two three four\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/function_vars.sh\n~/project/function_vars.sh \n```",
+      "task": "Create function_vars.sh; print_args receives two arguments then four.",
+      "task_vi": "Tạo function_vars.sh; gọi print_args lần lượt với hai và bốn tham số.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/function_vars.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['print_args', '$#', '$@']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Number of Arguments: 2', 'Number of Arguments: 4']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388819-section-5-v4",
+      "title": "Understanding the Difference Between $@ and $\\*",
+      "title_vi": "Phân biệt $@ và $*",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In at_vs_star.sh compare \"$@\" and \"$*\" using arguments containing spaces.\n\n`~/project/at_vs_star.sh`:\n\n```bash\n#!/bin/bash\necho 'Using $@:'\nfor arg in \"$@\"; do echo \"Argument: $arg\"; done\necho 'Using $*:'\nfor arg in \"$*\"; do echo \"Argument: $arg\"; done\n```\n\nRun:\n\n```bash\nchmod +x ~/project/at_vs_star.sh\n~/project/at_vs_star.sh 'arg with spaces' another_arg 'third arg'\n```",
+      "content_vi": "Trong at_vs_star.sh so sánh \"$@\" với \"$*\" bằng tham số có khoảng trắng.\n\n`~/project/at_vs_star.sh`:\n\n```bash\n#!/bin/bash\necho 'Using $@:'\nfor arg in \"$@\"; do echo \"Argument: $arg\"; done\necho 'Using $*:'\nfor arg in \"$*\"; do echo \"Argument: $arg\"; done\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/at_vs_star.sh\n~/project/at_vs_star.sh 'arg with spaces' another_arg 'third arg'\n```",
+      "task": "In at_vs_star.sh compare \"$@\" and \"$*\" using arguments containing spaces.",
+      "task_vi": "Trong at_vs_star.sh so sánh \"$@\" với \"$*\" bằng tham số có khoảng trắng.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/at_vs_star.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['\"$@\"', '\"$*\"']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*['arg with spaces', 'another_arg', 'third arg']],'')\n    assert all(item in result.stdout for item in ['Argument: arg with spaces\\nArgument: another_arg\\nArgument: third arg', 'Argument: arg with spaces another_arg third arg']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388819-section-1-v4",
+      "title": "Creating Your First Script",
+      "title_vi": "Tạo kịch bản đầu tiên",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create special_vars.sh to display $0, $1, $2, $@, $# and $$.\n\n`~/project/special_vars.sh`:\n\n```bash\n#!/bin/bash\necho \"Script Name: $0\"\necho \"First Argument: $1\"\necho \"Second Argument: $2\"\necho \"All Arguments: $@\"\necho \"Number of Arguments: $#\"\necho \"Process ID: $$\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/special_vars.sh\n~/project/special_vars.sh \n```",
+      "content_vi": "Tạo special_vars.sh hiển thị $0, $1, $2, $@, $# và $$.\n\n`~/project/special_vars.sh`:\n\n```bash\n#!/bin/bash\necho \"Script Name: $0\"\necho \"First Argument: $1\"\necho \"Second Argument: $2\"\necho \"All Arguments: $@\"\necho \"Number of Arguments: $#\"\necho \"Process ID: $$\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/special_vars.sh\n~/project/special_vars.sh \n```",
+      "task": "Create special_vars.sh to display $0, $1, $2, $@, $# and $$.",
+      "task_vi": "Tạo special_vars.sh hiển thị $0, $1, $2, $@, $# và $$.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/special_vars.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['$0', '$1', '$2', '$@', '$#', '$$']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Number of Arguments: 0']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388819-section-2-v4",
+      "title": "Running the Script with Arguments",
+      "title_vi": "Chạy kịch bản với tham số",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Run without arguments, then run with hello world; compare counts 0 and 2.\n\n`~/project/special_vars.sh`:\n\n```bash\n#!/bin/bash\necho \"Script Name: $0\"\necho \"First Argument: $1\"\necho \"Second Argument: $2\"\necho \"All Arguments: $@\"\necho \"Number of Arguments: $#\"\necho \"Process ID: $$\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/special_vars.sh\n~/project/special_vars.sh hello world\n```",
+      "content_vi": "Chạy không tham số, rồi chạy với hello world; so sánh số lượng 0 và 2.\n\n`~/project/special_vars.sh`:\n\n```bash\n#!/bin/bash\necho \"Script Name: $0\"\necho \"First Argument: $1\"\necho \"Second Argument: $2\"\necho \"All Arguments: $@\"\necho \"Number of Arguments: $#\"\necho \"Process ID: $$\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/special_vars.sh\n~/project/special_vars.sh hello world\n```",
+      "task": "Run without arguments, then run with hello world; compare counts 0 and 2.",
+      "task_vi": "Chạy không tham số, rồi chạy với hello world; so sánh số lượng 0 và 2.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/special_vars.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in []), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*['hello', 'world']],'')\n    assert all(item in result.stdout for item in ['First Argument: hello', 'Second Argument: world', 'Number of Arguments: 2']),result.stdout\nLABEX_CHECK"
+          },
+          {
+            "kind": "commands",
+            "groups": [
+              [
+                "(?:^|[;&|]\\s*)(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?special_vars\\.sh(?:\\s|$)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388819-section-3-v4",
+      "title": "Understanding `$?` and `$!`",
+      "title_vi": "Tìm hiểu $? và $!",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use exit_status.sh to compare successful/failed ls status and the background PID from $!.\n\n`~/project/exit_status.sh`:\n\n```bash\n#!/bin/bash\necho \"Running a successful command:\"\nls /home\necho \"Exit status: $?\"\necho \"Running a command that will fail:\"\nls /nonexistent_directory\necho \"Exit status: $?\"\nsleep 2 &\necho \"Process ID of last background command: $!\"\nwait\n```\n\nRun:\n\n```bash\nchmod +x ~/project/exit_status.sh\n~/project/exit_status.sh \n```",
+      "content_vi": "Dùng exit_status.sh so sánh mã thoát ls thành công/thất bại và PID nền từ $!.\n\n`~/project/exit_status.sh`:\n\n```bash\n#!/bin/bash\necho \"Running a successful command:\"\nls /home\necho \"Exit status: $?\"\necho \"Running a command that will fail:\"\nls /nonexistent_directory\necho \"Exit status: $?\"\nsleep 2 &\necho \"Process ID of last background command: $!\"\nwait\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/exit_status.sh\n~/project/exit_status.sh \n```",
+      "task": "Use exit_status.sh to compare successful/failed ls status and the background PID from $!.",
+      "task_vi": "Dùng exit_status.sh so sánh mã thoát ls thành công/thất bại và PID nền từ $!.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/exit_status.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['$?', '$!', '/nonexistent_directory', '&']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Exit status: 0', 'Exit status: 2']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388819-section-4-v4",
+      "title": "Using Special Variables in Functions",
+      "title_vi": "Dùng biến đặc biệt trong hàm",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create function_vars.sh; print_args receives two arguments then four.\n\n`~/project/function_vars.sh`:\n\n```bash\n#!/bin/bash\nprint_args() {\n  echo \"Function Name: $0\"\n  echo \"First Argument: $1\"\n  echo \"Second Argument: $2\"\n  echo \"All Arguments: $@\"\n  echo \"Number of Arguments: $#\"\n}\nprint_args hello world\nprint_args one two three four\n```\n\nRun:\n\n```bash\nchmod +x ~/project/function_vars.sh\n~/project/function_vars.sh \n```",
+      "content_vi": "Tạo function_vars.sh; gọi print_args lần lượt với hai và bốn tham số.\n\n`~/project/function_vars.sh`:\n\n```bash\n#!/bin/bash\nprint_args() {\n  echo \"Function Name: $0\"\n  echo \"First Argument: $1\"\n  echo \"Second Argument: $2\"\n  echo \"All Arguments: $@\"\n  echo \"Number of Arguments: $#\"\n}\nprint_args hello world\nprint_args one two three four\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/function_vars.sh\n~/project/function_vars.sh \n```",
+      "task": "Create function_vars.sh; print_args receives two arguments then four.",
+      "task_vi": "Tạo function_vars.sh; gọi print_args lần lượt với hai và bốn tham số.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/function_vars.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['print_args', '$#', '$@']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Number of Arguments: 2', 'Number of Arguments: 4']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388819-section-5-v4",
+      "title": "Understanding the Difference Between $@ and $\\*",
+      "title_vi": "Phân biệt $@ và $*",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In at_vs_star.sh compare \"$@\" and \"$*\" using arguments containing spaces.\n\n`~/project/at_vs_star.sh`:\n\n```bash\n#!/bin/bash\necho 'Using $@:'\nfor arg in \"$@\"; do echo \"Argument: $arg\"; done\necho 'Using $*:'\nfor arg in \"$*\"; do echo \"Argument: $arg\"; done\n```\n\nRun:\n\n```bash\nchmod +x ~/project/at_vs_star.sh\n~/project/at_vs_star.sh 'arg with spaces' another_arg 'third arg'\n```",
+      "content_vi": "Trong at_vs_star.sh so sánh \"$@\" với \"$*\" bằng tham số có khoảng trắng.\n\n`~/project/at_vs_star.sh`:\n\n```bash\n#!/bin/bash\necho 'Using $@:'\nfor arg in \"$@\"; do echo \"Argument: $arg\"; done\necho 'Using $*:'\nfor arg in \"$*\"; do echo \"Argument: $arg\"; done\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/at_vs_star.sh\n~/project/at_vs_star.sh 'arg with spaces' another_arg 'third arg'\n```",
+      "task": "In at_vs_star.sh compare \"$@\" and \"$*\" using arguments containing spaces.",
+      "task_vi": "Trong at_vs_star.sh so sánh \"$@\" với \"$*\" bằng tham số có khoảng trắng.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/at_vs_star.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['\"$@\"', '\"$*\"']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*['arg with spaces', 'another_arg', 'third arg']],'')\n    assert all(item in result.stdout for item in ['Argument: arg with spaces\\nArgument: another_arg\\nArgument: third arg', 'Argument: arg with spaces another_arg third arg']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-special-variables-in-shell-388819",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

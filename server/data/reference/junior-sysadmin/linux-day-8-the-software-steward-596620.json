@@ -1,0 +1,181 @@
+{
+  "tutorial": {
+    "id": 596620,
+    "name": "The Software Steward",
+    "fee_type": 2,
+    "type": 1,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/elevated_privileges",
+        "name": "Elevated Privileges",
+        "desc": "Elevated privileges cover running authorized commands with higher access rights while preserving access control boundaries.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/package_lifecycle",
+        "name": "Package Lifecycle",
+        "desc": "Package lifecycle covers installing, removing, and resolving dependencies for distribution-managed software.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/package_repositories",
+        "name": "Package Repositories",
+        "desc": "Package repositories cover software sources, repository metadata, and trust boundaries for distribution-managed packages.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/package_updates",
+        "name": "Package Updates",
+        "desc": "Package updates cover refreshing package metadata and applying software updates safely.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/package_inspection",
+        "name": "Package Inspection",
+        "desc": "Package inspection covers querying installed packages, files, versions, and package ownership.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/project-become-a-junior-system-administrator/challenge-day-8-the-software-steward",
+    "alias": "linux-day-8-the-software-steward-596620",
+    "icon": "https://icons.labex.io/the-software-steward.png",
+    "show_in_tutorial": true,
+    "description": "In this challenge, you'll step into the role of a System Administrator to manage software packages on a Linux server, including updating, installing, verifying, and removing applications.",
+    "default_console_type": 2,
+    "meta_title": "Manage Linux Software Packages with APT",
+    "meta_description": "Learn to manage software on Ubuntu/Debian systems using APT. Practice updating repositories, installing, verifying, and removing packages in a hands-on Linux challenge.",
+    "meta_keywords": "linux, apt, package management, ubuntu, system administration",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/projects"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nWelcome, Software Steward! You've just joined a fast-growing tech startup as their first dedicated System Administrator. Your initial assignment is to take charge of a critical development server that has been managed collectively—and chaotically—by the development team. It's cluttered, potentially outdated, and needs a firm hand.\n\nYour mission is to establish order. You'll need to update the system's software sources, install essential tools requested by the team, verify that everything is correctly installed, remove obsolete software, and perform a general cleanup. This is your opportunity to demonstrate your value and bring professional-grade stability and efficiency to the company's infrastructure. The team is counting on you. Let's get this server in shape!\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Important Notice</div>\n<div class=\"text-sm\">\nThis challenge covers skills beyond <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. If you have not learned these topics yet, skip it for now and continue to <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, the next course in the <a href=\"https://labex.io/learn/linux\" class=\"underline\">Linux learning path</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>When to return:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Complete the <a href=\"https://labex.io/labs/software-installation-on-linux-18005?course=linux-for-noobs\" class=\"underline\">Software Installation on Linux</a> Guided Lab, then return and try this challenge again.</li>\n</ol>\n</div>\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Updating System Package Repositories",
+      "layout": "doc-workbench-split",
+      "text": "## Updating System Package Repositories\n\nYour first task as the Software Steward is to ensure the server's package manager has the latest information about available software. An outdated package list can lead to installation errors or security vulnerabilities. You need to synchronize the local package index with the central repositories.\n\n### Tasks\n\n- Update the list of available packages from all configured sources.\n\n### Requirements\n\n- Use the Advanced Package Tool (`apt`) to perform the update.\n- You must execute the command with administrator privileges.\n\n### Examples\n\nAfter successfully updating the package repositories, you should see output indicating that the package lists have been refreshed. The command will typically show information about packages that can be upgraded and confirm that the update was successful.\n\n### Hints\n\n- Remember that system-wide changes, like updating package sources, require elevated permissions.\n- The `apt` command has a specific subcommand for refreshing the local package index.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 2,
+      "title": "Installing Essential Software Packages",
+      "layout": "doc-workbench-split",
+      "text": "## Installing Essential Software Packages\n\nWith the package lists updated, it's time to fulfill a request from the development team. They need `neofetch`, a handy command-line tool that displays system information in a visually appealing way. Your task is to install it.\n\n### Tasks\n\n- Install the `neofetch` software package.\n\n### Requirements\n\n- Use the `apt` command to install the package.\n- The package name is `neofetch`.\n- Run the installation command with administrator privileges.\n\n### Examples\n\nAfter successful installation, the `neofetch` command should be available in your terminal. You should be able to run it and see a colorful display of your system information, including details about your operating system, kernel version, and hardware.\n\n### Hints\n\n- The `apt` command for installing packages is very common. Think of the action you want to perform: \"install\".\n- Don't forget to use `sudo`.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 3,
+      "title": "Verifying Installed Package Versions",
+      "layout": "doc-workbench-split",
+      "text": "## Verifying Installed Package Versions\n\nGreat, `neofetch` is installed. Before you report back to the team, it's good practice to verify the installation and note the version number. This confirms the task is complete and provides useful information for documentation or troubleshooting.\n\n### Tasks\n\n- Display detailed information for the `neofetch` package, including its version number.\n\n### Requirements\n\n- Use a command that can query the package database for details about an installed package.\n\n### Examples\n\nWhen you query the package information, you should see detailed output including the package name, current version, installation status, and other metadata. This information confirms that the package is properly installed and provides the version number you can report to the team.\n\n### Hints\n\n- The `apt` tool has a subcommand to `show` information about a package.\n- Alternatively, the `dpkg` command with the `-s` flag can also be used to check the status of a package.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 4,
+      "title": "Removing Unnecessary Software Packages",
+      "layout": "doc-workbench-split",
+      "text": "## Removing Unnecessary Software Packages\n\nWhile inspecting the server, you've found a package named `figlet` that was used for a one-off project and is no longer needed. To keep the system clean and secure, you should remove any obsolete software.\n\n### Tasks\n\n- Uninstall the `figlet` package from the system.\n\n### Requirements\n\n- Use the `apt` command to remove the package.\n- The package to be removed is `figlet`.\n- You must use administrator privileges to uninstall software.\n\n### Examples\n\nAfter successfully removing the package, the `figlet` command should no longer be available in your system. Attempts to run it or check its status should indicate that the package is not installed.\n\n### Hints\n\n- The `apt` subcommand for removing a package is quite intuitive. Think of the opposite of \"install\".\n- Remember to use `sudo`.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 5,
+      "title": "Managing Package Dependencies",
+      "layout": "doc-workbench-split",
+      "text": "## Managing Package Dependencies\n\nAfter removing software, some packages that were installed as dependencies might no longer be needed by any other program. These are called \"orphaned\" dependencies, and they needlessly consume disk space. A good steward always cleans up after themselves.\n\n### Tasks\n\n- Remove all automatically installed dependencies that are no longer required by any package on the system.\n\n### Requirements\n\n- Use the specific `apt` command designed for cleaning up unused dependencies.\n- This operation requires administrator privileges.\n\n### Examples\n\nWhen you run the cleanup command, it will scan your system for packages that were automatically installed as dependencies but are no longer needed. If any orphaned packages are found, they will be listed and removed, helping to keep your system clean and efficient.\n\n### Hints\n\n- `apt` has a helpful command that \"automatically removes\" unused packages.\n- As always, this system-wide change requires `sudo`.\n",
+      "need_verify": true,
+      "has_solution": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nCongratulations, Software Steward! You have successfully brought the development server under control. In this challenge, you practiced the complete lifecycle of software management on a Debian-based Linux system:\n\n- You updated the package repositories with `apt update`.\n- You installed new software using `apt install`.\n- You verified an installation with `apt show`.\n- You removed an obsolete package with `apt remove`.\n- You cleaned up unused dependencies with `apt autoremove`.\n\nThese are fundamental, everyday skills for any Linux administrator or power user. By mastering them, you ensure that your systems are up-to-date, secure, and free of clutter. You've proven your capabilities and laid the foundation for a well-managed infrastructure.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

@@ -1,0 +1,590 @@
+{
+  "id": "shell-shell-scripting-fundamentals-725418",
+  "course_id": "linux-for-noobs",
+  "order": 34,
+  "title": "Shell Scripting Fundamentals",
+  "title_vi": "Nền tảng viết script shell",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "A shell script stores commands in a file so a task can be repeated consistently. Reliable beginner scripts make their interpreter explicit, quote variable expansions, validate input before acting, and",
+  "source_url": "https://labex.io/tutorials/shell-shell-scripting-fundamentals-725418",
+  "source_lab_id": 725418,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A shell script stores commands in a file so a task can be repeated consistently. Reliable beginner scripts make their interpreter explicit, quote variable expansions, validate input before acting, and return an exit status that other commands can understand.\n\nIn this lab, you will build small Bash scripts incrementally. You will run scripts through Bash and as executable files, use variables and positional arguments, read interactive input, branch with `if` and file tests, choose exit codes, iterate with `for`, and combine the ideas in a simple log summarizer.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Script shell lưu các lệnh trong một tệp để lặp lại nhiệm vụ một cách nhất quán. Script đáng tin cậy cho người mới chỉ rõ trình thông dịch, đặt phần mở rộng biến trong dấu nháy, kiểm tra đầu vào trước khi hành động và trả trạng thái thoát mà lệnh khác có thể hiểu.\n\nTrong bài này, bạn sẽ xây dựng từng bước các script Bash nhỏ. Bạn sẽ chạy script qua Bash và dưới dạng tệp thực thi, dùng biến và đối số vị trí, đọc đầu vào tương tác, rẽ nhánh bằng `if` và phép kiểm tra tệp, chọn mã thoát, lặp bằng `for` và kết hợp các ý tưởng thành bộ tóm tắt log đơn giản."
+    },
+    {
+      "id": "source-725418-section-1-v3",
+      "title": "Create and Run Your First Script",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a Bash script, run it through an interpreter, and make it directly executable.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/shell-lab\n```\n\nCreate `hello.sh` with a here-document. The first line is a shebang that selects Bash when the file is executed directly:\n\n```bash\ncat > hello.sh <<'EOF'\n#!/bin/bash\n\necho \"Hello from a Bash script\"\npwd\nEOF\n```\n\nInspect the file before running it:\n\n```bash\ncat hello.sh\n```\n\nPass the file to Bash explicitly. This works even before the executable permission is added:\n\n```bash\nbash hello.sh\n```\n\nAdd executable permission and inspect the mode:\n\n```bash\nchmod u+x hello.sh\n```\n\n```bash\nls -l hello.sh\n```\n\nExecute the file from the current directory. `./` supplies a path; the shell does not normally search the current directory automatically:\n\n```bash\n./hello.sh\n```",
+      "title_vi": "Tạo và chạy script đầu tiên",
+      "task": "Thực hiện hướng dẫn: Create and Run Your First Script",
+      "hint": "Chạy lệnh: cd /home/labex/project/shell-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'hello.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash'\nassert os.access(path, os.X_OK)\nwanted = f'Hello from a Bash script\\n{root}\\n'\np = run('hello.sh')\nassert p.returncode == 0 and p.stdout == wanted\np = subprocess.run([str(path)], cwd=root, text=True, capture_output=True, timeout=2)\nassert p.returncode == 0 and p.stdout == wanted\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo script Bash, chạy qua trình thông dịch và cho phép thực thi trực tiếp.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/shell-lab\n```\n\nTạo `hello.sh` bằng here-document. Dòng đầu là shebang chọn Bash khi tệp được thực thi trực tiếp:\n\n```bash\ncat > hello.sh <<'EOF'\n#!/bin/bash\n\necho \"Hello from a Bash script\"\npwd\nEOF\n```\n\nKiểm tra tệp trước khi chạy:\n\n```bash\ncat hello.sh\n```\n\nTruyền tệp trực tiếp cho Bash. Cách này hoạt động ngay cả trước khi thêm quyền thực thi:\n\n```bash\nbash hello.sh\n```\n\nThêm quyền thực thi và kiểm tra chế độ quyền:\n\n```bash\nchmod u+x hello.sh\n```\n\n```bash\nls -l hello.sh\n```\n\nThực thi tệp từ thư mục hiện tại. `./` cung cấp một đường dẫn; shell thường không tự tìm trong thư mục hiện tại:\n\n```bash\n./hello.sh\n```",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và chạy script đầu tiên",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/shell-lab"
+    },
+    {
+      "id": "source-725418-section-2-v3",
+      "title": "Use Variables and Safe Quoting",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will assign variables, expand them, and see why double quotes protect values containing spaces.\n\nCreate a script with two variables:\n\n```bash\ncat > variables.sh <<'EOF'\n#!/bin/bash\n\ncourse=\"Linux for Noobs\"\nworkspace=\"/home/labex/project/shell-lab\"\n\necho \"Course: $course\"\necho \"Workspace: $workspace\"\nprintf 'Quoted argument count: %s\\n' \"$#\"\nprintf 'First argument: %s\\n' \"${1:-not provided}\"\nEOF\n```\n\nNo spaces surround `=` in a shell assignment. Double quotes allow `$course` to expand while keeping `Linux for Noobs` as one value.\n\nRun the script with one argument that contains spaces:\n\n```bash\nbash variables.sh \"beginner learner\"\n```\n\nThe special variable `$#` is the number of positional arguments, and `$1` is the first argument. `${1:-not provided}` supplies a fallback when it is absent.\n\nSave the output for inspection:\n\n```bash\nbash variables.sh \"beginner learner\" > variable-output.txt\n```\n\n```bash\ncat variable-output.txt\n```",
+      "title_vi": "Dùng biến và dấu nháy an toàn",
+      "task": "Thực hiện hướng dẫn: Use Variables and Safe Quoting",
+      "hint": "Chạy lệnh: bash variables.sh \"beginner learner\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nprefix = f'Course: Linux for Noobs\\nWorkspace: {root}\\n'\nexpected = prefix + 'Quoted argument count: 1\\nFirst argument: beginner learner\\n'\nassert (root/'variable-output.txt').read_text() == expected\np = run('variables.sh', 'another learner')\nassert p.returncode == 0 and p.stdout == prefix + 'Quoted argument count: 1\\nFirst argument: another learner\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ gán biến, mở rộng chúng và thấy vì sao dấu nháy kép bảo vệ giá trị chứa khoảng trắng.\n\nTạo script với hai biến:\n\n```bash\ncat > variables.sh <<'EOF'\n#!/bin/bash\n\ncourse=\"Linux for Noobs\"\nworkspace=\"/home/labex/project/shell-lab\"\n\necho \"Course: $course\"\necho \"Workspace: $workspace\"\nprintf 'Quoted argument count: %s\\n' \"$#\"\nprintf 'First argument: %s\\n' \"${1:-not provided}\"\nEOF\n```\n\nKhông có khoảng trắng quanh `=` trong phép gán shell. Dấu nháy kép cho phép mở rộng `$course` trong khi giữ `Linux for Noobs` là một giá trị.\n\nChạy script với một đối số chứa khoảng trắng:\n\n```bash\nbash variables.sh \"beginner learner\"\n```\n\nBiến đặc biệt `$#` là số lượng đối số vị trí và `$1` là đối số đầu tiên. `${1:-not provided}` cung cấp giá trị dự phòng khi không có đối số đó.\n\nLưu đầu ra để kiểm tra:\n\n```bash\nbash variables.sh \"beginner learner\" > variable-output.txt\n```\n\n```bash\ncat variable-output.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Dùng biến và dấu nháy an toàn",
+      "hint_vi": "Chạy lệnh: bash variables.sh \"beginner learner\""
+    },
+    {
+      "id": "source-725418-section-3-v3",
+      "title": "Validate Positional Arguments",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will require an argument, print usage guidance, and return different exit statuses for failure and success.\n\nCreate `greet-argument.sh`:\n\n```bash\ncat > greet-argument.sh <<'EOF'\n#!/bin/bash\n\nif [ \"$#\" -ne 1 ]; then\n  echo \"Usage: $0 NAME\" >&2\n  exit 2\nfi\n\nname=$1\necho \"Hello, $name\"\nexit 0\nEOF\n```\n\nThe test command `[ ... ]` checks whether the argument count is not equal to one. `>&2` sends usage text to standard error, and `exit 2` reports invalid usage.\n\nRun it without an argument, then immediately display `$?`, the previous command's exit status:\n\n```bash\nbash greet-argument.sh\n```\n\n```bash\necho \"missing argument status: $?\"\n```\n\nThe expected status is `2`. Run it correctly:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\"\n```\n\n```bash\necho \"valid argument status: $?\"\n```\n\nSave the successful greeting:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\" > argument-greeting.txt\n```",
+      "title_vi": "Kiểm tra đối số vị trí",
+      "task": "Thực hiện hướng dẫn: Validate Positional Arguments",
+      "hint": "Chạy lệnh: bash greet-argument.sh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('greet-argument.sh')\nassert p.returncode == 2 and 'Usage:' in p.stderr\np = run('greet-argument.sh', 'Ada Lovelace')\nassert p.returncode == 0 and p.stdout == 'Hello, Ada Lovelace\\n'\nassert (root/'argument-greeting.txt').read_text() == p.stdout\nassert run('greet-argument.sh', 'one', 'two').returncode == 2\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ yêu cầu một đối số, in hướng dẫn sử dụng và trả trạng thái thoát khác nhau cho thất bại và thành công.\n\nTạo `greet-argument.sh`:\n\n```bash\ncat > greet-argument.sh <<'EOF'\n#!/bin/bash\n\nif [ \"$#\" -ne 1 ]; then\n  echo \"Usage: $0 NAME\" >&2\n  exit 2\nfi\n\nname=$1\necho \"Hello, $name\"\nexit 0\nEOF\n```\n\nLệnh kiểm tra `[ ... ]` kiểm tra số đối số có khác một hay không. `>&2` gửi hướng dẫn sử dụng tới lỗi chuẩn và `exit 2` báo cách dùng không hợp lệ.\n\nChạy không có đối số rồi hiển thị ngay `$?`, trạng thái thoát của lệnh trước:\n\n```bash\nbash greet-argument.sh\n```\n\n```bash\necho \"missing argument status: $?\"\n```\n\nTrạng thái dự kiến là `2`. Chạy đúng cách:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\"\n```\n\n```bash\necho \"valid argument status: $?\"\n```\n\nLưu lời chào thành công:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\" > argument-greeting.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra đối số vị trí",
+      "hint_vi": "Chạy lệnh: bash greet-argument.sh"
+    },
+    {
+      "id": "source-725418-section-4-v3",
+      "title": "Read Interactive Input",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will prompt a user, read one line safely, and handle empty input.\n\nCreate `ask-name.sh`:\n\n```bash\ncat > ask-name.sh <<'EOF'\n#!/bin/bash\n\nread -r -p \"Enter your name: \" name\n\nif [ -z \"$name\" ]; then\n  echo \"A name is required\" >&2\n  exit 1\nfi\n\necho \"Welcome, $name\"\nEOF\n```\n\n`read -r` reads a line without treating backslashes specially. `-p` displays a prompt, and `-z` tests whether the quoted value is empty.\n\nRun the script:\n\n```bash\nbash ask-name.sh\n```\n\nAt the prompt, type:\n\n```text\nGrace Hopper\n```\n\nYou should see `Welcome, Grace Hopper`. For a reproducible saved result, pipe one input line into the same script:\n\n```bash\nprintf 'Grace Hopper\\n' | bash ask-name.sh > interactive-greeting.txt\n```\n\n```bash\ncat interactive-greeting.txt\n```",
+      "title_vi": "Đọc đầu vào tương tác",
+      "task": "Thực hiện hướng dẫn: Read Interactive Input",
+      "hint": "Chạy lệnh: bash ask-name.sh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('ask-name.sh', input='Grace Hopper\\n')\nassert p.returncode == 0 and p.stdout == 'Welcome, Grace Hopper\\n'\nassert (root/'interactive-greeting.txt').read_text() == p.stdout\np = run('ask-name.sh', input='\\n')\nassert p.returncode == 1 and 'A name is required' in p.stderr\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ hỏi người dùng, đọc một dòng an toàn và xử lý đầu vào rỗng.\n\nTạo `ask-name.sh`:\n\n```bash\ncat > ask-name.sh <<'EOF'\n#!/bin/bash\n\nread -r -p \"Enter your name: \" name\n\nif [ -z \"$name\" ]; then\n  echo \"A name is required\" >&2\n  exit 1\nfi\n\necho \"Welcome, $name\"\nEOF\n```\n\n`read -r` đọc một dòng mà không xử lý đặc biệt dấu gạch chéo ngược. `-p` hiển thị lời nhắc và `-z` kiểm tra giá trị được đặt trong dấu nháy có rỗng không.\n\nChạy script:\n\n```bash\nbash ask-name.sh\n```\n\nTại lời nhắc, nhập:\n\n```text\nGrace Hopper\n```\n\nBạn sẽ thấy `Welcome, Grace Hopper`. Để có kết quả lưu được tái tạo, chuyển một dòng đầu vào qua đường ống vào cùng script:\n\n```bash\nprintf 'Grace Hopper\\n' | bash ask-name.sh > interactive-greeting.txt\n```\n\n```bash\ncat interactive-greeting.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Đọc đầu vào tương tác",
+      "hint_vi": "Chạy lệnh: bash ask-name.sh"
+    },
+    {
+      "id": "source-725418-section-5-v3",
+      "title": "Branch with File Tests",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `if`, `elif`, and `else` with file tests to classify a path.\n\nCreate `classify-path.sh`:\n\n```bash\ncat > classify-path.sh <<'EOF'\n#!/bin/bash\n\npath=${1:-}\n\nif [ -z \"$path\" ]; then\n  echo \"Usage: $0 PATH\" >&2\n  exit 2\nelif [ -d \"$path\" ]; then\n  echo \"directory: $path\"\nelif [ -f \"$path\" ]; then\n  echo \"file: $path\"\nelse\n  echo \"missing: $path\" >&2\n  exit 1\nfi\n\nexit 0\nEOF\n```\n\n`-d` tests for a directory and `-f` tests for a regular file. The order matters: invalid usage is handled before path type.\n\nTry all three path outcomes:\n\n```bash\nbash classify-path.sh logs\n```\n\n```bash\nbash classify-path.sh notes.txt\n```\n\n```bash\nbash classify-path.sh missing.txt\n```\n\n```bash\necho \"missing path status: $?\"\n```\n\nSave successful results together. `&&` runs the second command only if the first succeeds:\n\n```bash\nbash classify-path.sh logs > path-results.txt && bash classify-path.sh notes.txt >> path-results.txt\n```\n\n```bash\ncat path-results.txt\n```",
+      "title_vi": "Rẽ nhánh bằng phép kiểm tra tệp",
+      "task": "Thực hiện hướng dẫn: Branch with File Tests",
+      "hint": "Chạy lệnh: bash classify-path.sh logs",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert run('classify-path.sh', 'logs').stdout == 'directory: logs\\n'\nassert run('classify-path.sh', 'notes.txt').stdout == 'file: notes.txt\\n'\nassert run('classify-path.sh', 'missing.txt').returncode == 1\nassert run('classify-path.sh').returncode == 2\nassert (root/'path-results.txt').read_text() == 'directory: logs\\nfile: notes.txt\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `if`, `elif` và `else` với phép kiểm tra tệp để phân loại đường dẫn.\n\nTạo `classify-path.sh`:\n\n```bash\ncat > classify-path.sh <<'EOF'\n#!/bin/bash\n\npath=${1:-}\n\nif [ -z \"$path\" ]; then\n  echo \"Usage: $0 PATH\" >&2\n  exit 2\nelif [ -d \"$path\" ]; then\n  echo \"directory: $path\"\nelif [ -f \"$path\" ]; then\n  echo \"file: $path\"\nelse\n  echo \"missing: $path\" >&2\n  exit 1\nfi\n\nexit 0\nEOF\n```\n\n`-d` kiểm tra thư mục và `-f` kiểm tra tệp thông thường. Thứ tự có ý nghĩa: cách dùng không hợp lệ được xử lý trước loại đường dẫn.\n\nThử cả ba kết quả đường dẫn:\n\n```bash\nbash classify-path.sh logs\n```\n\n```bash\nbash classify-path.sh notes.txt\n```\n\n```bash\nbash classify-path.sh missing.txt\n```\n\n```bash\necho \"missing path status: $?\"\n```\n\nLưu chung các kết quả thành công. `&&` chỉ chạy lệnh thứ hai nếu lệnh đầu thành công:\n\n```bash\nbash classify-path.sh logs > path-results.txt && bash classify-path.sh notes.txt >> path-results.txt\n```\n\n```bash\ncat path-results.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Rẽ nhánh bằng phép kiểm tra tệp",
+      "hint_vi": "Chạy lệnh: bash classify-path.sh logs"
+    },
+    {
+      "id": "source-725418-section-6-v3",
+      "title": "Process Multiple Files with a For Loop",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will iterate over log files and count matching records in each one.\n\nCreate `count-errors.sh`:\n\n```bash\ncat > count-errors.sh <<'EOF'\n#!/bin/bash\n\nlog_dir=${1:-logs}\n\nif [ ! -d \"$log_dir\" ]; then\n  echo \"Log directory not found: $log_dir\" >&2\n  exit 1\nfi\n\nfor log_file in \"$log_dir\"/*.log; do\n  error_count=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$error_count\"\ndone\nEOF\n```\n\nThe loop assigns one matched path to `log_file` on each iteration. Quoting `\"$log_file\"` protects spaces, while `basename` removes the directory prefix. `grep -c` counts matching lines; `|| true` prevents zero matches from stopping a larger strict workflow.\n\nRun the loop and save its output:\n\n```bash\nbash count-errors.sh logs | tee error-counts.txt\n```\n\nYou should see one result for each `.log` file.",
+      "title_vi": "Xử lý nhiều tệp bằng vòng lặp for",
+      "task": "Thực hiện hướng dẫn: Process Multiple Files with a For Loop",
+      "hint": "Chạy lệnh: bash count-errors.sh logs | tee error-counts.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('count-errors.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nassert (root/'error-counts.txt').read_text() == p.stdout\nassert run('count-errors.sh', 'missing').returncode == 1\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ lặp qua tệp log và đếm số bản ghi khớp trong từng tệp.\n\nTạo `count-errors.sh`:\n\n```bash\ncat > count-errors.sh <<'EOF'\n#!/bin/bash\n\nlog_dir=${1:-logs}\n\nif [ ! -d \"$log_dir\" ]; then\n  echo \"Log directory not found: $log_dir\" >&2\n  exit 1\nfi\n\nfor log_file in \"$log_dir\"/*.log; do\n  error_count=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$error_count\"\ndone\nEOF\n```\n\nVòng lặp gán một đường dẫn khớp cho `log_file` ở mỗi lượt. Đặt `\"$log_file\"` trong dấu nháy bảo vệ khoảng trắng, còn `basename` bỏ tiền tố thư mục. `grep -c` đếm dòng khớp; `|| true` ngăn trường hợp không có phần khớp làm dừng một quy trình nghiêm ngặt lớn hơn.\n\nChạy vòng lặp và lưu đầu ra:\n\n```bash\nbash count-errors.sh logs | tee error-counts.txt\n```\n\nBạn sẽ thấy một kết quả cho mỗi tệp `.log`.",
+      "task_vi": "Thực hiện hướng dẫn: Xử lý nhiều tệp bằng vòng lặp for",
+      "hint_vi": "Chạy lệnh: bash count-errors.sh logs | tee error-counts.txt"
+    },
+    {
+      "id": "source-725418-section-7-v3",
+      "title": "Combine Validation, Loops, and Exit Status",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will build one reusable script that validates a directory, summarizes its logs, and reports success or failure clearly.\n\nCreate `summarize-logs.sh`:\n\n```bash\ncat > summarize-logs.sh <<'EOF'\n#!/bin/bash\n\ninput_dir=${1:-}\noutput_file=${2:-}\n\nif [ -z \"$input_dir\" ] || [ -z \"$output_file\" ]; then\n  echo \"Usage: $0 INPUT_DIR OUTPUT_FILE\" >&2\n  exit 2\nfi\n\nif [ ! -d \"$input_dir\" ]; then\n  echo \"Input directory not found: $input_dir\" >&2\n  exit 1\nfi\n\n: > \"$output_file\"\n\nfor log_file in \"$input_dir\"/*.log; do\n  lines=$(wc -l < \"$log_file\")\n  errors=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s lines=%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$lines\" \"$errors\" >> \"$output_file\"\ndone\n\necho \"Wrote summary to $output_file\"\nexit 0\nEOF\n```\n\nThe command `: > \"$output_file\"` safely creates or empties the destination before the loop. Run the script with both required arguments:\n\n```bash\nchmod u+x summarize-logs.sh\n```\n\n```bash\n./summarize-logs.sh logs log-summary.txt\n```\n\n```bash\necho \"summary status: $?\"\n```\n\n```bash\ncat log-summary.txt\n```\n\nTest the failure path with a missing directory:\n\n```bash\n./summarize-logs.sh missing log-summary.txt\n```\n\n```bash\necho \"missing directory status: $?\"\n```\n\nThe success status should be `0`, while the missing-directory status should be `1`.",
+      "title_vi": "Kết hợp kiểm tra, vòng lặp và trạng thái thoát",
+      "task": "Thực hiện hướng dẫn: Combine Validation, Loops, and Exit Status",
+      "hint": "Chạy lệnh: chmod u+x summarize-logs.sh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert os.access(root/'summarize-logs.sh', os.X_OK)\nassert (root/'log-summary.txt').read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-script-check-') as directory:\n    output = str(pathlib.Path(directory)/'summary.txt')\n    p = run('summarize-logs.sh', 'logs', output)\n    assert p.returncode == 0 and pathlib.Path(output).read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\n    assert run('summarize-logs.sh', 'missing', output).returncode == 1\n    assert run('summarize-logs.sh').returncode == 2\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xây dựng một script tái sử dụng để kiểm tra thư mục, tóm tắt log và báo thành công hoặc thất bại rõ ràng.\n\nTạo `summarize-logs.sh`:\n\n```bash\ncat > summarize-logs.sh <<'EOF'\n#!/bin/bash\n\ninput_dir=${1:-}\noutput_file=${2:-}\n\nif [ -z \"$input_dir\" ] || [ -z \"$output_file\" ]; then\n  echo \"Usage: $0 INPUT_DIR OUTPUT_FILE\" >&2\n  exit 2\nfi\n\nif [ ! -d \"$input_dir\" ]; then\n  echo \"Input directory not found: $input_dir\" >&2\n  exit 1\nfi\n\n: > \"$output_file\"\n\nfor log_file in \"$input_dir\"/*.log; do\n  lines=$(wc -l < \"$log_file\")\n  errors=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s lines=%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$lines\" \"$errors\" >> \"$output_file\"\ndone\n\necho \"Wrote summary to $output_file\"\nexit 0\nEOF\n```\n\nLệnh `: > \"$output_file\"` tạo hoặc làm rỗng đích an toàn trước vòng lặp. Chạy script với cả hai đối số bắt buộc:\n\n```bash\nchmod u+x summarize-logs.sh\n```\n\n```bash\n./summarize-logs.sh logs log-summary.txt\n```\n\n```bash\necho \"summary status: $?\"\n```\n\n```bash\ncat log-summary.txt\n```\n\nKiểm tra nhánh thất bại với thư mục bị thiếu:\n\n```bash\n./summarize-logs.sh missing log-summary.txt\n```\n\n```bash\necho \"missing directory status: $?\"\n```\n\nTrạng thái thành công phải là `0`, còn trạng thái thiếu thư mục phải là `1`.",
+      "task_vi": "Thực hiện hướng dẫn: Kết hợp kiểm tra, vòng lặp và trạng thái thoát",
+      "hint_vi": "Chạy lệnh: chmod u+x summarize-logs.sh"
+    },
+    {
+      "id": "section-8",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You created and executed Bash scripts, used shebangs and permissions, expanded quoted variables, read positional and interactive input, and returned meaningful exit statuses. You also branched with `if/elif/else`, tested files and directories, iterated over logs with `for`, and combined the ideas in a reusable summarizer.\n\nThese fundamentals make later automation easier to read, safer to rerun, and easier for other commands or scheduled jobs to evaluate.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã tạo và thực thi script Bash, dùng shebang và quyền, mở rộng biến có dấu nháy, đọc đầu vào vị trí và tương tác, trả trạng thái thoát có ý nghĩa. Bạn cũng rẽ nhánh bằng `if/elif/else`, kiểm tra tệp và thư mục, lặp qua log bằng `for` và kết hợp các ý tưởng trong bộ tóm tắt tái sử dụng.\n\nNhững nền tảng này giúp tự động hóa về sau dễ đọc hơn, an toàn hơn khi chạy lại và dễ được lệnh khác hoặc tác vụ theo lịch đánh giá."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725418-section-1-v3",
+      "title": "Create and Run Your First Script",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a Bash script, run it through an interpreter, and make it directly executable.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/shell-lab\n```\n\nCreate `hello.sh` with a here-document. The first line is a shebang that selects Bash when the file is executed directly:\n\n```bash\ncat > hello.sh <<'EOF'\n#!/bin/bash\n\necho \"Hello from a Bash script\"\npwd\nEOF\n```\n\nInspect the file before running it:\n\n```bash\ncat hello.sh\n```\n\nPass the file to Bash explicitly. This works even before the executable permission is added:\n\n```bash\nbash hello.sh\n```\n\nAdd executable permission and inspect the mode:\n\n```bash\nchmod u+x hello.sh\n```\n\n```bash\nls -l hello.sh\n```\n\nExecute the file from the current directory. `./` supplies a path; the shell does not normally search the current directory automatically:\n\n```bash\n./hello.sh\n```",
+      "title_vi": "Tạo và chạy script đầu tiên",
+      "task": "Thực hiện hướng dẫn: Create and Run Your First Script",
+      "hint": "Chạy lệnh: cd /home/labex/project/shell-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'hello.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash'\nassert os.access(path, os.X_OK)\nwanted = f'Hello from a Bash script\\n{root}\\n'\np = run('hello.sh')\nassert p.returncode == 0 and p.stdout == wanted\np = subprocess.run([str(path)], cwd=root, text=True, capture_output=True, timeout=2)\nassert p.returncode == 0 and p.stdout == wanted\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'hello.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash'\nassert os.access(path, os.X_OK)\nwanted = f'Hello from a Bash script\\n{root}\\n'\np = run('hello.sh')\nassert p.returncode == 0 and p.stdout == wanted\np = subprocess.run([str(path)], cwd=root, text=True, capture_output=True, timeout=2)\nassert p.returncode == 0 and p.stdout == wanted\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo script Bash, chạy qua trình thông dịch và cho phép thực thi trực tiếp.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/shell-lab\n```\n\nTạo `hello.sh` bằng here-document. Dòng đầu là shebang chọn Bash khi tệp được thực thi trực tiếp:\n\n```bash\ncat > hello.sh <<'EOF'\n#!/bin/bash\n\necho \"Hello from a Bash script\"\npwd\nEOF\n```\n\nKiểm tra tệp trước khi chạy:\n\n```bash\ncat hello.sh\n```\n\nTruyền tệp trực tiếp cho Bash. Cách này hoạt động ngay cả trước khi thêm quyền thực thi:\n\n```bash\nbash hello.sh\n```\n\nThêm quyền thực thi và kiểm tra chế độ quyền:\n\n```bash\nchmod u+x hello.sh\n```\n\n```bash\nls -l hello.sh\n```\n\nThực thi tệp từ thư mục hiện tại. `./` cung cấp một đường dẫn; shell thường không tự tìm trong thư mục hiện tại:\n\n```bash\n./hello.sh\n```",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và chạy script đầu tiên",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/shell-lab"
+    },
+    {
+      "id": "source-725418-section-2-v3",
+      "title": "Use Variables and Safe Quoting",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will assign variables, expand them, and see why double quotes protect values containing spaces.\n\nCreate a script with two variables:\n\n```bash\ncat > variables.sh <<'EOF'\n#!/bin/bash\n\ncourse=\"Linux for Noobs\"\nworkspace=\"/home/labex/project/shell-lab\"\n\necho \"Course: $course\"\necho \"Workspace: $workspace\"\nprintf 'Quoted argument count: %s\\n' \"$#\"\nprintf 'First argument: %s\\n' \"${1:-not provided}\"\nEOF\n```\n\nNo spaces surround `=` in a shell assignment. Double quotes allow `$course` to expand while keeping `Linux for Noobs` as one value.\n\nRun the script with one argument that contains spaces:\n\n```bash\nbash variables.sh \"beginner learner\"\n```\n\nThe special variable `$#` is the number of positional arguments, and `$1` is the first argument. `${1:-not provided}` supplies a fallback when it is absent.\n\nSave the output for inspection:\n\n```bash\nbash variables.sh \"beginner learner\" > variable-output.txt\n```\n\n```bash\ncat variable-output.txt\n```",
+      "title_vi": "Dùng biến và dấu nháy an toàn",
+      "task": "Thực hiện hướng dẫn: Use Variables and Safe Quoting",
+      "hint": "Chạy lệnh: bash variables.sh \"beginner learner\"",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nprefix = f'Course: Linux for Noobs\\nWorkspace: {root}\\n'\nexpected = prefix + 'Quoted argument count: 1\\nFirst argument: beginner learner\\n'\nassert (root/'variable-output.txt').read_text() == expected\np = run('variables.sh', 'another learner')\nassert p.returncode == 0 and p.stdout == prefix + 'Quoted argument count: 1\\nFirst argument: another learner\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nprefix = f'Course: Linux for Noobs\\nWorkspace: {root}\\n'\nexpected = prefix + 'Quoted argument count: 1\\nFirst argument: beginner learner\\n'\nassert (root/'variable-output.txt').read_text() == expected\np = run('variables.sh', 'another learner')\nassert p.returncode == 0 and p.stdout == prefix + 'Quoted argument count: 1\\nFirst argument: another learner\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ gán biến, mở rộng chúng và thấy vì sao dấu nháy kép bảo vệ giá trị chứa khoảng trắng.\n\nTạo script với hai biến:\n\n```bash\ncat > variables.sh <<'EOF'\n#!/bin/bash\n\ncourse=\"Linux for Noobs\"\nworkspace=\"/home/labex/project/shell-lab\"\n\necho \"Course: $course\"\necho \"Workspace: $workspace\"\nprintf 'Quoted argument count: %s\\n' \"$#\"\nprintf 'First argument: %s\\n' \"${1:-not provided}\"\nEOF\n```\n\nKhông có khoảng trắng quanh `=` trong phép gán shell. Dấu nháy kép cho phép mở rộng `$course` trong khi giữ `Linux for Noobs` là một giá trị.\n\nChạy script với một đối số chứa khoảng trắng:\n\n```bash\nbash variables.sh \"beginner learner\"\n```\n\nBiến đặc biệt `$#` là số lượng đối số vị trí và `$1` là đối số đầu tiên. `${1:-not provided}` cung cấp giá trị dự phòng khi không có đối số đó.\n\nLưu đầu ra để kiểm tra:\n\n```bash\nbash variables.sh \"beginner learner\" > variable-output.txt\n```\n\n```bash\ncat variable-output.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Dùng biến và dấu nháy an toàn",
+      "hint_vi": "Chạy lệnh: bash variables.sh \"beginner learner\""
+    },
+    {
+      "id": "source-725418-section-3-v3",
+      "title": "Validate Positional Arguments",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will require an argument, print usage guidance, and return different exit statuses for failure and success.\n\nCreate `greet-argument.sh`:\n\n```bash\ncat > greet-argument.sh <<'EOF'\n#!/bin/bash\n\nif [ \"$#\" -ne 1 ]; then\n  echo \"Usage: $0 NAME\" >&2\n  exit 2\nfi\n\nname=$1\necho \"Hello, $name\"\nexit 0\nEOF\n```\n\nThe test command `[ ... ]` checks whether the argument count is not equal to one. `>&2` sends usage text to standard error, and `exit 2` reports invalid usage.\n\nRun it without an argument, then immediately display `$?`, the previous command's exit status:\n\n```bash\nbash greet-argument.sh\n```\n\n```bash\necho \"missing argument status: $?\"\n```\n\nThe expected status is `2`. Run it correctly:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\"\n```\n\n```bash\necho \"valid argument status: $?\"\n```\n\nSave the successful greeting:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\" > argument-greeting.txt\n```",
+      "title_vi": "Kiểm tra đối số vị trí",
+      "task": "Thực hiện hướng dẫn: Validate Positional Arguments",
+      "hint": "Chạy lệnh: bash greet-argument.sh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('greet-argument.sh')\nassert p.returncode == 2 and 'Usage:' in p.stderr\np = run('greet-argument.sh', 'Ada Lovelace')\nassert p.returncode == 0 and p.stdout == 'Hello, Ada Lovelace\\n'\nassert (root/'argument-greeting.txt').read_text() == p.stdout\nassert run('greet-argument.sh', 'one', 'two').returncode == 2\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('greet-argument.sh')\nassert p.returncode == 2 and 'Usage:' in p.stderr\np = run('greet-argument.sh', 'Ada Lovelace')\nassert p.returncode == 0 and p.stdout == 'Hello, Ada Lovelace\\n'\nassert (root/'argument-greeting.txt').read_text() == p.stdout\nassert run('greet-argument.sh', 'one', 'two').returncode == 2\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ yêu cầu một đối số, in hướng dẫn sử dụng và trả trạng thái thoát khác nhau cho thất bại và thành công.\n\nTạo `greet-argument.sh`:\n\n```bash\ncat > greet-argument.sh <<'EOF'\n#!/bin/bash\n\nif [ \"$#\" -ne 1 ]; then\n  echo \"Usage: $0 NAME\" >&2\n  exit 2\nfi\n\nname=$1\necho \"Hello, $name\"\nexit 0\nEOF\n```\n\nLệnh kiểm tra `[ ... ]` kiểm tra số đối số có khác một hay không. `>&2` gửi hướng dẫn sử dụng tới lỗi chuẩn và `exit 2` báo cách dùng không hợp lệ.\n\nChạy không có đối số rồi hiển thị ngay `$?`, trạng thái thoát của lệnh trước:\n\n```bash\nbash greet-argument.sh\n```\n\n```bash\necho \"missing argument status: $?\"\n```\n\nTrạng thái dự kiến là `2`. Chạy đúng cách:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\"\n```\n\n```bash\necho \"valid argument status: $?\"\n```\n\nLưu lời chào thành công:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\" > argument-greeting.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra đối số vị trí",
+      "hint_vi": "Chạy lệnh: bash greet-argument.sh"
+    },
+    {
+      "id": "source-725418-section-4-v3",
+      "title": "Read Interactive Input",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will prompt a user, read one line safely, and handle empty input.\n\nCreate `ask-name.sh`:\n\n```bash\ncat > ask-name.sh <<'EOF'\n#!/bin/bash\n\nread -r -p \"Enter your name: \" name\n\nif [ -z \"$name\" ]; then\n  echo \"A name is required\" >&2\n  exit 1\nfi\n\necho \"Welcome, $name\"\nEOF\n```\n\n`read -r` reads a line without treating backslashes specially. `-p` displays a prompt, and `-z` tests whether the quoted value is empty.\n\nRun the script:\n\n```bash\nbash ask-name.sh\n```\n\nAt the prompt, type:\n\n```text\nGrace Hopper\n```\n\nYou should see `Welcome, Grace Hopper`. For a reproducible saved result, pipe one input line into the same script:\n\n```bash\nprintf 'Grace Hopper\\n' | bash ask-name.sh > interactive-greeting.txt\n```\n\n```bash\ncat interactive-greeting.txt\n```",
+      "title_vi": "Đọc đầu vào tương tác",
+      "task": "Thực hiện hướng dẫn: Read Interactive Input",
+      "hint": "Chạy lệnh: bash ask-name.sh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('ask-name.sh', input='Grace Hopper\\n')\nassert p.returncode == 0 and p.stdout == 'Welcome, Grace Hopper\\n'\nassert (root/'interactive-greeting.txt').read_text() == p.stdout\np = run('ask-name.sh', input='\\n')\nassert p.returncode == 1 and 'A name is required' in p.stderr\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('ask-name.sh', input='Grace Hopper\\n')\nassert p.returncode == 0 and p.stdout == 'Welcome, Grace Hopper\\n'\nassert (root/'interactive-greeting.txt').read_text() == p.stdout\np = run('ask-name.sh', input='\\n')\nassert p.returncode == 1 and 'A name is required' in p.stderr\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ hỏi người dùng, đọc một dòng an toàn và xử lý đầu vào rỗng.\n\nTạo `ask-name.sh`:\n\n```bash\ncat > ask-name.sh <<'EOF'\n#!/bin/bash\n\nread -r -p \"Enter your name: \" name\n\nif [ -z \"$name\" ]; then\n  echo \"A name is required\" >&2\n  exit 1\nfi\n\necho \"Welcome, $name\"\nEOF\n```\n\n`read -r` đọc một dòng mà không xử lý đặc biệt dấu gạch chéo ngược. `-p` hiển thị lời nhắc và `-z` kiểm tra giá trị được đặt trong dấu nháy có rỗng không.\n\nChạy script:\n\n```bash\nbash ask-name.sh\n```\n\nTại lời nhắc, nhập:\n\n```text\nGrace Hopper\n```\n\nBạn sẽ thấy `Welcome, Grace Hopper`. Để có kết quả lưu được tái tạo, chuyển một dòng đầu vào qua đường ống vào cùng script:\n\n```bash\nprintf 'Grace Hopper\\n' | bash ask-name.sh > interactive-greeting.txt\n```\n\n```bash\ncat interactive-greeting.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Đọc đầu vào tương tác",
+      "hint_vi": "Chạy lệnh: bash ask-name.sh"
+    },
+    {
+      "id": "source-725418-section-5-v3",
+      "title": "Branch with File Tests",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `if`, `elif`, and `else` with file tests to classify a path.\n\nCreate `classify-path.sh`:\n\n```bash\ncat > classify-path.sh <<'EOF'\n#!/bin/bash\n\npath=${1:-}\n\nif [ -z \"$path\" ]; then\n  echo \"Usage: $0 PATH\" >&2\n  exit 2\nelif [ -d \"$path\" ]; then\n  echo \"directory: $path\"\nelif [ -f \"$path\" ]; then\n  echo \"file: $path\"\nelse\n  echo \"missing: $path\" >&2\n  exit 1\nfi\n\nexit 0\nEOF\n```\n\n`-d` tests for a directory and `-f` tests for a regular file. The order matters: invalid usage is handled before path type.\n\nTry all three path outcomes:\n\n```bash\nbash classify-path.sh logs\n```\n\n```bash\nbash classify-path.sh notes.txt\n```\n\n```bash\nbash classify-path.sh missing.txt\n```\n\n```bash\necho \"missing path status: $?\"\n```\n\nSave successful results together. `&&` runs the second command only if the first succeeds:\n\n```bash\nbash classify-path.sh logs > path-results.txt && bash classify-path.sh notes.txt >> path-results.txt\n```\n\n```bash\ncat path-results.txt\n```",
+      "title_vi": "Rẽ nhánh bằng phép kiểm tra tệp",
+      "task": "Thực hiện hướng dẫn: Branch with File Tests",
+      "hint": "Chạy lệnh: bash classify-path.sh logs",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert run('classify-path.sh', 'logs').stdout == 'directory: logs\\n'\nassert run('classify-path.sh', 'notes.txt').stdout == 'file: notes.txt\\n'\nassert run('classify-path.sh', 'missing.txt').returncode == 1\nassert run('classify-path.sh').returncode == 2\nassert (root/'path-results.txt').read_text() == 'directory: logs\\nfile: notes.txt\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert run('classify-path.sh', 'logs').stdout == 'directory: logs\\n'\nassert run('classify-path.sh', 'notes.txt').stdout == 'file: notes.txt\\n'\nassert run('classify-path.sh', 'missing.txt').returncode == 1\nassert run('classify-path.sh').returncode == 2\nassert (root/'path-results.txt').read_text() == 'directory: logs\\nfile: notes.txt\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `if`, `elif` và `else` với phép kiểm tra tệp để phân loại đường dẫn.\n\nTạo `classify-path.sh`:\n\n```bash\ncat > classify-path.sh <<'EOF'\n#!/bin/bash\n\npath=${1:-}\n\nif [ -z \"$path\" ]; then\n  echo \"Usage: $0 PATH\" >&2\n  exit 2\nelif [ -d \"$path\" ]; then\n  echo \"directory: $path\"\nelif [ -f \"$path\" ]; then\n  echo \"file: $path\"\nelse\n  echo \"missing: $path\" >&2\n  exit 1\nfi\n\nexit 0\nEOF\n```\n\n`-d` kiểm tra thư mục và `-f` kiểm tra tệp thông thường. Thứ tự có ý nghĩa: cách dùng không hợp lệ được xử lý trước loại đường dẫn.\n\nThử cả ba kết quả đường dẫn:\n\n```bash\nbash classify-path.sh logs\n```\n\n```bash\nbash classify-path.sh notes.txt\n```\n\n```bash\nbash classify-path.sh missing.txt\n```\n\n```bash\necho \"missing path status: $?\"\n```\n\nLưu chung các kết quả thành công. `&&` chỉ chạy lệnh thứ hai nếu lệnh đầu thành công:\n\n```bash\nbash classify-path.sh logs > path-results.txt && bash classify-path.sh notes.txt >> path-results.txt\n```\n\n```bash\ncat path-results.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Rẽ nhánh bằng phép kiểm tra tệp",
+      "hint_vi": "Chạy lệnh: bash classify-path.sh logs"
+    },
+    {
+      "id": "source-725418-section-6-v3",
+      "title": "Process Multiple Files with a For Loop",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will iterate over log files and count matching records in each one.\n\nCreate `count-errors.sh`:\n\n```bash\ncat > count-errors.sh <<'EOF'\n#!/bin/bash\n\nlog_dir=${1:-logs}\n\nif [ ! -d \"$log_dir\" ]; then\n  echo \"Log directory not found: $log_dir\" >&2\n  exit 1\nfi\n\nfor log_file in \"$log_dir\"/*.log; do\n  error_count=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$error_count\"\ndone\nEOF\n```\n\nThe loop assigns one matched path to `log_file` on each iteration. Quoting `\"$log_file\"` protects spaces, while `basename` removes the directory prefix. `grep -c` counts matching lines; `|| true` prevents zero matches from stopping a larger strict workflow.\n\nRun the loop and save its output:\n\n```bash\nbash count-errors.sh logs | tee error-counts.txt\n```\n\nYou should see one result for each `.log` file.",
+      "title_vi": "Xử lý nhiều tệp bằng vòng lặp for",
+      "task": "Thực hiện hướng dẫn: Process Multiple Files with a For Loop",
+      "hint": "Chạy lệnh: bash count-errors.sh logs | tee error-counts.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('count-errors.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nassert (root/'error-counts.txt').read_text() == p.stdout\nassert run('count-errors.sh', 'missing').returncode == 1\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('count-errors.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nassert (root/'error-counts.txt').read_text() == p.stdout\nassert run('count-errors.sh', 'missing').returncode == 1\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ lặp qua tệp log và đếm số bản ghi khớp trong từng tệp.\n\nTạo `count-errors.sh`:\n\n```bash\ncat > count-errors.sh <<'EOF'\n#!/bin/bash\n\nlog_dir=${1:-logs}\n\nif [ ! -d \"$log_dir\" ]; then\n  echo \"Log directory not found: $log_dir\" >&2\n  exit 1\nfi\n\nfor log_file in \"$log_dir\"/*.log; do\n  error_count=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$error_count\"\ndone\nEOF\n```\n\nVòng lặp gán một đường dẫn khớp cho `log_file` ở mỗi lượt. Đặt `\"$log_file\"` trong dấu nháy bảo vệ khoảng trắng, còn `basename` bỏ tiền tố thư mục. `grep -c` đếm dòng khớp; `|| true` ngăn trường hợp không có phần khớp làm dừng một quy trình nghiêm ngặt lớn hơn.\n\nChạy vòng lặp và lưu đầu ra:\n\n```bash\nbash count-errors.sh logs | tee error-counts.txt\n```\n\nBạn sẽ thấy một kết quả cho mỗi tệp `.log`.",
+      "task_vi": "Thực hiện hướng dẫn: Xử lý nhiều tệp bằng vòng lặp for",
+      "hint_vi": "Chạy lệnh: bash count-errors.sh logs | tee error-counts.txt"
+    },
+    {
+      "id": "source-725418-section-7-v3",
+      "title": "Combine Validation, Loops, and Exit Status",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will build one reusable script that validates a directory, summarizes its logs, and reports success or failure clearly.\n\nCreate `summarize-logs.sh`:\n\n```bash\ncat > summarize-logs.sh <<'EOF'\n#!/bin/bash\n\ninput_dir=${1:-}\noutput_file=${2:-}\n\nif [ -z \"$input_dir\" ] || [ -z \"$output_file\" ]; then\n  echo \"Usage: $0 INPUT_DIR OUTPUT_FILE\" >&2\n  exit 2\nfi\n\nif [ ! -d \"$input_dir\" ]; then\n  echo \"Input directory not found: $input_dir\" >&2\n  exit 1\nfi\n\n: > \"$output_file\"\n\nfor log_file in \"$input_dir\"/*.log; do\n  lines=$(wc -l < \"$log_file\")\n  errors=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s lines=%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$lines\" \"$errors\" >> \"$output_file\"\ndone\n\necho \"Wrote summary to $output_file\"\nexit 0\nEOF\n```\n\nThe command `: > \"$output_file\"` safely creates or empties the destination before the loop. Run the script with both required arguments:\n\n```bash\nchmod u+x summarize-logs.sh\n```\n\n```bash\n./summarize-logs.sh logs log-summary.txt\n```\n\n```bash\necho \"summary status: $?\"\n```\n\n```bash\ncat log-summary.txt\n```\n\nTest the failure path with a missing directory:\n\n```bash\n./summarize-logs.sh missing log-summary.txt\n```\n\n```bash\necho \"missing directory status: $?\"\n```\n\nThe success status should be `0`, while the missing-directory status should be `1`.",
+      "title_vi": "Kết hợp kiểm tra, vòng lặp và trạng thái thoát",
+      "task": "Thực hiện hướng dẫn: Combine Validation, Loops, and Exit Status",
+      "hint": "Chạy lệnh: chmod u+x summarize-logs.sh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert os.access(root/'summarize-logs.sh', os.X_OK)\nassert (root/'log-summary.txt').read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-script-check-') as directory:\n    output = str(pathlib.Path(directory)/'summary.txt')\n    p = run('summarize-logs.sh', 'logs', output)\n    assert p.returncode == 0 and pathlib.Path(output).read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\n    assert run('summarize-logs.sh', 'missing', output).returncode == 1\n    assert run('summarize-logs.sh').returncode == 2\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert os.access(root/'summarize-logs.sh', os.X_OK)\nassert (root/'log-summary.txt').read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-script-check-') as directory:\n    output = str(pathlib.Path(directory)/'summary.txt')\n    p = run('summarize-logs.sh', 'logs', output)\n    assert p.returncode == 0 and pathlib.Path(output).read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\n    assert run('summarize-logs.sh', 'missing', output).returncode == 1\n    assert run('summarize-logs.sh').returncode == 2\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xây dựng một script tái sử dụng để kiểm tra thư mục, tóm tắt log và báo thành công hoặc thất bại rõ ràng.\n\nTạo `summarize-logs.sh`:\n\n```bash\ncat > summarize-logs.sh <<'EOF'\n#!/bin/bash\n\ninput_dir=${1:-}\noutput_file=${2:-}\n\nif [ -z \"$input_dir\" ] || [ -z \"$output_file\" ]; then\n  echo \"Usage: $0 INPUT_DIR OUTPUT_FILE\" >&2\n  exit 2\nfi\n\nif [ ! -d \"$input_dir\" ]; then\n  echo \"Input directory not found: $input_dir\" >&2\n  exit 1\nfi\n\n: > \"$output_file\"\n\nfor log_file in \"$input_dir\"/*.log; do\n  lines=$(wc -l < \"$log_file\")\n  errors=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s lines=%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$lines\" \"$errors\" >> \"$output_file\"\ndone\n\necho \"Wrote summary to $output_file\"\nexit 0\nEOF\n```\n\nLệnh `: > \"$output_file\"` tạo hoặc làm rỗng đích an toàn trước vòng lặp. Chạy script với cả hai đối số bắt buộc:\n\n```bash\nchmod u+x summarize-logs.sh\n```\n\n```bash\n./summarize-logs.sh logs log-summary.txt\n```\n\n```bash\necho \"summary status: $?\"\n```\n\n```bash\ncat log-summary.txt\n```\n\nKiểm tra nhánh thất bại với thư mục bị thiếu:\n\n```bash\n./summarize-logs.sh missing log-summary.txt\n```\n\n```bash\necho \"missing directory status: $?\"\n```\n\nTrạng thái thành công phải là `0`, còn trạng thái thiếu thư mục phải là `1`.",
+      "task_vi": "Thực hiện hướng dẫn: Kết hợp kiểm tra, vòng lặp và trạng thái thoát",
+      "hint_vi": "Chạy lệnh: chmod u+x summarize-logs.sh"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/shell-shell-scripting-fundamentals-725418.json"
+}

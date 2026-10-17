@@ -1,0 +1,125 @@
+{
+  "id": "linux-analyzing-disk-usage-7775",
+  "course_id": "linux-for-noobs",
+  "order": 15,
+  "title": "Rank Directory Usage",
+  "title_vi": "Phân Tích Dung Lượng Bộ Nhớ Đĩa",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "overview": "A workspace contains three directories with different amounts of data. Before cleanup, an administrator needs a small report ordered from the least-used directory to the most-used directory.  This cha",
+  "source_url": "https://labex.io/tutorials/linux-analyzing-disk-usage-7775",
+  "source_lab_id": 7775,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A workspace contains three directories with different amounts of data. Before cleanup, an administrator needs a small report ordered from the least-used directory to the most-used directory.\n\nThis challenge uses the `du`, `sort`, pipeline, and redirection patterns already practiced in preceding guided labs.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một không gian làm việc chứa ba thư mục với lượng dữ liệu khác nhau. Trước khi dọn dẹp, một quản trị viên cần một báo cáo nhỏ được sắp xếp từ thư mục chiếm ít dung lượng nhất đến thư mục chiếm nhiều dung lượng nhất.\n\nThử thách này sử dụng các mẫu lệnh `du`, `sort`, pipeline (đường ống) và chuyển hướng (redirection) đã được thực hành trong các phòng thực hành có hướng dẫn trước đó."
+    },
+    {
+      "id": "source-7775-section-1-v3",
+      "title": "Create the Usage Ranking",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe immediate children of `/home/labex/project/disk-audit/workspace` are `cache`, `logs`, and `releases`. The empty `reports` directory is ready.\n\n### Scope\n\n- Measure the three immediate directories with human-readable summarized sizes.\n- Sort the measured lines from smallest to largest.\n- Save the complete output in `reports/directory-usage.txt`.\n- Do not change the prepared data.\n\n### Your Goal\n\nCreate one size-ordered directory-usage report.\n\n### Acceptance Criteria\n\n- `reports/directory-usage.txt` contains one `du -sh` result for each prepared directory.\n- The three lines are ordered by human-readable size from smallest to largest.\n- The prepared files retain their original sizes.\n\n### Hints\n\nWhich command chain was practiced earlier?\n\nUse summarized human-readable `du` output, send it through human-readable `sort`, and redirect the final output to the report.",
+      "title_vi": "Tạo bảng xếp hạng mức sử dụng",
+      "task": "Thực hiện hướng dẫn: Create the Usage Ranking",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/disk-audit/reports/directory-usage.txt <(cd /home/labex/project/disk-audit/; du -sh workspace/* | sort -h) && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/cache/cache.bin)\" = 1024 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/logs/application.log)\" = 8192 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/releases/release.bin)\" = 32768"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình hình hiện tại\n\nCác thư mục con trực tiếp của `/home/labex/project/disk-audit/workspace` là `cache`, `logs`, và `releases`. Thư mục trống `reports` đã sẵn sàng.\n\n### Phạm vi\n\n- Đo lường ba thư mục trực tiếp với kích thước được tóm tắt ở định dạng dễ đọc đối với con người.\n- Sắp xếp các dòng kết quả đo lường từ nhỏ đến lớn.\n- Lưu toàn bộ đầu ra vào `reports/directory-usage.txt`.\n- Không thay đổi dữ liệu đã chuẩn bị.\n\n### Mục tiêu của bạn\n\nTạo một báo cáo sử dụng thư mục được sắp xếp theo kích thước.\n\n### Tiêu chí chấp nhận\n\n- `reports/directory-usage.txt` chứa một kết quả `du -sh` cho mỗi thư mục đã chuẩn bị.\n- Ba dòng được sắp xếp theo kích thước dễ đọc đối với con người từ nhỏ đến lớn.\n- Các tệp đã chuẩn bị giữ nguyên kích thước ban đầu của chúng.\n\n### Gợi ý\n\nChuỗi lệnh nào đã được thực hành trước đó?\n\nSử dụng đầu ra `du` được tóm tắt dễ đọc đối với con người, chuyển nó qua lệnh `sort` dành cho định dạng dễ đọc đối với con người, và chuyển hướng đầu ra cuối cùng vào tệp báo cáo.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo bảng xếp hạng mức sử dụng",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You combined directory measurement, a pipeline, sorting, and redirection to create one useful storage report.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã kết hợp việc đo lường thư mục, một đường ống (pipeline), việc sắp xếp và chuyển hướng để tạo ra một báo cáo lưu trữ hữu ích."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-7775-section-1-v3",
+      "title": "Create the Usage Ranking",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe immediate children of `/home/labex/project/disk-audit/workspace` are `cache`, `logs`, and `releases`. The empty `reports` directory is ready.\n\n### Scope\n\n- Measure the three immediate directories with human-readable summarized sizes.\n- Sort the measured lines from smallest to largest.\n- Save the complete output in `reports/directory-usage.txt`.\n- Do not change the prepared data.\n\n### Your Goal\n\nCreate one size-ordered directory-usage report.\n\n### Acceptance Criteria\n\n- `reports/directory-usage.txt` contains one `du -sh` result for each prepared directory.\n- The three lines are ordered by human-readable size from smallest to largest.\n- The prepared files retain their original sizes.\n\n### Hints\n\nWhich command chain was practiced earlier?\n\nUse summarized human-readable `du` output, send it through human-readable `sort`, and redirect the final output to the report.",
+      "title_vi": "Tạo bảng xếp hạng mức sử dụng",
+      "task": "Thực hiện hướng dẫn: Create the Usage Ranking",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/disk-audit/reports/directory-usage.txt <(cd /home/labex/project/disk-audit/; du -sh workspace/* | sort -h) && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/cache/cache.bin)\" = 1024 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/logs/application.log)\" = 8192 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/releases/release.bin)\" = 32768"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/disk-audit/reports/directory-usage.txt <(cd /home/labex/project/disk-audit/; du -sh workspace/* | sort -h) && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/cache/cache.bin)\" = 1024 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/logs/application.log)\" = 8192 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/releases/release.bin)\" = 32768"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình hình hiện tại\n\nCác thư mục con trực tiếp của `/home/labex/project/disk-audit/workspace` là `cache`, `logs`, và `releases`. Thư mục trống `reports` đã sẵn sàng.\n\n### Phạm vi\n\n- Đo lường ba thư mục trực tiếp với kích thước được tóm tắt ở định dạng dễ đọc đối với con người.\n- Sắp xếp các dòng kết quả đo lường từ nhỏ đến lớn.\n- Lưu toàn bộ đầu ra vào `reports/directory-usage.txt`.\n- Không thay đổi dữ liệu đã chuẩn bị.\n\n### Mục tiêu của bạn\n\nTạo một báo cáo sử dụng thư mục được sắp xếp theo kích thước.\n\n### Tiêu chí chấp nhận\n\n- `reports/directory-usage.txt` chứa một kết quả `du -sh` cho mỗi thư mục đã chuẩn bị.\n- Ba dòng được sắp xếp theo kích thước dễ đọc đối với con người từ nhỏ đến lớn.\n- Các tệp đã chuẩn bị giữ nguyên kích thước ban đầu của chúng.\n\n### Gợi ý\n\nChuỗi lệnh nào đã được thực hành trước đó?\n\nSử dụng đầu ra `du` được tóm tắt dễ đọc đối với con người, chuyển nó qua lệnh `sort` dành cho định dạng dễ đọc đối với con người, và chuyển hướng đầu ra cuối cùng vào tệp báo cáo.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo bảng xếp hạng mức sử dụng",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-analyzing-disk-usage-7775.json"
+}

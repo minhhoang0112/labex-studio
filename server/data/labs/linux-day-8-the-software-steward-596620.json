@@ -1,0 +1,571 @@
+{
+  "id": "linux-day-8-the-software-steward-596620",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 8,
+  "title": "The Software Steward",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "Welcome, Software Steward! You've just joined a fast-growing tech startup as their first dedicated System Administrator. Your initial assignment is to take charge of a critical development server that has been managed collectively—and chaotically—by the development team. It's cluttered, potentially outdated, and needs a firm hand.",
+  "source_url": "https://labex.io/tutorials/linux-day-8-the-software-steward-596620",
+  "source_lab_id": 596620,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-8-the-software-steward-596620",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-8-the-software-steward-596620.json",
+    "reference_sha256": "1b04743abfa78d758cbe77302bab9dd671a14982e2cb30a7d2343c2c548a218f",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "intro-only-visible"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-8-the-software-steward-596620.json",
+  "sections": [
+    {
+      "id": "source-596620-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nWelcome, Software Steward! You've just joined a fast-growing tech startup as their first dedicated System Administrator. Your initial assignment is to take charge of a critical development server that has been managed collectively—and chaotically—by the development team. It's cluttered, potentially outdated, and needs a firm hand.\n\nYour mission is to establish order. You'll need to update the system's software sources, install essential tools requested by the team, verify that everything is correctly installed, remove obsolete software, and perform a general cleanup. This is your opportunity to demonstrate your value and bring professional-grade stability and efficiency to the company's infrastructure. The team is counting on you. Let's get this server in shape!\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Important Notice</div>\n<div class=\"text-sm\">\nThis challenge covers skills beyond <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. If you have not learned these topics yet, skip it for now and continue to <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, the next course in the <a href=\"https://labex.io/learn/linux\" class=\"underline\">Linux learning path</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>When to return:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Complete the <a href=\"https://labex.io/labs/software-installation-on-linux-18005?course=linux-for-noobs\" class=\"underline\">Software Installation on Linux</a> Guided Lab, then return and try this challenge again.</li>\n</ol>\n</div>\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Giới thiệu\n\nChào mừng bạn, Quản trị viên Phần mềm! Bạn vừa gia nhập một công ty khởi nghiệp công nghệ đang phát triển nhanh chóng với tư cách là Quản trị viên Hệ thống chuyên trách đầu tiên. Nhiệm vụ ban đầu của bạn là tiếp quản một máy chủ phát triển quan trọng đã được quản lý tập thể — và khá hỗn loạn — bởi đội ngũ phát triển. Nó đang bừa bộn, có khả năng đã lỗi thời và cần một bàn tay cứng rắn.\n\nSứ mệnh của bạn là thiết lập lại trật tự. Bạn sẽ cần cập nhật các nguồn phần mềm của hệ thống, cài đặt các công cụ thiết yếu được nhóm yêu cầu, xác minh rằng mọi thứ đã được cài đặt chính xác, gỡ bỏ phần mềm lỗi thời và thực hiện dọn dẹp tổng thể. Đây là cơ hội để bạn thể hiện giá trị của mình và mang lại sự ổn định cũng như hiệu suất chuyên nghiệp cho cơ sở hạ tầng của công ty. Đội ngũ đang đặt niềm tin vào bạn. Hãy cùng chỉnh đốn lại máy chủ này nào!\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Thông báo quan trọng</div>\n<div class=\"text-sm\">\nThử thách này bao gồm các kỹ năng nằm ngoài <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. Nếu bạn chưa học các chủ đề này, hãy bỏ qua nó lúc này và tiếp tục với <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, khóa học tiếp theo trong <a href=\"https://labex.io/learn/linux\" class=\"underline\">lộ trình học Linux</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>Khi nào nên quay lại:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Hoàn thành Lab hướng dẫn <a href=\"https://labex.io/labs/software-installation-on-linux-18005?course=linux-for-noobs\" class=\"underline\">Software Installation on Linux</a>, sau đó quay lại và thử lại thử thách này.</li>\n</ol>\n</div>"
+    },
+    {
+      "id": "source-596620-section-1-v2",
+      "title": "Updating System Package Repositories",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Updating System Package Repositories\n\nYour first task as the Software Steward is to ensure the server's package manager has the latest information about available software. An outdated package list can lead to installation errors or security vulnerabilities. You need to synchronize the local package index with the central repositories.\n\n### Tasks\n\n- Update the list of available packages from all configured sources.\n\n### Requirements\n\n- Use the Advanced Package Tool (`apt`) to perform the update.\n- You must execute the command with administrator privileges.\n\n### Examples\n\nAfter successfully updating the package repositories, you should see output indicating that the package lists have been refreshed. The command will typically show information about packages that can be upgraded and confirm that the update was successful.\n\n### Hints\n\n- Remember that system-wide changes, like updating package sources, require elevated permissions.\n- The `apt` command has a specific subcommand for refreshing the local package index.\n",
+      "task": "- Update the list of available packages from all configured sources.",
+      "hint": "- Remember that system-wide changes, like updating package sources, require elevated permissions.\n- The `apt` command has a specific subcommand for refreshing the local package index.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name '*Packages*' -print -quit)\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+update\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Cập nhật kho gói phần mềm hệ thống",
+      "content_vi": "## Cập nhật Kho lưu trữ Gói Hệ thống\n\nNhiệm vụ đầu tiên của bạn với tư cách là Người quản lý Phần mềm (Software Steward) là đảm bảo trình quản lý gói của máy chủ có thông tin mới nhất về phần mềm có sẵn. Danh sách gói lỗi thời có thể dẫn đến lỗi cài đặt hoặc lỗ hổng bảo mật. Bạn cần đồng bộ hóa chỉ mục gói cục bộ với các kho lưu trữ trung tâm.\n\n### Nhiệm vụ\n\n- Cập nhật danh sách các gói có sẵn từ tất cả các nguồn đã được định cấu hình.\n\n### Yêu cầu\n\n- Sử dụng Công cụ Gói Nâng cao (`apt`) để thực hiện việc cập nhật.\n- Bạn phải thực thi lệnh với quyền quản trị viên.\n\n### Ví dụ\n\nSau khi cập nhật thành công các kho lưu trữ gói, bạn sẽ thấy đầu ra cho biết danh sách gói đã được làm mới. Lệnh thường sẽ hiển thị thông tin về các gói có thể nâng cấp và xác nhận rằng quá trình cập nhật đã thành công.\n\n### Gợi ý\n\n- Hãy nhớ rằng các thay đổi trên toàn hệ thống, chẳng hạn như cập nhật nguồn gói, yêu cầu quyền nâng cao.\n- Lệnh `apt` có một lệnh con cụ thể để làm mới chỉ mục gói cục bộ."
+    },
+    {
+      "id": "source-596620-section-2-v2",
+      "title": "Installing Essential Software Packages",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Installing Essential Software Packages\n\nWith the package lists updated, it's time to fulfill a request from the development team. They need `neofetch`, a handy command-line tool that displays system information in a visually appealing way. Your task is to install it.\n\n### Tasks\n\n- Install the `neofetch` software package.\n\n### Requirements\n\n- Use the `apt` command to install the package.\n- The package name is `neofetch`.\n- Run the installation command with administrator privileges.\n\n### Examples\n\nAfter successful installation, the `neofetch` command should be available in your terminal. You should be able to run it and see a colorful display of your system information, including details about your operating system, kernel version, and hardware.\n\n### Hints\n\n- The `apt` command for installing packages is very common. Think of the action you want to perform: \"install\".\n- Don't forget to use `sudo`.\n",
+      "task": "- Install the `neofetch` software package.",
+      "hint": "- The `apt` command for installing packages is very common. Think of the action you want to perform: \"install\".\n- Don't forget to use `sudo`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?install\\s+(?:-y\\s+)?neofetch(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Cài đặt các gói phần mềm thiết yếu",
+      "content_vi": "## Cài đặt các gói phần mềm thiết yếu\n\nSau khi danh sách gói phần mềm đã được cập nhật, đã đến lúc đáp ứng yêu cầu từ đội ngũ phát triển. Họ cần `neofetch`, một công cụ dòng lệnh tiện lợi hiển thị thông tin hệ thống một cách trực quan và hấp dẫn. Nhiệm vụ của bạn là cài đặt nó.\n\n### Nhiệm vụ\n\n- Cài đặt gói phần mềm `neofetch`.\n\n### Yêu cầu\n\n- Sử dụng lệnh `apt` để cài đặt gói phần mềm.\n- Tên gói phần mềm là `neofetch`.\n- Chạy lệnh cài đặt với quyền quản trị viên.\n\n### Ví dụ\n\nSau khi cài đặt thành công, lệnh `neofetch` sẽ có sẵn trong terminal của bạn. Bạn sẽ có thể chạy nó và nhìn thấy màn hình hiển thị đầy màu sắc về thông tin hệ thống của mình, bao gồm các chi tiết về hệ điều hành, phiên bản kernel và phần cứng.\n\n### Gợi ý\n\n- Lệnh `apt` để cài đặt các gói phần mềm rất phổ biến. Hãy nghĩ về hành động bạn muốn thực hiện: \"install\".\n- Đừng quên sử dụng `sudo`."
+    },
+    {
+      "id": "source-596620-section-3-v2",
+      "title": "Verifying Installed Package Versions",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Verifying Installed Package Versions\n\nGreat, `neofetch` is installed. Before you report back to the team, it's good practice to verify the installation and note the version number. This confirms the task is complete and provides useful information for documentation or troubleshooting.\n\n### Tasks\n\n- Display detailed information for the `neofetch` package, including its version number.\n\n### Requirements\n\n- Use a command that can query the package database for details about an installed package.\n\n### Examples\n\nWhen you query the package information, you should see detailed output including the package name, current version, installation status, and other metadata. This information confirms that the package is properly installed and provides the version number you can report to the team.\n\n### Hints\n\n- The `apt` tool has a subcommand to `show` information about a package.\n- Alternatively, the `dpkg` command with the `-s` flag can also be used to check the status of a package.\n",
+      "task": "- Display detailed information for the `neofetch` package, including its version number.",
+      "hint": "- The `apt` tool has a subcommand to `show` information about a package.\n- Alternatively, the `dpkg` command with the `-s` flag can also be used to check the status of a package.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*apt\\s+show\\s+neofetch\\s*$",
+                  "^\\s*dpkg\\s+-s\\s+neofetch\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Kiểm tra phiên bản gói đã cài đặt",
+      "content_vi": "## Xác minh Phiên bản Gói đã cài đặt\n\nTuyệt vời, `neofetch` đã được cài đặt. Trước khi bạn báo cáo lại cho nhóm, thói quen tốt là xác minh việc cài đặt và ghi lại số phiên bản. Điều này xác nhận rằng nhiệm vụ đã hoàn thành và cung cấp thông tin hữu ích cho việc tài liệu hóa hoặc khắc phục sự cố.\n\n### Các nhiệm vụ\n\n- Hiển thị thông tin chi tiết cho gói `neofetch`, bao gồm cả số phiên bản của nó.\n\n### Yêu cầu\n\n- Sử dụng một lệnh có thể truy vấn cơ sở dữ liệu gói để lấy thông tin chi tiết về một gói đã cài đặt.\n\n### Ví dụ\n\nKhi bạn truy vấn thông tin gói, bạn sẽ thấy đầu ra chi tiết bao gồm tên gói, phiên bản hiện tại, trạng thái cài đặt và các siêu dữ liệu khác. Thông tin này xác nhận rằng gói đã được cài đặt đúng cách và cung cấp số phiên bản mà bạn có thể báo cáo cho nhóm.\n\n### Gợi ý\n\n- Công cụ `apt` có một lệnh con để `show` thông tin về một gói.\n- Ngoài ra, lệnh `dpkg` với cờ `-s` cũng có thể được sử dụng để kiểm tra trạng thái của một gói."
+    },
+    {
+      "id": "source-596620-section-4-v2",
+      "title": "Removing Unnecessary Software Packages",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Removing Unnecessary Software Packages\n\nWhile inspecting the server, you've found a package named `figlet` that was used for a one-off project and is no longer needed. To keep the system clean and secure, you should remove any obsolete software.\n\n### Tasks\n\n- Uninstall the `figlet` package from the system.\n\n### Requirements\n\n- Use the `apt` command to remove the package.\n- The package to be removed is `figlet`.\n- You must use administrator privileges to uninstall software.\n\n### Examples\n\nAfter successfully removing the package, the `figlet` command should no longer be available in your system. Attempts to run it or check its status should indicate that the package is not installed.\n\n### Hints\n\n- The `apt` subcommand for removing a package is quite intuitive. Think of the opposite of \"install\".\n- Remember to use `sudo`.\n",
+      "task": "- Uninstall the `figlet` package from the system.",
+      "hint": "- The `apt` subcommand for removing a package is quite intuitive. Think of the opposite of \"install\".\n- Remember to use `sudo`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! dpkg-query -W -f='${Status}' figlet 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?remove\\s+(?:-y\\s+)?figlet(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Gỡ bỏ các gói phần mềm không cần thiết",
+      "content_vi": "## Gỡ bỏ các gói phần mềm không cần thiết\n\nTrong quá trình kiểm tra máy chủ, bạn đã phát hiện ra một gói có tên là `figlet` từng được sử dụng cho một dự án dùng một lần và hiện không còn cần thiết nữa. Để giữ cho hệ thống sạch sẽ và bảo mật, bạn nên gỡ bỏ mọi phần mềm lỗi thời.\n\n### Các nhiệm vụ\n\n- Gỡ cài đặt gói `figlet` khỏi hệ thống.\n\n### Yêu cầu\n\n- Sử dụng lệnh `apt` để gỡ bỏ gói phần mềm.\n- Gói cần gỡ bỏ là `figlet`.\n- Bạn phải sử dụng quyền quản trị viên để gỡ cài đặt phần mềm.\n\n### Ví dụ\n\nSau khi gỡ bỏ gói thành công, lệnh `figlet` sẽ không còn khả dụng trên hệ thống của bạn. Các cố gắng chạy hoặc kiểm tra trạng thái của lệnh này sẽ cho biết rằng gói chưa được cài đặt.\n\n### Gợi ý\n\n- Lệnh phụ (subcommand) của `apt` để gỡ bỏ một gói rất trực quan. Hãy nghĩ đến từ trái nghĩa với \"install\".\n- Nhớ sử dụng `sudo`."
+    },
+    {
+      "id": "source-596620-section-5-v2",
+      "title": "Managing Package Dependencies",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Managing Package Dependencies\n\nAfter removing software, some packages that were installed as dependencies might no longer be needed by any other program. These are called \"orphaned\" dependencies, and they needlessly consume disk space. A good steward always cleans up after themselves.\n\n### Tasks\n\n- Remove all automatically installed dependencies that are no longer required by any package on the system.\n\n### Requirements\n\n- Use the specific `apt` command designed for cleaning up unused dependencies.\n- This operation requires administrator privileges.\n\n### Examples\n\nWhen you run the cleanup command, it will scan your system for packages that were automatically installed as dependencies but are no longer needed. If any orphaned packages are found, they will be listed and removed, helping to keep your system clean and efficient.\n\n### Hints\n\n- `apt` has a helpful command that \"automatically removes\" unused packages.\n- As always, this system-wide change requires `sudo`.\n",
+      "task": "- Remove all automatically installed dependencies that are no longer required by any package on the system.",
+      "hint": "- `apt` has a helpful command that \"automatically removes\" unused packages.\n- As always, this system-wide change requires `sudo`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! dpkg-query -W -f='${Status}' libtext-charwidth-perl 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?autoremove(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Quản lý phụ thuộc gói",
+      "content_vi": "## Quản lý các phụ thuộc của gói (Package Dependencies)\n\nSau khi gỡ bỏ phần mềm, một số gói được cài đặt như là các phần phụ thuộc (dependencies) có thể không còn cần thiết bởi bất kỳ chương trình nào khác nữa. Chúng được gọi là các phụ thuộc \"mồ côi\" (orphaned), và chúng lãng phí không gian ổ đĩa một cách vô ích. Một người quản lý hệ thống tốt luôn dọn dẹp sạch sẽ sau khi thao tác.\n\n### Các nhiệm vụ\n\n- Gỡ bỏ tất cả các phụ thuộc được cài đặt tự động mà không còn được yêu cầu bởi bất kỳ gói nào trên hệ thống nữa.\n\n### Các yêu cầu\n\n- Sử dụng lệnh `apt` cụ thể được thiết kế để dọn dẹp các phụ thuộc không dùng đến.\n- Thao tác này yêu cầu quyền quản trị viên.\n\n### Ví dụ\n\nKhi bạn chạy lệnh dọn dẹp, nó sẽ quét hệ thống của bạn để tìm các gói được cài đặt tự động như các phụ thuộc nhưng không còn cần thiết nữa. Nếu tìm thấy bất kỳ gói mồ côi nào, chúng sẽ được liệt kê và gỡ bỏ, giúp giữ cho hệ thống của bạn sạch sẽ và hiệu quả.\n\n### Gợi ý\n\n- `apt` có một lệnh hữu ích dùng để \"tự động gỡ bỏ\" (`automatically removes`) các gói không dùng đến.\n- Như thường lệ, thay đổi mang tính toàn hệ thống này yêu cầu quyền `sudo`."
+    },
+    {
+      "id": "source-596620-section-6-v2",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nCongratulations, Software Steward! You have successfully brought the development server under control. In this challenge, you practiced the complete lifecycle of software management on a Debian-based Linux system:\n\n- You updated the package repositories with `apt update`.\n- You installed new software using `apt install`.\n- You verified an installation with `apt show`.\n- You removed an obsolete package with `apt remove`.\n- You cleaned up unused dependencies with `apt autoremove`.\n\nThese are fundamental, everyday skills for any Linux administrator or power user. By mastering them, you ensure that your systems are up-to-date, secure, and free of clutter. You've proven your capabilities and laid the foundation for a well-managed infrastructure.\n",
+      "title_vi": "Tóm tắt",
+      "content_vi": "## Tổng kết\n\nChúc mừng, Người quản lý Phần mềm! Bạn đã kiểm soát thành công máy chủ phát triển. Trong thử thách này, bạn đã thực hành toàn bộ vòng đời quản lý phần mềm trên hệ thống Linux dựa trên Debian:\n\n- Bạn đã cập nhật kho lưu trữ gói bằng `apt update`.\n- Bạn đã cài đặt phần mềm mới bằng cách sử dụng `apt install`.\n- Bạn đã xác minh một lần cài đặt bằng `apt show`.\n- Bạn đã gỡ bỏ một gói lỗi thời bằng `apt remove`.\n- Bạn đã dọn dẹp các phụ thuộc không còn sử dụng bằng `apt autoremove`.\n\nĐây là những kỹ năng cơ bản và hàng ngày đối với bất kỳ quản trị viên Linux hoặc người dùng nâng cao nào. Bằng cách làm chủ chúng, bạn đảm bảo rằng hệ thống của mình luôn được cập nhật, bảo mật và không bị rác. Bạn đã chứng minh được năng lực của mình và đặt nền móng cho một cơ sở hạ tầng được quản lý tốt."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596620-section-1-v2",
+      "title": "Updating System Package Repositories",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Updating System Package Repositories\n\nYour first task as the Software Steward is to ensure the server's package manager has the latest information about available software. An outdated package list can lead to installation errors or security vulnerabilities. You need to synchronize the local package index with the central repositories.\n\n### Tasks\n\n- Update the list of available packages from all configured sources.\n\n### Requirements\n\n- Use the Advanced Package Tool (`apt`) to perform the update.\n- You must execute the command with administrator privileges.\n\n### Examples\n\nAfter successfully updating the package repositories, you should see output indicating that the package lists have been refreshed. The command will typically show information about packages that can be upgraded and confirm that the update was successful.\n\n### Hints\n\n- Remember that system-wide changes, like updating package sources, require elevated permissions.\n- The `apt` command has a specific subcommand for refreshing the local package index.\n",
+      "task": "- Update the list of available packages from all configured sources.",
+      "hint": "- Remember that system-wide changes, like updating package sources, require elevated permissions.\n- The `apt` command has a specific subcommand for refreshing the local package index.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name '*Packages*' -print -quit)\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+update\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Cập nhật kho gói phần mềm hệ thống",
+      "content_vi": "## Cập nhật Kho lưu trữ Gói Hệ thống\n\nNhiệm vụ đầu tiên của bạn với tư cách là Người quản lý Phần mềm (Software Steward) là đảm bảo trình quản lý gói của máy chủ có thông tin mới nhất về phần mềm có sẵn. Danh sách gói lỗi thời có thể dẫn đến lỗi cài đặt hoặc lỗ hổng bảo mật. Bạn cần đồng bộ hóa chỉ mục gói cục bộ với các kho lưu trữ trung tâm.\n\n### Nhiệm vụ\n\n- Cập nhật danh sách các gói có sẵn từ tất cả các nguồn đã được định cấu hình.\n\n### Yêu cầu\n\n- Sử dụng Công cụ Gói Nâng cao (`apt`) để thực hiện việc cập nhật.\n- Bạn phải thực thi lệnh với quyền quản trị viên.\n\n### Ví dụ\n\nSau khi cập nhật thành công các kho lưu trữ gói, bạn sẽ thấy đầu ra cho biết danh sách gói đã được làm mới. Lệnh thường sẽ hiển thị thông tin về các gói có thể nâng cấp và xác nhận rằng quá trình cập nhật đã thành công.\n\n### Gợi ý\n\n- Hãy nhớ rằng các thay đổi trên toàn hệ thống, chẳng hạn như cập nhật nguồn gói, yêu cầu quyền nâng cao.\n- Lệnh `apt` có một lệnh con cụ thể để làm mới chỉ mục gói cục bộ.",
+      "task_vi": "- Cập nhật danh sách các gói có sẵn từ tất cả các nguồn đã được cấu hình.",
+      "hint_vi": "Hãy nhớ rằng các thay đổi toàn hệ thống, như cập nhật nguồn gói, yêu cầu quyền nâng cao.\nLệnh `apt` có một lệnh con cụ thể để làm mới chỉ mục gói cục bộ."
+    },
+    {
+      "id": "source-596620-section-2-v2",
+      "title": "Installing Essential Software Packages",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Installing Essential Software Packages\n\nWith the package lists updated, it's time to fulfill a request from the development team. They need `neofetch`, a handy command-line tool that displays system information in a visually appealing way. Your task is to install it.\n\n### Tasks\n\n- Install the `neofetch` software package.\n\n### Requirements\n\n- Use the `apt` command to install the package.\n- The package name is `neofetch`.\n- Run the installation command with administrator privileges.\n\n### Examples\n\nAfter successful installation, the `neofetch` command should be available in your terminal. You should be able to run it and see a colorful display of your system information, including details about your operating system, kernel version, and hardware.\n\n### Hints\n\n- The `apt` command for installing packages is very common. Think of the action you want to perform: \"install\".\n- Don't forget to use `sudo`.\n",
+      "task": "- Install the `neofetch` software package.",
+      "hint": "- The `apt` command for installing packages is very common. Think of the action you want to perform: \"install\".\n- Don't forget to use `sudo`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?install\\s+(?:-y\\s+)?neofetch(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Cài đặt các gói phần mềm thiết yếu",
+      "content_vi": "## Cài đặt các gói phần mềm thiết yếu\n\nSau khi danh sách gói phần mềm đã được cập nhật, đã đến lúc đáp ứng yêu cầu từ đội ngũ phát triển. Họ cần `neofetch`, một công cụ dòng lệnh tiện lợi hiển thị thông tin hệ thống một cách trực quan và hấp dẫn. Nhiệm vụ của bạn là cài đặt nó.\n\n### Nhiệm vụ\n\n- Cài đặt gói phần mềm `neofetch`.\n\n### Yêu cầu\n\n- Sử dụng lệnh `apt` để cài đặt gói phần mềm.\n- Tên gói phần mềm là `neofetch`.\n- Chạy lệnh cài đặt với quyền quản trị viên.\n\n### Ví dụ\n\nSau khi cài đặt thành công, lệnh `neofetch` sẽ có sẵn trong terminal của bạn. Bạn sẽ có thể chạy nó và nhìn thấy màn hình hiển thị đầy màu sắc về thông tin hệ thống của mình, bao gồm các chi tiết về hệ điều hành, phiên bản kernel và phần cứng.\n\n### Gợi ý\n\n- Lệnh `apt` để cài đặt các gói phần mềm rất phổ biến. Hãy nghĩ về hành động bạn muốn thực hiện: \"install\".\n- Đừng quên sử dụng `sudo`.",
+      "task_vi": "- Cài đặt gói phần mềm `neofetch`.",
+      "hint_vi": "Lệnh `apt` để cài đặt gói rất phổ biến. Hãy nghĩ đến hành động bạn muốn thực hiện: \"install\".\nĐừng quên sử dụng `sudo`."
+    },
+    {
+      "id": "source-596620-section-3-v2",
+      "title": "Verifying Installed Package Versions",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Verifying Installed Package Versions\n\nGreat, `neofetch` is installed. Before you report back to the team, it's good practice to verify the installation and note the version number. This confirms the task is complete and provides useful information for documentation or troubleshooting.\n\n### Tasks\n\n- Display detailed information for the `neofetch` package, including its version number.\n\n### Requirements\n\n- Use a command that can query the package database for details about an installed package.\n\n### Examples\n\nWhen you query the package information, you should see detailed output including the package name, current version, installation status, and other metadata. This information confirms that the package is properly installed and provides the version number you can report to the team.\n\n### Hints\n\n- The `apt` tool has a subcommand to `show` information about a package.\n- Alternatively, the `dpkg` command with the `-s` flag can also be used to check the status of a package.\n",
+      "task": "- Display detailed information for the `neofetch` package, including its version number.",
+      "hint": "- The `apt` tool has a subcommand to `show` information about a package.\n- Alternatively, the `dpkg` command with the `-s` flag can also be used to check the status of a package.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*apt\\s+show\\s+neofetch\\s*$",
+                  "^\\s*dpkg\\s+-s\\s+neofetch\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Kiểm tra phiên bản gói đã cài đặt",
+      "content_vi": "## Xác minh Phiên bản Gói đã cài đặt\n\nTuyệt vời, `neofetch` đã được cài đặt. Trước khi bạn báo cáo lại cho nhóm, thói quen tốt là xác minh việc cài đặt và ghi lại số phiên bản. Điều này xác nhận rằng nhiệm vụ đã hoàn thành và cung cấp thông tin hữu ích cho việc tài liệu hóa hoặc khắc phục sự cố.\n\n### Các nhiệm vụ\n\n- Hiển thị thông tin chi tiết cho gói `neofetch`, bao gồm cả số phiên bản của nó.\n\n### Yêu cầu\n\n- Sử dụng một lệnh có thể truy vấn cơ sở dữ liệu gói để lấy thông tin chi tiết về một gói đã cài đặt.\n\n### Ví dụ\n\nKhi bạn truy vấn thông tin gói, bạn sẽ thấy đầu ra chi tiết bao gồm tên gói, phiên bản hiện tại, trạng thái cài đặt và các siêu dữ liệu khác. Thông tin này xác nhận rằng gói đã được cài đặt đúng cách và cung cấp số phiên bản mà bạn có thể báo cáo cho nhóm.\n\n### Gợi ý\n\n- Công cụ `apt` có một lệnh con để `show` thông tin về một gói.\n- Ngoài ra, lệnh `dpkg` với cờ `-s` cũng có thể được sử dụng để kiểm tra trạng thái của một gói.",
+      "task_vi": "- Hiển thị thông tin chi tiết cho gói `neofetch`, bao gồm cả số phiên bản của nó.",
+      "hint_vi": "- Công cụ `apt` có một lệnh con để `show` thông tin về một gói phần mềm.\n- Ngoài ra, lệnh `dpkg` với cờ `-s` cũng có thể được sử dụng để kiểm tra trạng thái của một gói phần mềm."
+    },
+    {
+      "id": "source-596620-section-4-v2",
+      "title": "Removing Unnecessary Software Packages",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Removing Unnecessary Software Packages\n\nWhile inspecting the server, you've found a package named `figlet` that was used for a one-off project and is no longer needed. To keep the system clean and secure, you should remove any obsolete software.\n\n### Tasks\n\n- Uninstall the `figlet` package from the system.\n\n### Requirements\n\n- Use the `apt` command to remove the package.\n- The package to be removed is `figlet`.\n- You must use administrator privileges to uninstall software.\n\n### Examples\n\nAfter successfully removing the package, the `figlet` command should no longer be available in your system. Attempts to run it or check its status should indicate that the package is not installed.\n\n### Hints\n\n- The `apt` subcommand for removing a package is quite intuitive. Think of the opposite of \"install\".\n- Remember to use `sudo`.\n",
+      "task": "- Uninstall the `figlet` package from the system.",
+      "hint": "- The `apt` subcommand for removing a package is quite intuitive. Think of the opposite of \"install\".\n- Remember to use `sudo`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! dpkg-query -W -f='${Status}' figlet 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?remove\\s+(?:-y\\s+)?figlet(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Gỡ bỏ các gói phần mềm không cần thiết",
+      "content_vi": "## Gỡ bỏ các gói phần mềm không cần thiết\n\nTrong quá trình kiểm tra máy chủ, bạn đã phát hiện ra một gói có tên là `figlet` từng được sử dụng cho một dự án dùng một lần và hiện không còn cần thiết nữa. Để giữ cho hệ thống sạch sẽ và bảo mật, bạn nên gỡ bỏ mọi phần mềm lỗi thời.\n\n### Các nhiệm vụ\n\n- Gỡ cài đặt gói `figlet` khỏi hệ thống.\n\n### Yêu cầu\n\n- Sử dụng lệnh `apt` để gỡ bỏ gói phần mềm.\n- Gói cần gỡ bỏ là `figlet`.\n- Bạn phải sử dụng quyền quản trị viên để gỡ cài đặt phần mềm.\n\n### Ví dụ\n\nSau khi gỡ bỏ gói thành công, lệnh `figlet` sẽ không còn khả dụng trên hệ thống của bạn. Các cố gắng chạy hoặc kiểm tra trạng thái của lệnh này sẽ cho biết rằng gói chưa được cài đặt.\n\n### Gợi ý\n\n- Lệnh phụ (subcommand) của `apt` để gỡ bỏ một gói rất trực quan. Hãy nghĩ đến từ trái nghĩa với \"install\".\n- Nhớ sử dụng `sudo`.",
+      "task_vi": "- Gỡ cài đặt gói `figlet` khỏi hệ thống.",
+      "hint_vi": "Lệnh con của `apt` để gỡ cài đặt một gói rất trực quan. Hãy nghĩ đến từ trái nghĩa với \"install\".\nHãy nhớ sử dụng `sudo`."
+    },
+    {
+      "id": "source-596620-section-5-v2",
+      "title": "Managing Package Dependencies",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Managing Package Dependencies\n\nAfter removing software, some packages that were installed as dependencies might no longer be needed by any other program. These are called \"orphaned\" dependencies, and they needlessly consume disk space. A good steward always cleans up after themselves.\n\n### Tasks\n\n- Remove all automatically installed dependencies that are no longer required by any package on the system.\n\n### Requirements\n\n- Use the specific `apt` command designed for cleaning up unused dependencies.\n- This operation requires administrator privileges.\n\n### Examples\n\nWhen you run the cleanup command, it will scan your system for packages that were automatically installed as dependencies but are no longer needed. If any orphaned packages are found, they will be listed and removed, helping to keep your system clean and efficient.\n\n### Hints\n\n- `apt` has a helpful command that \"automatically removes\" unused packages.\n- As always, this system-wide change requires `sudo`.\n",
+      "task": "- Remove all automatically installed dependencies that are no longer required by any package on the system.",
+      "hint": "- `apt` has a helpful command that \"automatically removes\" unused packages.\n- As always, this system-wide change requires `sudo`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+      },
+      "required_capabilities": [
+        "private-package-image"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! dpkg-query -W -f='${Status}' libtext-charwidth-perl 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?autoremove(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "package_management"
+        ]
+      },
+      "title_vi": "Quản lý phụ thuộc gói",
+      "content_vi": "## Quản lý các phụ thuộc của gói (Package Dependencies)\n\nSau khi gỡ bỏ phần mềm, một số gói được cài đặt như là các phần phụ thuộc (dependencies) có thể không còn cần thiết bởi bất kỳ chương trình nào khác nữa. Chúng được gọi là các phụ thuộc \"mồ côi\" (orphaned), và chúng lãng phí không gian ổ đĩa một cách vô ích. Một người quản lý hệ thống tốt luôn dọn dẹp sạch sẽ sau khi thao tác.\n\n### Các nhiệm vụ\n\n- Gỡ bỏ tất cả các phụ thuộc được cài đặt tự động mà không còn được yêu cầu bởi bất kỳ gói nào trên hệ thống nữa.\n\n### Các yêu cầu\n\n- Sử dụng lệnh `apt` cụ thể được thiết kế để dọn dẹp các phụ thuộc không dùng đến.\n- Thao tác này yêu cầu quyền quản trị viên.\n\n### Ví dụ\n\nKhi bạn chạy lệnh dọn dẹp, nó sẽ quét hệ thống của bạn để tìm các gói được cài đặt tự động như các phụ thuộc nhưng không còn cần thiết nữa. Nếu tìm thấy bất kỳ gói mồ côi nào, chúng sẽ được liệt kê và gỡ bỏ, giúp giữ cho hệ thống của bạn sạch sẽ và hiệu quả.\n\n### Gợi ý\n\n- `apt` có một lệnh hữu ích dùng để \"tự động gỡ bỏ\" (`automatically removes`) các gói không dùng đến.\n- Như thường lệ, thay đổi mang tính toàn hệ thống này yêu cầu quyền `sudo`.",
+      "task_vi": "- Gỡ bỏ tất cả các phụ thuộc được cài đặt tự động mà không còn cần thiết bởi bất kỳ gói nào trên hệ thống.",
+      "hint_vi": "`apt` có một lệnh hữu ích giúp \"tự động xóa\" các gói không dùng đến.\nNhư thường lệ, thay đổi toàn hệ thống này yêu cầu quyền `sudo`."
+    }
+  ],
+  "title_vi": "Ngày 8: Quản Trị Gói Phần Mềm"
+}

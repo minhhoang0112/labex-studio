@@ -1,0 +1,387 @@
+{
+  "id": "linux-linux-find-command-file-searching-219191",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219191,
+  "source_url": "https://labex.io/tutorials/linux-linux-find-command-file-searching-219191",
+  "order": 21,
+  "title": "Linux find Command: File Searching",
+  "title_vi": "Lệnh find: tìm kiếm tệp",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux find Command: File Searching",
+  "sections": [
+    {
+      "id": "commands-219191-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux find Command: File Searching. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh find: tìm kiếm tệp. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219191-section-1-v1",
+      "title": "Getting Started with find",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm theo tên",
+      "content": "Search recursively from the project directory for clue.txt.\n\n```bash\nfind . -name \"clue.txt\"\n```",
+      "content_vi": "Tìm đệ quy từ thư mục dự án theo tên clue.txt.\n\n```bash\nfind . -name \"clue.txt\"\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-name\\ \"clue\\.txt\"\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-2-v1",
+      "title": "Searching for Multiple File Types",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm nhiều loại tệp",
+      "content": "Match txt or log extensions with -o. Quote wildcards to prevent shell expansion.\n\n```bash\nfind . -name \"*.txt\" -o -name \"*.log\"\n```",
+      "content_vi": "Dùng -o tìm đuôi txt hoặc log. Đặt wildcard trong dấu nháy để shell không mở rộng trước.\n\n```bash\nfind . -name \"*.txt\" -o -name \"*.log\"\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-name\\ \"\\*\\.txt\"\\ \\-o\\ \\-name\\ \"\\*\\.log\"\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-3-v1",
+      "title": "Finding Files by Size",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm theo kích thước",
+      "content": "Search regular files larger than one MiB.\n\n```bash\nfind . -type f -size +1M\n```",
+      "content_vi": "Tìm tệp thông thường lớn hơn một MiB.\n\n```bash\nfind . -type f -size +1M\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-type\\ f\\ \\-size\\ \\+1M\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-4-v1",
+      "title": "Finding Recently Modified Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm tệp sửa gần đây",
+      "content": "Find regular files modified less than one day ago.\n\n```bash\nfind . -type f -mtime -1\n```",
+      "content_vi": "Tìm tệp thông thường được sửa trong vòng một ngày.\n\n```bash\nfind . -type f -mtime -1\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-type\\ f\\ \\-mtime\\ \\-1\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-5-v1",
+      "title": "Executing Commands on Found Files",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chạy lệnh trên kết quả",
+      "content": "Read each txt file using -exec cat; escape the terminating semicolon.\n\n```bash\nfind . -name \"*.txt\" -exec cat {} \\;\n```",
+      "content_vi": "Dùng -exec cat đọc từng tệp txt; thêm dấu gạch chéo trước dấu chấm phẩy kết thúc.\n\n```bash\nfind . -name \"*.txt\" -exec cat {} \\;\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-name\\ \"\\*\\.txt\"\\ \\-exec\\ cat\\ \\{\\}\\ \\\\;\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219191-section-1-v1",
+      "title": "Getting Started with find",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm theo tên",
+      "content": "Search recursively from the project directory for clue.txt.\n\n```bash\nfind . -name \"clue.txt\"\n```",
+      "content_vi": "Tìm đệ quy từ thư mục dự án theo tên clue.txt.\n\n```bash\nfind . -name \"clue.txt\"\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-name\\ \"clue\\.txt\"\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-2-v1",
+      "title": "Searching for Multiple File Types",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm nhiều loại tệp",
+      "content": "Match txt or log extensions with -o. Quote wildcards to prevent shell expansion.\n\n```bash\nfind . -name \"*.txt\" -o -name \"*.log\"\n```",
+      "content_vi": "Dùng -o tìm đuôi txt hoặc log. Đặt wildcard trong dấu nháy để shell không mở rộng trước.\n\n```bash\nfind . -name \"*.txt\" -o -name \"*.log\"\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-name\\ \"\\*\\.txt\"\\ \\-o\\ \\-name\\ \"\\*\\.log\"\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-3-v1",
+      "title": "Finding Files by Size",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm theo kích thước",
+      "content": "Search regular files larger than one MiB.\n\n```bash\nfind . -type f -size +1M\n```",
+      "content_vi": "Tìm tệp thông thường lớn hơn một MiB.\n\n```bash\nfind . -type f -size +1M\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-type\\ f\\ \\-size\\ \\+1M\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-4-v1",
+      "title": "Finding Recently Modified Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm tệp sửa gần đây",
+      "content": "Find regular files modified less than one day ago.\n\n```bash\nfind . -type f -mtime -1\n```",
+      "content_vi": "Tìm tệp thông thường được sửa trong vòng một ngày.\n\n```bash\nfind . -type f -mtime -1\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-type\\ f\\ \\-mtime\\ \\-1\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219191-section-5-v1",
+      "title": "Executing Commands on Found Files",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chạy lệnh trên kết quả",
+      "content": "Read each txt file using -exec cat; escape the terminating semicolon.\n\n```bash\nfind . -name \"*.txt\" -exec cat {} \\;\n```",
+      "content_vi": "Dùng -exec cat đọc từng tệp txt; thêm dấu gạch chéo trước dấu chấm phẩy kết thúc.\n\n```bash\nfind . -name \"*.txt\" -exec cat {} \\;\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)find\\ \\.\\ \\-name\\ \"\\*\\.txt\"\\ \\-exec\\ cat\\ \\{\\}\\ \\\\;\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-find-command-file-searching-219191.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

@@ -1,0 +1,844 @@
+{
+  "linux-analyze-historical-commands-17988": {
+    "title_vi": "Trích xuất tên chương trình từ lịch sử lệnh",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một bản xuất lịch sử nhỏ lưu số thứ tự bản ghi và tên chương trình trên mỗi dòng được phân cách bằng dấu gạch đứng. Một người phân tích chỉ cần trường tên chương trình cho báo cáo sau này.\n\nThử thách này áp dụng cách trích xuất trường từ bài pipeline và chuyển hướng tệp từ bài luồng vào một sản phẩm đầu ra đơn giản.",
+        "source_content_sha256": "bbc1ac2c16db031516f16e3a628c3e47357f7a08b0f59cd6511fbc1b6db38b85"
+      },
+      {
+        "position": 1,
+        "title_vi": "Trích xuất trường tên chương trình",
+        "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/history-analysis/command-history.txt` chứa năm bản ghi. Mỗi dòng có số lịch sử ở trường 1 và tên chương trình ở trường 2, phân cách bằng `|`.\n\n### Phạm vi\n\n- Trích xuất trường 2 từ mọi bản ghi.\n- Giữ thứ tự bản ghi ban đầu và các tên lặp lại.\n- Lưu kết quả thành `programs.txt`.\n\n### Mục tiêu của bạn\n\nTạo một tệp chứa năm tên chương trình, mỗi dòng một tên.\n\n### Tiêu chí đạt\n\n- `programs.txt` chứa đúng một giá trị trường 2 cho mỗi bản ghi nguồn.\n- Không có số lịch sử và ký tự phân cách.\n- Giữ nguyên thứ tự nguồn và mục `ls` lặp lại.\n\n### Gợi ý\n\nCông cụ xử lý trường nào phù hợp?\n\nBài pipeline đã dùng `cut` với ký tự phân cách và số trường được chọn. Chuyển hướng đầu ra chuẩn của lệnh đó vào tệp yêu cầu.",
+        "source_content_sha256": "8224d9a85c1f105c659aa072cce146c43fc72462edfb79920888c92162045175",
+        "task_vi": "Thực hiện hướng dẫn: Trích xuất trường tên chương trình",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã trích xuất một trường có phân cách và lưu nó bằng chuyển hướng đầu ra chuẩn.",
+        "source_content_sha256": "54ba3407bcca63ea14a26cad82b823e5e689f79f5b52fa6bf447defa2e891c92"
+      }
+    ]
+  },
+  "linux-correct-a-service-bind-address-725411": {
+    "title_vi": "Sửa địa chỉ bind của dịch vụ",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một trang trạng thái nội bộ hoạt động trên giao diện loopback nhưng cần lắng nghe trên mọi giao diện IPv4. Cổng và nội dung trang đã đúng.\n\nBài mạng trước đã luyện kiểm tra nơi lắng nghe bằng `ss`, thử HTTP bằng `curl` và đọc cấu hình dịch vụ. Thử thách này chỉ thay địa chỉ bind.",
+        "source_content_sha256": "659eda64dc9f553faaac1946810e5f251163d5280548201f652ec1854d8108d1"
+      },
+      {
+        "position": 1,
+        "title_vi": "Cho trang trạng thái lắng nghe trên mọi giao diện IPv4",
+        "content_vi": "### Tình huống hiện tại\n\n`labex-status-page.service` đang hoạt động trên cổng TCP `8090`, nhưng chỉ lắng nghe trên `127.0.0.1`. Cấu hình của nó là `/etc/labex-status-page.conf`.\n\n### Phạm vi\n\n- Chỉ thay `BIND_ADDRESS`.\n- Giữ cổng `8090` và nội dung trang hiện có.\n- Chỉ khởi động lại `labex-status-page.service`.\n\n### Mục tiêu của bạn\n\nĐể trang trạng thái lắng nghe trên `0.0.0.0:8090` và vẫn trả về `internal status ready`.\n\n### Tiêu chí đạt\n\n- `labex-status-page.service` đang hoạt động.\n- `ss` cho thấy nơi lắng nghe IPv4 trên `0.0.0.0:8090`.\n- `curl http://127.0.0.1:8090/` trả nội dung chứa `internal status ready`.\n\n### Gợi ý\n\nTôi có thể so sánh trạng thái hiện tại và yêu cầu như thế nào?\n\nKiểm tra cổng `8090` bằng `ss`, đọc tệp cấu hình được nêu, rồi khởi động lại dịch vụ sau khi đổi giá trị bind.",
+        "source_content_sha256": "3ea8a57db7befa13988292169adc240fa972203ff4d1535dfb1948a8abf62e25",
+        "task_vi": "Thực hiện hướng dẫn: Cho trang trạng thái lắng nghe trên mọi giao diện IPv4",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã sửa một địa chỉ bind của dịch vụ và xác minh cả nơi lắng nghe lẫn phản hồi HTTP được giữ nguyên.",
+        "source_content_sha256": "70195256dfcea85874002fc9cda2a0200c811c46a5ac3b0ad5928aae5ef40d71"
+      }
+    ]
+  },
+  "linux-data-stream-redirection-17995": {
+    "title_vi": "Chuyển hướng luồng dữ liệu",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Lệnh Linux thường đọc đầu vào từ terminal và ghi kết quả trở lại đó. Shell có thể nối lại các luồng dữ liệu này với tệp hoặc lệnh khác. Đây được gọi là chuyển hướng và là nền tảng của ghi log, pipeline, tác vụ nền và script shell.\n\nTrong bài này, bạn sẽ làm việc với đầu vào chuẩn, đầu ra chuẩn và lỗi chuẩn. Bạn sẽ học khi nào `>` ghi đè, khi nào `>>` nối thêm, cách `2>` và `2>&1` xử lý lỗi, cách đường ống truyền dữ liệu, cách `tee` vừa hiển thị vừa lưu cùng một đầu ra và khi nào `/dev/null` hữu ích.",
+        "source_content_sha256": "70df23507f1941ea9285a89d47b6b1463cf5b4f6c9845fe6a0b48f368c0954a5"
+      },
+      {
+        "position": 1,
+        "title_vi": "Hiểu đầu vào, đầu ra và lỗi chuẩn",
+        "content_vi": "Trong bước này, bạn sẽ tạo một tệp đầu vào nhỏ và nối nó với các lệnh thông qua đầu vào chuẩn.\n\nMỗi lệnh bắt đầu với ba luồng chuẩn:\n\nBộ mô tả\nTên\nKết nối mặc định\n\n`0`\nđầu vào chuẩn, hay stdin\nbàn phím\n\n`1`\nđầu ra chuẩn, hay stdout\nterminal\n\n`2`\nlỗi chuẩn, hay stderr\nterminal\n\nTạo và đi vào thư mục làm việc:\n\n```bash\nmkdir -p /home/labex/project/streams-lab\n```\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\nTạo tệp đầu vào ba dòng bằng here-document. Shell chuyển các dòng giữa hai mốc `EOF` vào `cat`, còn `>` lưu đầu ra của `cat` trong `input.txt`:\n\n```bash\ncat > input.txt <<'EOF'\nalpha\nbeta\ngamma\nEOF\n```\n\nThông thường, `cat input.txt` nhận tên tệp làm đối số. Thay vào đó, toán tử `<` nối tệp với bộ mô tả `0`, tức đầu vào chuẩn:\n\n```bash\ncat < input.txt\n```\n\nBạn sẽ thấy ba dòng. Dùng cùng cách chuyển hướng đầu vào với `wc -l`, lệnh đếm số dòng:\n\n```bash\nwc -l < input.txt\n```\n\nĐầu ra phải là `3`. Vì tên tệp không phải là đối số của `wc`, chỉ con số được in ra.",
+        "source_content_sha256": "ba6b8f0d42f30d648240dbfbfa2d651aea47caa047f4625690641a50af7e1918",
+        "task_vi": "Thực hiện hướng dẫn: Hiểu đầu vào, đầu ra và lỗi chuẩn",
+        "hint_vi": "Chạy lệnh: mkdir -p /home/labex/project/streams-lab"
+      },
+      {
+        "position": 2,
+        "title_vi": "Chuyển hướng và nối thêm đầu ra chuẩn",
+        "content_vi": "Trong bước này, bạn sẽ chuyển hướng đầu ra thông thường của lệnh và quan sát sự khác nhau giữa ghi đè và nối thêm.\n\nĐảm bảo bạn đang ở thư mục làm việc với luồng:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\nToán tử `>` nối bộ mô tả `1`, tức đầu ra chuẩn, với một tệp. Nó tạo tệp hoặc xóa nội dung hiện có trước khi ghi:\n\n```bash\necho \"Stream report\" > report.txt\n```\n\n```bash\ncat report.txt\n```\n\nChạy một lần ghi đè nữa để thấy dòng trước biến mất:\n\n```bash\necho \"Input lines: 3\" > report.txt\n```\n\n```bash\ncat report.txt\n```\n\nBây giờ dùng `>>`, thao tác mở đích ở chế độ nối thêm:\n\n```bash\necho \"Status: complete\" >> report.txt\n```\n\n```bash\ncat report.txt\n```\n\nTệp phải chứa đúng hai dòng: `Input lines: 3`, tiếp theo là `Status: complete`. Shell thực hiện chuyển hướng trước khi lệnh bắt đầu.",
+        "source_content_sha256": "71874cb9e2c16fc16f0c3105164190bb36f57b2764be48b620b07f7e644490b3",
+        "task_vi": "Thực hiện hướng dẫn: Chuyển hướng và nối thêm đầu ra chuẩn",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/streams-lab"
+      },
+      {
+        "position": 3,
+        "title_vi": "Tách đầu ra chuẩn và lỗi chuẩn",
+        "content_vi": "Trong bước này, bạn sẽ chạy một lệnh tạo cả đầu ra thông thường lẫn lỗi, rồi lưu mỗi luồng vào một tệp khác nhau.\n\nLệnh `ls` sau nhận một đường dẫn tồn tại và một đường dẫn bị thiếu:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\n```bash\nls -l input.txt missing.txt\n```\n\nDòng mô tả `input.txt` là stdout. Thông báo `No such file or directory` là stderr. Theo mặc định cả hai đều xuất hiện trong terminal nhưng chúng là các luồng riêng biệt.\n\nChuyển hướng bộ mô tả `1` bằng `>` và bộ mô tả `2` bằng `2>`:\n\n```bash\nls -l input.txt missing.txt > listing.log 2> errors.log\n```\n\nLệnh vẫn trả về trạng thái thoát khác 0 vì một đường dẫn bị thiếu, nhưng shell vẫn sẵn sàng cho lệnh tiếp theo. Kiểm tra các tệp đích:\n\n```bash\ncat listing.log\n```\n\n```bash\ncat errors.log\n```\n\n`listing.log` phải nhắc đến `input.txt` mà không có lỗi. `errors.log` phải nhắc đến `missing.txt` và lỗi, không chứa kết quả liệt kê thành công.",
+        "source_content_sha256": "06637ae7ba47469339223e0c65c8c6ebe3afedcd88ea7ceb604425658a454608",
+        "task_vi": "Thực hiện hướng dẫn: Tách đầu ra chuẩn và lỗi chuẩn",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/streams-lab"
+      },
+      {
+        "position": 4,
+        "title_vi": "Gộp đầu ra chuẩn và lỗi chuẩn",
+        "content_vi": "Trong bước này, bạn sẽ đưa stdout và stderr vào một log và tìm hiểu vì sao thứ tự chuyển hướng có ý nghĩa.\n\nTrước hết chuyển hướng stdout vào `combined.log`, sau đó trỏ bộ mô tả `2` tới đích hiện tại của bộ mô tả `1`:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\n```bash\nls -l input.txt missing.txt > combined.log 2>&1\n```\n\nBiểu thức `2>&1` có nghĩa là \"đưa bộ mô tả 2 tới cùng đích mà bộ mô tả 1 hiện đang sử dụng\". Vì `> combined.log` đứng trước nên cả hai luồng đều đi vào tệp.\n\n```bash\ncat combined.log\n```\n\nTệp phải chứa cả kết quả liệt kê `input.txt` và lỗi về `missing.txt`.\n\nBash cũng hỗ trợ `&>` làm cách viết ngắn để chuyển hướng cả hai luồng:\n\n```bash\nls -l report.txt absent.txt &> shorthand.log\n```\n\n```bash\ncat shorthand.log\n```\n\nTệp thứ hai này phải chứa kết quả liệt kê thành công của `report.txt` và lỗi về `absent.txt`. Dạng có tính di động `> file 2>&1` đặc biệt phổ biến trong script và lệnh dịch vụ.",
+        "source_content_sha256": "ece878b1423cd492f7b126b637074c2c13573c1be879e396ae108be57de9a2db",
+        "task_vi": "Thực hiện hướng dẫn: Gộp đầu ra chuẩn và lỗi chuẩn",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/streams-lab"
+      },
+      {
+        "position": 5,
+        "title_vi": "Xem và lưu đầu ra pipeline bằng tee",
+        "content_vi": "Trong bước này, bạn sẽ dùng pipeline và `tee` để hiển thị đầu ra đồng thời lưu cùng dữ liệu đó vào tệp.\n\nĐường ống, viết là `|`, nối stdout của lệnh bên trái với stdin của lệnh bên phải. Sắp xếp tệp đầu vào theo thứ tự chữ cái đảo ngược:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\n```bash\nsort -r input.txt\n```\n\nVới chuyển hướng đầu ra thông thường, các dòng đã sắp xếp đi vào tệp và không còn xuất hiện trong terminal:\n\n```bash\nsort -r input.txt > sorted.txt\n```\n\n```bash\ncat sorted.txt\n```\n\nLệnh `tee` sao chép stdin của nó tới cả stdout và tệp được chỉ định. Chạy cùng phép sắp xếp qua một đường ống:\n\n```bash\nsort -r input.txt | tee sorted.txt\n```\n\nBạn sẽ thấy các dòng đã sắp xếp trên màn hình và `sorted.txt` nhận cùng nội dung. Theo mặc định, `tee` ghi đè đích giống như `>`.\n\nTùy chọn `-a` khiến `tee` nối thêm. Thêm một dòng nữa đồng thời hiển thị nó:\n\n```bash\necho \"delta\" | tee -a sorted.txt\n```\n\n```bash\ncat sorted.txt\n```\n\nBây giờ tệp phải chứa `gamma`, `beta`, `alpha` và `delta`. `tee` hữu ích khi bạn cần phản hồi trực tiếp trên terminal và một bản log được lưu cùng lúc.",
+        "source_content_sha256": "f6195d9d07c4824cadf169dbdf4f18d74855da4e277c7fda1e561adadb2308c4",
+        "task_vi": "Thực hiện hướng dẫn: Xem và lưu đầu ra pipeline bằng tee",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/streams-lab"
+      },
+      {
+        "position": 6,
+        "title_vi": "Loại bỏ dữ liệu không cần bằng /dev/null",
+        "content_vi": "Trong bước này, bạn sẽ chủ ý loại bỏ một luồng bằng `/dev/null`, giữ đầu ra hữu ích bằng `tee` và làm rỗng một log hiện có.\n\n`/dev/null` là thiết bị đặc biệt chấp nhận và loại bỏ mọi thứ được ghi vào nó. Liệt kê một thư mục có thật và một thư mục bị thiếu trong khi chỉ loại bỏ stderr:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\n```bash\nls -l . missing-directory 2> /dev/null\n```\n\nBạn sẽ thấy danh sách thư mục nhưng không thấy lỗi thư mục bị thiếu. Kết hợp với `tee` để stdout hiển thị cũng được lưu:\n\n```bash\nls -l . missing-directory 2> /dev/null | tee visible-listing.log\n```\n\nĐường ống chỉ mang stdout. Stderr đã được chuyển riêng tới `/dev/null` trước khi đường ống nhận dữ liệu.\n\nKiểm tra danh sách đã lưu:\n\n```bash\ncat visible-listing.log\n```\n\nCuối cùng, tạo một log tạm có thể bỏ đi, rồi dùng `/dev/null` làm nguồn đầu vào rỗng để xóa nội dung của nó. Một tệp riêng giữ bằng chứng gộp luồng từ Bước 4:\n\n```bash\necho \"outdated scratch data\" > scratch.log\ncat /dev/null > scratch.log\n```\n\nKiểm tra kích thước:\n\n```bash\nls -l scratch.log\n```\n\nTệp vẫn phải tồn tại với kích thước `0` byte. Hãy chủ ý khi loại bỏ dữ liệu: lỗi bị che có thể khiến việc xử lý sự cố khó hơn khi bạn thực sự cần thông tin chẩn đoán.",
+        "source_content_sha256": "1f8a7f310f4356443b919973741d8c4b6c70082535375207d06914887a0a17ec",
+        "task_vi": "Thực hiện hướng dẫn: Loại bỏ dữ liệu không cần bằng /dev/null",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/streams-lab"
+      },
+      {
+        "position": 7,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã thực hành ba luồng chuẩn và bộ mô tả tệp của chúng, nối tệp với stdin bằng `<`, chuyển hướng stdout bằng `>` và `>>`. Bạn đã tách stderr bằng `2>`, gộp nó với stdout bằng `2>&1` và `&>`, đồng thời hiểu vì sao thứ tự toán tử quan trọng.\n\nBạn cũng so sánh chuyển hướng tệp thông thường với pipeline và `tee`, dùng `tee -a` để nối thêm đồng thời hiển thị đầu ra, và loại bỏ dữ liệu không cần bằng `/dev/null`. Những mẫu này chuẩn bị cho bạn hiểu việc ghi log, lệnh nền và script shell ở phần sau của khóa học.",
+        "source_content_sha256": "eb71f3eade7dc6bdc80f6d1a27def299fe7403963a815f2459391f379e9dfb03"
+      }
+    ]
+  },
+  "linux-extracting-mails-and-numbers-17991": {
+    "title_vi": "Trích xuất các địa chỉ email không trùng lặp",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Ghi chú bàn giao sự cố nhắc đến một số địa chỉ liên hệ, trong đó có địa chỉ lặp lại và các chuỗi gần giống nhưng sai định dạng. Ca trực tiếp theo cần một danh sách liên hệ sạch.\n\nBài thực hành biểu thức chính quy trước đó đã luyện mẫu email và cách chỉ xuất phần khớp. Các bài trước đã giới thiệu sắp xếp và loại bỏ bản trùng.",
+        "source_content_sha256": "5146379110e1dbec31465997a90f15fc99c290d1c301adb46e3483e095e936b7"
+      },
+      {
+        "position": 1,
+        "title_vi": "Xây dựng danh sách liên hệ",
+        "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/extraction-challenge/handover.txt` chứa lẫn địa chỉ email hợp lệ, một địa chỉ trùng và các chuỗi gần giống nhưng sai định dạng.\n\n### Phạm vi\n\n- Chỉ trích xuất phần khớp là địa chỉ email đầy đủ.\n- Sắp xếp các địa chỉ đã trích xuất theo thứ tự chữ cái.\n- Chỉ giữ mỗi địa chỉ khác nhau một lần.\n- Lưu kết quả thành `emails.txt`.\n\n### Mục tiêu của bạn\n\nTạo một danh sách địa chỉ email hợp lệ từ ghi chú bàn giao, đã sắp xếp và không trùng lặp.\n\n### Tiêu chí đạt\n\n- `emails.txt` chứa đúng ba địa chỉ hợp lệ, mỗi dòng một địa chỉ.\n- Các địa chỉ được sắp xếp theo thứ tự chữ cái và không lặp lại.\n- Những chuỗi gần giống nhưng sai định dạng bị loại bỏ.\n\n### Gợi ý\n\nTôi có thể dùng lại biểu thức chính quy nào?\n\nBài hướng dẫn trước đã trình bày mẫu `grep` mở rộng để trích xuất phần khớp có dạng email. Chuyển các phần khớp đó qua pipeline quen thuộc gồm sắp xếp rồi `uniq`.",
+        "source_content_sha256": "2f3fcaa2a8a7479ec8aefc496c5a097eca97e25173dd7675b70f581f5ff5a0d5",
+        "task_vi": "Thực hiện hướng dẫn: Xây dựng danh sách liên hệ",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã trích xuất một loại giá trị bằng biểu thức chính quy đã học và chuẩn hóa kết quả bằng những lệnh pipeline quen thuộc.",
+        "source_content_sha256": "12611f3133f1d4da3cf74b264b182da3390721651b69ab11c531df190d6573eb"
+      }
+    ]
+  },
+  "linux-installing-and-removing-packages-385380": {
+    "title_vi": "Cài đặt gói giám sát cục bộ",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một lệnh giám sát được phê duyệt đã được cung cấp dưới dạng gói Debian cục bộ. Nó phải được cài qua trình quản lý gói để hệ thống ghi nhận phiên bản và các tệp.\n\nBài hướng dẫn trước đã luyện kiểm tra và cài một tệp `.deb` cục bộ. Thử thách này lặp lại riêng quy trình gói đó.",
+        "source_content_sha256": "285f1ff07ed8e0545c69f99237ce65243b08194c797542b2737bc97d4ffcf521"
+      },
+      {
+        "position": 1,
+        "title_vi": "Cài gói giám sát",
+        "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/software-inventory/labex-monitor_2.0_all.deb` được cung cấp và `labex-monitor` chưa được cài.\n\n### Phạm vi\n\n- Cài gói cục bộ được cung cấp bằng APT.\n- Giữ tệp gói trong thư mục làm việc.\n- Không cài hoặc gỡ bất kỳ gói không liên quan nào.\n\n### Mục tiêu của bạn\n\nĐể `labex-monitor` phiên bản `2.0` được cài và sử dụng được dưới dạng lệnh.\n\n### Tiêu chí đạt\n\n- Cơ sở dữ liệu gói báo `labex-monitor` phiên bản `2.0` đã cài.\n- Chạy `labex-monitor` in ra `monitor status: ready`.\n- Tệp `.deb` được cung cấp vẫn còn.\n\n### Gợi ý\n\nPhân biệt đường dẫn gói cục bộ với tên trong kho như thế nào?\n\nBài hướng dẫn đã truyền đường dẫn tương đối bắt đầu bằng `./` cho `apt install`.",
+        "source_content_sha256": "bd0a7bcb0c7016194823125ec543ce53c25b2d2daa839f85f507be9a3df7fef9",
+        "task_vi": "Thực hiện hướng dẫn: Cài gói giám sát",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã kiểm tra và cài một gói Debian cục bộ, rồi kiểm tra phiên bản được ghi nhận và lệnh của nó.",
+        "source_content_sha256": "8cad6b75a35aaa51bedf0d9b87925046154fe74f6e3349c7d62cc1ed36ca9a63"
+      }
+    ]
+  },
+  "linux-linux-networking-and-firewall-basics-725414": {
+    "title_vi": "Kiến thức cơ bản về mạng và firewall Linux",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Xử lý sự cố mạng dễ hơn khi bạn kiểm tra từng lớp. Bắt đầu với danh tính máy, sau đó xác nhận giao diện và địa chỉ, lựa chọn tuyến, khả năng kết nối cơ bản, phân giải tên, socket lắng nghe, phản hồi ứng dụng và cuối cùng là chính sách firewall cục bộ.\n\nTrong bài này, bạn sẽ theo trình tự đó trên máy Ubuntu. Một dịch vụ HTTP đã chuẩn bị chỉ lắng nghe trên cổng loopback `8088`, cung cấp đích an toàn để luyện `ss`, `curl` và quy tắc UFW. Bạn sẽ không thay cấu hình giao diện, tuyến mặc định, thiết lập DNS hoặc dịch vụ SSH của máy. Trước khi bật UFW, bạn sẽ chủ động giữ quyền truy cập SSH.",
+        "source_content_sha256": "f3003f216363b7f5435f3a797ab1e9e511c40fad759b708044c04c4e3151c8d2"
+      },
+      {
+        "position": 1,
+        "title_vi": "Nhận diện máy",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra tên máy và bản ghi tên cục bộ giúp chương trình nhận diện máy này.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\nIn tên máy hiện tại:\n\n```bash\nhostname\n```\n\nHiển thị danh tính tĩnh, tạm thời và hệ điều hành mà systemd biết:\n\n```bash\nhostnamectl\n```\n\n`Static hostname` là tên được cấu hình. Trong máy đào tạo đám mây, tên tạm thời có thể được gán khi khởi động.\n\nKiểm tra ánh xạ máy cục bộ:\n\n```bash\ncat /etc/hosts\n```\n\nCác tên loopback `localhost`, `127.0.0.1` và `::1` nhận diện chính máy này mà không cần mạng ngoài. Hiển thị ngắn gọn các địa chỉ IP đã gán cho máy:\n\n```bash\nhostname -I\n```\n\nLưu tên máy và danh sách địa chỉ:\n\n```bash\nprintf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt\n```\n\n```bash\ncat host-identity.txt\n```",
+        "source_content_sha256": "c266db70809e6d7688e8d6153df3cd0baa3d34c237c9cf8e8760d1c5067403c1",
+        "task_vi": "Thực hiện hướng dẫn: Nhận diện máy",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab"
+      },
+      {
+        "position": 2,
+        "title_vi": "Kiểm tra giao diện và địa chỉ IP",
+        "content_vi": "Trong bước này, bạn sẽ nhận diện giao diện mạng, trạng thái liên kết, địa chỉ IPv4, độ dài tiền tố và phạm vi địa chỉ.\n\nDùng chế độ xem liên kết ngắn gọn:\n\n```bash\nip -brief link\n```\n\n`lo` là giao diện loopback. Một giao diện khác, thường tên `eth0` hoặc `ens...`, nối VM với mạng. `UP` nghĩa là giao diện được bật về mặt quản trị.\n\nHiển thị địa chỉ dạng ngắn gọn:\n\n```bash\nip -brief address\n```\n\nĐịa chỉ như `192.0.2.10/24` kết hợp địa chỉ IPv4 và độ dài tiền tố. Tiền tố mô tả những bit đầu nào xác định mạng cục bộ.\n\nKiểm tra đầy đủ loopback:\n\n```bash\nip address show dev lo\n```\n\nĐịa chỉ IPv4 `127.0.0.1/8` có `scope host` nên chỉ hợp lệ bên trong máy này. Tìm giao diện được tuyến mặc định sử dụng:\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Primary interface: $primary_if\"\n```\n\n```bash\nip address show dev \"$primary_if\"\n```\n\nLệnh `ifconfig` là công cụ giao diện cũ vẫn xuất hiện trong quy trình vận hành và hướng dẫn xử lý sự cố hiện có. So sánh đầu ra của nó với đầu ra `ip` hiện đại bạn vừa đọc:\n\n```bash\nifconfig\n```\n\nLưu cả góc nhìn kiểu cũ:\n\n```bash\nifconfig > ifconfig-addresses.txt\n```\n\nLưu ảnh chụp giao diện ngắn gọn:\n\n```bash\nip -brief address > interface-addresses.txt\n```\n\n```bash\ncat interface-addresses.txt\n```",
+        "source_content_sha256": "4d67e9586195256c0412b0203360fb5c3c354dbdba3b9adedd14490a3416ff8b",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra giao diện và địa chỉ IP",
+        "hint_vi": "Chạy lệnh: ip -brief link"
+      },
+      {
+        "position": 3,
+        "title_vi": "Đọc bảng định tuyến",
+        "content_vi": "Trong bước này, bạn sẽ xác định gateway mặc định và hỏi Linux sẽ dùng tuyến nào cho một đích.\n\nHiển thị bảng định tuyến chính:\n\n```bash\nip route\n```\n\nTuyến kết nối mô tả những mạng gắn trực tiếp. Dòng bắt đầu bằng `default via` được dùng khi không có tuyến cụ thể hơn khớp.\n\nHỏi kernel cách đi tới một đích công cộng. Lệnh này báo gateway, giao diện và địa chỉ nguồn được chọn mà không gửi gói tin:\n\n```bash\nip route get 1.1.1.1\n```\n\nTrích xuất gateway và giao diện mặc định:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Default gateway: $gateway via $primary_if\"\n```\n\nLưu tóm tắt tuyến:\n\n```bash\nprintf 'gateway=%s\\ninterface=%s\\n' \"$gateway\" \"$primary_if\" > route-summary.txt\n```\n\n```bash\ncat route-summary.txt\n```",
+        "source_content_sha256": "674faa158415a702b761d73176189f2771f3449722d06a7eb951325e03825a42",
+        "task_vi": "Thực hiện hướng dẫn: Đọc bảng định tuyến",
+        "hint_vi": "Chạy lệnh: ip route"
+      },
+      {
+        "position": 4,
+        "title_vi": "Kiểm tra khả năng kết nối mạng",
+        "content_vi": "Trong bước này, bạn sẽ dùng `ping` để kiểm tra các ranh giới xa dần, đồng thời hiểu rằng một số mạng chặn gói chẩn đoán.\n\nBắt đầu với loopback. Các tùy chọn `-c 2` gửi hai yêu cầu và `-W 2` chờ tối đa hai giây cho mỗi phản hồi:\n\n```bash\nping -c 2 -W 2 127.0.0.1\n```\n\nKiểm tra loopback thành công chứng minh ngăn xếp IP cục bộ phản hồi. Tiếp theo, lấy và kiểm tra gateway mặc định:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nping -c 2 -W 2 \"$gateway\" || echo \"The gateway does not answer ICMP echo requests\"\n```\n\nThông báo dự phòng có ý nghĩa vì router có thể chuyển tiếp lưu lượng nhưng từ chối ping. Kiểm tra một địa chỉ IP công cộng mà không phụ thuộc DNS:\n\n```bash\nping -c 2 -W 2 1.1.1.1 || echo \"Public ICMP is blocked or unavailable\"\n```\n\nLưu kết quả kết nối cục bộ ổn định thay vì phụ thuộc chính sách bên ngoài:\n\n```bash\nping -c 1 -W 2 127.0.0.1 > loopback-ping.txt\n```\n\n```bash\ntail -n 2 loopback-ping.txt\n```",
+        "source_content_sha256": "e408a35d23b774f282b9db60cd8fdc51771d9c290134cce8086e5ec63e84d3a8",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra khả năng kết nối mạng",
+        "hint_vi": "Chạy lệnh: ping -c 2 -W 2 127.0.0.1"
+      },
+      {
+        "position": 5,
+        "title_vi": "Kiểm tra phân giải tên máy",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra cấu hình bộ phân giải và chuyển tên máy thành địa chỉ.\n\nXem tệp phân giải mà các ứng dụng Linux tiêu chuẩn sử dụng:\n\n```bash\ncat /etc/resolv.conf\n```\n\nNó thường chứa một hoặc nhiều dòng `nameserver`. Trên máy dùng systemd-resolved, địa chỉ có thể chỉ bộ phân giải trung gian cục bộ thay vì trực tiếp một máy chủ DNS bên ngoài.\n\nPhân giải tên cục bộ qua cấu hình dịch vụ tên đầy đủ của hệ thống:\n\n```bash\ngetent hosts localhost\n```\n\n`getent` tuân theo `/etc/nsswitch.conf` nên có thể kết hợp `/etc/hosts`, DNS và những nguồn đã cấu hình khác. Phân giải tên bên ngoài và yêu cầu địa chỉ socket IPv4:\n\n```bash\ngetent ahostsv4 example.com\n```\n\nNếu ping IP thành công nhưng tra cứu này thất bại, hãy tập trung vào cấu hình bộ phân giải hoặc khả năng kết nối DNS. Lưu bản ghi IPv4 đầu tiên đã phân giải:\n\n```bash\ngetent ahostsv4 example.com | head -n 1 > dns-result.txt\n```\n\n```bash\ncat dns-result.txt\n```",
+        "source_content_sha256": "9620a1d04ef22061128ffa48bc0f0d954149d383a2d88ff62f109c217318726c",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra phân giải tên máy",
+        "hint_vi": "Chạy lệnh: getent hosts localhost"
+      },
+      {
+        "position": 6,
+        "title_vi": "Kiểm tra cổng lắng nghe và phản hồi HTTP",
+        "content_vi": "Trong bước này, bạn sẽ liên hệ socket TCP lắng nghe với tiến trình sở hữu và kiểm tra giao thức ứng dụng.\n\nDịch vụ mẫu đã chuẩn bị lắng nghe trên cổng loopback `8088`. Dùng `ss` kiểm tra socket TCP lắng nghe. Các tùy chọn `-l`, `-t`, `-n` và `-p` nghĩa là lắng nghe, TCP, địa chỉ số và thông tin tiến trình:\n\n```bash\nsudo ss -ltnp | grep ':8088'\n```\n\nTìm `127.0.0.1:8088`. Bind vào loopback nghĩa là chỉ có thể truy cập dịch vụ từ máy này.\n\nKiểm tra tiến trình dịch vụ phía sau socket:\n\n```bash\nsystemctl status labex-network-demo.service --no-pager\n```\n\nDùng `curl -i` để hiển thị header và nội dung phản hồi HTTP:\n\n```bash\ncurl -i http://127.0.0.1:8088/\n```\n\nTrạng thái HTTP `200 OK` chứng minh nhiều hơn một cổng mở: ứng dụng đã chấp nhận yêu cầu HTTP và trả nội dung. Chỉ lưu nội dung phản hồi bằng chế độ im lặng `-s`:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\ncurl -s http://127.0.0.1:8088/ > http-response.html\n```\n\n```bash\ngrep 'network demo ready' http-response.html\n```",
+        "source_content_sha256": "5aae0eb1520943f566a0f76b187901905b3b872210ca59f53ab82b7a98cf5f48",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra cổng lắng nghe và phản hồi HTTP",
+        "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'"
+      },
+      {
+        "position": 7,
+        "title_vi": "Giữ đường truy cập và bật UFW",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra trạng thái UFW, giữ đường quản trị từ xa, cho phép cổng dịch vụ thực hành và bật firewall.\n\nUFW là giao diện cho quy tắc lọc gói Linux. Kiểm tra trạng thái hiện tại:\n\n```bash\nsudo ufw status verbose\n```\n\nThiết lập ban đầu để UFW không hoạt động với bộ quy tắc sạch. Trước khi bật bất kỳ firewall máy nào từ xa, hãy cho phép đường quản trị mà bạn phụ thuộc. VM này dùng cổng TCP `22` cho SSH:\n\n```bash\nsudo ufw allow 22/tcp\n```\n\nBây giờ cho phép lưu lượng TCP đi vào cổng dịch vụ thực hành:\n\n```bash\nsudo ufw allow 8088/tcp\n```\n\nXem lại các thay đổi đã chuẩn bị trước khi kích hoạt:\n\n```bash\nsudo ufw show added\n```\n\nBật UFW mà không có lời nhắc xác nhận tương tác:\n\n```bash\nsudo ufw --force enable\n```\n\nXác nhận firewall hoạt động và cả hai quyền cho phép đều có:\n\n```bash\nsudo ufw status verbose\n```\n\nDịch vụ được bind vào loopback nên hãy kiểm tra cục bộ sau thay đổi firewall:\n\n```bash\ncurl -fsS http://127.0.0.1:8088/\n```\n\nLưu trạng thái hoạt động làm kết quả có thể quan sát:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\nsudo ufw status verbose > firewall-status.txt\n```\n\n```bash\ncat firewall-status.txt\n```\n\nThứ tự quan trọng: giữ đường quản trị, thêm quy tắc dịch vụ cần thiết, bật firewall và xác minh ngay cả chính sách lẫn khả năng truy cập ứng dụng. Máy sản xuất có thể dùng cổng SSH khác nên hãy xác nhận đường quản trị thực tế thay vì mặc định cổng `22`.",
+        "source_content_sha256": "7b86fd62c602a217d7e648ae7b91b6d122879f43bdab2da39de6ea13ed65ae49",
+        "task_vi": "Thực hiện hướng dẫn: Giữ đường truy cập và bật UFW",
+        "hint_vi": "Chạy lệnh: sudo ufw status verbose"
+      },
+      {
+        "position": 8,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã theo một chuỗi chẩn đoán mạng Linux có cấu trúc: danh tính máy, giao diện và địa chỉ IP, lựa chọn tuyến, khả năng kết nối, phân giải tên, socket lắng nghe và phản hồi HTTP. Bạn hiểu mỗi lớp trả lời một câu hỏi khác nhau và lỗi tại một ranh giới giúp thu hẹp điều tra tiếp theo.\n\nBạn cũng giữ đường SSH, cho phép một cổng dịch vụ thực hành, bật UFW và xác minh cả chính sách đang hoạt động lẫn phản hồi ứng dụng. Những thói quen này chuẩn bị cho bạn chẩn đoán và bảo vệ dịch vụ mạng mà không thay đổi rộng gây gián đoạn.",
+        "source_content_sha256": "219fa4eadb5ef6a9991ebf0da6d82bdc9172e0afe3824f4d2f92aa848aab38f1"
+      }
+    ]
+  },
+  "linux-managing-services-and-system-logs-725415": {
+    "title_vi": "Quản lý dịch vụ và log hệ thống",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Tiến trình là một chương trình đang chạy. Dịch vụ là một chức năng hệ thống chạy lâu dài, được quản lý theo định nghĩa và chính sách vòng đời. Trên Ubuntu, systemd đọc định nghĩa unit, khởi chạy và dừng dịch vụ, theo dõi trạng thái và ghi đầu ra của chúng vào journal hệ thống.\n\nTrong bài này, bạn sẽ dùng dịch vụ thực hành biệt lập `labex-heartbeat`. Bạn sẽ kiểm tra unit, điều khiển trạng thái chạy, cấu hình bật khi khởi động máy, truy vấn journal và log văn bản truyền thống, theo dõi đầu ra trực tiếp, chẩn đoán lỗi được kiểm soát và khôi phục hoạt động bình thường. Bạn sẽ không sửa tệp unit hoặc tác động dịch vụ SSH.",
+        "source_content_sha256": "254aab5247a5c8dde89b211074508c4cefeb6bff04a12a04f34a1b538bdab77b"
+      },
+      {
+        "position": 1,
+        "title_vi": "Nhận biết systemd và unit dịch vụ",
+        "content_vi": "Trong bước này, bạn sẽ xác nhận systemd có sẵn và phân biệt unit đang chạy với tệp unit đã cài.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\nHiển thị phiên bản systemd. Dòng đầu đủ để nhận diện:\n\n```bash\nsystemctl --version | head -n 1\n```\n\nHỏi systemd về trạng thái tổng thể:\n\n```bash\nsystemctl is-system-running || true\n```\n\n`running` nghĩa là mọi unit bắt buộc đều hoạt động tốt. VM đào tạo có thể báo `degraded` vì một unit tùy chọn không liên quan bị lỗi; lệnh vẫn chứng minh systemd đang phản hồi.\n\nLiệt kê một số dịch vụ hiện đang chạy:\n\n```bash\nsystemctl list-units --type=service --state=running --no-pager | head -n 12\n```\n\nUnit là một đối tượng được systemd quản lý. Unit dịch vụ kết thúc bằng `.service`. Tệp unit mô tả những gì có thể được quản lý, kể cả khi hiện không chạy:\n\n```bash\nsystemctl list-unit-files --type=service --no-pager | head -n 12\n```\n\nLưu bản tóm tắt systemd ngắn gọn. Phép thay thế lệnh `$(...)` chèn đầu ra lệnh vào văn bản được `printf` ghi:\n\n```bash\nprintf 'systemd=%s\\nstate=%s\\n' \"$(systemctl --version | head -n 1)\" \"$(systemctl is-system-running)\" > systemd-summary.txt\n```\n\n```bash\ncat systemd-summary.txt\n```",
+        "source_content_sha256": "f0385463f2c008f169bfed66b5962d7e422457fc605252c982582b513d5ee0e8",
+        "task_vi": "Thực hiện hướng dẫn: Nhận biết systemd và unit dịch vụ",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/service-lab"
+      },
+      {
+        "position": 2,
+        "title_vi": "Kiểm tra định nghĩa và trạng thái dịch vụ",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra dịch vụ thực hành đã chuẩn bị trước khi khởi chạy nó.\n\n`systemctl status` kết hợp đường dẫn unit đã nạp, trạng thái bật khi khởi động, trạng thái chạy, thông tin tiến trình và các dòng log gần đây:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nDịch vụ phải ở trạng thái `inactive (dead)` và `disabled`. Inactive nghĩa là hiện không chạy; disabled nghĩa là chưa được cấu hình khởi chạy qua target cài đặt khi máy khởi động. Đây là hai thuộc tính riêng.\n\nHiển thị định nghĩa unit:\n\n```bash\nsystemctl cat labex-heartbeat.service\n```\n\nPhần `[Unit]` mô tả nhận diện và thứ tự, `[Service]` định nghĩa tiến trình và `[Install]` mô tả việc bật dịch vụ. Bạn chỉ kiểm tra unit đã chuẩn bị này; không cần viết unit mới.\n\nDùng `systemctl show` để lấy thuộc tính máy có thể đọc:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState\n```\n\nLưu các thuộc tính đó để xác minh:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState > service-properties.txt\n```\n\n```bash\ncat service-properties.txt\n```",
+        "source_content_sha256": "7c84fd5cdcbe1be3f1f82aa9eb20c55544295b318c62e6078d7ff308a020164a",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra định nghĩa và trạng thái dịch vụ",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/service-lab"
+      },
+      {
+        "position": 3,
+        "title_vi": "Khởi chạy, dừng và khởi động lại dịch vụ",
+        "content_vi": "Trong bước này, bạn sẽ thay đổi trạng thái chạy của dịch vụ thực hành và xác nhận từng kết quả.\n\nKhởi chạy và dừng dịch vụ hệ thống cần quyền nâng cao. Khởi chạy dịch vụ:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nKiểm tra trạng thái hoạt động ngắn gọn:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\nĐầu ra dự kiến là `active`. Xem trạng thái đầy đủ hơn:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nTrạng thái giờ có PID chính. Dừng dịch vụ và kiểm tra kết quả:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsystemctl is-active labex-heartbeat.service || true\n```\n\nTrạng thái dự kiến là `inactive`. Khởi chạy lại, rồi dùng restart để thay tiến trình đang chạy trong một thao tác:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\n```bash\nsudo systemctl restart labex-heartbeat.service\n```\n\n```bash\nsystemctl show labex-heartbeat.service -p ActiveState -p SubState -p MainPID\n```\n\nKết thúc bước này, dịch vụ phải có `ActiveState=active` và `SubState=running`.",
+        "source_content_sha256": "b198be0a705ac4a17d5acce084528364bfeec37f399070429a23f3a6b952587e",
+        "task_vi": "Thực hiện hướng dẫn: Khởi chạy, dừng và khởi động lại dịch vụ",
+        "hint_vi": "Chạy lệnh: sudo systemctl start labex-heartbeat.service"
+      },
+      {
+        "position": 4,
+        "title_vi": "Cấu hình bật dịch vụ khi khởi động máy",
+        "content_vi": "Trong bước này, bạn sẽ phân biệt trạng thái chạy hiện tại của dịch vụ với việc nó có được bật cho những lần khởi động máy sau hay không.\n\nDịch vụ đang hoạt động từ bước trước, nhưng thiết lập ban đầu để tệp unit ở trạng thái disabled. Kiểm tra việc bật:\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nBật dịch vụ:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```\n\nThao tác bật tạo các liên kết nối dịch vụ với một target khởi động. Nó không cần khởi động lại một dịch vụ đang chạy.\n\nThực hành gỡ các liên kết khởi động đó:\n\n```bash\nsudo systemctl disable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nDịch vụ có thể vẫn hoạt động dù đầu ra giờ là `disabled`. Bật lại để có trạng thái cuối bài:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\nXác nhận cả hai thuộc tính độc lập:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```",
+        "source_content_sha256": "38fa0baf5c97591f3ef0751610cc9ee6b2a4a0f600b839177ea2e7a4c8f816e1",
+        "task_vi": "Thực hiện hướng dẫn: Cấu hình bật dịch vụ khi khởi động máy",
+        "hint_vi": "Chạy lệnh: systemctl is-enabled labex-heartbeat.service || true"
+      },
+      {
+        "position": 5,
+        "title_vi": "Truy vấn log dịch vụ bằng journalctl",
+        "content_vi": "Trong bước này, bạn sẽ đọc đầu ra dịch vụ gần đây từ journal của systemd và lưu ảnh chụp có chọn lọc.\n\nDịch vụ do systemd quản lý thường gửi đầu ra chuẩn và lỗi chuẩn vào journal. Chỉ truy vấn unit thực hành:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nTùy chọn `-u` chọn unit, `-n 10` giữ mười bản ghi gần nhất và `--no-pager` in trực tiếp. Bạn sẽ thấy các bản ghi heartbeat gần đây. Thông báo khởi chạy có thể đã nằm ngoài phần hiển thị giới hạn này trong lúc dịch vụ tiếp tục chạy.\n\nGiới hạn kết quả vào một khoảng thời gian gần đây:\n\n```bash\nsudo journalctl -u labex-heartbeat.service --since \"5 minutes ago\" --no-pager\n```\n\nLọc mức ưu tiên từ cảnh báo trở lên. Không có đầu ra là kết quả hợp lệ và bình thường khi dịch vụ chưa ghi cảnh báo:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -p warning --since \"5 minutes ago\" --no-pager\n```\n\nLưu ảnh chụp gần đây dành riêng cho unit vào thư mục dự án:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 20 --no-pager > service-journal.txt\n```\n\n```bash\ntail -n 5 service-journal.txt\n```",
+        "source_content_sha256": "853ab76b29ed44bf12ea025bd5578e569be1a5bbd6737891f6d2ee5880246e9a",
+        "task_vi": "Thực hiện hướng dẫn: Truy vấn log dịch vụ bằng journalctl",
+        "hint_vi": "Chạy lệnh: sudo journalctl -u labex-heartbeat.service -n 10 --no-pager"
+      },
+      {
+        "position": 6,
+        "title_vi": "Theo dõi log văn bản truyền thống",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra `/var/log` và theo dõi log văn bản khi có bản ghi mới.\n\nCây thư mục `/var/log` lưu nhiều log hệ thống và ứng dụng truyền thống. Liệt kê một số mục:\n\n```bash\nls -lh /var/log | head -n 12\n```\n\nĐọc bản ghi mới nhất của dịch vụ thực hành:\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log\n```\n\nTùy chọn `-f` theo dõi tệp và hiển thị dòng mới khi tiến trình khác nối thêm:\n\n```bash\ntail -f /var/log/labex-heartbeat.log\n```\n\nChờ đến khi thấy ít nhất hai dòng heartbeat mới rồi nhấn `Ctrl+C`. Thao tác này ngắt `tail`; nó không dừng dịch vụ đang ghi log.\n\nLọc các dòng heartbeat và xem ba dòng gần nhất:\n\n```bash\ngrep '^heartbeat ' /var/log/labex-heartbeat.log | tail -n 3\n```\n\nLưu mẫu năm dòng vào thư mục dự án:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log > traditional-log-sample.txt\n```\n\n```bash\ncat traditional-log-sample.txt\n```",
+        "source_content_sha256": "5046f200d8dae759823417c1485f87d232d5eed4a7e87a01055ed1294dd45d44",
+        "task_vi": "Thực hiện hướng dẫn: Theo dõi log văn bản truyền thống",
+        "hint_vi": "Chạy lệnh: tail -n 5 /var/log/labex-heartbeat.log"
+      },
+      {
+        "position": 7,
+        "title_vi": "Chẩn đoán và khôi phục dịch vụ lỗi",
+        "content_vi": "Trong bước này, bạn sẽ tạo một lỗi cấu hình được kiểm soát, dùng trạng thái dịch vụ và log để xác định nó, rồi khôi phục hoạt động bình thường.\n\nDừng dịch vụ thực hành và sao lưu cấu hình đơn giản của nó:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsudo cp /etc/labex-heartbeat.conf /etc/labex-heartbeat.conf.bak\n```\n\nThay khoảng thời gian dạng số bằng giá trị không hợp lệ. Việc này chủ ý chỉ làm hỏng dịch vụ thực hành:\n\n```bash\nsudo sed -i 's/^INTERVAL=2$/INTERVAL=invalid/' /etc/labex-heartbeat.conf\n```\n\nThử khởi chạy dịch vụ. Thông báo lỗi là điều dự kiến:\n\n```bash\nsudo systemctl start labex-heartbeat.service || true\n```\n\nKiểm tra trạng thái lỗi:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager || true\n```\n\n```bash\nsystemctl is-failed labex-heartbeat.service\n```\n\nTrạng thái cho biết tiến trình đã thoát, còn journal cung cấp lý do cụ thể của ứng dụng:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nTìm `configuration error: INTERVAL must be a positive integer`. Khôi phục cấu hình tốt đã biết, xóa trạng thái lỗi được ghi nhận rồi khởi chạy lại dịch vụ:\n\n```bash\nsudo mv /etc/labex-heartbeat.conf.bak /etc/labex-heartbeat.conf\n```\n\n```bash\nsudo systemctl reset-failed labex-heartbeat.service\n```\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nXác nhận việc khôi phục:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\ncat /etc/labex-heartbeat.conf\n```\n\nDịch vụ phải là `active` và cấu hình phải lại chứa `INTERVAL=2`.",
+        "source_content_sha256": "f7b5736e96c25a6d8ea002bb356ea357a2397397943d6aad532f370afc82fcff",
+        "task_vi": "Thực hiện hướng dẫn: Chẩn đoán và khôi phục dịch vụ lỗi",
+        "hint_vi": "Chạy lệnh: sudo systemctl stop labex-heartbeat.service"
+      },
+      {
+        "position": 8,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã phân biệt tiến trình, dịch vụ, trạng thái hoạt động và việc bật khi khởi động máy. Bạn đã kiểm tra một unit systemd, điều khiển dịch vụ thực hành an toàn bằng `systemctl` và truy vấn bản ghi của nó bằng `journalctl`.\n\nBạn cũng kiểm tra `/var/log`, theo dõi đầu ra văn bản trực tiếp bằng `tail -f`, kết hợp trạng thái và log để giải thích một lỗi được kiểm soát và khôi phục dịch vụ. Quy trình xem trạng thái trước, log sau là nền tảng thực tế cho người mới xử lý sự cố dịch vụ.",
+        "source_content_sha256": "bd1eeaa2d8b23b67ab6e50977a2d62a46273165372a8e586670a8896f7abca1b"
+      }
+    ]
+  },
+  "linux-recover-a-failed-service-725413": {
+    "title_vi": "Khôi phục một dịch vụ bị lỗi",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một dịch vụ xuất báo cáo không thể khởi chạy vì tệp cấu hình nhỏ của nó chứa giá trị cổng không hợp lệ. Log dịch vụ giải thích phạm vi được chấp nhận.\n\nBài hướng dẫn trước đã thực hành cùng mẫu khôi phục: kiểm tra trạng thái, đọc journal, sửa một giá trị cấu hình, đặt lại trạng thái lỗi và khởi chạy dịch vụ.",
+        "source_content_sha256": "f8acff0d6ebcb04fa1b8fce750026e3b01a34a1c56c219262b14c198345dbf91"
+      },
+      {
+        "position": 1,
+        "title_vi": "Đưa dịch vụ trở lại trạng thái hoạt động",
+        "content_vi": "### Tình huống hiện tại\n\n`labex-report-export.service` bị lỗi. Nó đọc một phép gán `PORT` từ `/etc/labex-report-export.conf`.\n\n### Phạm vi\n\n- Dùng trạng thái dịch vụ và bằng chứng journal để hiểu lỗi.\n- Chỉ thay giá trị `PORT` không hợp lệ.\n- Chọn cổng dạng số từ `1024` đến `65535`.\n- Không sửa tệp unit hoặc dịch vụ không liên quan.\n\n### Mục tiêu của bạn\n\nĐể `labex-report-export.service` hoạt động với cổng được cấu hình hợp lệ.\n\n### Tiêu chí đạt\n\n- `systemctl is-active labex-report-export.service` báo `active`.\n- `/etc/labex-report-export.conf` chứa một giá trị `PORT` dạng số trong phạm vi.\n\n### Gợi ý\n\nNên bắt đầu chẩn đoán từ đâu?\n\nDùng cùng lệnh `systemctl status` và `journalctl` dành riêng cho unit đã luyện trong bài hướng dẫn. Thông báo lỗi cho biết điều gì không hợp lệ.",
+        "source_content_sha256": "d0774f300b188cd6ac7d81a152b9830222429203a704e3949721b2aa38e8b2d9",
+        "task_vi": "Thực hiện hướng dẫn: Đưa dịch vụ trở lại trạng thái hoạt động",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã dùng bằng chứng dịch vụ để sửa một giá trị không hợp lệ và đưa một unit lỗi trở lại phục vụ.",
+        "source_content_sha256": "ae08f2fb2643a78f5a596c80c78fa85af955ee6c9d8e87f061e011d0bcb2e130"
+      }
+    ]
+  },
+  "linux-remote-access-and-file-transfer-with-ssh-725416": {
+    "title_vi": "Truy cập từ xa và truyền tệp bằng SSH",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "SSH cung cấp truy cập dòng lệnh được mã hóa vào tài khoản Linux khác, còn SCP sử dụng cùng cơ chế xác thực và truyền tải để sao chép tệp. Kết nối đầu tiên an toàn cần xác minh khóa máy chủ của máy đích; các kết nối sau có thể dùng khóa cá nhân thay cho việc gửi mật khẩu tài khoản nhiều lần.\n\nBài này dùng tài khoản `remoteuser` biệt lập trên `localhost` làm máy đích từ xa. Dù hai tài khoản cùng nằm trên một VM đào tạo, giao thức SSH, lời nhắc xác thực, thư mục home từ xa và việc truyền tệp hoạt động như quy trình cơ bản giữa hai máy. Đường truy cập SSH mặc định của `labex` không bị thay đổi.",
+        "source_content_sha256": "b26850ae170a61d0d388ded71934b0e0634fb865ac91b09d92013da324073277"
+      },
+      {
+        "position": 1,
+        "title_vi": "Kiểm tra đích SSH",
+        "content_vi": "Trong bước này, bạn sẽ nhận diện SSH client, phân giải tên đích, xác nhận máy chủ đang lắng nghe và xem trước khóa máy chủ công khai của nó.\n\nVào thư mục làm việc cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nHiển thị phiên bản OpenSSH client. Chương trình này ghi phiên bản vào lỗi chuẩn nên `2>&1` gộp nó với đầu ra chuẩn:\n\n```bash\nssh -V 2>&1\n```\n\nPhân giải đích cục bộ qua cấu hình dịch vụ tên của hệ thống:\n\n```bash\ngetent hosts localhost\n```\n\nXác nhận máy chủ SSH lắng nghe trên cổng TCP 22:\n\n```bash\nsudo ss -ltnp | grep ':22'\n```\n\n`ssh-keyscan` lấy khóa máy chủ công khai mà không đăng nhập. Chuyển khóa ED25519 qua đường ống tới `ssh-keygen -lf -` để hiển thị dấu vân tay:\n\n```bash\nssh-keyscan -t ed25519 localhost 2>/dev/null | ssh-keygen -lf -\n```\n\nTrong môi trường thực, so sánh dấu vân tay này với giá trị đáng tin do quản trị viên cung cấp trước khi chấp nhận. Lưu tóm tắt đích ngắn gọn:\n\n```bash\nprintf 'target=localhost\\nport=22\\nuser=remoteuser\\n' > ssh-target.txt\n```\n\n```bash\ncat ssh-target.txt\n```",
+        "source_content_sha256": "78c609db3ba482a3f0d6841cede87441a9146d893bc6bd518ce7394f18acb0ec",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra đích SSH",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      },
+      {
+        "position": 2,
+        "title_vi": "Mở shell từ xa đầu tiên",
+        "content_vi": "Trong bước này, bạn sẽ xác minh khóa máy chủ, xác thực bằng mật khẩu, kiểm tra tài khoản từ xa và đóng shell từ xa.\n\nKết nối với dạng `user@host`:\n\n```bash\nssh remoteuser@localhost\n```\n\nVì thiết lập ban đầu đã xóa mọi bản ghi khóa máy chủ `localhost` trước đó, SSH hỏi bạn có tin dấu vân tay được hiển thị không. Sau khi so sánh với Bước 1, nhập:\n\n```text\nyes\n```\n\nTại lời nhắc mật khẩu, nhập:\n\n```text\nRemoteLab123!\n```\n\nMật khẩu không hiển thị khi gõ. Sau khi đăng nhập, dấu nhắc thuộc về `remoteuser`, không phải `labex`. Xác nhận danh tính từ xa, máy và thư mục hiện tại:\n\n```bash\nwhoami\n```\n\n```bash\nhostname\n```\n\n```bash\npwd\n```\n\nTạo dấu mốc từ xa trong thư mục home của tài khoản từ xa:\n\n```bash\nmkdir -p ~/ssh-lab\n```\n\n```bash\nprintf 'connected as %s\\n' \"$(whoami)\" > ~/ssh-lab/connected.txt\n```\n\nĐóng shell từ xa và trở về dấu nhắc `labex` cục bộ:\n\n```bash\nexit\n```\n\nLệnh `exit` chỉ kết thúc shell từ xa; terminal cục bộ vẫn mở.",
+        "source_content_sha256": "a4cd9ea6f5b5218288fb59a975be2a50865b56ef51296abba35c3d3c786c1507",
+        "task_vi": "Thực hiện hướng dẫn: Mở shell từ xa đầu tiên",
+        "hint_vi": "Chạy lệnh: ssh remoteuser@localhost"
+      },
+      {
+        "position": 3,
+        "title_vi": "Chạy một lệnh từ xa",
+        "content_vi": "Trong bước này, bạn sẽ chạy lệnh từ xa mà không mở shell tương tác kéo dài và lưu đầu ra của chúng ở cục bộ.\n\nTrở về thư mục làm việc cục bộ nếu cần:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nĐặt lệnh trong dấu nháy sau tên máy. SSH chạy nó từ xa và trả đầu ra về terminal cục bộ:\n\n```bash\nssh remoteuser@localhost 'whoami; uname -srm; uptime'\n```\n\nNhập `RemoteLab123!` khi được hỏi. Dấu chấm phẩy phân tách các lệnh được shell từ xa diễn giải.\n\nChạy lệnh từ xa thứ hai và chuyển hướng đầu ra trả về vào một tệp cục bộ:\n\n```bash\nssh remoteuser@localhost 'printf \"remote_user=%s\\nremote_home=%s\\n\" \"$(whoami)\" \"$HOME\"' > remote-context.txt\n```\n\nNhập lại mật khẩu. Chuyển hướng `>` do shell cục bộ xử lý nên `remote-context.txt` được tạo trong thư mục làm việc cục bộ:\n\n```bash\ncat remote-context.txt\n```\n\nTệp phải nhận diện `remoteuser` và `/home/remoteuser`.",
+        "source_content_sha256": "4b8170c570bbc8e9d7aecbee64f2daacaa042b696c7a11c2027ed7212f1dc291",
+        "task_vi": "Thực hiện hướng dẫn: Chạy một lệnh từ xa",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      },
+      {
+        "position": 4,
+        "title_vi": "Truyền tệp bằng SCP",
+        "content_vi": "Trong bước này, bạn sẽ tải lên một tệp cục bộ, kiểm tra nó từ xa và tải xuống dưới tên cục bộ mới.\n\nTạo cấu hình mẫu cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > app.conf\n```\n\nSCP dùng `user@host:path` cho đường dẫn từ xa. Tải tệp lên thư mục `incoming` từ xa đã chuẩn bị:\n\n```bash\nscp app.conf remoteuser@localhost:/home/remoteuser/incoming/app.conf\n```\n\nNhập `RemoteLab123!` khi được hỏi. Xác nhận nội dung từ xa qua SSH:\n\n```bash\nssh remoteuser@localhost 'cat /home/remoteuser/incoming/app.conf'\n```\n\nNhập lại mật khẩu. Bây giờ đảo nguồn và đích để tải tệp xuống:\n\n```bash\nscp remoteuser@localhost:/home/remoteuser/incoming/app.conf downloaded-app.conf\n```\n\nNhập mật khẩu, rồi so sánh bản gốc cục bộ và bản tải xuống:\n\n```bash\ncmp app.conf downloaded-app.conf && echo \"The files match\"\n```",
+        "source_content_sha256": "1ffd8429d190432e8dad9b6c247e4d37d9becb97ce06b629f511d5e67a46be5d",
+        "task_vi": "Thực hiện hướng dẫn: Truyền tệp bằng SCP",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      },
+      {
+        "position": 5,
+        "title_vi": "Truyền thư mục đệ quy",
+        "content_vi": "Trong bước này, bạn sẽ dùng chế độ đệ quy của SCP để sao chép cây thư mục sang tài khoản từ xa.\n\nTạo cây dự án cục bộ nhỏ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nmkdir -p site/assets\n```\n\n```bash\nprintf '<h1>SSH transfer practice</h1>\\n' > site/index.html\n```\n\n```bash\nprintf 'body { color: navy; }\\n' > site/assets/style.css\n```\n\nTùy chọn `-r` sao chép thư mục và nội dung của chúng theo cách đệ quy:\n\n```bash\nscp -r site remoteuser@localhost:/home/remoteuser/incoming/\n```\n\nNhập `RemoteLab123!` khi được hỏi. Liệt kê cây từ xa bằng một lệnh SSH chạy một lần:\n\n```bash\nssh remoteuser@localhost 'find /home/remoteuser/incoming/site -type f -printf \"%P\\n\" | sort'\n```\n\nNhập lại mật khẩu. Bạn sẽ thấy `assets/style.css` và `index.html`.",
+        "source_content_sha256": "53e66138d3ceb6f2e705dae8a9ac3739f624d47a6bb347e31ef2547b7293abb8",
+        "task_vi": "Thực hiện hướng dẫn: Truyền thư mục đệ quy",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      },
+      {
+        "position": 6,
+        "title_vi": "Tạo khóa SSH cá nhân",
+        "content_vi": "Trong bước này, bạn sẽ tạo một cặp khóa ED25519 chuyên dùng và kiểm tra quyền cùng dấu vân tay của nó.\n\nCặp khóa gồm khóa riêng được giữ bên bạn và khóa công khai có thể cài trên tài khoản từ xa. Tạo khóa thực hành riêng không có mật khẩu bảo vệ để kiểm tra tự động có thể dùng:\n\n```bash\nmkdir -p ~/.ssh\n```\n\n```bash\nchmod 700 ~/.ssh\n```\n\n```bash\nssh-keygen -t ed25519 -f ~/.ssh/labex_remote_ed25519 -N '' -C 'labex-remote-practice'\n```\n\nTùy chọn `-t` chọn thuật toán, `-f` chọn tệp, `-N ''` đặt mật khẩu bảo vệ thực hành rỗng và `-C` thêm nhãn. Khóa dùng trong sản xuất thông thường nên có mật khẩu bảo vệ mạnh nếu ràng buộc tự động hóa không ngăn cản.\n\nKiểm tra hai tệp và quyền của chúng:\n\n```bash\nls -l ~/.ssh/labex_remote_ed25519 ~/.ssh/labex_remote_ed25519.pub\n```\n\nChỉ `labex` được đọc khóa riêng. Tệp `.pub` được thiết kế để chia sẻ. Hiển thị dấu vân tay khóa công khai:\n\n```bash\nssh-keygen -lf ~/.ssh/labex_remote_ed25519.pub\n```\n\nKhông bao giờ sao chép hoặc tiết lộ khóa riêng.",
+        "source_content_sha256": "e7cda6f6b938b40c9a58cee84221db0c7822f6021a87d826962c657953e6890b",
+        "task_vi": "Thực hiện hướng dẫn: Tạo khóa SSH cá nhân",
+        "hint_vi": "Chạy lệnh: mkdir -p ~/.ssh"
+      },
+      {
+        "position": 7,
+        "title_vi": "Cài và sử dụng khóa công khai",
+        "content_vi": "Trong bước này, bạn sẽ cài khóa công khai cho `remoteuser`, kết nối không có lời nhắc mật khẩu và xác minh truyền tệp bằng khóa.\n\n`ssh-copy-id` nối khóa công khai vào `~/.ssh/authorized_keys` của tài khoản từ xa với quyền thích hợp:\n\n```bash\nssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost\n```\n\nNhập `RemoteLab123!` cho thao tác xác thực bằng mật khẩu cuối cùng này. Thử khóa riêng chuyên dùng bằng `-i`:\n\n```bash\nssh -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost 'printf \"key authentication works\\n\" > ~/ssh-lab/key-authenticated.txt; cat ~/ssh-lab/key-authenticated.txt'\n```\n\nLệnh này không được hỏi mật khẩu tài khoản từ xa. Dùng cùng khóa nhận diện cho SCP:\n\n```bash\nscp -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost:~/ssh-lab/key-authenticated.txt key-authenticated.txt\n```\n\n```bash\ncat key-authenticated.txt\n```\n\nTệp tải xuống phải chứa `key authentication works`. Khóa máy chủ xác thực máy chủ; khóa riêng của bạn xác thực bạn với tài khoản từ xa. Chúng giải quyết hai vấn đề tin cậy khác nhau.",
+        "source_content_sha256": "b503bbed41f63d89dc728cd7526ad2d85152e5c2f15af4d517565f36490564b0",
+        "task_vi": "Thực hiện hướng dẫn: Cài và sử dụng khóa công khai",
+        "hint_vi": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost"
+      },
+      {
+        "position": 8,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã xác minh khóa máy chủ SSH, mở và thoát shell từ xa, chạy lệnh từ xa một lần và phân biệt chuyển hướng cục bộ với thực thi từ xa. Bạn đã tải lên và tải xuống tệp bằng SCP, sao chép thư mục đệ quy.\n\nBạn cũng tạo cặp khóa ED25519 chuyên dùng, bảo vệ khóa riêng, chỉ cài khóa công khai và dùng lại khóa nhận diện cho SSH và SCP không cần mật khẩu. Đây là kỹ năng cốt lõi để người mới quản trị từ xa an toàn.",
+        "source_content_sha256": "31f84daebed2755057e428da5bb45e338f4937a811b860ff7f5b579036652269"
+      }
+    ]
+  },
+  "linux-restore-a-configuration-from-backup-725409": {
+    "title_vi": "Khôi phục cấu hình từ bản sao lưu",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một cấu hình ứng dụng vô tình bị xóa, nhưng có sẵn bản sao lưu nén đọc được. Tệp lưu trữ cũng chứa một tài liệu quy trình vận hành không thuộc lần khôi phục này.\n\nBài hướng dẫn trước đã luyện liệt kê tệp lưu trữ và giải nén một đường dẫn được chọn. Thử thách cuối này chỉ tập trung vào quyết định khôi phục đó.",
+        "source_content_sha256": "f84e262d35989ed278dc2c813d0542ae70430599b0f9bd90d1147935d36449e2"
+      },
+      {
+        "position": 1,
+        "title_vi": "Khôi phục cấu hình bị thiếu",
+        "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/backup-automation/data/config/app.conf` bị thiếu. Tệp lưu trữ `backups/manual-backup.tar.gz` chứa bản tốt gần nhất và một tài liệu quy trình không liên quan.\n\n### Phạm vi\n\n- Chỉ khôi phục đường dẫn trong tệp lưu trữ `config/app.conf`.\n- Khôi phục nó bên dưới `/home/labex/project/backup-automation/data`.\n- Không giải nén hoặc thay đổi `documents/runbook.txt`.\n\n### Mục tiêu của bạn\n\nKhôi phục `data/config/app.conf` bị thiếu từ bản sao lưu đã chuẩn bị.\n\n### Tiêu chí đạt\n\n- `data/config/app.conf` tồn tại với:\n\n```text\nmode=production\nport=8080\n```\n- `data/documents/runbook.txt` vẫn là tệp gốc đã chuẩn bị và không bị thay thế bởi giải nén.\n\n### Gợi ý\n\nLàm thế nào giải nén một đường dẫn thay vì cả tệp lưu trữ?\n\nBài hướng dẫn đã đặt đường dẫn lưu trữ được chọn sau các tùy chọn tệp lưu trữ và thư mục đích trong lệnh `tar -xzf`.",
+        "source_content_sha256": "8fabbaf70bf6f0d2d92a027f1fc2313bc568996ec87f43228224252f0ab8ceb3",
+        "task_vi": "Thực hiện hướng dẫn: Khôi phục cấu hình bị thiếu",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã kiểm tra một bản sao lưu và khôi phục có chọn lọc một tệp cấu hình bị thiếu mà không giải nén nội dung không liên quan.",
+        "source_content_sha256": "aacc86a41b842de991cf2c4307190813385e112ba53aeb633132e7d57e4e5e05"
+      }
+    ]
+  },
+  "linux-scheduled-backup-and-recovery-725417": {
+    "title_vi": "Sao lưu theo lịch và khôi phục",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một bản sao lưu hữu ích không chỉ là lệnh tạo tệp lưu trữ. Bạn phải biết nó chứa gì, xác minh có thể đọc, khôi phục tệp cần thiết và làm cho những lần chạy không giám sát có thể quan sát được.\n\nTrong bài này, bạn sẽ sao lưu một thư mục ứng dụng nhỏ theo manifest, khôi phục một tệp được chọn, biến quy trình thành script có dấu thời gian và cài lịch Cron. Mọi đường dẫn tự động đều là tuyệt đối để tác vụ không phụ thuộc thư mục hiện tại của shell tương tác.",
+        "source_content_sha256": "ad6d41198e012d49813ab57a4b0e0d4052c26902cbb88dd2b96ca1b11f5e6bc0"
+      },
+      {
+        "position": 1,
+        "title_vi": "Xác định phạm vi sao lưu bằng manifest",
+        "content_vi": "Trong bước này, bạn sẽ tạo manifest: danh sách đường dẫn dạng văn bản thuần giúp phạm vi sao lưu rõ ràng và có thể xem xét.\n\nVào thư mục làm việc:\n\n```bash\ncd /home/labex/project/backup-lab\n```\n\nTạo manifest chứa các đường dẫn tương đối so với thư mục `data`:\n\n```bash\ncat > backup-manifest.txt <<'EOF'\nconfig/app.conf\ndocuments/runbook.txt\nEOF\n```\n\nĐánh số các mục để dễ xem xét:\n\n```bash\nnl -ba backup-manifest.txt\n```\n\nXác nhận mọi nguồn được liệt kê đều tồn tại bằng vòng lặp `while`. Đọc cấu trúc trước khi chạy:\n\n- `IFS=` ngăn shell cắt khoảng trắng ở đầu hoặc cuối dòng;\n- `read -r item` đọc một dòng đầy đủ vào `item` mà không xử lý đặc biệt dấu gạch chéo ngược;\n- `do ... done` bao quanh lệnh được lặp cho mỗi dòng;\n- `< backup-manifest.txt` cung cấp manifest làm đầu vào vòng lặp;\n- `test -f` kiểm tra đường dẫn tương ứng là tệp thông thường và `&&` chỉ in `ready` khi kiểm tra thành công.\n\n```bash\nwhile IFS= read -r item; do\n  test -f \"data/$item\" && echo \"ready: $item\"\ndone < backup-manifest.txt\n```\n\nTệp `documents/scratch.txt` không được liệt kê chủ ý nằm ngoài bản sao lưu được quản lý này.",
+        "source_content_sha256": "34294e666d94c3a666c9fa1af8908381f18e6d1e0c603ee3749fd2eec5f1c2e3",
+        "task_vi": "Thực hiện hướng dẫn: Xác định phạm vi sao lưu bằng manifest",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/backup-lab"
+      },
+      {
+        "position": 2,
+        "title_vi": "Tạo tệp lưu trữ từ manifest",
+        "content_vi": "Trong bước này, bạn sẽ dùng `tar -T` để đọc tên tệp từ manifest. Tùy chọn `-C data` khiến tệp lưu trữ dùng đường dẫn tương đối ngắn.\n\n```bash\ntar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt\n```\n\nCác tùy chọn có nghĩa:\n\n- `-c`: tạo tệp lưu trữ;\n- `-z`: nén bằng gzip;\n- `-f`: dùng tên tệp lưu trữ theo sau;\n- `-C data`: thao tác tương đối với `data`;\n- `-T backup-manifest.txt`: đọc các thành viên sao lưu từ manifest.\n\nKiểm tra tệp được tạo:\n\n```bash\nls -lh backups/manual-backup.tar.gz\n```\n\nSo sánh dấu thời gian và kích thước với các tệp nguồn:\n\n```bash\nstat -c '%n size=%s modified=%y' backups/manual-backup.tar.gz data/config/app.conf data/documents/runbook.txt\n```",
+        "source_content_sha256": "b268b1cd362e2d82f559af7bcb97ea290411eb211c23e91c721387c1b0158806",
+        "task_vi": "Thực hiện hướng dẫn: Tạo tệp lưu trữ từ manifest",
+        "hint_vi": "Chạy lệnh: tar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt"
+      },
+      {
+        "position": 3,
+        "title_vi": "Xác minh tệp lưu trữ mà không giải nén",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra tệp lưu trữ trước khi dựa vào nó. Trước hết kiểm tra luồng gzip:\n\n```bash\ngzip -t backups/manual-backup.tar.gz\n```\n\nKhông có đầu ra nghĩa là luồng nén đã vượt qua kiểm tra tính toàn vẹn. Bây giờ liệt kê các thành viên tar mà không giải nén:\n\n```bash\ntar -tzf backups/manual-backup.tar.gz | tee archive-contents.txt\n```\n\nSo sánh danh sách đã lưu với manifest:\n\n```bash\ndiff -u backup-manifest.txt archive-contents.txt\n```\n\nLệnh phải không hiển thị khác biệt. Xác nhận tệp tạm không được quản lý không có trong đó:\n\n```bash\nif tar -tzf backups/manual-backup.tar.gz | grep -qx 'documents/scratch.txt'; then\n  echo \"Unexpected scratch file found\"\nelse\n  echo \"Archive scope is correct\"\nfi\n```",
+        "source_content_sha256": "959cfb37a4923951252da2e09edfc9ed59571a2517fc921225be7b76c4a4b8cf",
+        "task_vi": "Thực hiện hướng dẫn: Xác minh tệp lưu trữ mà không giải nén",
+        "hint_vi": "Chạy lệnh: gzip -t backups/manual-backup.tar.gz"
+      },
+      {
+        "position": 4,
+        "title_vi": "Khôi phục một tệp được chọn",
+        "content_vi": "Trong bước này, bạn sẽ chỉ khôi phục một tệp được chọn để không ghi đè dữ liệu không liên quan. Mô phỏng vô tình xóa cấu hình:\n\n```bash\nrm data/config/app.conf\n```\n\n```bash\ntest -e data/config/app.conf || echo \"app.conf is missing\"\n```\n\nChỉ giải nén `config/app.conf` vào thư mục khôi phục riêng:\n\n```bash\nrm -rf restore/*\n```\n\n```bash\ntar -xzf backups/manual-backup.tar.gz -C restore config/app.conf\n```\n\nKiểm tra tệp đã phục hồi rồi sao chép về vị trí làm việc:\n\n```bash\ncat restore/config/app.conf\n```\n\n```bash\ncp restore/config/app.conf data/config/app.conf\n```\n\n```bash\ncmp -s restore/config/app.conf data/config/app.conf && echo \"Configuration restored\"\n```\n\nChỉ thành viên tệp lưu trữ được yêu cầu đã được giải nén.",
+        "source_content_sha256": "7627ddee0c8e0f31d49ccd5a3adfeea9c9241973d572e5a0af3d9e46e004c540",
+        "task_vi": "Thực hiện hướng dẫn: Khôi phục một tệp được chọn",
+        "hint_vi": "Chạy lệnh: rm data/config/app.conf"
+      },
+      {
+        "position": 5,
+        "title_vi": "Xây dựng script sao lưu có dấu thời gian",
+        "content_vi": "Trong bước này, bạn sẽ xây dựng script sao lưu có dấu thời gian. Cron khởi chạy tác vụ với môi trường giới hạn nên hãy dùng đường dẫn tuyệt đối trong script không giám sát.\n\nTạo `backup.sh`:\n\n```bash\ncat > backup.sh <<'EOF'\n#!/bin/bash\n\nsource_dir=/home/labex/project/backup-lab/data\nmanifest=/home/labex/project/backup-lab/backup-manifest.txt\nbackup_dir=/home/labex/project/backup-lab/backups\ntimestamp=$(date +%Y%m%d-%H%M%S)\narchive=\"$backup_dir/backup-$timestamp.tar.gz\"\n\nmkdir -p \"$backup_dir\"\n\nif [ ! -d \"$source_dir\" ] || [ ! -f \"$manifest\" ]; then\n  echo \"Backup source or manifest is missing\" >&2\n  exit 1\nfi\n\n/bin/tar -czf \"$archive\" -C \"$source_dir\" -T \"$manifest\" || exit 1\n/bin/tar -tzf \"$archive\" > \"$archive.contents\" || exit 1\n\necho \"Created $archive\"\nexit 0\nEOF\n```\n\nCho phép thực thi script và thử ngay thay vì chờ Cron:\n\n```bash\nchmod u+x backup.sh\n```\n\n```bash\n./backup.sh | tee last-backup.txt\n```\n\n```bash\nls -1 backups\n```\n\nDấu thời gian cho mỗi lần chạy một tên tệp riêng. Tệp `.contents` đi kèm ghi chính xác những gì tệp lưu trữ chứa.",
+        "source_content_sha256": "67036869f241cd5a594db46ae05ac53be3b13fbfde86958997618cb39c6421f7",
+        "task_vi": "Thực hiện hướng dẫn: Xây dựng script sao lưu có dấu thời gian",
+        "hint_vi": "Chạy lệnh: chmod u+x backup.sh"
+      },
+      {
+        "position": 6,
+        "title_vi": "Cài và kiểm tra lịch Cron",
+        "content_vi": "Trong bước này, bạn sẽ cài và kiểm tra lịch Cron cá nhân. Một dòng crontab bắt đầu bằng năm trường lịch, tiếp theo là lệnh:\n\nVị trí\nTrường\nPhạm vi thường dùng\n\n1\nphút\n`0`–`59`\n\n2\ngiờ\n`0`–`23`\n\n3\nngày trong tháng\n`1`–`31`\n\n4\ntháng\n`1`–`12`\n\n5\nngày trong tuần\n`0`–`7`, trong đó Chủ nhật là `0` hoặc `7`\n\nDấu sao `*` nghĩa là mọi giá trị được phép. Bước như `*/5` nghĩa là mỗi năm đơn vị trong trường đó.\n\n```text\nminute hour day-of-month month day-of-week command\n```\n\nVí dụ, `*/5 * * * *` nghĩa là mỗi năm phút. `0 2 * * *` nghĩa là 02:00 hằng ngày.\n\n`crontab -e` mở crontab cá nhân trong trình soạn thảo. Quy trình đáng tin cậy là chuẩn bị và cài một mục tốt đã biết trước, rồi chỉnh sửa tương tác nhỏ. Tạo một mục dùng đường dẫn tuyệt đối và ghi lại cả đầu ra chuẩn lẫn lỗi chuẩn:\n\n```bash\ncat > backup.crontab <<'EOF'\n*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\nEOF\n```\n\nXem lại và cài nó:\n\n```bash\ncat backup.crontab\n```\n\n```bash\ncrontab backup.crontab\n```\n\nBây giờ mở crontab đã cài trong Nano:\n\n```bash\nEDITOR=nano crontab -e\n```\n\nThêm chú thích này vào dòng trên lịch:\n\n```text\n## LabEx managed backup schedule\n```\n\nNhấn `Ctrl+O`, rồi `Enter` để lưu. Nhấn `Ctrl+X` để rời Nano và trở lại shell. Dùng `crontab -l` để xác nhận chính xác những gì Cron sẽ đọc và lưu đầu ra đó:\n\n```bash\ncrontab -l | tee installed-crontab.txt\n```\n\nĐầu ra phải chứa chú thích rồi đến mục mỗi năm phút. Kiểm tra kết quả đã cài giúp phát hiện lỗi soạn thảo trước khi bạn phụ thuộc lịch đó.",
+        "source_content_sha256": "55412a498e1afd2f30a495eefc6b33829b7cccc46e8d459bb5833b3c038e119d",
+        "task_vi": "Thực hiện hướng dẫn: Cài và kiểm tra lịch Cron",
+        "hint_vi": "Chạy lệnh: minute hour day-of-month month day-of-week command"
+      },
+      {
+        "position": 7,
+        "title_vi": "Kiểm tra ghi log và hiểu cách escape dấu phần trăm",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra ghi log sao lưu và học cách Cron xử lý đặc biệt dấu phần trăm. Trước hết chạy thủ công lệnh được lên lịch:\n\n```bash\n/home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\n```\n\n```bash\ntail -n 5 logs/backup.log\n```\n\n```bash\nfind backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%f\\n' | sort\n```\n\nDấu thời gian được tạo bên trong `backup.sh`, nơi các ký tự `%` thông thường an toàn. Tuy nhiên, Cron xử lý đặc biệt `%` không được escape trong lệnh crontab. Nếu đặt `date` trực tiếp trong một dòng crontab, hãy escape mỗi dấu phần trăm bằng dấu gạch chéo ngược.\n\nLưu ví dụ đã escape đúng để tham khảo:\n\n```bash\ncat > cron-date-example.txt <<'EOF'\n0 2 * * * /bin/echo \"backup-$(/bin/date +\\%Y\\%m\\%d-\\%H\\%M\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\nEOF\n```\n\n```bash\ncat cron-date-example.txt\n```\n\nTác vụ đã cài của bạn vẫn là mục đơn giản dựa trên script. Nó dùng đường dẫn tuyệt đối, gán dấu thời gian cho mỗi tệp lưu trữ và để lại log có thể kiểm tra sau những lần chạy không giám sát.",
+        "source_content_sha256": "35a08a1f261f90cb7d856080b50c5ab166e08c77e1a000bdef63dc9d2df13c0a",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra ghi log và hiểu cách escape dấu phần trăm",
+        "hint_vi": "Chạy lệnh: tail -n 5 logs/backup.log"
+      },
+      {
+        "position": 8,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã định nghĩa phạm vi sao lưu trong manifest, tạo tệp lưu trữ bằng `tar -T`, xác minh mà không giải nén và khôi phục một tệp được chọn. Sau đó bạn viết script sao lưu có dấu thời gian với đường dẫn tuyệt đối, cài và kiểm tra lịch Cron, chuyển hướng đầu ra không giám sát vào log, đồng thời hiểu vì sao phải escape dấu phần trăm khi `date` xuất hiện trực tiếp trong lệnh crontab.",
+        "source_content_sha256": "16175a3903101047d62b18fad76f0cb9bd49ec25261bab90f7833a1b29b58ebc"
+      }
+    ]
+  },
+  "linux-software-installation-on-linux-18005": {
+    "title_vi": "Cài đặt phần mềm trên Linux",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Phần mềm Ubuntu thường được cung cấp dưới dạng gói. Kho phần mềm công bố tệp gói cùng siêu dữ liệu mô tả tên, phiên bản, phụ thuộc và địa chỉ tải. `apt` làm việc với kho và giải quyết phụ thuộc; `dpkg` quản lý cơ sở dữ liệu gói `.deb` đã cài ở mức thấp hơn.\n\nBạn sẽ cập nhật siêu dữ liệu, tìm kiếm trước khi cài, kiểm tra gói đã cài, gỡ nó và cài một `.deb` cục bộ có kết quả xác định. Mọi thay đổi dùng gói thực hành có thể bỏ đi và có thể xác minh từ trạng thái gói thay vì lịch sử terminal.",
+        "source_content_sha256": "00ac177c20f0f23247b2025d0fd3a74fe759504399e31f8c0f75f2fbab3a7257"
+      },
+      {
+        "position": 1,
+        "title_vi": "Đọc trạng thái gói và nguồn phần mềm",
+        "content_vi": "Trong bước này, bạn sẽ phân biệt cấu hình kho, siêu dữ liệu có sẵn và trạng thái gói đã cài.\n\nKiểm tra định nghĩa nguồn được bật. Ảnh Ubuntu hiện đại có thể dùng tệp `.list` hoặc `.sources`. Pipeline chỉ đọc này tìm cả hai vị trí: `grep -R` tìm đệ quy, `-h` ẩn tên tệp nguồn, `-s` ẩn thông báo thiếu tệp và `-E` bật mẫu có nhóm. `head` giới hạn hiển thị ở mười hai dòng khớp:\n\n```bash\ngrep -RhsE '^(deb |Types:|URIs:|Suites:)' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null | head -n 12\n```\n\nHỏi dpkg xem Bash đã cài chưa. `-W` chọn bản ghi gói, còn `-f` cung cấp định dạng hiển thị. `${Package}`, `${Version}` và `${db:Status-Status}` là trường của dpkg, không phải biến shell, vì định dạng nằm trong dấu nháy đơn:\n\n```bash\ndpkg-query -W -f='package=${Package} version=${Version} status=${db:Status-Status}\\n' bash\n```\n\n`dpkg-query` đọc trạng thái đã cài cục bộ. Ngược lại, `apt-cache policy` so sánh phiên bản đã cài với các phiên bản được biết từ kho đã cấu hình:\n\n```bash\napt-cache policy bash\n```\n\nLưu một quan sát ổn định về trạng thái đã cài:\n\n```bash\nmkdir -p /home/labex/project/package-lab\ndpkg-query -W -f='${Package} ${db:Status-Status}\\n' bash > /home/labex/project/package-lab/bash-state.txt\ncat /home/labex/project/package-lab/bash-state.txt\n```",
+        "source_content_sha256": "012b6b377ecb8a19089cd3234fc51f557ca2bdc2ea31b14085d21eca3efabdf6",
+        "task_vi": "Thực hiện hướng dẫn: Đọc trạng thái gói và nguồn phần mềm",
+        "hint_vi": "Chạy lệnh: apt-cache policy bash"
+      },
+      {
+        "position": 2,
+        "title_vi": "Làm mới siêu dữ liệu kho",
+        "content_vi": "Trong bước này, bạn sẽ làm mới chỉ mục gói và hiểu `apt update` thay đổi điều gì.\n\nChạy:\n\n```bash\nsudo apt update\n```\n\nLệnh tải siêu dữ liệu kho hiện tại. Nó **không** cài phiên bản mới hơn của mọi gói; `apt upgrade` là thao tác riêng để nâng cấp gói đã cài.\n\nKiểm tra thư mục bộ nhớ đệm siêu dữ liệu:\n\n```bash\nls -ld /var/lib/apt/lists\nfind /var/lib/apt/lists -maxdepth 1 -type f | head\n```\n\nGhi lại số tệp siêu dữ liệu thông thường hiện có:\n\n```bash\nfind /var/lib/apt/lists -maxdepth 1 -type f | wc -l | tr -d ' ' > /home/labex/project/package-lab/index-file-count.txt\ncat /home/labex/project/package-lab/index-file-count.txt\n```",
+        "source_content_sha256": "f8f3b0281b24cb9fbed189e17401d76ccd0205e9cdc6a7b3a6362ade10342af8",
+        "task_vi": "Thực hiện hướng dẫn: Làm mới siêu dữ liệu kho",
+        "hint_vi": "Chạy lệnh: sudo apt update"
+      },
+      {
+        "position": 3,
+        "title_vi": "Tìm, kiểm tra và cài gói từ kho",
+        "content_vi": "Trong bước này, bạn sẽ tìm hiểu một gói trước khi cài nó.\n\nTìm trong tên và mô tả gói để tìm tiện ích liệt kê dạng cây:\n\n```bash\napt search '^tree$'\n```\n\nĐọc siêu dữ liệu của nó:\n\n```bash\napt show tree\n```\n\nCài gói với xử lý phụ thuộc. `sudo` cung cấp quyền quản trị cần thiết và `-y` tự động trả lời có cho yêu cầu cài đặt đã được xem xét này:\n\n```bash\nsudo apt install -y tree\n```\n\nXác minh cả trạng thái gói lẫn khả năng tìm lệnh, rồi sử dụng nó:\n\n```bash\ndpkg-query -W -f='${Package} ${Version} ${db:Status-Status}\\n' tree | tee /home/labex/project/package-lab/tree-installed.txt\ncommand -v tree\ntree -L 1 /home/labex/project/package-lab\n```\n\nLiệt kê các đường dẫn do gói cung cấp:\n\n```bash\ndpkg -L tree | head\n```",
+        "source_content_sha256": "4307372813fbbd7fe416a1cbe971e02d47fe142a356fe48a800d9a93615ec0e3",
+        "task_vi": "Thực hiện hướng dẫn: Tìm, kiểm tra và cài gói từ kho",
+        "hint_vi": "Chạy lệnh: apt search '^tree$'"
+      },
+      {
+        "position": 4,
+        "title_vi": "Gỡ gói và xác minh kết quả",
+        "content_vi": "Trong bước này, bạn sẽ gỡ gói thực hành từ kho và phân biệt các thao tác dọn dẹp liên quan.\n\nGỡ `tree`:\n\n```bash\nsudo apt remove -y tree\n```\n\n`remove` xóa chương trình được gói cài nhưng có thể giữ cấu hình. `purge` xóa cả cấu hình thuộc gói. `autoremove` gỡ phụ thuộc được cài tự động và không còn cần; trên máy thật hãy xem đề xuất trước khi xác nhận.\n\nXem trước việc dọn phụ thuộc mà không thay đổi hệ thống. Tùy chọn `--dry-run` thực hiện tính toán nhưng không gỡ gì:\n\n```bash\nsudo apt autoremove --dry-run | tee /home/labex/project/package-lab/autoremove-preview.txt\n```\n\nĐọc các hành động được đề xuất trước khi chạy `apt autoremove` không có `--dry-run`, đặc biệt trên máy dùng chung hoặc máy sản xuất.\n\nPhiên Bash hiện tại có thể nhớ đường dẫn cũ của lệnh. Xóa bộ nhớ đệm vị trí lệnh đó, rồi xác minh lệnh đã biến mất và ghi lại trạng thái cơ sở dữ liệu gói:\n\n```bash\nhash -r\ncommand -v tree || echo \"tree command is unavailable\"\ndpkg-query -W -f='${db:Status-Status}\\n' tree 2>/dev/null || echo \"not-installed\" | tee /home/labex/project/package-lab/tree-removed.txt\n```\n\nĐảm bảo có dấu mốc ổn định dù dpkg có giữ bản ghi còn sót lại hay không:\n\n```bash\nif dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -qx installed; then echo \"still-installed\"; else echo \"not-installed\"; fi > /home/labex/project/package-lab/tree-removed.txt\ncat /home/labex/project/package-lab/tree-removed.txt\n```",
+        "source_content_sha256": "8433230a10366075a9faac63050de495c7ff5251ed35a2af3fa1d5b6c88ed776",
+        "task_vi": "Thực hiện hướng dẫn: Gỡ gói và xác minh kết quả",
+        "hint_vi": "Chạy lệnh: sudo apt remove -y tree"
+      },
+      {
+        "position": 5,
+        "title_vi": "Kiểm tra và cài gói deb cục bộ",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra `.deb` đã chuẩn bị, cài qua apt, chạy lệnh của nó và gỡ sạch.\n\nVào thư mục làm việc, kiểm tra siêu dữ liệu và nội dung gói mà không cài:\n\n```bash\ncd /home/labex/project/package-lab\ndpkg-deb -I labex-greeter_1.0_all.deb\ndpkg-deb -c labex-greeter_1.0_all.deb\n```\n\nTiền tố `./` cho apt biết đây là tệp cục bộ thay vì tên gói từ kho:\n\n```bash\nsudo apt install -y ./labex-greeter_1.0_all.deb\n```\n\nTruy vấn và chạy nó:\n\n```bash\ndpkg-query -W -f='${Package} ${Version} ${db:Status-Status}\\n' labex-greeter\nlabex-greeter | tee local-package-output.txt\n```\n\nGỡ gói sau khi thử và chứng minh lệnh do gói cung cấp đã biến mất:\n\n```bash\nsudo apt remove -y labex-greeter\nif command -v labex-greeter >/dev/null; then echo \"still-installed\"; else echo \"local-package-removed\"; fi > local-package-state.txt\ncat local-package-state.txt\n```",
+        "source_content_sha256": "be3e6e2fc5db6558e67d4c707cae312d1fd45e23f1eaff6b92ac46ff309a9e38",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra và cài gói deb cục bộ",
+        "hint_vi": "Chạy lệnh: sudo apt install -y ./labex-greeter_1.0_all.deb"
+      },
+      {
+        "position": 6,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã phân biệt siêu dữ liệu kho với trạng thái đã cài, làm mới chỉ mục apt, tìm hiểu gói trước khi cài, xác minh các tệp được cung cấp và khả năng tìm lệnh, gỡ một gói từ kho và hoàn thành vòng đời của một `.deb` cục bộ đã kiểm tra.",
+        "source_content_sha256": "a4718f3f5f4dc62e3780e0e9227a7ef17051f5ac94f84c91674a31e36b16506d"
+      }
+    ]
+  },
+  "linux-stop-a-runaway-process-725412": {
+    "title_vi": "Dừng một tiến trình chạy mất kiểm soát",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một tiến trình thử nghiệm tên `labex-runaway` bị để chạy sau một thí nghiệm. PID của nó đã được ghi lại để người vận hành nhắm tới mà không ảnh hưởng tiến trình không liên quan.\n\nBài hướng dẫn trước đã luyện đọc tệp PID, kiểm tra PID đó, gửi `SIGTERM` và xác nhận tiến trình đã dừng.",
+        "source_content_sha256": "c1cbfee499c3a924f898d9432c0dd093867b93c5f5011442cf8f170dba3d8ed7"
+      },
+      {
+        "position": 1,
+        "title_vi": "Dừng tiến trình đã ghi nhận",
+        "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/system-recovery/runaway.pid` chứa PID của một tiến trình `labex-runaway` đang chạy, thuộc sở hữu `labex`.\n\n### Phạm vi\n\n- Sử dụng PID trong `runaway.pid`.\n- Dừng tiến trình đó bằng tín hiệu kết thúc thông thường.\n- Không gửi tín hiệu tới tiến trình nào khác.\n\n### Mục tiêu của bạn\n\nĐể tiến trình `labex-runaway` đã ghi nhận ở trạng thái dừng.\n\n### Tiêu chí đạt\n\n- PID ghi trong `runaway.pid` không còn chạy.\n- Không có tiến trình không liên quan nào bị thay đổi.\n\n### Gợi ý\n\nBài hướng dẫn đã dùng trình tự an toàn nào?\n\nĐọc PID, kiểm tra đúng PID đó bằng `ps`, truyền nó cho `kill`, chờ ngắn rồi kiểm tra lại cùng PID.",
+        "source_content_sha256": "27e405a6339272e4636d943b905c8f67f97f36fc4e8110835962668812791a1c",
+        "task_vi": "Thực hiện hướng dẫn: Dừng tiến trình đã ghi nhận",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã dừng an toàn một tiến trình đã biết bằng cách kiểm tra và gửi tín hiệu tới PID đã ghi của nó.",
+        "source_content_sha256": "e4861c13dcc0ab91a00ac0cf5d5ad6b8d4b17c546d23778c65dec2933b3d4fff"
+      }
+    ]
+  },
+  "linux-system-information-and-process-management-725419": {
+    "title_vi": "Thông tin hệ thống và quản lý tiến trình",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một hệ thống Linux đang chạy không chỉ có các tệp. Kernel quản lý phần cứng và tiến trình, mỗi lệnh chạy dưới dạng một tiến trình có mã định danh và shell theo dõi các tác vụ tiền cảnh và nền. Quản trị viên trước hết quan sát trạng thái này, rồi tác động lên tiến trình có liên quan ở phạm vi nhỏ nhất.\n\nTrong bài này, bạn sẽ nhận diện hệ điều hành và kernel, diễn giải thời gian hoạt động và tải trung bình, kiểm tra quan hệ giữa các tiến trình, tìm tiến trình theo tên, gửi tín hiệu kết thúc, thực hành điều khiển tác vụ tương tác, diễn giải trạng thái thoát, chạy lệnh tách terminal bằng `nohup` và đọc thông báo kernel gần đây.",
+        "source_content_sha256": "19ced7480ead597a6bfc90473bf0d0ef4703e20c21db0629c0b9d2eaed81b410"
+      },
+      {
+        "position": 1,
+        "title_vi": "Nhận diện hệ thống và diễn giải tải",
+        "content_vi": "Trong bước này, bạn sẽ nhận diện kernel và bản phân phối, kiểm tra hệ thống đã chạy bao lâu và tìm hiểu ý nghĩa của tải trung bình.\n\nTạo và đi vào thư mục làm việc:\n\n```bash\nmkdir -p /home/labex/project/process-lab\n```\n\n```bash\ncd /home/labex/project/process-lab\n```\n\nLệnh `uname` báo thông tin kernel. Các tùy chọn `-s`, `-r` và `-m` lần lượt chọn tên kernel, phiên bản kernel và kiến trúc máy:\n\n```bash\nuname -srm\n```\n\n`uname -a` hiển thị tất cả trường có sẵn trên một dòng:\n\n```bash\nuname -a\n```\n\nKernel không phải là bản phân phối Linux. Đọc siêu dữ liệu của bản phân phối:\n\n```bash\ncat /etc/os-release\n```\n\nTìm những trường như `NAME`, `VERSION` và `ID`. Tiếp theo, kiểm tra thời gian hoạt động và tải:\n\n```bash\nuptime\n```\n\nĐầu ra gồm thời gian hiện tại, thời gian hệ thống đã chạy, số người dùng đăng nhập và ba giá trị tải trung bình. Chúng mô tả công việc có thể chạy hoặc đang chờ không thể ngắt trong khoảng 1, 5 và 15 phút. Chúng không phải phần trăm; ý nghĩa còn phụ thuộc một phần vào số lõi CPU.\n\nXem bản ghi tải ngắn gọn của kernel:\n\n```bash\ncat /proc/loadavg\n```\n\nBa giá trị đầu tương ứng với khái niệm tải trung bình. Các trường sau cho biết tác vụ có thể chạy và mã tiến trình được cấp gần đây nhất.\n\nLưu bản tóm tắt hệ thống nhỏ để tham khảo về sau:\n\n```bash\nuname -srm > system-summary.txt\n```\n\n```bash\nuptime >> system-summary.txt\n```\n\n```bash\ncat system-summary.txt\n```\n\nTệp phải chứa một dòng kernel và một dòng thời gian hoạt động.",
+        "source_content_sha256": "7e832704acb9423eddcc3f58ee267da94ca5a38423d05446d8e036df761a399e",
+        "task_vi": "Thực hiện hướng dẫn: Nhận diện hệ thống và diễn giải tải",
+        "hint_vi": "Chạy lệnh: mkdir -p /home/labex/project/process-lab"
+      },
+      {
+        "position": 2,
+        "title_vi": "Kiểm tra tiến trình và hoạt động tài nguyên",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra mã tiến trình, quan hệ cha, trạng thái và ảnh chụp hoạt động tài nguyên hệ thống.\n\nTiến trình là một chương trình đang chạy. Mỗi tiến trình có mã tiến trình, gọi là PID. Phần lớn tiến trình cũng có mã tiến trình cha, PPID, xác định tiến trình đã khởi chạy nó.\n\nLệnh `ps` hiển thị ảnh chụp tiến trình. Chọn các trường hữu ích và sắp xếp theo PID:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid | head -n 15\n```\n\nTùy chọn `-e` chọn mọi tiến trình và `-o` định nghĩa các cột:\n\n- `PID` là mã tiến trình.\n- `PPID` là mã tiến trình cha.\n- `USER` là chủ sở hữu tiến trình.\n- `STAT` là trạng thái tiến trình kèm các cờ tùy chọn.\n- `COMMAND` là tên chương trình thực thi.\n\nCác chữ cái trạng thái thường gặp gồm `R` cho đang chạy, `S` cho ngủ có thể ngắt, `D` cho ngủ không thể ngắt, `T` cho đã dừng và `Z` cho zombie. Một tiến trình đang ngủ thường chỉ đang chờ công việc.\n\nDạng `ps aux` theo phong cách BSD cung cấp các cột CPU và bộ nhớ cùng dòng lệnh đầy đủ:\n\n```bash\nps aux | head -n 10\n```\n\n`top` cập nhật liên tục khi dùng tương tác. Chế độ batch tạo một ảnh chụp ổn định: `-b` chọn đầu ra batch và `-n 1` yêu cầu một lần cập nhật.\n\n```bash\ntop -b -n 1 | head -n 12\n```\n\nPhần đầu tóm tắt thời gian hoạt động, tải, trạng thái tác vụ, mức dùng CPU và bộ nhớ. Bảng tiến trình phía dưới giúp tìm những tiến trình đang tiêu thụ tài nguyên.\n\nBây giờ mở màn hình tương tác:\n\n```bash\ntop\n```\n\nQuan sát giá trị cập nhật, tìm cột `%CPU` và `%MEM`, rồi nhấn `q` để quay về shell. `top` tương tác hữu ích để quan sát thay đổi theo thời gian; chế độ batch phù hợp hơn khi cần lưu đầu ra hoặc xử lý bằng lệnh khác.\n\nLưu ảnh chụp tiến trình có chọn lọc làm kết quả có thể quan sát:\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid > process-snapshot.txt\n```\n\n```bash\nhead -n 5 process-snapshot.txt\n```",
+        "source_content_sha256": "30978e5d9b4a927fc8d507c861545ce207e066f866e8745226eabbea3686cbc9",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra tiến trình và hoạt động tài nguyên",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      },
+      {
+        "position": 3,
+        "title_vi": "Khởi chạy và tìm tiến trình thực hành",
+        "content_vi": "Trong bước này, bạn sẽ khởi chạy một tiến trình nền vô hại, lấy PID của nó và tìm nó bằng cả `ps` lẫn `pgrep`.\n\nDấu `&` ở cuối yêu cầu shell chạy lệnh trong nền và trả dấu nhắc ngay. Khởi chạy tiến trình ngủ năm phút với tên hiển thị `labex-worker`:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-worker sleep 300' &\n```\n\nGiá trị shell đặc biệt `$!` chứa PID của tiến trình nền được khởi chạy gần nhất. Lưu nó trước khi khởi chạy lệnh nền khác:\n\n```bash\nworker_pid=$!\n```\n\n```bash\necho \"$worker_pid\" > worker.pid\n```\n\nKiểm tra chính xác tiến trình đó. Tùy chọn `-p` chọn PID và `-o` chọn trường:\n\n```bash\nps -o pid,ppid,user,stat,etime,args -p \"$worker_pid\"\n```\n\n`ETIME` cho biết thời gian đã chạy, còn `ARGS` gồm tên tiến trình hiển thị. Dùng `pgrep -f` để tìm trong toàn bộ dòng lệnh; `-a` cũng in dòng lệnh đó:\n\n```bash\npgrep -af labex-worker\n```\n\nPID từ `pgrep` phải khớp với `worker.pid`. Tìm bằng mẫu chính xác an toàn hơn tác động lên mọi tiến trình có tên chung chung.",
+        "source_content_sha256": "6e4e9294e53f5d8bfc5325a935c4b1b53285e32494088134fa7b371e5d918159",
+        "task_vi": "Thực hiện hướng dẫn: Khởi chạy và tìm tiến trình thực hành",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      },
+      {
+        "position": 4,
+        "title_vi": "Dừng tiến trình bằng tín hiệu",
+        "content_vi": "Trong bước này, bạn sẽ yêu cầu kết thúc có trật tự bằng SIGTERM và chỉ dùng SIGKILL cho tiến trình được thiết kế để bỏ qua yêu cầu đó.\n\nLệnh `kill` gửi tín hiệu tới một PID. Nếu không chỉ định tín hiệu, nó gửi SIGTERM, tín hiệu 15. SIGTERM yêu cầu tắt có trật tự và cho tiến trình cơ hội dọn dẹp.\n\nĐọc PID của worker và gửi SIGTERM:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nworker_pid=$(cat worker.pid)\n```\n\n```bash\nkill \"$worker_pid\"\n```\n\n```bash\nsleep 1\n```\n\nLỗi `ps` dự kiến sau đây chứng minh tiến trình đã kết thúc:\n\n```bash\nps -p \"$worker_pid\" || echo \"labex-worker stopped after SIGTERM\"\n```\n\nBây giờ khởi chạy một tiến trình được kiểm soát, chủ ý bỏ qua SIGTERM:\n\n```bash\nbash -c 'trap \"\" TERM; exec -a labex-stubborn sleep 300' &\n```\n\n```bash\nstubborn_pid=$!\n```\n\n```bash\necho \"$stubborn_pid\" > stubborn.pid\n```\n\nCho shell mới một chút thời gian cài đặt bộ xử lý tín hiệu:\n\n```bash\nsleep 1\n```\n\nGửi SIGTERM, chờ ngắn rồi kiểm tra tiến trình:\n\n```bash\nkill -TERM \"$stubborn_pid\"\n```\n\n```bash\nsleep 1\n```\n\n```bash\nps -o pid,stat,args -p \"$stubborn_pid\"\n```\n\nNó vẫn phải tồn tại vì tiến trình thực hành này bỏ qua SIGTERM. SIGKILL, tín hiệu 9, không thể bị bắt hoặc bỏ qua. Chỉ dùng khi tín hiệu kết thúc có trật tự không hiệu quả:\n\n```bash\nkill -KILL \"$stubborn_pid\"\n```\n\nThu hồi trạng thái tác vụ nền đã kết thúc. Trạng thái khác 0 là điều dự kiến nên `|| true` cho phép chuỗi thực hành tiếp tục:\n\n```bash\nwait \"$stubborn_pid\" 2>/dev/null || true\n```\n\n```bash\nps -p \"$stubborn_pid\" || echo \"labex-stubborn required SIGKILL\"\n```\n\nSIGKILL không cho tiến trình cơ hội lưu trạng thái hoặc giải phóng tài nguyên ứng dụng một cách sạch sẽ, nên đây là biện pháp cuối cùng.\n\n`kill` nhắm tới một PID đã biết. Khi cần chọn tiến trình theo tên hoặc toàn bộ dòng lệnh, `pkill` kết hợp việc khớp và gửi tín hiệu. Khởi chạy thêm một tiến trình được kiểm soát với dòng lệnh đặc trưng:\n\n```bash\nbash -c 'exec -a labex-helper sleep 300' &\n```\n\n```bash\nhelper_pid=$!\necho \"$helper_pid\" > helper.pid\n```\n\nXác nhận mẫu khớp chính xác toàn bộ dòng lệnh trước khi tác động:\n\n```bash\npgrep -af '^labex-helper 300$'\n```\n\nGửi SIGTERM tới phần khớp chính xác đó bằng `pkill -f`. Các ký hiệu neo `^` và `$` ngăn mẫu thực hành này khớp các dòng lệnh không liên quan:\n\n```bash\npkill -TERM -f '^labex-helper 300$'\n```\n\n```bash\nwait \"$helper_pid\" 2>/dev/null || true\nps -p \"$helper_pid\" || echo \"labex-helper stopped by pkill\"\n```\n\nDùng mẫu `pkill` chính xác và kiểm tra phần khớp trước bằng `pgrep`; mẫu quá rộng có thể dừng nhiều tiến trình hơn dự định.",
+        "source_content_sha256": "053bb8078a1632c09c2667cd0b2e80480af9576ac2640bf1f6667fc9256e7482",
+        "task_vi": "Thực hiện hướng dẫn: Dừng tiến trình bằng tín hiệu",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      },
+      {
+        "position": 5,
+        "title_vi": "Điều khiển tác vụ tiền cảnh và nền",
+        "content_vi": "Trong bước này, bạn sẽ tạm dừng một lệnh tiền cảnh, tiếp tục nó trong nền, đưa nó về tiền cảnh rồi ngắt nó.\n\nĐiều khiển tác vụ thuộc về shell tương tác hiện tại. Khởi chạy tiến trình ngủ ở tiền cảnh với tên dễ nhận biết:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nTerminal hiện bị tiến trình tiền cảnh chiếm dụng. Nhấn `Ctrl+Z`. Shell gửi tín hiệu dừng và trả lại dấu nhắc.\n\nLiệt kê các tác vụ mà shell này biết. Tùy chọn `-l` bao gồm mã tiến trình:\n\n```bash\njobs -l\n```\n\nBạn sẽ thấy một tác vụ `Stopped`. Tiếp tục tác vụ số 1 trong nền:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nTrạng thái giờ phải là `Running` và dấu nhắc vẫn dùng được. Đưa tác vụ trở lại tiền cảnh:\n\n```bash\nfg %1\n```\n\nNhấn `Ctrl+C` để gửi tín hiệu ngắt tới tác vụ tiền cảnh. Dấu nhắc phải trở lại. Xác nhận không còn tác vụ thực hành:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nTạo dấu mốc hoàn thành sau khi kết thúc chuỗi tương tác:\n\n```bash\ntouch job-control.done\n```\n\nDùng điều khiển tác vụ cho các lệnh gắn với terminal hiện tại. Sau này bạn sẽ dùng `nohup` cho công việc không nên phụ thuộc phiên terminal.",
+        "source_content_sha256": "29a055cbeff56c98ed277ab42db52f16b9d6c38273799b1d74575f5af2cb48de",
+        "task_vi": "Thực hiện hướng dẫn: Điều khiển tác vụ tiền cảnh và nền",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      },
+      {
+        "position": 6,
+        "title_vi": "Đọc trạng thái thoát và chạy tác vụ tách terminal",
+        "content_vi": "Trong bước này, bạn sẽ diễn giải trạng thái thoát của lệnh và chạy một tác vụ nền ngắn có đầu ra được giữ độc lập với màn hình terminal.\n\nMỗi lệnh trả về một trạng thái số nguyên. Số 0 nghĩa là thành công; giá trị khác 0 biểu thị một dạng lỗi. Biến shell `$?` chứa trạng thái của lệnh vừa kết thúc.\n\nChạy một lệnh thành công rồi in ngay trạng thái của nó:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\ntrue\n```\n\n```bash\necho \"true status: $?\"\n```\n\nKết quả là `0`. Bây giờ chạy một lệnh không tìm được đường dẫn:\n\n```bash\nls missing-path\n```\n\nLấy trạng thái của nó trước khi lệnh khác thay thế `$?`:\n\n```bash\nmissing_status=$?\n```\n\n```bash\necho \"missing-path status: $missing_status\"\n```\n\nGiá trị khác 0. Lưu cả hai cách diễn giải dự kiến:\n\n```bash\nprintf 'success=0\\nfailure=%s\\n' \"$missing_status\" > exit-status.txt\n```\n\nLệnh `nohup` khiến chương trình bỏ qua tín hiệu ngắt kết nối terminal. Dấu `&` cuối cùng khởi chạy nó trong nền. Chuyển hướng `< /dev/null` ngắt đầu vào terminal, còn `> nohup.log 2>&1` đưa cả hai luồng đầu ra vào log:\n\n```bash\nnohup bash -c 'for item in one two three; do echo \"background: $item\"; sleep 1; done' < /dev/null > nohup.log 2>&1 &\n```\n\nLưu PID nền và chờ tác vụ ngắn hoàn tất:\n\n```bash\necho $! > nohup.pid\n```\n\n```bash\nsleep 4\n```\n\n```bash\ncat nohup.log\n```\n\nBạn sẽ thấy ba dòng, từ `background: one` đến `background: three`. Với công việc chạy lâu, PID và log đã lưu cung cấp cách kiểm tra tiến độ.",
+        "source_content_sha256": "7b00a84837a2b1fb5f102009878d74d59bdaa1023fc4b20df80d89a985456ef4",
+        "task_vi": "Thực hiện hướng dẫn: Đọc trạng thái thoát và chạy tác vụ tách terminal",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      },
+      {
+        "position": 7,
+        "title_vi": "Kiểm tra thông báo kernel gần đây",
+        "content_vi": "Trong bước này, bạn sẽ kiểm tra bộ đệm thông báo kernel và lưu phiên bản kernel đang chạy làm tham chiếu ổn định.\n\nKernel ghi thông báo về khởi động, phần cứng, trình điều khiển và sự kiện khi chạy vào một bộ đệm vòng. `dmesg` đọc bộ đệm đó. Thông thường cần quyền quản trị:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThông báo cụ thể thay đổi theo máy và thời điểm. Chú ý trường giống dấu thời gian và thành phần hoặc hệ thống con đã tạo mỗi thông báo.\n\nTùy chọn `--level` lọc theo mức nghiêm trọng. Hiển thị cảnh báo và lỗi gần đây:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nKhông có đầu ra không có nghĩa lệnh thất bại; có thể bộ đệm hiện tại không có thông báo ở các mức đó. Tìm thông báo gần đây chứa thuật ngữ lưu trữ và mạng thường gặp:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nMột lần nữa, kết quả phụ thuộc hệ thống hiện tại. Lưu phiên bản kernel do `uname -r` báo:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nThông báo kernel là bằng chứng, không phải chẩn đoán tự động. Kết hợp chúng với trạng thái tiến trình, log dịch vụ và triệu chứng quan sát được trước khi quyết định hành động.",
+        "source_content_sha256": "d656434854aa61e85e15b38d9b757bef01801422aed90f00f4f2435c8d3d0905",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra thông báo kernel gần đây",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      },
+      {
+        "position": 8,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã nhận diện một hệ thống Linux, diễn giải thời gian hoạt động và tải trung bình, kiểm tra mã tiến trình, tiến trình cha, chủ sở hữu, trạng thái và hoạt động tài nguyên bằng công cụ chụp trạng thái lẫn tương tác. Bạn đã khởi chạy và tìm tiến trình có tên, nhắm chính xác bằng `kill` và `pkill`, dùng SIGTERM trước SIGKILL và thực hành điều khiển tác vụ tiền cảnh và nền.\n\nBạn cũng diễn giải trạng thái thoát, chạy tác vụ tách terminal bằng `nohup` với log rõ ràng và kiểm tra thông báo kernel bằng `dmesg`. Thói quen quan sát trước này là nền tảng xử lý sự cố tiến trình an toàn và chuẩn bị cho chẩn đoán dịch vụ, log và mạng về sau trong khóa học.",
+        "source_content_sha256": "f24496e4309998830d0677b63a142b511c799649b2acbd8621e311174bb948a0"
+      }
+    ]
+  },
+  "linux-text-processing-and-regular-expressions-18003": {
+    "title_vi": "Xử lý văn bản bằng biểu thức chính quy",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Biểu thức chính quy mô tả văn bản theo cấu trúc thay vì một chuỗi chính xác duy nhất. Cùng một ngôn ngữ mẫu xuất hiện trong nhiều công cụ Linux, nhưng mỗi công cụ sử dụng nó khác nhau: `grep` chọn hoặc trích xuất phần khớp, `sed` biến đổi luồng và `awk` kết hợp mẫu với thao tác hiểu cấu trúc trường.\n\nBạn sẽ bắt đầu với ký hiệu neo và lớp ký tự, chuyển sang phép lặp mở rộng và trích xuất, xem trước các phép biến đổi trước khi lưu, rồi kết thúc bằng chọn trường và tổng hợp. Mẫu được đặt trong dấu nháy để shell chuyển ký tự đặc biệt cho công cụ văn bản thay vì tự diễn giải chúng.",
+        "source_content_sha256": "780ba766cd07367827d63d6be61e297e3805a5536b56d2abfdf2426ed6a49bf5"
+      },
+      {
+        "position": 1,
+        "title_vi": "Khớp dòng bằng cấu trúc regex cơ bản",
+        "content_vi": "Trong bước này, bạn sẽ dùng văn bản nguyên dạng, ký hiệu neo và lớp ký tự để mô tả vị trí trên toàn dòng.\n\nKiểm tra tệp thực hành:\n\n```bash\ncd /home/labex/project/regex-lab\nnl -ba contacts.txt\n```\n\nVăn bản nguyên dạng khớp ở bất kỳ vị trí nào trong một dòng:\n\n```bash\ngrep 'active' contacts.txt\n```\n\n`^` neo mẫu vào đầu dòng và `$` neo vào cuối dòng. Tìm bản ghi Alice và những bản ghi kết thúc bằng số có hai chữ số:\n\n```bash\ngrep '^Alice|' contacts.txt\ngrep '[0-9][0-9]$' contacts.txt\n```\n\nTrong dấu ngoặc vuông, một lớp ký tự khớp với một ký tự. `[ABC]` có nghĩa là A, B hoặc C:\n\n```bash\ngrep '^[ABC]' contacts.txt | tee abc-contacts.txt\n```\n\nKết quả gồm Alice, Bob và Carol. Hãy lưu cả những dòng khớp với mẫu số có neo:\n\n```bash\ngrep '[0-9][0-9]$' contacts.txt > two-digit-values.txt\n```",
+        "source_content_sha256": "66ebcca42c4560c139bb22cf89ef98ca05eb6ec98a99e808641b69fc9f503361",
+        "task_vi": "Thực hiện hướng dẫn: Khớp dòng bằng cấu trúc regex cơ bản",
+        "hint_vi": "Chạy lệnh: grep 'active' contacts.txt"
+      },
+      {
+        "position": 2,
+        "title_vi": "Dùng regex mở rộng và trích xuất phần khớp",
+        "content_vi": "Trong bước này, bạn sẽ dùng biểu thức chính quy mở rộng cho các lựa chọn và phép lặp, rồi chỉ trích xuất chuỗi con khớp.\n\n`grep -E` bật các toán tử như `+` (một hoặc nhiều), `?` (không hoặc một) và `|` (lựa chọn). Khớp toàn bộ trường trạng thái active hoặc pending:\n\n```bash\ncd /home/labex/project/regex-lab\ngrep -E '\\|(active|pending)\\|' contacts.txt\n```\n\nCó thể xây dựng mẫu giống địa chỉ email từ các phần:\n\n- `[[:alnum:]._-]+` khớp một hoặc nhiều ký tự được phép trong phần trước dấu @;\n- `@` là ký tự nguyên dạng;\n- `[[:alnum:].-]+` khớp phần tên miền;\n- `\\.[[:alpha:]]{2,}` khớp dấu chấm và hậu tố có ít nhất hai chữ cái.\n\nDùng `-o` để chỉ in những chuỗi con khớp:\n\n```bash\ngrep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' contacts.txt | tee emails.txt\n```\n\nĐánh số những dòng khớp và đếm địa chỉ đã trích xuất:\n\n```bash\ngrep -En '\\|(active|pending)\\|' contacts.txt\nwc -l < emails.txt | tr -d ' ' > email-count.txt\ncat email-count.txt\n```\n\nChuỗi sai định dạng `dave_at_example.com` không khớp vì không có `@`.",
+        "source_content_sha256": "a880fc8f9a8e3cd17f8722bc0375d5f512069bc79ddb1fb001379adfde744f04",
+        "task_vi": "Thực hiện hướng dẫn: Dùng regex mở rộng và trích xuất phần khớp",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 3,
+        "title_vi": "Xem trước phép biến đổi bằng sed",
+        "content_vi": "Trong bước này, bạn sẽ biến đổi một luồng bằng `sed` mà không thay đổi dữ liệu đầu vào.\n\nPhép thay thế có dạng `s/pattern/replacement/flags`. Chỉ thay chữ `a` đầu tiên trên mỗi dòng, sau đó thay mọi chữ `a` viết thường bằng cờ `g`:\n\n```bash\ncd /home/labex/project/regex-lab\nsed 's/a/A/' contacts.txt\nsed 's/a/A/g' contacts.txt\n```\n\nDùng ký tự phân cách khác khi bản thân văn bản chứa dấu gạch chéo hoặc khi ký tự khác giúp dễ đọc hơn. Thay các tên miền email bằng `redacted.invalid`:\n\n```bash\nsed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt\n```\n\nĐịa chỉ của sed chọn những dòng nhận lệnh. Chỉ thay trạng thái trên những dòng chứa chính xác trường `|inactive|`:\n\n```bash\nsed '/|inactive|/s/|inactive|/|disabled|/' contacts.txt | tee contacts-preview.txt\n```\n\nXác nhận bản gốc vẫn chứa `inactive`:\n\n```bash\ngrep '|inactive|' contacts.txt\n```",
+        "source_content_sha256": "e663a1e18fe9ff6a1ede987bbdacce89e2e3c9110ed50f01e4389fa7746f99b5",
+        "task_vi": "Thực hiện hướng dẫn: Xem trước phép biến đổi bằng sed",
+        "hint_vi": "Chạy lệnh: sed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt"
+      },
+      {
+        "position": 4,
+        "title_vi": "Tạo tệp đã chuẩn hóa bằng sed",
+        "content_vi": "Trong bước này, bạn sẽ kết hợp nhiều lệnh sed và lưu luồng đã biến đổi thành một tệp mới.\n\nDòng tiêu đề trong `services.csv` cần giữ nguyên. Với các dòng dữ liệu, chuẩn hóa `warn` thành `warning` và thêm hậu tố `ms` vào trường số cuối cùng. `-e` cung cấp nhiều lệnh và địa chỉ `2,$` giới hạn chúng từ dòng 2 đến hết:\n\n```bash\ncd /home/labex/project/regex-lab\nsed -E -e '2,$ s/,warn,/,warning,/' -e '2,$ s/([0-9]+)$/\\1ms/' services.csv | tee services-clean.csv\n```\n\nỞ đây, dấu ngoặc đơn bắt giữ các chữ số cuối cùng và `\\1` sử dụng lại phần bắt giữ trong chuỗi thay thế.\n\nSo sánh tệp gốc và tệp mới:\n\n```bash\ndiff -u services.csv services-clean.csv || true\n```\n\nTrạng thái khác 0 của `diff` là điều dự kiến vì kết quả đã được chủ ý thay đổi; `|| true` cho phép chuỗi lệnh được sao chép tiếp tục chạy.",
+        "source_content_sha256": "24f9f0b8115bf0ce7908202513cdfa54fe98d317cfd70bf8062ba91f4ad57da2",
+        "task_vi": "Thực hiện hướng dẫn: Tạo tệp đã chuẩn hóa bằng sed",
+        "hint_vi": "Chạy lệnh: diff -u services.csv services-clean.csv || true"
+      },
+      {
+        "position": 5,
+        "title_vi": "Chọn trường và tổng hợp bằng awk",
+        "content_vi": "Trong bước này, bạn sẽ dùng `awk` khi nhiệm vụ cần cả cấu trúc trường lẫn phép tính.\n\n`-F,` đặt dấu phẩy làm ký tự phân cách đầu vào. Chỉ in dịch vụ và trạng thái cho các dòng dữ liệu; `NR` là số thứ tự bản ghi hiện tại:\n\n```bash\ncd /home/labex/project/regex-lab\nawk -F, 'NR > 1 {print $1, $2}' services.csv\n```\n\nChọn những dòng có trường số thứ ba lớn hơn 200:\n\n```bash\nawk -F, 'NR > 1 && $3 > 200 {print $1, $3}' services.csv | tee slow-services.txt\n```\n\nCộng dồn tổng và số lượng, rồi tính trung bình trong khối `END`. `printf` điều khiển định dạng số:\n\n```bash\nawk -F, 'NR > 1 {sum += $3; count++} END {printf \"average_latency=%.1f\\n\", sum/count}' services.csv | tee latency-summary.txt\n```\n\nMẫu của awk quyết định bản ghi nào chạy một thao tác; các trường như `$1` và `$3` giúp phép tính trên dữ liệu có cấu trúc dễ đọc hơn.",
+        "source_content_sha256": "7d2d8d10b0cd2d2b93ca623fcd004ef9581fb8561506c19d8e0f169958535ae6",
+        "task_vi": "Thực hiện hướng dẫn: Chọn trường và tổng hợp bằng awk",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 6,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã xây dựng mẫu regex từ ký hiệu neo, lớp ký tự, lựa chọn và phép lặp; dùng grep để chọn và trích xuất; dùng sed để xem trước và lưu phép biến đổi; dùng awk để chọn và tổng hợp theo trường. Thử thách tiếp theo yêu cầu áp dụng các ý tưởng này mà không được cung cấp toàn bộ chuỗi lệnh.",
+        "source_content_sha256": "b9200b003dc6913ff87e42e064d7cce92fde9ea45da288f79fbc39f48f39f94b"
+      }
+    ]
+  },
+  "linux-upload-a-configuration-with-scp-725408": {
+    "title_vi": "Tải tệp cấu hình lên bằng SCP",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Một tệp cấu hình đã sẵn sàng ở cục bộ và phải được chuyển nguyên vẹn tới một tài khoản từ xa hiện có. Khóa riêng hoạt động đã được cung cấp.\n\nBài hướng dẫn trước đã thực hành chọn khóa nhận diện SSH và truyền tệp bằng `scp`. Thử thách này chỉ tập trung vào lần chuyển giao đó.",
+        "source_content_sha256": "2d7a075e4a1749396e296096425ccaf53e2a87b5a61284a7797765076156dc72"
+      },
+      {
+        "position": 1,
+        "title_vi": "Chuyển giao tệp cấu hình",
+        "content_vi": "### Tình huống hiện tại\n\nThư mục làm việc cục bộ `/home/labex/project/remote-admin` chứa:\n\n- `service.conf`, tệp cần chuyển giao;\n- `id_ed25519`, khóa riêng cho `opsuser@localhost`.\n\nThư mục từ xa `/home/opsuser/incoming` đã tồn tại.\n\n### Phạm vi\n\n- Dùng tệp khóa nhận diện được cung cấp.\n- Tải `service.conf` lên `/home/opsuser/incoming/service.conf`.\n- Giữ nguyên tệp nguồn cục bộ.\n- Không thay thiết lập máy chủ SSH hoặc thông tin xác thực tài khoản.\n\n### Mục tiêu của bạn\n\nĐể một bản sao nguyên vẹn của `service.conf` trong thư mục incoming từ xa.\n\n### Tiêu chí đạt\n\n- `/home/opsuser/incoming/service.conf` tồn tại và thuộc sở hữu `opsuser`.\n- Nội dung của nó giống từng byte với `service.conf` cục bộ.\n- Tệp nguồn cục bộ và khóa nhận diện được cung cấp vẫn còn.\n\n### Gợi ý\n\nLàm thế nào chọn khóa đã được cung cấp?\n\nBài hướng dẫn đã dùng tùy chọn `-i` với cả `ssh` và `scp`. Trong lần tải lên, nguồn cục bộ đứng trước đích từ xa.",
+        "source_content_sha256": "1fcbeea0a452c030a3e0886c914bf845c34c07f94183826d927810e78a402023",
+        "task_vi": "Thực hiện hướng dẫn: Chuyển giao tệp cấu hình",
+        "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã dùng một khóa nhận diện SSH được cung cấp để chuyển giao nguyên vẹn một tệp cấu hình bằng SCP.",
+        "source_content_sha256": "6be2dea23940322bc527ee7020cfd3bcd52ece1dbb3afb9efc4be4ca51ea7afa"
+      }
+    ]
+  },
+  "shell-shell-scripting-fundamentals-725418": {
+    "title_vi": "Nền tảng viết script shell",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Script shell lưu các lệnh trong một tệp để lặp lại nhiệm vụ một cách nhất quán. Script đáng tin cậy cho người mới chỉ rõ trình thông dịch, đặt phần mở rộng biến trong dấu nháy, kiểm tra đầu vào trước khi hành động và trả trạng thái thoát mà lệnh khác có thể hiểu.\n\nTrong bài này, bạn sẽ xây dựng từng bước các script Bash nhỏ. Bạn sẽ chạy script qua Bash và dưới dạng tệp thực thi, dùng biến và đối số vị trí, đọc đầu vào tương tác, rẽ nhánh bằng `if` và phép kiểm tra tệp, chọn mã thoát, lặp bằng `for` và kết hợp các ý tưởng thành bộ tóm tắt log đơn giản.",
+        "source_content_sha256": "156796395a87168367c4845effdfd86d03974c2b14f0992b24346c9b7af8a7a8"
+      },
+      {
+        "position": 1,
+        "title_vi": "Tạo và chạy script đầu tiên",
+        "content_vi": "Trong bước này, bạn sẽ tạo script Bash, chạy qua trình thông dịch và cho phép thực thi trực tiếp.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/shell-lab\n```\n\nTạo `hello.sh` bằng here-document. Dòng đầu là shebang chọn Bash khi tệp được thực thi trực tiếp:\n\n```bash\ncat > hello.sh <<'EOF'\n#!/bin/bash\n\necho \"Hello from a Bash script\"\npwd\nEOF\n```\n\nKiểm tra tệp trước khi chạy:\n\n```bash\ncat hello.sh\n```\n\nTruyền tệp trực tiếp cho Bash. Cách này hoạt động ngay cả trước khi thêm quyền thực thi:\n\n```bash\nbash hello.sh\n```\n\nThêm quyền thực thi và kiểm tra chế độ quyền:\n\n```bash\nchmod u+x hello.sh\n```\n\n```bash\nls -l hello.sh\n```\n\nThực thi tệp từ thư mục hiện tại. `./` cung cấp một đường dẫn; shell thường không tự tìm trong thư mục hiện tại:\n\n```bash\n./hello.sh\n```",
+        "source_content_sha256": "284f837221f4101858eff0957d581325c885038c8765c9b2810c8c2bf084232c",
+        "task_vi": "Thực hiện hướng dẫn: Tạo và chạy script đầu tiên",
+        "hint_vi": "Chạy lệnh: cd /home/labex/project/shell-lab"
+      },
+      {
+        "position": 2,
+        "title_vi": "Dùng biến và dấu nháy an toàn",
+        "content_vi": "Trong bước này, bạn sẽ gán biến, mở rộng chúng và thấy vì sao dấu nháy kép bảo vệ giá trị chứa khoảng trắng.\n\nTạo script với hai biến:\n\n```bash\ncat > variables.sh <<'EOF'\n#!/bin/bash\n\ncourse=\"Linux for Noobs\"\nworkspace=\"/home/labex/project/shell-lab\"\n\necho \"Course: $course\"\necho \"Workspace: $workspace\"\nprintf 'Quoted argument count: %s\\n' \"$#\"\nprintf 'First argument: %s\\n' \"${1:-not provided}\"\nEOF\n```\n\nKhông có khoảng trắng quanh `=` trong phép gán shell. Dấu nháy kép cho phép mở rộng `$course` trong khi giữ `Linux for Noobs` là một giá trị.\n\nChạy script với một đối số chứa khoảng trắng:\n\n```bash\nbash variables.sh \"beginner learner\"\n```\n\nBiến đặc biệt `$#` là số lượng đối số vị trí và `$1` là đối số đầu tiên. `${1:-not provided}` cung cấp giá trị dự phòng khi không có đối số đó.\n\nLưu đầu ra để kiểm tra:\n\n```bash\nbash variables.sh \"beginner learner\" > variable-output.txt\n```\n\n```bash\ncat variable-output.txt\n```",
+        "source_content_sha256": "45ea84a777ad1110d3b1db87e16a695340a4073badf007126c56e36018d5f441",
+        "task_vi": "Thực hiện hướng dẫn: Dùng biến và dấu nháy an toàn",
+        "hint_vi": "Chạy lệnh: bash variables.sh \"beginner learner\""
+      },
+      {
+        "position": 3,
+        "title_vi": "Kiểm tra đối số vị trí",
+        "content_vi": "Trong bước này, bạn sẽ yêu cầu một đối số, in hướng dẫn sử dụng và trả trạng thái thoát khác nhau cho thất bại và thành công.\n\nTạo `greet-argument.sh`:\n\n```bash\ncat > greet-argument.sh <<'EOF'\n#!/bin/bash\n\nif [ \"$#\" -ne 1 ]; then\n  echo \"Usage: $0 NAME\" >&2\n  exit 2\nfi\n\nname=$1\necho \"Hello, $name\"\nexit 0\nEOF\n```\n\nLệnh kiểm tra `[ ... ]` kiểm tra số đối số có khác một hay không. `>&2` gửi hướng dẫn sử dụng tới lỗi chuẩn và `exit 2` báo cách dùng không hợp lệ.\n\nChạy không có đối số rồi hiển thị ngay `$?`, trạng thái thoát của lệnh trước:\n\n```bash\nbash greet-argument.sh\n```\n\n```bash\necho \"missing argument status: $?\"\n```\n\nTrạng thái dự kiến là `2`. Chạy đúng cách:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\"\n```\n\n```bash\necho \"valid argument status: $?\"\n```\n\nLưu lời chào thành công:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\" > argument-greeting.txt\n```",
+        "source_content_sha256": "7dad53950e1568f9e4af23c754d690ccf082aa87a6d80f7ed282bed6c706de0b",
+        "task_vi": "Thực hiện hướng dẫn: Kiểm tra đối số vị trí",
+        "hint_vi": "Chạy lệnh: bash greet-argument.sh"
+      },
+      {
+        "position": 4,
+        "title_vi": "Đọc đầu vào tương tác",
+        "content_vi": "Trong bước này, bạn sẽ hỏi người dùng, đọc một dòng an toàn và xử lý đầu vào rỗng.\n\nTạo `ask-name.sh`:\n\n```bash\ncat > ask-name.sh <<'EOF'\n#!/bin/bash\n\nread -r -p \"Enter your name: \" name\n\nif [ -z \"$name\" ]; then\n  echo \"A name is required\" >&2\n  exit 1\nfi\n\necho \"Welcome, $name\"\nEOF\n```\n\n`read -r` đọc một dòng mà không xử lý đặc biệt dấu gạch chéo ngược. `-p` hiển thị lời nhắc và `-z` kiểm tra giá trị được đặt trong dấu nháy có rỗng không.\n\nChạy script:\n\n```bash\nbash ask-name.sh\n```\n\nTại lời nhắc, nhập:\n\n```text\nGrace Hopper\n```\n\nBạn sẽ thấy `Welcome, Grace Hopper`. Để có kết quả lưu được tái tạo, chuyển một dòng đầu vào qua đường ống vào cùng script:\n\n```bash\nprintf 'Grace Hopper\\n' | bash ask-name.sh > interactive-greeting.txt\n```\n\n```bash\ncat interactive-greeting.txt\n```",
+        "source_content_sha256": "6bc3110e2547239fa8edb3efc8106bb36f5228706045cc7b75ff093ca432c9f1",
+        "task_vi": "Thực hiện hướng dẫn: Đọc đầu vào tương tác",
+        "hint_vi": "Chạy lệnh: bash ask-name.sh"
+      },
+      {
+        "position": 5,
+        "title_vi": "Rẽ nhánh bằng phép kiểm tra tệp",
+        "content_vi": "Trong bước này, bạn sẽ dùng `if`, `elif` và `else` với phép kiểm tra tệp để phân loại đường dẫn.\n\nTạo `classify-path.sh`:\n\n```bash\ncat > classify-path.sh <<'EOF'\n#!/bin/bash\n\npath=${1:-}\n\nif [ -z \"$path\" ]; then\n  echo \"Usage: $0 PATH\" >&2\n  exit 2\nelif [ -d \"$path\" ]; then\n  echo \"directory: $path\"\nelif [ -f \"$path\" ]; then\n  echo \"file: $path\"\nelse\n  echo \"missing: $path\" >&2\n  exit 1\nfi\n\nexit 0\nEOF\n```\n\n`-d` kiểm tra thư mục và `-f` kiểm tra tệp thông thường. Thứ tự có ý nghĩa: cách dùng không hợp lệ được xử lý trước loại đường dẫn.\n\nThử cả ba kết quả đường dẫn:\n\n```bash\nbash classify-path.sh logs\n```\n\n```bash\nbash classify-path.sh notes.txt\n```\n\n```bash\nbash classify-path.sh missing.txt\n```\n\n```bash\necho \"missing path status: $?\"\n```\n\nLưu chung các kết quả thành công. `&&` chỉ chạy lệnh thứ hai nếu lệnh đầu thành công:\n\n```bash\nbash classify-path.sh logs > path-results.txt && bash classify-path.sh notes.txt >> path-results.txt\n```\n\n```bash\ncat path-results.txt\n```",
+        "source_content_sha256": "30e43c8d10c5ad7ef002c0d9f320a7a766449a3e2add61e946a69e6908b4d531",
+        "task_vi": "Thực hiện hướng dẫn: Rẽ nhánh bằng phép kiểm tra tệp",
+        "hint_vi": "Chạy lệnh: bash classify-path.sh logs"
+      },
+      {
+        "position": 6,
+        "title_vi": "Xử lý nhiều tệp bằng vòng lặp for",
+        "content_vi": "Trong bước này, bạn sẽ lặp qua tệp log và đếm số bản ghi khớp trong từng tệp.\n\nTạo `count-errors.sh`:\n\n```bash\ncat > count-errors.sh <<'EOF'\n#!/bin/bash\n\nlog_dir=${1:-logs}\n\nif [ ! -d \"$log_dir\" ]; then\n  echo \"Log directory not found: $log_dir\" >&2\n  exit 1\nfi\n\nfor log_file in \"$log_dir\"/*.log; do\n  error_count=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$error_count\"\ndone\nEOF\n```\n\nVòng lặp gán một đường dẫn khớp cho `log_file` ở mỗi lượt. Đặt `\"$log_file\"` trong dấu nháy bảo vệ khoảng trắng, còn `basename` bỏ tiền tố thư mục. `grep -c` đếm dòng khớp; `|| true` ngăn trường hợp không có phần khớp làm dừng một quy trình nghiêm ngặt lớn hơn.\n\nChạy vòng lặp và lưu đầu ra:\n\n```bash\nbash count-errors.sh logs | tee error-counts.txt\n```\n\nBạn sẽ thấy một kết quả cho mỗi tệp `.log`.",
+        "source_content_sha256": "ff57890e973bb90c6b9f26d22842fa3cef4e4c861b89277f73ed29c4b6b2517c",
+        "task_vi": "Thực hiện hướng dẫn: Xử lý nhiều tệp bằng vòng lặp for",
+        "hint_vi": "Chạy lệnh: bash count-errors.sh logs | tee error-counts.txt"
+      },
+      {
+        "position": 7,
+        "title_vi": "Kết hợp kiểm tra, vòng lặp và trạng thái thoát",
+        "content_vi": "Trong bước này, bạn sẽ xây dựng một script tái sử dụng để kiểm tra thư mục, tóm tắt log và báo thành công hoặc thất bại rõ ràng.\n\nTạo `summarize-logs.sh`:\n\n```bash\ncat > summarize-logs.sh <<'EOF'\n#!/bin/bash\n\ninput_dir=${1:-}\noutput_file=${2:-}\n\nif [ -z \"$input_dir\" ] || [ -z \"$output_file\" ]; then\n  echo \"Usage: $0 INPUT_DIR OUTPUT_FILE\" >&2\n  exit 2\nfi\n\nif [ ! -d \"$input_dir\" ]; then\n  echo \"Input directory not found: $input_dir\" >&2\n  exit 1\nfi\n\n: > \"$output_file\"\n\nfor log_file in \"$input_dir\"/*.log; do\n  lines=$(wc -l < \"$log_file\")\n  errors=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s lines=%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$lines\" \"$errors\" >> \"$output_file\"\ndone\n\necho \"Wrote summary to $output_file\"\nexit 0\nEOF\n```\n\nLệnh `: > \"$output_file\"` tạo hoặc làm rỗng đích an toàn trước vòng lặp. Chạy script với cả hai đối số bắt buộc:\n\n```bash\nchmod u+x summarize-logs.sh\n```\n\n```bash\n./summarize-logs.sh logs log-summary.txt\n```\n\n```bash\necho \"summary status: $?\"\n```\n\n```bash\ncat log-summary.txt\n```\n\nKiểm tra nhánh thất bại với thư mục bị thiếu:\n\n```bash\n./summarize-logs.sh missing log-summary.txt\n```\n\n```bash\necho \"missing directory status: $?\"\n```\n\nTrạng thái thành công phải là `0`, còn trạng thái thiếu thư mục phải là `1`.",
+        "source_content_sha256": "ea51966402db7e54feb3390c051d700a2fa7e0cae2c81872c95339d844e172be",
+        "task_vi": "Thực hiện hướng dẫn: Kết hợp kiểm tra, vòng lặp và trạng thái thoát",
+        "hint_vi": "Chạy lệnh: chmod u+x summarize-logs.sh"
+      },
+      {
+        "position": 8,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã tạo và thực thi script Bash, dùng shebang và quyền, mở rộng biến có dấu nháy, đọc đầu vào vị trí và tương tác, trả trạng thái thoát có ý nghĩa. Bạn cũng rẽ nhánh bằng `if/elif/else`, kiểm tra tệp và thư mục, lặp qua log bằng `for` và kết hợp các ý tưởng trong bộ tóm tắt tái sử dụng.\n\nNhững nền tảng này giúp tự động hóa về sau dễ đọc hơn, an toàn hơn khi chạy lại và dễ được lệnh khác hoặc tác vụ theo lịch đánh giá.",
+        "source_content_sha256": "a4be1fa8e96a7f6a5e1e444574075878c2e8e3d6d33dad97dc7ff46b5a381167"
+      }
+    ]
+  },
+  "shell-write-a-log-error-summary-script-725410": {
+    "title_vi": "Viết script tóm tắt lỗi trong log",
+    "sections": [
+      {
+        "position": 0,
+        "title_vi": "Giới thiệu",
+        "content_vi": "Ba log ứng dụng cần cùng một phép kiểm tra đơn giản: đếm các dòng bắt đầu bằng `ERROR` và in một kết quả cho mỗi tệp. Không cần lặp lại lệnh thủ công khi một vòng lặp ngắn có thể xử lý mọi tệp `.log`.\n\nBài hướng dẫn trước đã xây dựng chính loại vòng lặp này từng bước. Thử thách yêu cầu một script tái sử dụng nhỏ, không thêm yêu cầu sao chép, thư mục báo cáo hoặc xử lý lỗi.",
+        "source_content_sha256": "ab5bd5a3572850c7e6f25608764d187a689c26341d10b92c69134f5d85482e76"
+      },
+      {
+        "position": 1,
+        "title_vi": "Tạo script tóm tắt lỗi",
+        "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/log-automation/logs` chứa `api.log`, `healthy.log` và `worker.log`.\n\n### Phạm vi\n\n- Tạo `/home/labex/project/log-automation/process-logs.sh`.\n- Đối số đầu tiên của nó là thư mục chứa log.\n- Xử lý các tệp kết thúc bằng `.log`.\n- Với mỗi tệp, đếm những dòng bắt đầu bằng `ERROR`.\n- In một dòng theo định dạng `filename errors=count`.\n\n### Mục tiêu của bạn\n\nTạo một script có thể thực thi, in đúng tóm tắt lỗi khi chạy `./process-logs.sh logs`.\n\n### Tiêu chí đạt\n\n- Script bắt đầu bằng `#!/bin/bash` và có quyền thực thi.\n- `./process-logs.sh logs` in ra:\n\n```text\napi.log errors=1\nhealthy.log errors=0\nworker.log errors=2\n```\n\n### Gợi ý\n\nVí dụ được hướng dẫn nào gần giống nhất?\n\nXem lại vòng lặp duyệt `\"$log_dir\"/*.log`, đếm dòng `^ERROR` và in tên cơ sở cùng số lượng.",
+        "source_content_sha256": "38fa983ce38a7c20eaeb32d5625d3fc1ac33be87c0cd81e56ff987525745c90e",
+        "task_vi": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
+        "hint_vi": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR"
+      },
+      {
+        "position": 2,
+        "title_vi": "Tổng kết bài học",
+        "content_vi": "Bạn đã biến một vòng lặp đếm log quen thuộc thành một script Bash ngắn có thể tái sử dụng.",
+        "source_content_sha256": "aa093ad01c50109ee1d6d071d5c6440a67f3c329764cc25e15837d78d4603081"
+      }
+    ]
+  }
+}

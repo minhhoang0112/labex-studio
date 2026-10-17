@@ -1,0 +1,423 @@
+{
+  "id": "linux-linux-xargs-command-command-building-219201",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219201,
+  "source_url": "https://labex.io/tutorials/linux-linux-xargs-command-command-building-219201",
+  "order": 32,
+  "title": "Linux xargs Command: Command Building",
+  "title_vi": "Lệnh xargs: dựng đối số",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux xargs Command: Command Building",
+  "sections": [
+    {
+      "id": "commands-219201-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux xargs Command: Command Building. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh xargs: dựng đối số. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219201-section-1-v1",
+      "title": "Understanding the xargs Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Dữ liệu thành đối số",
+      "content": "Build one echo invocation from fruit names.\n\n```bash\ncat fruits.txt | xargs echo\n```",
+      "content_vi": "Đưa tên trái cây thành đối số cho echo.\n\n```bash\ncat fruits.txt | xargs echo\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bcat\\s+fruits\\.txt\\s*\\|\\s*xargs\\s+echo"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-2-v1",
+      "title": "Processing Files with xargs",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tạo tệp theo danh sách",
+      "content": "Create a .txt file for each book with a placeholder.\n\n```bash\ncat books.txt | xargs -I {} touch {}.txt\n```",
+      "content_vi": "Dùng vị trí thay thế để tạo tệp .txt cho mỗi sách.\n\n```bash\ncat books.txt | xargs -I {} touch {}.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bxargs\\s+-I\\s+\\{\\}\\s+touch"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -f linux.txt\ntest -f networking.txt\ntest -f scripting.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-3-v1",
+      "title": "Limiting Arguments with xargs",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Giới hạn đối số",
+      "content": "Process two book names per invocation.\n\n```bash\ncat more_books.txt | xargs -n 2 echo \"Processing books:\"\n```",
+      "content_vi": "Xử lý hai tên sách trong mỗi lần gọi.\n\n```bash\ncat more_books.txt | xargs -n 2 echo \"Processing books:\"\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bxargs\\s+-n\\s+2\\s+echo"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-4-v1",
+      "title": "Parallel Processing with xargs",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xử lý song song",
+      "content": "Run at most three processing scripts concurrently.\n\n```bash\ncat more_books.txt | xargs -P 3 -I {} ./process_book.sh {}\n```",
+      "content_vi": "Chạy đồng thời tối đa ba script xử lý.\n\n```bash\ncat more_books.txt | xargs -P 3 -I {} ./process_book.sh {}\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bxargs\\s+-P\\s+3\\s+-I\\s+\\{\\}\\s+\\./process_book\\.sh"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\nfor x in alpha beta gamma delta epsilon; do test -s \"processed_$x\" || exit 1; done"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-5-v1",
+      "title": "Combining xargs Options",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Kết hợp giới hạn và song song",
+      "content": "Pass pairs to sh -c with at most three workers.\n\n```bash\ncat classic_books.txt | xargs -n 2 -P 3 sh -c 'echo \"Processing batch: $@\"' _\n```",
+      "content_vi": "Truyền từng cặp vào sh -c với tối đa ba tiến trình.\n\n```bash\ncat classic_books.txt | xargs -n 2 -P 3 sh -c 'echo \"Processing batch: $@\"' _\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bxargs\\s+-n\\s+2\\s+-P\\s+3\\s+sh\\s+-c"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219201-section-1-v1",
+      "title": "Understanding the xargs Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Dữ liệu thành đối số",
+      "content": "Build one echo invocation from fruit names.\n\n```bash\ncat fruits.txt | xargs echo\n```",
+      "content_vi": "Đưa tên trái cây thành đối số cho echo.\n\n```bash\ncat fruits.txt | xargs echo\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bcat\\s+fruits\\.txt\\s*\\|\\s*xargs\\s+echo"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-2-v1",
+      "title": "Processing Files with xargs",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tạo tệp theo danh sách",
+      "content": "Create a .txt file for each book with a placeholder.\n\n```bash\ncat books.txt | xargs -I {} touch {}.txt\n```",
+      "content_vi": "Dùng vị trí thay thế để tạo tệp .txt cho mỗi sách.\n\n```bash\ncat books.txt | xargs -I {} touch {}.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bxargs\\s+-I\\s+\\{\\}\\s+touch"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -f linux.txt\ntest -f networking.txt\ntest -f scripting.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-3-v1",
+      "title": "Limiting Arguments with xargs",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Giới hạn đối số",
+      "content": "Process two book names per invocation.\n\n```bash\ncat more_books.txt | xargs -n 2 echo \"Processing books:\"\n```",
+      "content_vi": "Xử lý hai tên sách trong mỗi lần gọi.\n\n```bash\ncat more_books.txt | xargs -n 2 echo \"Processing books:\"\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bxargs\\s+-n\\s+2\\s+echo"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-4-v1",
+      "title": "Parallel Processing with xargs",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xử lý song song",
+      "content": "Run at most three processing scripts concurrently.\n\n```bash\ncat more_books.txt | xargs -P 3 -I {} ./process_book.sh {}\n```",
+      "content_vi": "Chạy đồng thời tối đa ba script xử lý.\n\n```bash\ncat more_books.txt | xargs -P 3 -I {} ./process_book.sh {}\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bxargs\\s+-P\\s+3\\s+-I\\s+\\{\\}\\s+\\./process_book\\.sh"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\nfor x in alpha beta gamma delta epsilon; do test -s \"processed_$x\" || exit 1; done"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219201-section-5-v1",
+      "title": "Combining xargs Options",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Kết hợp giới hạn và song song",
+      "content": "Pass pairs to sh -c with at most three workers.\n\n```bash\ncat classic_books.txt | xargs -n 2 -P 3 sh -c 'echo \"Processing batch: $@\"' _\n```",
+      "content_vi": "Truyền từng cặp vào sh -c với tối đa ba tiến trình.\n\n```bash\ncat classic_books.txt | xargs -n 2 -P 3 sh -c 'echo \"Processing batch: $@\"' _\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bxargs\\s+-n\\s+2\\s+-P\\s+3\\s+sh\\s+-c"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-xargs-command-command-building-219201.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

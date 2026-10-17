@@ -1,0 +1,224 @@
+{
+  "id": "linux-the-manuscript-mystery",
+  "course_id": "quick-start-with-linux",
+  "order": 6,
+  "title": "The Manuscript Mystery",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Khảo sát hai bản thảo bằng cat, head, tail rồi dùng diff tìm thay đổi; không sửa nội dung.",
+  "source_url": "https://labex.io/tutorials/linux-the-manuscript-mystery-384742",
+  "source_lab_id": 384742,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-the-manuscript-mystery-384742",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "partial-reconstructed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/linux-the-manuscript-mystery.json",
+  "sections": [
+    {
+      "id": "source-384742-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "As a junior editor at a publishing house, you've stumbled upon two versions of a crucial page from an upcoming mystery novel. Your task is to examine these files using the Linux commands you've just learned in the File Contents and Comparing lab.\n\n### Achievements\n\nUpon completing this challenge, you will demonstrate your ability to:\n\n- Use `cat` to view file contents\n- Use `head` and `tail` to examine specific parts of files\n- Compare files using the `diff` command",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Với tư cách là một biên tập viên tập sự tại một nhà xuất bản, bạn vừa phát hiện ra hai phiên bản của một trang tài liệu tối quan trọng từ cuốn tiểu thuyết trinh thám sắp ra mắt. Tác giả khẳng định chỉ có một vài câu chữ bị thay đổi giữa các bản thảo, nhưng bạn cần kiểm tra chính xác từng chi tiết trước khi cuốn sách được đưa vào in ấn!\n\nNhiệm vụ của bạn là sử dụng các công cụ kiểm tra tệp tin dòng lệnh trong Linux để so sánh hai tệp bản thảo và xác định các điểm khác biệt.\n\n### Thành tựu đạt được\n\nKhi hoàn thành thử thách này, bạn sẽ chứng minh được năng lực thành thạo trong việc:\n\n- Sử dụng `cat`, `head`, và `tail` để kiểm tra nội dung tệp tin\n- Sử dụng lệnh `diff` để so sánh các tệp tin và tìm ra sự khác biệt"
+    },
+    {
+      "id": "source-384742-section-1",
+      "title": "Examining File Contents",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you'll use `cat`, `head`, and `tail` to inspect two mysterious files.\n\n### Tasks\n\n1. Use `cat` to view the contents of `/home/labex/project/manuscript_v1.txt`.\n2. Use `head` to view the **first two lines** of `/home/labex/project/manuscript_v2.txt`.\n3. Use `tail` to view **the last line** of both files.\n\n### Requirements\n\n- Use only the commands learned in the File Contents and Comparing lab (`cat`, `head`, `tail`).\n- Do not modify the contents of the files.",
+      "task": "Dùng cat xem manuscript_v1.txt; head xem hai dòng đầu manuscript_v2.txt; tail xem dòng cuối cả hai file trong /home/labex/project.",
+      "hint": "Không sửa các file có sẵn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*cat\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s*$"
+              ],
+              [
+                "^\\s*head\\s+-n\\s*2\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+              ],
+              [
+                "^\\s*tail\\s+-n\\s*1\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt(?:\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt)?\\s*$"
+              ],
+              [
+                "^\\s*tail\\s+-n\\s*1\\s+(?:(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s+)?(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s \"$HOME/project/manuscript_v1.txt\" <(printf 'The room fell silent.\\nA shadow moved across the room.\\nThe mystery continued.\\n') && cmp -s \"$HOME/project/manuscript_v2.txt\" <(printf 'The room fell silent.\\nA figure darted behind the curtains.\\nThe mystery continued.\\n')"
+          }
+        ]
+      },
+      "title_vi": "Kiểm Tra Nội Dung Tệp Tin",
+      "content_vi": "Trong bước này, bạn sẽ sử dụng các lệnh `cat`, `head`, và `tail` để kiểm tra hai tệp tin bí ẩn.\n\n### Nhiệm vụ (Tasks)\n\n1. Sử dụng `cat` để xem toàn bộ nội dung của cả hai tệp: `/home/labex/project/manuscript_v1.txt` và `/home/labex/project/manuscript_v2.txt`.\n2. Sử dụng `head` để xem 3 dòng đầu tiên của mỗi tệp.\n3. Sử dụng `tail` để xem 3 dòng cuối cùng của mỗi tệp.\n\n### Yêu cầu (Requirements)\n\n- Thực hiện tất cả các lệnh từ thư mục làm việc hiện tại của bạn hoặc sử dụng đường dẫn tuyệt đối.\n- Quan sát nội dung cẩn thận để tìm bất kỳ sự khác biệt nào mà mắt thường có thể nhận thấy.\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, việc chạy lệnh `head`:\n\n```bash\nhead -n 3 /home/labex/project/manuscript_v1.txt\n```\n\nSẽ cho kết quả tương tự như sau:\n\n```plaintext\nThe old grandfather clock struck midnight.\nA shadow moved across the room.\nDetective Vance held his breath.\n```",
+      "task_vi": "Dùng cat, head, tail để kiểm tra hai tệp manuscript_v1.txt và manuscript_v2.txt trong ~/project.",
+      "hint_vi": "Chạy cat ~/project/manuscript_v1.txt, head -n 3 và tail -n 3 trên cả 2 tệp."
+    },
+    {
+      "id": "source-384742-section-2",
+      "title": "Comparing the Files",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Now that you've examined the files individually, it's time to compare them directly.\n\n### Tasks\n\n1. Use the `diff` command to compare `/home/labex/project/manuscript_v1.txt` and `/home/labex/project/manuscript_v2.txt`.\n\n### Requirements\n\n- Use the `diff` command as demonstrated in the File Contents and Comparing lab.\n- Analyze the output to understand the differences between the two files.\n\n### Example\n\nAfter completing the task, you should see output similar to the following:\n\n```bash\n2c2\n< A shadow moved across the room.\n---\n> A figure darted behind the curtains.\n```\n\nThis output indicates that the second line differs between the two files.",
+      "task": "Dùng diff so sánh hai bản thảo và đọc thay đổi ở dòng 2.",
+      "hint": "Không cần tạo diff_report.txt.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0,
+              1
+            ],
+            "groups": [
+              [
+                "^\\s*diff\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s \"$HOME/project/manuscript_v1.txt\" <(printf 'The room fell silent.\\nA shadow moved across the room.\\nThe mystery continued.\\n') && cmp -s \"$HOME/project/manuscript_v2.txt\" <(printf 'The room fell silent.\\nA figure darted behind the curtains.\\nThe mystery continued.\\n')"
+          }
+        ]
+      },
+      "title_vi": "So Sánh Các Tệp Tin",
+      "content_vi": "Bây giờ bạn đã kiểm tra các tệp tin một cách riêng lẻ, đã đến lúc so sánh trực tiếp hai tệp này với nhau bằng công cụ chuyên dụng.\n\n### Nhiệm vụ (Tasks)\n\n1. Sử dụng lệnh `diff` để so sánh giữa `/home/labex/project/manuscript_v1.txt` và `/home/labex/project/manuscript_v2.txt`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `diff` như đã được hướng dẫn trong bài thực hành File Contents and Comparing.\n- Phân tích kết quả đầu ra để hiểu chính xác những điểm khác biệt giữa hai tệp.\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n2c2\n< A shadow moved across the room.\n---\n> A figure darted behind the curtains.\n```\n\nKết quả này chỉ ra rằng dòng thứ hai có sự khác biệt giữa hai phiên bản bản thảo.",
+      "task_vi": "Dùng lệnh diff để so sánh hai tệp manuscript_v1.txt và manuscript_v2.txt.",
+      "hint_vi": "Chạy diff /home/labex/project/manuscript_v1.txt /home/labex/project/manuscript_v2.txt."
+    },
+    {
+      "id": "source-384742-section-3",
+      "title": "Summary",
+      "position": 3,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Congratulations, junior editor! You've successfully applied your newly learned Linux file examination skills to uncover the differences between two versions of a manuscript page. Your ability to use `cat`, `head`, `tail`, and `diff` has proven invaluable in this editorial mystery.\n\nBy viewing file contents with `cat`, examining specific parts with `head` and `tail`, and comparing files with `diff`, you've demonstrated a solid grasp of basic file manipulation in Linux. These skills will serve you well as you continue your journey in the publishing world and in your Linux adventures.\n\nRemember, attention to detail and the right tools can unravel any mystery – whether in novels or in code!",
+      "title_vi": "Tổng Kết Thử Thách",
+      "content_vi": "Xin chúc mừng, biên tập viên tập sự! Bạn đã áp dụng thành công các kỹ năng kiểm tra tệp tin Linux mới học được để khám phá ra sự khác biệt giữa hai phiên bản trang bản thảo. Khả năng sử dụng thành thạo `cat`, `head`, `tail`, và `diff` của bạn đã chứng tỏ giá trị vô giá trong việc giải mã bí ẩn biên tập này.\n\nBằng cách xem toàn bộ nội dung tệp bằng `cat`, kiểm tra các phần cụ thể bằng `head` và `tail`, và so sánh tệp bằng `diff`, bạn đã chứng minh được sự nắm bắt vững chắc về các thao tác xử lý tệp cơ bản trong Linux. Những kỹ năng này sẽ hỗ trợ bạn đắc lực khi bạn tiếp tục hành trình trong thế giới xuất bản cũng như trong các cuộc phiêu lưu với Linux.\n\nHãy nhớ rằng: sự chú ý đến từng chi tiết nhỏ kết hợp với các công cụ phù hợp có thể làm sáng tỏ mọi bí ẩn - dù là trong tiểu thuyết hay trong các dòng mã nguồn!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-384742-section-1",
+      "title": "Examining File Contents",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you'll use `cat`, `head`, and `tail` to inspect two mysterious files.\n\n### Tasks\n\n1. Use `cat` to view the contents of `/home/labex/project/manuscript_v1.txt`.\n2. Use `head` to view the **first two lines** of `/home/labex/project/manuscript_v2.txt`.\n3. Use `tail` to view **the last line** of both files.\n\n### Requirements\n\n- Use only the commands learned in the File Contents and Comparing lab (`cat`, `head`, `tail`).\n- Do not modify the contents of the files.",
+      "task": "Dùng cat xem manuscript_v1.txt; head xem hai dòng đầu manuscript_v2.txt; tail xem dòng cuối cả hai file trong /home/labex/project.",
+      "hint": "Không sửa các file có sẵn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*cat\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s*$"
+              ],
+              [
+                "^\\s*head\\s+-n\\s*2\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+              ],
+              [
+                "^\\s*tail\\s+-n\\s*1\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt(?:\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt)?\\s*$"
+              ],
+              [
+                "^\\s*tail\\s+-n\\s*1\\s+(?:(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s+)?(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s \"$HOME/project/manuscript_v1.txt\" <(printf 'The room fell silent.\\nA shadow moved across the room.\\nThe mystery continued.\\n') && cmp -s \"$HOME/project/manuscript_v2.txt\" <(printf 'The room fell silent.\\nA figure darted behind the curtains.\\nThe mystery continued.\\n')"
+          }
+        ]
+      },
+      "title_vi": "Khám Phá Nội Dung Bản Thảo",
+      "content_vi": "Trong bước này, bạn sẽ sử dụng các lệnh `cat`, `head`, và `tail` để kiểm tra hai tệp văn bản bí ẩn.\n\n### Nhiệm vụ\n\n1. Sử dụng lệnh `cat` để xem toàn bộ nội dung của tệp `manuscript_page_v1.txt`.\n2. Sử dụng lệnh `head` để chỉ đọc 3 dòng đầu tiên của `manuscript_page_v2.txt`.\n3. Sử dụng lệnh `tail` để đọc 3 dòng cuối cùng của `manuscript_page_v1.txt`.\n\n### Hướng dẫn thực hiện\n\n```bash\ncat manuscript_page_v1.txt\nhead -n 3 manuscript_page_v2.txt\ntail -n 3 manuscript_page_v1.txt\n```\n\nHãy quan sát kỹ các chi tiết văn bản xuất hiện trên màn hình terminal để nắm bắt cốt truyện và phát hiện các manh mối.",
+      "task_vi": "Sử dụng cat, head và tail để kiểm tra nội dung hai tệp bản thảo.",
+      "hint_vi": "Chạy cat manuscript_page_v1.txt, head -n 3 và tail -n 3."
+    },
+    {
+      "id": "source-384742-section-2",
+      "title": "Comparing the Files",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Now that you've examined the files individually, it's time to compare them directly.\n\n### Tasks\n\n1. Use the `diff` command to compare `/home/labex/project/manuscript_v1.txt` and `/home/labex/project/manuscript_v2.txt`.\n\n### Requirements\n\n- Use the `diff` command as demonstrated in the File Contents and Comparing lab.\n- Analyze the output to understand the differences between the two files.\n\n### Example\n\nAfter completing the task, you should see output similar to the following:\n\n```bash\n2c2\n< A shadow moved across the room.\n---\n> A figure darted behind the curtains.\n```\n\nThis output indicates that the second line differs between the two files.",
+      "task": "Dùng diff so sánh hai bản thảo và đọc thay đổi ở dòng 2.",
+      "hint": "Không cần tạo diff_report.txt.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0,
+              1
+            ],
+            "groups": [
+              [
+                "^\\s*diff\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s \"$HOME/project/manuscript_v1.txt\" <(printf 'The room fell silent.\\nA shadow moved across the room.\\nThe mystery continued.\\n') && cmp -s \"$HOME/project/manuscript_v2.txt\" <(printf 'The room fell silent.\\nA figure darted behind the curtains.\\nThe mystery continued.\\n')"
+          }
+        ]
+      },
+      "title_vi": "So Sánh Hai Bản Thảo",
+      "content_vi": "Bây giờ bạn đã xem qua từng tệp riêng lẻ, đã đến lúc so sánh trực tiếp hai bản thảo để tìm ra sự khác biệt mấu chốt.\n\n### Nhiệm vụ\n\n1. Sử dụng câu lệnh `diff` ở định dạng hợp nhất (`-u`) để so sánh `manuscript_page_v1.txt` và `manuscript_page_v2.txt`.\n\n```bash\ndiff -u manuscript_page_v1.txt manuscript_page_v2.txt\n```\n\n### Phân tích kết quả\n\nHãy chú ý các dòng bắt đầu bằng dấu `-` (nội dung có trong bản v1 nhưng bị loại bỏ ở bản v2) và các dòng bắt đầu bằng dấu `+` (nội dung mới được tác giả đưa vào bản v2). Những thay đổi này chứa đựng lời giải cho bí ẩn của bản thảo!",
+      "task_vi": "Chạy lệnh diff -u manuscript_page_v1.txt manuscript_page_v2.txt để tìm điểm dị biệt.",
+      "hint_vi": "Sử dụng lệnh diff -u giữa 2 tệp bản thảo."
+    }
+  ],
+  "title_vi": "Bản Thảo Bí Ẩn (The Manuscript Mystery)"
+}

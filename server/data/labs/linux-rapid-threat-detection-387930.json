@@ -1,0 +1,181 @@
+{
+  "id": "linux-rapid-threat-detection-387930",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 387930,
+  "source_url": "https://labex.io/tutorials/linux-rapid-threat-detection-387930",
+  "order": 18,
+  "title": "Rapid Threat Detection",
+  "title_vi": "Phát hiện nhanh mối đe dọa",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "5 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Rapid Threat Detection",
+  "sections": [
+    {
+      "id": "commands-387930-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Rapid Threat Detection. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Phát hiện nhanh mối đe dọa. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-387930-section-1-v1",
+      "title": "Rapid Log Analysis",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Phân tích nhật ký nhanh",
+      "content": "Keep the last twenty authentication entries in recent_logins.txt and the first fifteen network entries in recent_traffic.txt. Use head/tail and preserve both source files.",
+      "content_vi": "Lưu hai mươi dòng xác thực cuối vào recent_logins.txt và mười lăm dòng lưu lượng đầu vào recent_traffic.txt. Dùng head/tail và giữ nguyên hai tệp gốc.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/recent_logins.txt && cmp -s /home/labex/project/recent_logins.txt <(tail -n 20 /home/labex/project/auth_log.txt)"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/recent_traffic.txt && cmp -s /home/labex/project/recent_traffic.txt <(head -n 15 /home/labex/project/network_traffic.txt)"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^tail\\s+-n\\s+20\\s+auth_log\\.txt\\s*>\\s*recent_logins\\.txt\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^head\\s+-n\\s+15\\s+network_traffic\\.txt\\s*>\\s*recent_traffic\\.txt\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "test \"$(sha256sum /home/labex/project/auth_log.txt | cut -d' ' -f1)\" = 580db752f6de69f51543065a59e624a3799a12558375452314b8f55ad1adc39d && test \"$(sha256sum /home/labex/project/network_traffic.txt | cut -d' ' -f1)\" = 4f5b0424a6dff1a632b25ddfc3d2a4c99465d794894c26ee5c62f4efadfab12a"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-387930-section-2-v1",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-387930-section-1-v1",
+      "title": "Rapid Log Analysis",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Phân tích nhật ký nhanh",
+      "content": "Keep the last twenty authentication entries in recent_logins.txt and the first fifteen network entries in recent_traffic.txt. Use head/tail and preserve both source files.",
+      "content_vi": "Lưu hai mươi dòng xác thực cuối vào recent_logins.txt và mười lăm dòng lưu lượng đầu vào recent_traffic.txt. Dùng head/tail và giữ nguyên hai tệp gốc.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/recent_logins.txt && cmp -s /home/labex/project/recent_logins.txt <(tail -n 20 /home/labex/project/auth_log.txt)"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/recent_traffic.txt && cmp -s /home/labex/project/recent_traffic.txt <(head -n 15 /home/labex/project/network_traffic.txt)"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^tail\\s+-n\\s+20\\s+auth_log\\.txt\\s*>\\s*recent_logins\\.txt\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^head\\s+-n\\s+15\\s+network_traffic\\.txt\\s*>\\s*recent_traffic\\.txt\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "test \"$(sha256sum /home/labex/project/auth_log.txt | cut -d' ' -f1)\" = 580db752f6de69f51543065a59e624a3799a12558375452314b8f55ad1adc39d && test \"$(sha256sum /home/labex/project/network_traffic.txt | cut -d' ' -f1)\" = 4f5b0424a6dff1a632b25ddfc3d2a4c99465d794894c26ee5c62f4efadfab12a"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-rapid-threat-detection-387930.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

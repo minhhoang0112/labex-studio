@@ -1,0 +1,281 @@
+{
+  "id": "linux-bash-trap-command-388820",
+  "course_id": "shell-for-beginners",
+  "order": 16,
+  "title": "Bash Trap Command",
+  "title_vi": "Bắt Tín Hiệu Hệ Thống Với Lệnh Trap",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "20 mins",
+  "overview": "Intercept Unix signals (SIGINT, SIGTERM, EXIT) to ensure clean script termination and cleanup.",
+  "source_url": "https://labex.io/tutorials/linux-bash-trap-command-388820",
+  "source_lab_id": 388820,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388820-section-1-v4",
+      "title": "Create a Bash Script",
+      "title_vi": "Tạo kịch bản Bash",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create trap_example.sh in ~/project.",
+      "content_vi": "Tạo trap_example.sh trong ~/project.",
+      "task": "Create trap_example.sh in ~/project.",
+      "task_vi": "Tạo trap_example.sh trong ~/project.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/trap_example.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388820-section-2-v4",
+      "title": "Implement a Basic Trap Command",
+      "title_vi": "Viết lệnh trap cơ bản",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Install cleanup_and_exit for SIGINT and SIGTERM around a running counter loop.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up and exiting...\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nRun:\n\n```bash\nbash ~/project/trap_example.sh \n```",
+      "content_vi": "Đăng ký cleanup_and_exit cho SIGINT và SIGTERM quanh vòng lặp đếm liên tục.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up and exiting...\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nChạy:\n\n```bash\nbash ~/project/trap_example.sh \n```",
+      "task": "Install cleanup_and_exit for SIGINT and SIGTERM around a running counter loop.",
+      "task_vi": "Đăng ký cleanup_and_exit cho SIGINT và SIGTERM quanh vòng lặp đếm liên tục.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/trap_example.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['trap', 'SIGINT', 'SIGTERM', 'while']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if True else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    import signal,time\n    child=subprocess.Popen(['/bin/bash',str(p)],cwd=work,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,start_new_session=True)\n    try:\n        time.sleep(0.25)\n        child.send_signal(signal.SIGTERM)\n        captured,_=child.communicate(timeout=3)\n        assert child.returncode == 0\n        assert 'Signal received!' in captured\n    finally:\n        if child.poll() is None:\n            os.killpg(child.pid,signal.SIGKILL)\n            child.wait()\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388820-section-3-v4",
+      "title": "Make the Script Executable and Run It",
+      "title_vi": "Cấp quyền thực thi và chạy kịch bản",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Make executable, run the counter, then press Ctrl+C to trigger graceful cleanup.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up and exiting...\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nRun:\n\n```bash\nchmod +x ~/project/trap_example.sh\n~/project/trap_example.sh \n```",
+      "content_vi": "Cấp quyền thực thi, chạy bộ đếm rồi nhấn Ctrl+C để dừng qua hàm dọn dẹp.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up and exiting...\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/trap_example.sh\n~/project/trap_example.sh \n```",
+      "task": "Make executable, run the counter, then press Ctrl+C to trigger graceful cleanup.",
+      "task_vi": "Cấp quyền thực thi, chạy bộ đếm rồi nhấn Ctrl+C để dừng qua hàm dọn dẹp.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/trap_example.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['SIGINT', 'SIGTERM']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if True else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    import signal,time\n    child=subprocess.Popen(['/bin/bash',str(p)],cwd=work,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,start_new_session=True)\n    try:\n        time.sleep(0.25)\n        child.send_signal(signal.SIGTERM)\n        captured,_=child.communicate(timeout=3)\n        assert child.returncode == 0\n        assert 'Signal received!' in captured\n    finally:\n        if child.poll() is None:\n            os.killpg(child.pid,signal.SIGKILL)\n            child.wait()\nLABEX_CHECK"
+          },
+          {
+            "kind": "commands",
+            "groups": [
+              [
+                "(?:^|[;&|]\\s*)(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?trap_example\\.sh(?:\\s|$)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388820-section-4-v4",
+      "title": "Modify the Trap to Use a Function",
+      "title_vi": "Mở rộng hàm xử lý tín hiệu",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Expand cleanup_and_exit to report cleanup completion and graceful exit; test Ctrl+C again.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up...\"\n  echo \"Performing cleanup tasks...\"\n  echo \"Cleanup completed.\"\n  echo \"Exiting script gracefully.\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nRun:\n\n```bash\nchmod +x ~/project/trap_example.sh\n~/project/trap_example.sh \n```",
+      "content_vi": "Mở rộng cleanup_and_exit thông báo dọn dẹp hoàn tất và thoát an toàn; thử Ctrl+C lần nữa.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up...\"\n  echo \"Performing cleanup tasks...\"\n  echo \"Cleanup completed.\"\n  echo \"Exiting script gracefully.\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/trap_example.sh\n~/project/trap_example.sh \n```",
+      "task": "Expand cleanup_and_exit to report cleanup completion and graceful exit; test Ctrl+C again.",
+      "task_vi": "Mở rộng cleanup_and_exit thông báo dọn dẹp hoàn tất và thoát an toàn; thử Ctrl+C lần nữa.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/trap_example.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['Cleanup completed.', 'Exiting script gracefully.']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if True else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    import signal,time\n    child=subprocess.Popen(['/bin/bash',str(p)],cwd=work,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,start_new_session=True)\n    try:\n        time.sleep(0.25)\n        child.send_signal(signal.SIGTERM)\n        captured,_=child.communicate(timeout=3)\n        assert child.returncode == 0\n        assert 'Signal received!' in captured\n    finally:\n        if child.poll() is None:\n            os.killpg(child.pid,signal.SIGKILL)\n            child.wait()\n    assert 'Cleanup completed.' in captured\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-5",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 5,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388820-section-1-v4",
+      "title": "Create a Bash Script",
+      "title_vi": "Tạo kịch bản Bash",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create trap_example.sh in ~/project.",
+      "content_vi": "Tạo trap_example.sh trong ~/project.",
+      "task": "Create trap_example.sh in ~/project.",
+      "task_vi": "Tạo trap_example.sh trong ~/project.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/trap_example.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388820-section-2-v4",
+      "title": "Implement a Basic Trap Command",
+      "title_vi": "Viết lệnh trap cơ bản",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Install cleanup_and_exit for SIGINT and SIGTERM around a running counter loop.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up and exiting...\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nRun:\n\n```bash\nbash ~/project/trap_example.sh \n```",
+      "content_vi": "Đăng ký cleanup_and_exit cho SIGINT và SIGTERM quanh vòng lặp đếm liên tục.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up and exiting...\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nChạy:\n\n```bash\nbash ~/project/trap_example.sh \n```",
+      "task": "Install cleanup_and_exit for SIGINT and SIGTERM around a running counter loop.",
+      "task_vi": "Đăng ký cleanup_and_exit cho SIGINT và SIGTERM quanh vòng lặp đếm liên tục.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/trap_example.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['trap', 'SIGINT', 'SIGTERM', 'while']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if True else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    import signal,time\n    child=subprocess.Popen(['/bin/bash',str(p)],cwd=work,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,start_new_session=True)\n    try:\n        time.sleep(0.25)\n        child.send_signal(signal.SIGTERM)\n        captured,_=child.communicate(timeout=3)\n        assert child.returncode == 0\n        assert 'Signal received!' in captured\n    finally:\n        if child.poll() is None:\n            os.killpg(child.pid,signal.SIGKILL)\n            child.wait()\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388820-section-3-v4",
+      "title": "Make the Script Executable and Run It",
+      "title_vi": "Cấp quyền thực thi và chạy kịch bản",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Make executable, run the counter, then press Ctrl+C to trigger graceful cleanup.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up and exiting...\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nRun:\n\n```bash\nchmod +x ~/project/trap_example.sh\n~/project/trap_example.sh \n```",
+      "content_vi": "Cấp quyền thực thi, chạy bộ đếm rồi nhấn Ctrl+C để dừng qua hàm dọn dẹp.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up and exiting...\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/trap_example.sh\n~/project/trap_example.sh \n```",
+      "task": "Make executable, run the counter, then press Ctrl+C to trigger graceful cleanup.",
+      "task_vi": "Cấp quyền thực thi, chạy bộ đếm rồi nhấn Ctrl+C để dừng qua hàm dọn dẹp.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/trap_example.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['SIGINT', 'SIGTERM']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if True else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    import signal,time\n    child=subprocess.Popen(['/bin/bash',str(p)],cwd=work,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,start_new_session=True)\n    try:\n        time.sleep(0.25)\n        child.send_signal(signal.SIGTERM)\n        captured,_=child.communicate(timeout=3)\n        assert child.returncode == 0\n        assert 'Signal received!' in captured\n    finally:\n        if child.poll() is None:\n            os.killpg(child.pid,signal.SIGKILL)\n            child.wait()\nLABEX_CHECK"
+          },
+          {
+            "kind": "commands",
+            "groups": [
+              [
+                "(?:^|[;&|]\\s*)(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?trap_example\\.sh(?:\\s|$)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388820-section-4-v4",
+      "title": "Modify the Trap to Use a Function",
+      "title_vi": "Mở rộng hàm xử lý tín hiệu",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Expand cleanup_and_exit to report cleanup completion and graceful exit; test Ctrl+C again.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up...\"\n  echo \"Performing cleanup tasks...\"\n  echo \"Cleanup completed.\"\n  echo \"Exiting script gracefully.\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nRun:\n\n```bash\nchmod +x ~/project/trap_example.sh\n~/project/trap_example.sh \n```",
+      "content_vi": "Mở rộng cleanup_and_exit thông báo dọn dẹp hoàn tất và thoát an toàn; thử Ctrl+C lần nữa.\n\n`~/project/trap_example.sh`:\n\n```bash\n#!/bin/bash\ncleanup_and_exit() {\n  echo \"Signal received! Cleaning up...\"\n  echo \"Performing cleanup tasks...\"\n  echo \"Cleanup completed.\"\n  echo \"Exiting script gracefully.\"\n  exit 0\n}\ntrap cleanup_and_exit SIGINT SIGTERM\necho \"This script will run until you press Ctrl+C.\"\ncount=1\nwhile true; do\n  echo \"Script is running... (iteration $count)\"\n  sleep 1\n  ((count++))\ndone\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/trap_example.sh\n~/project/trap_example.sh \n```",
+      "task": "Expand cleanup_and_exit to report cleanup completion and graceful exit; test Ctrl+C again.",
+      "task_vi": "Mở rộng cleanup_and_exit thông báo dọn dẹp hoàn tất và thoát an toàn; thử Ctrl+C lần nữa.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/trap_example.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['Cleanup completed.', 'Exiting script gracefully.']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if True else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    import signal,time\n    child=subprocess.Popen(['/bin/bash',str(p)],cwd=work,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,start_new_session=True)\n    try:\n        time.sleep(0.25)\n        child.send_signal(signal.SIGTERM)\n        captured,_=child.communicate(timeout=3)\n        assert child.returncode == 0\n        assert 'Signal received!' in captured\n    finally:\n        if child.poll() is None:\n            os.killpg(child.pid,signal.SIGKILL)\n            child.wait()\n    assert 'Cleanup completed.' in captured\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/linux-bash-trap-command-388820",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

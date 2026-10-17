@@ -1,0 +1,633 @@
+{
+  "id": "linux-file-contents-and-comparing",
+  "course_id": "quick-start-with-linux",
+  "order": 5,
+  "title": "File Contents and Comparing",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Đọc file theo dòng/byte và so sánh file, thư mục; dùng dữ liệu có sẵn, không tự tạo thêm bài tập.",
+  "source_url": "https://labex.io/tutorials/linux-file-contents-and-comparing-270251",
+  "source_lab_id": 270251,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-file-contents-and-comparing-270251",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "partial-reconstructed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/linux-file-contents-and-comparing.json",
+  "sections": [
+    {
+      "id": "source-270251-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Welcome to this hands-on lab about working with files in Linux! If you're new to Linux, don't worry. We'll guide you through each step carefully. In this lab, you'll learn how to view the contents of files, look at specific parts of files, and compare files. These are fundamental skills that will help you navigate and understand the Linux file system.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Chào mừng bạn đến với bài thực hành về làm việc với các tệp tin trong Linux! Nếu bạn là người mới làm quen với Linux, đừng lo lắng - chúng tôi sẽ hướng dẫn bạn từng bước một.\n\nTrong bài thực hành này, bạn sẽ học cách xem nội dung của các tệp văn bản và so sánh hai tệp để tìm ra sự khác biệt giữa chúng. Đây là kỹ năng thiết yếu đối với bất kỳ ai làm việc với hệ điều hành Linux."
+    },
+    {
+      "id": "source-270251-section-1",
+      "title": "Print File Contents",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "First, please open a terminal on the Desktop **OR** switch to the terminal tab in the lab environment.\n\nOnce you have a terminal open, you should see a command prompt, typically ending with a `$` symbol. This is where we'll enter our commands.\n\nNow, let's use the `cat` command to display the contents of a file:\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ncat /tmp/hello\n```\n\nHere, `/tmp/hello` is the path to the file we want to view. `/tmp` is a directory (folder) on your system, and `hello` is the name of the file in that directory.\n\n1. After pressing Enter, you should see the contents of the file:\n\n```plaintext\nHi,\nI am Labby!\n```\n\nThis is everything that's in the `/tmp/hello` file. The `cat` command has displayed it for us in the terminal.",
+      "task": "In toàn bộ /tmp/hello.",
+      "hint": "cat đọc file đã có.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*cat\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "In Nội Dung Tệp",
+      "content_vi": "Trước tiên, hãy mở một cửa sổ terminal trên Desktop **HOẶC** chuyển sang tab terminal trong giao diện bài thực hành.\n\nSau khi mở terminal, bạn sẽ thấy dấu nhắc lệnh, thường kết thúc bằng ký tự `$`. Đây là nơi chúng ta sẽ nhập các câu lệnh.\n\nBây giờ, hãy sử dụng câu lệnh `cat` để hiển thị nội dung của một tệp tin:\n\n1. Trong cửa sổ dòng lệnh, nhập lệnh sau và nhấn **Enter**:\n\n```bash\ncat /tmp/hello\n```\n\nĐây `/tmp/hello` là đường dẫn đến tệp tin mà chúng ta muốn xem. `/tmp` là thư mục trên hệ thống của bạn, và `hello` là tên của tệp tin trong thư mục đó.\n\n2. Sau khi nhấn Enter, bạn sẽ thấy nội dung của tệp tin:\n\n```plaintext\nHi,\nI am Labby!\n```\n\nĐây là toàn bộ nội dung trong tệp `/tmp/hello`. Lệnh `cat` đã hiển thị nó cho chúng ta trong cửa sổ terminal.",
+      "task_vi": "Chạy lệnh cat /tmp/hello trong terminal.",
+      "hint_vi": "Gõ cat /tmp/hello và nhấn Enter."
+    },
+    {
+      "id": "source-270251-section-2",
+      "title": "Display File Contents with Line Numbers",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now, let's use the `cat` command again, but this time we'll add line numbers to the output.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ncat -n /tmp/hello\n```\n\nThe `-n` here is called an option or a flag. It tells `cat` to number all output lines.\n\n1. You should now see the contents of the file with line numbers:\n\n```plaintext\n1 Hi,\n     2 I am Labby!\n```\n\nThis can be very helpful when you're dealing with longer files and need to refer to specific lines.",
+      "task": "Hiện nội dung /tmp/hello kèm số dòng.",
+      "hint": "-n đánh số từng dòng.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*cat\\s+-n\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "Hiển Thị Nội Dung Tệp Kèm Số Dòng",
+      "content_vi": "Bây giờ, chúng ta hãy sử dụng lại câu lệnh `cat`, nhưng lần này chúng ta sẽ thêm số thứ tự dòng vào kết quả đầu ra.\n\n1. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\ncat -n /tmp/hello\n```\n\nTùy chọn `-n` ở đây được gọi là một cờ (flag) hoặc tùy chọn (option). Nó yêu cầu `cat` đánh số thứ tự cho tất cả các dòng đầu ra.\n\n2. Bây giờ bạn sẽ thấy nội dung của tệp đi kèm với số dòng:\n\n```plaintext\n     1  Hi,\n     2  I am Labby!\n```\n\nĐiều này có thể rất hữu ích khi bạn đang làm việc với các tệp dài hơn và cần tham chiếu đến các dòng cụ thể.",
+      "task_vi": "Chạy lệnh cat -n /tmp/hello trong terminal.",
+      "hint_vi": "Sử dụng tùy chọn -n: cat -n /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-3",
+      "title": "Print the Top Lines of a File",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Next, we'll use the `head` command. As its name suggests, `head` is used to view the beginning or \"head\" of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\nhead -n1 /tmp/hello\n```\n\nHere, `-n1` is an option that tells `head` to show only the first line. The `1` can be changed to any number to show that many lines.\n\n1. You should see this output:\n\n```plaintext\nHi,\n```\n\nThis is just the first line of the file. By default, without the `-n1` option, `head` would show the first 10 lines of the file.",
+      "task": "In dòng đầu của /tmp/hello.",
+      "hint": "head -n chọn số dòng.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*head\\s+-n1\\s+/tmp/hello\\s*$",
+                "^\\s*head\\s+-n\\s+1\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "In Các Dòng Đầu Của Tệp",
+      "content_vi": "Tiếp theo, chúng ta sẽ sử dụng câu lệnh `head`. Đúng như tên gọi của nó, `head` (đầu) được sử dụng để xem phần đầu hoặc phần mở đầu của một tệp tin.\n\n1. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\nhead -n1 /tmp/hello\n```\n\nỞ đây, `-n1` là một tùy chọn yêu cầu `head` chỉ hiển thị dòng đầu tiên. Số `1` có thể được thay đổi thành bất kỳ số nào để hiển thị số lượng dòng tương ứng.\n\n2. Bạn sẽ thấy kết quả đầu ra như sau:\n\n```plaintext\nHi,\n```\n\nĐây chính là dòng đầu tiên của tệp tin. Theo mặc định, nếu không có tùy chọn `-n1`, lệnh `head` sẽ hiển thị 10 dòng đầu tiên của tệp.",
+      "task_vi": "Chạy lệnh head -n1 /tmp/hello trong terminal.",
+      "hint_vi": "Dùng head -n1 /tmp/hello hoặc head -n 1 /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-4",
+      "title": "View the First Few Bytes of a File",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now we'll use the `head` command again, but this time to view a specific number of bytes from the beginning of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\nhead -c1 /tmp/hello\n```\n\nThe `-c1` option tells `head` to show only the first byte (character) of the file. Like with `-n`, you can change the `1` to any number to see that many bytes.\n\n1. You should see this output:\n\n```plaintext\nH\n```\n\nThis is just the first character of the file. In text files, each character is typically one byte.",
+      "task": "In byte đầu của /tmp/hello.",
+      "hint": "-c đếm byte, không phải số dòng.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*head\\s+-c1\\s+/tmp/hello\\s*$",
+                "^\\s*head\\s+-c\\s+1\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "Xem Vài Byte Đầu Tiên Của Tệp",
+      "content_vi": "Bây giờ chúng ta sẽ sử dụng lại câu lệnh `head`, nhưng lần này để xem một số lượng byte cụ thể tính từ phần đầu của một tệp tin.\n\n1. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\nhead -c1 /tmp/hello\n```\n\nTùy chọn `-c1` yêu cầu `head` chỉ hiển thị byte (ký tự) đầu tiên của tệp. Giống như với `-n`, bạn có thể thay đổi số `1` thành bất kỳ số nào để xem số lượng byte tương ứng.\n\n2. Bạn sẽ thấy kết quả đầu ra:\n\n```plaintext\nH\n```\n\nĐây chính là ký tự đầu tiên của tệp tin. Trong các tệp văn bản thông thường, mỗi ký tự thường chiếm một byte.",
+      "task_vi": "Chạy lệnh head -c1 /tmp/hello trong terminal.",
+      "hint_vi": "Dùng head -c1 /tmp/hello hoặc head -c 1 /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-5",
+      "title": "Print the Last Lines of a File",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now let's move on to the `tail` command. As you might guess, `tail` is the opposite of `head` - it shows the end of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ntail -n1 /tmp/hello\n```\n\nJust like with `head`, the `-n1` option tells `tail` to show only one line, in this case the last line of the file.\n\n1. You should see this output:\n\n```plaintext\nI am Labby!\n```\n\nThis is the last line of our file. Without the `-n1` option, `tail` would show the last 10 lines by default.",
+      "task": "In dòng cuối của /tmp/hello.",
+      "hint": "tail đọc từ cuối file.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tail\\s+-n1\\s+/tmp/hello\\s*$",
+                "^\\s*tail\\s+-n\\s+1\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "In Các Dòng Cuối Của Tệp",
+      "content_vi": "Bây giờ chúng ta hãy chuyển sang câu lệnh `tail`. Như bạn có thể đoán, `tail` (đuôi) là câu lệnh đối lập với `head` - nó hiển thị phần kết thúc của một tệp tin.\n\n1. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\ntail -n1 /tmp/hello\n```\n\nTương tự như với `head`, tùy chọn `-n1` yêu cầu `tail` chỉ hiển thị một dòng, trong trường hợp này là dòng cuối cùng của tệp.\n\n2. Bạn sẽ thấy kết quả đầu ra:\n\n```plaintext\nI am Labby!\n```\n\nĐây là dòng cuối cùng trong tệp của chúng ta. Nếu không có tùy chọn `-n1`, lệnh `tail` theo mặc định sẽ hiển thị 10 dòng cuối cùng.",
+      "task_vi": "Chạy lệnh tail -n1 /tmp/hello trong terminal.",
+      "hint_vi": "Dùng tail -n1 /tmp/hello hoặc tail -n 1 /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-6",
+      "title": "View the Last Few Bytes of a File",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Similar to what we did with `head`, we can use `tail` to display a specific number of bytes from the end of a file.\n\n1. First, let's try viewing the last byte. In the terminal, type the following command and press Enter:\n\n```bash\ntail -c1 /tmp/hello\n```\n\nYou might not see any output. This is because the last character is likely a newline character, which is invisible.\n\n1. Let's try viewing the last two bytes instead. Type the following command and press Enter:\n\n```bash\ntail -c2 /tmp/hello\n```\n\n1. Now you should see:\n\n```plaintext\n!\n```\n\nThe `-c2` option tells `tail` to show the last 2 bytes (characters) of the file. In this case, it's showing the exclamation mark, which is the last visible character in our file.",
+      "task": "Thử byte cuối rồi hai byte cuối của /tmp/hello.",
+      "hint": "Byte cuối là xuống dòng nên thường không có ký tự nhìn thấy.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tail\\s+-c1\\s+/tmp/hello\\s*$",
+                "^\\s*tail\\s+-c\\s+1\\s+/tmp/hello\\s*$"
+              ],
+              [
+                "^\\s*tail\\s+-c2\\s+/tmp/hello\\s*$",
+                "^\\s*tail\\s+-c\\s+2\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "Xem Vài Byte Cuối Cùng Của Tệp",
+      "content_vi": "Tương tự như những gì chúng ta đã làm với lệnh `head`, chúng ta có thể sử dụng `tail` để hiển thị một số lượng byte cụ thể tính từ cuối tệp.\n\n1. Trước hết, hãy thử xem byte cuối cùng. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\ntail -c1 /tmp/hello\n```\n\nBạn có thể sẽ không thấy kết quả đầu ra nào hiển thị. Điều này là do ký tự cuối cùng thường là ký tự xuống dòng (newline character `\\n`), vốn là ký tự vô hình.\n\n2. Hãy thử xem hai byte cuối cùng thay thế. Nhập câu lệnh sau và nhấn **Enter**:\n\n```bash\ntail -c2 /tmp/hello\n```\n\n3. Bây giờ bạn sẽ thấy xuất hiện:\n\n```plaintext\n!\n```\n\nTùy chọn `-c2` yêu cầu `tail` hiển thị 2 byte (ký tự) cuối cùng của tệp. Trong trường hợp này, nó hiển thị dấu chấm than, đây là ký tự nhìn thấy được cuối cùng trong tệp của chúng ta.",
+      "task_vi": "Chạy lệnh tail -c1 /tmp/hello rồi tail -c2 /tmp/hello trong terminal.",
+      "hint_vi": "Chạy lần lượt tail -c1 /tmp/hello và tail -c2 /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-7",
+      "title": "Comparing Files",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now we'll learn how to use the `diff` command to compare two files and see the differences between them.\n\n1. First, let's make sure we're in the right directory (folder). Type the following command and press Enter:\n\n```bash\ncd ~/project\n```\n\nThis changes our current directory to the \"project\" folder in our home directory. The `~` symbol is a shortcut for your home directory.\n\n1. Now, let's compare two files. Type the following command and press Enter:\n\n```bash\ndiff file1 file2\n```\n\nThis tells `diff` to compare the contents of `file1` and `file2`.\n\n1. You should see output similar to this:\n\n```plaintext\n1c1\n< this is file1\n---\n> this is file2\n```\n\nLet's break down what this output means. The `diff` command produces output that describes what changes are needed to make the first file identical to the second file. It doesn't matter which file was created or modified first; `diff` only compares their contents at the time you run the command.\n\n- `1c1`: This indicates that line 1 in the first file needs to be **c**hanged to match line 1 in the second file.\n- `< this is file1`: The `<` symbol indicates a line from the first file (`file1`).\n- `---`: This is a separator between the lines from `file1` and `file2`.\n- `> this is file2`: The `>` symbol indicates a line from the second file (`file2`).\n\nIn simple terms, `diff` is showing us that the content of line 1 is different between the two files. To make `file1` match `file2`, the line \"this is file1\" would need to be replaced with \"this is file2\".",
+      "task": "So sánh file1 với file2 trong ~/project.",
+      "hint": "diff trả mã 1 khi hai file khác nhau; đây là kết quả mong đợi, không phải lỗi chạy lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0,
+          1
+        ],
+        "groups": [
+          [
+            "^\\s*diff\\s+file1\\s+file2\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "So Sánh Hai Tệp Tin (Comparing Files)",
+      "content_vi": "Bây giờ chúng ta sẽ học cách sử dụng câu lệnh `diff` để so sánh hai tệp tin và xem sự khác biệt giữa chúng.\n\n1. Trước tiên, hãy đảm bảo chúng ta đang đứng ở đúng thư mục. Nhập câu lệnh sau và nhấn **Enter**:\n\n```bash\ncd ~/project\n```\n\nLệnh này chuyển thư mục hiện tại của chúng ta sang thư mục \"project\" nằm trong thư mục cá nhân. Ký hiệu `~` là lối tắt đại diện cho thư mục cá nhân (home directory).\n\n2. Bây giờ, hãy so sánh hai tệp. Nhập lệnh sau và nhấn **Enter**:\n\n```bash\ndiff file1 file2\n```\n\nLệnh này yêu cầu `diff` so sánh nội dung của hai tệp `file1` và `file2`.\n\n3. Bạn sẽ thấy kết quả đầu ra tương tự như sau:\n\n```plaintext\n1c1\n< this is file1\n---\n> this is file2\n```\n\nHãy cùng phân tích ý nghĩa của kết quả đầu ra này. Lệnh `diff` tạo ra kết quả mô tả những thay đổi cần thiết để làm cho tệp thứ nhất trở nên giống hệt tệp thứ hai. Việc tệp nào được tạo hoặc sửa đổi trước không quan trọng; `diff` chỉ so sánh nội dung của chúng tại thời điểm bạn chạy lệnh:\n\n- `1c1`: Cho biết dòng 1 trong tệp thứ nhất cần được thay đổi (**c**hange) để khớp với dòng 1 trong tệp thứ hai.\n- `< this is file1`: Ký hiệu `<` biểu thị một dòng văn bản đến từ tệp thứ nhất (`file1`).\n- `---`: Đây là dấu phân cách giữa các dòng của `file1` và `file2`.\n- `> this is file2`: Ký hiệu `>` biểu thị một dòng văn bản đến từ tệp thứ hai (`file2`).\n\nNói một cách đơn giản, `diff` đang chỉ ra cho chúng ta thấy nội dung của dòng 1 là khác nhau giữa hai tệp. Để làm cho `file1` giống `file2`, dòng \"this is file1\" sẽ cần được thay thế bằng \"this is file2\".",
+      "task_vi": "Chuyển vào ~/project và chạy lệnh diff file1 file2.",
+      "hint_vi": "Chạy cd ~/project rồi diff file1 file2."
+    },
+    {
+      "id": "source-270251-section-8",
+      "title": "Comparing Directories",
+      "position": 8,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Finally, let's use the `diff` command to compare entire directories.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ndiff -r ~/Desktop ~/Code\n```\n\nThe `-r` option tells `diff` to recursively compare subdirectories as well. `~/Desktop` and `~/Code` are the paths to the two directories we're comparing.\n\n1. You might see output similar to this:\n\n```plaintext\nOnly in /home/labex/Desktop: code.desktop\nOnly in /home/labex/Desktop: gedit.desktop\nOnly in /home/labex/Desktop: gvim.desktop\nOnly in /home/labex/Desktop: xfce4-terminal.desktop\n```\n\nThis output shows that the `Desktop` directory contains four files that are not in the `Code` directory.",
+      "task": "So sánh đệ quy ~/Desktop và ~/Code.",
+      "hint": "diff -r so sánh cả các thư mục con; đọc tên các mục chỉ xuất hiện ở một bên.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0,
+          1
+        ],
+        "groups": [
+          [
+            "^\\s*diff\\s+-r\\s+~/Desktop\\s+~/Code\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "So Sánh Hai Thư Mục (Comparing Directories)",
+      "content_vi": "Cuối cùng, chúng ta hãy sử dụng câu lệnh `diff` để so sánh toàn bộ hai thư mục với nhau.\n\n1. Trong terminal, nhập câu lệnh sau và nhấn **Enter**:\n\n```bash\ndiff -r ~/Desktop ~/Code\n```\n\nTùy chọn `-r` yêu cầu `diff` so sánh đệ quy (recursively) cả các thư mục con bên trong. `~/Desktop` và `~/Code` là đường dẫn đến hai thư mục mà chúng ta đang so sánh.\n\n2. Bạn sẽ thấy kết quả đầu ra tương tự như sau:\n\n```plaintext\nOnly in /home/labex/Desktop: code.desktop\nOnly in /home/labex/Desktop: gedit.desktop\nOnly in /home/labex/Desktop: gvim.desktop\nOnly in /home/labex/Desktop: xfce4-terminal.desktop\n```\n\nKết quả đầu ra này cho thấy thư mục `Desktop` chứa bốn tệp tin mà không có trong thư mục `Code`.",
+      "task_vi": "Chạy lệnh diff -r ~/Desktop ~/Code trong terminal.",
+      "hint_vi": "Sử dụng lệnh diff -r ~/Desktop ~/Code."
+    },
+    {
+      "id": "source-270251-section-9",
+      "title": "Summary",
+      "position": 9,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Congratulations! You've completed the File Contents and Comparing lab. Let's recap what you've learned:\n\n1. You used `cat` to view the entire contents of a file.\n2. You learned how to use `cat -n` to view file contents with line numbers.\n3. You used `head` to view the beginning of a file, both by lines and by bytes.\n4. You used `tail` to view the end of a file, both by lines and by bytes.\n5. You learned how to use `diff` to compare the contents of files.\n6. Finally, you used `diff -r` to compare entire directories.\n\nThese commands are fundamental tools in Linux. As you continue to work with Linux, you'll find yourself using these commands frequently to inspect and compare files and directories.\n\nRemember, if you ever forget how to use a command, you can always type `man` followed by the command name (e.g., `man cat`) to see the manual page for that command. This will give you detailed information about all the options available for each command.\n\nKeep practicing with these commands on different files and directories to become more comfortable with them. The more you use them, the more natural they'll become!",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Xin chúc mừng! Bạn đã hoàn thành xuất sắc bài thực hành **File Contents and Comparing**. Hãy cùng điểm lại những gì bạn đã học được:\n\n1. Bạn đã sử dụng `cat` để xem toàn bộ nội dung của một tệp tin.\n2. Bạn đã học cách sử dụng `cat -n` để xem nội dung tệp tin đi kèm với số thứ tự dòng.\n3. Bạn đã sử dụng `head` để xem phần đầu của tệp, cả theo số dòng lẫn theo số lượng byte.\n4. Bạn đã sử dụng `tail` để xem phần cuối của tệp, cả theo số dòng lẫn theo số lượng byte.\n5. Bạn đã học cách sử dụng `diff` để so sánh nội dung giữa các tệp tin.\n6. Cuối cùng, bạn đã sử dụng `diff -r` để so sánh toàn bộ hai thư mục.\n\nCác câu lệnh này là những công cụ nền tảng thiết yếu trong Linux. Khi tiếp tục làm việc với Linux, bạn sẽ thấy mình sử dụng các câu lệnh này rất thường xuyên để kiểm tra và so sánh các tệp tin cũng như thư mục.\n\nHãy nhớ rằng, nếu bạn quên cách sử dụng một lệnh nào đó, bạn luôn có thể gõ `man` kèm theo tên lệnh (ví dụ: `man cat`) để xem trang tài liệu hướng dẫn (manual page) của lệnh đó. Điều này sẽ cung cấp cho bạn thông tin chi tiết về tất cả các tùy chọn có sẵn cho từng lệnh.\n\nHãy tiếp tục thực hành với các câu lệnh này trên các tệp và thư mục khác nhau để ngày càng thành thạo hơn!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-270251-section-1",
+      "title": "Print File Contents",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "First, please open a terminal on the Desktop **OR** switch to the terminal tab in the lab environment.\n\nOnce you have a terminal open, you should see a command prompt, typically ending with a `$` symbol. This is where we'll enter our commands.\n\nNow, let's use the `cat` command to display the contents of a file:\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ncat /tmp/hello\n```\n\nHere, `/tmp/hello` is the path to the file we want to view. `/tmp` is a directory (folder) on your system, and `hello` is the name of the file in that directory.\n\n1. After pressing Enter, you should see the contents of the file:\n\n```plaintext\nHi,\nI am Labby!\n```\n\nThis is everything that's in the `/tmp/hello` file. The `cat` command has displayed it for us in the terminal.",
+      "task": "In toàn bộ /tmp/hello.",
+      "hint": "cat đọc file đã có.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*cat\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "In Nội Dung Tệp",
+      "content_vi": "Trước tiên, hãy mở một cửa sổ terminal trên Desktop **HOẶC** chuyển sang tab terminal trong giao diện bài thực hành.\n\nSau khi mở terminal, bạn sẽ thấy dấu nhắc lệnh, thường kết thúc bằng ký tự `$`. Đây là nơi chúng ta sẽ nhập các câu lệnh.\n\nBây giờ, hãy sử dụng câu lệnh `cat` để hiển thị nội dung của một tệp tin:\n\n1. Trong cửa sổ dòng lệnh, nhập lệnh sau và nhấn **Enter**:\n\n```bash\ncat /tmp/hello\n```\n\nĐây `/tmp/hello` là đường dẫn đến tệp tin mà chúng ta muốn xem. `/tmp` là thư mục trên hệ thống của bạn, và `hello` là tên của tệp tin trong thư mục đó.\n\n2. Sau khi nhấn Enter, bạn sẽ thấy nội dung của tệp tin:\n\n```plaintext\nHi,\nI am Labby!\n```\n\nĐây là toàn bộ nội dung trong tệp `/tmp/hello`. Lệnh `cat` đã hiển thị nó cho chúng ta trong cửa sổ terminal.",
+      "task_vi": "Chạy lệnh cat /tmp/hello trong terminal.",
+      "hint_vi": "Gõ cat /tmp/hello và nhấn Enter."
+    },
+    {
+      "id": "source-270251-section-2",
+      "title": "Display File Contents with Line Numbers",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now, let's use the `cat` command again, but this time we'll add line numbers to the output.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ncat -n /tmp/hello\n```\n\nThe `-n` here is called an option or a flag. It tells `cat` to number all output lines.\n\n1. You should now see the contents of the file with line numbers:\n\n```plaintext\n1 Hi,\n     2 I am Labby!\n```\n\nThis can be very helpful when you're dealing with longer files and need to refer to specific lines.",
+      "task": "Hiện nội dung /tmp/hello kèm số dòng.",
+      "hint": "-n đánh số từng dòng.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*cat\\s+-n\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "Hiển Thị Nội Dung Tệp Kèm Số Dòng",
+      "content_vi": "Bây giờ, chúng ta hãy sử dụng lại câu lệnh `cat`, nhưng lần này chúng ta sẽ thêm số thứ tự dòng vào kết quả đầu ra.\n\n1. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\ncat -n /tmp/hello\n```\n\nTùy chọn `-n` ở đây được gọi là một cờ (flag) hoặc tùy chọn (option). Nó yêu cầu `cat` đánh số thứ tự cho tất cả các dòng đầu ra.\n\n2. Bây giờ bạn sẽ thấy nội dung của tệp đi kèm với số dòng:\n\n```plaintext\n     1  Hi,\n     2  I am Labby!\n```\n\nĐiều này có thể rất hữu ích khi bạn đang làm việc với các tệp dài hơn và cần tham chiếu đến các dòng cụ thể.",
+      "task_vi": "Chạy lệnh cat -n /tmp/hello trong terminal.",
+      "hint_vi": "Sử dụng tùy chọn -n: cat -n /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-3",
+      "title": "Print the Top Lines of a File",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Next, we'll use the `head` command. As its name suggests, `head` is used to view the beginning or \"head\" of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\nhead -n1 /tmp/hello\n```\n\nHere, `-n1` is an option that tells `head` to show only the first line. The `1` can be changed to any number to show that many lines.\n\n1. You should see this output:\n\n```plaintext\nHi,\n```\n\nThis is just the first line of the file. By default, without the `-n1` option, `head` would show the first 10 lines of the file.",
+      "task": "In dòng đầu của /tmp/hello.",
+      "hint": "head -n chọn số dòng.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*head\\s+-n1\\s+/tmp/hello\\s*$",
+                "^\\s*head\\s+-n\\s+1\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "In Các Dòng Đầu Của Tệp",
+      "content_vi": "Tiếp theo, chúng ta sẽ sử dụng câu lệnh `head`. Đúng như tên gọi của nó, `head` (đầu) được sử dụng để xem phần đầu hoặc phần mở đầu của một tệp tin.\n\n1. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\nhead -n1 /tmp/hello\n```\n\nỞ đây, `-n1` là một tùy chọn yêu cầu `head` chỉ hiển thị dòng đầu tiên. Số `1` có thể được thay đổi thành bất kỳ số nào để hiển thị số lượng dòng tương ứng.\n\n2. Bạn sẽ thấy kết quả đầu ra như sau:\n\n```plaintext\nHi,\n```\n\nĐây chính là dòng đầu tiên của tệp tin. Theo mặc định, nếu không có tùy chọn `-n1`, lệnh `head` sẽ hiển thị 10 dòng đầu tiên của tệp.",
+      "task_vi": "Chạy lệnh head -n1 /tmp/hello trong terminal.",
+      "hint_vi": "Dùng head -n1 /tmp/hello hoặc head -n 1 /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-4",
+      "title": "View the First Few Bytes of a File",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now we'll use the `head` command again, but this time to view a specific number of bytes from the beginning of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\nhead -c1 /tmp/hello\n```\n\nThe `-c1` option tells `head` to show only the first byte (character) of the file. Like with `-n`, you can change the `1` to any number to see that many bytes.\n\n1. You should see this output:\n\n```plaintext\nH\n```\n\nThis is just the first character of the file. In text files, each character is typically one byte.",
+      "task": "In byte đầu của /tmp/hello.",
+      "hint": "-c đếm byte, không phải số dòng.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*head\\s+-c1\\s+/tmp/hello\\s*$",
+                "^\\s*head\\s+-c\\s+1\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "Xem Vài Byte Đầu Tiên Của Tệp",
+      "content_vi": "Bây giờ chúng ta sẽ sử dụng lại câu lệnh `head`, nhưng lần này để xem một số lượng byte cụ thể tính từ phần đầu của một tệp tin.\n\n1. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\nhead -c1 /tmp/hello\n```\n\nTùy chọn `-c1` yêu cầu `head` chỉ hiển thị byte (ký tự) đầu tiên của tệp. Giống như với `-n`, bạn có thể thay đổi số `1` thành bất kỳ số nào để xem số lượng byte tương ứng.\n\n2. Bạn sẽ thấy kết quả đầu ra:\n\n```plaintext\nH\n```\n\nĐây chính là ký tự đầu tiên của tệp tin. Trong các tệp văn bản thông thường, mỗi ký tự thường chiếm một byte.",
+      "task_vi": "Chạy lệnh head -c1 /tmp/hello trong terminal.",
+      "hint_vi": "Dùng head -c1 /tmp/hello hoặc head -c 1 /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-5",
+      "title": "Print the Last Lines of a File",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now let's move on to the `tail` command. As you might guess, `tail` is the opposite of `head` - it shows the end of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ntail -n1 /tmp/hello\n```\n\nJust like with `head`, the `-n1` option tells `tail` to show only one line, in this case the last line of the file.\n\n1. You should see this output:\n\n```plaintext\nI am Labby!\n```\n\nThis is the last line of our file. Without the `-n1` option, `tail` would show the last 10 lines by default.",
+      "task": "In dòng cuối của /tmp/hello.",
+      "hint": "tail đọc từ cuối file.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tail\\s+-n1\\s+/tmp/hello\\s*$",
+                "^\\s*tail\\s+-n\\s+1\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "In Các Dòng Cuối Của Tệp",
+      "content_vi": "Bây giờ chúng ta hãy chuyển sang câu lệnh `tail`. Như bạn có thể đoán, `tail` (đuôi) là câu lệnh đối lập với `head` - nó hiển thị phần kết thúc của một tệp tin.\n\n1. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\ntail -n1 /tmp/hello\n```\n\nTương tự như với `head`, tùy chọn `-n1` yêu cầu `tail` chỉ hiển thị một dòng, trong trường hợp này là dòng cuối cùng của tệp.\n\n2. Bạn sẽ thấy kết quả đầu ra:\n\n```plaintext\nI am Labby!\n```\n\nĐây là dòng cuối cùng trong tệp của chúng ta. Nếu không có tùy chọn `-n1`, lệnh `tail` theo mặc định sẽ hiển thị 10 dòng cuối cùng.",
+      "task_vi": "Chạy lệnh tail -n1 /tmp/hello trong terminal.",
+      "hint_vi": "Dùng tail -n1 /tmp/hello hoặc tail -n 1 /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-6",
+      "title": "View the Last Few Bytes of a File",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Similar to what we did with `head`, we can use `tail` to display a specific number of bytes from the end of a file.\n\n1. First, let's try viewing the last byte. In the terminal, type the following command and press Enter:\n\n```bash\ntail -c1 /tmp/hello\n```\n\nYou might not see any output. This is because the last character is likely a newline character, which is invisible.\n\n1. Let's try viewing the last two bytes instead. Type the following command and press Enter:\n\n```bash\ntail -c2 /tmp/hello\n```\n\n1. Now you should see:\n\n```plaintext\n!\n```\n\nThe `-c2` option tells `tail` to show the last 2 bytes (characters) of the file. In this case, it's showing the exclamation mark, which is the last visible character in our file.",
+      "task": "Thử byte cuối rồi hai byte cuối của /tmp/hello.",
+      "hint": "Byte cuối là xuống dòng nên thường không có ký tự nhìn thấy.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tail\\s+-c1\\s+/tmp/hello\\s*$",
+                "^\\s*tail\\s+-c\\s+1\\s+/tmp/hello\\s*$"
+              ],
+              [
+                "^\\s*tail\\s+-c2\\s+/tmp/hello\\s*$",
+                "^\\s*tail\\s+-c\\s+2\\s+/tmp/hello\\s*$"
+              ]
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "cmp -s /tmp/hello <(printf 'Hi,\\nI am Labby!\\n')"
+          }
+        ]
+      },
+      "title_vi": "Xem Vài Byte Cuối Cùng Của Tệp",
+      "content_vi": "Tương tự như những gì chúng ta đã làm với lệnh `head`, chúng ta có thể sử dụng `tail` để hiển thị một số lượng byte cụ thể tính từ cuối tệp.\n\n1. Trước hết, hãy thử xem byte cuối cùng. Trong terminal, nhập lệnh sau và nhấn **Enter**:\n\n```bash\ntail -c1 /tmp/hello\n```\n\nBạn có thể sẽ không thấy kết quả đầu ra nào hiển thị. Điều này là do ký tự cuối cùng thường là ký tự xuống dòng (newline character `\\n`), vốn là ký tự vô hình.\n\n2. Hãy thử xem hai byte cuối cùng thay thế. Nhập câu lệnh sau và nhấn **Enter**:\n\n```bash\ntail -c2 /tmp/hello\n```\n\n3. Bây giờ bạn sẽ thấy xuất hiện:\n\n```plaintext\n!\n```\n\nTùy chọn `-c2` yêu cầu `tail` hiển thị 2 byte (ký tự) cuối cùng của tệp. Trong trường hợp này, nó hiển thị dấu chấm than, đây là ký tự nhìn thấy được cuối cùng trong tệp của chúng ta.",
+      "task_vi": "Chạy lệnh tail -c1 /tmp/hello rồi tail -c2 /tmp/hello trong terminal.",
+      "hint_vi": "Chạy lần lượt tail -c1 /tmp/hello và tail -c2 /tmp/hello."
+    },
+    {
+      "id": "source-270251-section-7",
+      "title": "Comparing Files",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Now we'll learn how to use the `diff` command to compare two files and see the differences between them.\n\n1. First, let's make sure we're in the right directory (folder). Type the following command and press Enter:\n\n```bash\ncd ~/project\n```\n\nThis changes our current directory to the \"project\" folder in our home directory. The `~` symbol is a shortcut for your home directory.\n\n1. Now, let's compare two files. Type the following command and press Enter:\n\n```bash\ndiff file1 file2\n```\n\nThis tells `diff` to compare the contents of `file1` and `file2`.\n\n1. You should see output similar to this:\n\n```plaintext\n1c1\n< this is file1\n---\n> this is file2\n```\n\nLet's break down what this output means. The `diff` command produces output that describes what changes are needed to make the first file identical to the second file. It doesn't matter which file was created or modified first; `diff` only compares their contents at the time you run the command.\n\n- `1c1`: This indicates that line 1 in the first file needs to be **c**hanged to match line 1 in the second file.\n- `< this is file1`: The `<` symbol indicates a line from the first file (`file1`).\n- `---`: This is a separator between the lines from `file1` and `file2`.\n- `> this is file2`: The `>` symbol indicates a line from the second file (`file2`).\n\nIn simple terms, `diff` is showing us that the content of line 1 is different between the two files. To make `file1` match `file2`, the line \"this is file1\" would need to be replaced with \"this is file2\".",
+      "task": "So sánh file1 với file2 trong ~/project.",
+      "hint": "diff trả mã 1 khi hai file khác nhau; đây là kết quả mong đợi, không phải lỗi chạy lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0,
+          1
+        ],
+        "groups": [
+          [
+            "^\\s*diff\\s+file1\\s+file2\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "So Sánh Hai Tệp Tin (Comparing Files)",
+      "content_vi": "Bây giờ chúng ta sẽ học cách sử dụng câu lệnh `diff` để so sánh hai tệp tin và xem sự khác biệt giữa chúng.\n\n1. Trước tiên, hãy đảm bảo chúng ta đang đứng ở đúng thư mục. Nhập câu lệnh sau và nhấn **Enter**:\n\n```bash\ncd ~/project\n```\n\nLệnh này chuyển thư mục hiện tại của chúng ta sang thư mục \"project\" nằm trong thư mục cá nhân. Ký hiệu `~` là lối tắt đại diện cho thư mục cá nhân (home directory).\n\n2. Bây giờ, hãy so sánh hai tệp. Nhập lệnh sau và nhấn **Enter**:\n\n```bash\ndiff file1 file2\n```\n\nLệnh này yêu cầu `diff` so sánh nội dung của hai tệp `file1` và `file2`.\n\n3. Bạn sẽ thấy kết quả đầu ra tương tự như sau:\n\n```plaintext\n1c1\n< this is file1\n---\n> this is file2\n```\n\nHãy cùng phân tích ý nghĩa của kết quả đầu ra này. Lệnh `diff` tạo ra kết quả mô tả những thay đổi cần thiết để làm cho tệp thứ nhất trở nên giống hệt tệp thứ hai. Việc tệp nào được tạo hoặc sửa đổi trước không quan trọng; `diff` chỉ so sánh nội dung của chúng tại thời điểm bạn chạy lệnh:\n\n- `1c1`: Cho biết dòng 1 trong tệp thứ nhất cần được thay đổi (**c**hange) để khớp với dòng 1 trong tệp thứ hai.\n- `< this is file1`: Ký hiệu `<` biểu thị một dòng văn bản đến từ tệp thứ nhất (`file1`).\n- `---`: Đây là dấu phân cách giữa các dòng của `file1` và `file2`.\n- `> this is file2`: Ký hiệu `>` biểu thị một dòng văn bản đến từ tệp thứ hai (`file2`).\n\nNói một cách đơn giản, `diff` đang chỉ ra cho chúng ta thấy nội dung của dòng 1 là khác nhau giữa hai tệp. Để làm cho `file1` giống `file2`, dòng \"this is file1\" sẽ cần được thay thế bằng \"this is file2\".",
+      "task_vi": "Chuyển vào ~/project và chạy lệnh diff file1 file2.",
+      "hint_vi": "Chạy cd ~/project rồi diff file1 file2."
+    },
+    {
+      "id": "source-270251-section-8",
+      "title": "Comparing Directories",
+      "position": 8,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Finally, let's use the `diff` command to compare entire directories.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ndiff -r ~/Desktop ~/Code\n```\n\nThe `-r` option tells `diff` to recursively compare subdirectories as well. `~/Desktop` and `~/Code` are the paths to the two directories we're comparing.\n\n1. You might see output similar to this:\n\n```plaintext\nOnly in /home/labex/Desktop: code.desktop\nOnly in /home/labex/Desktop: gedit.desktop\nOnly in /home/labex/Desktop: gvim.desktop\nOnly in /home/labex/Desktop: xfce4-terminal.desktop\n```\n\nThis output shows that the `Desktop` directory contains four files that are not in the `Code` directory.",
+      "task": "So sánh đệ quy ~/Desktop và ~/Code.",
+      "hint": "diff -r so sánh cả các thư mục con; đọc tên các mục chỉ xuất hiện ở một bên.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0,
+          1
+        ],
+        "groups": [
+          [
+            "^\\s*diff\\s+-r\\s+~/Desktop\\s+~/Code\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "So Sánh Hai Thư Mục (Comparing Directories)",
+      "content_vi": "Cuối cùng, chúng ta hãy sử dụng câu lệnh `diff` để so sánh toàn bộ hai thư mục với nhau.\n\n1. Trong terminal, nhập câu lệnh sau và nhấn **Enter**:\n\n```bash\ndiff -r ~/Desktop ~/Code\n```\n\nTùy chọn `-r` yêu cầu `diff` so sánh đệ quy (recursively) cả các thư mục con bên trong. `~/Desktop` và `~/Code` là đường dẫn đến hai thư mục mà chúng ta đang so sánh.\n\n2. Bạn sẽ thấy kết quả đầu ra tương tự như sau:\n\n```plaintext\nOnly in /home/labex/Desktop: code.desktop\nOnly in /home/labex/Desktop: gedit.desktop\nOnly in /home/labex/Desktop: gvim.desktop\nOnly in /home/labex/Desktop: xfce4-terminal.desktop\n```\n\nKết quả đầu ra này cho thấy thư mục `Desktop` chứa bốn tệp tin mà không có trong thư mục `Code`.",
+      "task_vi": "Chạy lệnh diff -r ~/Desktop ~/Code trong terminal.",
+      "hint_vi": "Sử dụng lệnh diff -r ~/Desktop ~/Code."
+    }
+  ],
+  "title_vi": "Xem và So Sánh Nội Dung Tệp (File Contents and Comparing)",
+  "overview_vi": "Xem nội dung tệp theo dòng và byte với cat, head, tail; so sánh tệp và thư mục với diff."
+}

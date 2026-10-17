@@ -1,0 +1,48 @@
+{
+  "id": "linux-practice-log-analysis",
+  "course_id": "linux-commands-practice-online",
+  "title": "Luyện tập: Phân tích log",
+  "order": 1,
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Tự tạo log, lọc lỗi và thống kê bằng grep, cut, sort, uniq. Không cần log hệ thống hay quyền quản trị.",
+  "steps": [
+    {
+      "id": "log-1",
+      "title": "1. Tạo bộ log mẫu",
+      "content": "### 1. Tạo bộ log mẫu\n\nMỗi dòng gồm mức độ và tên dịch vụ, ngăn bằng khoảng trắng. Tạo dữ liệu cố định để đối chiếu kết quả.\n\n```bash\nmkdir -p \"$HOME/log-practice\"\nprintf 'INFO api\\nERROR api\\nERROR worker\\nWARN api\\nERROR api\\n' > \"$HOME/log-practice/events.log\"\n```\n\nTạo events.log có năm dòng theo mẫu.",
+      "task": "Tạo events.log có năm dòng theo mẫu.",
+      "verify_command": "cmp -s \"$HOME/log-practice/events.log\" <(printf 'INFO api\\nERROR api\\nERROR worker\\nWARN api\\nERROR api\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "1. Tạo bộ log mẫu",
+      "content_vi": "### 1. Tạo bộ log mẫu\n\nMỗi dòng gồm mức độ và tên dịch vụ, ngăn bằng khoảng trắng. Tạo dữ liệu cố định để đối chiếu kết quả.\n\n```bash\nmkdir -p \"$HOME/log-practice\"\nprintf 'INFO api\\nERROR api\\nERROR worker\\nWARN api\\nERROR api\\n' > \"$HOME/log-practice/events.log\"\n```\n\nTạo events.log có năm dòng theo mẫu.",
+      "task_vi": "Tạo events.log có năm dòng theo mẫu.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    },
+    {
+      "id": "log-2",
+      "title": "2. Trích lỗi và đếm",
+      "content": "### 2. Trích lỗi và đếm\n\ngrep '^ERROR ' chọn dòng lỗi. wc -l đếm số dòng để có tổng số sự kiện lỗi.\n\n```bash\ngrep '^ERROR ' \"$HOME/log-practice/events.log\" > \"$HOME/log-practice/errors.log\"\nwc -l < \"$HOME/log-practice/errors.log\" > \"$HOME/log-practice/count.txt\"\n```\n\nTạo errors.log với ba dòng lỗi và count.txt chứa số 3.",
+      "task": "Tạo errors.log với ba dòng lỗi và count.txt chứa số 3.",
+      "verify_command": "cmp -s \"$HOME/log-practice/errors.log\" <(printf 'ERROR api\\nERROR worker\\nERROR api\\n') && test \"$(cat \"$HOME/log-practice/count.txt\")\" -eq 3",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "2. Trích lỗi và đếm",
+      "content_vi": "### 2. Trích lỗi và đếm\n\ngrep '^ERROR ' chọn dòng lỗi. wc -l đếm số dòng để có tổng số sự kiện lỗi.\n\n```bash\ngrep '^ERROR ' \"$HOME/log-practice/events.log\" > \"$HOME/log-practice/errors.log\"\nwc -l < \"$HOME/log-practice/errors.log\" > \"$HOME/log-practice/count.txt\"\n```\n\nTạo errors.log với ba dòng lỗi và count.txt chứa số 3.",
+      "task_vi": "Tạo errors.log với ba dòng lỗi và count.txt chứa số 3.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    },
+    {
+      "id": "log-3",
+      "title": "3. Thống kê dịch vụ",
+      "content": "### 3. Thống kê dịch vụ\n\ncut chọn trường thứ hai. sort rồi uniq -c đếm nhóm bằng nhau; awk chuẩn hóa đầu ra thành tên và số lượng.\n\n```bash\ncut -d' ' -f2 \"$HOME/log-practice/errors.log\" | LC_ALL=C sort | uniq -c | awk '{print $2, $1}' > \"$HOME/log-practice/summary.txt\"\ncat \"$HOME/log-practice/summary.txt\"\n```\n\nTạo summary.txt gồm api 2 và worker 1.",
+      "task": "Tạo summary.txt gồm api 2 và worker 1.",
+      "verify_command": "cmp -s \"$HOME/log-practice/summary.txt\" <(printf 'api 2\\nworker 1\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "3. Thống kê dịch vụ",
+      "content_vi": "### 3. Thống kê dịch vụ\n\ncut chọn trường thứ hai. sort rồi uniq -c đếm nhóm bằng nhau; awk chuẩn hóa đầu ra thành tên và số lượng.\n\n```bash\ncut -d' ' -f2 \"$HOME/log-practice/errors.log\" | LC_ALL=C sort | uniq -c | awk '{print $2, $1}' > \"$HOME/log-practice/summary.txt\"\ncat \"$HOME/log-practice/summary.txt\"\n```\n\nTạo summary.txt gồm api 2 và worker 1.",
+      "task_vi": "Tạo summary.txt gồm api 2 và worker 1.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    }
+  ],
+  "title_vi": "Luyện tập: Phân tích log"
+}

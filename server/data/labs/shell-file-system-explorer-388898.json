@@ -1,0 +1,99 @@
+{
+  "id": "shell-file-system-explorer-388898",
+  "course_id": "shell-for-beginners",
+  "order": 18,
+  "title": "File System Explorer",
+  "title_vi": "Thử Thách: Trình Thám Hiểm Hệ Thống Tệp",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "5 mins",
+  "overview": "Build an inspection tool that iterates over a directory and reports item types and counts.",
+  "source_url": "https://labex.io/tutorials/shell-file-system-explorer-388898",
+  "source_lab_id": 388898,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388898-section-1-v4",
+      "title": "Create the File System Explorer Script",
+      "title_vi": "Viết kịch bản khám phá hệ thống tệp",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Complete check_item in file_explorer.sh: accept one path; report existence, file/directory type and readability using -e/-f/-d/-r.\n\n```text\nChecking: test_file.txt\nExists: Yes\nType: File\nReadable: Yes\n```\n\nMissing: `Exists: No`. Directory: `Type: Directory`.",
+      "content_vi": "Hoàn thiện check_item trong file_explorer.sh: nhận một đường dẫn; báo tồn tại, loại tệp/thư mục và quyền đọc bằng -e/-f/-d/-r.\n\n```text\nChecking: test_file.txt\nExists: Yes\nType: File\nReadable: Yes\n```\n\nMissing: `Exists: No`. Directory: `Type: Directory`.",
+      "task": "Complete check_item in file_explorer.sh: accept one path; report existence, file/directory type and readability using -e/-f/-d/-r.",
+      "task_vi": "Hoàn thiện check_item trong file_explorer.sh: nhận một đường dẫn; báo tồn tại, loại tệp/thư mục và quyền đọc bằng -e/-f/-d/-r.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/file_explorer.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['check_item', '-e', '-f', '-d', '-r']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    q=work/'test_file.txt'; q.write_text('sample'); q.chmod(0o600)\n    (work/'test_directory').mkdir()\n    for name,lines in [('test_file.txt',['Exists: Yes','Type: File','Readable: Yes']),('non_existent.txt',['Exists: No']),('test_directory',['Exists: Yes','Type: Directory','Readable: Yes'])]:\n        out=execute([str(p),name]).stdout\n        assert all(line in out for line in lines),out\n    q.chmod(0o000)\n    assert 'Readable: No' in execute([str(p),'test_file.txt']).stdout\n    q.chmod(0o600)\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388898-section-1-v4",
+      "title": "Create the File System Explorer Script",
+      "title_vi": "Viết kịch bản khám phá hệ thống tệp",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Complete check_item in file_explorer.sh: accept one path; report existence, file/directory type and readability using -e/-f/-d/-r.\n\n```text\nChecking: test_file.txt\nExists: Yes\nType: File\nReadable: Yes\n```\n\nMissing: `Exists: No`. Directory: `Type: Directory`.",
+      "content_vi": "Hoàn thiện check_item trong file_explorer.sh: nhận một đường dẫn; báo tồn tại, loại tệp/thư mục và quyền đọc bằng -e/-f/-d/-r.\n\n```text\nChecking: test_file.txt\nExists: Yes\nType: File\nReadable: Yes\n```\n\nMissing: `Exists: No`. Directory: `Type: Directory`.",
+      "task": "Complete check_item in file_explorer.sh: accept one path; report existence, file/directory type and readability using -e/-f/-d/-r.",
+      "task_vi": "Hoàn thiện check_item trong file_explorer.sh: nhận một đường dẫn; báo tồn tại, loại tệp/thư mục và quyền đọc bằng -e/-f/-d/-r.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/file_explorer.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['check_item', '-e', '-f', '-d', '-r']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    q=work/'test_file.txt'; q.write_text('sample'); q.chmod(0o600)\n    (work/'test_directory').mkdir()\n    for name,lines in [('test_file.txt',['Exists: Yes','Type: File','Readable: Yes']),('non_existent.txt',['Exists: No']),('test_directory',['Exists: Yes','Type: Directory','Readable: Yes'])]:\n        out=execute([str(p),name]).stdout\n        assert all(line in out for line in lines),out\n    q.chmod(0o000)\n    assert 'Readable: No' in execute([str(p),'test_file.txt']).stdout\n    q.chmod(0o600)\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-file-system-explorer-388898",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

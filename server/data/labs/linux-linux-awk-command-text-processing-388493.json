@@ -1,0 +1,405 @@
+{
+  "id": "linux-linux-awk-command-text-processing-388493",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 388493,
+  "source_url": "https://labex.io/tutorials/linux-linux-awk-command-text-processing-388493",
+  "order": 33,
+  "title": "Linux awk Command: Text Processing",
+  "title_vi": "Lệnh awk: xử lý văn bản",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux awk Command: Text Processing",
+  "sections": [
+    {
+      "id": "commands-388493-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux awk Command: Text Processing. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh awk: xử lý văn bản. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-388493-section-1-v1",
+      "title": "Examining the Log File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem log máy chủ",
+      "content": "Inspect field positions in the log.\n\n```bash\nhead server_logs.txt\n```",
+      "content_vi": "Xem vị trí các trường trong log.\n\n```bash\nhead server_logs.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bhead\\s+server_logs\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-2-v1",
+      "title": "Basic AWK Usage - Printing Specific Fields",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "In trường cụ thể",
+      "content": "Print client addresses and requested resources.\n\n```bash\nawk '{print $3, $5}' server_logs.txt | head -n 5\n```",
+      "content_vi": "In địa chỉ máy khách và tài nguyên yêu cầu.\n\n```bash\nawk '{print $3, $5}' server_logs.txt | head -n 5\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bawk\\s+.*print\\s+\\$3,\\s*\\$5.*server_logs\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-3-v1",
+      "title": "Filtering Log Entries",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Lọc yêu cầu",
+      "content": "Print POST requests returning an error.\n\n```bash\nawk '$4 == \"POST\" && $6 >= 400 {print $0}' server_logs.txt\n```",
+      "content_vi": "In yêu cầu POST trả về lỗi.\n\n```bash\nawk '$4 == \"POST\" && $6 >= 400 {print $0}' server_logs.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bawk\\s+.*POST.*\\$6\\s*>=\\s*400.*server_logs\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-4-v1",
+      "title": "Counting and Summarizing Data",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tổng hợp trạng thái",
+      "content": "Count responses by status code.\n\n```bash\nawk '{count[$6]++} END {for (code in count) print code, count[code]}' server_logs.txt | sort -n\n```",
+      "content_vi": "Đếm phản hồi theo mã trạng thái.\n\n```bash\nawk '{count[$6]++} END {for (code in count) print code, count[code]}' server_logs.txt | sort -n\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bawk\\s+.*count\\[\\$6\\].*END.*server_logs\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-5-v1",
+      "title": "Creating a Simple Report",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tạo báo cáo HTML",
+      "content": "Create an AWK report with request totals, error rate, top five IPs and resources.\n\n```bash\ncat > log_report.awk <<'AWK'\nfunction top5(counts, heading,    i,k,best) {\n    print \"<h2>\" heading \"</h2><ul>\"\n    for (i=0; i<5; i++) {\n        best=\"\"\n        for (k in counts) if (best==\"\" || counts[k]>counts[best]) best=k\n        if (best==\"\") break\n        print \"<li>\" best \": \" counts[best] \" requests</li>\"\n        delete counts[best]\n    }\n    print \"</ul>\"\n}\nBEGIN { print \"<html><body><h1>Server Log Summary</h1>\" }\n{ total++; if ($6>=400) errors++; ips[$3]++; resources[$5]++ }\nEND {\n    print \"<p>Total requests: \" total \"</p>\"\n    print \"<p>Error rate: \" (total ? 100*errors/total : 0) \"%</p>\"\n    top5(ips,\"Top 5 IP Addresses\")\n    top5(resources,\"Top 5 Requested Resources\")\n    print \"</body></html>\"\n}\nAWK\nawk -f log_report.awk server_logs.txt > log_report.html\n```",
+      "content_vi": "Tạo báo cáo AWK gồm tổng yêu cầu, tỷ lệ lỗi, năm IP và tài nguyên thường gặp.\n\n```bash\ncat > log_report.awk <<'AWK'\nfunction top5(counts, heading,    i,k,best) {\n    print \"<h2>\" heading \"</h2><ul>\"\n    for (i=0; i<5; i++) {\n        best=\"\"\n        for (k in counts) if (best==\"\" || counts[k]>counts[best]) best=k\n        if (best==\"\") break\n        print \"<li>\" best \": \" counts[best] \" requests</li>\"\n        delete counts[best]\n    }\n    print \"</ul>\"\n}\nBEGIN { print \"<html><body><h1>Server Log Summary</h1>\" }\n{ total++; if ($6>=400) errors++; ips[$3]++; resources[$5]++ }\nEND {\n    print \"<p>Total requests: \" total \"</p>\"\n    print \"<p>Error rate: \" (total ? 100*errors/total : 0) \"%</p>\"\n    top5(ips,\"Top 5 IP Addresses\")\n    top5(resources,\"Top 5 Requested Resources\")\n    print \"</body></html>\"\n}\nAWK\nawk -f log_report.awk server_logs.txt > log_report.html\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bawk\\s+-f\\s+log_report\\.awk\\s+server_logs\\.txt\\s*>\\s*log_report\\.html"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s log_report.awk\ngrep -qi '<html' log_report.html\ngrep -q 'Total requests: 4' log_report.html\ngrep -q 'Error rate: 50%' log_report.html\ngrep -q 'Top 5 IP Addresses' log_report.html\ngrep -q '10.0.0.1: 2 requests' log_report.html\ngrep -q 'Top 5 Requested Resources' log_report.html\ncmp -s log_report.html <(awk -f log_report.awk server_logs.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-388493-section-1-v1",
+      "title": "Examining the Log File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem log máy chủ",
+      "content": "Inspect field positions in the log.\n\n```bash\nhead server_logs.txt\n```",
+      "content_vi": "Xem vị trí các trường trong log.\n\n```bash\nhead server_logs.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bhead\\s+server_logs\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-2-v1",
+      "title": "Basic AWK Usage - Printing Specific Fields",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "In trường cụ thể",
+      "content": "Print client addresses and requested resources.\n\n```bash\nawk '{print $3, $5}' server_logs.txt | head -n 5\n```",
+      "content_vi": "In địa chỉ máy khách và tài nguyên yêu cầu.\n\n```bash\nawk '{print $3, $5}' server_logs.txt | head -n 5\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bawk\\s+.*print\\s+\\$3,\\s*\\$5.*server_logs\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-3-v1",
+      "title": "Filtering Log Entries",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Lọc yêu cầu",
+      "content": "Print POST requests returning an error.\n\n```bash\nawk '$4 == \"POST\" && $6 >= 400 {print $0}' server_logs.txt\n```",
+      "content_vi": "In yêu cầu POST trả về lỗi.\n\n```bash\nawk '$4 == \"POST\" && $6 >= 400 {print $0}' server_logs.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bawk\\s+.*POST.*\\$6\\s*>=\\s*400.*server_logs\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-4-v1",
+      "title": "Counting and Summarizing Data",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tổng hợp trạng thái",
+      "content": "Count responses by status code.\n\n```bash\nawk '{count[$6]++} END {for (code in count) print code, count[code]}' server_logs.txt | sort -n\n```",
+      "content_vi": "Đếm phản hồi theo mã trạng thái.\n\n```bash\nawk '{count[$6]++} END {for (code in count) print code, count[code]}' server_logs.txt | sort -n\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bawk\\s+.*count\\[\\$6\\].*END.*server_logs\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388493-section-5-v1",
+      "title": "Creating a Simple Report",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tạo báo cáo HTML",
+      "content": "Create an AWK report with request totals, error rate, top five IPs and resources.\n\n```bash\ncat > log_report.awk <<'AWK'\nfunction top5(counts, heading,    i,k,best) {\n    print \"<h2>\" heading \"</h2><ul>\"\n    for (i=0; i<5; i++) {\n        best=\"\"\n        for (k in counts) if (best==\"\" || counts[k]>counts[best]) best=k\n        if (best==\"\") break\n        print \"<li>\" best \": \" counts[best] \" requests</li>\"\n        delete counts[best]\n    }\n    print \"</ul>\"\n}\nBEGIN { print \"<html><body><h1>Server Log Summary</h1>\" }\n{ total++; if ($6>=400) errors++; ips[$3]++; resources[$5]++ }\nEND {\n    print \"<p>Total requests: \" total \"</p>\"\n    print \"<p>Error rate: \" (total ? 100*errors/total : 0) \"%</p>\"\n    top5(ips,\"Top 5 IP Addresses\")\n    top5(resources,\"Top 5 Requested Resources\")\n    print \"</body></html>\"\n}\nAWK\nawk -f log_report.awk server_logs.txt > log_report.html\n```",
+      "content_vi": "Tạo báo cáo AWK gồm tổng yêu cầu, tỷ lệ lỗi, năm IP và tài nguyên thường gặp.\n\n```bash\ncat > log_report.awk <<'AWK'\nfunction top5(counts, heading,    i,k,best) {\n    print \"<h2>\" heading \"</h2><ul>\"\n    for (i=0; i<5; i++) {\n        best=\"\"\n        for (k in counts) if (best==\"\" || counts[k]>counts[best]) best=k\n        if (best==\"\") break\n        print \"<li>\" best \": \" counts[best] \" requests</li>\"\n        delete counts[best]\n    }\n    print \"</ul>\"\n}\nBEGIN { print \"<html><body><h1>Server Log Summary</h1>\" }\n{ total++; if ($6>=400) errors++; ips[$3]++; resources[$5]++ }\nEND {\n    print \"<p>Total requests: \" total \"</p>\"\n    print \"<p>Error rate: \" (total ? 100*errors/total : 0) \"%</p>\"\n    top5(ips,\"Top 5 IP Addresses\")\n    top5(resources,\"Top 5 Requested Resources\")\n    print \"</body></html>\"\n}\nAWK\nawk -f log_report.awk server_logs.txt > log_report.html\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bawk\\s+-f\\s+log_report\\.awk\\s+server_logs\\.txt\\s*>\\s*log_report\\.html"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s log_report.awk\ngrep -qi '<html' log_report.html\ngrep -q 'Total requests: 4' log_report.html\ngrep -q 'Error rate: 50%' log_report.html\ngrep -q 'Top 5 IP Addresses' log_report.html\ngrep -q '10.0.0.1: 2 requests' log_report.html\ngrep -q 'Top 5 Requested Resources' log_report.html\ncmp -s log_report.html <(awk -f log_report.awk server_logs.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-awk-command-text-processing-388493.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

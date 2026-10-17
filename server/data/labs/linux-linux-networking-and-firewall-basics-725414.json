@@ -1,0 +1,551 @@
+{
+  "id": "linux-linux-networking-and-firewall-basics-725414",
+  "course_id": "linux-for-noobs",
+  "order": 30,
+  "title": "Linux Networking and Firewall Basics",
+  "title_vi": "Kiến thức cơ bản về mạng và firewall Linux",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "Network troubleshooting is easier when you check one layer at a time. Start with the host's identity, then confirm its interfaces and addresses, route selection, basic reachability, name resolution, l",
+  "source_url": "https://labex.io/tutorials/linux-linux-networking-and-firewall-basics-725414",
+  "source_lab_id": 725414,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Network troubleshooting is easier when you check one layer at a time. Start with the host's identity, then confirm its interfaces and addresses, route selection, basic reachability, name resolution, listening sockets, application response, and finally local firewall policy.\n\nIn this lab, you will follow that sequence on an Ubuntu host. A prepared HTTP service listens only on loopback port `8088`, giving you a safe target for `ss`, `curl`, and UFW rule practice. You will not change the host's interface configuration, default route, DNS settings, or SSH service. Before enabling UFW, you will explicitly preserve SSH access.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Xử lý sự cố mạng dễ hơn khi bạn kiểm tra từng lớp. Bắt đầu với danh tính máy, sau đó xác nhận giao diện và địa chỉ, lựa chọn tuyến, khả năng kết nối cơ bản, phân giải tên, socket lắng nghe, phản hồi ứng dụng và cuối cùng là chính sách firewall cục bộ.\n\nTrong bài này, bạn sẽ theo trình tự đó trên máy Ubuntu. Một dịch vụ HTTP đã chuẩn bị chỉ lắng nghe trên cổng loopback `8088`, cung cấp đích an toàn để luyện `ss`, `curl` và quy tắc UFW. Bạn sẽ không thay cấu hình giao diện, tuyến mặc định, thiết lập DNS hoặc dịch vụ SSH của máy. Trước khi bật UFW, bạn sẽ chủ động giữ quyền truy cập SSH."
+    },
+    {
+      "id": "source-725414-section-1-v3",
+      "title": "Identify the Host",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect the host name and the local name records that help programs identify this machine.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\nPrint the current host name:\n\n```bash\nhostname\n```\n\nDisplay the static, transient, and operating-system identity known to systemd:\n\n```bash\nhostnamectl\n```\n\n`Static hostname` is the configured name. In cloud training machines, the transient name may be assigned during boot.\n\nInspect local host mappings:\n\n```bash\ncat /etc/hosts\n```\n\nThe loopback names `localhost`, `127.0.0.1`, and `::1` identify this same host without external networking. Show the host's assigned IP addresses in compact form:\n\n```bash\nhostname -I\n```\n\nSave the host name and address list:\n\n```bash\nprintf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt\n```\n\n```bash\ncat host-identity.txt\n```",
+      "title_vi": "Nhận diện máy",
+      "task": "Thực hiện hướng dẫn: Identify the Host",
+      "hint": "Chạy lệnh: cd /home/labex/project/network-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra tên máy và bản ghi tên cục bộ giúp chương trình nhận diện máy này.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\nIn tên máy hiện tại:\n\n```bash\nhostname\n```\n\nHiển thị danh tính tĩnh, tạm thời và hệ điều hành mà systemd biết:\n\n```bash\nhostnamectl\n```\n\n`Static hostname` là tên được cấu hình. Trong máy đào tạo đám mây, tên tạm thời có thể được gán khi khởi động.\n\nKiểm tra ánh xạ máy cục bộ:\n\n```bash\ncat /etc/hosts\n```\n\nCác tên loopback `localhost`, `127.0.0.1` và `::1` nhận diện chính máy này mà không cần mạng ngoài. Hiển thị ngắn gọn các địa chỉ IP đã gán cho máy:\n\n```bash\nhostname -I\n```\n\nLưu tên máy và danh sách địa chỉ:\n\n```bash\nprintf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt\n```\n\n```bash\ncat host-identity.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Nhận diện máy",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab"
+    },
+    {
+      "id": "source-725414-section-2-v3",
+      "title": "Inspect Interfaces and IP Addresses",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify network interfaces, link state, IPv4 addresses, prefixes, and address scope.\n\nUse the brief link view:\n\n```bash\nip -brief link\n```\n\n`lo` is the loopback interface. Another interface, commonly named `eth0` or `ens...`, connects the VM to its network. `UP` means the interface is administratively enabled.\n\nDisplay addresses in compact form:\n\n```bash\nip -brief address\n```\n\nAn address such as `192.0.2.10/24` combines an IPv4 address and prefix length. The prefix describes which leading bits identify the local network.\n\nInspect loopback in full detail:\n\n```bash\nip address show dev lo\n```\n\nThe IPv4 address `127.0.0.1/8` has `scope host`, so it is valid only inside this host. Find the interface used by the default route:\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Primary interface: $primary_if\"\n```\n\n```bash\nip address show dev \"$primary_if\"\n```\n\nThe `ifconfig` command is an older interface tool that still appears in existing runbooks and troubleshooting instructions. Compare its output with the modern `ip` output you just read:\n\n```bash\nifconfig\n```\n\nSave the legacy view as well:\n\n```bash\nifconfig > ifconfig-addresses.txt\n```\n\nSave a brief interface snapshot:\n\n```bash\nip -brief address > interface-addresses.txt\n```\n\n```bash\ncat interface-addresses.txt\n```",
+      "title_vi": "Kiểm tra giao diện và địa chỉ IP",
+      "task": "Thực hiện hướng dẫn: Inspect Interfaces and IP Addresses",
+      "hint": "Chạy lệnh: ip -brief link",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/interface-addresses.txt && grep -Eq \"^lo[[:space:]]\" /home/labex/project/network-lab/interface-addresses.txt && test -s /home/labex/project/network-lab/ifconfig-addresses.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ nhận diện giao diện mạng, trạng thái liên kết, địa chỉ IPv4, độ dài tiền tố và phạm vi địa chỉ.\n\nDùng chế độ xem liên kết ngắn gọn:\n\n```bash\nip -brief link\n```\n\n`lo` là giao diện loopback. Một giao diện khác, thường tên `eth0` hoặc `ens...`, nối VM với mạng. `UP` nghĩa là giao diện được bật về mặt quản trị.\n\nHiển thị địa chỉ dạng ngắn gọn:\n\n```bash\nip -brief address\n```\n\nĐịa chỉ như `192.0.2.10/24` kết hợp địa chỉ IPv4 và độ dài tiền tố. Tiền tố mô tả những bit đầu nào xác định mạng cục bộ.\n\nKiểm tra đầy đủ loopback:\n\n```bash\nip address show dev lo\n```\n\nĐịa chỉ IPv4 `127.0.0.1/8` có `scope host` nên chỉ hợp lệ bên trong máy này. Tìm giao diện được tuyến mặc định sử dụng:\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Primary interface: $primary_if\"\n```\n\n```bash\nip address show dev \"$primary_if\"\n```\n\nLệnh `ifconfig` là công cụ giao diện cũ vẫn xuất hiện trong quy trình vận hành và hướng dẫn xử lý sự cố hiện có. So sánh đầu ra của nó với đầu ra `ip` hiện đại bạn vừa đọc:\n\n```bash\nifconfig\n```\n\nLưu cả góc nhìn kiểu cũ:\n\n```bash\nifconfig > ifconfig-addresses.txt\n```\n\nLưu ảnh chụp giao diện ngắn gọn:\n\n```bash\nip -brief address > interface-addresses.txt\n```\n\n```bash\ncat interface-addresses.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra giao diện và địa chỉ IP",
+      "hint_vi": "Chạy lệnh: ip -brief link"
+    },
+    {
+      "id": "source-725414-section-3-v3",
+      "title": "Read the Routing Table",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify the default gateway and ask Linux which route it would use for a destination.\n\nDisplay the main routing table:\n\n```bash\nip route\n```\n\nConnected routes describe directly attached networks. A line beginning with `default via` is used when no more specific route matches.\n\nAsk the kernel how it would reach a public destination. This command reports the selected gateway, interface, and source address without sending a packet:\n\n```bash\nip route get 1.1.1.1\n```\n\nExtract the default gateway and interface:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Default gateway: $gateway via $primary_if\"\n```\n\nSave the route summary:\n\n```bash\nprintf 'gateway=%s\\ninterface=%s\\n' \"$gateway\" \"$primary_if\" > route-summary.txt\n```\n\n```bash\ncat route-summary.txt\n```",
+      "title_vi": "Đọc bảng định tuyến",
+      "task": "Thực hiện hướng dẫn: Read the Routing Table",
+      "hint": "Chạy lệnh: ip route",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/route-summary.txt && gateway=$(ip route show default | awk 'NR==1 {print $3}') && interface=$(ip route show default | awk 'NR==1 {print $5}') && test -n \"$gateway\" && cmp -s /home/labex/project/network-lab/route-summary.txt <(printf \"gateway=%s\\ninterface=%s\\n\" \"$gateway\" \"$interface\")"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xác định gateway mặc định và hỏi Linux sẽ dùng tuyến nào cho một đích.\n\nHiển thị bảng định tuyến chính:\n\n```bash\nip route\n```\n\nTuyến kết nối mô tả những mạng gắn trực tiếp. Dòng bắt đầu bằng `default via` được dùng khi không có tuyến cụ thể hơn khớp.\n\nHỏi kernel cách đi tới một đích công cộng. Lệnh này báo gateway, giao diện và địa chỉ nguồn được chọn mà không gửi gói tin:\n\n```bash\nip route get 1.1.1.1\n```\n\nTrích xuất gateway và giao diện mặc định:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Default gateway: $gateway via $primary_if\"\n```\n\nLưu tóm tắt tuyến:\n\n```bash\nprintf 'gateway=%s\\ninterface=%s\\n' \"$gateway\" \"$primary_if\" > route-summary.txt\n```\n\n```bash\ncat route-summary.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Đọc bảng định tuyến",
+      "hint_vi": "Chạy lệnh: ip route"
+    },
+    {
+      "id": "source-725414-section-4-v3",
+      "title": "Test Network Reachability",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `ping` to test increasingly distant boundaries while recognizing that some networks block diagnostic packets.\n\nStart with loopback. The options `-c 2` send two requests and `-W 2` wait at most two seconds for each reply:\n\n```bash\nping -c 2 -W 2 127.0.0.1\n```\n\nA successful loopback test proves the local IP stack responds. Next, retrieve and test the default gateway:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nping -c 2 -W 2 \"$gateway\" || echo \"The gateway does not answer ICMP echo requests\"\n```\n\nThe fallback message matters because a router can forward traffic while refusing ping. Test a public IP address without relying on DNS:\n\n```bash\nping -c 2 -W 2 1.1.1.1 || echo \"Public ICMP is blocked or unavailable\"\n```\n\nSave a stable local connectivity result rather than depending on external policy:\n\n```bash\nping -c 1 -W 2 127.0.0.1 > loopback-ping.txt\n```\n\n```bash\ntail -n 2 loopback-ping.txt\n```",
+      "title_vi": "Kiểm tra khả năng kết nối mạng",
+      "task": "Thực hiện hướng dẫn: Test Network Reachability",
+      "hint": "Chạy lệnh: ping -c 2 -W 2 127.0.0.1",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -Eq \"1 packets transmitted, 1 received\" /home/labex/project/network-lab/loopback-ping.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `ping` để kiểm tra các ranh giới xa dần, đồng thời hiểu rằng một số mạng chặn gói chẩn đoán.\n\nBắt đầu với loopback. Các tùy chọn `-c 2` gửi hai yêu cầu và `-W 2` chờ tối đa hai giây cho mỗi phản hồi:\n\n```bash\nping -c 2 -W 2 127.0.0.1\n```\n\nKiểm tra loopback thành công chứng minh ngăn xếp IP cục bộ phản hồi. Tiếp theo, lấy và kiểm tra gateway mặc định:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nping -c 2 -W 2 \"$gateway\" || echo \"The gateway does not answer ICMP echo requests\"\n```\n\nThông báo dự phòng có ý nghĩa vì router có thể chuyển tiếp lưu lượng nhưng từ chối ping. Kiểm tra một địa chỉ IP công cộng mà không phụ thuộc DNS:\n\n```bash\nping -c 2 -W 2 1.1.1.1 || echo \"Public ICMP is blocked or unavailable\"\n```\n\nLưu kết quả kết nối cục bộ ổn định thay vì phụ thuộc chính sách bên ngoài:\n\n```bash\nping -c 1 -W 2 127.0.0.1 > loopback-ping.txt\n```\n\n```bash\ntail -n 2 loopback-ping.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra khả năng kết nối mạng",
+      "hint_vi": "Chạy lệnh: ping -c 2 -W 2 127.0.0.1"
+    },
+    {
+      "id": "source-725414-section-5-v3",
+      "title": "Test Host Name Resolution",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect resolver configuration and translate host names into addresses.\n\nView the resolver file used by standard Linux applications:\n\n```bash\ncat /etc/resolv.conf\n```\n\nIt commonly contains one or more `nameserver` lines. On systemd-resolved hosts, the address can identify a local stub resolver rather than an external DNS server directly.\n\nResolve a local name through the system's complete name-service configuration:\n\n```bash\ngetent hosts localhost\n```\n\n`getent` follows `/etc/nsswitch.conf`, so it can combine `/etc/hosts`, DNS, and other configured sources. Resolve an external name and request IPv4 socket addresses:\n\n```bash\ngetent ahostsv4 example.com\n```\n\nIf IP ping succeeds but this lookup fails, focus on resolver configuration or DNS reachability. Save the first resolved IPv4 record:\n\n```bash\ngetent ahostsv4 example.com | head -n 1 > dns-result.txt\n```\n\n```bash\ncat dns-result.txt\n```",
+      "title_vi": "Kiểm tra phân giải tên máy",
+      "task": "Thực hiện hướng dẫn: Test Host Name Resolution",
+      "hint": "Chạy lệnh: getent hosts localhost",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/dns-result.txt && awk '{print $1}' /home/labex/project/network-lab/dns-result.txt | grep -Eq \"^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$\""
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra cấu hình bộ phân giải và chuyển tên máy thành địa chỉ.\n\nXem tệp phân giải mà các ứng dụng Linux tiêu chuẩn sử dụng:\n\n```bash\ncat /etc/resolv.conf\n```\n\nNó thường chứa một hoặc nhiều dòng `nameserver`. Trên máy dùng systemd-resolved, địa chỉ có thể chỉ bộ phân giải trung gian cục bộ thay vì trực tiếp một máy chủ DNS bên ngoài.\n\nPhân giải tên cục bộ qua cấu hình dịch vụ tên đầy đủ của hệ thống:\n\n```bash\ngetent hosts localhost\n```\n\n`getent` tuân theo `/etc/nsswitch.conf` nên có thể kết hợp `/etc/hosts`, DNS và những nguồn đã cấu hình khác. Phân giải tên bên ngoài và yêu cầu địa chỉ socket IPv4:\n\n```bash\ngetent ahostsv4 example.com\n```\n\nNếu ping IP thành công nhưng tra cứu này thất bại, hãy tập trung vào cấu hình bộ phân giải hoặc khả năng kết nối DNS. Lưu bản ghi IPv4 đầu tiên đã phân giải:\n\n```bash\ngetent ahostsv4 example.com | head -n 1 > dns-result.txt\n```\n\n```bash\ncat dns-result.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra phân giải tên máy",
+      "hint_vi": "Chạy lệnh: getent hosts localhost"
+    },
+    {
+      "id": "source-725414-section-6-v3",
+      "title": "Inspect a Listening Port and HTTP Response",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will connect a listening TCP socket to its owning process and test the application protocol.\n\nThe prepared demo service listens on loopback port `8088`. Use `ss` to inspect listening TCP sockets. The options `-l`, `-t`, `-n`, and `-p` mean listening, TCP, numeric addresses, and process information:\n\n```bash\nsudo ss -ltnp | grep ':8088'\n```\n\nLook for `127.0.0.1:8088`. Binding to loopback means the service is reachable only from this host.\n\nCheck the service process behind the socket:\n\n```bash\nsystemctl status labex-network-demo.service --no-pager\n```\n\nUse `curl -i` to display the HTTP response headers and body:\n\n```bash\ncurl -i http://127.0.0.1:8088/\n```\n\nAn HTTP `200 OK` status proves more than an open port: the application accepted an HTTP request and returned content. Save only the response body with silent mode `-s`:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\ncurl -s http://127.0.0.1:8088/ > http-response.html\n```\n\n```bash\ngrep 'network demo ready' http-response.html\n```",
+      "title_vi": "Kiểm tra cổng lắng nghe và phản hồi HTTP",
+      "task": "Thực hiện hướng dẫn: Inspect a Listening Port and HTTP Response",
+      "hint": "Chạy lệnh: sudo ss -ltnp | grep ':8088'",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ liên hệ socket TCP lắng nghe với tiến trình sở hữu và kiểm tra giao thức ứng dụng.\n\nDịch vụ mẫu đã chuẩn bị lắng nghe trên cổng loopback `8088`. Dùng `ss` kiểm tra socket TCP lắng nghe. Các tùy chọn `-l`, `-t`, `-n` và `-p` nghĩa là lắng nghe, TCP, địa chỉ số và thông tin tiến trình:\n\n```bash\nsudo ss -ltnp | grep ':8088'\n```\n\nTìm `127.0.0.1:8088`. Bind vào loopback nghĩa là chỉ có thể truy cập dịch vụ từ máy này.\n\nKiểm tra tiến trình dịch vụ phía sau socket:\n\n```bash\nsystemctl status labex-network-demo.service --no-pager\n```\n\nDùng `curl -i` để hiển thị header và nội dung phản hồi HTTP:\n\n```bash\ncurl -i http://127.0.0.1:8088/\n```\n\nTrạng thái HTTP `200 OK` chứng minh nhiều hơn một cổng mở: ứng dụng đã chấp nhận yêu cầu HTTP và trả nội dung. Chỉ lưu nội dung phản hồi bằng chế độ im lặng `-s`:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\ncurl -s http://127.0.0.1:8088/ > http-response.html\n```\n\n```bash\ngrep 'network demo ready' http-response.html\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra cổng lắng nghe và phản hồi HTTP",
+      "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'"
+    },
+    {
+      "id": "source-725414-section-7-v3",
+      "title": "Preserve Access and Enable UFW",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect UFW state, preserve remote administration access, allow the practice service port, and enable the firewall.\n\nUFW is a front end for Linux packet-filtering rules. Inspect its current state:\n\n```bash\nsudo ufw status verbose\n```\n\nThe setup leaves UFW inactive with a clean rule set. Before enabling any host firewall remotely, allow the management path you depend on. This VM uses TCP port `22` for SSH:\n\n```bash\nsudo ufw allow 22/tcp\n```\n\nNow allow inbound TCP traffic to the practice service port:\n\n```bash\nsudo ufw allow 8088/tcp\n```\n\nReview the prepared changes before activation:\n\n```bash\nsudo ufw show added\n```\n\nEnable UFW without an interactive confirmation prompt:\n\n```bash\nsudo ufw --force enable\n```\n\nConfirm that the firewall is active and both allowances are present:\n\n```bash\nsudo ufw status verbose\n```\n\nThe service is bound to loopback, so test it locally after the firewall change:\n\n```bash\ncurl -fsS http://127.0.0.1:8088/\n```\n\nSave the active status as an observable result:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\nsudo ufw status verbose > firewall-status.txt\n```\n\n```bash\ncat firewall-status.txt\n```\n\nThe order matters: preserve the administration path, add required service rules, enable the firewall, and immediately verify both policy and application reachability. Production hosts may use a different SSH port, so confirm the real management path instead of assuming port `22`.",
+      "title_vi": "Giữ đường truy cập và bật UFW",
+      "task": "Thực hiện hướng dẫn: Preserve Access and Enable UFW",
+      "hint": "Chạy lệnh: sudo ufw status verbose",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "sudo -n ufw status | grep -q \"^Status: active\" && sudo -n ufw status | grep -Eq \"^22/tcp[[:space:]].*ALLOW\" && sudo -n ufw status | grep -Eq \"^8088/tcp[[:space:]].*ALLOW\" && grep -q \"^Status: active\" /home/labex/project/network-lab/firewall-status.txt && curl -fsS http://127.0.0.1:8088/ | grep -Fq \"network demo ready\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+22/tcp\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+8088/tcp\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+--force\\s+enable\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra trạng thái UFW, giữ đường quản trị từ xa, cho phép cổng dịch vụ thực hành và bật firewall.\n\nUFW là giao diện cho quy tắc lọc gói Linux. Kiểm tra trạng thái hiện tại:\n\n```bash\nsudo ufw status verbose\n```\n\nThiết lập ban đầu để UFW không hoạt động với bộ quy tắc sạch. Trước khi bật bất kỳ firewall máy nào từ xa, hãy cho phép đường quản trị mà bạn phụ thuộc. VM này dùng cổng TCP `22` cho SSH:\n\n```bash\nsudo ufw allow 22/tcp\n```\n\nBây giờ cho phép lưu lượng TCP đi vào cổng dịch vụ thực hành:\n\n```bash\nsudo ufw allow 8088/tcp\n```\n\nXem lại các thay đổi đã chuẩn bị trước khi kích hoạt:\n\n```bash\nsudo ufw show added\n```\n\nBật UFW mà không có lời nhắc xác nhận tương tác:\n\n```bash\nsudo ufw --force enable\n```\n\nXác nhận firewall hoạt động và cả hai quyền cho phép đều có:\n\n```bash\nsudo ufw status verbose\n```\n\nDịch vụ được bind vào loopback nên hãy kiểm tra cục bộ sau thay đổi firewall:\n\n```bash\ncurl -fsS http://127.0.0.1:8088/\n```\n\nLưu trạng thái hoạt động làm kết quả có thể quan sát:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\nsudo ufw status verbose > firewall-status.txt\n```\n\n```bash\ncat firewall-status.txt\n```\n\nThứ tự quan trọng: giữ đường quản trị, thêm quy tắc dịch vụ cần thiết, bật firewall và xác minh ngay cả chính sách lẫn khả năng truy cập ứng dụng. Máy sản xuất có thể dùng cổng SSH khác nên hãy xác nhận đường quản trị thực tế thay vì mặc định cổng `22`.",
+      "task_vi": "Thực hiện hướng dẫn: Giữ đường truy cập và bật UFW",
+      "hint_vi": "Chạy lệnh: sudo ufw status verbose"
+    },
+    {
+      "id": "section-8",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You followed a structured Linux network diagnostic chain: host identity, interfaces and IP addresses, route selection, reachability, name resolution, listening sockets, and HTTP response. You learned that each layer answers a different question and that failure at one boundary narrows the next investigation.\n\nYou also preserved SSH access, allowed a practice service port, enabled UFW, and verified both the active policy and the application's response. These habits prepare you to diagnose and secure a network service without making broad, disruptive changes.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã theo một chuỗi chẩn đoán mạng Linux có cấu trúc: danh tính máy, giao diện và địa chỉ IP, lựa chọn tuyến, khả năng kết nối, phân giải tên, socket lắng nghe và phản hồi HTTP. Bạn hiểu mỗi lớp trả lời một câu hỏi khác nhau và lỗi tại một ranh giới giúp thu hẹp điều tra tiếp theo.\n\nBạn cũng giữ đường SSH, cho phép một cổng dịch vụ thực hành, bật UFW và xác minh cả chính sách đang hoạt động lẫn phản hồi ứng dụng. Những thói quen này chuẩn bị cho bạn chẩn đoán và bảo vệ dịch vụ mạng mà không thay đổi rộng gây gián đoạn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725414-section-1-v3",
+      "title": "Identify the Host",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect the host name and the local name records that help programs identify this machine.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\nPrint the current host name:\n\n```bash\nhostname\n```\n\nDisplay the static, transient, and operating-system identity known to systemd:\n\n```bash\nhostnamectl\n```\n\n`Static hostname` is the configured name. In cloud training machines, the transient name may be assigned during boot.\n\nInspect local host mappings:\n\n```bash\ncat /etc/hosts\n```\n\nThe loopback names `localhost`, `127.0.0.1`, and `::1` identify this same host without external networking. Show the host's assigned IP addresses in compact form:\n\n```bash\nhostname -I\n```\n\nSave the host name and address list:\n\n```bash\nprintf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt\n```\n\n```bash\ncat host-identity.txt\n```",
+      "title_vi": "Nhận diện máy",
+      "task": "Thực hiện hướng dẫn: Identify the Host",
+      "hint": "Chạy lệnh: cd /home/labex/project/network-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra tên máy và bản ghi tên cục bộ giúp chương trình nhận diện máy này.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\nIn tên máy hiện tại:\n\n```bash\nhostname\n```\n\nHiển thị danh tính tĩnh, tạm thời và hệ điều hành mà systemd biết:\n\n```bash\nhostnamectl\n```\n\n`Static hostname` là tên được cấu hình. Trong máy đào tạo đám mây, tên tạm thời có thể được gán khi khởi động.\n\nKiểm tra ánh xạ máy cục bộ:\n\n```bash\ncat /etc/hosts\n```\n\nCác tên loopback `localhost`, `127.0.0.1` và `::1` nhận diện chính máy này mà không cần mạng ngoài. Hiển thị ngắn gọn các địa chỉ IP đã gán cho máy:\n\n```bash\nhostname -I\n```\n\nLưu tên máy và danh sách địa chỉ:\n\n```bash\nprintf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt\n```\n\n```bash\ncat host-identity.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Nhận diện máy",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab"
+    },
+    {
+      "id": "source-725414-section-2-v3",
+      "title": "Inspect Interfaces and IP Addresses",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify network interfaces, link state, IPv4 addresses, prefixes, and address scope.\n\nUse the brief link view:\n\n```bash\nip -brief link\n```\n\n`lo` is the loopback interface. Another interface, commonly named `eth0` or `ens...`, connects the VM to its network. `UP` means the interface is administratively enabled.\n\nDisplay addresses in compact form:\n\n```bash\nip -brief address\n```\n\nAn address such as `192.0.2.10/24` combines an IPv4 address and prefix length. The prefix describes which leading bits identify the local network.\n\nInspect loopback in full detail:\n\n```bash\nip address show dev lo\n```\n\nThe IPv4 address `127.0.0.1/8` has `scope host`, so it is valid only inside this host. Find the interface used by the default route:\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Primary interface: $primary_if\"\n```\n\n```bash\nip address show dev \"$primary_if\"\n```\n\nThe `ifconfig` command is an older interface tool that still appears in existing runbooks and troubleshooting instructions. Compare its output with the modern `ip` output you just read:\n\n```bash\nifconfig\n```\n\nSave the legacy view as well:\n\n```bash\nifconfig > ifconfig-addresses.txt\n```\n\nSave a brief interface snapshot:\n\n```bash\nip -brief address > interface-addresses.txt\n```\n\n```bash\ncat interface-addresses.txt\n```",
+      "title_vi": "Kiểm tra giao diện và địa chỉ IP",
+      "task": "Thực hiện hướng dẫn: Inspect Interfaces and IP Addresses",
+      "hint": "Chạy lệnh: ip -brief link",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/interface-addresses.txt && grep -Eq \"^lo[[:space:]]\" /home/labex/project/network-lab/interface-addresses.txt && test -s /home/labex/project/network-lab/ifconfig-addresses.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ nhận diện giao diện mạng, trạng thái liên kết, địa chỉ IPv4, độ dài tiền tố và phạm vi địa chỉ.\n\nDùng chế độ xem liên kết ngắn gọn:\n\n```bash\nip -brief link\n```\n\n`lo` là giao diện loopback. Một giao diện khác, thường tên `eth0` hoặc `ens...`, nối VM với mạng. `UP` nghĩa là giao diện được bật về mặt quản trị.\n\nHiển thị địa chỉ dạng ngắn gọn:\n\n```bash\nip -brief address\n```\n\nĐịa chỉ như `192.0.2.10/24` kết hợp địa chỉ IPv4 và độ dài tiền tố. Tiền tố mô tả những bit đầu nào xác định mạng cục bộ.\n\nKiểm tra đầy đủ loopback:\n\n```bash\nip address show dev lo\n```\n\nĐịa chỉ IPv4 `127.0.0.1/8` có `scope host` nên chỉ hợp lệ bên trong máy này. Tìm giao diện được tuyến mặc định sử dụng:\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Primary interface: $primary_if\"\n```\n\n```bash\nip address show dev \"$primary_if\"\n```\n\nLệnh `ifconfig` là công cụ giao diện cũ vẫn xuất hiện trong quy trình vận hành và hướng dẫn xử lý sự cố hiện có. So sánh đầu ra của nó với đầu ra `ip` hiện đại bạn vừa đọc:\n\n```bash\nifconfig\n```\n\nLưu cả góc nhìn kiểu cũ:\n\n```bash\nifconfig > ifconfig-addresses.txt\n```\n\nLưu ảnh chụp giao diện ngắn gọn:\n\n```bash\nip -brief address > interface-addresses.txt\n```\n\n```bash\ncat interface-addresses.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra giao diện và địa chỉ IP",
+      "hint_vi": "Chạy lệnh: ip -brief link"
+    },
+    {
+      "id": "source-725414-section-3-v3",
+      "title": "Read the Routing Table",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify the default gateway and ask Linux which route it would use for a destination.\n\nDisplay the main routing table:\n\n```bash\nip route\n```\n\nConnected routes describe directly attached networks. A line beginning with `default via` is used when no more specific route matches.\n\nAsk the kernel how it would reach a public destination. This command reports the selected gateway, interface, and source address without sending a packet:\n\n```bash\nip route get 1.1.1.1\n```\n\nExtract the default gateway and interface:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Default gateway: $gateway via $primary_if\"\n```\n\nSave the route summary:\n\n```bash\nprintf 'gateway=%s\\ninterface=%s\\n' \"$gateway\" \"$primary_if\" > route-summary.txt\n```\n\n```bash\ncat route-summary.txt\n```",
+      "title_vi": "Đọc bảng định tuyến",
+      "task": "Thực hiện hướng dẫn: Read the Routing Table",
+      "hint": "Chạy lệnh: ip route",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/route-summary.txt && gateway=$(ip route show default | awk 'NR==1 {print $3}') && interface=$(ip route show default | awk 'NR==1 {print $5}') && test -n \"$gateway\" && cmp -s /home/labex/project/network-lab/route-summary.txt <(printf \"gateway=%s\\ninterface=%s\\n\" \"$gateway\" \"$interface\")"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ xác định gateway mặc định và hỏi Linux sẽ dùng tuyến nào cho một đích.\n\nHiển thị bảng định tuyến chính:\n\n```bash\nip route\n```\n\nTuyến kết nối mô tả những mạng gắn trực tiếp. Dòng bắt đầu bằng `default via` được dùng khi không có tuyến cụ thể hơn khớp.\n\nHỏi kernel cách đi tới một đích công cộng. Lệnh này báo gateway, giao diện và địa chỉ nguồn được chọn mà không gửi gói tin:\n\n```bash\nip route get 1.1.1.1\n```\n\nTrích xuất gateway và giao diện mặc định:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Default gateway: $gateway via $primary_if\"\n```\n\nLưu tóm tắt tuyến:\n\n```bash\nprintf 'gateway=%s\\ninterface=%s\\n' \"$gateway\" \"$primary_if\" > route-summary.txt\n```\n\n```bash\ncat route-summary.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Đọc bảng định tuyến",
+      "hint_vi": "Chạy lệnh: ip route"
+    },
+    {
+      "id": "source-725414-section-4-v3",
+      "title": "Test Network Reachability",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `ping` to test increasingly distant boundaries while recognizing that some networks block diagnostic packets.\n\nStart with loopback. The options `-c 2` send two requests and `-W 2` wait at most two seconds for each reply:\n\n```bash\nping -c 2 -W 2 127.0.0.1\n```\n\nA successful loopback test proves the local IP stack responds. Next, retrieve and test the default gateway:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nping -c 2 -W 2 \"$gateway\" || echo \"The gateway does not answer ICMP echo requests\"\n```\n\nThe fallback message matters because a router can forward traffic while refusing ping. Test a public IP address without relying on DNS:\n\n```bash\nping -c 2 -W 2 1.1.1.1 || echo \"Public ICMP is blocked or unavailable\"\n```\n\nSave a stable local connectivity result rather than depending on external policy:\n\n```bash\nping -c 1 -W 2 127.0.0.1 > loopback-ping.txt\n```\n\n```bash\ntail -n 2 loopback-ping.txt\n```",
+      "title_vi": "Kiểm tra khả năng kết nối mạng",
+      "task": "Thực hiện hướng dẫn: Test Network Reachability",
+      "hint": "Chạy lệnh: ping -c 2 -W 2 127.0.0.1",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -Eq \"1 packets transmitted, 1 received\" /home/labex/project/network-lab/loopback-ping.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `ping` để kiểm tra các ranh giới xa dần, đồng thời hiểu rằng một số mạng chặn gói chẩn đoán.\n\nBắt đầu với loopback. Các tùy chọn `-c 2` gửi hai yêu cầu và `-W 2` chờ tối đa hai giây cho mỗi phản hồi:\n\n```bash\nping -c 2 -W 2 127.0.0.1\n```\n\nKiểm tra loopback thành công chứng minh ngăn xếp IP cục bộ phản hồi. Tiếp theo, lấy và kiểm tra gateway mặc định:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nping -c 2 -W 2 \"$gateway\" || echo \"The gateway does not answer ICMP echo requests\"\n```\n\nThông báo dự phòng có ý nghĩa vì router có thể chuyển tiếp lưu lượng nhưng từ chối ping. Kiểm tra một địa chỉ IP công cộng mà không phụ thuộc DNS:\n\n```bash\nping -c 2 -W 2 1.1.1.1 || echo \"Public ICMP is blocked or unavailable\"\n```\n\nLưu kết quả kết nối cục bộ ổn định thay vì phụ thuộc chính sách bên ngoài:\n\n```bash\nping -c 1 -W 2 127.0.0.1 > loopback-ping.txt\n```\n\n```bash\ntail -n 2 loopback-ping.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra khả năng kết nối mạng",
+      "hint_vi": "Chạy lệnh: ping -c 2 -W 2 127.0.0.1"
+    },
+    {
+      "id": "source-725414-section-5-v3",
+      "title": "Test Host Name Resolution",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect resolver configuration and translate host names into addresses.\n\nView the resolver file used by standard Linux applications:\n\n```bash\ncat /etc/resolv.conf\n```\n\nIt commonly contains one or more `nameserver` lines. On systemd-resolved hosts, the address can identify a local stub resolver rather than an external DNS server directly.\n\nResolve a local name through the system's complete name-service configuration:\n\n```bash\ngetent hosts localhost\n```\n\n`getent` follows `/etc/nsswitch.conf`, so it can combine `/etc/hosts`, DNS, and other configured sources. Resolve an external name and request IPv4 socket addresses:\n\n```bash\ngetent ahostsv4 example.com\n```\n\nIf IP ping succeeds but this lookup fails, focus on resolver configuration or DNS reachability. Save the first resolved IPv4 record:\n\n```bash\ngetent ahostsv4 example.com | head -n 1 > dns-result.txt\n```\n\n```bash\ncat dns-result.txt\n```",
+      "title_vi": "Kiểm tra phân giải tên máy",
+      "task": "Thực hiện hướng dẫn: Test Host Name Resolution",
+      "hint": "Chạy lệnh: getent hosts localhost",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/dns-result.txt && awk '{print $1}' /home/labex/project/network-lab/dns-result.txt | grep -Eq \"^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$\""
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra cấu hình bộ phân giải và chuyển tên máy thành địa chỉ.\n\nXem tệp phân giải mà các ứng dụng Linux tiêu chuẩn sử dụng:\n\n```bash\ncat /etc/resolv.conf\n```\n\nNó thường chứa một hoặc nhiều dòng `nameserver`. Trên máy dùng systemd-resolved, địa chỉ có thể chỉ bộ phân giải trung gian cục bộ thay vì trực tiếp một máy chủ DNS bên ngoài.\n\nPhân giải tên cục bộ qua cấu hình dịch vụ tên đầy đủ của hệ thống:\n\n```bash\ngetent hosts localhost\n```\n\n`getent` tuân theo `/etc/nsswitch.conf` nên có thể kết hợp `/etc/hosts`, DNS và những nguồn đã cấu hình khác. Phân giải tên bên ngoài và yêu cầu địa chỉ socket IPv4:\n\n```bash\ngetent ahostsv4 example.com\n```\n\nNếu ping IP thành công nhưng tra cứu này thất bại, hãy tập trung vào cấu hình bộ phân giải hoặc khả năng kết nối DNS. Lưu bản ghi IPv4 đầu tiên đã phân giải:\n\n```bash\ngetent ahostsv4 example.com | head -n 1 > dns-result.txt\n```\n\n```bash\ncat dns-result.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra phân giải tên máy",
+      "hint_vi": "Chạy lệnh: getent hosts localhost"
+    },
+    {
+      "id": "source-725414-section-6-v3",
+      "title": "Inspect a Listening Port and HTTP Response",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will connect a listening TCP socket to its owning process and test the application protocol.\n\nThe prepared demo service listens on loopback port `8088`. Use `ss` to inspect listening TCP sockets. The options `-l`, `-t`, `-n`, and `-p` mean listening, TCP, numeric addresses, and process information:\n\n```bash\nsudo ss -ltnp | grep ':8088'\n```\n\nLook for `127.0.0.1:8088`. Binding to loopback means the service is reachable only from this host.\n\nCheck the service process behind the socket:\n\n```bash\nsystemctl status labex-network-demo.service --no-pager\n```\n\nUse `curl -i` to display the HTTP response headers and body:\n\n```bash\ncurl -i http://127.0.0.1:8088/\n```\n\nAn HTTP `200 OK` status proves more than an open port: the application accepted an HTTP request and returned content. Save only the response body with silent mode `-s`:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\ncurl -s http://127.0.0.1:8088/ > http-response.html\n```\n\n```bash\ngrep 'network demo ready' http-response.html\n```",
+      "title_vi": "Kiểm tra cổng lắng nghe và phản hồi HTTP",
+      "task": "Thực hiện hướng dẫn: Inspect a Listening Port and HTTP Response",
+      "hint": "Chạy lệnh: sudo ss -ltnp | grep ':8088'",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ liên hệ socket TCP lắng nghe với tiến trình sở hữu và kiểm tra giao thức ứng dụng.\n\nDịch vụ mẫu đã chuẩn bị lắng nghe trên cổng loopback `8088`. Dùng `ss` kiểm tra socket TCP lắng nghe. Các tùy chọn `-l`, `-t`, `-n` và `-p` nghĩa là lắng nghe, TCP, địa chỉ số và thông tin tiến trình:\n\n```bash\nsudo ss -ltnp | grep ':8088'\n```\n\nTìm `127.0.0.1:8088`. Bind vào loopback nghĩa là chỉ có thể truy cập dịch vụ từ máy này.\n\nKiểm tra tiến trình dịch vụ phía sau socket:\n\n```bash\nsystemctl status labex-network-demo.service --no-pager\n```\n\nDùng `curl -i` để hiển thị header và nội dung phản hồi HTTP:\n\n```bash\ncurl -i http://127.0.0.1:8088/\n```\n\nTrạng thái HTTP `200 OK` chứng minh nhiều hơn một cổng mở: ứng dụng đã chấp nhận yêu cầu HTTP và trả nội dung. Chỉ lưu nội dung phản hồi bằng chế độ im lặng `-s`:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\ncurl -s http://127.0.0.1:8088/ > http-response.html\n```\n\n```bash\ngrep 'network demo ready' http-response.html\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra cổng lắng nghe và phản hồi HTTP",
+      "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'"
+    },
+    {
+      "id": "source-725414-section-7-v3",
+      "title": "Preserve Access and Enable UFW",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect UFW state, preserve remote administration access, allow the practice service port, and enable the firewall.\n\nUFW is a front end for Linux packet-filtering rules. Inspect its current state:\n\n```bash\nsudo ufw status verbose\n```\n\nThe setup leaves UFW inactive with a clean rule set. Before enabling any host firewall remotely, allow the management path you depend on. This VM uses TCP port `22` for SSH:\n\n```bash\nsudo ufw allow 22/tcp\n```\n\nNow allow inbound TCP traffic to the practice service port:\n\n```bash\nsudo ufw allow 8088/tcp\n```\n\nReview the prepared changes before activation:\n\n```bash\nsudo ufw show added\n```\n\nEnable UFW without an interactive confirmation prompt:\n\n```bash\nsudo ufw --force enable\n```\n\nConfirm that the firewall is active and both allowances are present:\n\n```bash\nsudo ufw status verbose\n```\n\nThe service is bound to loopback, so test it locally after the firewall change:\n\n```bash\ncurl -fsS http://127.0.0.1:8088/\n```\n\nSave the active status as an observable result:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\nsudo ufw status verbose > firewall-status.txt\n```\n\n```bash\ncat firewall-status.txt\n```\n\nThe order matters: preserve the administration path, add required service rules, enable the firewall, and immediately verify both policy and application reachability. Production hosts may use a different SSH port, so confirm the real management path instead of assuming port `22`.",
+      "title_vi": "Giữ đường truy cập và bật UFW",
+      "task": "Thực hiện hướng dẫn: Preserve Access and Enable UFW",
+      "hint": "Chạy lệnh: sudo ufw status verbose",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "sudo -n ufw status | grep -q \"^Status: active\" && sudo -n ufw status | grep -Eq \"^22/tcp[[:space:]].*ALLOW\" && sudo -n ufw status | grep -Eq \"^8088/tcp[[:space:]].*ALLOW\" && grep -q \"^Status: active\" /home/labex/project/network-lab/firewall-status.txt && curl -fsS http://127.0.0.1:8088/ | grep -Fq \"network demo ready\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+22/tcp\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+8088/tcp\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+--force\\s+enable\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra trạng thái UFW, giữ đường quản trị từ xa, cho phép cổng dịch vụ thực hành và bật firewall.\n\nUFW là giao diện cho quy tắc lọc gói Linux. Kiểm tra trạng thái hiện tại:\n\n```bash\nsudo ufw status verbose\n```\n\nThiết lập ban đầu để UFW không hoạt động với bộ quy tắc sạch. Trước khi bật bất kỳ firewall máy nào từ xa, hãy cho phép đường quản trị mà bạn phụ thuộc. VM này dùng cổng TCP `22` cho SSH:\n\n```bash\nsudo ufw allow 22/tcp\n```\n\nBây giờ cho phép lưu lượng TCP đi vào cổng dịch vụ thực hành:\n\n```bash\nsudo ufw allow 8088/tcp\n```\n\nXem lại các thay đổi đã chuẩn bị trước khi kích hoạt:\n\n```bash\nsudo ufw show added\n```\n\nBật UFW mà không có lời nhắc xác nhận tương tác:\n\n```bash\nsudo ufw --force enable\n```\n\nXác nhận firewall hoạt động và cả hai quyền cho phép đều có:\n\n```bash\nsudo ufw status verbose\n```\n\nDịch vụ được bind vào loopback nên hãy kiểm tra cục bộ sau thay đổi firewall:\n\n```bash\ncurl -fsS http://127.0.0.1:8088/\n```\n\nLưu trạng thái hoạt động làm kết quả có thể quan sát:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\nsudo ufw status verbose > firewall-status.txt\n```\n\n```bash\ncat firewall-status.txt\n```\n\nThứ tự quan trọng: giữ đường quản trị, thêm quy tắc dịch vụ cần thiết, bật firewall và xác minh ngay cả chính sách lẫn khả năng truy cập ứng dụng. Máy sản xuất có thể dùng cổng SSH khác nên hãy xác nhận đường quản trị thực tế thay vì mặc định cổng `22`.",
+      "task_vi": "Thực hiện hướng dẫn: Giữ đường truy cập và bật UFW",
+      "hint_vi": "Chạy lệnh: sudo ufw status verbose"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-linux-networking-and-firewall-basics-725414.json"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "docker-fundamentals",
+  "course_id": "docker-for-beginners",
+  "title": "Docker Containers & Images",
+  "difficulty": "Beginner",
+  "estimated_time": "30 mins",
+  "overview": "Hiểu kiến trúc Container, làm việc với Docker Hub, tải images và chạy container đầu tiên với port forwarding.",
+  "steps": [
+    {
+      "id": "doc-1",
+      "title": "1. Khái niệm Container vs Virtual Machine",
+      "content": "### Containerization là gì?\n\nContainer đóng gói ứng dụng cùng mọi thư viện, dependency cần thiết để ứng dụng chạy đồng nhất trên mọi môi trường.\nKhác với máy ảo (VM) nặng nề phải có cả Guest OS, Container dùng chung Kernel của máy host, giúp khởi động tính bằng mili-giây và tiêu tốn cực ít RAM.\n\nKiểm tra Docker đã cài đặt:\n```bash\ndocker --version\n```\n",
+      "task": "Kiểm tra phiên bản docker hoặc tạo thư mục `~/docker_lab`",
+      "verify_command": "test -d ~/docker_lab || docker --version",
+      "hint": "Gõ `mkdir -p ~/docker_lab`",
+      "title_vi": "1. Khái niệm Container vs Virtual Machine",
+      "content_vi": "### Containerization là gì?\n\nContainer đóng gói ứng dụng cùng mọi thư viện, dependency cần thiết để ứng dụng chạy đồng nhất trên mọi môi trường.\nKhác với máy ảo (VM) nặng nề phải có cả Guest OS, Container dùng chung Kernel của máy host, giúp khởi động tính bằng mili-giây và tiêu tốn cực ít RAM.\n\nKiểm tra Docker đã cài đặt:\n```bash\ndocker --version\n```\n",
+      "task_vi": "Kiểm tra phiên bản docker hoặc tạo thư mục `~/docker_lab`",
+      "hint_vi": "Gõ `mkdir -p ~/docker_lab`"
+    },
+    {
+      "id": "doc-2",
+      "title": "2. Viết Dockerfile cơ bản",
+      "content": "### Tạo Dockerfile đầu tiên\n\nDockerfile là tập hợp các chỉ thị để Docker build thành một Image:\n- `FROM`: Image nền (ví dụ `alpine`, `ubuntu`, `node:18`).\n- `WORKDIR`: Thư mục làm việc bên trong container.\n- `COPY`: Sao chép file từ máy host vào container.\n- `RUN`: Chạy lệnh cài đặt khi build image.\n- `CMD`: Lệnh mặc định khi container khởi chạy.\n\nTạo file Dockerfile mẫu:\n```bash\nmkdir -p ~/docker_lab\ncat << 'EOF' > ~/docker_lab/Dockerfile\nFROM alpine:latest\nRUN echo \"Building LabEx Container\"\nCMD [\"echo\", \"Hello from Docker on LabEx!\"]\nEOF\n```\n",
+      "task": "Tạo file `~/docker_lab/Dockerfile` chứa chỉ thị `FROM alpine`",
+      "verify_command": "test -f ~/docker_lab/Dockerfile && grep -qi 'FROM alpine' ~/docker_lab/Dockerfile",
+      "hint": "Tạo file `~/docker_lab/Dockerfile` với nội dung `FROM alpine:latest`",
+      "title_vi": "2. Viết Dockerfile cơ bản",
+      "content_vi": "### Tạo Dockerfile đầu tiên\n\nDockerfile là tập hợp các chỉ thị để Docker build thành một Image:\n- `FROM`: Image nền (ví dụ `alpine`, `ubuntu`, `node:18`).\n- `WORKDIR`: Thư mục làm việc bên trong container.\n- `COPY`: Sao chép file từ máy host vào container.\n- `RUN`: Chạy lệnh cài đặt khi build image.\n- `CMD`: Lệnh mặc định khi container khởi chạy.\n\nTạo file Dockerfile mẫu:\n```bash\nmkdir -p ~/docker_lab\ncat << 'EOF' > ~/docker_lab/Dockerfile\nFROM alpine:latest\nRUN echo \"Building LabEx Container\"\nCMD [\"echo\", \"Hello from Docker on LabEx!\"]\nEOF\n```\n",
+      "task_vi": "Tạo file `~/docker_lab/Dockerfile` chứa chỉ thị `FROM alpine`",
+      "hint_vi": "Tạo file `~/docker_lab/Dockerfile` với nội dung `FROM alpine:latest`"
+    }
+  ],
+  "title_vi": "Docker Containers & Images"
+}

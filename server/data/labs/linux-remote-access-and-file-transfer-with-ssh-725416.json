@@ -1,0 +1,345 @@
+{
+  "id": "linux-remote-access-and-file-transfer-with-ssh-725416",
+  "course_id": "linux-for-noobs",
+  "order": 32,
+  "title": "Remote Access and File Transfer with SSH",
+  "title_vi": "Truy cập từ xa và truyền tệp bằng SSH",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "SSH provides encrypted command-line access to another Linux account, while SCP uses the same authentication and transport to copy files. A safe first connection verifies the server's host key; later c",
+  "source_url": "https://labex.io/tutorials/linux-remote-access-and-file-transfer-with-ssh-725416",
+  "source_lab_id": 725416,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "SSH provides encrypted command-line access to another Linux account, while SCP uses the same authentication and transport to copy files. A safe first connection verifies the server's host key; later connections can use a personal key instead of repeatedly sending an account password.\n\nThis lab uses an isolated `remoteuser` account on `localhost` as the remote host. Although both accounts share one training VM, the SSH protocol, authentication prompts, remote home directory, and file transfers behave like a basic two-host workflow. The default `labex` SSH access path is not changed.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "SSH cung cấp truy cập dòng lệnh được mã hóa vào tài khoản Linux khác, còn SCP sử dụng cùng cơ chế xác thực và truyền tải để sao chép tệp. Kết nối đầu tiên an toàn cần xác minh khóa máy chủ của máy đích; các kết nối sau có thể dùng khóa cá nhân thay cho việc gửi mật khẩu tài khoản nhiều lần.\n\nBài này dùng tài khoản `remoteuser` biệt lập trên `localhost` làm máy đích từ xa. Dù hai tài khoản cùng nằm trên một VM đào tạo, giao thức SSH, lời nhắc xác thực, thư mục home từ xa và việc truyền tệp hoạt động như quy trình cơ bản giữa hai máy. Đường truy cập SSH mặc định của `labex` không bị thay đổi."
+    },
+    {
+      "id": "source-725416-section-1-v3",
+      "title": "Inspect the SSH Target",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify the SSH client, resolve the target name, confirm a listening server, and preview its public host key.\n\nEnter the local workspace:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nDisplay the OpenSSH client version. This program writes its version to standard error, so `2>&1` combines it with standard output:\n\n```bash\nssh -V 2>&1\n```\n\nResolve the local target through the system name-service configuration:\n\n```bash\ngetent hosts localhost\n```\n\nConfirm that an SSH server listens on TCP port 22:\n\n```bash\nsudo ss -ltnp | grep ':22'\n```\n\n`ssh-keyscan` retrieves public host keys without logging in. Pipe the ED25519 key to `ssh-keygen -lf -` to display its fingerprint:\n\n```bash\nssh-keyscan -t ed25519 localhost 2>/dev/null | ssh-keygen -lf -\n```\n\nIn a real environment, compare this fingerprint with a trusted value from the administrator before accepting it. Save a compact target summary:\n\n```bash\nprintf 'target=localhost\\nport=22\\nuser=remoteuser\\n' > ssh-target.txt\n```\n\n```bash\ncat ssh-target.txt\n```",
+      "title_vi": "Kiểm tra đích SSH",
+      "task": "Thực hiện hướng dẫn: Inspect the SSH Target",
+      "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ nhận diện SSH client, phân giải tên đích, xác nhận máy chủ đang lắng nghe và xem trước khóa máy chủ công khai của nó.\n\nVào thư mục làm việc cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nHiển thị phiên bản OpenSSH client. Chương trình này ghi phiên bản vào lỗi chuẩn nên `2>&1` gộp nó với đầu ra chuẩn:\n\n```bash\nssh -V 2>&1\n```\n\nPhân giải đích cục bộ qua cấu hình dịch vụ tên của hệ thống:\n\n```bash\ngetent hosts localhost\n```\n\nXác nhận máy chủ SSH lắng nghe trên cổng TCP 22:\n\n```bash\nsudo ss -ltnp | grep ':22'\n```\n\n`ssh-keyscan` lấy khóa máy chủ công khai mà không đăng nhập. Chuyển khóa ED25519 qua đường ống tới `ssh-keygen -lf -` để hiển thị dấu vân tay:\n\n```bash\nssh-keyscan -t ed25519 localhost 2>/dev/null | ssh-keygen -lf -\n```\n\nTrong môi trường thực, so sánh dấu vân tay này với giá trị đáng tin do quản trị viên cung cấp trước khi chấp nhận. Lưu tóm tắt đích ngắn gọn:\n\n```bash\nprintf 'target=localhost\\nport=22\\nuser=remoteuser\\n' > ssh-target.txt\n```\n\n```bash\ncat ssh-target.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra đích SSH",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+    },
+    {
+      "id": "source-725416-section-2-v3",
+      "title": "Open Your First Remote Shell",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will verify a host key, authenticate with a password, inspect the remote account, and close the remote shell.\n\nConnect with the `user@host` form:\n\n```bash\nssh remoteuser@localhost\n```\n\nBecause setup removed any previous `localhost` host-key record, SSH asks whether you trust the displayed fingerprint. After comparing it with Step 1, type:\n\n```text\nyes\n```\n\nAt the password prompt, enter:\n\n```text\nRemoteLab123!\n```\n\nThe password is not displayed while you type. After login, the prompt belongs to `remoteuser`, not `labex`. Confirm the remote identity, host, and current directory:\n\n```bash\nwhoami\n```\n\n```bash\nhostname\n```\n\n```bash\npwd\n```\n\nCreate a remote marker in the remote account's home directory:\n\n```bash\nmkdir -p ~/ssh-lab\n```\n\n```bash\nprintf 'connected as %s\\n' \"$(whoami)\" > ~/ssh-lab/connected.txt\n```\n\nClose the remote shell and return to the local `labex` prompt:\n\n```bash\nexit\n```\n\nThe `exit` command ends only the remote shell; the local terminal remains open.",
+      "title_vi": "Mở shell từ xa đầu tiên",
+      "task": "Thực hiện hướng dẫn: Open Your First Remote Shell",
+      "hint": "Chạy lệnh: ssh remoteuser@localhost",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ xác minh khóa máy chủ, xác thực bằng mật khẩu, kiểm tra tài khoản từ xa và đóng shell từ xa.\n\nKết nối với dạng `user@host`:\n\n```bash\nssh remoteuser@localhost\n```\n\nVì thiết lập ban đầu đã xóa mọi bản ghi khóa máy chủ `localhost` trước đó, SSH hỏi bạn có tin dấu vân tay được hiển thị không. Sau khi so sánh với Bước 1, nhập:\n\n```text\nyes\n```\n\nTại lời nhắc mật khẩu, nhập:\n\n```text\nRemoteLab123!\n```\n\nMật khẩu không hiển thị khi gõ. Sau khi đăng nhập, dấu nhắc thuộc về `remoteuser`, không phải `labex`. Xác nhận danh tính từ xa, máy và thư mục hiện tại:\n\n```bash\nwhoami\n```\n\n```bash\nhostname\n```\n\n```bash\npwd\n```\n\nTạo dấu mốc từ xa trong thư mục home của tài khoản từ xa:\n\n```bash\nmkdir -p ~/ssh-lab\n```\n\n```bash\nprintf 'connected as %s\\n' \"$(whoami)\" > ~/ssh-lab/connected.txt\n```\n\nĐóng shell từ xa và trở về dấu nhắc `labex` cục bộ:\n\n```bash\nexit\n```\n\nLệnh `exit` chỉ kết thúc shell từ xa; terminal cục bộ vẫn mở.",
+      "task_vi": "Thực hiện hướng dẫn: Mở shell từ xa đầu tiên",
+      "hint_vi": "Chạy lệnh: ssh remoteuser@localhost"
+    },
+    {
+      "id": "source-725416-section-3-v3",
+      "title": "Run a Remote Command",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will run commands remotely without opening a long-lived interactive shell and save their output locally.\n\nReturn to the local workspace if needed:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nPlace a quoted command after the host. SSH runs it remotely and returns its output to your local terminal:\n\n```bash\nssh remoteuser@localhost 'whoami; uname -srm; uptime'\n```\n\nEnter `RemoteLab123!` when prompted. The semicolons separate commands interpreted by the remote shell.\n\nRun a second remote command and redirect the returned output into a local file:\n\n```bash\nssh remoteuser@localhost 'printf \"remote_user=%s\\nremote_home=%s\\n\" \"$(whoami)\" \"$HOME\"' > remote-context.txt\n```\n\nEnter the password again. The `>` redirection is handled by your local shell, so `remote-context.txt` is created in the local workspace:\n\n```bash\ncat remote-context.txt\n```\n\nThe file should identify `remoteuser` and `/home/remoteuser`.",
+      "title_vi": "Chạy một lệnh từ xa",
+      "task": "Thực hiện hướng dẫn: Run a Remote Command",
+      "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ chạy lệnh từ xa mà không mở shell tương tác kéo dài và lưu đầu ra của chúng ở cục bộ.\n\nTrở về thư mục làm việc cục bộ nếu cần:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nĐặt lệnh trong dấu nháy sau tên máy. SSH chạy nó từ xa và trả đầu ra về terminal cục bộ:\n\n```bash\nssh remoteuser@localhost 'whoami; uname -srm; uptime'\n```\n\nNhập `RemoteLab123!` khi được hỏi. Dấu chấm phẩy phân tách các lệnh được shell từ xa diễn giải.\n\nChạy lệnh từ xa thứ hai và chuyển hướng đầu ra trả về vào một tệp cục bộ:\n\n```bash\nssh remoteuser@localhost 'printf \"remote_user=%s\\nremote_home=%s\\n\" \"$(whoami)\" \"$HOME\"' > remote-context.txt\n```\n\nNhập lại mật khẩu. Chuyển hướng `>` do shell cục bộ xử lý nên `remote-context.txt` được tạo trong thư mục làm việc cục bộ:\n\n```bash\ncat remote-context.txt\n```\n\nTệp phải nhận diện `remoteuser` và `/home/remoteuser`.",
+      "task_vi": "Thực hiện hướng dẫn: Chạy một lệnh từ xa",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+    },
+    {
+      "id": "source-725416-section-4-v3",
+      "title": "Transfer a File with SCP",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will upload a local file, inspect it remotely, and download it under a new local name.\n\nCreate a local configuration sample:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > app.conf\n```\n\nSCP uses `user@host:path` for a remote path. Upload the file to the prepared remote `incoming` directory:\n\n```bash\nscp app.conf remoteuser@localhost:/home/remoteuser/incoming/app.conf\n```\n\nEnter `RemoteLab123!` when prompted. Confirm the remote content through SSH:\n\n```bash\nssh remoteuser@localhost 'cat /home/remoteuser/incoming/app.conf'\n```\n\nEnter the password again. Now reverse the source and destination to download the file:\n\n```bash\nscp remoteuser@localhost:/home/remoteuser/incoming/app.conf downloaded-app.conf\n```\n\nEnter the password, then compare the local original and downloaded copy:\n\n```bash\ncmp app.conf downloaded-app.conf && echo \"The files match\"\n```",
+      "title_vi": "Truyền tệp bằng SCP",
+      "task": "Thực hiện hướng dẫn: Transfer a File with SCP",
+      "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tải lên một tệp cục bộ, kiểm tra nó từ xa và tải xuống dưới tên cục bộ mới.\n\nTạo cấu hình mẫu cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > app.conf\n```\n\nSCP dùng `user@host:path` cho đường dẫn từ xa. Tải tệp lên thư mục `incoming` từ xa đã chuẩn bị:\n\n```bash\nscp app.conf remoteuser@localhost:/home/remoteuser/incoming/app.conf\n```\n\nNhập `RemoteLab123!` khi được hỏi. Xác nhận nội dung từ xa qua SSH:\n\n```bash\nssh remoteuser@localhost 'cat /home/remoteuser/incoming/app.conf'\n```\n\nNhập lại mật khẩu. Bây giờ đảo nguồn và đích để tải tệp xuống:\n\n```bash\nscp remoteuser@localhost:/home/remoteuser/incoming/app.conf downloaded-app.conf\n```\n\nNhập mật khẩu, rồi so sánh bản gốc cục bộ và bản tải xuống:\n\n```bash\ncmp app.conf downloaded-app.conf && echo \"The files match\"\n```",
+      "task_vi": "Thực hiện hướng dẫn: Truyền tệp bằng SCP",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+    },
+    {
+      "id": "source-725416-section-5-v3",
+      "title": "Transfer a Directory Recursively",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use SCP recursive mode to copy a directory tree to the remote account.\n\nCreate a small local project tree:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nmkdir -p site/assets\n```\n\n```bash\nprintf '<h1>SSH transfer practice</h1>\\n' > site/index.html\n```\n\n```bash\nprintf 'body { color: navy; }\\n' > site/assets/style.css\n```\n\nThe `-r` option copies directories and their contents recursively:\n\n```bash\nscp -r site remoteuser@localhost:/home/remoteuser/incoming/\n```\n\nEnter `RemoteLab123!` when prompted. List the remote tree with a one-shot SSH command:\n\n```bash\nssh remoteuser@localhost 'find /home/remoteuser/incoming/site -type f -printf \"%P\\n\" | sort'\n```\n\nEnter the password again. You should see `assets/style.css` and `index.html`.",
+      "title_vi": "Truyền thư mục đệ quy",
+      "task": "Thực hiện hướng dẫn: Transfer a Directory Recursively",
+      "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ dùng chế độ đệ quy của SCP để sao chép cây thư mục sang tài khoản từ xa.\n\nTạo cây dự án cục bộ nhỏ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nmkdir -p site/assets\n```\n\n```bash\nprintf '<h1>SSH transfer practice</h1>\\n' > site/index.html\n```\n\n```bash\nprintf 'body { color: navy; }\\n' > site/assets/style.css\n```\n\nTùy chọn `-r` sao chép thư mục và nội dung của chúng theo cách đệ quy:\n\n```bash\nscp -r site remoteuser@localhost:/home/remoteuser/incoming/\n```\n\nNhập `RemoteLab123!` khi được hỏi. Liệt kê cây từ xa bằng một lệnh SSH chạy một lần:\n\n```bash\nssh remoteuser@localhost 'find /home/remoteuser/incoming/site -type f -printf \"%P\\n\" | sort'\n```\n\nNhập lại mật khẩu. Bạn sẽ thấy `assets/style.css` và `index.html`.",
+      "task_vi": "Thực hiện hướng dẫn: Truyền thư mục đệ quy",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+    },
+    {
+      "id": "source-725416-section-6-v3",
+      "title": "Generate a Personal SSH Key",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a dedicated ED25519 key pair and inspect its permissions and fingerprint.\n\nA key pair contains a private key that stays with you and a public key that can be installed on a remote account. Generate a dedicated practice key without a passphrase so automated validation can use it:\n\n```bash\nmkdir -p ~/.ssh\n```\n\n```bash\nchmod 700 ~/.ssh\n```\n\n```bash\nssh-keygen -t ed25519 -f ~/.ssh/labex_remote_ed25519 -N '' -C 'labex-remote-practice'\n```\n\nThe `-t` option selects the algorithm, `-f` selects the file, `-N ''` sets an empty practice passphrase, and `-C` adds a label. Production keys should normally use a strong passphrase when automation constraints do not forbid it.\n\nInspect the two files and their permissions:\n\n```bash\nls -l ~/.ssh/labex_remote_ed25519 ~/.ssh/labex_remote_ed25519.pub\n```\n\nThe private key should be readable only by `labex`. The `.pub` file is designed to be shared. Display the public-key fingerprint:\n\n```bash\nssh-keygen -lf ~/.ssh/labex_remote_ed25519.pub\n```\n\nNever copy or disclose the private key.",
+      "title_vi": "Tạo khóa SSH cá nhân",
+      "task": "Thực hiện hướng dẫn: Generate a Personal SSH Key",
+      "hint": "Chạy lệnh: mkdir -p ~/.ssh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tạo một cặp khóa ED25519 chuyên dùng và kiểm tra quyền cùng dấu vân tay của nó.\n\nCặp khóa gồm khóa riêng được giữ bên bạn và khóa công khai có thể cài trên tài khoản từ xa. Tạo khóa thực hành riêng không có mật khẩu bảo vệ để kiểm tra tự động có thể dùng:\n\n```bash\nmkdir -p ~/.ssh\n```\n\n```bash\nchmod 700 ~/.ssh\n```\n\n```bash\nssh-keygen -t ed25519 -f ~/.ssh/labex_remote_ed25519 -N '' -C 'labex-remote-practice'\n```\n\nTùy chọn `-t` chọn thuật toán, `-f` chọn tệp, `-N ''` đặt mật khẩu bảo vệ thực hành rỗng và `-C` thêm nhãn. Khóa dùng trong sản xuất thông thường nên có mật khẩu bảo vệ mạnh nếu ràng buộc tự động hóa không ngăn cản.\n\nKiểm tra hai tệp và quyền của chúng:\n\n```bash\nls -l ~/.ssh/labex_remote_ed25519 ~/.ssh/labex_remote_ed25519.pub\n```\n\nChỉ `labex` được đọc khóa riêng. Tệp `.pub` được thiết kế để chia sẻ. Hiển thị dấu vân tay khóa công khai:\n\n```bash\nssh-keygen -lf ~/.ssh/labex_remote_ed25519.pub\n```\n\nKhông bao giờ sao chép hoặc tiết lộ khóa riêng.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo khóa SSH cá nhân",
+      "hint_vi": "Chạy lệnh: mkdir -p ~/.ssh"
+    },
+    {
+      "id": "source-725416-section-7-v3",
+      "title": "Install and Use the Public Key",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will install the public key for `remoteuser`, connect without a password prompt, and verify key-based file transfer.\n\n`ssh-copy-id` appends a public key to the remote account's `~/.ssh/authorized_keys` with suitable permissions:\n\n```bash\nssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost\n```\n\nEnter `RemoteLab123!` for this final password-authenticated action. Test the dedicated private key with `-i`:\n\n```bash\nssh -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost 'printf \"key authentication works\\n\" > ~/ssh-lab/key-authenticated.txt; cat ~/ssh-lab/key-authenticated.txt'\n```\n\nThis command should not ask for the remote account password. Use the same identity for SCP:\n\n```bash\nscp -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost:~/ssh-lab/key-authenticated.txt key-authenticated.txt\n```\n\n```bash\ncat key-authenticated.txt\n```\n\nThe downloaded file should contain `key authentication works`. The host key authenticates the server; your private key authenticates you to the remote account. They solve different trust problems.",
+      "title_vi": "Cài và sử dụng khóa công khai",
+      "task": "Thực hiện hướng dẫn: Install and Use the Public Key",
+      "hint": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ cài khóa công khai cho `remoteuser`, kết nối không có lời nhắc mật khẩu và xác minh truyền tệp bằng khóa.\n\n`ssh-copy-id` nối khóa công khai vào `~/.ssh/authorized_keys` của tài khoản từ xa với quyền thích hợp:\n\n```bash\nssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost\n```\n\nNhập `RemoteLab123!` cho thao tác xác thực bằng mật khẩu cuối cùng này. Thử khóa riêng chuyên dùng bằng `-i`:\n\n```bash\nssh -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost 'printf \"key authentication works\\n\" > ~/ssh-lab/key-authenticated.txt; cat ~/ssh-lab/key-authenticated.txt'\n```\n\nLệnh này không được hỏi mật khẩu tài khoản từ xa. Dùng cùng khóa nhận diện cho SCP:\n\n```bash\nscp -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost:~/ssh-lab/key-authenticated.txt key-authenticated.txt\n```\n\n```bash\ncat key-authenticated.txt\n```\n\nTệp tải xuống phải chứa `key authentication works`. Khóa máy chủ xác thực máy chủ; khóa riêng của bạn xác thực bạn với tài khoản từ xa. Chúng giải quyết hai vấn đề tin cậy khác nhau.",
+      "task_vi": "Thực hiện hướng dẫn: Cài và sử dụng khóa công khai",
+      "hint_vi": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost"
+    },
+    {
+      "id": "section-8",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You verified an SSH host key, opened and exited a remote shell, ran one-shot remote commands, and distinguished local redirection from remote execution. You uploaded and downloaded files with SCP and copied a directory recursively.\n\nYou also generated a dedicated ED25519 key pair, protected the private key, installed only the public key, and reused the identity for passwordless SSH and SCP. These are the core skills needed for safe beginner remote administration.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã xác minh khóa máy chủ SSH, mở và thoát shell từ xa, chạy lệnh từ xa một lần và phân biệt chuyển hướng cục bộ với thực thi từ xa. Bạn đã tải lên và tải xuống tệp bằng SCP, sao chép thư mục đệ quy.\n\nBạn cũng tạo cặp khóa ED25519 chuyên dùng, bảo vệ khóa riêng, chỉ cài khóa công khai và dùng lại khóa nhận diện cho SSH và SCP không cần mật khẩu. Đây là kỹ năng cốt lõi để người mới quản trị từ xa an toàn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725416-section-1-v3",
+      "title": "Inspect the SSH Target",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify the SSH client, resolve the target name, confirm a listening server, and preview its public host key.\n\nEnter the local workspace:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nDisplay the OpenSSH client version. This program writes its version to standard error, so `2>&1` combines it with standard output:\n\n```bash\nssh -V 2>&1\n```\n\nResolve the local target through the system name-service configuration:\n\n```bash\ngetent hosts localhost\n```\n\nConfirm that an SSH server listens on TCP port 22:\n\n```bash\nsudo ss -ltnp | grep ':22'\n```\n\n`ssh-keyscan` retrieves public host keys without logging in. Pipe the ED25519 key to `ssh-keygen -lf -` to display its fingerprint:\n\n```bash\nssh-keyscan -t ed25519 localhost 2>/dev/null | ssh-keygen -lf -\n```\n\nIn a real environment, compare this fingerprint with a trusted value from the administrator before accepting it. Save a compact target summary:\n\n```bash\nprintf 'target=localhost\\nport=22\\nuser=remoteuser\\n' > ssh-target.txt\n```\n\n```bash\ncat ssh-target.txt\n```",
+      "title_vi": "Kiểm tra đích SSH",
+      "task": "Thực hiện hướng dẫn: Inspect the SSH Target",
+      "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ nhận diện SSH client, phân giải tên đích, xác nhận máy chủ đang lắng nghe và xem trước khóa máy chủ công khai của nó.\n\nVào thư mục làm việc cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nHiển thị phiên bản OpenSSH client. Chương trình này ghi phiên bản vào lỗi chuẩn nên `2>&1` gộp nó với đầu ra chuẩn:\n\n```bash\nssh -V 2>&1\n```\n\nPhân giải đích cục bộ qua cấu hình dịch vụ tên của hệ thống:\n\n```bash\ngetent hosts localhost\n```\n\nXác nhận máy chủ SSH lắng nghe trên cổng TCP 22:\n\n```bash\nsudo ss -ltnp | grep ':22'\n```\n\n`ssh-keyscan` lấy khóa máy chủ công khai mà không đăng nhập. Chuyển khóa ED25519 qua đường ống tới `ssh-keygen -lf -` để hiển thị dấu vân tay:\n\n```bash\nssh-keyscan -t ed25519 localhost 2>/dev/null | ssh-keygen -lf -\n```\n\nTrong môi trường thực, so sánh dấu vân tay này với giá trị đáng tin do quản trị viên cung cấp trước khi chấp nhận. Lưu tóm tắt đích ngắn gọn:\n\n```bash\nprintf 'target=localhost\\nport=22\\nuser=remoteuser\\n' > ssh-target.txt\n```\n\n```bash\ncat ssh-target.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra đích SSH",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+    },
+    {
+      "id": "source-725416-section-2-v3",
+      "title": "Open Your First Remote Shell",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will verify a host key, authenticate with a password, inspect the remote account, and close the remote shell.\n\nConnect with the `user@host` form:\n\n```bash\nssh remoteuser@localhost\n```\n\nBecause setup removed any previous `localhost` host-key record, SSH asks whether you trust the displayed fingerprint. After comparing it with Step 1, type:\n\n```text\nyes\n```\n\nAt the password prompt, enter:\n\n```text\nRemoteLab123!\n```\n\nThe password is not displayed while you type. After login, the prompt belongs to `remoteuser`, not `labex`. Confirm the remote identity, host, and current directory:\n\n```bash\nwhoami\n```\n\n```bash\nhostname\n```\n\n```bash\npwd\n```\n\nCreate a remote marker in the remote account's home directory:\n\n```bash\nmkdir -p ~/ssh-lab\n```\n\n```bash\nprintf 'connected as %s\\n' \"$(whoami)\" > ~/ssh-lab/connected.txt\n```\n\nClose the remote shell and return to the local `labex` prompt:\n\n```bash\nexit\n```\n\nThe `exit` command ends only the remote shell; the local terminal remains open.",
+      "title_vi": "Mở shell từ xa đầu tiên",
+      "task": "Thực hiện hướng dẫn: Open Your First Remote Shell",
+      "hint": "Chạy lệnh: ssh remoteuser@localhost",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ xác minh khóa máy chủ, xác thực bằng mật khẩu, kiểm tra tài khoản từ xa và đóng shell từ xa.\n\nKết nối với dạng `user@host`:\n\n```bash\nssh remoteuser@localhost\n```\n\nVì thiết lập ban đầu đã xóa mọi bản ghi khóa máy chủ `localhost` trước đó, SSH hỏi bạn có tin dấu vân tay được hiển thị không. Sau khi so sánh với Bước 1, nhập:\n\n```text\nyes\n```\n\nTại lời nhắc mật khẩu, nhập:\n\n```text\nRemoteLab123!\n```\n\nMật khẩu không hiển thị khi gõ. Sau khi đăng nhập, dấu nhắc thuộc về `remoteuser`, không phải `labex`. Xác nhận danh tính từ xa, máy và thư mục hiện tại:\n\n```bash\nwhoami\n```\n\n```bash\nhostname\n```\n\n```bash\npwd\n```\n\nTạo dấu mốc từ xa trong thư mục home của tài khoản từ xa:\n\n```bash\nmkdir -p ~/ssh-lab\n```\n\n```bash\nprintf 'connected as %s\\n' \"$(whoami)\" > ~/ssh-lab/connected.txt\n```\n\nĐóng shell từ xa và trở về dấu nhắc `labex` cục bộ:\n\n```bash\nexit\n```\n\nLệnh `exit` chỉ kết thúc shell từ xa; terminal cục bộ vẫn mở.",
+      "task_vi": "Thực hiện hướng dẫn: Mở shell từ xa đầu tiên",
+      "hint_vi": "Chạy lệnh: ssh remoteuser@localhost"
+    },
+    {
+      "id": "source-725416-section-3-v3",
+      "title": "Run a Remote Command",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will run commands remotely without opening a long-lived interactive shell and save their output locally.\n\nReturn to the local workspace if needed:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nPlace a quoted command after the host. SSH runs it remotely and returns its output to your local terminal:\n\n```bash\nssh remoteuser@localhost 'whoami; uname -srm; uptime'\n```\n\nEnter `RemoteLab123!` when prompted. The semicolons separate commands interpreted by the remote shell.\n\nRun a second remote command and redirect the returned output into a local file:\n\n```bash\nssh remoteuser@localhost 'printf \"remote_user=%s\\nremote_home=%s\\n\" \"$(whoami)\" \"$HOME\"' > remote-context.txt\n```\n\nEnter the password again. The `>` redirection is handled by your local shell, so `remote-context.txt` is created in the local workspace:\n\n```bash\ncat remote-context.txt\n```\n\nThe file should identify `remoteuser` and `/home/remoteuser`.",
+      "title_vi": "Chạy một lệnh từ xa",
+      "task": "Thực hiện hướng dẫn: Run a Remote Command",
+      "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ chạy lệnh từ xa mà không mở shell tương tác kéo dài và lưu đầu ra của chúng ở cục bộ.\n\nTrở về thư mục làm việc cục bộ nếu cần:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nĐặt lệnh trong dấu nháy sau tên máy. SSH chạy nó từ xa và trả đầu ra về terminal cục bộ:\n\n```bash\nssh remoteuser@localhost 'whoami; uname -srm; uptime'\n```\n\nNhập `RemoteLab123!` khi được hỏi. Dấu chấm phẩy phân tách các lệnh được shell từ xa diễn giải.\n\nChạy lệnh từ xa thứ hai và chuyển hướng đầu ra trả về vào một tệp cục bộ:\n\n```bash\nssh remoteuser@localhost 'printf \"remote_user=%s\\nremote_home=%s\\n\" \"$(whoami)\" \"$HOME\"' > remote-context.txt\n```\n\nNhập lại mật khẩu. Chuyển hướng `>` do shell cục bộ xử lý nên `remote-context.txt` được tạo trong thư mục làm việc cục bộ:\n\n```bash\ncat remote-context.txt\n```\n\nTệp phải nhận diện `remoteuser` và `/home/remoteuser`.",
+      "task_vi": "Thực hiện hướng dẫn: Chạy một lệnh từ xa",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+    },
+    {
+      "id": "source-725416-section-4-v3",
+      "title": "Transfer a File with SCP",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will upload a local file, inspect it remotely, and download it under a new local name.\n\nCreate a local configuration sample:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > app.conf\n```\n\nSCP uses `user@host:path` for a remote path. Upload the file to the prepared remote `incoming` directory:\n\n```bash\nscp app.conf remoteuser@localhost:/home/remoteuser/incoming/app.conf\n```\n\nEnter `RemoteLab123!` when prompted. Confirm the remote content through SSH:\n\n```bash\nssh remoteuser@localhost 'cat /home/remoteuser/incoming/app.conf'\n```\n\nEnter the password again. Now reverse the source and destination to download the file:\n\n```bash\nscp remoteuser@localhost:/home/remoteuser/incoming/app.conf downloaded-app.conf\n```\n\nEnter the password, then compare the local original and downloaded copy:\n\n```bash\ncmp app.conf downloaded-app.conf && echo \"The files match\"\n```",
+      "title_vi": "Truyền tệp bằng SCP",
+      "task": "Thực hiện hướng dẫn: Transfer a File with SCP",
+      "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tải lên một tệp cục bộ, kiểm tra nó từ xa và tải xuống dưới tên cục bộ mới.\n\nTạo cấu hình mẫu cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > app.conf\n```\n\nSCP dùng `user@host:path` cho đường dẫn từ xa. Tải tệp lên thư mục `incoming` từ xa đã chuẩn bị:\n\n```bash\nscp app.conf remoteuser@localhost:/home/remoteuser/incoming/app.conf\n```\n\nNhập `RemoteLab123!` khi được hỏi. Xác nhận nội dung từ xa qua SSH:\n\n```bash\nssh remoteuser@localhost 'cat /home/remoteuser/incoming/app.conf'\n```\n\nNhập lại mật khẩu. Bây giờ đảo nguồn và đích để tải tệp xuống:\n\n```bash\nscp remoteuser@localhost:/home/remoteuser/incoming/app.conf downloaded-app.conf\n```\n\nNhập mật khẩu, rồi so sánh bản gốc cục bộ và bản tải xuống:\n\n```bash\ncmp app.conf downloaded-app.conf && echo \"The files match\"\n```",
+      "task_vi": "Thực hiện hướng dẫn: Truyền tệp bằng SCP",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+    },
+    {
+      "id": "source-725416-section-5-v3",
+      "title": "Transfer a Directory Recursively",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use SCP recursive mode to copy a directory tree to the remote account.\n\nCreate a small local project tree:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nmkdir -p site/assets\n```\n\n```bash\nprintf '<h1>SSH transfer practice</h1>\\n' > site/index.html\n```\n\n```bash\nprintf 'body { color: navy; }\\n' > site/assets/style.css\n```\n\nThe `-r` option copies directories and their contents recursively:\n\n```bash\nscp -r site remoteuser@localhost:/home/remoteuser/incoming/\n```\n\nEnter `RemoteLab123!` when prompted. List the remote tree with a one-shot SSH command:\n\n```bash\nssh remoteuser@localhost 'find /home/remoteuser/incoming/site -type f -printf \"%P\\n\" | sort'\n```\n\nEnter the password again. You should see `assets/style.css` and `index.html`.",
+      "title_vi": "Truyền thư mục đệ quy",
+      "task": "Thực hiện hướng dẫn: Transfer a Directory Recursively",
+      "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ dùng chế độ đệ quy của SCP để sao chép cây thư mục sang tài khoản từ xa.\n\nTạo cây dự án cục bộ nhỏ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nmkdir -p site/assets\n```\n\n```bash\nprintf '<h1>SSH transfer practice</h1>\\n' > site/index.html\n```\n\n```bash\nprintf 'body { color: navy; }\\n' > site/assets/style.css\n```\n\nTùy chọn `-r` sao chép thư mục và nội dung của chúng theo cách đệ quy:\n\n```bash\nscp -r site remoteuser@localhost:/home/remoteuser/incoming/\n```\n\nNhập `RemoteLab123!` khi được hỏi. Liệt kê cây từ xa bằng một lệnh SSH chạy một lần:\n\n```bash\nssh remoteuser@localhost 'find /home/remoteuser/incoming/site -type f -printf \"%P\\n\" | sort'\n```\n\nNhập lại mật khẩu. Bạn sẽ thấy `assets/style.css` và `index.html`.",
+      "task_vi": "Thực hiện hướng dẫn: Truyền thư mục đệ quy",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+    },
+    {
+      "id": "source-725416-section-6-v3",
+      "title": "Generate a Personal SSH Key",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a dedicated ED25519 key pair and inspect its permissions and fingerprint.\n\nA key pair contains a private key that stays with you and a public key that can be installed on a remote account. Generate a dedicated practice key without a passphrase so automated validation can use it:\n\n```bash\nmkdir -p ~/.ssh\n```\n\n```bash\nchmod 700 ~/.ssh\n```\n\n```bash\nssh-keygen -t ed25519 -f ~/.ssh/labex_remote_ed25519 -N '' -C 'labex-remote-practice'\n```\n\nThe `-t` option selects the algorithm, `-f` selects the file, `-N ''` sets an empty practice passphrase, and `-C` adds a label. Production keys should normally use a strong passphrase when automation constraints do not forbid it.\n\nInspect the two files and their permissions:\n\n```bash\nls -l ~/.ssh/labex_remote_ed25519 ~/.ssh/labex_remote_ed25519.pub\n```\n\nThe private key should be readable only by `labex`. The `.pub` file is designed to be shared. Display the public-key fingerprint:\n\n```bash\nssh-keygen -lf ~/.ssh/labex_remote_ed25519.pub\n```\n\nNever copy or disclose the private key.",
+      "title_vi": "Tạo khóa SSH cá nhân",
+      "task": "Thực hiện hướng dẫn: Generate a Personal SSH Key",
+      "hint": "Chạy lệnh: mkdir -p ~/.ssh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tạo một cặp khóa ED25519 chuyên dùng và kiểm tra quyền cùng dấu vân tay của nó.\n\nCặp khóa gồm khóa riêng được giữ bên bạn và khóa công khai có thể cài trên tài khoản từ xa. Tạo khóa thực hành riêng không có mật khẩu bảo vệ để kiểm tra tự động có thể dùng:\n\n```bash\nmkdir -p ~/.ssh\n```\n\n```bash\nchmod 700 ~/.ssh\n```\n\n```bash\nssh-keygen -t ed25519 -f ~/.ssh/labex_remote_ed25519 -N '' -C 'labex-remote-practice'\n```\n\nTùy chọn `-t` chọn thuật toán, `-f` chọn tệp, `-N ''` đặt mật khẩu bảo vệ thực hành rỗng và `-C` thêm nhãn. Khóa dùng trong sản xuất thông thường nên có mật khẩu bảo vệ mạnh nếu ràng buộc tự động hóa không ngăn cản.\n\nKiểm tra hai tệp và quyền của chúng:\n\n```bash\nls -l ~/.ssh/labex_remote_ed25519 ~/.ssh/labex_remote_ed25519.pub\n```\n\nChỉ `labex` được đọc khóa riêng. Tệp `.pub` được thiết kế để chia sẻ. Hiển thị dấu vân tay khóa công khai:\n\n```bash\nssh-keygen -lf ~/.ssh/labex_remote_ed25519.pub\n```\n\nKhông bao giờ sao chép hoặc tiết lộ khóa riêng.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo khóa SSH cá nhân",
+      "hint_vi": "Chạy lệnh: mkdir -p ~/.ssh"
+    },
+    {
+      "id": "source-725416-section-7-v3",
+      "title": "Install and Use the Public Key",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will install the public key for `remoteuser`, connect without a password prompt, and verify key-based file transfer.\n\n`ssh-copy-id` appends a public key to the remote account's `~/.ssh/authorized_keys` with suitable permissions:\n\n```bash\nssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost\n```\n\nEnter `RemoteLab123!` for this final password-authenticated action. Test the dedicated private key with `-i`:\n\n```bash\nssh -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost 'printf \"key authentication works\\n\" > ~/ssh-lab/key-authenticated.txt; cat ~/ssh-lab/key-authenticated.txt'\n```\n\nThis command should not ask for the remote account password. Use the same identity for SCP:\n\n```bash\nscp -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost:~/ssh-lab/key-authenticated.txt key-authenticated.txt\n```\n\n```bash\ncat key-authenticated.txt\n```\n\nThe downloaded file should contain `key authentication works`. The host key authenticates the server; your private key authenticates you to the remote account. They solve different trust problems.",
+      "title_vi": "Cài và sử dụng khóa công khai",
+      "task": "Thực hiện hướng dẫn: Install and Use the Public Key",
+      "hint": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ cài khóa công khai cho `remoteuser`, kết nối không có lời nhắc mật khẩu và xác minh truyền tệp bằng khóa.\n\n`ssh-copy-id` nối khóa công khai vào `~/.ssh/authorized_keys` của tài khoản từ xa với quyền thích hợp:\n\n```bash\nssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost\n```\n\nNhập `RemoteLab123!` cho thao tác xác thực bằng mật khẩu cuối cùng này. Thử khóa riêng chuyên dùng bằng `-i`:\n\n```bash\nssh -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost 'printf \"key authentication works\\n\" > ~/ssh-lab/key-authenticated.txt; cat ~/ssh-lab/key-authenticated.txt'\n```\n\nLệnh này không được hỏi mật khẩu tài khoản từ xa. Dùng cùng khóa nhận diện cho SCP:\n\n```bash\nscp -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost:~/ssh-lab/key-authenticated.txt key-authenticated.txt\n```\n\n```bash\ncat key-authenticated.txt\n```\n\nTệp tải xuống phải chứa `key authentication works`. Khóa máy chủ xác thực máy chủ; khóa riêng của bạn xác thực bạn với tài khoản từ xa. Chúng giải quyết hai vấn đề tin cậy khác nhau.",
+      "task_vi": "Thực hiện hướng dẫn: Cài và sử dụng khóa công khai",
+      "hint_vi": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-remote-access-and-file-transfer-with-ssh-725416.json"
+}

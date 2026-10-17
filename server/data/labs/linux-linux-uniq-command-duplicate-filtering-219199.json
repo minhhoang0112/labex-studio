@@ -1,0 +1,459 @@
+{
+  "id": "linux-linux-uniq-command-duplicate-filtering-219199",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219199,
+  "source_url": "https://labex.io/tutorials/linux-linux-uniq-command-duplicate-filtering-219199",
+  "order": 28,
+  "title": "Linux uniq Command: Duplicate Filtering",
+  "title_vi": "Lệnh uniq: lọc dòng trùng",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux uniq Command: Duplicate Filtering",
+  "sections": [
+    {
+      "id": "commands-219199-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux uniq Command: Duplicate Filtering. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh uniq: lọc dòng trùng. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219199-section-1-v1",
+      "title": "Examining the Raw Customer Data",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem giao dịch",
+      "content": "Read the unsorted purchase records.\n\n```bash\ncat customer_purchases.txt\n```",
+      "content_vi": "Đọc các giao dịch chưa sắp xếp.\n\n```bash\ncat customer_purchases.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bcat\\s+customer_purchases\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-2-v1",
+      "title": "Sorting the Data",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sắp xếp dữ liệu",
+      "content": "Group identical records together.\n\n```bash\nsort customer_purchases.txt > sorted_purchases.txt\n```",
+      "content_vi": "Đưa bản ghi giống nhau về liền kề.\n\n```bash\nsort customer_purchases.txt > sorted_purchases.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bsort\\b[^\\n]*sorted_purchases\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s sorted_purchases.txt\ncmp -s sorted_purchases.txt <(sort customer_purchases.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-3-v1",
+      "title": "Using uniq to Remove Duplicate Entries",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Lấy bản ghi duy nhất",
+      "content": "Remove adjacent duplicates.\n\n```bash\nuniq sorted_purchases.txt > unique_purchases.txt\n```",
+      "content_vi": "Loại các dòng trùng liền kề.\n\n```bash\nuniq sorted_purchases.txt > unique_purchases.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\buniq\\b[^\\n]*unique_purchases\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s unique_purchases.txt\ncmp -s unique_purchases.txt <(uniq sorted_purchases.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-4-v1",
+      "title": "Counting Purchases with uniq -c",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đếm giao dịch",
+      "content": "Count each repeated record.\n\n```bash\nuniq -c sorted_purchases.txt > purchase_counts.txt\n```",
+      "content_vi": "Đếm số lần xuất hiện mỗi bản ghi.\n\n```bash\nuniq -c sorted_purchases.txt > purchase_counts.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\buniq\\b[^\\n]*purchase_counts\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s purchase_counts.txt\ncmp -s purchase_counts.txt <(uniq -c sorted_purchases.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-5-v1",
+      "title": "Finding Repeat Customers with uniq -d",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm giao dịch lặp",
+      "content": "Show records occurring more than once.\n\n```bash\nuniq -d sorted_purchases.txt > repeat_customers.txt\n```",
+      "content_vi": "Lấy bản ghi xuất hiện nhiều lần.\n\n```bash\nuniq -d sorted_purchases.txt > repeat_customers.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\buniq\\b[^\\n]*repeat_customers\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s repeat_customers.txt\ncmp -s repeat_customers.txt <(uniq -d sorted_purchases.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219199-section-1-v1",
+      "title": "Examining the Raw Customer Data",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem giao dịch",
+      "content": "Read the unsorted purchase records.\n\n```bash\ncat customer_purchases.txt\n```",
+      "content_vi": "Đọc các giao dịch chưa sắp xếp.\n\n```bash\ncat customer_purchases.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bcat\\s+customer_purchases\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-2-v1",
+      "title": "Sorting the Data",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Sắp xếp dữ liệu",
+      "content": "Group identical records together.\n\n```bash\nsort customer_purchases.txt > sorted_purchases.txt\n```",
+      "content_vi": "Đưa bản ghi giống nhau về liền kề.\n\n```bash\nsort customer_purchases.txt > sorted_purchases.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bsort\\b[^\\n]*sorted_purchases\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s sorted_purchases.txt\ncmp -s sorted_purchases.txt <(sort customer_purchases.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-3-v1",
+      "title": "Using uniq to Remove Duplicate Entries",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Lấy bản ghi duy nhất",
+      "content": "Remove adjacent duplicates.\n\n```bash\nuniq sorted_purchases.txt > unique_purchases.txt\n```",
+      "content_vi": "Loại các dòng trùng liền kề.\n\n```bash\nuniq sorted_purchases.txt > unique_purchases.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\buniq\\b[^\\n]*unique_purchases\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s unique_purchases.txt\ncmp -s unique_purchases.txt <(uniq sorted_purchases.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-4-v1",
+      "title": "Counting Purchases with uniq -c",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đếm giao dịch",
+      "content": "Count each repeated record.\n\n```bash\nuniq -c sorted_purchases.txt > purchase_counts.txt\n```",
+      "content_vi": "Đếm số lần xuất hiện mỗi bản ghi.\n\n```bash\nuniq -c sorted_purchases.txt > purchase_counts.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\buniq\\b[^\\n]*purchase_counts\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s purchase_counts.txt\ncmp -s purchase_counts.txt <(uniq -c sorted_purchases.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219199-section-5-v1",
+      "title": "Finding Repeat Customers with uniq -d",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm giao dịch lặp",
+      "content": "Show records occurring more than once.\n\n```bash\nuniq -d sorted_purchases.txt > repeat_customers.txt\n```",
+      "content_vi": "Lấy bản ghi xuất hiện nhiều lần.\n\n```bash\nuniq -d sorted_purchases.txt > repeat_customers.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\buniq\\b[^\\n]*repeat_customers\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s repeat_customers.txt\ncmp -s repeat_customers.txt <(uniq -d sorted_purchases.txt)"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-uniq-command-duplicate-filtering-219199.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

@@ -1,0 +1,405 @@
+{
+  "id": "linux-linux-cat-command-file-concatenating-210986",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 210986,
+  "source_url": "https://labex.io/tutorials/linux-linux-cat-command-file-concatenating-210986",
+  "order": 11,
+  "title": "Linux cat Command: File Concatenating",
+  "title_vi": "Lệnh cat: xem và nối tệp",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux cat Command: File Concatenating",
+  "sections": [
+    {
+      "id": "commands-210986-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux cat Command: File Concatenating. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh cat: xem và nối tệp. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-210986-section-1-v1",
+      "title": "Exploring the Project Directory",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Khám phá thư mục dự án",
+      "content": "Enter the project directory, check its path, and list its files.\n\n```bash\ncd /home/labex/project\npwd\nls\n```",
+      "content_vi": "Vào thư mục dự án, kiểm tra đường dẫn rồi liệt kê các tệp.\n\n```bash\ncd /home/labex/project\npwd\nls\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^pwd\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^ls\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-2-v1",
+      "title": "Viewing File Contents",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đọc nội dung tệp",
+      "content": "Read the daily report with cat.\n\n```bash\ncat daily_report.txt\n```",
+      "content_vi": "Dùng cat để đọc báo cáo hằng ngày.\n\n```bash\ncat daily_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)cat\\ daily_report\\.txt\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-3-v1",
+      "title": "Combining Multiple Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Nối nhiều tệp",
+      "content": "Join sales followed by marketing into combined_report.txt; verify the saved result.\n\n```bash\ncat sales.txt marketing.txt > combined_report.txt\ncat combined_report.txt\n```",
+      "content_vi": "Nối sales trước marketing vào combined_report.txt rồi đọc lại kết quả.\n\n```bash\ncat sales.txt marketing.txt > combined_report.txt\ncat combined_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/combined_report.txt && cmp -s /home/labex/project/combined_report.txt <(cat /home/labex/project/sales.txt /home/labex/project/marketing.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-4-v1",
+      "title": "Using the Line Number Option",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Hiện số dòng",
+      "content": "Number every output line with -n.\n\n```bash\ncat -n daily_report.txt\n```",
+      "content_vi": "Dùng -n để đánh số mọi dòng được hiển thị.\n\n```bash\ncat -n daily_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)cat\\ \\-n\\ daily_report\\.txt\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-5-v1",
+      "title": "Displaying End of Line Characters",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Hiện ký tự cuối dòng",
+      "content": "Use -E to mark each line ending with a dollar sign.\n\n```bash\ncat -E daily_report.txt\n```",
+      "content_vi": "Dùng -E để hiện dấu đô la ở cuối mỗi dòng.\n\n```bash\ncat -E daily_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)cat\\ \\-E\\ daily_report\\.txt\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-210986-section-1-v1",
+      "title": "Exploring the Project Directory",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Khám phá thư mục dự án",
+      "content": "Enter the project directory, check its path, and list its files.\n\n```bash\ncd /home/labex/project\npwd\nls\n```",
+      "content_vi": "Vào thư mục dự án, kiểm tra đường dẫn rồi liệt kê các tệp.\n\n```bash\ncd /home/labex/project\npwd\nls\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^pwd\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^ls\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-2-v1",
+      "title": "Viewing File Contents",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đọc nội dung tệp",
+      "content": "Read the daily report with cat.\n\n```bash\ncat daily_report.txt\n```",
+      "content_vi": "Dùng cat để đọc báo cáo hằng ngày.\n\n```bash\ncat daily_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)cat\\ daily_report\\.txt\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-3-v1",
+      "title": "Combining Multiple Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Nối nhiều tệp",
+      "content": "Join sales followed by marketing into combined_report.txt; verify the saved result.\n\n```bash\ncat sales.txt marketing.txt > combined_report.txt\ncat combined_report.txt\n```",
+      "content_vi": "Nối sales trước marketing vào combined_report.txt rồi đọc lại kết quả.\n\n```bash\ncat sales.txt marketing.txt > combined_report.txt\ncat combined_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/combined_report.txt && cmp -s /home/labex/project/combined_report.txt <(cat /home/labex/project/sales.txt /home/labex/project/marketing.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-4-v1",
+      "title": "Using the Line Number Option",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Hiện số dòng",
+      "content": "Number every output line with -n.\n\n```bash\ncat -n daily_report.txt\n```",
+      "content_vi": "Dùng -n để đánh số mọi dòng được hiển thị.\n\n```bash\ncat -n daily_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)cat\\ \\-n\\ daily_report\\.txt\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210986-section-5-v1",
+      "title": "Displaying End of Line Characters",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Hiện ký tự cuối dòng",
+      "content": "Use -E to mark each line ending with a dollar sign.\n\n```bash\ncat -E daily_report.txt\n```",
+      "content_vi": "Dùng -E để hiện dấu đô la ở cuối mỗi dòng.\n\n```bash\ncat -E daily_report.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)cat\\ \\-E\\ daily_report\\.txt\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-cat-command-file-concatenating-210986.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

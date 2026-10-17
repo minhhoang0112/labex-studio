@@ -1,0 +1,395 @@
+{
+  "id": "linux-file-system-and-disk-management-17999",
+  "course_id": "linux-for-noobs",
+  "order": 14,
+  "title": "File System and Disk Management",
+  "title_vi": "Quản Lý Hệ Thống Tệp và Đĩa Cứng",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "Linux storage has several connected layers. A device can contain partitions, a partition or image can contain a filesystem, and a filesystem becomes accessible when it is attached to the directory tre",
+  "source_url": "https://labex.io/tutorials/linux-file-system-and-disk-management-17999",
+  "source_lab_id": 17999,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Linux storage has several connected layers. A device can contain partitions, a partition or image can contain a filesystem, and a filesystem becomes accessible when it is attached to the directory tree at a mount point. Keeping these terms separate makes disk commands much easier to understand.\n\nIn this lab, you will inspect storage safely, analyze space usage, create an ext4 filesystem inside a regular file, mount and unmount it, read partition information, and build a practice fstab file. All write operations target disposable files created for the lab; you will not repartition a real disk or modify the system's `/etc/fstab`.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Lưu trữ trong Linux có nhiều lớp được kết nối với nhau. Một thiết bị có thể chứa các phân vùng (partition), một phân vùng hoặc tệp ảnh (image) có thể chứa một hệ thống tệp (filesystem), và một hệ thống tệp sẽ trở thành khả truy cập khi nó được gắn kết (attach) vào cây thư mục tại một điểm gắn kết (mount point). Việc phân biệt rõ các thuật ngữ này sẽ giúp các lệnh về đĩa trở nên dễ hiểu hơn rất nhiều.\n\nTrong phòng thí nghiệm này, bạn sẽ kiểm tra dung lượng lưu trữ một cách an toàn, phân tích mức sử dụng không gian, tạo một hệ thống tệp ext4 bên trong một tệp thông thường, gắn kết (mount) và gỡ gắn kết (unmount) nó, đọc thông tin phân vùng, và xây dựng một tệp `fstab` thực hành. Tất cả các thao tác ghi đều nhắm đến các tệp dùng một lần được tạo cho phòng thí nghiệm; bạn sẽ không phân vùng lại ổ đĩa thực hoặc sửa đổi tệp `/etc/fstab` của hệ thống."
+    },
+    {
+      "id": "source-17999-section-1-v3",
+      "title": "Understand the Linux Storage Layers",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect the relationship between block devices, filesystems, and mount points, then prepare a safe workspace.\n\nThe `lsblk` command means \"list block devices.\" Its `-o` option selects the columns to display:\n\n```bash\nlsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS\n```\n\nRead the output from left to right:\n\n- `NAME` identifies the device or partition.\n- `TYPE` distinguishes disks, partitions, and loop devices.\n- `SIZE` shows capacity.\n- `FSTYPE` shows the detected filesystem type when one exists.\n- `MOUNTPOINTS` shows where the filesystem is attached to the directory tree.\n\nA disk can contain one or more partitions. A filesystem such as ext4 organizes files inside a partition or other storage object. A mount point is an ordinary directory through which Linux exposes that filesystem.\n\nUse `findmnt` to identify the filesystem that currently contains the project directory. The `-T` option accepts any path and finds its mounted filesystem:\n\n```bash\nfindmnt -T /home/labex/project\n```\n\nThe exact source device can vary, but the output shows the source, target, filesystem type, and mount options.\n\nThe `blkid` command reads filesystem signatures, labels, and UUIDs. Administrative access is needed to inspect every available block device:\n\n```bash\nsudo blkid\n```\n\nA UUID is a filesystem identifier designed to remain stable even when a device name changes. You will use this idea later when studying persistent mounts.\n\nCreate and enter a dedicated workspace:\n\n```bash\nmkdir -p /home/labex/project/storage-lab\n```\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\npwd\n```\n\nThe final output should be `/home/labex/project/storage-lab`.",
+      "title_vi": "Hiểu về các tầng lưu trữ Linux",
+      "task": "Thực hiện hướng dẫn: Understand the Linux Storage Layers",
+      "hint": "Chạy lệnh: lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra mối quan hệ giữa các thiết bị khối, hệ thống tệp và các điểm gắn kết (mount point), sau đó chuẩn bị một không gian làm việc an toàn.\n\nLệnh `lsblk` có nghĩa là \"list block devices\" (liệt kê các thiết bị khối). Tùy chọn `-o` của nó dùng để chọn các cột cần hiển thị:\n\n```bash\nlsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS\n```\n\nĐọc đầu ra từ trái sang phải:\n\n- `NAME` xác định thiết bị hoặc phân vùng.\n- `TYPE` phân biệt đĩa, phân vùng và thiết bị loop.\n- `SIZE` hiển thị dung lượng.\n- `FSTYPE` hiển thị loại hệ thống tệp được phát hiện khi có tồn tại.\n- `MOUNTPOINTS` hiển thị nơi hệ thống tệp được gắn kết vào cây thư mục.\n\nMột ổ đĩa có thể chứa một hoặc nhiều phân vùng. Một hệ thống tệp như ext4 tổ chức các tệp bên trong một phân vùng hoặc đối tượng lưu trữ khác. Điểm gắn kết là một thư mục thông thường mà qua đó Linux hiển thị hệ thống tệp đó.\n\nSử dụng `findmnt` để xác định hệ thống tệp hiện đang chứa thư mục dự án. Tùy chọn `-T` chấp nhận bất kỳ đường dẫn nào và tìm hệ thống tệp được gắn kết của nó:\n\n```bash\nfindmnt -T /home/labex/project\n```\n\nThiết bị nguồn chính xác có thể khác nhau, nhưng đầu ra hiển thị nguồn, đích, loại hệ thống tệp và các tùy chọn gắn kết.\n\nLệnh `blkid` đọc các chữ ký (signature) của hệ thống tệp, nhãn (label) và UUID. Cần có quyền quản trị để kiểm tra mọi thiết bị khối khả dụng:\n\n```bash\nsudo blkid\n```\n\nUUID là một định danh hệ thống tệp được thiết kế để giữ nguyên ổn định ngay cả khi tên thiết bị thay đổi. Bạn sẽ sử dụng ý tưởng này sau khi học về việc gắn kết bền vững (persistent mounts).\n\nTạo và truy cập vào một không gian làm việc chuyên dụng:\n\n```bash\nmkdir -p /home/labex/project/storage-lab\n```\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\npwd\n```\n\nKết quả cuối cùng sẽ là `/home/labex/project/storage-lab`.",
+      "task_vi": "Thực hiện hướng dẫn: Hiểu về các tầng lưu trữ Linux",
+      "hint_vi": "Chạy lệnh: lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS"
+    },
+    {
+      "id": "source-17999-section-2-v3",
+      "title": "Analyze Filesystem and Directory Usage",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will compare `df`, which reports space for complete filesystems, with `du`, which measures files and directory trees.\n\nCreate two sample files with known apparent sizes. The `truncate -s` option sets a file's size efficiently without filling it with meaningful data:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nmkdir -p usage/reports usage/archive\n```\n\n```bash\ntruncate -s 2M usage/reports/weekly.log\n```\n\n```bash\ntruncate -s 5M usage/archive/records.bin\n```\n\nUse `df -h` on the workspace. The `-h` option displays human-readable units such as MiB and GiB:\n\n```bash\ndf -h /home/labex/project/storage-lab\n```\n\n`df` answers, \"How much space is used and available on the filesystem containing this path?\" Its important columns are `Size`, `Used`, `Avail`, `Use%`, and `Mounted on`.\n\nUse `du -sh` to summarize the sample directory. Here `-s` means summary and `-h` selects readable units:\n\n```bash\ndu -sh usage\n```\n\nUnlike `df`, `du` answers, \"How much space belongs to this file or directory tree?\" Sparse files created by `truncate` can have a large apparent size while consuming little allocated disk space. The `--apparent-size` option measures their logical sizes:\n\n```bash\ndu -h --apparent-size --max-depth=1 usage\n```\n\nYou should see that `usage/archive` is larger than `usage/reports`. Combine `du` with sorting to list the largest apparent items first:\n\n```bash\ndu -ah --apparent-size usage | sort -rh | head -n 5\n```\n\nThe pipe sends `du` output to `sort`; `-r` reverses the order and `-h` understands readable size suffixes. `head -n 5` keeps the first five results.",
+      "title_vi": "Phân tích dung lượng hệ thống tệp và thư mục",
+      "task": "Thực hiện hướng dẫn: Analyze Filesystem and Directory Usage",
+      "hint": "Chạy lệnh: cd /home/labex/project/storage-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(stat -c %s /home/labex/project/storage-lab/usage/reports/weekly.log)\" = 2097152 && test \"$(stat -c %s /home/labex/project/storage-lab/usage/archive/records.bin)\" = 5242880"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*df\\s+-h\\s+/home/labex/project/storage-lab\\s*$"
+                ],
+                [
+                  "^\\s*du\\s+-h\\s+--apparent-size\\s+--max-depth=1\\s+usage\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ so sánh `df`, lệnh báo cáo dung lượng cho toàn bộ hệ thống tệp, với `du`, lệnh đo lường các tệp và cây thư mục.\n\nTạo hai tệp mẫu với kích thước hiển thị xác định. Tùy chọn `truncate -s` thiết lập kích thước của tệp một cách hiệu quả mà không cần lấp đầy nó bằng dữ liệu có ý nghĩa:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nmkdir -p usage/reports usage/archive\n```\n\n```bash\ntruncate -s 2M usage/reports/weekly.log\n```\n\n```bash\ntruncate -s 5M usage/archive/records.bin\n```\n\nSử dụng `df -h` trên không gian làm việc. Tùy chọn `-h` hiển thị các đơn vị dễ đọc đối với con người như MiB và GiB:\n\n```bash\ndf -h /home/labex/project/storage-lab\n```\n\n`df` trả lời cho câu hỏi: \"Có bao nhiêu dung lượng đã được sử dụng và còn trống trên hệ thống tệp chứa đường dẫn này?\". Các cột quan trọng của nó là `Size`, `Used`, `Avail`, `Use%` và `Mounted on`.\n\nSử dụng `du -sh` để tổng kết thư mục mẫu. Ở đây `-s` có nghĩa là tổng kết (summary) và `-h` chọn các đơn vị dễ đọc:\n\n```bash\ndu -sh usage\n```\n\nKhông giống như `df`, `du` trả lời cho câu hỏi: \"Có bao nhiêu dung lượng thuộc về tệp hoặc cây thư mục này?\". Các tệp thưa (sparse files) được tạo bởi `truncate` có thể có kích thước hiển thị lớn trong khi tiêu thụ ít dung lượng đĩa được cấp phát. Tùy chọn `--apparent-size` đo lường kích thước logic của chúng:\n\n```bash\ndu -h --apparent-size --max-depth=1 usage\n```\n\nBạn sẽ thấy rằng `usage/archive` lớn hơn `usage/reports`. Kết hợp `du` với lệnh sắp xếp để liệt kê các mục có kích thước hiển thị lớn nhất trước tiên:\n\n```bash\ndu -ah --apparent-size usage | sort -rh | head -n 5\n```\n\nĐường ống (pipe) gửi đầu ra của `du` tới `sort`; `-r` đảo ngược thứ tự và `-h` hiểu các hậu tố kích thước dễ đọc. `head -n 5` giữ lại năm kết quả đầu tiên.",
+      "task_vi": "Thực hiện hướng dẫn: Phân tích dung lượng hệ thống tệp và thư mục",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/storage-lab"
+    },
+    {
+      "id": "source-17999-section-3-v3",
+      "title": "Create and Inspect an Ext4 Filesystem",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a virtual disk image, format it with ext4, and inspect its filesystem metadata without touching a real disk.\n\nCreate a 128 MiB image file. This file will act as disposable storage for the rest of the lab:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\ntruncate -s 128M virtual.img\n```\n\nCheck its apparent size:\n\n```bash\nls -lh virtual.img\n```\n\nBefore formatting, `file` sees only generic data or an empty file:\n\n```bash\nfile virtual.img\n```\n\nThe `mkfs.ext4` command creates an ext4 filesystem. The `-F` option confirms that a regular file is an intentional target, and `-L` assigns the label `LABEXDATA`:\n\n```bash\nsudo mkfs.ext4 -F -L LABEXDATA virtual.img\n```\n\nFormatting creates filesystem structures inside the image. Inspect the result with two tools:\n\n```bash\nfile virtual.img\n```\n\n```bash\nsudo blkid -p virtual.img\n```\n\nThe output should identify ext4, show the label `LABEXDATA`, and include a generated UUID. Display only that UUID:\n\n```bash\nsudo blkid -s UUID -o value virtual.img\n```\n\nThe UUID value is generated at formatting time and will differ between learners.",
+      "title_vi": "Tạo và kiểm tra hệ thống tệp Ext4",
+      "task": "Thực hiện hướng dẫn: Create and Inspect an Ext4 Filesystem",
+      "hint": "Chạy lệnh: cd /home/labex/project/storage-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tạo một tệp ảnh đĩa ảo, định dạng nó với hệ thống tệp ext4 và kiểm tra siêu dữ liệu hệ thống tệp của nó mà không cần chạm vào đĩa thật.\n\nTạo một tệp ảnh 128 MiB. Tệp này sẽ đóng vai trò là bộ nhớ lưu trữ dùng một lần cho phần còn lại của phòng thực hành (lab):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\ntruncate -s 128M virtual.img\n```\n\nKiểm tra kích thước thực tế của nó:\n\n```bash\nls -lh virtual.img\n```\n\nTrước khi định dạng, lệnh `file` chỉ nhìn thấy dữ liệu chung hoặc một tệp trống:\n\n```bash\nfile virtual.img\n```\n\nLệnh `mkfs.ext4` tạo một hệ thống tệp ext4. Tùy chọn `-F` xác nhận rằng một tệp thông thường là mục tiêu có chủ đích và `-L` gán nhãn `LABEXDATA`:\n\n```bash\nsudo mkfs.ext4 -F -L LABEXDATA virtual.img\n```\n\nQuá trình định dạng tạo ra các cấu trúc hệ thống tệp bên trong tệp ảnh. Kiểm tra kết quả bằng hai công cụ:\n\n```bash\nfile virtual.img\n```\n\n```bash\nsudo blkid -p virtual.img\n```\n\nĐầu ra sẽ xác định ext4, hiển thị nhãn `LABEXDATA` và bao gồm một UUID được tạo tự động. Chỉ hiển thị UUID đó:\n\n```bash\nsudo blkid -s UUID -o value virtual.img\n```\n\nGiá trị UUID được tạo ra tại thời điểm định dạng và sẽ khác nhau giữa các học viên.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và kiểm tra hệ thống tệp Ext4",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/storage-lab"
+    },
+    {
+      "id": "source-17999-section-4-v3",
+      "title": "Mount, Use, and Unmount the Filesystem",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will attach the virtual filesystem to the Linux directory tree, write one file, and detach it safely.\n\nA mount point is the directory where a filesystem becomes visible. Create one under `/mnt`, a standard location for temporary administrative mounts:\n\n```bash\nsudo mkdir -p /mnt/labex-virtual\n```\n\nMount the image. The `-o loop` option asks Linux to associate the regular file with a loop device so that it can be treated like block storage:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo mount -o loop virtual.img /mnt/labex-virtual\n```\n\nInspect the active mount:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nThe source usually appears as a loop device, the target is `/mnt/labex-virtual`, and the filesystem type is ext4. You can also ask `df` about this specific filesystem:\n\n```bash\ndf -h /mnt/labex-virtual\n```\n\nWrite a file inside the mounted filesystem. `sudo sh -c` is used because redirection is performed by the shell and the mounted root directory belongs to `root`:\n\n```bash\nsudo sh -c 'echo \"stored inside the virtual filesystem\" > /mnt/labex-virtual/welcome.txt'\n```\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nUnmounting flushes pending writes and detaches the filesystem from its mount point:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nConfirm that it is no longer mounted:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nNo output is expected, and `findmnt` returns a nonzero status because it found no active mount at that target. The mount point directory still exists, but the image's contents are no longer accessible through it until the image is mounted again.",
+      "title_vi": "Mount, Sử dụng và Unmount Filesystem",
+      "task": "Thực hiện hướng dẫn: Mount, Use, and Unmount the Filesystem",
+      "hint": "Chạy lệnh: sudo mkdir -p /mnt/labex-virtual",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ gắn (attach) hệ thống tệp ảo vào cây thư mục Linux, ghi một tệp và ngắt kết nối nó một cách an toàn.\n\nĐiểm gắn (mount point) là thư mục nơi hệ thống tệp trở nên hiển thị. Hãy tạo một điểm gắn dưới `/mnt`, một vị trí tiêu chuẩn cho việc gắn kết quản trị tạm thời:\n\n```bash\nsudo mkdir -p /mnt/labex-virtual\n```\n\nGắn (mount) tệp ảnh. Tùy chọn `-o loop` yêu cầu Linux liên kết tệp thông thường với một thiết bị loop để nó có thể được xử lý giống như thiết bị lưu trữ khối (block storage):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo mount -o loop virtual.img /mnt/labex-virtual\n```\n\nKiểm tra điểm gắn đang hoạt động:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nNguồn (source) thường xuất hiện dưới dạng một thiết bị loop, đích (target) là `/mnt/labex-virtual` và loại hệ thống tệp là ext4. Bạn cũng có thể yêu cầu `df` cung cấp thông tin về hệ thống tệp cụ thể này:\n\n```bash\ndf -h /mnt/labex-virtual\n```\n\nGhi một tệp bên trong hệ thống tệp đã được gắn. `sudo sh -c` được sử dụng vì việc chuyển hướng (redirection) được thực hiện bởi shell và thư mục gốc được gắn thuộc quyền sở hữu của `root`:\n\n```bash\nsudo sh -c 'echo \"stored inside the virtual filesystem\" > /mnt/labex-virtual/welcome.txt'\n```\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nViệc ngắt kết nối (unmounting) sẽ xả (flush) các lệnh ghi đang chờ xử lý và tách hệ thống tệp khỏi điểm gắn của nó:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nXác nhận rằng nó không còn được gắn kết nữa:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nKhông có đầu ra nào được trả về và `findmnt` trả về một mã trạng thái khác không vì nó không tìm thấy điểm gắn hoạt động nào tại đích đó. Thư mục điểm gắn vẫn tồn tại, nhưng nội dung của tệp ảnh không còn có thể truy cập được thông qua nó cho đến khi tệp ảnh được gắn lại.",
+      "task_vi": "Thực hiện hướng dẫn: Mount, Sử dụng và Unmount Filesystem",
+      "hint_vi": "Chạy lệnh: sudo mkdir -p /mnt/labex-virtual"
+    },
+    {
+      "id": "source-17999-section-5-v3",
+      "title": "Inspect Partition Tables Safely",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `fdisk` in read-only listing mode and distinguish a partition table from a filesystem signature.\n\nList the system's visible disks and partitions:\n\n```bash\nsudo fdisk -l\n```\n\nThe `-l` option means list. It reports disk sizes, sector sizes, partition-table types, and partitions without changing them. Never start an interactive partitioning session on an unfamiliar production disk.\n\nNow inspect the virtual image:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo fdisk -l virtual.img\n```\n\nThe image has a disk size but no partition entries. In this controlled example, ext4 was created directly in the whole image. On a physical disk, a common layout is:\n\n```text\ndisk device -> partition table -> partition -> filesystem -> mount point\n```\n\nCreate a second empty image for comparison:\n\n```bash\ntruncate -s 64M partition-demo.img\n```\n\n```bash\nsudo fdisk -l partition-demo.img\n```\n\nIt also has no partition table. Compare filesystem signatures with `wipefs` in its default read-only mode:\n\n```bash\nsudo wipefs virtual.img partition-demo.img\n```\n\n`virtual.img` should show an ext4 signature, while the empty comparison image should show no filesystem signature. Do not use the destructive `wipefs -a` option in this lab.",
+      "title_vi": "Kiểm tra bảng phân vùng an toàn",
+      "task": "Thực hiện hướng dẫn: Inspect Partition Tables Safely",
+      "hint": "Chạy lệnh: sudo fdisk -l",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ sử dụng `fdisk` ở chế độ liệt kê chỉ đọc (read-only) và phân biệt bảng phân vùng (partition table) với chữ ký hệ thống tệp (filesystem signature).\n\nLiệt kê các đĩa và phân vùng nhìn thấy được của hệ thống:\n\n```bash\nsudo fdisk -l\n```\n\nTùy chọn `-l` có nghĩa là liệt kê (list). Nó báo cáo kích thước đĩa, kích thước cung đĩa (sector), các loại bảng phân vùng và các phân vùng mà không làm thay đổi chúng. Không bao giờ bắt đầu một phiên phân vùng tương tác trên một đĩa sản xuất (production disk) mà bạn không quen thuộc.\n\nBây giờ hãy kiểm tra ảnh ảo (virtual image):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo fdisk -l virtual.img\n```\n\nẢnh này có kích thước đĩa nhưng không có mục phân vùng nào. Trong ví dụ có kiểm soát này, ext4 được tạo trực tiếp trên toàn bộ ảnh. Trên một đĩa vật lý, bố cục phổ biến là:\n\n```text\ndisk device -> partition table -> partition -> filesystem -> mount point\n```\n\nTạo một ảnh trống thứ hai để so sánh:\n\n```bash\ntruncate -s 64M partition-demo.img\n```\n\n```bash\nsudo fdisk -l partition-demo.img\n```\n\nNó cũng không có bảng phân vùng nào. So sánh các chữ ký hệ thống tệp bằng `wipefs` ở chế độ chỉ đọc mặc định của nó:\n\n```bash\nsudo wipefs virtual.img partition-demo.img\n```\n\n`virtual.img` sẽ hiển thị chữ ký ext4, trong khi ảnh so sánh trống sẽ không hiển thị chữ ký hệ thống tệp nào. Không sử dụng tùy chọn hủy diệt `wipefs -a` trong bài Lab này.",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra bảng phân vùng an toàn",
+      "hint_vi": "Chạy lệnh: sudo fdisk -l"
+    },
+    {
+      "id": "source-17999-section-6-v3",
+      "title": "Build and Validate a Practice Fstab",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will learn the six fields of an fstab entry and safely test a separate practice file without modifying `/etc/fstab`.\n\nThe system reads `/etc/fstab` to decide which filesystems should be mounted consistently. View its non-comment lines without editing the file:\n\n```bash\ngrep -Ev '^\\s*(#|$)' /etc/fstab\n```\n\nAn fstab entry has six whitespace-separated fields:\n\n```text\nsource  mount-point  filesystem-type  options  dump  fsck-order\n```\n\nFor physical partitions, `UUID=<value>` is usually safer than a name such as `/dev/sdb1`, because device names can change when hardware discovery order changes.\n\nCapture the UUID of your image and place a commented UUID example in a practice file:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nuuid=$(sudo blkid -s UUID -o value virtual.img)\n```\n\n```bash\nprintf '## Real block device example: UUID=%s /mnt/data ext4 defaults,nofail 0 2\\n' \"$uuid\" > practice-fstab\n```\n\nBecause this lab uses a regular file rather than a physical partition, its active practice entry uses the absolute image path and the `loop` option:\n\n```bash\nprintf '%s\\n' '/home/labex/project/storage-lab/virtual.img /mnt/labex-virtual ext4 loop,nofail 0 2' >> practice-fstab\n```\n\nDisplay and validate the practice file. `--tab-file` tells `findmnt` not to use the real `/etc/fstab`:\n\n```bash\ncat practice-fstab\n```\n\n```bash\nfindmnt --verify --tab-file practice-fstab\n```\n\nThe final summary should report `0 parse errors` and `0 errors`. It also reports one warning that the source is a regular file. That warning is expected here because this controlled lab intentionally uses a file-backed loop filesystem rather than a physical block device.\n\nUse the practice file for one controlled mount. The `-T` option tells `mount` to read the named alternative fstab file:\n\n```bash\nsudo mount -T practice-fstab /mnt/labex-virtual\n```\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nThe previously created `welcome.txt` should still exist, proving that mounting exposes the filesystem's stored data:\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nUnmount it again so the lab finishes in a safe detached state:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nYou validated persistent-mount syntax without changing the system boot configuration. A mistake in the real `/etc/fstab` can disrupt startup, so administrators commonly validate changes before rebooting.",
+      "title_vi": "Xây dựng và Kiểm tra Fstab Thực hành",
+      "task": "Thực hiện hướng dẫn: Build and Validate a Practice Fstab",
+      "hint": "Chạy lệnh: grep -Ev '^\\s*(#|$)' /etc/fstab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tìm hiểu sáu trường của một mục fstab và kiểm thử an toàn trên một tệp thực hành riêng biệt mà không sửa đổi `/etc/fstab`.\n\nHệ thống đọc `/etc/fstab` để quyết định những hệ thống tệp nào nên được gắn kết một cách nhất quán. Xem các dòng không phải là chú thích của tệp mà không cần chỉnh sửa tệp:\n\n```bash\ngrep -Ev '^\\s*(#|$)' /etc/fstab\n```\n\nMột mục fstab có sáu trường được phân tách bằng khoảng trắng:\n\n```text\nsource  mount-point  filesystem-type  options  dump  fsck-order\n```\n\nĐối với các phân vùng vật lý, `UUID=<value>` thường an toàn hơn so với một tên như `/dev/sdb1`, bởi vì tên thiết bị có thể thay đổi khi thứ tự nhận diện phần cứng thay đổi.\n\nLấy UUID của tệp ảnh của bạn và đặt một ví dụ UUID có chú thích vào tệp thực hành:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nuuid=$(sudo blkid -s UUID -o value virtual.img)\n```\n\n```bash\nprintf '## Real block device example: UUID=%s /mnt/data ext4 defaults,nofail 0 2\\n' \"$uuid\" > practice-fstab\n```\n\nVì bài thực hành này sử dụng một tệp thông thường thay vì một phân vùng vật lý, mục thực hành hoạt động của nó sử dụng đường dẫn tuyệt đối đến tệp ảnh và tùy chọn `loop`:\n\n```bash\nprintf '%s\\n' '/home/labex/project/storage-lab/virtual.img /mnt/labex-virtual ext4 loop,nofail 0 2' >> practice-fstab\n```\n\nHiển thị và kiểm tra tính hợp lệ của tệp thực hành. `--tab-file` báo cho `findmnt` biết không sử dụng tệp `/etc/fstab` thực:\n\n```bash\ncat practice-fstab\n```\n\n```bash\nfindmnt --verify --tab-file practice-fstab\n```\n\nBản tóm tắt cuối cùng sẽ báo cáo `0 parse errors` và `0 errors`. Nó cũng báo cáo một cảnh báo rằng nguồn là một tệp thông thường. Cảnh báo đó là điều được dự kiến ở đây bởi vì bài thực hành có kiểm soát này cố ý sử dụng một hệ thống tệp loop dựa trên tệp thay vì một thiết bị khối vật lý.\n\nSử dụng tệp thực hành cho một lần gắn kết có kiểm soát. Tùy chọn `-T` bảo `mount` đọc tệp fstab thay thế được chỉ định:\n\n```bash\nsudo mount -T practice-fstab /mnt/labex-virtual\n```\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nTệp `welcome.txt` được tạo trước đó vẫn phải tồn tại, chứng minh rằng việc gắn kết làm lộ ra dữ liệu được lưu trữ của hệ thống tệp:\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nGắn kết ngắt (unmount) nó lại để bài thực hành kết thúc ở trạng thái đã ngắt kết nối an toàn:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nBạn đã xác thực cú pháp gắn kết bền vững mà không thay đổi cấu hình khởi động của hệ thống. Một sai sót trong `/etc/fstab` thực tế có thể làm gián đoạn quá trình khởi động, vì vậy các quản trị viên thường xác thực các thay đổi trước khi khởi động lại.",
+      "task_vi": "Thực hiện hướng dẫn: Xây dựng và Kiểm tra Fstab Thực hành",
+      "hint_vi": "Chạy lệnh: grep -Ev '^\\s*(#|$)' /etc/fstab"
+    },
+    {
+      "id": "section-7",
+      "title": "Summary",
+      "position": 7,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You connected the main Linux storage layers: devices, partitions, filesystems, and mount points. You used `lsblk`, `blkid`, and `findmnt` to inspect them, then compared filesystem-wide usage from `df` with file and directory usage from `du`.\n\nYou created and labeled an ext4 filesystem inside a disposable image, mounted it through a loop device, preserved data across an unmount, and inspected partition information without altering real disks. Finally, you learned the six fstab fields, why stable UUIDs matter, and how to validate a separate practice fstab before using it.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã kết nối các tầng lưu trữ chính của Linux: thiết bị, phân vùng, hệ thống tệp và điểm gắn kết. Bạn đã sử dụng `lsblk`, `blkid` và `findmnt` để kiểm tra chúng, sau đó so sánh mức sử dụng trên toàn hệ thống tệp từ `df` với mức sử dụng của tệp và thư mục từ `du`.\n\nBạn đã tạo và dán nhãn một hệ thống tệp ext4 bên trong một tệp ảnh dùng một lần, gắn kết nó thông qua một thiết bị vòng lặp (loop device), bảo toàn dữ liệu sau khi ngắt kết nối (unmount) và kiểm tra thông tin phân vùng mà không làm thay đổi các ổ đĩa thực. Cuối cùng, bạn đã học về sáu trường trong tệp fstab, lý do tại sao các UUID ổn định lại quan trọng, và cách xác thực một tệp fstab thực hành riêng biệt trước khi sử dụng nó."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-17999-section-1-v3",
+      "title": "Understand the Linux Storage Layers",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect the relationship between block devices, filesystems, and mount points, then prepare a safe workspace.\n\nThe `lsblk` command means \"list block devices.\" Its `-o` option selects the columns to display:\n\n```bash\nlsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS\n```\n\nRead the output from left to right:\n\n- `NAME` identifies the device or partition.\n- `TYPE` distinguishes disks, partitions, and loop devices.\n- `SIZE` shows capacity.\n- `FSTYPE` shows the detected filesystem type when one exists.\n- `MOUNTPOINTS` shows where the filesystem is attached to the directory tree.\n\nA disk can contain one or more partitions. A filesystem such as ext4 organizes files inside a partition or other storage object. A mount point is an ordinary directory through which Linux exposes that filesystem.\n\nUse `findmnt` to identify the filesystem that currently contains the project directory. The `-T` option accepts any path and finds its mounted filesystem:\n\n```bash\nfindmnt -T /home/labex/project\n```\n\nThe exact source device can vary, but the output shows the source, target, filesystem type, and mount options.\n\nThe `blkid` command reads filesystem signatures, labels, and UUIDs. Administrative access is needed to inspect every available block device:\n\n```bash\nsudo blkid\n```\n\nA UUID is a filesystem identifier designed to remain stable even when a device name changes. You will use this idea later when studying persistent mounts.\n\nCreate and enter a dedicated workspace:\n\n```bash\nmkdir -p /home/labex/project/storage-lab\n```\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\npwd\n```\n\nThe final output should be `/home/labex/project/storage-lab`.",
+      "title_vi": "Hiểu về các tầng lưu trữ Linux",
+      "task": "Thực hiện hướng dẫn: Understand the Linux Storage Layers",
+      "hint": "Chạy lệnh: lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra mối quan hệ giữa các thiết bị khối, hệ thống tệp và các điểm gắn kết (mount point), sau đó chuẩn bị một không gian làm việc an toàn.\n\nLệnh `lsblk` có nghĩa là \"list block devices\" (liệt kê các thiết bị khối). Tùy chọn `-o` của nó dùng để chọn các cột cần hiển thị:\n\n```bash\nlsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS\n```\n\nĐọc đầu ra từ trái sang phải:\n\n- `NAME` xác định thiết bị hoặc phân vùng.\n- `TYPE` phân biệt đĩa, phân vùng và thiết bị loop.\n- `SIZE` hiển thị dung lượng.\n- `FSTYPE` hiển thị loại hệ thống tệp được phát hiện khi có tồn tại.\n- `MOUNTPOINTS` hiển thị nơi hệ thống tệp được gắn kết vào cây thư mục.\n\nMột ổ đĩa có thể chứa một hoặc nhiều phân vùng. Một hệ thống tệp như ext4 tổ chức các tệp bên trong một phân vùng hoặc đối tượng lưu trữ khác. Điểm gắn kết là một thư mục thông thường mà qua đó Linux hiển thị hệ thống tệp đó.\n\nSử dụng `findmnt` để xác định hệ thống tệp hiện đang chứa thư mục dự án. Tùy chọn `-T` chấp nhận bất kỳ đường dẫn nào và tìm hệ thống tệp được gắn kết của nó:\n\n```bash\nfindmnt -T /home/labex/project\n```\n\nThiết bị nguồn chính xác có thể khác nhau, nhưng đầu ra hiển thị nguồn, đích, loại hệ thống tệp và các tùy chọn gắn kết.\n\nLệnh `blkid` đọc các chữ ký (signature) của hệ thống tệp, nhãn (label) và UUID. Cần có quyền quản trị để kiểm tra mọi thiết bị khối khả dụng:\n\n```bash\nsudo blkid\n```\n\nUUID là một định danh hệ thống tệp được thiết kế để giữ nguyên ổn định ngay cả khi tên thiết bị thay đổi. Bạn sẽ sử dụng ý tưởng này sau khi học về việc gắn kết bền vững (persistent mounts).\n\nTạo và truy cập vào một không gian làm việc chuyên dụng:\n\n```bash\nmkdir -p /home/labex/project/storage-lab\n```\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\npwd\n```\n\nKết quả cuối cùng sẽ là `/home/labex/project/storage-lab`.",
+      "task_vi": "Thực hiện hướng dẫn: Hiểu về các tầng lưu trữ Linux",
+      "hint_vi": "Chạy lệnh: lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS"
+    },
+    {
+      "id": "source-17999-section-2-v3",
+      "title": "Analyze Filesystem and Directory Usage",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will compare `df`, which reports space for complete filesystems, with `du`, which measures files and directory trees.\n\nCreate two sample files with known apparent sizes. The `truncate -s` option sets a file's size efficiently without filling it with meaningful data:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nmkdir -p usage/reports usage/archive\n```\n\n```bash\ntruncate -s 2M usage/reports/weekly.log\n```\n\n```bash\ntruncate -s 5M usage/archive/records.bin\n```\n\nUse `df -h` on the workspace. The `-h` option displays human-readable units such as MiB and GiB:\n\n```bash\ndf -h /home/labex/project/storage-lab\n```\n\n`df` answers, \"How much space is used and available on the filesystem containing this path?\" Its important columns are `Size`, `Used`, `Avail`, `Use%`, and `Mounted on`.\n\nUse `du -sh` to summarize the sample directory. Here `-s` means summary and `-h` selects readable units:\n\n```bash\ndu -sh usage\n```\n\nUnlike `df`, `du` answers, \"How much space belongs to this file or directory tree?\" Sparse files created by `truncate` can have a large apparent size while consuming little allocated disk space. The `--apparent-size` option measures their logical sizes:\n\n```bash\ndu -h --apparent-size --max-depth=1 usage\n```\n\nYou should see that `usage/archive` is larger than `usage/reports`. Combine `du` with sorting to list the largest apparent items first:\n\n```bash\ndu -ah --apparent-size usage | sort -rh | head -n 5\n```\n\nThe pipe sends `du` output to `sort`; `-r` reverses the order and `-h` understands readable size suffixes. `head -n 5` keeps the first five results.",
+      "title_vi": "Phân tích dung lượng hệ thống tệp và thư mục",
+      "task": "Thực hiện hướng dẫn: Analyze Filesystem and Directory Usage",
+      "hint": "Chạy lệnh: cd /home/labex/project/storage-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(stat -c %s /home/labex/project/storage-lab/usage/reports/weekly.log)\" = 2097152 && test \"$(stat -c %s /home/labex/project/storage-lab/usage/archive/records.bin)\" = 5242880"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*df\\s+-h\\s+/home/labex/project/storage-lab\\s*$"
+                ],
+                [
+                  "^\\s*du\\s+-h\\s+--apparent-size\\s+--max-depth=1\\s+usage\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(stat -c %s /home/labex/project/storage-lab/usage/reports/weekly.log)\" = 2097152 && test \"$(stat -c %s /home/labex/project/storage-lab/usage/archive/records.bin)\" = 5242880"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*df\\s+-h\\s+/home/labex/project/storage-lab\\s*$"
+                ],
+                [
+                  "^\\s*du\\s+-h\\s+--apparent-size\\s+--max-depth=1\\s+usage\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ so sánh `df`, lệnh báo cáo dung lượng cho toàn bộ hệ thống tệp, với `du`, lệnh đo lường các tệp và cây thư mục.\n\nTạo hai tệp mẫu với kích thước hiển thị xác định. Tùy chọn `truncate -s` thiết lập kích thước của tệp một cách hiệu quả mà không cần lấp đầy nó bằng dữ liệu có ý nghĩa:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nmkdir -p usage/reports usage/archive\n```\n\n```bash\ntruncate -s 2M usage/reports/weekly.log\n```\n\n```bash\ntruncate -s 5M usage/archive/records.bin\n```\n\nSử dụng `df -h` trên không gian làm việc. Tùy chọn `-h` hiển thị các đơn vị dễ đọc đối với con người như MiB và GiB:\n\n```bash\ndf -h /home/labex/project/storage-lab\n```\n\n`df` trả lời cho câu hỏi: \"Có bao nhiêu dung lượng đã được sử dụng và còn trống trên hệ thống tệp chứa đường dẫn này?\". Các cột quan trọng của nó là `Size`, `Used`, `Avail`, `Use%` và `Mounted on`.\n\nSử dụng `du -sh` để tổng kết thư mục mẫu. Ở đây `-s` có nghĩa là tổng kết (summary) và `-h` chọn các đơn vị dễ đọc:\n\n```bash\ndu -sh usage\n```\n\nKhông giống như `df`, `du` trả lời cho câu hỏi: \"Có bao nhiêu dung lượng thuộc về tệp hoặc cây thư mục này?\". Các tệp thưa (sparse files) được tạo bởi `truncate` có thể có kích thước hiển thị lớn trong khi tiêu thụ ít dung lượng đĩa được cấp phát. Tùy chọn `--apparent-size` đo lường kích thước logic của chúng:\n\n```bash\ndu -h --apparent-size --max-depth=1 usage\n```\n\nBạn sẽ thấy rằng `usage/archive` lớn hơn `usage/reports`. Kết hợp `du` với lệnh sắp xếp để liệt kê các mục có kích thước hiển thị lớn nhất trước tiên:\n\n```bash\ndu -ah --apparent-size usage | sort -rh | head -n 5\n```\n\nĐường ống (pipe) gửi đầu ra của `du` tới `sort`; `-r` đảo ngược thứ tự và `-h` hiểu các hậu tố kích thước dễ đọc. `head -n 5` giữ lại năm kết quả đầu tiên.",
+      "task_vi": "Thực hiện hướng dẫn: Phân tích dung lượng hệ thống tệp và thư mục",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/storage-lab"
+    },
+    {
+      "id": "source-17999-section-3-v3",
+      "title": "Create and Inspect an Ext4 Filesystem",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a virtual disk image, format it with ext4, and inspect its filesystem metadata without touching a real disk.\n\nCreate a 128 MiB image file. This file will act as disposable storage for the rest of the lab:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\ntruncate -s 128M virtual.img\n```\n\nCheck its apparent size:\n\n```bash\nls -lh virtual.img\n```\n\nBefore formatting, `file` sees only generic data or an empty file:\n\n```bash\nfile virtual.img\n```\n\nThe `mkfs.ext4` command creates an ext4 filesystem. The `-F` option confirms that a regular file is an intentional target, and `-L` assigns the label `LABEXDATA`:\n\n```bash\nsudo mkfs.ext4 -F -L LABEXDATA virtual.img\n```\n\nFormatting creates filesystem structures inside the image. Inspect the result with two tools:\n\n```bash\nfile virtual.img\n```\n\n```bash\nsudo blkid -p virtual.img\n```\n\nThe output should identify ext4, show the label `LABEXDATA`, and include a generated UUID. Display only that UUID:\n\n```bash\nsudo blkid -s UUID -o value virtual.img\n```\n\nThe UUID value is generated at formatting time and will differ between learners.",
+      "title_vi": "Tạo và kiểm tra hệ thống tệp Ext4",
+      "task": "Thực hiện hướng dẫn: Create and Inspect an Ext4 Filesystem",
+      "hint": "Chạy lệnh: cd /home/labex/project/storage-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tạo một tệp ảnh đĩa ảo, định dạng nó với hệ thống tệp ext4 và kiểm tra siêu dữ liệu hệ thống tệp của nó mà không cần chạm vào đĩa thật.\n\nTạo một tệp ảnh 128 MiB. Tệp này sẽ đóng vai trò là bộ nhớ lưu trữ dùng một lần cho phần còn lại của phòng thực hành (lab):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\ntruncate -s 128M virtual.img\n```\n\nKiểm tra kích thước thực tế của nó:\n\n```bash\nls -lh virtual.img\n```\n\nTrước khi định dạng, lệnh `file` chỉ nhìn thấy dữ liệu chung hoặc một tệp trống:\n\n```bash\nfile virtual.img\n```\n\nLệnh `mkfs.ext4` tạo một hệ thống tệp ext4. Tùy chọn `-F` xác nhận rằng một tệp thông thường là mục tiêu có chủ đích và `-L` gán nhãn `LABEXDATA`:\n\n```bash\nsudo mkfs.ext4 -F -L LABEXDATA virtual.img\n```\n\nQuá trình định dạng tạo ra các cấu trúc hệ thống tệp bên trong tệp ảnh. Kiểm tra kết quả bằng hai công cụ:\n\n```bash\nfile virtual.img\n```\n\n```bash\nsudo blkid -p virtual.img\n```\n\nĐầu ra sẽ xác định ext4, hiển thị nhãn `LABEXDATA` và bao gồm một UUID được tạo tự động. Chỉ hiển thị UUID đó:\n\n```bash\nsudo blkid -s UUID -o value virtual.img\n```\n\nGiá trị UUID được tạo ra tại thời điểm định dạng và sẽ khác nhau giữa các học viên.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo và kiểm tra hệ thống tệp Ext4",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/storage-lab"
+    },
+    {
+      "id": "source-17999-section-4-v3",
+      "title": "Mount, Use, and Unmount the Filesystem",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will attach the virtual filesystem to the Linux directory tree, write one file, and detach it safely.\n\nA mount point is the directory where a filesystem becomes visible. Create one under `/mnt`, a standard location for temporary administrative mounts:\n\n```bash\nsudo mkdir -p /mnt/labex-virtual\n```\n\nMount the image. The `-o loop` option asks Linux to associate the regular file with a loop device so that it can be treated like block storage:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo mount -o loop virtual.img /mnt/labex-virtual\n```\n\nInspect the active mount:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nThe source usually appears as a loop device, the target is `/mnt/labex-virtual`, and the filesystem type is ext4. You can also ask `df` about this specific filesystem:\n\n```bash\ndf -h /mnt/labex-virtual\n```\n\nWrite a file inside the mounted filesystem. `sudo sh -c` is used because redirection is performed by the shell and the mounted root directory belongs to `root`:\n\n```bash\nsudo sh -c 'echo \"stored inside the virtual filesystem\" > /mnt/labex-virtual/welcome.txt'\n```\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nUnmounting flushes pending writes and detaches the filesystem from its mount point:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nConfirm that it is no longer mounted:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nNo output is expected, and `findmnt` returns a nonzero status because it found no active mount at that target. The mount point directory still exists, but the image's contents are no longer accessible through it until the image is mounted again.",
+      "title_vi": "Mount, Sử dụng và Unmount Filesystem",
+      "task": "Thực hiện hướng dẫn: Mount, Use, and Unmount the Filesystem",
+      "hint": "Chạy lệnh: sudo mkdir -p /mnt/labex-virtual",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ gắn (attach) hệ thống tệp ảo vào cây thư mục Linux, ghi một tệp và ngắt kết nối nó một cách an toàn.\n\nĐiểm gắn (mount point) là thư mục nơi hệ thống tệp trở nên hiển thị. Hãy tạo một điểm gắn dưới `/mnt`, một vị trí tiêu chuẩn cho việc gắn kết quản trị tạm thời:\n\n```bash\nsudo mkdir -p /mnt/labex-virtual\n```\n\nGắn (mount) tệp ảnh. Tùy chọn `-o loop` yêu cầu Linux liên kết tệp thông thường với một thiết bị loop để nó có thể được xử lý giống như thiết bị lưu trữ khối (block storage):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo mount -o loop virtual.img /mnt/labex-virtual\n```\n\nKiểm tra điểm gắn đang hoạt động:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nNguồn (source) thường xuất hiện dưới dạng một thiết bị loop, đích (target) là `/mnt/labex-virtual` và loại hệ thống tệp là ext4. Bạn cũng có thể yêu cầu `df` cung cấp thông tin về hệ thống tệp cụ thể này:\n\n```bash\ndf -h /mnt/labex-virtual\n```\n\nGhi một tệp bên trong hệ thống tệp đã được gắn. `sudo sh -c` được sử dụng vì việc chuyển hướng (redirection) được thực hiện bởi shell và thư mục gốc được gắn thuộc quyền sở hữu của `root`:\n\n```bash\nsudo sh -c 'echo \"stored inside the virtual filesystem\" > /mnt/labex-virtual/welcome.txt'\n```\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nViệc ngắt kết nối (unmounting) sẽ xả (flush) các lệnh ghi đang chờ xử lý và tách hệ thống tệp khỏi điểm gắn của nó:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nXác nhận rằng nó không còn được gắn kết nữa:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nKhông có đầu ra nào được trả về và `findmnt` trả về một mã trạng thái khác không vì nó không tìm thấy điểm gắn hoạt động nào tại đích đó. Thư mục điểm gắn vẫn tồn tại, nhưng nội dung của tệp ảnh không còn có thể truy cập được thông qua nó cho đến khi tệp ảnh được gắn lại.",
+      "task_vi": "Thực hiện hướng dẫn: Mount, Sử dụng và Unmount Filesystem",
+      "hint_vi": "Chạy lệnh: sudo mkdir -p /mnt/labex-virtual"
+    },
+    {
+      "id": "source-17999-section-5-v3",
+      "title": "Inspect Partition Tables Safely",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `fdisk` in read-only listing mode and distinguish a partition table from a filesystem signature.\n\nList the system's visible disks and partitions:\n\n```bash\nsudo fdisk -l\n```\n\nThe `-l` option means list. It reports disk sizes, sector sizes, partition-table types, and partitions without changing them. Never start an interactive partitioning session on an unfamiliar production disk.\n\nNow inspect the virtual image:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo fdisk -l virtual.img\n```\n\nThe image has a disk size but no partition entries. In this controlled example, ext4 was created directly in the whole image. On a physical disk, a common layout is:\n\n```text\ndisk device -> partition table -> partition -> filesystem -> mount point\n```\n\nCreate a second empty image for comparison:\n\n```bash\ntruncate -s 64M partition-demo.img\n```\n\n```bash\nsudo fdisk -l partition-demo.img\n```\n\nIt also has no partition table. Compare filesystem signatures with `wipefs` in its default read-only mode:\n\n```bash\nsudo wipefs virtual.img partition-demo.img\n```\n\n`virtual.img` should show an ext4 signature, while the empty comparison image should show no filesystem signature. Do not use the destructive `wipefs -a` option in this lab.",
+      "title_vi": "Kiểm tra bảng phân vùng an toàn",
+      "task": "Thực hiện hướng dẫn: Inspect Partition Tables Safely",
+      "hint": "Chạy lệnh: sudo fdisk -l",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ sử dụng `fdisk` ở chế độ liệt kê chỉ đọc (read-only) và phân biệt bảng phân vùng (partition table) với chữ ký hệ thống tệp (filesystem signature).\n\nLiệt kê các đĩa và phân vùng nhìn thấy được của hệ thống:\n\n```bash\nsudo fdisk -l\n```\n\nTùy chọn `-l` có nghĩa là liệt kê (list). Nó báo cáo kích thước đĩa, kích thước cung đĩa (sector), các loại bảng phân vùng và các phân vùng mà không làm thay đổi chúng. Không bao giờ bắt đầu một phiên phân vùng tương tác trên một đĩa sản xuất (production disk) mà bạn không quen thuộc.\n\nBây giờ hãy kiểm tra ảnh ảo (virtual image):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo fdisk -l virtual.img\n```\n\nẢnh này có kích thước đĩa nhưng không có mục phân vùng nào. Trong ví dụ có kiểm soát này, ext4 được tạo trực tiếp trên toàn bộ ảnh. Trên một đĩa vật lý, bố cục phổ biến là:\n\n```text\ndisk device -> partition table -> partition -> filesystem -> mount point\n```\n\nTạo một ảnh trống thứ hai để so sánh:\n\n```bash\ntruncate -s 64M partition-demo.img\n```\n\n```bash\nsudo fdisk -l partition-demo.img\n```\n\nNó cũng không có bảng phân vùng nào. So sánh các chữ ký hệ thống tệp bằng `wipefs` ở chế độ chỉ đọc mặc định của nó:\n\n```bash\nsudo wipefs virtual.img partition-demo.img\n```\n\n`virtual.img` sẽ hiển thị chữ ký ext4, trong khi ảnh so sánh trống sẽ không hiển thị chữ ký hệ thống tệp nào. Không sử dụng tùy chọn hủy diệt `wipefs -a` trong bài Lab này.",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra bảng phân vùng an toàn",
+      "hint_vi": "Chạy lệnh: sudo fdisk -l"
+    },
+    {
+      "id": "source-17999-section-6-v3",
+      "title": "Build and Validate a Practice Fstab",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will learn the six fields of an fstab entry and safely test a separate practice file without modifying `/etc/fstab`.\n\nThe system reads `/etc/fstab` to decide which filesystems should be mounted consistently. View its non-comment lines without editing the file:\n\n```bash\ngrep -Ev '^\\s*(#|$)' /etc/fstab\n```\n\nAn fstab entry has six whitespace-separated fields:\n\n```text\nsource  mount-point  filesystem-type  options  dump  fsck-order\n```\n\nFor physical partitions, `UUID=<value>` is usually safer than a name such as `/dev/sdb1`, because device names can change when hardware discovery order changes.\n\nCapture the UUID of your image and place a commented UUID example in a practice file:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nuuid=$(sudo blkid -s UUID -o value virtual.img)\n```\n\n```bash\nprintf '## Real block device example: UUID=%s /mnt/data ext4 defaults,nofail 0 2\\n' \"$uuid\" > practice-fstab\n```\n\nBecause this lab uses a regular file rather than a physical partition, its active practice entry uses the absolute image path and the `loop` option:\n\n```bash\nprintf '%s\\n' '/home/labex/project/storage-lab/virtual.img /mnt/labex-virtual ext4 loop,nofail 0 2' >> practice-fstab\n```\n\nDisplay and validate the practice file. `--tab-file` tells `findmnt` not to use the real `/etc/fstab`:\n\n```bash\ncat practice-fstab\n```\n\n```bash\nfindmnt --verify --tab-file practice-fstab\n```\n\nThe final summary should report `0 parse errors` and `0 errors`. It also reports one warning that the source is a regular file. That warning is expected here because this controlled lab intentionally uses a file-backed loop filesystem rather than a physical block device.\n\nUse the practice file for one controlled mount. The `-T` option tells `mount` to read the named alternative fstab file:\n\n```bash\nsudo mount -T practice-fstab /mnt/labex-virtual\n```\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nThe previously created `welcome.txt` should still exist, proving that mounting exposes the filesystem's stored data:\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nUnmount it again so the lab finishes in a safe detached state:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nYou validated persistent-mount syntax without changing the system boot configuration. A mistake in the real `/etc/fstab` can disrupt startup, so administrators commonly validate changes before rebooting.",
+      "title_vi": "Xây dựng và Kiểm tra Fstab Thực hành",
+      "task": "Thực hiện hướng dẫn: Build and Validate a Practice Fstab",
+      "hint": "Chạy lệnh: grep -Ev '^\\s*(#|$)' /etc/fstab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tìm hiểu sáu trường của một mục fstab và kiểm thử an toàn trên một tệp thực hành riêng biệt mà không sửa đổi `/etc/fstab`.\n\nHệ thống đọc `/etc/fstab` để quyết định những hệ thống tệp nào nên được gắn kết một cách nhất quán. Xem các dòng không phải là chú thích của tệp mà không cần chỉnh sửa tệp:\n\n```bash\ngrep -Ev '^\\s*(#|$)' /etc/fstab\n```\n\nMột mục fstab có sáu trường được phân tách bằng khoảng trắng:\n\n```text\nsource  mount-point  filesystem-type  options  dump  fsck-order\n```\n\nĐối với các phân vùng vật lý, `UUID=<value>` thường an toàn hơn so với một tên như `/dev/sdb1`, bởi vì tên thiết bị có thể thay đổi khi thứ tự nhận diện phần cứng thay đổi.\n\nLấy UUID của tệp ảnh của bạn và đặt một ví dụ UUID có chú thích vào tệp thực hành:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nuuid=$(sudo blkid -s UUID -o value virtual.img)\n```\n\n```bash\nprintf '## Real block device example: UUID=%s /mnt/data ext4 defaults,nofail 0 2\\n' \"$uuid\" > practice-fstab\n```\n\nVì bài thực hành này sử dụng một tệp thông thường thay vì một phân vùng vật lý, mục thực hành hoạt động của nó sử dụng đường dẫn tuyệt đối đến tệp ảnh và tùy chọn `loop`:\n\n```bash\nprintf '%s\\n' '/home/labex/project/storage-lab/virtual.img /mnt/labex-virtual ext4 loop,nofail 0 2' >> practice-fstab\n```\n\nHiển thị và kiểm tra tính hợp lệ của tệp thực hành. `--tab-file` báo cho `findmnt` biết không sử dụng tệp `/etc/fstab` thực:\n\n```bash\ncat practice-fstab\n```\n\n```bash\nfindmnt --verify --tab-file practice-fstab\n```\n\nBản tóm tắt cuối cùng sẽ báo cáo `0 parse errors` và `0 errors`. Nó cũng báo cáo một cảnh báo rằng nguồn là một tệp thông thường. Cảnh báo đó là điều được dự kiến ở đây bởi vì bài thực hành có kiểm soát này cố ý sử dụng một hệ thống tệp loop dựa trên tệp thay vì một thiết bị khối vật lý.\n\nSử dụng tệp thực hành cho một lần gắn kết có kiểm soát. Tùy chọn `-T` bảo `mount` đọc tệp fstab thay thế được chỉ định:\n\n```bash\nsudo mount -T practice-fstab /mnt/labex-virtual\n```\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nTệp `welcome.txt` được tạo trước đó vẫn phải tồn tại, chứng minh rằng việc gắn kết làm lộ ra dữ liệu được lưu trữ của hệ thống tệp:\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nGắn kết ngắt (unmount) nó lại để bài thực hành kết thúc ở trạng thái đã ngắt kết nối an toàn:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nBạn đã xác thực cú pháp gắn kết bền vững mà không thay đổi cấu hình khởi động của hệ thống. Một sai sót trong `/etc/fstab` thực tế có thể làm gián đoạn quá trình khởi động, vì vậy các quản trị viên thường xác thực các thay đổi trước khi khởi động lại.",
+      "task_vi": "Thực hiện hướng dẫn: Xây dựng và Kiểm tra Fstab Thực hành",
+      "hint_vi": "Chạy lệnh: grep -Ev '^\\s*(#|$)' /etc/fstab"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-file-system-and-disk-management-17999.json"
+}

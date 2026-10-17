@@ -1,0 +1,537 @@
+{
+  "id": "linux-basic-file-operations-in-linux-18001",
+  "course_id": "linux-for-noobs",
+  "order": 3,
+  "title": "Basic File Operations in Linux",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "50 mins",
+  "overview": "Linux organizes data as a tree of directories and files. Commands operate on locations in that tree, so reliable file work begins with three questions: Where am I? What is here? Which path identifies",
+  "source_url": "https://labex.io/tutorials/linux-basic-file-operations-in-linux-18001",
+  "source_lab_id": 18001,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Linux organizes data as a tree of directories and files. Commands operate on locations in that tree, so reliable file work begins with three questions: Where am I? What is here? Which path identifies the item I want?\n\nThis lab builds those ideas gradually in `/home/labex/project/file-basics`. You will navigate with absolute and relative paths, inspect visible and hidden entries, create files and directories, select names with wildcards, and safely copy, move, and remove practice files. The final step introduces terminal shortcuts that make these operations faster without changing their meaning.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Linux tổ chức dữ liệu thành một cấu trúc cây gồm các thư mục và tệp tin. Các lệnh hoạt động trên các vị trí trong cây đó, vì vậy việc thao tác với tệp tin một cách đáng tin cậy bắt đầu bằng ba câu hỏi: Tôi đang ở đâu? Có gì ở đây? Đường dẫn nào xác định mục tiêu tôi muốn?\n\nPhòng thực hành (lab) này xây dựng các ý tưởng đó một cách tuần tự trong `/home/labex/project/file-basics`. Bạn sẽ điều hướng bằng đường dẫn tuyệt đối và tương đối, kiểm tra các mục hiển thị và ẩn, tạo tệp và thư mục, chọn tên với các ký tự đại diện (wildcards), đồng thời sao chép, di chuyển và xóa các tệp thực hành một cách an toàn. Bước cuối cùng giới thiệu các phím tắt trên terminal giúp các thao tác này nhanh hơn mà không làm thay đổi ý nghĩa của chúng."
+    },
+    {
+      "id": "source-18001-section-1-v3",
+      "title": "Locate Your Working Directory",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will connect the terminal prompt to the directory where commands operate.\n\nThe shell always has a current working directory. Relative paths start from that directory, so checking your location prevents many beginner mistakes. Move to this lab's workspace using its complete path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nA path beginning with `/` is an **absolute path**. It starts at the filesystem root and identifies the same location regardless of where you began.\n\nPrint the working directory:\n\n```bash\npwd\n```\n\nYou should see:\n\n```text\n/home/labex/project/file-basics\n```\n\nSave that location as evidence. The `>` operator redirects the output into `starting-location.txt`; because the output goes to the file, nothing is printed this time:\n\n```bash\npwd > starting-location.txt\n```\n\nRead the file to confirm what was saved:\n\n```bash\ncat starting-location.txt\n```\n\nThe terminal screen and the file should show the same absolute path.",
+      "task": "Thực hiện hướng dẫn: Locate Your Working Directory",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics",
+      "title_vi": "Xác Định Thư Mục Làm Việc Hiện Tại",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Xác Định Thư Mục Làm Việc Hiện Tại",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/starting-location.txt <(printf %s '/home/labex/project/file-basics\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kết nối dấu nhắc terminal với thư mục nơi các lệnh hoạt động.\n\nShell luôn có một thư mục làm việc hiện tại. Các đường dẫn tương đối bắt đầu từ thư mục đó, vì vậy việc kiểm tra vị trí của bạn giúp ngăn ngừa nhiều lỗi của người mới bắt đầu. Di chuyển đến không gian làm việc của Lab này bằng đường dẫn đầy đủ của nó:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nMột đường dẫn bắt đầu bằng `/` là một **đường dẫn tuyệt đối**. Nó bắt đầu từ gốc của hệ thống tệp và xác định cùng một vị trí bất kể bạn bắt đầu từ đâu.\n\nIn ra thư mục làm việc:\n\n```bash\npwd\n```\n\nBạn sẽ thấy:\n\n```text\n/home/labex/project/file-basics\n```\n\nLưu vị trí đó làm bằng chứng. Toán tử `>` chuyển hướng đầu ra vào tệp `starting-location.txt`; vì đầu ra đi vào tệp, không có gì được in ra trong lần này:\n\n```bash\npwd > starting-location.txt\n```\n\nĐọc tệp để xác nhận những gì đã được lưu:\n\n```bash\ncat starting-location.txt\n```\n\nMàn hình terminal và tệp phải hiển thị cùng một đường dẫn tuyệt đối.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics"
+    },
+    {
+      "id": "source-18001-section-2-v3",
+      "title": "Navigate with Relative Paths",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will move through neighboring directories using relative paths and the special names `.` and `..`.\n\nReturn to the workspace if necessary:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nList its visible entries:\n\n```bash\nls\n```\n\nYou should see `path-map` and `starting-location.txt`. Enter `path-map` using a **relative path**—a path interpreted from the current directory:\n\n```bash\ncd path-map\n```\n\n```bash\npwd\n```\n\nNow enter `north` and read its reference file:\n\n```bash\ncd north\n```\n\n```bash\ncat reference.txt\n```\n\nThe output is `north reference`. The name `..` means the parent directory, one level above the current location:\n\n```bash\ncd ..\n```\n\nMove from `path-map` into its `south` child:\n\n```bash\ncd south\n```\n\n```bash\ncat reference.txt\n```\n\nThe name `.` means the current directory. Save the current absolute location into the lab root by combining `pwd` with a relative destination that climbs two levels:\n\n```bash\npwd > ../../relative-location.txt\n```\n\nReturn directly to the lab root with its absolute path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\ncat relative-location.txt\n```\n\nThe saved path should end with `/path-map/south`. You have used both relative movement and an absolute return path.",
+      "task": "Thực hiện hướng dẫn: Navigate with Relative Paths",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics",
+      "title_vi": "Điều Hướng Bằng Đường Dẫn Tương Đối",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Điều Hướng Bằng Đường Dẫn Tương Đối",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/relative-location.txt <(printf %s '/home/labex/project/file-basics/path-map/south\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ di chuyển qua lại giữa các thư mục lân cận bằng cách sử dụng đường dẫn tương đối và các tên đặc biệt `.` và `..`.\n\nTrở lại không gian làm việc nếu cần thiết:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nLiệt kê các mục hiển thị của nó:\n\n```bash\nls\n```\n\nBạn sẽ thấy `path-map` và `starting-location.txt`. Hãy đi vào `path-map` bằng cách sử dụng một **đường dẫn tương đối** — một đường dẫn được diễn giải từ thư mục hiện tại:\n\n```bash\ncd path-map\n```\n\n```bash\npwd\n```\n\nBây giờ hãy đi vào `north` và đọc tệp tham chiếu của nó:\n\n```bash\ncd north\n```\n\n```bash\ncat reference.txt\n```\n\nĐầu ra là `north reference`. Tên `..` có nghĩa là thư mục cha, cao hơn một cấp so với vị trí hiện tại:\n\n```bash\ncd ..\n```\n\nDi chuyển từ `path-map` vào thư mục con `south` của nó:\n\n```bash\ncd south\n```\n\n```bash\ncat reference.txt\n```\n\nTên `.` có nghĩa là thư mục hiện tại. Lưu vị trí tuyệt đối hiện tại vào thư mục gốc của lab bằng cách kết hợp `pwd` với một đích đến tương đối đi lên hai cấp:\n\n```bash\npwd > ../../relative-location.txt\n```\n\nTrở lại trực tiếp thư mục gốc của lab bằng đường dẫn tuyệt đối của nó:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\ncat relative-location.txt\n```\n\nĐường dẫn được lưu phải kết thúc bằng `/path-map/south`. Bạn đã sử dụng cả việc di chuyển tương đối và đường dẫn tuyệt đối để quay lại.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics"
+    },
+    {
+      "id": "source-18001-section-3-v3",
+      "title": "Inspect Directory Contents",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `ls` options to reveal hidden names and file details.\n\nRun a plain listing in the lab root:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nls\n```\n\nLinux normally hides names that begin with a dot. The `-a` option means “all” and includes those entries:\n\n```bash\nls -a\n```\n\nYou should now see `.practice-note`, along with `.` for the current directory and `..` for its parent.\n\nThe `-l` option produces a **long listing** with permissions, owner, size, time, and name:\n\n```bash\nls -l\n```\n\nCombine the options to inspect all entries in long form:\n\n```bash\nls -la\n```\n\nEach output line begins with a type and permission field. A leading `d` identifies a directory; a leading `-` identifies a regular file. Permissions are taught in depth later.\n\nSave the names, including hidden entries. `ls` already displays them alphabetically in this controlled workspace, so no additional sorting command is needed yet:\n\n```bash\nls -A > all-names.txt\n```\n\nUnlike `-a`, `-A` omits the special `.` and `..` entries while retaining other hidden names. Display the result:\n\n```bash\ncat all-names.txt\n```\n\nThe list should include `.practice-note`, `path-map`, and the files created in earlier steps.",
+      "task": "Thực hiện hướng dẫn: Inspect Directory Contents",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics",
+      "title_vi": "Kiểm Tra Nội Dung Thư Mục",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Kiểm Tra Nội Dung Thư Mục",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -Fxq .practice-note /home/labex/project/file-basics/all-names.txt && grep -Fxq path-map /home/labex/project/file-basics/all-names.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng các tùy chọn của `ls` để hiển thị tên ẩn và chi tiết tệp.\n\nChạy một lệnh liệt kê thông thường trong thư mục gốc của lab:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nls\n```\n\nLinux thông thường ẩn các tên bắt đầu bằng một dấu chấm. Tùy chọn `-a` có nghĩa là \"all\" (tất cả) và bao gồm cả các mục đó:\n\n```bash\nls -a\n```\n\nBây giờ bạn sẽ thấy `.practice-note`, cùng với `.` cho thư mục hiện tại và `..` cho thư mục cha của nó.\n\nTùy chọn `-l` tạo ra một **danh sách chi tiết (long listing)** bao gồm quyền hạn, chủ sở hữu, kích thước, thời gian và tên:\n\n```bash\nls -l\n```\n\nKết hợp các tùy chọn để kiểm tra tất cả các mục ở dạng chi tiết:\n\n```bash\nls -la\n```\n\nMỗi dòng đầu ra bắt đầu bằng một trường loại và quyền hạn. Ký tự `d` ở đầu xác định một thư mục; ký tự `-` ở đầu xác định một tệp thông thường. Quyền hạn sẽ được hướng dẫn chi tiết ở phần sau.\n\nLưu các tên, bao gồm cả các mục ẩn. `ls` đã hiển thị chúng theo thứ tự bảng chữ cái trong không gian làm việc được kiểm soát này, vì vậy chưa cần thêm lệnh sắp xếp nào khác:\n\n```bash\nls -A > all-names.txt\n```\n\nKhông giống như `-a`, `-A` bỏ qua các mục đặc biệt `.` và `..` trong khi vẫn giữ lại các tên ẩn khác. Hiển thị kết quả:\n\n```bash\ncat all-names.txt\n```\n\nDanh sách nên bao gồm `.practice-note`, `path-map`, và các tệp được tạo trong các bước trước.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics"
+    },
+    {
+      "id": "source-18001-section-4-v3",
+      "title": "Create Directories and Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a small project tree and place text inside regular files.\n\n`mkdir` creates a directory. Its `-p` option also creates missing parent directories, so one command can build a nested path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nmkdir -p workspace/docs workspace/logs\n```\n\nThis creates `workspace` plus its `docs` and `logs` children. Inspect the result:\n\n```bash\nfind workspace -maxdepth 2 -type d\n```\n\n`touch` creates an empty file when the name does not exist. Create two files at once:\n\n```bash\ntouch workspace/docs/guide.txt workspace/logs/app.log\n```\n\nWrite content to the guide. A single `>` replaces the destination with the command's output:\n\n```bash\necho \"Linux file practice\" > workspace/docs/guide.txt\n```\n\nAppend a second line with `>>`, which preserves existing content:\n\n```bash\necho \"Paths make locations predictable\" >> workspace/docs/guide.txt\n```\n\nRead the complete file:\n\n```bash\ncat workspace/docs/guide.txt\n```\n\nYou should see both lines in their original order. The empty `app.log` also exists, ready for later wildcard practice.",
+      "task": "Thực hiện hướng dẫn: Create Directories and Files",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics",
+      "title_vi": "Tạo Mới Thư Mục và Tệp",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tạo Mới Thư Mục và Tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/docs/guide.txt <(printf %s 'Linux file practice\nPaths make locations predictable\n') && test -f /home/labex/project/file-basics/workspace/logs/app.log"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một cây dự án nhỏ và đặt văn bản bên trong các tệp thông thường.\n\n`mkdir` tạo ra một thư mục. Tùy chọn `-p` của nó cũng tạo ra các thư mục cha còn thiếu, vì vậy một lệnh có thể xây dựng một đường dẫn lồng nhau:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nmkdir -p workspace/docs workspace/logs\n```\n\nThao tác này tạo ra `workspace` cùng với các thư mục con `docs` và `logs` của nó. Hãy kiểm tra kết quả:\n\n```bash\nfind workspace -maxdepth 2 -type d\n```\n\n`touch` tạo ra một tệp trống khi tên tệp chưa tồn tại. Hãy tạo hai tệp cùng một lúc:\n\n```bash\ntouch workspace/docs/guide.txt workspace/logs/app.log\n```\n\nViết nội dung vào tệp hướng dẫn. Dấu `>` đơn sẽ thay thế đích đến bằng đầu ra của lệnh:\n\n```bash\necho \"Linux file practice\" > workspace/docs/guide.txt\n```\n\nThêm dòng thứ hai bằng `>>`, thao tác này sẽ giữ lại nội dung hiện có:\n\n```bash\necho \"Paths make locations predictable\" >> workspace/docs/guide.txt\n```\n\nĐọc toàn bộ tệp:\n\n```bash\ncat workspace/docs/guide.txt\n```\n\nBạn sẽ thấy cả hai dòng theo thứ tự ban đầu của chúng. Tệp `app.log` trống cũng tồn tại, sẵn sàng cho việc luyện tập ký tự đại diện (wildcard) sau này.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics"
+    },
+    {
+      "id": "source-18001-section-5-v3",
+      "title": "Select Names with Wildcards",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create groups of files and select them by filename patterns.\n\nMove into the logs directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace/logs\n```\n\nBrace expansion generates several literal names before the command runs. Create numbered logs:\n\n```bash\ntouch app{1..3}.log worker{1..2}.log notes.txt\n```\n\nThe shell expands `{1..3}` into `1 2 3`, so `app{1..3}.log` becomes three arguments.\n\nA wildcard is different: it matches names that already exist. `*` matches any sequence of characters:\n\n```bash\nls *.log\n```\n\nThe output includes every name ending in `.log`, but not `notes.txt`.\n\nThe `?` wildcard matches exactly one character. List only the numbered `app` logs:\n\n```bash\nls app?.log\n```\n\nThe shell expands filename patterns in alphabetical order. `printf` prints each expanded name on its own line, and `>` saves those lines:\n\n```bash\nprintf '%s\\n' *.log > matched-logs.txt\n```\n\n```bash\ncat matched-logs.txt\n```\n\nThe saved list should contain `app.log`, `app1.log`, `app2.log`, `app3.log`, `worker1.log`, and `worker2.log`. Quoting `*.log` would prevent wildcard expansion, so the pattern is intentionally unquoted here.",
+      "task": "Thực hiện hướng dẫn: Select Names with Wildcards",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/logs",
+      "title_vi": "Lọc Tên Tệp Bằng Ký Tự Đại Diện (Wildcard)",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Lọc Tên Tệp Bằng Ký Tự Đại Diện (Wildcard)",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/logs/matched-logs.txt <(printf %s 'app.log\napp1.log\napp2.log\napp3.log\nworker1.log\nworker2.log\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo các nhóm tệp và chọn chúng theo các mẫu tên tệp (filename patterns).\n\nDi chuyển vào thư mục logs:\n\n```bash\ncd /home/labex/project/file-basics/workspace/logs\n```\n\nPhép mở rộng dấu ngoặc nhọn (Brace expansion) tạo ra một số tên cụ thể trước khi lệnh chạy. Tạo các tệp log được đánh số:\n\n```bash\ntouch app{1..3}.log worker{1..2}.log notes.txt\n```\n\nShell mở rộng `{1..3}` thành `1 2 3`, do đó `app{1..3}.log` trở thành ba đối số.\n\nKý tự đại diện (wildcard) thì khác: nó khớp với các tên đã tồn tại. `*` khớp với bất kỳ chuỗi ký tự nào:\n\n```bash\nls *.log\n```\n\nĐầu ra bao gồm mọi tên kết thúc bằng `.log`, nhưng không bao gồm `notes.txt`.\n\nKý tự đại diện `?` khớp chính xác với một ký tự. Liệt kê các tệp log `app` có đánh số:\n\n```bash\nls app?.log\n```\n\nShell mở rộng các mẫu tên tệp theo thứ tự bảng chữ cái. `printf` in từng tên đã được mở rộng trên dòng riêng của nó, và `>` lưu các dòng đó lại:\n\n```bash\nprintf '%s\\n' *.log > matched-logs.txt\n```\n\n```bash\ncat matched-logs.txt\n```\n\nDanh sách được lưu phải chứa `app.log`, `app1.log`, `app2.log`, `app3.log`, `worker1.log`, và `worker2.log`. Việc đặt `*.log` trong dấu ngoặc kép sẽ ngăn chặn việc mở rộng ký tự đại diện, vì vậy mẫu này cố tình không được đặt trong dấu ngoặc kép ở đây.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/logs"
+    },
+    {
+      "id": "source-18001-section-6-v3",
+      "title": "Copy, Move, and Remove Files Safely",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will compare the effects of `cp`, `mv`, and `rm` before using them in the following challenge.\n\nReturn to the workspace directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace\n```\n\n`cp SOURCE DESTINATION` creates another file while leaving the source in place. Make a backup copy of the guide:\n\n```bash\ncp docs/guide.txt docs/guide-backup.txt\n```\n\nConfirm that the two files have identical content. `cmp` compares two files byte for byte. It prints nothing when they match; an error message would mean they differ:\n\n```bash\ncmp docs/guide.txt docs/guide-backup.txt\n```\n\n`mv SOURCE DESTINATION` relocates or renames an item. Move the backup into the workspace root and give it a clearer name:\n\n```bash\nmv docs/guide-backup.txt archived-guide.txt\n```\n\nList both locations:\n\n```bash\nls docs\n```\n\n```bash\nls\n```\n\nYou should see `guide.txt` under `docs` and `archived-guide.txt` in the current directory.\n\n`rm` permanently removes a named file; there is normally no terminal recycle bin. Remove only the disposable notes file:\n\n```bash\nrm logs/notes.txt\n```\n\nList the directory again to make the deletion observable:\n\n```bash\nls logs\n```\n\n`notes.txt` should no longer appear. The original guide and its moved copy remain available, while the one explicitly named disposable file is gone.",
+      "task": "Thực hiện hướng dẫn: Copy, Move, and Remove Files Safely",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics/workspace",
+      "title_vi": "Sao Chép, Di Chuyển và Xóa Tệp An Toàn",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Sao Chép, Di Chuyển và Xóa Tệp An Toàn",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/docs/guide.txt /home/labex/project/file-basics/workspace/archived-guide.txt && test ! -e /home/labex/project/file-basics/workspace/docs/guide-backup.txt && test ! -e /home/labex/project/file-basics/workspace/logs/notes.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ so sánh hiệu ứng của `cp`, `mv`, và `rm` trước khi sử dụng chúng trong thử thách tiếp theo.\n\nQuay lại thư mục làm việc:\n\n```bash\ncd /home/labex/project/file-basics/workspace\n```\n\n`cp NGUỒN ĐÍCH` tạo ra một tệp khác trong khi vẫn giữ nguyên tệp nguồn tại chỗ. Hãy tạo một bản sao lưu của tệp hướng dẫn:\n\n```bash\ncp docs/guide.txt docs/guide-backup.txt\n```\n\nXác nhận rằng hai tệp có nội dung giống hệt nhau. `cmp` so sánh hai tệp theo từng byte. Nó không in ra gì khi chúng khớp nhau; một thông báo lỗi sẽ có nghĩa là chúng khác nhau:\n\n```bash\ncmp docs/guide.txt docs/guide-backup.txt\n```\n\n`mv NGUỒN ĐÍCH` di chuyển hoặc đổi tên một mục. Di chuyển bản sao lưu vào thư mục gốc của không gian làm việc và đặt cho nó một tên rõ ràng hơn:\n\n```bash\nmv docs/guide-backup.txt archived-guide.txt\n```\n\nLiệt kê cả hai vị trí:\n\n```bash\nls docs\n```\n\n```bash\nls\n```\n\nBạn sẽ thấy `guide.txt` nằm dưới `docs` và `archived-guide.txt` ở thư mục hiện tại.\n\n`rm` xóa vĩnh viễn một tệp được chỉ định; thông thường không có thùng rác (recycle bin) trên terminal. Chỉ xóa tệp ghi chú dùng một lần:\n\n```bash\nrm logs/notes.txt\n```\n\nLiệt kê lại thư mục để thấy rõ việc xóa:\n\n```bash\nls logs\n```\n\n`notes.txt` không còn xuất hiện nữa. Hướng dẫn gốc và bản sao đã di chuyển của nó vẫn còn sẵn có, trong khi tệp dùng một lần được chỉ định rõ ràng đã biến mất.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics/workspace"
+    },
+    {
+      "id": "source-18001-section-7-v3",
+      "title": "Work Faster with Terminal Shortcuts",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will practice four terminal controls that reduce typing and help recover from a command that keeps running.\n\nFirst enter the documents directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace/docs\n```\n\nRun a command you will reuse:\n\n```bash\ncat guide.txt\n```\n\nPress the **Up Arrow** once. The previous `cat guide.txt` command should reappear at the prompt. Press Enter to run it again. Command recall avoids retyping and still lets you edit the recalled line before execution.\n\nNext type `cat g` without pressing Enter, then press **Tab**. Because only `guide.txt` matches, the shell should complete the filename. Press Enter to run the completed command.\n\nNow start a command that waits continuously:\n\n```bash\ntail -f /dev/null\n```\n\n`tail -f` follows a file and waits for new data. `/dev/null` never provides useful lines, so the command appears to sit silently. Press **Ctrl+C** to send an interrupt and return to the prompt. This is the standard first response when a foreground command should stop.\n\nPress **Ctrl+L** to clear old output from the visible screen. Like `clear`, this does not delete files or command history.\n\nCreate a completion marker after returning to the prompt:\n\n```bash\necho \"Shortcuts practiced\" > /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\n```bash\ncat /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\nThe marker confirms that you successfully regained the prompt after the interactive practice.",
+      "task": "Thực hiện hướng dẫn: Work Faster with Terminal Shortcuts",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/docs",
+      "title_vi": "Tăng Tốc Làm Việc với Phím Tắt Terminal",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa kiểm chứng được các tương tác Up/Tab/Ctrl+C/Ctrl+L theo yêu cầu; marker file đơn lẻ không chứng minh các thao tác này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tăng Tốc Làm Việc với Phím Tắt Terminal",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ thực hành bốn phím điều khiển terminal giúp giảm bớt việc gõ phím và giúp khôi phục từ một lệnh đang chạy liên tục.\n\nĐầu tiên, hãy đi vào thư mục documents:\n\n```bash\ncd /home/labex/project/file-basics/workspace/docs\n```\n\nChạy một lệnh mà bạn sẽ sử dụng lại:\n\n```bash\ncat guide.txt\n```\n\nNhấn phím **Mũi tên lên** (Up Arrow) một lần. Lệnh `cat guide.txt` trước đó sẽ xuất hiện trở lại tại dấu nhắc lệnh (prompt). Nhấn Enter để chạy lại lệnh đó. Việc gọi lại lệnh giúp tránh phải gõ lại và vẫn cho phép bạn chỉnh sửa dòng được gọi lại trước khi thực thi.\n\nTiếp theo, hãy gõ `cat g` nhưng không nhấn Enter, sau đó nhấn **Tab**. Do chỉ có `guide.txt` khớp với chuỗi này, shell sẽ tự động hoàn thành tên tệp. Nhấn Enter để chạy lệnh đã được hoàn thành.\n\nBây giờ, hãy khởi Chạy một lệnh chờ đợi liên tục:\n\n```bash\ntail -f /dev/null\n```\n\n`tail -f` theo dõi một tệp và chờ dữ liệu mới. `/dev/null` không bao giờ cung cấp các dòng hữu ích, vì vậy lệnh này có vẻ đứng im lặng. Nhấn **Ctrl+C** để gửi tín hiệu ngắt (interrupt) và quay lại dấu nhắc lệnh. Đây là phản ứng tiêu chuẩn đầu tiên khi một lệnh chạy ở foreground (chạy nổi) cần phải dừng lại.\n\nNhấn **Ctrl+L** để xóa các đầu ra cũ khỏi màn hình hiển thị. Giống như lệnh `clear`, thao tác này không xóa tệp hoặc lịch sử lệnh.\n\nTạo một tệp đánh dấu hoàn thành sau khi quay lại dấu nhắc lệnh:\n\n```bash\necho \"Shortcuts practiced\" > /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\n```bash\ncat /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\nTệp đánh dấu này xác nhận rằng bạn đã lấy lại thành công dấu nhắc lệnh sau phần thực hành tương tác.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/docs"
+    },
+    {
+      "id": "section-8",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You learned how the working directory and paths control file operations. You navigated with absolute and relative paths, inspected hidden entries and metadata, created a directory tree and text files, selected names with wildcards, and compared copying, moving, and permanent removal. You also practiced command recall, Tab completion, `Ctrl+C`, and `Ctrl+L`. The next lab teaches how to find reliable help when an unfamiliar command or option appears.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã học cách thư mục làm việc và đường dẫn điều khiển các thao tác tệp. Bạn đã điều hướng bằng đường dẫn tuyệt đối và tương đối, kiểm tra các mục ẩn và siêu dữ liệu, tạo cây thư mục và tệp văn bản, chọn tên bằng ký tự đại diện, và so sánh việc sao chép, di chuyển và xóa vĩnh viễn. Bạn cũng đã thực hành gọi lại lệnh, tính năng tự động hoàn thành bằng phím Tab, `Ctrl+C` và `Ctrl+L`. Bài lab tiếp theo sẽ hướng dẫn cách tìm kiếm trợ giúp đáng tin cậy khi xuất hiện một lệnh hoặc tùy chọn không quen thuộc."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-18001-section-1-v3",
+      "title": "Locate Your Working Directory",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will connect the terminal prompt to the directory where commands operate.\n\nThe shell always has a current working directory. Relative paths start from that directory, so checking your location prevents many beginner mistakes. Move to this lab's workspace using its complete path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nA path beginning with `/` is an **absolute path**. It starts at the filesystem root and identifies the same location regardless of where you began.\n\nPrint the working directory:\n\n```bash\npwd\n```\n\nYou should see:\n\n```text\n/home/labex/project/file-basics\n```\n\nSave that location as evidence. The `>` operator redirects the output into `starting-location.txt`; because the output goes to the file, nothing is printed this time:\n\n```bash\npwd > starting-location.txt\n```\n\nRead the file to confirm what was saved:\n\n```bash\ncat starting-location.txt\n```\n\nThe terminal screen and the file should show the same absolute path.",
+      "task": "Thực hiện hướng dẫn: Locate Your Working Directory",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Xác Định Thư Mục Làm Việc Hiện Tại",
+      "task_vi": "Thực hiện hướng dẫn: Xác Định Thư Mục Làm Việc Hiện Tại",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/starting-location.txt <(printf %s '/home/labex/project/file-basics\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/starting-location.txt <(printf %s '/home/labex/project/file-basics\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kết nối dấu nhắc terminal với thư mục nơi các lệnh hoạt động.\n\nShell luôn có một thư mục làm việc hiện tại. Các đường dẫn tương đối bắt đầu từ thư mục đó, vì vậy việc kiểm tra vị trí của bạn giúp ngăn ngừa nhiều lỗi của người mới bắt đầu. Di chuyển đến không gian làm việc của Lab này bằng đường dẫn đầy đủ của nó:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nMột đường dẫn bắt đầu bằng `/` là một **đường dẫn tuyệt đối**. Nó bắt đầu từ gốc của hệ thống tệp và xác định cùng một vị trí bất kể bạn bắt đầu từ đâu.\n\nIn ra thư mục làm việc:\n\n```bash\npwd\n```\n\nBạn sẽ thấy:\n\n```text\n/home/labex/project/file-basics\n```\n\nLưu vị trí đó làm bằng chứng. Toán tử `>` chuyển hướng đầu ra vào tệp `starting-location.txt`; vì đầu ra đi vào tệp, không có gì được in ra trong lần này:\n\n```bash\npwd > starting-location.txt\n```\n\nĐọc tệp để xác nhận những gì đã được lưu:\n\n```bash\ncat starting-location.txt\n```\n\nMàn hình terminal và tệp phải hiển thị cùng một đường dẫn tuyệt đối.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics"
+    },
+    {
+      "id": "source-18001-section-2-v3",
+      "title": "Navigate with Relative Paths",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will move through neighboring directories using relative paths and the special names `.` and `..`.\n\nReturn to the workspace if necessary:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nList its visible entries:\n\n```bash\nls\n```\n\nYou should see `path-map` and `starting-location.txt`. Enter `path-map` using a **relative path**—a path interpreted from the current directory:\n\n```bash\ncd path-map\n```\n\n```bash\npwd\n```\n\nNow enter `north` and read its reference file:\n\n```bash\ncd north\n```\n\n```bash\ncat reference.txt\n```\n\nThe output is `north reference`. The name `..` means the parent directory, one level above the current location:\n\n```bash\ncd ..\n```\n\nMove from `path-map` into its `south` child:\n\n```bash\ncd south\n```\n\n```bash\ncat reference.txt\n```\n\nThe name `.` means the current directory. Save the current absolute location into the lab root by combining `pwd` with a relative destination that climbs two levels:\n\n```bash\npwd > ../../relative-location.txt\n```\n\nReturn directly to the lab root with its absolute path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\ncat relative-location.txt\n```\n\nThe saved path should end with `/path-map/south`. You have used both relative movement and an absolute return path.",
+      "task": "Thực hiện hướng dẫn: Navigate with Relative Paths",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Điều Hướng Bằng Đường Dẫn Tương Đối",
+      "task_vi": "Thực hiện hướng dẫn: Điều Hướng Bằng Đường Dẫn Tương Đối",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/relative-location.txt <(printf %s '/home/labex/project/file-basics/path-map/south\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/relative-location.txt <(printf %s '/home/labex/project/file-basics/path-map/south\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ di chuyển qua lại giữa các thư mục lân cận bằng cách sử dụng đường dẫn tương đối và các tên đặc biệt `.` và `..`.\n\nTrở lại không gian làm việc nếu cần thiết:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nLiệt kê các mục hiển thị của nó:\n\n```bash\nls\n```\n\nBạn sẽ thấy `path-map` và `starting-location.txt`. Hãy đi vào `path-map` bằng cách sử dụng một **đường dẫn tương đối** — một đường dẫn được diễn giải từ thư mục hiện tại:\n\n```bash\ncd path-map\n```\n\n```bash\npwd\n```\n\nBây giờ hãy đi vào `north` và đọc tệp tham chiếu của nó:\n\n```bash\ncd north\n```\n\n```bash\ncat reference.txt\n```\n\nĐầu ra là `north reference`. Tên `..` có nghĩa là thư mục cha, cao hơn một cấp so với vị trí hiện tại:\n\n```bash\ncd ..\n```\n\nDi chuyển từ `path-map` vào thư mục con `south` của nó:\n\n```bash\ncd south\n```\n\n```bash\ncat reference.txt\n```\n\nTên `.` có nghĩa là thư mục hiện tại. Lưu vị trí tuyệt đối hiện tại vào thư mục gốc của lab bằng cách kết hợp `pwd` với một đích đến tương đối đi lên hai cấp:\n\n```bash\npwd > ../../relative-location.txt\n```\n\nTrở lại trực tiếp thư mục gốc của lab bằng đường dẫn tuyệt đối của nó:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\ncat relative-location.txt\n```\n\nĐường dẫn được lưu phải kết thúc bằng `/path-map/south`. Bạn đã sử dụng cả việc di chuyển tương đối và đường dẫn tuyệt đối để quay lại.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics"
+    },
+    {
+      "id": "source-18001-section-3-v3",
+      "title": "Inspect Directory Contents",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `ls` options to reveal hidden names and file details.\n\nRun a plain listing in the lab root:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nls\n```\n\nLinux normally hides names that begin with a dot. The `-a` option means “all” and includes those entries:\n\n```bash\nls -a\n```\n\nYou should now see `.practice-note`, along with `.` for the current directory and `..` for its parent.\n\nThe `-l` option produces a **long listing** with permissions, owner, size, time, and name:\n\n```bash\nls -l\n```\n\nCombine the options to inspect all entries in long form:\n\n```bash\nls -la\n```\n\nEach output line begins with a type and permission field. A leading `d` identifies a directory; a leading `-` identifies a regular file. Permissions are taught in depth later.\n\nSave the names, including hidden entries. `ls` already displays them alphabetically in this controlled workspace, so no additional sorting command is needed yet:\n\n```bash\nls -A > all-names.txt\n```\n\nUnlike `-a`, `-A` omits the special `.` and `..` entries while retaining other hidden names. Display the result:\n\n```bash\ncat all-names.txt\n```\n\nThe list should include `.practice-note`, `path-map`, and the files created in earlier steps.",
+      "task": "Thực hiện hướng dẫn: Inspect Directory Contents",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Kiểm Tra Nội Dung Thư Mục",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm Tra Nội Dung Thư Mục",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -Fxq .practice-note /home/labex/project/file-basics/all-names.txt && grep -Fxq path-map /home/labex/project/file-basics/all-names.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "grep -Fxq .practice-note /home/labex/project/file-basics/all-names.txt && grep -Fxq path-map /home/labex/project/file-basics/all-names.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng các tùy chọn của `ls` để hiển thị tên ẩn và chi tiết tệp.\n\nChạy một lệnh liệt kê thông thường trong thư mục gốc của lab:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nls\n```\n\nLinux thông thường ẩn các tên bắt đầu bằng một dấu chấm. Tùy chọn `-a` có nghĩa là \"all\" (tất cả) và bao gồm cả các mục đó:\n\n```bash\nls -a\n```\n\nBây giờ bạn sẽ thấy `.practice-note`, cùng với `.` cho thư mục hiện tại và `..` cho thư mục cha của nó.\n\nTùy chọn `-l` tạo ra một **danh sách chi tiết (long listing)** bao gồm quyền hạn, chủ sở hữu, kích thước, thời gian và tên:\n\n```bash\nls -l\n```\n\nKết hợp các tùy chọn để kiểm tra tất cả các mục ở dạng chi tiết:\n\n```bash\nls -la\n```\n\nMỗi dòng đầu ra bắt đầu bằng một trường loại và quyền hạn. Ký tự `d` ở đầu xác định một thư mục; ký tự `-` ở đầu xác định một tệp thông thường. Quyền hạn sẽ được hướng dẫn chi tiết ở phần sau.\n\nLưu các tên, bao gồm cả các mục ẩn. `ls` đã hiển thị chúng theo thứ tự bảng chữ cái trong không gian làm việc được kiểm soát này, vì vậy chưa cần thêm lệnh sắp xếp nào khác:\n\n```bash\nls -A > all-names.txt\n```\n\nKhông giống như `-a`, `-A` bỏ qua các mục đặc biệt `.` và `..` trong khi vẫn giữ lại các tên ẩn khác. Hiển thị kết quả:\n\n```bash\ncat all-names.txt\n```\n\nDanh sách nên bao gồm `.practice-note`, `path-map`, và các tệp được tạo trong các bước trước.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics"
+    },
+    {
+      "id": "source-18001-section-4-v3",
+      "title": "Create Directories and Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a small project tree and place text inside regular files.\n\n`mkdir` creates a directory. Its `-p` option also creates missing parent directories, so one command can build a nested path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nmkdir -p workspace/docs workspace/logs\n```\n\nThis creates `workspace` plus its `docs` and `logs` children. Inspect the result:\n\n```bash\nfind workspace -maxdepth 2 -type d\n```\n\n`touch` creates an empty file when the name does not exist. Create two files at once:\n\n```bash\ntouch workspace/docs/guide.txt workspace/logs/app.log\n```\n\nWrite content to the guide. A single `>` replaces the destination with the command's output:\n\n```bash\necho \"Linux file practice\" > workspace/docs/guide.txt\n```\n\nAppend a second line with `>>`, which preserves existing content:\n\n```bash\necho \"Paths make locations predictable\" >> workspace/docs/guide.txt\n```\n\nRead the complete file:\n\n```bash\ncat workspace/docs/guide.txt\n```\n\nYou should see both lines in their original order. The empty `app.log` also exists, ready for later wildcard practice.",
+      "task": "Thực hiện hướng dẫn: Create Directories and Files",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Tạo Mới Thư Mục và Tệp",
+      "task_vi": "Thực hiện hướng dẫn: Tạo Mới Thư Mục và Tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/docs/guide.txt <(printf %s 'Linux file practice\nPaths make locations predictable\n') && test -f /home/labex/project/file-basics/workspace/logs/app.log"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/docs/guide.txt <(printf %s 'Linux file practice\nPaths make locations predictable\n') && test -f /home/labex/project/file-basics/workspace/logs/app.log"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo một cây dự án nhỏ và đặt văn bản bên trong các tệp thông thường.\n\n`mkdir` tạo ra một thư mục. Tùy chọn `-p` của nó cũng tạo ra các thư mục cha còn thiếu, vì vậy một lệnh có thể xây dựng một đường dẫn lồng nhau:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nmkdir -p workspace/docs workspace/logs\n```\n\nThao tác này tạo ra `workspace` cùng với các thư mục con `docs` và `logs` của nó. Hãy kiểm tra kết quả:\n\n```bash\nfind workspace -maxdepth 2 -type d\n```\n\n`touch` tạo ra một tệp trống khi tên tệp chưa tồn tại. Hãy tạo hai tệp cùng một lúc:\n\n```bash\ntouch workspace/docs/guide.txt workspace/logs/app.log\n```\n\nViết nội dung vào tệp hướng dẫn. Dấu `>` đơn sẽ thay thế đích đến bằng đầu ra của lệnh:\n\n```bash\necho \"Linux file practice\" > workspace/docs/guide.txt\n```\n\nThêm dòng thứ hai bằng `>>`, thao tác này sẽ giữ lại nội dung hiện có:\n\n```bash\necho \"Paths make locations predictable\" >> workspace/docs/guide.txt\n```\n\nĐọc toàn bộ tệp:\n\n```bash\ncat workspace/docs/guide.txt\n```\n\nBạn sẽ thấy cả hai dòng theo thứ tự ban đầu của chúng. Tệp `app.log` trống cũng tồn tại, sẵn sàng cho việc luyện tập ký tự đại diện (wildcard) sau này.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics"
+    },
+    {
+      "id": "source-18001-section-5-v3",
+      "title": "Select Names with Wildcards",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create groups of files and select them by filename patterns.\n\nMove into the logs directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace/logs\n```\n\nBrace expansion generates several literal names before the command runs. Create numbered logs:\n\n```bash\ntouch app{1..3}.log worker{1..2}.log notes.txt\n```\n\nThe shell expands `{1..3}` into `1 2 3`, so `app{1..3}.log` becomes three arguments.\n\nA wildcard is different: it matches names that already exist. `*` matches any sequence of characters:\n\n```bash\nls *.log\n```\n\nThe output includes every name ending in `.log`, but not `notes.txt`.\n\nThe `?` wildcard matches exactly one character. List only the numbered `app` logs:\n\n```bash\nls app?.log\n```\n\nThe shell expands filename patterns in alphabetical order. `printf` prints each expanded name on its own line, and `>` saves those lines:\n\n```bash\nprintf '%s\\n' *.log > matched-logs.txt\n```\n\n```bash\ncat matched-logs.txt\n```\n\nThe saved list should contain `app.log`, `app1.log`, `app2.log`, `app3.log`, `worker1.log`, and `worker2.log`. Quoting `*.log` would prevent wildcard expansion, so the pattern is intentionally unquoted here.",
+      "task": "Thực hiện hướng dẫn: Select Names with Wildcards",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/logs",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Lọc Tên Tệp Bằng Ký Tự Đại Diện (Wildcard)",
+      "task_vi": "Thực hiện hướng dẫn: Lọc Tên Tệp Bằng Ký Tự Đại Diện (Wildcard)",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/logs/matched-logs.txt <(printf %s 'app.log\napp1.log\napp2.log\napp3.log\nworker1.log\nworker2.log\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/logs/matched-logs.txt <(printf %s 'app.log\napp1.log\napp2.log\napp3.log\nworker1.log\nworker2.log\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo các nhóm tệp và chọn chúng theo các mẫu tên tệp (filename patterns).\n\nDi chuyển vào thư mục logs:\n\n```bash\ncd /home/labex/project/file-basics/workspace/logs\n```\n\nPhép mở rộng dấu ngoặc nhọn (Brace expansion) tạo ra một số tên cụ thể trước khi lệnh chạy. Tạo các tệp log được đánh số:\n\n```bash\ntouch app{1..3}.log worker{1..2}.log notes.txt\n```\n\nShell mở rộng `{1..3}` thành `1 2 3`, do đó `app{1..3}.log` trở thành ba đối số.\n\nKý tự đại diện (wildcard) thì khác: nó khớp với các tên đã tồn tại. `*` khớp với bất kỳ chuỗi ký tự nào:\n\n```bash\nls *.log\n```\n\nĐầu ra bao gồm mọi tên kết thúc bằng `.log`, nhưng không bao gồm `notes.txt`.\n\nKý tự đại diện `?` khớp chính xác với một ký tự. Liệt kê các tệp log `app` có đánh số:\n\n```bash\nls app?.log\n```\n\nShell mở rộng các mẫu tên tệp theo thứ tự bảng chữ cái. `printf` in từng tên đã được mở rộng trên dòng riêng của nó, và `>` lưu các dòng đó lại:\n\n```bash\nprintf '%s\\n' *.log > matched-logs.txt\n```\n\n```bash\ncat matched-logs.txt\n```\n\nDanh sách được lưu phải chứa `app.log`, `app1.log`, `app2.log`, `app3.log`, `worker1.log`, và `worker2.log`. Việc đặt `*.log` trong dấu ngoặc kép sẽ ngăn chặn việc mở rộng ký tự đại diện, vì vậy mẫu này cố tình không được đặt trong dấu ngoặc kép ở đây.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/logs"
+    },
+    {
+      "id": "source-18001-section-6-v3",
+      "title": "Copy, Move, and Remove Files Safely",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will compare the effects of `cp`, `mv`, and `rm` before using them in the following challenge.\n\nReturn to the workspace directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace\n```\n\n`cp SOURCE DESTINATION` creates another file while leaving the source in place. Make a backup copy of the guide:\n\n```bash\ncp docs/guide.txt docs/guide-backup.txt\n```\n\nConfirm that the two files have identical content. `cmp` compares two files byte for byte. It prints nothing when they match; an error message would mean they differ:\n\n```bash\ncmp docs/guide.txt docs/guide-backup.txt\n```\n\n`mv SOURCE DESTINATION` relocates or renames an item. Move the backup into the workspace root and give it a clearer name:\n\n```bash\nmv docs/guide-backup.txt archived-guide.txt\n```\n\nList both locations:\n\n```bash\nls docs\n```\n\n```bash\nls\n```\n\nYou should see `guide.txt` under `docs` and `archived-guide.txt` in the current directory.\n\n`rm` permanently removes a named file; there is normally no terminal recycle bin. Remove only the disposable notes file:\n\n```bash\nrm logs/notes.txt\n```\n\nList the directory again to make the deletion observable:\n\n```bash\nls logs\n```\n\n`notes.txt` should no longer appear. The original guide and its moved copy remain available, while the one explicitly named disposable file is gone.",
+      "task": "Thực hiện hướng dẫn: Copy, Move, and Remove Files Safely",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics/workspace",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Sao Chép, Di Chuyển và Xóa Tệp An Toàn",
+      "task_vi": "Thực hiện hướng dẫn: Sao Chép, Di Chuyển và Xóa Tệp An Toàn",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/docs/guide.txt /home/labex/project/file-basics/workspace/archived-guide.txt && test ! -e /home/labex/project/file-basics/workspace/docs/guide-backup.txt && test ! -e /home/labex/project/file-basics/workspace/logs/notes.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-basics/workspace/docs/guide.txt /home/labex/project/file-basics/workspace/archived-guide.txt && test ! -e /home/labex/project/file-basics/workspace/docs/guide-backup.txt && test ! -e /home/labex/project/file-basics/workspace/logs/notes.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ so sánh hiệu ứng của `cp`, `mv`, và `rm` trước khi sử dụng chúng trong thử thách tiếp theo.\n\nQuay lại thư mục làm việc:\n\n```bash\ncd /home/labex/project/file-basics/workspace\n```\n\n`cp NGUỒN ĐÍCH` tạo ra một tệp khác trong khi vẫn giữ nguyên tệp nguồn tại chỗ. Hãy tạo một bản sao lưu của tệp hướng dẫn:\n\n```bash\ncp docs/guide.txt docs/guide-backup.txt\n```\n\nXác nhận rằng hai tệp có nội dung giống hệt nhau. `cmp` so sánh hai tệp theo từng byte. Nó không in ra gì khi chúng khớp nhau; một thông báo lỗi sẽ có nghĩa là chúng khác nhau:\n\n```bash\ncmp docs/guide.txt docs/guide-backup.txt\n```\n\n`mv NGUỒN ĐÍCH` di chuyển hoặc đổi tên một mục. Di chuyển bản sao lưu vào thư mục gốc của không gian làm việc và đặt cho nó một tên rõ ràng hơn:\n\n```bash\nmv docs/guide-backup.txt archived-guide.txt\n```\n\nLiệt kê cả hai vị trí:\n\n```bash\nls docs\n```\n\n```bash\nls\n```\n\nBạn sẽ thấy `guide.txt` nằm dưới `docs` và `archived-guide.txt` ở thư mục hiện tại.\n\n`rm` xóa vĩnh viễn một tệp được chỉ định; thông thường không có thùng rác (recycle bin) trên terminal. Chỉ xóa tệp ghi chú dùng một lần:\n\n```bash\nrm logs/notes.txt\n```\n\nLiệt kê lại thư mục để thấy rõ việc xóa:\n\n```bash\nls logs\n```\n\n`notes.txt` không còn xuất hiện nữa. Hướng dẫn gốc và bản sao đã di chuyển của nó vẫn còn sẵn có, trong khi tệp dùng một lần được chỉ định rõ ràng đã biến mất.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics/workspace"
+    },
+    {
+      "id": "source-18001-section-7-v3",
+      "title": "Work Faster with Terminal Shortcuts",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will practice four terminal controls that reduce typing and help recover from a command that keeps running.\n\nFirst enter the documents directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace/docs\n```\n\nRun a command you will reuse:\n\n```bash\ncat guide.txt\n```\n\nPress the **Up Arrow** once. The previous `cat guide.txt` command should reappear at the prompt. Press Enter to run it again. Command recall avoids retyping and still lets you edit the recalled line before execution.\n\nNext type `cat g` without pressing Enter, then press **Tab**. Because only `guide.txt` matches, the shell should complete the filename. Press Enter to run the completed command.\n\nNow start a command that waits continuously:\n\n```bash\ntail -f /dev/null\n```\n\n`tail -f` follows a file and waits for new data. `/dev/null` never provides useful lines, so the command appears to sit silently. Press **Ctrl+C** to send an interrupt and return to the prompt. This is the standard first response when a foreground command should stop.\n\nPress **Ctrl+L** to clear old output from the visible screen. Like `clear`, this does not delete files or command history.\n\nCreate a completion marker after returning to the prompt:\n\n```bash\necho \"Shortcuts practiced\" > /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\n```bash\ncat /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\nThe marker confirms that you successfully regained the prompt after the interactive practice.",
+      "task": "Thực hiện hướng dẫn: Work Faster with Terminal Shortcuts",
+      "hint": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/docs",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa kiểm chứng được các tương tác Up/Tab/Ctrl+C/Ctrl+L theo yêu cầu; marker file đơn lẻ không chứng minh các thao tác này."
+      },
+      "title_vi": "Tăng Tốc Làm Việc với Phím Tắt Terminal",
+      "task_vi": "Thực hiện hướng dẫn: Tăng Tốc Làm Việc với Phím Tắt Terminal",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ thực hành bốn phím điều khiển terminal giúp giảm bớt việc gõ phím và giúp khôi phục từ một lệnh đang chạy liên tục.\n\nĐầu tiên, hãy đi vào thư mục documents:\n\n```bash\ncd /home/labex/project/file-basics/workspace/docs\n```\n\nChạy một lệnh mà bạn sẽ sử dụng lại:\n\n```bash\ncat guide.txt\n```\n\nNhấn phím **Mũi tên lên** (Up Arrow) một lần. Lệnh `cat guide.txt` trước đó sẽ xuất hiện trở lại tại dấu nhắc lệnh (prompt). Nhấn Enter để chạy lại lệnh đó. Việc gọi lại lệnh giúp tránh phải gõ lại và vẫn cho phép bạn chỉnh sửa dòng được gọi lại trước khi thực thi.\n\nTiếp theo, hãy gõ `cat g` nhưng không nhấn Enter, sau đó nhấn **Tab**. Do chỉ có `guide.txt` khớp với chuỗi này, shell sẽ tự động hoàn thành tên tệp. Nhấn Enter để chạy lệnh đã được hoàn thành.\n\nBây giờ, hãy khởi Chạy một lệnh chờ đợi liên tục:\n\n```bash\ntail -f /dev/null\n```\n\n`tail -f` theo dõi một tệp và chờ dữ liệu mới. `/dev/null` không bao giờ cung cấp các dòng hữu ích, vì vậy lệnh này có vẻ đứng im lặng. Nhấn **Ctrl+C** để gửi tín hiệu ngắt (interrupt) và quay lại dấu nhắc lệnh. Đây là phản ứng tiêu chuẩn đầu tiên khi một lệnh chạy ở foreground (chạy nổi) cần phải dừng lại.\n\nNhấn **Ctrl+L** để xóa các đầu ra cũ khỏi màn hình hiển thị. Giống như lệnh `clear`, thao tác này không xóa tệp hoặc lịch sử lệnh.\n\nTạo một tệp đánh dấu hoàn thành sau khi quay lại dấu nhắc lệnh:\n\n```bash\necho \"Shortcuts practiced\" > /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\n```bash\ncat /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\nTệp đánh dấu này xác nhận rằng bạn đã lấy lại thành công dấu nhắc lệnh sau phần thực hành tương tác.",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/docs"
+    }
+  ],
+  "title_vi": "Thao Tác Tệp Cơ Bản Trong Linux",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-basic-file-operations-in-linux-18001.json"
+}

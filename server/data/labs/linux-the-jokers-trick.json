@@ -1,0 +1,256 @@
+{
+  "id": "linux-the-jokers-trick",
+  "course_id": "quick-start-with-linux",
+  "order": 10,
+  "title": "The Joker's Trick",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Áp dụng vòng đời tài khoản với joker và batman, HOME tùy chỉnh và cách xóa giữ hoặc bỏ HOME.",
+  "source_url": "https://labex.io/tutorials/linux-the-joker-s-trick-270247",
+  "source_lab_id": 270247,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-the-joker-s-trick-270247",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-or-observed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/linux-the-jokers-trick.json",
+  "sections": [
+    {
+      "id": "source-270247-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "In this challenge, you will apply your knowledge of Linux user account management. You'll create new user accounts, modify existing ones, and delete users. This challenge will test your understanding of the concepts learned in the \"User Account Management\" lab.\n\n### Achievements\n\nYou'll demonstrate your ability to use:\n\n- `useradd` - to create new users\n- `passwd` - to change user passwords\n- `usermod` - to modify user accounts\n- `userdel` - to delete user accounts",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Trong thử thách này, bạn sẽ vận dụng toàn bộ kiến thức về quản lý tài khoản người dùng Linux. Bạn sẽ tạo các tài khoản người dùng mới, sửa đổi các tài khoản hiện có, và xóa người dùng. Thử thách này sẽ kiểm tra sự hiểu biết sâu sắc của bạn về các khái niệm đã học trong bài lab \"User Account Management\".\n\n### Thành tựu đạt được\n\nBạn sẽ thể hiện năng lực sử dụng các lệnh:\n\n- `useradd` - dùng để tạo tài khoản người dùng mới\n- `passwd` - dùng để thay đổi mật khẩu người dùng\n- `usermod` - dùng để sửa đổi thuộc tính tài khoản người dùng\n- `userdel` - dùng để xóa tài khoản người dùng"
+    },
+    {
+      "id": "source-270247-section-1",
+      "title": "Creating User Accounts",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you'll create several user accounts with different specifications.\n\n### Tasks\n\nComplete the following tasks in order:\n\n1. Create a user named `joker`.\n2. Create a user named `batman` with a home directory at `/home/gotham`.\n\n### Requirements\n\n- Use the `useradd` command for all user creations.\n- Ensure both users have home directories created during account creation.\n- `batman` has a different home directory than the default.\n\n### Example\n\nAfter completing these tasks, you can verify the user information like this:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nSample output:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/sh\n```",
+      "task": "Tạo joker với HOME và batman với HOME tại /home/gotham bằng useradd.",
+      "hint": "Hai người dùng phải có thư mục riêng khi tạo.",
+      "verification": {
+        "kind": "state",
+        "command": "getent passwd joker >/dev/null && getent passwd batman >/dev/null && test \"$(getent passwd joker | cut -d: -f6)\" = /home/joker && test \"$(getent passwd batman | cut -d: -f6)\" = /home/gotham && test -d /home/joker && test -d /home/gotham"
+      },
+      "title_vi": "Tạo Các Tài Khoản Người Dùng",
+      "content_vi": "Trong bước này, bạn sẽ tạo một số tài khoản người dùng với các thông số kỹ thuật khác nhau.\n\n### Nhiệm vụ (Tasks)\n\nHoàn thành các nhiệm vụ sau theo thứ tự:\n\n1. Tạo một người dùng có tên `joker`.\n2. Tạo một người dùng có tên `batman` với thư mục cá nhân tại `/home/gotham`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `useradd` cho tất cả các thao tác tạo người dùng.\n- Đảm bảo cả hai người dùng đều được tự động tạo thư mục cá nhân trong quá trình tạo tài khoản.\n- Người dùng `batman` có thư mục cá nhân khác với vị trí mặc định (`/home/gotham`).\n\n### Ví dụ (Example)\n\nSau khi hoàn thành các nhiệm vụ này, bạn có thể xác minh thông tin người dùng như sau:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nKết quả mẫu:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/sh\n```",
+      "task_vi": "Tạo người dùng joker và người dùng batman (thư mục /home/gotham) bằng useradd.",
+      "hint_vi": "Chạy sudo useradd -m joker và sudo useradd -m -d /home/gotham batman."
+    },
+    {
+      "id": "source-270247-section-2",
+      "title": "Managing User Passwords",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you'll set and change passwords for users.\n\n### Tasks\n\nComplete the following tasks:\n\n1. Set a password for the `joker` user.\n2. Set a password for the `batman` user.\n\n### Requirements\n\n- Use the `passwd` command for all password operations.\n- For this challenge, use simple passwords like `password123`.\n\n### Example\n\nAfter setting the passwords, you can check the password status:\n\n```bash\nsudo passwd -S joker\nsudo passwd -S batman\n```\n\nSample output:\n\n```plaintext\njoker P 01/19/2024 0 99999 7 -1\nbatman P 01/19/2024 0 99999 7 -1\n```\n\nIn this output, `P` means the account has a usable password.",
+      "task": "Dùng passwd đặt mật khẩu thực hành cho joker và batman.",
+      "hint": "Nhập mật khẩu hai lần; không dùng mật khẩu cá nhân.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(sudo passwd -S joker | awk '{print $2}')\" = P && test \"$(sudo passwd -S batman | awk '{print $2}')\" = P"
+      },
+      "title_vi": "Quản Lý Mật Khẩu Người Dùng",
+      "content_vi": "Trong bước này, bạn sẽ thiết lập và thay đổi mật khẩu cho các tài khoản người dùng.\n\n### Nhiệm vụ (Tasks)\n\nHoàn thành các nhiệm vụ sau:\n\n1. Đặt mật khẩu cho người dùng `joker`.\n2. Đặt mật khẩu cho người dùng `batman`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `passwd` cho tất cả các thao tác xử lý mật khẩu.\n- Đối với thử thách này, hãy sử dụng các mật khẩu đơn giản như `password123`.\n\n### Ví dụ (Example)\n\nSau khi thiết lập mật khẩu, bạn có thể kiểm tra trạng thái mật khẩu bằng lệnh:\n\n```bash\nsudo passwd -S joker\nsudo passwd -S batman\n```\n\nKết quả mẫu:\n\n```plaintext\njoker P 01/19/2024 0 99999 7 -1\nbatman P 01/19/2024 0 99999 7 -1\n```\n\nTrong kết quả này, chữ `P` có nghĩa là tài khoản đã có một mật khẩu hợp lệ (Usable Password).",
+      "task_vi": "Thiết lập mật khẩu cho người dùng joker và batman bằng lệnh passwd.",
+      "hint_vi": "Chạy sudo passwd joker và sudo passwd batman (ví dụ đặt password123)."
+    },
+    {
+      "id": "source-270247-section-3",
+      "title": "Modifying User Accounts",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you'll modify existing user accounts.\n\n### Tasks\n\nComplete the following tasks:\n\n1. Change the `joker` user's home directory to `/home/arkham`.\n2. Change the `batman` user's shell to `/bin/bash`.\n\n### Requirements\n\n- Use the `usermod` command for all modifications.\n\n### Example\n\nAfter making these changes, you can verify them:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nSample output:\n\n```plaintext\njoker:x:5001:5001::/home/arkham:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/bash\n```",
+      "task": "Đổi HOME joker thành /home/arkham và shell batman thành /bin/bash.",
+      "hint": "Thay thông tin bằng usermod.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(getent passwd joker | cut -d: -f6)\" = /home/arkham && test \"$(getent passwd batman | cut -d: -f7)\" = /bin/bash"
+      },
+      "title_vi": "Sửa Đổi Tài Khoản Người Dùng",
+      "content_vi": "Trong bước này, bạn sẽ sửa đổi các tài khoản người dùng hiện có.\n\n### Nhiệm vụ (Tasks)\n\nHoàn thành các nhiệm vụ sau:\n\n1. Đổi thư mục cá nhân của người dùng `joker` thành `/home/arkham`.\n2. Đổi shell mặc định của người dùng `batman` thành `/bin/bash`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `usermod` cho tất cả các thao tác sửa đổi thuộc tính.\n\n### Ví dụ (Example)\n\nSau khi thực hiện các thay đổi này, bạn có thể xác minh lại bằng lệnh:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nKết quả mẫu:\n\n```plaintext\njoker:x:5001:5001::/home/arkham:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/bash\n```",
+      "task_vi": "Đổi thư mục home của joker thành /home/arkham và shell của batman thành /bin/bash bằng usermod.",
+      "hint_vi": "Chạy sudo usermod -d /home/arkham joker và sudo usermod -s /bin/bash batman."
+    },
+    {
+      "id": "source-270247-section-4",
+      "title": "Deleting User Accounts",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this final step, you'll delete user accounts.\n\n### Tasks\n\nComplete the following tasks:\n\n1. Delete the `joker` user without removing their home directory.\n2. Delete the `batman` user and their home directory `/home/gotham`.\n\n### Requirements\n\n- Use the `userdel` command for all deletions.\n\n### Example\n\nAfter deleting these users, you can verify:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\nls -ld /home/gotham\n```\n\nThe two `grep` commands should return no results. For `ls -ld /home/gotham`, a \"No such file or directory\" message confirms the directory was removed.",
+      "task": "Xóa joker nhưng giữ HOME; xóa batman và /home/gotham.",
+      "hint": "usermod -d không di chuyển thư mục nếu thiếu -m; trong chuỗi lệnh mẫu, /home/joker vẫn được giữ.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "! getent passwd joker >/dev/null && ! getent passwd batman >/dev/null && test ! -e /home/gotham && test -d /home/joker"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+userdel\\s+joker\\s*$"
+              ],
+              [
+                "^\\s*sudo\\s+userdel\\s+-r\\s+batman\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Xóa Tài Khoản Người Dùng",
+      "content_vi": "Trong bước cuối cùng này, bạn sẽ tiến hành xóa các tài khoản người dùng.\n\n### Nhiệm vụ (Tasks)\n\nHoàn thành các nhiệm vụ sau:\n\n1. Xóa người dùng `joker` nhưng **không xóa** thư mục cá nhân của người này.\n2. Xóa người dùng `batman` **cùng toàn bộ** thư mục cá nhân `/home/gotham` của người này.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `userdel` cho tất cả các thao tác xóa tài khoản.\n\n### Ví dụ (Example)\n\nSau khi xóa các người dùng này, bạn có thể kiểm tra xác minh:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\nls -ld /home/gotham\n```\n\nHai câu lệnh `grep` đều không được trả về kết quả nào. Đối với lệnh `ls -ld /home/gotham`, thông báo \"No such file or directory\" xác nhận rằng thư mục này đã được loại bỏ thành công.",
+      "task_vi": "Xóa joker (giữ nguyên thư mục home), và xóa batman cùng thư mục /home/gotham (userdel -r).",
+      "hint_vi": "Chạy sudo userdel joker rồi sudo userdel -r batman."
+    },
+    {
+      "id": "source-270247-section-5",
+      "title": "Summary",
+      "position": 5,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Congratulations! You've completed the \"Joker's Trick\" user account management challenge. You've demonstrated your ability to:\n\n1. Create user accounts with various specifications\n2. Set and change user passwords\n3. Modify user account properties\n4. Delete user accounts with and without removing home directories\n\nThese skills are fundamental for Linux system administration. Keep practicing and exploring to become a Linux user management expert!",
+      "title_vi": "Tổng Kết Thử Thách",
+      "content_vi": "Xin chúc mừng! Bạn đã hoàn thành xuất sắc thử thách quản lý tài khoản người dùng \"Joker's Trick\". Bạn đã chứng minh được năng lực của mình trong việc:\n\n1. Tạo tài khoản người dùng với các thông số cấu hình đa dạng\n2. Thiết lập và thay đổi mật khẩu người dùng\n3. Sửa đổi các thuộc tính tài khoản người dùng (thư mục cá nhân, shell mặc định)\n4. Xóa tài khoản người dùng có hoặc không kèm theo việc xóa thư mục cá nhân\n\nNhững kỹ năng này là nền tảng cốt lõi cho công việc quản trị hệ thống Linux chuyên nghiệp. Hãy tiếp tục luyện tập và khám phá để trở thành một chuyên gia quản trị người dùng Linux thực thụ!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-270247-section-1",
+      "title": "Creating User Accounts",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you'll create several user accounts with different specifications.\n\n### Tasks\n\nComplete the following tasks in order:\n\n1. Create a user named `joker`.\n2. Create a user named `batman` with a home directory at `/home/gotham`.\n\n### Requirements\n\n- Use the `useradd` command for all user creations.\n- Ensure both users have home directories created during account creation.\n- `batman` has a different home directory than the default.\n\n### Example\n\nAfter completing these tasks, you can verify the user information like this:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nSample output:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/sh\n```",
+      "task": "Tạo joker với HOME và batman với HOME tại /home/gotham bằng useradd.",
+      "hint": "Hai người dùng phải có thư mục riêng khi tạo.",
+      "verification": {
+        "kind": "state",
+        "command": "getent passwd joker >/dev/null && getent passwd batman >/dev/null && test \"$(getent passwd joker | cut -d: -f6)\" = /home/joker && test \"$(getent passwd batman | cut -d: -f6)\" = /home/gotham && test -d /home/joker && test -d /home/gotham"
+      },
+      "title_vi": "Tạo Các Tài Khoản Người Dùng",
+      "content_vi": "Trong bước này, bạn sẽ tạo các tài khoản người dùng với các đặc tả kỹ thuật khác nhau.\n\n### Nhiệm vụ\n\n1. Tạo một người dùng tên là `joker` không tự động tạo thư mục home.\n2. Tạo một người dùng tên là `batman` có tạo thư mục cá nhân `/home/batman`.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `useradd` kết hợp với `sudo`.\n- Dùng cờ `-m` cho người dùng `batman`.",
+      "task_vi": "Tạo tài khoản joker và tài khoản batman có thư mục home.",
+      "hint_vi": "Dùng sudo useradd joker và sudo useradd -m batman."
+    },
+    {
+      "id": "source-270247-section-2",
+      "title": "Managing User Passwords",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you'll set and change passwords for users.\n\n### Tasks\n\nComplete the following tasks:\n\n1. Set a password for the `joker` user.\n2. Set a password for the `batman` user.\n\n### Requirements\n\n- Use the `passwd` command for all password operations.\n- For this challenge, use simple passwords like `password123`.\n\n### Example\n\nAfter setting the passwords, you can check the password status:\n\n```bash\nsudo passwd -S joker\nsudo passwd -S batman\n```\n\nSample output:\n\n```plaintext\njoker P 01/19/2024 0 99999 7 -1\nbatman P 01/19/2024 0 99999 7 -1\n```\n\nIn this output, `P` means the account has a usable password.",
+      "task": "Dùng passwd đặt mật khẩu thực hành cho joker và batman.",
+      "hint": "Nhập mật khẩu hai lần; không dùng mật khẩu cá nhân.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(sudo passwd -S joker | awk '{print $2}')\" = P && test \"$(sudo passwd -S batman | awk '{print $2}')\" = P"
+      },
+      "title_vi": "Quản Lý Mật Khẩu Người Dùng",
+      "content_vi": "Trong bước này, bạn sẽ kích hoạt tài khoản bằng cách đặt mật khẩu cho các người dùng vừa tạo.\n\n### Nhiệm vụ\n\n1. Đặt mật khẩu cho người dùng `joker`.\n2. Đặt mật khẩu cho người dùng `batman`.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `passwd` với quyền `sudo`.",
+      "task_vi": "Đặt mật khẩu cho người dùng joker và batman.",
+      "hint_vi": "Chạy sudo passwd joker và sudo passwd batman."
+    },
+    {
+      "id": "source-270247-section-3",
+      "title": "Modifying User Accounts",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you'll modify existing user accounts.\n\n### Tasks\n\nComplete the following tasks:\n\n1. Change the `joker` user's home directory to `/home/arkham`.\n2. Change the `batman` user's shell to `/bin/bash`.\n\n### Requirements\n\n- Use the `usermod` command for all modifications.\n\n### Example\n\nAfter making these changes, you can verify them:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nSample output:\n\n```plaintext\njoker:x:5001:5001::/home/arkham:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/bash\n```",
+      "task": "Đổi HOME joker thành /home/arkham và shell batman thành /bin/bash.",
+      "hint": "Thay thông tin bằng usermod.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(getent passwd joker | cut -d: -f6)\" = /home/arkham && test \"$(getent passwd batman | cut -d: -f7)\" = /bin/bash"
+      },
+      "title_vi": "Sửa Đổi Thuộc Tính Tài Khoản",
+      "content_vi": "Trong bước này, bạn sẽ chỉnh sửa thuộc tính của các tài khoản hiện có.\n\n### Nhiệm vụ\n\n1. Thay đổi shell đăng nhập mặc định của `joker` thành `/bin/bash`.\n2. Thêm người dùng `batman` vào nhóm quản trị `sudo`.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `usermod` kèm quyền `sudo`.\n- Dùng cờ `-s` để đổi shell và `-aG` để thêm nhóm.",
+      "task_vi": "Đổi shell của joker thành /bin/bash và thêm batman vào nhóm sudo.",
+      "hint_vi": "Sử dụng sudo usermod -s /bin/bash joker và sudo usermod -aG sudo batman."
+    },
+    {
+      "id": "source-270247-section-4",
+      "title": "Deleting User Accounts",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this final step, you'll delete user accounts.\n\n### Tasks\n\nComplete the following tasks:\n\n1. Delete the `joker` user without removing their home directory.\n2. Delete the `batman` user and their home directory `/home/gotham`.\n\n### Requirements\n\n- Use the `userdel` command for all deletions.\n\n### Example\n\nAfter deleting these users, you can verify:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\nls -ld /home/gotham\n```\n\nThe two `grep` commands should return no results. For `ls -ld /home/gotham`, a \"No such file or directory\" message confirms the directory was removed.",
+      "task": "Xóa joker nhưng giữ HOME; xóa batman và /home/gotham.",
+      "hint": "usermod -d không di chuyển thư mục nếu thiếu -m; trong chuỗi lệnh mẫu, /home/joker vẫn được giữ.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "! getent passwd joker >/dev/null && ! getent passwd batman >/dev/null && test ! -e /home/gotham && test -d /home/joker"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+userdel\\s+joker\\s*$"
+              ],
+              [
+                "^\\s*sudo\\s+userdel\\s+-r\\s+batman\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "title_vi": "Xóa Tài Khoản Người Dùng",
+      "content_vi": "Trong bước kết thúc này, bạn sẽ dọn dẹp các tài khoản theo yêu cầu.\n\n### Nhiệm vụ\n\n1. Xóa người dùng `joker` khỏi hệ thống.\n2. Xóa người dùng `batman` cùng toàn bộ thư mục cá nhân của họ.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `userdel` kèm quyền `sudo`.\n- Đảm bảo dùng cờ `-r` khi xóa `batman` để dọn sạch thư mục cá nhân.",
+      "task_vi": "Xóa tài khoản joker và xóa batman kèm thư mục home.",
+      "hint_vi": "Dùng sudo userdel joker và sudo userdel -r batman."
+    }
+  ],
+  "title_vi": "Thử Thách Joker (The Joker's Trick)"
+}

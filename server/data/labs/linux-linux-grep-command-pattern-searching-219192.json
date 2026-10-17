@@ -1,0 +1,519 @@
+{
+  "id": "linux-linux-grep-command-pattern-searching-219192",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219192,
+  "source_url": "https://labex.io/tutorials/linux-linux-grep-command-pattern-searching-219192",
+  "order": 23,
+  "title": "Linux grep Command: Pattern Searching",
+  "title_vi": "Lệnh grep: tìm mẫu trong văn bản",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux grep Command: Pattern Searching",
+  "sections": [
+    {
+      "id": "commands-219192-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux grep Command: Pattern Searching. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh grep: tìm mẫu trong văn bản. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219192-section-1-v1",
+      "title": "Preparing the Environment",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chuẩn bị thư mục log",
+      "content": "List the prepared log files.\n\n```bash\nls -l logs\n```",
+      "content_vi": "Liệt kê các tệp log đã chuẩn bị.\n\n```bash\nls -l logs\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bls\\s+-l\\s+(?:\\S*/)?logs\\b"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-2-v1",
+      "title": "Basic Usage of grep - Searching for Errors",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm và đếm lỗi",
+      "content": "Find ERROR lines and count matching lines.\n\n```bash\ngrep \"ERROR\" logs/server.log\ngrep -c \"ERROR\" logs/server.log\n```",
+      "content_vi": "Tìm các dòng ERROR và đếm số dòng khớp.\n\n```bash\ngrep \"ERROR\" logs/server.log\ngrep -c \"ERROR\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+-c\\s+[\\\"\\x27]?ERROR[\\\"\\x27]?\\s+logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-3-v1",
+      "title": "Case-Insensitive Search",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Không phân biệt hoa thường",
+      "content": "Include every capitalization of error.\n\n```bash\ngrep -i \"error\" logs/server.log\n```",
+      "content_vi": "Tìm error với mọi kiểu viết hoa và thường.\n\n```bash\ngrep -i \"error\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+-i\\s+.*error.*logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-4-v1",
+      "title": "Searching Multiple Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm trong nhiều tệp",
+      "content": "Search all logs for the database failure.\n\n```bash\ngrep \"database connection failed\" logs/*\n```",
+      "content_vi": "Tìm lỗi kết nối cơ sở dữ liệu trong mọi tệp log.\n\n```bash\ngrep \"database connection failed\" logs/*\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+.*database connection failed.*logs/\\*"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-5-v1",
+      "title": "Using Regular Expressions",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Biểu thức chính quy",
+      "content": "Match dates in 2023 with digit classes.\n\n```bash\ngrep \"2023-[0-9][0-9]-[0-9][0-9]\" logs/server.log\n```",
+      "content_vi": "Dùng lớp chữ số để khớp ngày trong năm 2023.\n\n```bash\ngrep \"2023-[0-9][0-9]-[0-9][0-9]\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+.*2023-\\[0-9\\].*logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-6-v1",
+      "title": "Displaying Context",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem ngữ cảnh",
+      "content": "Show two lines before and after CRITICAL.\n\n```bash\ngrep -B 2 -A 2 \"CRITICAL\" logs/server.log\n```",
+      "content_vi": "Xem hai dòng trước và sau CRITICAL.\n\n```bash\ngrep -B 2 -A 2 \"CRITICAL\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+-B\\s+2\\s+-A\\s+2\\s+.*CRITICAL.*logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-7-v1",
+      "title": "Inverting the Match",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đảo điều kiện khớp",
+      "content": "Display lines without uppercase ERROR.\n\n```bash\ngrep -v \"ERROR\" logs/server.log\n```",
+      "content_vi": "Hiển thị những dòng không chứa ERROR viết hoa.\n\n```bash\ngrep -v \"ERROR\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+-v\\s+.*ERROR.*logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-8-v1",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219192-section-1-v1",
+      "title": "Preparing the Environment",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chuẩn bị thư mục log",
+      "content": "List the prepared log files.\n\n```bash\nls -l logs\n```",
+      "content_vi": "Liệt kê các tệp log đã chuẩn bị.\n\n```bash\nls -l logs\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bls\\s+-l\\s+(?:\\S*/)?logs\\b"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-2-v1",
+      "title": "Basic Usage of grep - Searching for Errors",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm và đếm lỗi",
+      "content": "Find ERROR lines and count matching lines.\n\n```bash\ngrep \"ERROR\" logs/server.log\ngrep -c \"ERROR\" logs/server.log\n```",
+      "content_vi": "Tìm các dòng ERROR và đếm số dòng khớp.\n\n```bash\ngrep \"ERROR\" logs/server.log\ngrep -c \"ERROR\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+-c\\s+[\\\"\\x27]?ERROR[\\\"\\x27]?\\s+logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-3-v1",
+      "title": "Case-Insensitive Search",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Không phân biệt hoa thường",
+      "content": "Include every capitalization of error.\n\n```bash\ngrep -i \"error\" logs/server.log\n```",
+      "content_vi": "Tìm error với mọi kiểu viết hoa và thường.\n\n```bash\ngrep -i \"error\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+-i\\s+.*error.*logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-4-v1",
+      "title": "Searching Multiple Files",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm trong nhiều tệp",
+      "content": "Search all logs for the database failure.\n\n```bash\ngrep \"database connection failed\" logs/*\n```",
+      "content_vi": "Tìm lỗi kết nối cơ sở dữ liệu trong mọi tệp log.\n\n```bash\ngrep \"database connection failed\" logs/*\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+.*database connection failed.*logs/\\*"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-5-v1",
+      "title": "Using Regular Expressions",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Biểu thức chính quy",
+      "content": "Match dates in 2023 with digit classes.\n\n```bash\ngrep \"2023-[0-9][0-9]-[0-9][0-9]\" logs/server.log\n```",
+      "content_vi": "Dùng lớp chữ số để khớp ngày trong năm 2023.\n\n```bash\ngrep \"2023-[0-9][0-9]-[0-9][0-9]\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+.*2023-\\[0-9\\].*logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-6-v1",
+      "title": "Displaying Context",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem ngữ cảnh",
+      "content": "Show two lines before and after CRITICAL.\n\n```bash\ngrep -B 2 -A 2 \"CRITICAL\" logs/server.log\n```",
+      "content_vi": "Xem hai dòng trước và sau CRITICAL.\n\n```bash\ngrep -B 2 -A 2 \"CRITICAL\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+-B\\s+2\\s+-A\\s+2\\s+.*CRITICAL.*logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219192-section-7-v1",
+      "title": "Inverting the Match",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đảo điều kiện khớp",
+      "content": "Display lines without uppercase ERROR.\n\n```bash\ngrep -v \"ERROR\" logs/server.log\n```",
+      "content_vi": "Hiển thị những dòng không chứa ERROR viết hoa.\n\n```bash\ngrep -v \"ERROR\" logs/server.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bgrep\\s+-v\\s+.*ERROR.*logs/server\\.log"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-grep-command-pattern-searching-219192.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

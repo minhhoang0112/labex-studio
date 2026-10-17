@@ -1,0 +1,48 @@
+{
+  "id": "linux-practice-shell-automation",
+  "course_id": "linux-commands-practice-online",
+  "title": "Luyện tập: Tự động hóa bằng Bash",
+  "order": 4,
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Dùng vòng lặp và tham số để tạo báo cáo số dòng cho nhiều file, bao gồm file có khoảng trắng trong tên.",
+  "steps": [
+    {
+      "id": "auto-1",
+      "title": "1. Chuẩn bị đầu vào có khoảng trắng",
+      "content": "### 1. Chuẩn bị đầu vào có khoảng trắng\n\nĐường dẫn cần đặt trong nháy kép. Mẫu input/*.txt vẫn mở rộng nhiều tên, còn biến của từng tên trong vòng lặp phải được bảo vệ.\n\n```bash\nmkdir -p \"$HOME/automation/input\"\nprintf 'one\\ntwo\\n' > \"$HOME/automation/input/first file.txt\"\nprintf 'three\\n' > \"$HOME/automation/input/second.txt\"\n```\n\nTạo first file.txt có hai dòng và second.txt có một dòng.",
+      "task": "Tạo first file.txt có hai dòng và second.txt có một dòng.",
+      "verify_command": "cmp -s \"$HOME/automation/input/first file.txt\" <(printf 'one\\ntwo\\n') && cmp -s \"$HOME/automation/input/second.txt\" <(printf 'three\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "1. Chuẩn bị đầu vào có khoảng trắng",
+      "content_vi": "### 1. Chuẩn bị đầu vào có khoảng trắng\n\nĐường dẫn cần đặt trong nháy kép. Mẫu input/*.txt vẫn mở rộng nhiều tên, còn biến của từng tên trong vòng lặp phải được bảo vệ.\n\n```bash\nmkdir -p \"$HOME/automation/input\"\nprintf 'one\\ntwo\\n' > \"$HOME/automation/input/first file.txt\"\nprintf 'three\\n' > \"$HOME/automation/input/second.txt\"\n```\n\nTạo first file.txt có hai dòng và second.txt có một dòng.",
+      "task_vi": "Tạo first file.txt có hai dòng và second.txt có một dòng.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    },
+    {
+      "id": "auto-2",
+      "title": "2. Viết script tổng hợp",
+      "content": "### 2. Viết script tổng hợp\n\nScript nhận thư mục làm tham số, dùng basename lấy tên file. [ -f ... ] bỏ qua mẫu glob khi không có file; wc -l đọc từ stdin để chỉ in số dòng.\n\n```bash\ncat > \"$HOME/automation/count-lines.sh\" <<'EOF'\n#!/usr/bin/env bash\nset -euo pipefail\nfor file in \"$1\"/*.txt; do\n  [ -f \"$file\" ] || continue\n  printf '%s:%s\\n' \"$(basename \"$file\")\" \"$(wc -l < \"$file\" | tr -d '[:space:]')\"\ndone | LC_ALL=C sort\nEOF\nchmod 700 \"$HOME/automation/count-lines.sh\"\n\"$HOME/automation/count-lines.sh\" \"$HOME/automation/input\" > \"$HOME/automation/report.txt\"\n```\n\nTạo script dùng được với thư mục tham số và báo cáo hai file.",
+      "task": "Tạo script dùng được với thư mục tham số và báo cáo hai file.",
+      "verify_command": "test -x \"$HOME/automation/count-lines.sh\" && bash -n \"$HOME/automation/count-lines.sh\" && cmp -s \"$HOME/automation/report.txt\" <(printf 'first file.txt:2\\nsecond.txt:1\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "2. Viết script tổng hợp",
+      "content_vi": "### 2. Viết script tổng hợp\n\nScript nhận thư mục làm tham số, dùng basename lấy tên file. [ -f ... ] bỏ qua mẫu glob khi không có file; wc -l đọc từ stdin để chỉ in số dòng.\n\n```bash\ncat > \"$HOME/automation/count-lines.sh\" <<'EOF'\n#!/usr/bin/env bash\nset -euo pipefail\nfor file in \"$1\"/*.txt; do\n  [ -f \"$file\" ] || continue\n  printf '%s:%s\\n' \"$(basename \"$file\")\" \"$(wc -l < \"$file\" | tr -d '[:space:]')\"\ndone | LC_ALL=C sort\nEOF\nchmod 700 \"$HOME/automation/count-lines.sh\"\n\"$HOME/automation/count-lines.sh\" \"$HOME/automation/input\" > \"$HOME/automation/report.txt\"\n```\n\nTạo script dùng được với thư mục tham số và báo cáo hai file.",
+      "task_vi": "Tạo script dùng được với thư mục tham số và báo cáo hai file.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    },
+    {
+      "id": "auto-3",
+      "title": "3. Thử script với dữ liệu khác",
+      "content": "### 3. Thử script với dữ liệu khác\n\nMột script có thể dùng lại phải nhận dữ liệu mới mà không sửa mã. Thêm file có ba dòng vào một thư mục mới rồi tạo báo cáo mới.\n\n```bash\nmkdir -p \"$HOME/automation/other\"\nprintf 'a\\nb\\nc\\n' > \"$HOME/automation/other/new file.txt\"\n\"$HOME/automation/count-lines.sh\" \"$HOME/automation/other\" > \"$HOME/automation/other-report.txt\"\n```\n\nTạo other-report.txt có new file.txt:3 và giữ báo cáo đầu.",
+      "task": "Tạo other-report.txt có new file.txt:3 và giữ báo cáo đầu.",
+      "verify_command": "cmp -s \"$HOME/automation/other-report.txt\" <(printf 'new file.txt:3\\n') && cmp -s <(bash \"$HOME/automation/count-lines.sh\" \"$HOME/automation/other\") \"$HOME/automation/other-report.txt\" && cmp -s \"$HOME/automation/report.txt\" <(printf 'first file.txt:2\\nsecond.txt:1\\n')",
+      "hint": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra.",
+      "title_vi": "3. Thử script với dữ liệu khác",
+      "content_vi": "### 3. Thử script với dữ liệu khác\n\nMột script có thể dùng lại phải nhận dữ liệu mới mà không sửa mã. Thêm file có ba dòng vào một thư mục mới rồi tạo báo cáo mới.\n\n```bash\nmkdir -p \"$HOME/automation/other\"\nprintf 'a\\nb\\nc\\n' > \"$HOME/automation/other/new file.txt\"\n\"$HOME/automation/count-lines.sh\" \"$HOME/automation/other\" > \"$HOME/automation/other-report.txt\"\n```\n\nTạo other-report.txt có new file.txt:3 và giữ báo cáo đầu.",
+      "task_vi": "Tạo other-report.txt có new file.txt:3 và giữ báo cáo đầu.",
+      "hint_vi": "Chạy khối lệnh mẫu, đọc kết quả rồi bấm Kiểm tra."
+    }
+  ],
+  "title_vi": "Luyện tập: Tự động hóa bằng Bash"
+}

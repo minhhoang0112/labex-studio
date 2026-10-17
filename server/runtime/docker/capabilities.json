@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "image": "labex-local/ubuntu22:1",
+  "capabilities": {
+    "persistent_processes": true,
+    "package_management": true,
+    "cron_scheduler": true,
+    "ifconfig": true,
+    "network": true,
+    "firewall": true,
+    "kernel_logs": false,
+    "external_icmp": true,
+    "network_ports": true
+  },
+  "evidence": {
+    "runner": "tests/runtime.docker-smoke.py",
+    "result": "passed",
+    "ubuntu": "22.04.5 LTS",
+    "docker": "29.9.1 rootless",
+    "processes": "A real background sleep process survives separate execs, is inspected and killed by another exec.",
+    "packages": "Actual apt update, neofetch installation, figlet removal and orphan libtext-charwidth-perl autoremove pass in the container writable layer.",
+    "cron": "A real private cron daemon executes a learner crontab across a scheduled minute and writes a current timestamp.",
+    "network": "ping -c 3 -W 2 8.8.8.8 completes with exit status 0.",
+    "firewall": "tests/runtime.docker-network-smoke.py PASS: two disposable internal-bridge peers prove TCP22/8000 default-deny, selective allow, delete and disable actual enforcement; no SSH authentication claim.",
+    "limits": "No private kernel log claim. Ubuntu22 source course and Junior integration report coverage recorded separately.",
+    "network_ports": "Actual peer TCP connections to private listener ports 22/8000 pass without host mounts, published ports or privileged mode.",
+    "external_icmp": "tests/runtime.docker-network-smoke.py PASS: actual ping -c 3 -W 2 8.8.8.8; external connectivity can vary.",
+    "image_id": "sha256:042a8d7e6d14e153b99933b12794a4b6ddab0877759e06773e5812b3449d35fc",
+    "lifecycle": "tests/runtime.docker-lifecycle-smoke.py PASS: status/history read-only, restart preserves files, manifest mismatch does not reseed, real inner timeout process cleanup, reset archives old container.",
+    "quick_start_coverage": ".artifacts/docker-quick-start-coverage.json: all10lessons/47tasks passed, completed lesson evidence aggregated from recorded runs; not claimed as a single uninterrupted run.",
+    "junior_coverage": ".artifacts/docker-junior-coverage.json: all10lessons/48tasks exercised;47passed including actual scheduled tararchive,1dmesg deliberatelyblocked; completed lesson evidence aggregated from recorded runs."
+  }
+}

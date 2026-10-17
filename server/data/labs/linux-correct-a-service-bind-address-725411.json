@@ -1,0 +1,93 @@
+{
+  "id": "linux-correct-a-service-bind-address-725411",
+  "course_id": "linux-for-noobs",
+  "order": 31,
+  "title": "Correct a Service Bind Address",
+  "title_vi": "Sửa địa chỉ bind của dịch vụ",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "20 mins",
+  "overview": "An internal status page works on the loopback interface but should listen on every IPv4 interface. Its port and page content are already correct.  The preceding networking lab practiced inspecting lis",
+  "source_url": "https://labex.io/tutorials/linux-correct-a-service-bind-address-725411",
+  "source_lab_id": 725411,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "An internal status page works on the loopback interface but should listen on every IPv4 interface. Its port and page content are already correct.\n\nThe preceding networking lab practiced inspecting listeners with `ss`, testing HTTP with `curl`, and reading service configuration. This challenge changes only the bind address.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một trang trạng thái nội bộ hoạt động trên giao diện loopback nhưng cần lắng nghe trên mọi giao diện IPv4. Cổng và nội dung trang đã đúng.\n\nBài mạng trước đã luyện kiểm tra nơi lắng nghe bằng `ss`, thử HTTP bằng `curl` và đọc cấu hình dịch vụ. Thử thách này chỉ thay địa chỉ bind."
+    },
+    {
+      "id": "source-725411-section-1-v3",
+      "title": "Make the Status Page Listen on All IPv4 Interfaces",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`labex-status-page.service` is active on TCP port `8090`, but it listens only on `127.0.0.1`. Its configuration is `/etc/labex-status-page.conf`.\n\n### Scope\n\n- Change only `BIND_ADDRESS`.\n- Keep port `8090` and the existing page content.\n- Restart only `labex-status-page.service`.\n\n### Your Goal\n\nLeave the status page listening on `0.0.0.0:8090` and still returning `internal status ready`.\n\n### Acceptance Criteria\n\n- `labex-status-page.service` is active.\n- `ss` shows an IPv4 listener on `0.0.0.0:8090`.\n- `curl http://127.0.0.1:8090/` returns content containing `internal status ready`.\n\n### Hints\n\nHow can I compare the current and required state?\n\nInspect port `8090` with `ss`, read the named configuration file, then restart the service after changing the bind value.",
+      "title_vi": "Cho trang trạng thái lắng nghe trên mọi giao diện IPv4",
+      "task": "Thực hiện hướng dẫn: Make the Status Page Listen on All IPv4 Interfaces",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "### Tình huống hiện tại\n\n`labex-status-page.service` đang hoạt động trên cổng TCP `8090`, nhưng chỉ lắng nghe trên `127.0.0.1`. Cấu hình của nó là `/etc/labex-status-page.conf`.\n\n### Phạm vi\n\n- Chỉ thay `BIND_ADDRESS`.\n- Giữ cổng `8090` và nội dung trang hiện có.\n- Chỉ khởi động lại `labex-status-page.service`.\n\n### Mục tiêu của bạn\n\nĐể trang trạng thái lắng nghe trên `0.0.0.0:8090` và vẫn trả về `internal status ready`.\n\n### Tiêu chí đạt\n\n- `labex-status-page.service` đang hoạt động.\n- `ss` cho thấy nơi lắng nghe IPv4 trên `0.0.0.0:8090`.\n- `curl http://127.0.0.1:8090/` trả nội dung chứa `internal status ready`.\n\n### Gợi ý\n\nTôi có thể so sánh trạng thái hiện tại và yêu cầu như thế nào?\n\nKiểm tra cổng `8090` bằng `ss`, đọc tệp cấu hình được nêu, rồi khởi động lại dịch vụ sau khi đổi giá trị bind.",
+      "task_vi": "Thực hiện hướng dẫn: Cho trang trạng thái lắng nghe trên mọi giao diện IPv4",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You corrected one service bind address and verified both the listener and preserved HTTP response.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã sửa một địa chỉ bind của dịch vụ và xác minh cả nơi lắng nghe lẫn phản hồi HTTP được giữ nguyên."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725411-section-1-v3",
+      "title": "Make the Status Page Listen on All IPv4 Interfaces",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`labex-status-page.service` is active on TCP port `8090`, but it listens only on `127.0.0.1`. Its configuration is `/etc/labex-status-page.conf`.\n\n### Scope\n\n- Change only `BIND_ADDRESS`.\n- Keep port `8090` and the existing page content.\n- Restart only `labex-status-page.service`.\n\n### Your Goal\n\nLeave the status page listening on `0.0.0.0:8090` and still returning `internal status ready`.\n\n### Acceptance Criteria\n\n- `labex-status-page.service` is active.\n- `ss` shows an IPv4 listener on `0.0.0.0:8090`.\n- `curl http://127.0.0.1:8090/` returns content containing `internal status ready`.\n\n### Hints\n\nHow can I compare the current and required state?\n\nInspect port `8090` with `ss`, read the named configuration file, then restart the service after changing the bind value.",
+      "title_vi": "Cho trang trạng thái lắng nghe trên mọi giao diện IPv4",
+      "task": "Thực hiện hướng dẫn: Make the Status Page Listen on All IPv4 Interfaces",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "### Tình huống hiện tại\n\n`labex-status-page.service` đang hoạt động trên cổng TCP `8090`, nhưng chỉ lắng nghe trên `127.0.0.1`. Cấu hình của nó là `/etc/labex-status-page.conf`.\n\n### Phạm vi\n\n- Chỉ thay `BIND_ADDRESS`.\n- Giữ cổng `8090` và nội dung trang hiện có.\n- Chỉ khởi động lại `labex-status-page.service`.\n\n### Mục tiêu của bạn\n\nĐể trang trạng thái lắng nghe trên `0.0.0.0:8090` và vẫn trả về `internal status ready`.\n\n### Tiêu chí đạt\n\n- `labex-status-page.service` đang hoạt động.\n- `ss` cho thấy nơi lắng nghe IPv4 trên `0.0.0.0:8090`.\n- `curl http://127.0.0.1:8090/` trả nội dung chứa `internal status ready`.\n\n### Gợi ý\n\nTôi có thể so sánh trạng thái hiện tại và yêu cầu như thế nào?\n\nKiểm tra cổng `8090` bằng `ss`, đọc tệp cấu hình được nêu, rồi khởi động lại dịch vụ sau khi đổi giá trị bind.",
+      "task_vi": "Thực hiện hướng dẫn: Cho trang trạng thái lắng nghe trên mọi giao diện IPv4",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-correct-a-service-bind-address-725411.json"
+}

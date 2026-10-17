@@ -1,0 +1,475 @@
+{
+  "id": "linux-day-5-the-keeper-of-the-keys-596204",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 5,
+  "title": "The Keeper of the Keys",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "Welcome to your final day of the week at LabEx Corporation! It's been an incredible journey from your first reconnaissance mission to becoming the Fortress Guardian. Now, the company is promoting you to the ultimate position of trust: **Keeper of the Keys** for Project Phoenix.",
+  "source_url": "https://labex.io/tutorials/linux-day-5-the-keeper-of-the-keys-596204",
+  "source_lab_id": 596204,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-5-the-keeper-of-the-keys-596204",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-5-the-keeper-of-the-keys-596204.json",
+    "reference_sha256": "0f1d4bd05eb15014e01ab0328897ad7fc569b4f0d314fde0c48e6cdf62472716",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "format-normalized-match"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-5-the-keeper-of-the-keys-596204.json",
+  "sections": [
+    {
+      "id": "source-596204-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nWelcome to your final day of the week at LabEx Corporation! It's been an incredible journey from your first reconnaissance mission to becoming the Fortress Guardian. Now, the company is promoting you to the ultimate position of trust: **Keeper of the Keys** for Project Phoenix.\n\nThe CTO pulls you aside for a critical briefing: \"Project Phoenix is entering its final phase, and we need absolute control over who has access to our systems. We're bringing on a new senior developer, Brenda Smith, who will lead the final push to completion. Unfortunately, we also discovered that John Doe, a contractor from the previous team, had unauthorized access during the security incident you investigated earlier. His access needs to be immediately revoked.\"\n\nAs the Keeper of the Keys, you now control the human gateway to Project Phoenix. Your user management decisions will determine who can contribute to TechNova's most important project and who must be locked out for security reasons.\n\nThis is your moment to demonstrate complete mastery of Linux user administration. The future of Project Phoenix depends on your ability to grant access to those who need it and deny it to those who might compromise the system. Let's complete this mission!\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Introduction\n\nChào mừng bạn đến với ngày làm việc cuối cùng trong tuần tại LabEx Corporation! Đó là một hành trình tuyệt vời từ sứ mệnh trinh sát đầu tiên cho đến khi trở thành Người Gác Cổng (Fortress Guardian). Giờ đây, công ty đang thăng chức cho bạn lên vị trí đáng tin cậy cao nhất: **Người Giữ Chìa Khóa** (Keeper of the Keys) cho Dự án Phoenix (Project Phoenix).\n\nGiám đốc Công nghệ (CTO) kéo riêng bạn ra để giao nhiệm vụ quan trọng: \"Dự án Phoenix đang bước vào giai đoạn cuối, và chúng ta cần kiểm soát tuyệt vời đối với những ai có quyền truy cập vào các hệ thống của mình. Chúng ta sắp đón nhận một nhà phát triển cấp cao mới, Brenda Smith, người sẽ dẫn dắt đợt nước rút cuối cùng để hoàn thành dự án. Thật không may, chúng ta cũng phát hiện ra rằng John Doe, một nhà thầu từ nhóm trước, đã có quyền truy cập trái phép trong sự cố bảo mật mà bạn đã điều tra trước đó. Quyền truy cập của anh ta cần phải bị thu hồi ngay lập tức.\"\n\nVới tư cách là Người Giữ Chìa Khóa, giờ đây bạn kiểm soát cổng vào nhân sự của Dự án Phoenix. Các quyết định quản lý người dùng của bạn sẽ quyết định ai có thể đóng góp cho dự án quan trọng nhất của TechNova và ai phải bị khóa khỏi hệ thống vì lý do bảo mật.\n\nĐây là thời điểm để bạn thể hiện sự làm chủ hoàn toàn đối với việc quản trị người dùng Linux. Tương lai của Dự án Phoenix phụ thuộc vào khả năng cấp quyền truy cập cho những người cần nó và từ chối những kẻ có khả năng làm tổn hại hệ thống. Hãy hoàn thành nhiệm vụ này nào!"
+    },
+    {
+      "id": "source-596204-section-1-v2",
+      "title": "Onboarding a New Developer to the System",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Onboarding a New Developer to the System\n\nYour first task is to create a new user account for Brenda Smith, the senior developer who will lead Project Phoenix's final development phase. TechNova's policy dictates that usernames should follow the format of `first_initial.last_name`.\n\n### Tasks\n\n- Create a new user account for Brenda Smith.\n\n### Requirements\n\n- The username must be `b.smith`.\n- Use the `useradd` command to add the new user to the system. You will need `sudo` privileges.\n\n### Hints\n\n- This challenge expects the standard `useradd` command rather than the interactive `adduser` helper.\n- Remember to use `sudo` to execute commands with administrative privileges.\n\n### Examples\n\nAfter successfully creating the new user account, you should see the user entry in the system's user database:\n\n```bash\n$ grep \"b.smith\" /etc/passwd\nb.smith:x:5002:5004::/home/b.smith:/bin/sh\n```\n\nThe user account will be created with a system-assigned user ID and group ID. You can verify the account exists and check its details using:\n\n```bash\n$ id b.smith\nuid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith)\n```\n",
+      "task": "- Create a new user account for Brenda Smith.",
+      "hint": "- This challenge expects the standard `useradd` command rather than the interactive `adduser` helper.\n- Remember to use `sudo` to execute commands with administrative privileges.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "getent passwd b.smith >/dev/null"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+useradd\\s+b\\.smith\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
+      "title_vi": "Thiết lập tài khoản cho Lập trình viên mới trên Hệ thống",
+      "content_vi": "## Thêm Nhà phát triển Mới vào Hệ thống\n\nNhiệm vụ đầu tiên của bạn là tạo một tài khoản người dùng mới cho Brenda Smith, nhà phát triển cao cấp sẽ dẫn dắt giai đoạn phát triển cuối cùng của Project Phoenix. Chính sách của TechNova quy định rằng tên người dùng phải tuân theo định dạng `first_initial.last_name`.\n\n### Nhiệm vụ\n\n- Tạo một tài khoản người dùng mới cho Brenda Smith.\n\n### Yêu cầu\n\n- Tên người dùng phải là `b.smith`.\n- Sử dụng lệnh `useradd` để thêm người dùng mới vào hệ thống. Bạn sẽ cần quyền `sudo`.\n\n### Gợi ý\n\n- Thử thách này yêu cầu sử dụng lệnh tiêu chuẩn `useradd` thay vì công cụ hỗ trợ tương tác `adduser`.\n- Hãy nhớ sử dụng `sudo` để thực thi các lệnh với quyền quản trị viên.\n\n### Ví dụ\n\nSau khi tạo thành công tài khoản người dùng mới, bạn sẽ thấy mục người dùng trong cơ sở dữ liệu người dùng của hệ thống:\n\n```bash\n$ grep \"b.smith\" /etc/passwd\nb.smith:x:5002:5004::/home/b.smith:/bin/sh\n```\n\nTài khoản người dùng sẽ được tạo với ID người dùng và ID nhóm được hệ thống chỉ định. Bạn có thể xác minh tài khoản tồn tại và kiểm tra các chi tiết của nó bằng cách sử dụng:\n\n```bash\n$ id b.smith\nuid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith)\n```"
+    },
+    {
+      "id": "source-596204-section-2-v2",
+      "title": "Creating a Dedicated Home Directory for the New User",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Creating a Dedicated Home Directory for the New User\n\nYou've created the user, but you forgot a crucial step! Brenda, as the senior developer leading Project Phoenix's final phase, needs her own secure workspace to store critical project files and development tools. You must ensure that a home directory is created for her.\n\n### Tasks\n\n- Create a home directory for the user `b.smith` located at `/home/b.smith`.\n\n### Requirements\n\n- The home directory must be created for the user `b.smith`.\n- You should use an option with the `useradd` command to create the home directory automatically. If you have already created the user without a home directory, you may need to delete the user first and then recreate it correctly.\n- Valid solutions include either `-m` or `--create-home`, and the flag may appear before or after the username.\n\n### Hints\n\n- To delete a user, you can use the `userdel` command. For example: `sudo userdel b.smith`.\n- The `useradd` command has a specific flag to create a home directory for the user. Check the `man useradd` page for an option like `-m` or `--create-home`.\n\n### Examples\n\nAfter creating the user with a home directory, you should see the new directory created in the home directory listing:\n\n```bash\n$ ls -la /home/\ndrwxr-xr-x 1 root root 47 Sep 3 16:32 .\ndrwxr-xr-x 1 root root 62 Sep 3 16:31 ..\n-rw-r--r-- 1 root root 58 Jul 18 2024 .zshrc\ndrwxr-x--- 2 b.smith b.smith 57 Sep 3 16:32 b.smith\ndrwxr-x--- 2 j.doe j.doe 57 Sep 3 16:31 j.doe\ndrwxr-x--- 1 labex labex 4096 Sep 3 16:35 labex\n```\n\nThe home directory will be owned by the user with restricted permissions (accessible only by the owner and group). To view the contents, you may need appropriate permissions or use sudo:\n\n```bash\n$ sudo ls -la /home/b.smith/\ndrwxr-x--- 2 b.smith b.smith 57 Sep 3 16:32 .\ndrwxr-xr-x 1 root root 47 Sep 3 16:32 ..\n-rw-r--r-- 1 b.smith b.smith 220 Sep 3 16:32 .bash_logout\n-rw-r--r-- 1 b.smith b.smith 3771 Sep 3 16:32 .bashrc\n-rw-r--r-- 1 b.smith b.smith 655 Sep 3 16:32 .profile\n```\n",
+      "task": "- Create a home directory for the user `b.smith` located at `/home/b.smith`.",
+      "hint": "- To delete a user, you can use the `userdel` command. For example: `sudo userdel b.smith`.\n- The `useradd` command has a specific flag to create a home directory for the user. Check the `man useradd` page for an option like `-m` or `--create-home`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -d /home/b.smith && test \"$(stat -c '%U' /home/b.smith)\" = b.smith && test \"$(getent passwd b.smith | cut -d: -f6)\" = /home/b.smith"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+useradd\\s+(?:(?:-m|--create-home)\\s+b\\.smith|b\\.smith\\s+(?:-m|--create-home))\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo",
+        "files"
+      ],
+      "title_vi": "Tạo thư mục chính riêng cho người dùng mới",
+      "content_vi": "## Tạo Thư mục Chính Riêng cho Người dùng Mới\n\nBạn đã tạo người dùng, nhưng bạn đã quên một bước quan trọng! Brenda, với tư cách là nhà phát triển cấp cao dẫn dắt giai đoạn cuối của Dự án Phoenix, cần một không gian làm việc an toàn của riêng cô ấy để lưu trữ các tệp dự án quan trọng và các công cụ phát triển. Bạn phải đảm bảo rằng một thư mục chính (home directory) được tạo cho cô ấy.\n\n### Các nhiệm vụ\n\n- Tạo một thư mục chính cho người dùng `b.smith` nằm tại `/home/b.smith`.\n\n### Yêu cầu\n\n- Thư mục chính phải được tạo cho người dùng `b.smith`.\n- Bạn nên sử dụng một tùy chọn với lệnh `useradd` để tự động tạo thư mục chính. Nếu bạn đã tạo người dùng mà không có thư mục chính, bạn có thể cần xóa người dùng trước rồi tạo lại cho đúng.\n- Các giải pháp hợp lệ bao gồm `-m` hoặc `--create-home`, và cờ có thể xuất hiện trước hoặc sau tên người dùng.\n\n### Gợi ý\n\n- Để xóa một người dùng, bạn có thể sử dụng lệnh `userdel`. Ví dụ: `sudo userdel b.smith`.\n- Lệnh `useradd` có một cờ cụ thể để tạo thư mục chính cho người dùng. Hãy kiểm tra trang `man useradd` để tìm tùy chọn như `-m` hoặc `--create-home`.\n\n### Ví dụ\n\nSau khi tạo người dùng kèm theo thư mục chính, bạn sẽ thấy thư mục mới được tạo trong danh sách thư mục chính:\n\n```bash\n$ ls -la /home/\ndrwxr-xr-x 1 root root 47 Sep 3 16:32 .\ndrwxr-xr-x 1 root root 62 Sep 3 16:31 ..\n-rw-r--r-- 1 root root 58 Jul 18 2024 .zshrc\ndrwxr-x--- 2 b.smith b.smith 57 Sep 3 16:32 b.smith\ndrwxr-x--- 2 j.doe j.doe 57 Sep 3 16:31 j.doe\ndrwxr-x--- 1 labex labex 4096 Sep 3 16:35 labex\n```\n\nThư mục chính sẽ thuộc sở hữu của người dùng với các quyền bị giới hạn (chỉ chủ sở hữu và nhóm mới có thể truy cập). Để xem nội dung bên trong, bạn có thể cần có quyền thích hợp hoặc sử dụng sudo:\n\n```bash\n$ sudo ls -la /home/b.smith/\ndrwxr-x--- 2 b.smith b.smith 57 Sep 3 16:32 .\ndrwxr-xr-x 1 root root 47 Sep 3 16:32 ..\n-rw-r--r-- 1 b.smith b.smith 220 Sep 3 16:32 .bash_logout\n-rw-r--r-- 1 b.smith b.smith 3771 Sep 3 16:32 .bashrc\n-rw-r--r-- 1 b.smith b.smith 655 Sep 3 16:32 .profile\n```"
+    },
+    {
+      "id": "source-596204-section-3-v2",
+      "title": "Assigning an Initial Password for the New User",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Assigning an Initial Password for the New User\n\nThe user account `b.smith` is created, but it's currently locked. Brenda cannot access the Project Phoenix systems to begin her leadership role without a password. Your next task is to set an initial secure password for her account.\n\n### Tasks\n\n- Set a password for the user `b.smith`.\n\n### Requirements\n\n- Use the standard Linux command to change a user's password.\n- You will be prompted to enter and confirm the new password. You can use any simple password, for example, `password123`.\n\n### Hints\n\n- The command to set or change passwords is `passwd`.\n- Since you are changing the password for another user, you will need `sudo` privileges. The syntax is `sudo passwd <username>`.\n\n### Examples\n\nAfter setting the password successfully, the user account should have a password hash in the shadow file. You can verify this by checking the shadow file (note: this requires root privileges):\n\n```bash\n$ sudo grep \"^b.smith:\" /etc/shadow\nb.smith:$y$j9T$XbJLH9LJgY518Th4qcd1V0$NrfHOJ2MGm/1OhLGfpfMQkvPasV23Eenhwl9bA0i8O4:20334:0:99999:7:::\n```\n",
+      "task": "- Set a password for the user `b.smith`.",
+      "hint": "- The command to set or change passwords is `passwd`.\n- Since you are changing the password for another user, you will need `sudo` privileges. The syntax is `sudo passwd <username>`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(sudo passwd -S b.smith | awk '{print $2}')\" = P"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+passwd\\s+b\\.smith\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
+      "title_vi": "Đặt mật khẩu ban đầu cho người dùng mới",
+      "content_vi": "## Gán Mật Khẩu Ban Đầu Cho Người Dùng Mới\n\nTài khoản người dùng `b.smith` đã được tạo, nhưng hiện tại nó đang bị khóa. Brenda không thể truy cập vào các hệ thống của Project Phoenix để bắt đầu vai trò lãnh đạo của mình nếu không có mật khẩu. Nhiệm vụ tiếp theo của bạn là thiết lập một mật khẩu ban đầu an toàn cho tài khoản của cô ấy.\n\n### Nhiệm vụ\n\n- Đặt mật khẩu cho người dùng `b.smith`.\n\n### Yêu cầu\n\n- Sử dụng lệnh chuẩn của Linux để thay đổi mật khẩu của người dùng.\n- Bạn sẽ được nhắc nhập và xác nhận mật khẩu mới. Bạn có thể sử dụng bất kỳ mật khẩu đơn giản nào, ví dụ: `password123`.\n\n### Gợi ý\n\n- Lệnh để thiết lập hoặc thay đổi mật khẩu là `passwd`.\n- Vì bạn đang thay đổi mật khẩu cho một người dùng khác, bạn sẽ cần quyền `sudo`. Cú pháp là `sudo passwd <username>`.\n\n### Ví dụ\n\nSau khi thiết lập mật khẩu thành công, tài khoản người dùng sẽ có mã băm mật khẩu trong tệp shadow. Bạn có thể xác minh điều này bằng cách kiểm tra tệp shadow (lưu ý: việc này yêu cầu quyền root):\n\n```bash\n$ sudo grep \"^b.smith:\" /etc/shadow\nb.smith:$y$j9T$XbJLH9LJgY518Th4qcd1V0$NrfHOJ2MGm/1OhLGfpfMQkvPasV23Eenhwl9bA0i8O4:20334:0:99999:7:::\n```"
+    },
+    {
+      "id": "source-596204-section-4-v2",
+      "title": "Adding the New Developer to the \"developers\" Group",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Adding the New Developer to the \"developers\" Group\n\nTo ensure Brenda has access to the Project Phoenix files and repositories you've been securing all week, she must be added to the `developers` group. This is the same group you've been working with throughout your time at TechNova, and it has the special permissions needed for the project.\n\n### Tasks\n\n- Add the user `b.smith` to the `developers` group.\n\n### Requirements\n\n- The user `b.smith` must be a member of the `developers` group.\n- The user's existing group memberships should not be removed.\n\n### Hints\n\n- The `usermod` command is used to modify a user account.\n- Look for the `-a` (append) and `-G` (groups) flags. Using them together ensures you add the user to a new group without removing them from existing ones.\n\n### Examples\n\nAfter successfully adding the user to the developers group, you should see the group membership reflected in the user's group list:\n\n```bash\n$ groups b.smith\nb.smith : b.smith developers\n```\n\nYou can also verify using the `id` command to see more detailed group information:\n\n```bash\n$ id b.smith\nuid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith),5003(developers)\n```\n\nThe user should now have access to files and directories that are accessible to the `developers` group. You can check the group file to confirm the group exists:\n\n```bash\n$ grep \"^developers:\" /etc/group\ndevelopers:x:5003:b.smith\n```\n\nNotice that `b.smith` appears in the list of group members. This confirms the user has been successfully added to the group while preserving their existing group memberships.\n",
+      "task": "- Add the user `b.smith` to the `developers` group.",
+      "hint": "- The `usermod` command is used to modify a user account.\n- Look for the `-a` (append) and `-G` (groups) flags. Using them together ensures you add the user to a new group without removing them from existing ones.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "id -nG b.smith | tr ' ' '\\n' | grep -Fxq developers"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+usermod\\s+-aG\\s+developers\\s+b\\.smith\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
+      "title_vi": "Thêm nhà phát triển mới vào nhóm developers",
+      "content_vi": "## Thêm Nhà phát triển Mới vào Nhóm \"developers\"\n\nĐể đảm bảo Brenda có quyền truy cập vào các tệp và kho lưu trữ của Project Phoenix mà bạn đã bảo mật suốt cả tuần qua, cô ấy phải được thêm vào nhóm `developers`. Đây là nhóm tương tự mà bạn đã làm việc cùng trong suốt thời gian làm việc tại TechNova, và nó có các quyền đặc biệt cần thiết cho dự án.\n\n### Nhiệm vụ\n\n- Thêm người dùng `b.smith` vào nhóm `developers`.\n\n### Yêu cầu\n\n- Người dùng `b.smith` phải là thành viên của nhóm `developers`.\n- Các tư cách thành viên nhóm hiện tại của người dùng không được phép bị xóa bỏ.\n\n### Gợi ý\n\n- Lệnh `usermod` được sử dụng để sửa đổi tài khoản người dùng.\n- Hãy tìm các cờ `-a` (thêm vào) và `-G` (các nhóm). Sử dụng chúng cùng nhau đảm bảo rằng bạn thêm người dùng vào một nhóm mới mà không làm mất đi các nhóm hiện có của họ.\n\n### Ví dụ\n\nSau khi thêm thành công người dùng vào nhóm developers, bạn sẽ thấy tư cách thành viên nhóm được phản ánh trong danh sách nhóm của người dùng:\n\n```bash\n$ groups b.smith\nb.smith : b.smith developers\n```\n\nBạn cũng có thể xác minh bằng cách sử dụng lệnh `id` để xem thông tin chi tiết hơn về nhóm:\n\n```bash\n$ id b.smith\nuid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith),5003(developers)\n```\n\nNgười dùng bây giờ sẽ có quyền truy cập vào các tệp và thư mục mà nhóm `developers` có thể truy cập. Bạn có thể kiểm tra tệp nhóm để xác nhận nhóm tồn tại:\n\n```bash\n$ grep \"^developers:\" /etc/group\ndevelopers:x:5003:b.smith\n```\n\nLưu ý rằng `b.smith` xuất hiện trong danh sách các thành viên nhóm. Điều này xác nhận rằng người dùng đã được thêm thành công vào nhóm trong khi vẫn giữ nguyên tư cách thành viên nhóm hiện tại của họ."
+    },
+    {
+      "id": "source-596204-section-5-v2",
+      "title": "Temporarily Disabling a Departing Employee’s Account",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Temporarily Disabling a Departing Employee’s Account\n\nNow for your final task of the week—and the most critical security action for Project Phoenix. John Doe (`j.doe`) was identified during your earlier investigation as having potentially unauthorized access during the security incident. The CTO has ordered his immediate removal from all TechNova systems. However, legal and compliance teams need his files preserved for the ongoing security audit, so you must lock the account rather than delete it entirely.\n\n### Tasks\n\n- Lock the user account for `j.doe` to prevent logins.\n\n### Requirements\n\n- The user account `j.doe` must be locked.\n- Do not delete the user or their home directory.\n\n### Hints\n\n- You can use the `usermod` command with the `-L` (lock) option.\n- Alternatively, the `passwd` command has a `-l` (lock) flag that achieves the same result.\n- Remember to use `sudo`.\n\n### Examples\n\nYou can verify the account is locked by checking the shadow file:\n\n```bash\n$ sudo grep \"^j.doe:\" /etc/shadow\nj.doe:!:20334:0:99999:7:::\n```\n\nNotice the exclamation mark (`!`) at the beginning of the password field - this indicates the account is locked. The original password hash is preserved after the `!` for potential future unlocking.\n",
+      "task": "- Lock the user account for `j.doe` to prevent logins.",
+      "hint": "- You can use the `usermod` command with the `-L` (lock) option.\n- Alternatively, the `passwd` command has a `-l` (lock) flag that achieves the same result.\n- Remember to use `sudo`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "getent passwd j.doe >/dev/null && test -d /home/j.doe && test \"$(sudo passwd -S j.doe | awk '{print $2}')\" = L"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+passwd\\s+-l\\s+j\\.doe\\s*$",
+                "^\\s*sudo\\s+usermod\\s+-L\\s+j\\.doe\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo",
+        "files"
+      ],
+      "title_vi": "Tạm khóa tài khoản của nhân viên sắp nghỉ việc",
+      "content_vi": "## Tạm thời vô hiệu hóa tài khoản của nhân viên đã nghỉ việc\n\nBây giờ là nhiệm vụ cuối cùng trong tuần của bạn—và là hành động bảo mật quan trọng nhất đối với Dự án Phoenix. John Doe (`j.doe`) đã được xác định trong quá trình điều tra trước đó của bạn là có quyền truy cập có thể không được phép trong sự cố bảo mật. Giám đốc Công nghệ (CTO) đã ra lệnh xóa ngay lập tức tài khoản của anh ta khỏi tất cả các hệ thống của TechNova. Tuy nhiên, các nhóm pháp lý và tuân thủ cần giữ lại các tệp của anh ta cho cuộc kiểm toán bảo mật đang diễn ra, vì vậy bạn phải khóa tài khoản thay vì xóa hoàn toàn.\n\n### Nhiệm vụ\n\n- Khóa tài khoản người dùng cho `j.doe` để ngăn chặn việc đăng nhập.\n\n### Yêu cầu\n\n- Tài khoản người dùng `j.doe` phải bị khóa.\n- Không xóa người dùng hoặc thư mục chính (home directory) của họ.\n\n### Gợi ý\n\n- Bạn có thể sử dụng lệnh `usermod` với tùy chọn `-L` (lock).\n- Hoặc cách khác, lệnh `passwd` có cờ `-l` (lock) đạt được kết quả tương tự.\n- Hãy nhớ sử dụng `sudo`.\n\n### Ví dụ\n\nBạn có thể xác minh tài khoản đã bị khóa bằng cách kiểm tra tệp shadow:\n\n```bash\n$ sudo grep \"^j.doe:\" /etc/shadow\nj.doe:!:20334:0:99999:7:::\n```\n\nLưu ý dấu chấm than (`!`) ở đầu trường mật khẩu - điều này cho biết tài khoản đã bị khóa. Giá trị băm mật khẩu ban đầu được giữ nguyên sau dấu `!` để có thể mở khóa trong tương lai nếu cần."
+    },
+    {
+      "id": "source-596204-section-6-v2",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nCongratulations, Keeper of the Keys! You have successfully completed your incredible first week at LabEx Corporation and secured Project Phoenix for its final push to completion.\n\nThroughout this transformative week, you've evolved from a new junior system administrator into a trusted guardian of TechNova's most critical systems. In your final challenge, you mastered essential user management commands:\n\n- Created a new user account for the senior developer leading Project Phoenix's completion.\n- Configured secure home directories for critical team members.\n- Implemented robust password policies using `passwd`.\n- Managed group memberships to ensure proper access to Project Phoenix resources.\n- Secured the system by disabling unauthorized access while preserving audit trails.\n\nFrom initial reconnaissance to digital architecture, log investigation, security implementation, and finally user management—you've demonstrated the complete skill set of a professional System Administrator. The CTO has confirmed your permanent position and is already discussing promotion opportunities.\n\nProject Phoenix is now in safe hands, and TechNova's future is secure thanks to your dedication and expertise!\n",
+      "title_vi": "Tổng kết",
+      "content_vi": "## Tóm tắt\n\nXin chúc mừng, Người giữ các Chìa khóa! Bạn đã hoàn thành xuất sắc tuần làm việc đầu tiên tuyệt vời tại Tập đoàn LabEx và bảo vệ thành công Dự án Phoenix để tiến tới giai đoạn hoàn thành cuối cùng.\n\nTrong suốt tuần lễ mang tính bước ngoặt này, bạn đã chuyển đổi từ một quản trị viên hệ thống cơ sở mới vào nghề thành một người bảo vệ đáng tin cậy cho các hệ thống quan trọng nhất của TechNova. Trong thử thách cuối cùng của mình, bạn đã làm chủ các lệnh quản lý người dùng thiết yếu:\n\n- Tạo tài khoản người dùng mới cho nhà phát triển cấp cao dẫn dắt quá trình hoàn thành Dự án Phoenix.\n- Cấu hình các thư mục chính (home directories) bảo mật cho các thành viên quan trọng trong nhóm.\n- Triển khai các chính sách mật khẩu mạnh mẽ bằng cách sử dụng `passwd`.\n- Quản lý tư cách thành viên nhóm để đảm bảo quyền truy cập thích hợp vào các tài nguyên của Dự án Phoenix.\n- Bảo mật hệ thống bằng cách vô hiệu hóa quyền truy cập trái phép trong khi vẫn duy trì các dấu vết kiểm toán (audit trails).\n\nTừ quá trình trinh sát ban đầu đến kiến trúc số, điều tra nhật ký, triển khai bảo mật và cuối cùng là quản lý người dùng—bạn đã thể hiện toàn bộ tập hợp kỹ năng của một Quản trị viên Hệ thống chuyên nghiệp. Giám đốc Công nghệ (CTO) đã xác nhận vị trí chính thức của bạn và đang thảo luận về các cơ hội thăng tiến.\n\nDự án Phoenix giờ đây đã nằm trong những bàn tay an toàn, và tương lai của TechNova được bảo đảm nhờ sự tận tâm và chuyên môn của bạn!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596204-section-1-v2",
+      "title": "Onboarding a New Developer to the System",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Onboarding a New Developer to the System\n\nYour first task is to create a new user account for Brenda Smith, the senior developer who will lead Project Phoenix's final development phase. TechNova's policy dictates that usernames should follow the format of `first_initial.last_name`.\n\n### Tasks\n\n- Create a new user account for Brenda Smith.\n\n### Requirements\n\n- The username must be `b.smith`.\n- Use the `useradd` command to add the new user to the system. You will need `sudo` privileges.\n\n### Hints\n\n- This challenge expects the standard `useradd` command rather than the interactive `adduser` helper.\n- Remember to use `sudo` to execute commands with administrative privileges.\n\n### Examples\n\nAfter successfully creating the new user account, you should see the user entry in the system's user database:\n\n```bash\n$ grep \"b.smith\" /etc/passwd\nb.smith:x:5002:5004::/home/b.smith:/bin/sh\n```\n\nThe user account will be created with a system-assigned user ID and group ID. You can verify the account exists and check its details using:\n\n```bash\n$ id b.smith\nuid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith)\n```\n",
+      "task": "- Create a new user account for Brenda Smith.",
+      "hint": "- This challenge expects the standard `useradd` command rather than the interactive `adduser` helper.\n- Remember to use `sudo` to execute commands with administrative privileges.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "getent passwd b.smith >/dev/null"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+useradd\\s+b\\.smith\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
+      "title_vi": "Thiết lập tài khoản cho Lập trình viên mới trên Hệ thống",
+      "content_vi": "## Thêm Nhà phát triển Mới vào Hệ thống\n\nNhiệm vụ đầu tiên của bạn là tạo một tài khoản người dùng mới cho Brenda Smith, nhà phát triển cao cấp sẽ dẫn dắt giai đoạn phát triển cuối cùng của Project Phoenix. Chính sách của TechNova quy định rằng tên người dùng phải tuân theo định dạng `first_initial.last_name`.\n\n### Nhiệm vụ\n\n- Tạo một tài khoản người dùng mới cho Brenda Smith.\n\n### Yêu cầu\n\n- Tên người dùng phải là `b.smith`.\n- Sử dụng lệnh `useradd` để thêm người dùng mới vào hệ thống. Bạn sẽ cần quyền `sudo`.\n\n### Gợi ý\n\n- Thử thách này yêu cầu sử dụng lệnh tiêu chuẩn `useradd` thay vì công cụ hỗ trợ tương tác `adduser`.\n- Hãy nhớ sử dụng `sudo` để thực thi các lệnh với quyền quản trị viên.\n\n### Ví dụ\n\nSau khi tạo thành công tài khoản người dùng mới, bạn sẽ thấy mục người dùng trong cơ sở dữ liệu người dùng của hệ thống:\n\n```bash\n$ grep \"b.smith\" /etc/passwd\nb.smith:x:5002:5004::/home/b.smith:/bin/sh\n```\n\nTài khoản người dùng sẽ được tạo với ID người dùng và ID nhóm được hệ thống chỉ định. Bạn có thể xác minh tài khoản tồn tại và kiểm tra các chi tiết của nó bằng cách sử dụng:\n\n```bash\n$ id b.smith\nuid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith)\n```",
+      "task_vi": "- Tạo một tài khoản người dùng mới cho Brenda Smith.",
+      "hint_vi": "Thử thách này yêu cầu dùng lệnh chuẩn `useradd` thay vì công cụ tương tác `adduser`.\nNhớ dùng `sudo` để chạy lệnh với quyền quản trị hệ thống."
+    },
+    {
+      "id": "source-596204-section-2-v2",
+      "title": "Creating a Dedicated Home Directory for the New User",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Creating a Dedicated Home Directory for the New User\n\nYou've created the user, but you forgot a crucial step! Brenda, as the senior developer leading Project Phoenix's final phase, needs her own secure workspace to store critical project files and development tools. You must ensure that a home directory is created for her.\n\n### Tasks\n\n- Create a home directory for the user `b.smith` located at `/home/b.smith`.\n\n### Requirements\n\n- The home directory must be created for the user `b.smith`.\n- You should use an option with the `useradd` command to create the home directory automatically. If you have already created the user without a home directory, you may need to delete the user first and then recreate it correctly.\n- Valid solutions include either `-m` or `--create-home`, and the flag may appear before or after the username.\n\n### Hints\n\n- To delete a user, you can use the `userdel` command. For example: `sudo userdel b.smith`.\n- The `useradd` command has a specific flag to create a home directory for the user. Check the `man useradd` page for an option like `-m` or `--create-home`.\n\n### Examples\n\nAfter creating the user with a home directory, you should see the new directory created in the home directory listing:\n\n```bash\n$ ls -la /home/\ndrwxr-xr-x 1 root root 47 Sep 3 16:32 .\ndrwxr-xr-x 1 root root 62 Sep 3 16:31 ..\n-rw-r--r-- 1 root root 58 Jul 18 2024 .zshrc\ndrwxr-x--- 2 b.smith b.smith 57 Sep 3 16:32 b.smith\ndrwxr-x--- 2 j.doe j.doe 57 Sep 3 16:31 j.doe\ndrwxr-x--- 1 labex labex 4096 Sep 3 16:35 labex\n```\n\nThe home directory will be owned by the user with restricted permissions (accessible only by the owner and group). To view the contents, you may need appropriate permissions or use sudo:\n\n```bash\n$ sudo ls -la /home/b.smith/\ndrwxr-x--- 2 b.smith b.smith 57 Sep 3 16:32 .\ndrwxr-xr-x 1 root root 47 Sep 3 16:32 ..\n-rw-r--r-- 1 b.smith b.smith 220 Sep 3 16:32 .bash_logout\n-rw-r--r-- 1 b.smith b.smith 3771 Sep 3 16:32 .bashrc\n-rw-r--r-- 1 b.smith b.smith 655 Sep 3 16:32 .profile\n```\n",
+      "task": "- Create a home directory for the user `b.smith` located at `/home/b.smith`.",
+      "hint": "- To delete a user, you can use the `userdel` command. For example: `sudo userdel b.smith`.\n- The `useradd` command has a specific flag to create a home directory for the user. Check the `man useradd` page for an option like `-m` or `--create-home`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -d /home/b.smith && test \"$(stat -c '%U' /home/b.smith)\" = b.smith && test \"$(getent passwd b.smith | cut -d: -f6)\" = /home/b.smith"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+useradd\\s+(?:(?:-m|--create-home)\\s+b\\.smith|b\\.smith\\s+(?:-m|--create-home))\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo",
+        "files"
+      ],
+      "title_vi": "Tạo thư mục chính riêng cho người dùng mới",
+      "content_vi": "## Tạo Thư mục Chính Riêng cho Người dùng Mới\n\nBạn đã tạo người dùng, nhưng bạn đã quên một bước quan trọng! Brenda, với tư cách là nhà phát triển cấp cao dẫn dắt giai đoạn cuối của Dự án Phoenix, cần một không gian làm việc an toàn của riêng cô ấy để lưu trữ các tệp dự án quan trọng và các công cụ phát triển. Bạn phải đảm bảo rằng một thư mục chính (home directory) được tạo cho cô ấy.\n\n### Các nhiệm vụ\n\n- Tạo một thư mục chính cho người dùng `b.smith` nằm tại `/home/b.smith`.\n\n### Yêu cầu\n\n- Thư mục chính phải được tạo cho người dùng `b.smith`.\n- Bạn nên sử dụng một tùy chọn với lệnh `useradd` để tự động tạo thư mục chính. Nếu bạn đã tạo người dùng mà không có thư mục chính, bạn có thể cần xóa người dùng trước rồi tạo lại cho đúng.\n- Các giải pháp hợp lệ bao gồm `-m` hoặc `--create-home`, và cờ có thể xuất hiện trước hoặc sau tên người dùng.\n\n### Gợi ý\n\n- Để xóa một người dùng, bạn có thể sử dụng lệnh `userdel`. Ví dụ: `sudo userdel b.smith`.\n- Lệnh `useradd` có một cờ cụ thể để tạo thư mục chính cho người dùng. Hãy kiểm tra trang `man useradd` để tìm tùy chọn như `-m` hoặc `--create-home`.\n\n### Ví dụ\n\nSau khi tạo người dùng kèm theo thư mục chính, bạn sẽ thấy thư mục mới được tạo trong danh sách thư mục chính:\n\n```bash\n$ ls -la /home/\ndrwxr-xr-x 1 root root 47 Sep 3 16:32 .\ndrwxr-xr-x 1 root root 62 Sep 3 16:31 ..\n-rw-r--r-- 1 root root 58 Jul 18 2024 .zshrc\ndrwxr-x--- 2 b.smith b.smith 57 Sep 3 16:32 b.smith\ndrwxr-x--- 2 j.doe j.doe 57 Sep 3 16:31 j.doe\ndrwxr-x--- 1 labex labex 4096 Sep 3 16:35 labex\n```\n\nThư mục chính sẽ thuộc sở hữu của người dùng với các quyền bị giới hạn (chỉ chủ sở hữu và nhóm mới có thể truy cập). Để xem nội dung bên trong, bạn có thể cần có quyền thích hợp hoặc sử dụng sudo:\n\n```bash\n$ sudo ls -la /home/b.smith/\ndrwxr-x--- 2 b.smith b.smith 57 Sep 3 16:32 .\ndrwxr-xr-x 1 root root 47 Sep 3 16:32 ..\n-rw-r--r-- 1 b.smith b.smith 220 Sep 3 16:32 .bash_logout\n-rw-r--r-- 1 b.smith b.smith 3771 Sep 3 16:32 .bashrc\n-rw-r--r-- 1 b.smith b.smith 655 Sep 3 16:32 .profile\n```",
+      "task_vi": "- Tạo thư mục chính (home directory) cho người dùng `b.smith` nằm tại `/home/b.smith`.",
+      "hint_vi": "Để xóa người dùng, bạn có thể sử dụng lệnh `userdel`. Ví dụ: `sudo userdel b.smith`.\nLệnh `useradd` có một cờ cụ thể để tạo thư mục chính cho người dùng. Hãy kiểm tra trang `man useradd` để tìm tùy chọn như `-m` hoặc `--create-home`."
+    },
+    {
+      "id": "source-596204-section-3-v2",
+      "title": "Assigning an Initial Password for the New User",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Assigning an Initial Password for the New User\n\nThe user account `b.smith` is created, but it's currently locked. Brenda cannot access the Project Phoenix systems to begin her leadership role without a password. Your next task is to set an initial secure password for her account.\n\n### Tasks\n\n- Set a password for the user `b.smith`.\n\n### Requirements\n\n- Use the standard Linux command to change a user's password.\n- You will be prompted to enter and confirm the new password. You can use any simple password, for example, `password123`.\n\n### Hints\n\n- The command to set or change passwords is `passwd`.\n- Since you are changing the password for another user, you will need `sudo` privileges. The syntax is `sudo passwd <username>`.\n\n### Examples\n\nAfter setting the password successfully, the user account should have a password hash in the shadow file. You can verify this by checking the shadow file (note: this requires root privileges):\n\n```bash\n$ sudo grep \"^b.smith:\" /etc/shadow\nb.smith:$y$j9T$XbJLH9LJgY518Th4qcd1V0$NrfHOJ2MGm/1OhLGfpfMQkvPasV23Eenhwl9bA0i8O4:20334:0:99999:7:::\n```\n",
+      "task": "- Set a password for the user `b.smith`.",
+      "hint": "- The command to set or change passwords is `passwd`.\n- Since you are changing the password for another user, you will need `sudo` privileges. The syntax is `sudo passwd <username>`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(sudo passwd -S b.smith | awk '{print $2}')\" = P"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+passwd\\s+b\\.smith\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
+      "title_vi": "Đặt mật khẩu ban đầu cho người dùng mới",
+      "content_vi": "## Gán Mật Khẩu Ban Đầu Cho Người Dùng Mới\n\nTài khoản người dùng `b.smith` đã được tạo, nhưng hiện tại nó đang bị khóa. Brenda không thể truy cập vào các hệ thống của Project Phoenix để bắt đầu vai trò lãnh đạo của mình nếu không có mật khẩu. Nhiệm vụ tiếp theo của bạn là thiết lập một mật khẩu ban đầu an toàn cho tài khoản của cô ấy.\n\n### Nhiệm vụ\n\n- Đặt mật khẩu cho người dùng `b.smith`.\n\n### Yêu cầu\n\n- Sử dụng lệnh chuẩn của Linux để thay đổi mật khẩu của người dùng.\n- Bạn sẽ được nhắc nhập và xác nhận mật khẩu mới. Bạn có thể sử dụng bất kỳ mật khẩu đơn giản nào, ví dụ: `password123`.\n\n### Gợi ý\n\n- Lệnh để thiết lập hoặc thay đổi mật khẩu là `passwd`.\n- Vì bạn đang thay đổi mật khẩu cho một người dùng khác, bạn sẽ cần quyền `sudo`. Cú pháp là `sudo passwd <username>`.\n\n### Ví dụ\n\nSau khi thiết lập mật khẩu thành công, tài khoản người dùng sẽ có mã băm mật khẩu trong tệp shadow. Bạn có thể xác minh điều này bằng cách kiểm tra tệp shadow (lưu ý: việc này yêu cầu quyền root):\n\n```bash\n$ sudo grep \"^b.smith:\" /etc/shadow\nb.smith:$y$j9T$XbJLH9LJgY518Th4qcd1V0$NrfHOJ2MGm/1OhLGfpfMQkvPasV23Eenhwl9bA0i8O4:20334:0:99999:7:::\n```",
+      "task_vi": "- Đặt mật khẩu cho người dùng `b.smith`.",
+      "hint_vi": "Lệnh để đặt hoặc đổi mật khẩu là `passwd`.\nVì bạn đang đổi mật khẩu cho người dùng khác, bạn cần quyền `sudo`. Cú pháp là `sudo passwd <username>`."
+    },
+    {
+      "id": "source-596204-section-4-v2",
+      "title": "Adding the New Developer to the \"developers\" Group",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Adding the New Developer to the \"developers\" Group\n\nTo ensure Brenda has access to the Project Phoenix files and repositories you've been securing all week, she must be added to the `developers` group. This is the same group you've been working with throughout your time at TechNova, and it has the special permissions needed for the project.\n\n### Tasks\n\n- Add the user `b.smith` to the `developers` group.\n\n### Requirements\n\n- The user `b.smith` must be a member of the `developers` group.\n- The user's existing group memberships should not be removed.\n\n### Hints\n\n- The `usermod` command is used to modify a user account.\n- Look for the `-a` (append) and `-G` (groups) flags. Using them together ensures you add the user to a new group without removing them from existing ones.\n\n### Examples\n\nAfter successfully adding the user to the developers group, you should see the group membership reflected in the user's group list:\n\n```bash\n$ groups b.smith\nb.smith : b.smith developers\n```\n\nYou can also verify using the `id` command to see more detailed group information:\n\n```bash\n$ id b.smith\nuid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith),5003(developers)\n```\n\nThe user should now have access to files and directories that are accessible to the `developers` group. You can check the group file to confirm the group exists:\n\n```bash\n$ grep \"^developers:\" /etc/group\ndevelopers:x:5003:b.smith\n```\n\nNotice that `b.smith` appears in the list of group members. This confirms the user has been successfully added to the group while preserving their existing group memberships.\n",
+      "task": "- Add the user `b.smith` to the `developers` group.",
+      "hint": "- The `usermod` command is used to modify a user account.\n- Look for the `-a` (append) and `-G` (groups) flags. Using them together ensures you add the user to a new group without removing them from existing ones.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "id -nG b.smith | tr ' ' '\\n' | grep -Fxq developers"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+usermod\\s+-aG\\s+developers\\s+b\\.smith\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
+      "title_vi": "Thêm nhà phát triển mới vào nhóm developers",
+      "content_vi": "## Thêm Nhà phát triển Mới vào Nhóm \"developers\"\n\nĐể đảm bảo Brenda có quyền truy cập vào các tệp và kho lưu trữ của Project Phoenix mà bạn đã bảo mật suốt cả tuần qua, cô ấy phải được thêm vào nhóm `developers`. Đây là nhóm tương tự mà bạn đã làm việc cùng trong suốt thời gian làm việc tại TechNova, và nó có các quyền đặc biệt cần thiết cho dự án.\n\n### Nhiệm vụ\n\n- Thêm người dùng `b.smith` vào nhóm `developers`.\n\n### Yêu cầu\n\n- Người dùng `b.smith` phải là thành viên của nhóm `developers`.\n- Các tư cách thành viên nhóm hiện tại của người dùng không được phép bị xóa bỏ.\n\n### Gợi ý\n\n- Lệnh `usermod` được sử dụng để sửa đổi tài khoản người dùng.\n- Hãy tìm các cờ `-a` (thêm vào) và `-G` (các nhóm). Sử dụng chúng cùng nhau đảm bảo rằng bạn thêm người dùng vào một nhóm mới mà không làm mất đi các nhóm hiện có của họ.\n\n### Ví dụ\n\nSau khi thêm thành công người dùng vào nhóm developers, bạn sẽ thấy tư cách thành viên nhóm được phản ánh trong danh sách nhóm của người dùng:\n\n```bash\n$ groups b.smith\nb.smith : b.smith developers\n```\n\nBạn cũng có thể xác minh bằng cách sử dụng lệnh `id` để xem thông tin chi tiết hơn về nhóm:\n\n```bash\n$ id b.smith\nuid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith),5003(developers)\n```\n\nNgười dùng bây giờ sẽ có quyền truy cập vào các tệp và thư mục mà nhóm `developers` có thể truy cập. Bạn có thể kiểm tra tệp nhóm để xác nhận nhóm tồn tại:\n\n```bash\n$ grep \"^developers:\" /etc/group\ndevelopers:x:5003:b.smith\n```\n\nLưu ý rằng `b.smith` xuất hiện trong danh sách các thành viên nhóm. Điều này xác nhận rằng người dùng đã được thêm thành công vào nhóm trong khi vẫn giữ nguyên tư cách thành viên nhóm hiện tại của họ.",
+      "task_vi": "- Thêm người dùng `b.smith` vào nhóm `developers`.",
+      "hint_vi": "Lệnh `usermod` dùng để chỉnh sửa tài khoản người dùng.\nTìm các cờ `-a` (append) và `-G` (groups). Dùng chung chúng giúp thêm người dùng vào nhóm mới mà không xóa khỏi các nhóm hiện tại."
+    },
+    {
+      "id": "source-596204-section-5-v2",
+      "title": "Temporarily Disabling a Departing Employee’s Account",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Temporarily Disabling a Departing Employee’s Account\n\nNow for your final task of the week—and the most critical security action for Project Phoenix. John Doe (`j.doe`) was identified during your earlier investigation as having potentially unauthorized access during the security incident. The CTO has ordered his immediate removal from all TechNova systems. However, legal and compliance teams need his files preserved for the ongoing security audit, so you must lock the account rather than delete it entirely.\n\n### Tasks\n\n- Lock the user account for `j.doe` to prevent logins.\n\n### Requirements\n\n- The user account `j.doe` must be locked.\n- Do not delete the user or their home directory.\n\n### Hints\n\n- You can use the `usermod` command with the `-L` (lock) option.\n- Alternatively, the `passwd` command has a `-l` (lock) flag that achieves the same result.\n- Remember to use `sudo`.\n\n### Examples\n\nYou can verify the account is locked by checking the shadow file:\n\n```bash\n$ sudo grep \"^j.doe:\" /etc/shadow\nj.doe:!:20334:0:99999:7:::\n```\n\nNotice the exclamation mark (`!`) at the beginning of the password field - this indicates the account is locked. The original password hash is preserved after the `!` for potential future unlocking.\n",
+      "task": "- Lock the user account for `j.doe` to prevent logins.",
+      "hint": "- You can use the `usermod` command with the `-L` (lock) option.\n- Alternatively, the `passwd` command has a `-l` (lock) flag that achieves the same result.\n- Remember to use `sudo`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "getent passwd j.doe >/dev/null && test -d /home/j.doe && test \"$(sudo passwd -S j.doe | awk '{print $2}')\" = L"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+passwd\\s+-l\\s+j\\.doe\\s*$",
+                "^\\s*sudo\\s+usermod\\s+-L\\s+j\\.doe\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo",
+        "files"
+      ],
+      "title_vi": "Tạm khóa tài khoản của nhân viên sắp nghỉ việc",
+      "content_vi": "## Tạm thời vô hiệu hóa tài khoản của nhân viên đã nghỉ việc\n\nBây giờ là nhiệm vụ cuối cùng trong tuần của bạn—và là hành động bảo mật quan trọng nhất đối với Dự án Phoenix. John Doe (`j.doe`) đã được xác định trong quá trình điều tra trước đó của bạn là có quyền truy cập có thể không được phép trong sự cố bảo mật. Giám đốc Công nghệ (CTO) đã ra lệnh xóa ngay lập tức tài khoản của anh ta khỏi tất cả các hệ thống của TechNova. Tuy nhiên, các nhóm pháp lý và tuân thủ cần giữ lại các tệp của anh ta cho cuộc kiểm toán bảo mật đang diễn ra, vì vậy bạn phải khóa tài khoản thay vì xóa hoàn toàn.\n\n### Nhiệm vụ\n\n- Khóa tài khoản người dùng cho `j.doe` để ngăn chặn việc đăng nhập.\n\n### Yêu cầu\n\n- Tài khoản người dùng `j.doe` phải bị khóa.\n- Không xóa người dùng hoặc thư mục chính (home directory) của họ.\n\n### Gợi ý\n\n- Bạn có thể sử dụng lệnh `usermod` với tùy chọn `-L` (lock).\n- Hoặc cách khác, lệnh `passwd` có cờ `-l` (lock) đạt được kết quả tương tự.\n- Hãy nhớ sử dụng `sudo`.\n\n### Ví dụ\n\nBạn có thể xác minh tài khoản đã bị khóa bằng cách kiểm tra tệp shadow:\n\n```bash\n$ sudo grep \"^j.doe:\" /etc/shadow\nj.doe:!:20334:0:99999:7:::\n```\n\nLưu ý dấu chấm than (`!`) ở đầu trường mật khẩu - điều này cho biết tài khoản đã bị khóa. Giá trị băm mật khẩu ban đầu được giữ nguyên sau dấu `!` để có thể mở khóa trong tương lai nếu cần.",
+      "task_vi": "- Khóa tài khoản người dùng cho `j.doe` để ngăn chặn việc đăng nhập.",
+      "hint_vi": "Bạn có thể sử dụng lệnh `usermod` với tùy chọn `-L` (khóa).\nHoặc cách khác, lệnh `passwd` có cờ `-l` (khóa) mang lại kết quả tương tự.\nHãy nhớ sử dụng `sudo`."
+    }
+  ],
+  "title_vi": "Ngày 5: Người Quản Lý Chìa Khóa Quyền Lực"
+}

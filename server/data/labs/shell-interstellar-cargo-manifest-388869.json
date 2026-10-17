@@ -1,0 +1,221 @@
+{
+  "id": "shell-interstellar-cargo-manifest-388869",
+  "course_id": "shell-for-beginners",
+  "order": 6,
+  "title": "Interstellar Cargo Manifest",
+  "title_vi": "Thử Thách: Quản Lý Kiện Hàng Vũ Trụ",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "5 mins",
+  "overview": "Write a cargo manifest script using arrays to inventory spaceship supply crates.",
+  "source_url": "https://labex.io/tutorials/shell-interstellar-cargo-manifest-388869",
+  "source_lab_id": 388869,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice Interstellar Cargo Manifest. The tasks below retain the source filenames, data and required behavior; explanations are locally written.",
+      "content_vi": "Thực hành Thử Thách: Quản Lý Kiện Hàng Vũ Trụ. Các bước dưới giữ đúng tên tệp, dữ kiện và hành vi nguồn; phần giải thích do dự án biên soạn."
+    },
+    {
+      "id": "source-388869-section-1-v4",
+      "title": "Creating the Cargo Manifest Script",
+      "title_vi": "Viết script quản lý hàng hóa vũ trụ",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Complete cargo_manifest.sh: three three-item arrays forward_bay/midship_bay/aft_bay; select with $1, number the inventory, and handle absent or invalid bay names. Use the prepared exact cargo strings.",
+      "content_vi": "Hoàn thiện cargo_manifest.sh: ba mảng forward_bay/midship_bay/aft_bay, mỗi mảng ba món; chọn kho bằng $1, đánh số hàng và xử lý tên kho thiếu hoặc sai. Giữ đúng tên hàng đã chuẩn bị.",
+      "task": "Complete cargo_manifest.sh: three three-item arrays forward_bay/midship_bay/aft_bay; select with $1, number the inventory, and handle absent or invalid bay names. Use the prepared exact cargo strings.",
+      "task_vi": "Hoàn thiện cargo_manifest.sh: ba mảng forward_bay/midship_bay/aft_bay, mỗi mảng ba món; chọn kho bằng $1, đánh số hàng và xử lý tên kho thiếu hoặc sai. Giữ đúng tên hàng đã chuẩn bị.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/cargo_manifest.sh && test -x /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${#forward_bay[@]}:${#midship_bay[@]}:${#aft_bay[@]}\" = \"3:3:3\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\" forward >/dev/null' _ /home/labex/project/cargo_manifest.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+          },
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\nexpected={'forward':('Forward',['Space Suits','Oxygen Tanks','Repair Kits']),'midship':('Midship',['Food Supplies','Water Containers','Medical Equipment']),'aft':('Aft',['Spare Parts','Fuel Cells','Scientific Instruments'])}\nfor bay,(label,items) in expected.items():\n p=run('cargo_manifest.sh',bay); assert p.returncode==0 and p.stdout==label+' Bay Inventory:\\n'+''.join(str(i)+'. '+item+'\\n' for i,item in enumerate(items,1))\nassert run('cargo_manifest.sh').stdout=='Please specify a cargo bay: forward, midship, or aft\\n'\nassert run('cargo_manifest.sh','engine').stdout=='Invalid cargo bay. Choose forward, midship, or aft.\\n'\nLOCAL_CHECK"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/cargo_manifest.sh && test -x /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh"
+            },
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${#forward_bay[@]}:${#midship_bay[@]}:${#aft_bay[@]}\" = \"3:3:3\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\" forward >/dev/null' _ /home/labex/project/cargo_manifest.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\nexpected={'forward':('Forward',['Space Suits','Oxygen Tanks','Repair Kits']),'midship':('Midship',['Food Supplies','Water Containers','Medical Equipment']),'aft':('Aft',['Spare Parts','Fuel Cells','Scientific Instruments'])}\nfor bay,(label,items) in expected.items():\n p=run('cargo_manifest.sh',bay); assert p.returncode==0 and p.stdout==label+' Bay Inventory:\\n'+''.join(str(i)+'. '+item+'\\n' for i,item in enumerate(items,1))\nassert run('cargo_manifest.sh').stdout=='Please specify a cargo bay: forward, midship, or aft\\n'\nassert run('cargo_manifest.sh','engine').stdout=='Invalid cargo bay. Choose forward, midship, or aft.\\n'\nLOCAL_CHECK"
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/cargo_manifest.sh && test -x /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh"
+            },
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${#forward_bay[@]}:${#midship_bay[@]}:${#aft_bay[@]}\" = \"3:3:3\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\" forward >/dev/null' _ /home/labex/project/cargo_manifest.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\nexpected={'forward':('Forward',['Space Suits','Oxygen Tanks','Repair Kits']),'midship':('Midship',['Food Supplies','Water Containers','Medical Equipment']),'aft':('Aft',['Spare Parts','Fuel Cells','Scientific Instruments'])}\nfor bay,(label,items) in expected.items():\n p=run('cargo_manifest.sh',bay); assert p.returncode==0 and p.stdout==label+' Bay Inventory:\\n'+''.join(str(i)+'. '+item+'\\n' for i,item in enumerate(items,1))\nassert run('cargo_manifest.sh').stdout=='Please specify a cargo bay: forward, midship, or aft\\n'\nassert run('cargo_manifest.sh','engine').stdout=='Invalid cargo bay. Choose forward, midship, or aft.\\n'\nLOCAL_CHECK"
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "### Summary\n\nCongratulations! You have successfully completed **Interstellar Cargo Manifest**.",
+      "content_vi": "### Tổng kết bài học\n\nChúc mừng! Bạn đã hoàn thành xuất sắc bài thực hành **Thử Thách: Quản Lý Kiện Hàng Vũ Trụ**."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388869-section-1-v4",
+      "title": "Creating the Cargo Manifest Script",
+      "title_vi": "Viết script quản lý hàng hóa vũ trụ",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Complete cargo_manifest.sh: three three-item arrays forward_bay/midship_bay/aft_bay; select with $1, number the inventory, and handle absent or invalid bay names. Use the prepared exact cargo strings.",
+      "content_vi": "Hoàn thiện cargo_manifest.sh: ba mảng forward_bay/midship_bay/aft_bay, mỗi mảng ba món; chọn kho bằng $1, đánh số hàng và xử lý tên kho thiếu hoặc sai. Giữ đúng tên hàng đã chuẩn bị.",
+      "task": "Complete cargo_manifest.sh: three three-item arrays forward_bay/midship_bay/aft_bay; select with $1, number the inventory, and handle absent or invalid bay names. Use the prepared exact cargo strings.",
+      "task_vi": "Hoàn thiện cargo_manifest.sh: ba mảng forward_bay/midship_bay/aft_bay, mỗi mảng ba món; chọn kho bằng $1, đánh số hàng và xử lý tên kho thiếu hoặc sai. Giữ đúng tên hàng đã chuẩn bị.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/cargo_manifest.sh && test -x /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${#forward_bay[@]}:${#midship_bay[@]}:${#aft_bay[@]}\" = \"3:3:3\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\" forward >/dev/null' _ /home/labex/project/cargo_manifest.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+          },
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\nexpected={'forward':('Forward',['Space Suits','Oxygen Tanks','Repair Kits']),'midship':('Midship',['Food Supplies','Water Containers','Medical Equipment']),'aft':('Aft',['Spare Parts','Fuel Cells','Scientific Instruments'])}\nfor bay,(label,items) in expected.items():\n p=run('cargo_manifest.sh',bay); assert p.returncode==0 and p.stdout==label+' Bay Inventory:\\n'+''.join(str(i)+'. '+item+'\\n' for i,item in enumerate(items,1))\nassert run('cargo_manifest.sh').stdout=='Please specify a cargo bay: forward, midship, or aft\\n'\nassert run('cargo_manifest.sh','engine').stdout=='Invalid cargo bay. Choose forward, midship, or aft.\\n'\nLOCAL_CHECK"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/cargo_manifest.sh && test -x /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh"
+            },
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${#forward_bay[@]}:${#midship_bay[@]}:${#aft_bay[@]}\" = \"3:3:3\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\" forward >/dev/null' _ /home/labex/project/cargo_manifest.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\nexpected={'forward':('Forward',['Space Suits','Oxygen Tanks','Repair Kits']),'midship':('Midship',['Food Supplies','Water Containers','Medical Equipment']),'aft':('Aft',['Spare Parts','Fuel Cells','Scientific Instruments'])}\nfor bay,(label,items) in expected.items():\n p=run('cargo_manifest.sh',bay); assert p.returncode==0 and p.stdout==label+' Bay Inventory:\\n'+''.join(str(i)+'. '+item+'\\n' for i,item in enumerate(items,1))\nassert run('cargo_manifest.sh').stdout=='Please specify a cargo bay: forward, midship, or aft\\n'\nassert run('cargo_manifest.sh','engine').stdout=='Invalid cargo bay. Choose forward, midship, or aft.\\n'\nLOCAL_CHECK"
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/cargo_manifest.sh && test -x /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh"
+            },
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/cargo_manifest.sh && bash -n /home/labex/project/cargo_manifest.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"${#forward_bay[@]}:${#midship_bay[@]}:${#aft_bay[@]}\" = \"3:3:3\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\" forward >/dev/null' _ /home/labex/project/cargo_manifest.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\nexpected={'forward':('Forward',['Space Suits','Oxygen Tanks','Repair Kits']),'midship':('Midship',['Food Supplies','Water Containers','Medical Equipment']),'aft':('Aft',['Spare Parts','Fuel Cells','Scientific Instruments'])}\nfor bay,(label,items) in expected.items():\n p=run('cargo_manifest.sh',bay); assert p.returncode==0 and p.stdout==label+' Bay Inventory:\\n'+''.join(str(i)+'. '+item+'\\n' for i,item in enumerate(items,1))\nassert run('cargo_manifest.sh').stdout=='Please specify a cargo bay: forward, midship, or aft\\n'\nassert run('cargo_manifest.sh','engine').stdout=='Invalid cargo bay. Choose forward, midship, or aft.\\n'\nLOCAL_CHECK"
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "date": "2026-10-17",
+    "fidelity": "public-requirements-aligned-local-wording",
+    "private_grader_recovered": false,
+    "integration_status": "requires-current-smoke-proof"
+  },
+  "environment_setup": "server/data/environment-setups/shell-interstellar-cargo-manifest-388869.json"
+}

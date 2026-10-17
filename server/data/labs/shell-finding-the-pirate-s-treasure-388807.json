@@ -1,0 +1,221 @@
+{
+  "id": "shell-finding-the-pirate-s-treasure-388807",
+  "course_id": "shell-for-beginners",
+  "order": 3,
+  "title": "Finding the Pirate's Treasure",
+  "title_vi": "Thử Thách: Giải Mã Bản Đồ Kho Báu Hải Tặc",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "5 mins",
+  "overview": "Apply variables and arithmetic expansion to decode secret pirate coordinates.",
+  "source_url": "https://labex.io/tutorials/shell-finding-the-pirate-s-treasure-388807",
+  "source_lab_id": 388807,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice Finding the Pirate's Treasure. The tasks below retain the source filenames, data and required behavior; explanations are locally written.",
+      "content_vi": "Thực hành Thử Thách: Giải Mã Bản Đồ Kho Báu Hải Tặc. Các bước dưới giữ đúng tên tệp, dữ kiện và hành vi nguồn; phần giải thích do dự án biên soạn."
+    },
+    {
+      "id": "source-388807-section-1-v4",
+      "title": "Decoding the Treasure Map",
+      "title_vi": "Giải mã tọa độ kho báu bí mật",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Complete treasure_map.sh using LATITUDE=15 and LONGITUDE=25. North is latitude times two; east is longitude divided by five. Keep the prepared output sentence.",
+      "content_vi": "Hoàn thiện treasure_map.sh với LATITUDE=15 và LONGITUDE=25. Số bước bắc bằng vĩ độ nhân hai; số bước đông bằng kinh độ chia năm. Giữ nguyên câu xuất kết quả đã chuẩn bị.",
+      "task": "Complete treasure_map.sh using LATITUDE=15 and LONGITUDE=25. North is latitude times two; east is longitude divided by five. Keep the prepared output sentence.",
+      "task_vi": "Hoàn thiện treasure_map.sh với LATITUDE=15 và LONGITUDE=25. Số bước bắc bằng vĩ độ nhân hai; số bước đông bằng kinh độ chia năm. Giữ nguyên câu xuất kết quả đã chuẩn bị.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/treasure_map.sh && test -x /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$LATITUDE:$LONGITUDE:$PACES_NORTH:$PACES_EAST\" = \"15:25:30:5\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/treasure_map.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+          },
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('treasure_map.sh'); assert p.returncode==0 and p.stdout=='The treasure is buried 30 paces north and 5 paces east from the old oak tree.\\n'\nLOCAL_CHECK"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/treasure_map.sh && test -x /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh"
+            },
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$LATITUDE:$LONGITUDE:$PACES_NORTH:$PACES_EAST\" = \"15:25:30:5\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/treasure_map.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('treasure_map.sh'); assert p.returncode==0 and p.stdout=='The treasure is buried 30 paces north and 5 paces east from the old oak tree.\\n'\nLOCAL_CHECK"
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/treasure_map.sh && test -x /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh"
+            },
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$LATITUDE:$LONGITUDE:$PACES_NORTH:$PACES_EAST\" = \"15:25:30:5\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/treasure_map.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('treasure_map.sh'); assert p.returncode==0 and p.stdout=='The treasure is buried 30 paces north and 5 paces east from the old oak tree.\\n'\nLOCAL_CHECK"
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "### Summary\n\nCongratulations! You have successfully completed **Finding the Pirate's Treasure**.",
+      "content_vi": "### Tổng kết bài học\n\nChúc mừng! Bạn đã hoàn thành xuất sắc bài thực hành **Thử Thách: Giải Mã Bản Đồ Kho Báu Hải Tặc**."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388807-section-1-v4",
+      "title": "Decoding the Treasure Map",
+      "title_vi": "Giải mã tọa độ kho báu bí mật",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Complete treasure_map.sh using LATITUDE=15 and LONGITUDE=25. North is latitude times two; east is longitude divided by five. Keep the prepared output sentence.",
+      "content_vi": "Hoàn thiện treasure_map.sh với LATITUDE=15 và LONGITUDE=25. Số bước bắc bằng vĩ độ nhân hai; số bước đông bằng kinh độ chia năm. Giữ nguyên câu xuất kết quả đã chuẩn bị.",
+      "task": "Complete treasure_map.sh using LATITUDE=15 and LONGITUDE=25. North is latitude times two; east is longitude divided by five. Keep the prepared output sentence.",
+      "task_vi": "Hoàn thiện treasure_map.sh với LATITUDE=15 và LONGITUDE=25. Số bước bắc bằng vĩ độ nhân hai; số bước đông bằng kinh độ chia năm. Giữ nguyên câu xuất kết quả đã chuẩn bị.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/treasure_map.sh && test -x /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh"
+          },
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$LATITUDE:$LONGITUDE:$PACES_NORTH:$PACES_EAST\" = \"15:25:30:5\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/treasure_map.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+          },
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('treasure_map.sh'); assert p.returncode==0 and p.stdout=='The treasure is buried 30 paces north and 5 paces east from the old oak tree.\\n'\nLOCAL_CHECK"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/treasure_map.sh && test -x /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh"
+            },
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$LATITUDE:$LONGITUDE:$PACES_NORTH:$PACES_EAST\" = \"15:25:30:5\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/treasure_map.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('treasure_map.sh'); assert p.returncode==0 and p.stdout=='The treasure is buried 30 paces north and 5 paces east from the old oak tree.\\n'\nLOCAL_CHECK"
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/treasure_map.sh && test -x /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh"
+            },
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/treasure_map.sh && bash -n /home/labex/project/treasure_map.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$LATITUDE:$LONGITUDE:$PACES_NORTH:$PACES_EAST\" = \"15:25:30:5\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/treasure_map.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+            },
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('treasure_map.sh'); assert p.returncode==0 and p.stdout=='The treasure is buried 30 paces north and 5 paces east from the old oak tree.\\n'\nLOCAL_CHECK"
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "date": "2026-10-17",
+    "fidelity": "public-requirements-aligned-local-wording",
+    "private_grader_recovered": false,
+    "integration_status": "requires-current-smoke-proof"
+  },
+  "environment_setup": "server/data/environment-setups/shell-finding-the-pirate-s-treasure-388807.json"
+}

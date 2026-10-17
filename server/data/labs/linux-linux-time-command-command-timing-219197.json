@@ -1,0 +1,291 @@
+{
+  "id": "linux-linux-time-command-command-timing-219197",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219197,
+  "source_url": "https://labex.io/tutorials/linux-linux-time-command-command-timing-219197",
+  "order": 41,
+  "title": "Linux time Command: Command Timing",
+  "title_vi": "Lệnh time: đo thời gian chạy",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux time Command: Command Timing",
+  "sections": [
+    {
+      "id": "commands-219197-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux time Command: Command Timing. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh time: đo thời gian chạy. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219197-section-1-v1",
+      "title": "Timing File Operations",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đo thao tác đọc tệp",
+      "content": "Create test_file.txt and time reading it. Bash labels real/user/sys differ from Zsh examples.\n\n```bash\necho \"This is a test file for TechInnovate's performance analysis.\" > test_file.txt\ntime cat test_file.txt\n```",
+      "content_vi": "Tạo test_file.txt rồi đo thời gian đọc. Bash hiển thị real/user/sys khác ví dụ Zsh.\n\n```bash\necho \"This is a test file for TechInnovate's performance analysis.\" > test_file.txt\ntime cat test_file.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^time\\s+cat\\s+test_file\\.txt$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s test_file.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219197-section-2-v1",
+      "title": "Timing Complex Commands",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đo thời gian script",
+      "content": "Create and time the log-processing script.\n\n```bash\ncat > process_logs.sh <<'SH'\n#!/bin/bash\nfor i in {1..1000}; do echo \"Processing log entry $i\" >> output.log; done\nsort output.log > sorted_output.log\nuniq -c sorted_output.log > final_output.log\nrm output.log sorted_output.log\nSH\nchmod +x process_logs.sh\ntime ./process_logs.sh\n```",
+      "content_vi": "Tạo và đo thời gian script xử lý log.\n\n```bash\ncat > process_logs.sh <<'SH'\n#!/bin/bash\nfor i in {1..1000}; do echo \"Processing log entry $i\" >> output.log; done\nsort output.log > sorted_output.log\nuniq -c sorted_output.log > final_output.log\nrm output.log sorted_output.log\nSH\nchmod +x process_logs.sh\ntime ./process_logs.sh\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^time\\s+\\./process_logs\\.sh$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -x process_logs.sh\ntest \"$(wc -l < final_output.log)\" -eq 1000\ntest ! -e output.log\ntest ! -e sorted_output.log"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219197-section-3-v1",
+      "title": "Using time with Different Commands",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "So sánh các loại tải",
+      "content": "Time a numeric pipeline, file search and passwd sort. Runtime values vary.\n\n```bash\ntime echo {1..10000} | wc -w\ntime find / -name \"*.txt\" 2>/dev/null\ntime sort -R /etc/passwd | head -n 5\n```",
+      "content_vi": "Đo pipeline số, tìm tệp và sắp xếp passwd. Thời gian thực tế có thể khác.\n\n```bash\ntime echo {1..10000} | wc -w\ntime find / -name \"*.txt\" 2>/dev/null\ntime sort -R /etc/passwd | head -n 5\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^time\\s+sort\\s+-R\\s+/etc/passwd\\s*\\|\\s*head\\s+-n\\s+5$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219197-section-4-v1",
+      "title": "Summary",
+      "position": 4,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219197-section-1-v1",
+      "title": "Timing File Operations",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đo thao tác đọc tệp",
+      "content": "Create test_file.txt and time reading it. Bash labels real/user/sys differ from Zsh examples.\n\n```bash\necho \"This is a test file for TechInnovate's performance analysis.\" > test_file.txt\ntime cat test_file.txt\n```",
+      "content_vi": "Tạo test_file.txt rồi đo thời gian đọc. Bash hiển thị real/user/sys khác ví dụ Zsh.\n\n```bash\necho \"This is a test file for TechInnovate's performance analysis.\" > test_file.txt\ntime cat test_file.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^time\\s+cat\\s+test_file\\.txt$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s test_file.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219197-section-2-v1",
+      "title": "Timing Complex Commands",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đo thời gian script",
+      "content": "Create and time the log-processing script.\n\n```bash\ncat > process_logs.sh <<'SH'\n#!/bin/bash\nfor i in {1..1000}; do echo \"Processing log entry $i\" >> output.log; done\nsort output.log > sorted_output.log\nuniq -c sorted_output.log > final_output.log\nrm output.log sorted_output.log\nSH\nchmod +x process_logs.sh\ntime ./process_logs.sh\n```",
+      "content_vi": "Tạo và đo thời gian script xử lý log.\n\n```bash\ncat > process_logs.sh <<'SH'\n#!/bin/bash\nfor i in {1..1000}; do echo \"Processing log entry $i\" >> output.log; done\nsort output.log > sorted_output.log\nuniq -c sorted_output.log > final_output.log\nrm output.log sorted_output.log\nSH\nchmod +x process_logs.sh\ntime ./process_logs.sh\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^time\\s+\\./process_logs\\.sh$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -x process_logs.sh\ntest \"$(wc -l < final_output.log)\" -eq 1000\ntest ! -e output.log\ntest ! -e sorted_output.log"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219197-section-3-v1",
+      "title": "Using time with Different Commands",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "So sánh các loại tải",
+      "content": "Time a numeric pipeline, file search and passwd sort. Runtime values vary.\n\n```bash\ntime echo {1..10000} | wc -w\ntime find / -name \"*.txt\" 2>/dev/null\ntime sort -R /etc/passwd | head -n 5\n```",
+      "content_vi": "Đo pipeline số, tìm tệp và sắp xếp passwd. Thời gian thực tế có thể khác.\n\n```bash\ntime echo {1..10000} | wc -w\ntime find / -name \"*.txt\" 2>/dev/null\ntime sort -R /etc/passwd | head -n 5\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^time\\s+sort\\s+-R\\s+/etc/passwd\\s*\\|\\s*head\\s+-n\\s+5$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-time-command-command-timing-219197.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

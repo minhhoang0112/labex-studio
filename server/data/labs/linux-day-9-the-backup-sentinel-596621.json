@@ -1,0 +1,459 @@
+{
+  "id": "linux-day-9-the-backup-sentinel-596621",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 9,
+  "title": "The Backup Sentinel",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "You are the \"Backup Sentinel,\" the newly appointed system administrator for a promising tech startup. A recent, minor power surge caused a server glitch, momentarily corrupting a non-critical log file. While no important data was lost this time, it was a serious wake-up call.",
+  "source_url": "https://labex.io/tutorials/linux-day-9-the-backup-sentinel-596621",
+  "source_lab_id": 596621,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-9-the-backup-sentinel-596621",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-9-the-backup-sentinel-596621.json",
+    "reference_sha256": "cd6727375e4bb37f3980a348480c55776a6571221a0cd9a2b68097370cb02676",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "intro-only-visible"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-9-the-backup-sentinel-596621.json",
+  "sections": [
+    {
+      "id": "source-596621-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nYou are the \"Backup Sentinel,\" the newly appointed system administrator for a promising tech startup. A recent, minor power surge caused a server glitch, momentarily corrupting a non-critical log file. While no important data was lost this time, it was a serious wake-up call.\n\nThe CTO has personally tasked you with a critical mission: implement a robust backup and recovery strategy for the company's main application server, and do it *today*. The integrity of user data, application configurations, and vital logs is now in your hands.\n\nThis is your moment to shine. By successfully creating, verifying, and automating the backup process, you will not only safeguard the company's most valuable asset—its data—but also prove yourself as an indispensable guardian of its digital infrastructure. The system is live, the clock is ticking. Let's get to work.\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Important Notice</div>\n<div class=\"text-sm\">\nThis challenge covers skills beyond <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. If you have not learned these topics yet, skip it for now and continue to <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, the next course in the <a href=\"https://labex.io/learn/linux\" class=\"underline\">Linux learning path</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>When to return:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Complete the <a href=\"https://labex.io/labs/linux-scheduled-backup-and-recovery-725417?course=linux-for-noobs\" class=\"underline\">Scheduled Backup and Recovery</a> Guided Lab, then return and try this challenge again.</li>\n</ol>\n</div>\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Introduction\n\nBạn là \"Backup Sentinel\" (Người gác đền sao lưu), quản trị viên hệ thống mới được bổ nhiệm cho một công ty khởi nghiệp công nghệ đầy triển vọng. Một sự cố tăng điện nhỏ gần đây đã gây ra lỗi máy chủ, làm hỏng tạm thời một tệp nhật ký (log file) không quan trọng. Mặc dù không có dữ liệu quan trọng nào bị mất lần này, nhưng đó là một lời cảnh tỉnh nghiêm túc.\n\nCTO đã trực tiếp giao cho bạn một nhiệm vụ quan trọng: triển khai một chiến lược sao lưu và khôi phục mạnh mẽ cho máy chủ ứng dụng chính của công ty, và phải hoàn thành nó *ngay trong ngày hôm nay*. Tính toàn vẹn của dữ liệu người dùng, cấu hình ứng dụng và các tệp nhật ký quan trọng giờ đây nằm trong tay bạn.\n\nĐây là thời điểm để bạn tỏa sáng. Bằng cách tạo, xác minh và tự động hóa thành công quy trình sao lưu, bạn không chỉ bảo vệ tài sản có giá trị nhất của công ty—dữ liệu của nó—mà còn chứng minh bản thân là một người bảo vệ không thể thiếu đối với cơ sở hạ tầng kỹ thuật số của công ty. Hệ thống đang chạy trực tiếp, đồng hồ đang điểm. Hãy bắt tay vào làm việc thôi.\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Important Notice</div>\n<div class=\"text-sm\">\nThử thách này bao gồm các kỹ năng vượt ra ngoài phạm vi của khóa học <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. Nếu bạn chưa học các chủ đề này, hãy bỏ qua nó lúc này và tiếp tục với <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, khóa học tiếp theo trong <a href=\"https://labex.io/learn/linux\" class=\"underline\">lộ trình học Linux</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>Khi nào nên quay lại:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Hoàn thành Phòng thí nghiệm có hướng dẫn <a href=\"https://labex.io/labs/linux-scheduled-backup-and-recovery-725417?course=linux-for-noobs\" class=\"underline\">Scheduled Backup and Recovery</a>, sau đó quay lại và thử lại thử thách này.</li>\n</ol>\n</div>"
+    },
+    {
+      "id": "source-596621-section-1-v2",
+      "title": "Identifying Critical Data for Backup",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Identifying Critical Data for Backup\n\nBefore creating a backup, your first task is to identify which data is critical. A full system backup is often impractical. For our application server, the most important assets are in the `data`, `config`, and `logs` directories.\n\nTo make our backup process clean and manageable, we will create a file that lists all the directories we want to back up. This list will serve as a manifest for our backup script.\n\n### Tasks\n\n- Create a file named `backup-list.txt` in the `~/project` directory.\n- This file should contain the relative paths to the three critical directories, with each path on a new line.\n\n### Requirements\n\n- The file must be named exactly `backup-list.txt`.\n- The file must be located in the `~/project` directory.\n- The file must contain the following three entries, each on its own line:\n  - `data`\n  - `config`\n  - `logs`\n\n### Examples\n\nAfter creating the `backup-list.txt` file, your project directory should contain the new manifest file alongside the existing directories:\n\n```bash\n~/project/\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nWhen you run `cat backup-list.txt`, you should see the three critical directories listed:\n\n```plaintext\ndata\nconfig\nlogs\n```\n\n### Hints\n\n- You can use a text editor like `nano` to create and edit the file.\n- Alternatively, you can use the `echo` command with output redirection (`>`) to create the file and `>>` to append to it.\n",
+      "task": "- Create a file named `backup-list.txt` in the `~/project` directory.\n- This file should contain the relative paths to the three critical directories, with each path on a new line.",
+      "hint": "- You can use a text editor like `nano` to create and edit the file.\n- Alternatively, you can use the `echo` command with output redirection (`>`) to create the file and `>>` to append to it.",
+      "verification": {
+        "kind": "state",
+        "command": "cmp -s '/home/labex/project/backup-list.txt' <(printf '%s' 'data\nconfig\nlogs\n')"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Xác định dữ liệu quan trọng để sao lưu",
+      "content_vi": "## Xác định dữ liệu quan trọng để sao lưu\n\nTrước khi tạo bản sao lưu, nhiệm vụ đầu tiên của bạn là xác định dữ liệu nào là quan trọng. Việc sao lưu toàn bộ hệ thống thường không khả thi. Đối với máy chủ ứng dụng của chúng tôi, các tài sản quan trọng nhất nằm trong các thư mục `data`, `config` và `logs`.\n\nĐể làm cho quá trình sao lưu của chúng ta sạch sẽ và dễ quản lý, chúng ta sẽ tạo một tệp liệt kê tất cả các thư mục mà chúng ta muốn sao lưu. Danh sách này sẽ đóng vai trò như một bản kê khai (manifest) cho tập lệnh sao lưu của chúng ta.\n\n### Nhiệm vụ\n\n- Tạo một tệp có tên là `backup-list.txt` trong thư mục `~/project`.\n- Tệp này phải chứa các đường dẫn tương đối đến ba thư mục quan trọng, với mỗi đường dẫn nằm trên một dòng mới.\n\n### Yêu cầu\n\n- Tệp phải được đặt tên chính xác là `backup-list.txt`.\n- Tệp phải nằm trong thư mục `~/project`.\n- Tệp phải chứa ba mục sau, mỗi mục trên một dòng riêng biệt:\n  - `data`\n  - `config`\n  - `logs`\n\n### Ví dụ\n\nSau khi tạo tệp `backup-list.txt`, thư mục dự án của bạn sẽ chứa tệp kê khai mới bên cạnh các thư mục hiện có:\n\n```bash\n~/project/\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nKhi bạn chạy `cat backup-list.txt`, bạn sẽ thấy ba thư mục quan trọng được liệt kê:\n\n```plaintext\ndata\nconfig\nlogs\n```\n\n### Gợi ý\n\n- Bạn có thể sử dụng trình soạn thảo văn bản như `nano` để tạo và chỉnh sửa tệp.\n- Ngoài ra, bạn có thể sử dụng lệnh `echo` kết hợp với chuyển hướng đầu ra (`>`) để tạo tệp và `>>` để nối thêm nội dung vào tệp."
+    },
+    {
+      "id": "source-596621-section-2-v2",
+      "title": "Creating a Full System Backup Archive",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Creating a Full System Backup Archive\n\nWith the list of critical directories ready, it's time to create the backup archive. The standard Linux tool for this job is `tar` (Tape Archive). It can bundle multiple files and directories into a single file. We'll also compress the archive to save space using `gzip`.\n\n### Tasks\n\n- Use the `tar` command to create a compressed backup archive.\n- The archive should be named `system-backup.tar.gz`.\n- The archive must be placed in the `~/project/backups/` directory.\n- The contents of the archive should be determined by the `backup-list.txt` file you created in the previous step.\n\n### Requirements\n\n- The final archive must be located at `~/project/backups/system-backup.tar.gz`.\n- You must use the `tar` command.\n- You must use the `-T` option with `tar` to read the list of files/directories from `backup-list.txt`.\n- The archive must be compressed with `gzip` (use the `z` option in `tar`).\n\n### Examples\n\nAfter creating the backup archive, your `backups` directory should contain the new compressed archive:\n\n```bash\n~/project/backups/\n└── system-backup.tar.gz\n```\n\nWhen you run `ls -lh ~/project/backups/`, you should see the archive file with its size:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 1.2K Sep 11 15:08 system-backup.tar.gz\n```\n\n### Hints\n\n- The common options for creating a compressed archive with `tar` are `c` (create), `z` (compress with gzip), `v` (verbose, to see progress), and `f` (specify filename).\n- The `-T` option tells `tar` to get the names of the files to archive from the file that follows, instead of from the command line.\n- The command structure will look something like `tar -czvf [archive_name] -T [list_file]`.\n",
+      "task": "- Use the `tar` command to create a compressed backup archive.\n- The archive should be named `system-backup.tar.gz`.\n- The archive must be placed in the `~/project/backups/` directory.\n- The contents of the archive should be determined by the `backup-list.txt` file you created in the previous step.",
+      "hint": "- The common options for creating a compressed archive with `tar` are `c` (create), `z` (compress with gzip), `v` (verbose, to see progress), and `f` (specify filename).\n- The `-T` option tells `tar` to get the names of the files to archive from the file that follows, instead of from the command line.\n- The command structure will look something like `tar -czvf [archive_name] -T [list_file]`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "gzip -t /home/labex/project/backups/system-backup.tar.gz && cmp -s <(tar -tzf /home/labex/project/backups/system-backup.tar.gz | LC_ALL=C sort) <(printf 'config/\\nconfig/app.conf\\ndata/\\ndata/transactions.csv\\nlogs/\\nlogs/app.log\\n') && cmp -s <(tar -xOzf /home/labex/project/backups/system-backup.tar.gz 'data/transactions.csv') <(printf '%s' 'id,amount\nT1,100\nT2,250\n') && cmp -s <(tar -xOzf /home/labex/project/backups/system-backup.tar.gz 'config/app.conf') <(printf '%s' 'database=localhost\napi_key=practice-only\n') && cmp -s <(tar -xOzf /home/labex/project/backups/system-backup.tar.gz 'logs/app.log') <(printf '%s' 'INFO local backup fixture\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tar\\s+[^\\n;]*system-backup\\.tar\\.gz\\s+[^\\n;]*-T\\s+(?:/home/labex/project/|~/project/)?backup-list\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
+      "title_vi": "Tạo bản sao lưu toàn hệ thống",
+      "content_vi": "## Tạo một Kho lưu trữ Sao lưu Toàn bộ Hệ thống\n\nVới danh sách các thư mục quan trọng đã sẵn sàng, đã đến lúc tạo kho lưu trữ sao lưu. Công cụ chuẩn trong Linux cho công việc này là `tar` (Tape Archive). Nó có thể đóng gói nhiều tệp và thư mục thành một tệp duy nhất. Chúng ta cũng sẽ nén kho lưu trữ để tiết kiệm dung lượng bằng cách sử dụng `gzip`.\n\n### Các Nhiệm vụ\n\n- Sử dụng lệnh `tar` để tạo một kho lưu trữ sao lưu được nén.\n- Kho lưu trữ phải được đặt tên là `system-backup.tar.gz`.\n- Kho lưu trữ phải được đặt trong thư mục `~/project/backups/`.\n- Nội dung của kho lưu trữ phải được xác định bởi tệp `backup-list.txt` mà bạn đã tạo ở bước trước.\n\n### Các Yêu cầu\n\n- Kho lưu trữ cuối cùng phải được đặt tại `~/project/backups/system-backup.tar.gz`.\n- Bạn phải sử dụng lệnh `tar`.\n- Bạn phải sử dụng tùy chọn `-T` với `tar` để đọc danh sách các tệp/thư mục từ `backup-list.txt`.\n- Kho lưu trữ phải được nén bằng `gzip` (sử dụng tùy chọn `z` trong `tar`).\n\n### Ví dụ\n\nSau khi tạo kho lưu trữ sao lưu, thư mục `backups` của bạn sẽ chứa kho lưu trữ nén mới:\n\n```bash\n~/project/backups/\n└── system-backup.tar.gz\n```\n\nKhi bạn chạy `ls -lh ~/project/backups/`, bạn sẽ thấy tệp lưu trữ cùng với kích thước của nó:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 1.2K Sep 11 15:08 system-backup.tar.gz\n```\n\n### Gợi ý\n\n- Các tùy chọn phổ biến để tạo kho lưu trữ nén bằng `tar` là `c` (create - tạo), `z` (compress with gzip - nén bằng gzip), `v` (verbose - chi tiết, để xem tiến trình), và `f` (specify filename - chỉ định tên tệp).\n- Tùy chọn `-T` ra lệnh cho `tar` lấy tên của các tệp cần lưu trữ từ tệp theo sau nó, thay vì từ dòng lệnh.\n- Cấu trúc lệnh sẽ trông giống như `tar -czvf [archive_name] -T [list_file]`."
+    },
+    {
+      "id": "source-596621-section-3-v2",
+      "title": "Verifying Backup Integrity",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Verifying Backup Integrity\n\nA backup is useless if it's corrupted or incomplete. A crucial step in any backup strategy is verification. You must ensure that the archive you created contains all the intended files and is readable.\n\n### Tasks\n\n- Use the `tar` command to list the contents of the `system-backup.tar.gz` archive without extracting it.\n- Redirect the output of this command to a new file named `backup-contents.txt` in the `~/project` directory.\n\n### Requirements\n\n- You must create a file named `backup-contents.txt` in `~/project`.\n- This file must contain the list of all files and directories stored within `system-backup.tar.gz`.\n- Do not extract the files; only list them.\n\n### Examples\n\nAfter creating the verification file, your project directory should contain the new `backup-contents.txt` file:\n\n```bash\n~/project/\n├── backup-contents.txt\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nWhen you run `cat backup-contents.txt`, you should see a detailed listing of all files in the archive:\n\n```plaintext\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 data/\n-rw-rw-r-- labex/labex      46 2025-09-11 15:08 data/transactions.csv\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 config/\n-rw-rw-r-- labex/labex      72 2025-09-11 15:08 config/app.conf\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 logs/\n-rw-rw-r-- labex/labex      49 2025-09-11 15:08 logs/app.log\n```\n\n### Hints\n\n- The `tar` command has an option to list (`t`) the contents of an archive.\n- Combine the `t` option with `z` (for gzip), `v` (for a detailed list), and `f` (to specify the file).\n- Use the output redirection operator `>` to save the command's output to a file.\n",
+      "task": "- Use the `tar` command to list the contents of the `system-backup.tar.gz` archive without extracting it.\n- Redirect the output of this command to a new file named `backup-contents.txt` in the `~/project` directory.",
+      "hint": "- The `tar` command has an option to list (`t`) the contents of an archive.\n- Combine the `t` option with `z` (for gzip), `v` (for a detailed list), and `f` (to specify the file).\n- Use the output redirection operator `>` to save the command's output to a file.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -s /home/labex/project/backup-contents.txt && { cmp -s /home/labex/project/backup-contents.txt <(tar -tzf /home/labex/project/backups/system-backup.tar.gz) || cmp -s /home/labex/project/backup-contents.txt <(tar -tvzf /home/labex/project/backups/system-backup.tar.gz); }"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tar\\s+-[a-zA-Z]*t[a-zA-Z]*\\s+[^\\n;]*system-backup\\.tar\\.gz\\s*>\\s*(?:/home/labex/project/|~/project/)?backup-contents\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
+      "title_vi": "Kiểm tra tính toàn vẹn của bản sao lưu",
+      "content_vi": "## Xác thực tính toàn vẹn của bản sao lưu\n\nMột bản sao lưu sẽ trở nên vô dụng nếu nó bị hỏng hoặc không hoàn chỉnh. Một bước cực kỳ quan trọng trong bất kỳ chiến lược sao lưu nào là xác thực. Bạn phải đảm bảo rằng tệp lưu trữ bạn đã tạo chứa tất cả các tệp dự định và có thể đọc được.\n\n### Các tác vụ\n\n- Sử dụng lệnh `tar` để liệt kê nội dung của tệp lưu trữ `system-backup.tar.gz` mà không cần giải nén nó.\n- Chuyển hướng đầu ra của lệnh này vào một tệp mới có tên là `backup-contents.txt` trong thư mục `~/project`.\n\n### Yêu cầu\n\n- Bạn phải tạo một tệp có tên là `backup-contents.txt` trong thư mục `~/project`.\n- Tệp này phải chứa danh sách tất cả các tệp và thư mục được lưu trữ bên trong `system-backup.tar.gz`.\n- Không giải nén các tệp; chỉ liệt kê chúng.\n\n### Ví dụ\n\nSau khi tạo tệp xác thực, thư mục dự án của bạn sẽ chứa tệp `backup-contents.txt` mới:\n\n```bash\n~/project/\n├── backup-contents.txt\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nKhi bạn chạy `cat backup-contents.txt`, bạn sẽ thấy danh sách chi tiết của tất cả các tệp trong tệp lưu trữ:\n\n```plaintext\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 data/\n-rw-rw-r-- labex/labex      46 2025-09-11 15:08 data/transactions.csv\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 config/\n-rw-rw-r-- labex/labex      72 2025-09-11 15:08 config/app.conf\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 logs/\n-rw-rw-r-- labex/labex      49 2025-09-11 15:08 logs/app.log\n```\n\n### Gợi ý\n\n- Lệnh `tar` có một tùy chọn để liệt kê (`t`) nội dung của một tệp lưu trữ.\n- Kết hợp tùy chọn `t` với `z` (dành cho gzip), `v` (để hiển thị danh sách chi tiết), và `f` (để chỉ định tệp).\n- Sử dụng toán tử chuyển hướng đầu ra `>` để lưu đầu ra của lệnh vào một tệp."
+    },
+    {
+      "id": "source-596621-section-4-v2",
+      "title": "Restoring Files from a Backup",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Restoring Files from a Backup\n\nDisaster strikes! A junior developer, while trying to clear some space, has accidentally deleted the main application configuration file, `app.conf`. The application is now down. It's up to you, the Backup Sentinel, to restore this critical file from your backup and save the day.\n\n### Tasks\n\n1. First, simulate the accident by deleting the `config/app.conf` file.\n2. Then, use the `tar` command to restore *only* the `config/app.conf` file from your `system-backup.tar.gz` archive. The file should be restored to its original location.\n\n### Requirements\n\n- The file `~/project/config/app.conf` must be present after you complete the task.\n- You must extract only the single `config/app.conf` file, not the entire archive.\n\n### Examples\n\nAfter restoring the `app.conf` file, your `config` directory should contain the restored file:\n\n```bash\n~/project/config/\n├── app.conf\n└── ...\n```\n\nWhen you run `ls -l ~/project/config/app.conf`, you should see the restored file:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 72 Sep 11 15:08 /home/labex/project/config/app.conf\n```\n\nYou can verify the file content is correct by checking it contains the expected configuration:\n\n```bash\n## This should show the database and API key settings\ncat ~/project/config/app.conf\n```\n\n### Hints\n\n- The `rm` command is used to delete files.\n- The `tar` command uses the `x` option to extract files.\n- To extract a specific file, you can add its path (as it appears in the archive) to the end of the `tar -x` command.\n- The full path to the file inside the archive is `config/app.conf`.\n",
+      "task": "1. First, simulate the accident by deleting the `config/app.conf` file.\n2. Then, use the `tar` command to restore *only* the `config/app.conf` file from your `system-backup.tar.gz` archive. The file should be restored to its original location.",
+      "hint": "- The `rm` command is used to delete files.\n- The `tar` command uses the `x` option to extract files.\n- To extract a specific file, you can add its path (as it appears in the archive) to the end of the `tar -x` command.\n- The full path to the file inside the archive is `config/app.conf`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "cmp -s '/home/labex/project/config/app.conf' <(printf '%s' 'database=localhost\napi_key=practice-only\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*rm\\s+config/app\\.conf\\s*$"
+              ],
+              [
+                "^\\s*tar\\s+-xzf\\s+backups/system-backup\\.tar\\.gz\\s+config/app\\.conf\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
+      "title_vi": "Khôi phục tệp từ bản sao lưu",
+      "content_vi": "## Khôi phục tệp từ bản sao lưu\n\nThảm họa xảy ra! Một lập trình viên cấp dưới, trong lúc cố gắng dọn dẹp dung lượng trống, đã vô tình xóa mất tệp cấu hình ứng dụng chính, `app.conf`. Ứng dụng hiện đang bị ngừng hoạt động. Nhiệm vụ của bạn, Người bảo vệ Sao lưu (Backup Sentinel), là khôi phục tệp quan trọng này từ bản sao lưu của bạn và cứu nguy tình thế.\n\n### Nhiệm vụ\n\n1. Đầu tiên, mô phỏng tai nạn bằng cách xóa tệp `config/app.conf`.\n2. Sau đó, sử dụng lệnh `tar` để chỉ khôi phục *duy nhất* tệp `config/app.conf` từ tệp lưu trữ `system-backup.tar.gz` của bạn. Tệp phải được khôi phục về vị trí ban đầu của nó.\n\n### Yêu cầu\n\n- Tệp `~/project/config/app.conf` phải tồn tại sau khi bạn hoàn thành nhiệm vụ.\n- Bạn phải giải nén chỉ một tệp `config/app.conf` đơn lẻ, không phải toàn bộ tệp lưu trữ.\n\n### Ví dụ\n\nSau khi khôi phục tệp `app.conf`, thư mục `config` của bạn sẽ chứa tệp đã được khôi phục:\n\n```bash\n~/project/config/\n├── app.conf\n└── ...\n```\n\nKhi bạn chạy lệnh `ls -l ~/project/config/app.conf`, bạn sẽ thấy tệp đã được khôi phục:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 72 Sep 11 15:08 /home/labex/project/config/app.conf\n```\n\nBạn có thể xác minh nội dung tệp là chính xác bằng cách kiểm tra xem nó có chứa cấu hình mong đợi hay không:\n\n```bash\n## Điều này sẽ hiển thị các cài đặt cơ sở dữ liệu và khóa API\ncat ~/project/config/app.conf\n```\n\n### Gợi ý\n\n- Lệnh `rm` được sử dụng để xóa các tệp.\n- Lệnh `tar` sử dụng tùy chọn `x` để giải nén các tệp.\n- Để giải nén một tệp cụ thể, bạn có thể thêm đường dẫn của nó (như cách nó xuất hiện trong tệp lưu trữ) vào cuối lệnh `tar -x`.\n- Đường dẫn đầy đủ tới tệp bên trong tệp lưu trữ là `config/app.conf`."
+    },
+    {
+      "id": "source-596621-section-5-v2",
+      "title": "Scheduling Automated Backup Tasks",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Scheduling Automated Backup Tasks\n\nYou saved the day, but a hero's work is never done. Relying on manual backups is risky. The final step is to automate the process so that backups are created regularly without any human intervention. For this, we will use `cron`, the standard Linux task scheduler.\n\n### Tasks\n\n- Create a cron job that automatically runs a backup command.\n- The job should run **every minute** (for the purpose of this challenge).\n- The command should create a new, compressed `tar` archive inside the `~/project/backups/` directory.\n- To prevent overwriting, each new backup file must have a unique name that includes a timestamp (e.g., `backup-2023-10-27_15-30-00.tar.gz`).\n\n### Requirements\n\n- You must use `crontab -e` to edit your cron jobs.\n- The cron schedule must be `* * * * *` to run every minute.\n- The backup command within the cron job must use an **absolute path** for the output directory.\n- The backup command must back up the `data`, `config`, and `logs` directories from `/home/labex/project`. You may either list the directories directly after `-C /home/labex/project` or reuse the `/home/labex/project/backup-list.txt` manifest with `-T`.\n- The backup filename must include a timestamp.\n\n### Examples\n\nAfter setting up the cron job, you can verify it's working by checking your crontab and waiting for automatic backups to appear. When you run `crontab -l`, you should see your new backup job:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project data config logs\n```\n\nThe same backup can also reuse the manifest you created earlier:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project -T /home/labex/project/backup-list.txt\n```\n\nAfter a minute or two, your `backups` directory should start showing timestamped backup files:\n\n```bash\n~/project/backups/\n├── backup-2025-09-11_15-30-00.tar.gz\n├── backup-2025-09-11_15-31-00.tar.gz\n├── backup-2025-09-11_15-32-00.tar.gz\n└── system-backup.tar.gz\n```\n\n### Hints\n\n- Run `crontab -e` to open the cron job editor. You may be asked to select an editor; `nano` is a good choice.\n- The format for a cron job is: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` means every minute of every hour of every day.\n- You can use the `date` command to generate a timestamp. For example, `date +%Y-%m-%d_%H-%M-%S` will produce a format like `2023-10-27_15-30-00`.\n- To use the output of a command within another command, use `$(command)`.\n- **Important:** In a crontab, the percent sign (`%`) has a special meaning (it's treated as a newline). You must escape it with a backslash (`\\%`) when using it with the `date` command.\n- Your final command in the crontab might look like: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`\n",
+      "task": "- Create a cron job that automatically runs a backup command.\n- The job should run **every minute** (for the purpose of this challenge).\n- The command should create a new, compressed `tar` archive inside the `~/project/backups/` directory.\n- To prevent overwriting, each new backup file must have a unique name that includes a timestamp (e.g., `backup-2023-10-27_15-30-00.tar.gz`).",
+      "hint": "- Run `crontab -e` to open the cron job editor. You may be asked to select an editor; `nano` is a good choice.\n- The format for a cron job is: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` means every minute of every hour of every day.\n- You can use the `date` command to generate a timestamp. For example, `date +%Y-%m-%d_%H-%M-%S` will produce a format like `2023-10-27_15-30-00`.\n- To use the output of a command within another command, use `$(command)`.\n- **Important:** In a crontab, the percent sign (`%`) has a special meaning (it's treated as a newline). You must escape it with a backslash (`\\%`) when using it with the `date` command.\n- Your final command in the crontab might look like: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa xác nhận private crontab và daemon tồn tại xuyên phiên để chạy backup mỗi phút. Không dùng một lệnh tar thay cho tác vụ cron."
+      },
+      "required_capabilities": [
+        "private-cron"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "entry=$(crontab -l) && printf '%s\\n' \"$entry\" | grep -Eq '^\\* \\* \\* \\* \\* .*tar .* /home/labex/project/backups/[^ ]*\\$\\(date ' && printf '%s\\n' \"$entry\" | grep -Fq -- '-C /home/labex/project' && printf '%s\\n' \"$entry\" | grep -Eq '(data config logs|-T /home/labex/project/backup-list\\.txt)' && latest=$(find /home/labex/project/backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%T@ %p\\n' | sort -nr | head -n1 | cut -d' ' -f2-) && test -n \"$latest\" && gzip -t \"$latest\" && tar -tzf \"$latest\" | grep -Fxq data/transactions.csv && tar -tzf \"$latest\" | grep -Fxq config/app.conf && tar -tzf \"$latest\" | grep -Fxq logs/app.log"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "cron_scheduler"
+        ]
+      },
+      "title_vi": "Lập lịch tác vụ sao lưu tự động",
+      "content_vi": "## Lên lịch Tác vụ Sao lưu Tự động\n\nBạn đã cứu nguy cho tình huống này, nhưng công việc của một người anh hùng thì không bao giờ kết thúc. Việc phụ thuộc vào các bản sao lưu thủ công rất rủi ro. Bước cuối cùng là tự động hóa quy trình để các bản sao lưu được tạo ra định kỳ mà không cần sự can thiệp của con người. Đối với việc này, chúng ta sẽ sử dụng `cron`, trình lập lịch tác vụ tiêu chuẩn trên Linux.\n\n### Các Tác vụ\n\n- Tạo một cron job tự động chạy một lệnh sao lưu.\n- Tác vụ này nên chạy **mỗi phút một lần** (cho mục đích của thử thách này).\n- Lệnh phải tạo một tệp lưu trữ `tar` nén mới bên trong thư mục `~/project/backups/`.\n- Để tránh ghi đè, mỗi tệp sao lưu mới phải có một tên duy nhất bao gồm dấu thời gian (ví dụ: `backup-2023-10-27_15-30-00.tar.gz`).\n\n### Yêu cầu\n\n- Bạn phải sử dụng `crontab -e` để chỉnh sửa các cron job của mình.\n- Lịch trình cron phải là `* * * * *` để chạy mỗi phút một lần.\n- Lệnh sao lưu bên trong cron job phải sử dụng **đường dẫn tuyệt đối** cho thư mục đầu ra.\n- Lệnh sao lưu phải sao lưu các thư mục `data`, `config`, và `logs` từ `/home/labex/project`. Bạn có thể liệt kê trực tiếp các thư mục ngay sau `-C /home/labex/project` hoặc sử dụng lại tệp danh sách `/home/labex/project/backup-list.txt` với tùy chọn `-T`.\n- Tên tệp sao lưu phải bao gồm dấu thời gian.\n\n### Ví dụ\n\nSau khi thiết lập cron job, bạn có thể xác minh nó đang hoạt động bằng cách kiểm tra crontab của mình và đợi các bản sao lưu tự động xuất hiện. Khi bạn chạy `crontab -l`, bạn sẽ thấy tác vụ sao lưu mới của mình:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project data config logs\n```\n\nBản sao lưu tương tự cũng có thể sử dụng lại tệp danh sách mà bạn đã tạo trước đó:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project -T /home/labex/project/backup-list.txt\n```\n\nSau một hoặc hai phút, thư mục `backups` của bạn sẽ bắt đầu hiển thị các tệp sao lưu có đính kèm dấu thời gian:\n\n```bash\n~/project/backups/\n├── backup-2025-09-11_15-30-00.tar.gz\n├── backup-2025-09-11_15-31-00.tar.gz\n├── backup-2025-09-11_15-32-00.tar.gz\n└── system-backup.tar.gz\n```\n\n### Gợi ý\n\n- Chạy `crontab -e` để mở trình chỉnh sửa cron job. Bạn có thể được yêu cầu chọn một trình soạn thảo; `nano` là một sự lựa chọn tốt.\n- Định dạng cho một cron job là: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` có nghĩa là mỗi phút của mỗi giờ trong mọi ngày.\n- Bạn có thể sử dụng lệnh `date` để tạo dấu thời gian. Ví dụ, `date +%Y-%m-%d_%H-%M-%S` sẽ tạo ra định dạng như `2023-10-27_15-30-00`.\n- Để sử dụng đầu ra của một lệnh bên trong một lệnh khác, hãy sử dụng `$(command)`.\n- **Quan trọng:** Trong crontab, dấu phần trăm (`%`) có ý nghĩa đặc biệt (nó được coi là một ký tự xuống dòng). Bạn phải thoát nó bằng dấu gạch chéo ngược (`\\%`) khi sử dụng với lệnh `date`.\n- Lệnh cuối cùng của bạn trong crontab có thể trông giống như sau: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`"
+    },
+    {
+      "id": "source-596621-section-6-v2",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nCongratulations, Sentinel! You have successfully designed and implemented a complete, automated backup and recovery strategy. The company's data is now secure, thanks to your diligence and skill. You've not only averted a potential crisis but also established a system that will protect the company for the future.\n\nIn this challenge, you have mastered several fundamental system administration skills:\n\n- **Identifying Critical Data:** Pinpointing what needs to be backed up.\n- **Creating Archives:** Using the `tar` command to create compressed backups.\n- **Verifying Integrity:** Ensuring backups are valid and complete.\n- **Performing Restores:** Extracting specific files to recover from data loss.\n- **Automating Tasks:** Scheduling cron jobs for regular, unattended backups.\n\nThese are essential, real-world skills for any Linux system administrator, developer, or DevOps engineer. You've proven you have what it takes to be a reliable guardian of critical systems.\n",
+      "title_vi": "Tóm tắt",
+      "content_vi": "## Tổng kết\n\nChúc mừng, Sentinel! Bạn đã thiết kế và triển khai thành công một chiến lược sao lưu và khôi phục hoàn chỉnh, tự động hóa. Dữ liệu của công ty giờ đây đã được bảo mật, nhờ vào sự tận tâm và kỹ năng của bạn. Bạn không chỉ ngăn chặn một cuộc khủng hoảng tiềm tàng mà còn thiết lập một hệ thống sẽ bảo vệ công ty trong tương lai.\n\nTrong thử thách này, bạn đã làm chủ được một số kỹ năng quản trị hệ thống cơ bản:\n\n- **Xác định dữ liệu quan trọng:** Chỉ ra chính xác những gì cần được sao lưu.\n- **Tạo kho lưu trữ (Archives):** Sử dụng lệnh `tar` để tạo các bản sao lưu được nén.\n- **Xác minh tính toàn vẹn:** Đảm bảo các bản sao lưu hợp lệ và đầy đủ.\n- **Thực hiện khôi phục:** Giải nén các tệp cụ thể để phục hồi sau sự cố mất dữ liệu.\n- **Tự động hóa tác vụ:** Lên lịch cho các cron job để thực hiện sao lưu định kỳ mà không cần can thiệp thủ công.\n\nĐây là những kỹ năng thực tế thiết yếu đối với bất kỳ quản trị viên hệ thống Linux, nhà phát triển hoặc kỹ sư DevOps nào. Bạn đã chứng minh rằng mình có đủ tố chất để trở thành một người bảo vệ đáng tin cậy cho các hệ thống quan trọng."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596621-section-1-v2",
+      "title": "Identifying Critical Data for Backup",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Identifying Critical Data for Backup\n\nBefore creating a backup, your first task is to identify which data is critical. A full system backup is often impractical. For our application server, the most important assets are in the `data`, `config`, and `logs` directories.\n\nTo make our backup process clean and manageable, we will create a file that lists all the directories we want to back up. This list will serve as a manifest for our backup script.\n\n### Tasks\n\n- Create a file named `backup-list.txt` in the `~/project` directory.\n- This file should contain the relative paths to the three critical directories, with each path on a new line.\n\n### Requirements\n\n- The file must be named exactly `backup-list.txt`.\n- The file must be located in the `~/project` directory.\n- The file must contain the following three entries, each on its own line:\n  - `data`\n  - `config`\n  - `logs`\n\n### Examples\n\nAfter creating the `backup-list.txt` file, your project directory should contain the new manifest file alongside the existing directories:\n\n```bash\n~/project/\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nWhen you run `cat backup-list.txt`, you should see the three critical directories listed:\n\n```plaintext\ndata\nconfig\nlogs\n```\n\n### Hints\n\n- You can use a text editor like `nano` to create and edit the file.\n- Alternatively, you can use the `echo` command with output redirection (`>`) to create the file and `>>` to append to it.\n",
+      "task": "- Create a file named `backup-list.txt` in the `~/project` directory.\n- This file should contain the relative paths to the three critical directories, with each path on a new line.",
+      "hint": "- You can use a text editor like `nano` to create and edit the file.\n- Alternatively, you can use the `echo` command with output redirection (`>`) to create the file and `>>` to append to it.",
+      "verification": {
+        "kind": "state",
+        "command": "cmp -s '/home/labex/project/backup-list.txt' <(printf '%s' 'data\nconfig\nlogs\n')"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
+      "title_vi": "Xác định dữ liệu quan trọng để sao lưu",
+      "content_vi": "## Xác định dữ liệu quan trọng để sao lưu\n\nTrước khi tạo bản sao lưu, nhiệm vụ đầu tiên của bạn là xác định dữ liệu nào là quan trọng. Việc sao lưu toàn bộ hệ thống thường không khả thi. Đối với máy chủ ứng dụng của chúng tôi, các tài sản quan trọng nhất nằm trong các thư mục `data`, `config` và `logs`.\n\nĐể làm cho quá trình sao lưu của chúng ta sạch sẽ và dễ quản lý, chúng ta sẽ tạo một tệp liệt kê tất cả các thư mục mà chúng ta muốn sao lưu. Danh sách này sẽ đóng vai trò như một bản kê khai (manifest) cho tập lệnh sao lưu của chúng ta.\n\n### Nhiệm vụ\n\n- Tạo một tệp có tên là `backup-list.txt` trong thư mục `~/project`.\n- Tệp này phải chứa các đường dẫn tương đối đến ba thư mục quan trọng, với mỗi đường dẫn nằm trên một dòng mới.\n\n### Yêu cầu\n\n- Tệp phải được đặt tên chính xác là `backup-list.txt`.\n- Tệp phải nằm trong thư mục `~/project`.\n- Tệp phải chứa ba mục sau, mỗi mục trên một dòng riêng biệt:\n  - `data`\n  - `config`\n  - `logs`\n\n### Ví dụ\n\nSau khi tạo tệp `backup-list.txt`, thư mục dự án của bạn sẽ chứa tệp kê khai mới bên cạnh các thư mục hiện có:\n\n```bash\n~/project/\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nKhi bạn chạy `cat backup-list.txt`, bạn sẽ thấy ba thư mục quan trọng được liệt kê:\n\n```plaintext\ndata\nconfig\nlogs\n```\n\n### Gợi ý\n\n- Bạn có thể sử dụng trình soạn thảo văn bản như `nano` để tạo và chỉnh sửa tệp.\n- Ngoài ra, bạn có thể sử dụng lệnh `echo` kết hợp với chuyển hướng đầu ra (`>`) để tạo tệp và `>>` để nối thêm nội dung vào tệp.",
+      "task_vi": "- Tạo một tệp có tên là `backup-list.txt` trong thư mục `~/project`.\n- Tệp này phải chứa các đường dẫn tương đối đến ba thư mục quan trọng, với mỗi đường dẫn nằm trên một dòng mới.",
+      "hint_vi": "- Bạn có thể sử dụng trình soạn thảo văn bản như `nano` để tạo và chỉnh sửa tệp.\n- Ngoài ra, bạn có thể sử dụng lệnh `echo` kết hợp chuyển hướng đầu ra (`>`) để tạo tệp và `>>` để nối thêm vào tệp."
+    },
+    {
+      "id": "source-596621-section-2-v2",
+      "title": "Creating a Full System Backup Archive",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Creating a Full System Backup Archive\n\nWith the list of critical directories ready, it's time to create the backup archive. The standard Linux tool for this job is `tar` (Tape Archive). It can bundle multiple files and directories into a single file. We'll also compress the archive to save space using `gzip`.\n\n### Tasks\n\n- Use the `tar` command to create a compressed backup archive.\n- The archive should be named `system-backup.tar.gz`.\n- The archive must be placed in the `~/project/backups/` directory.\n- The contents of the archive should be determined by the `backup-list.txt` file you created in the previous step.\n\n### Requirements\n\n- The final archive must be located at `~/project/backups/system-backup.tar.gz`.\n- You must use the `tar` command.\n- You must use the `-T` option with `tar` to read the list of files/directories from `backup-list.txt`.\n- The archive must be compressed with `gzip` (use the `z` option in `tar`).\n\n### Examples\n\nAfter creating the backup archive, your `backups` directory should contain the new compressed archive:\n\n```bash\n~/project/backups/\n└── system-backup.tar.gz\n```\n\nWhen you run `ls -lh ~/project/backups/`, you should see the archive file with its size:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 1.2K Sep 11 15:08 system-backup.tar.gz\n```\n\n### Hints\n\n- The common options for creating a compressed archive with `tar` are `c` (create), `z` (compress with gzip), `v` (verbose, to see progress), and `f` (specify filename).\n- The `-T` option tells `tar` to get the names of the files to archive from the file that follows, instead of from the command line.\n- The command structure will look something like `tar -czvf [archive_name] -T [list_file]`.\n",
+      "task": "- Use the `tar` command to create a compressed backup archive.\n- The archive should be named `system-backup.tar.gz`.\n- The archive must be placed in the `~/project/backups/` directory.\n- The contents of the archive should be determined by the `backup-list.txt` file you created in the previous step.",
+      "hint": "- The common options for creating a compressed archive with `tar` are `c` (create), `z` (compress with gzip), `v` (verbose, to see progress), and `f` (specify filename).\n- The `-T` option tells `tar` to get the names of the files to archive from the file that follows, instead of from the command line.\n- The command structure will look something like `tar -czvf [archive_name] -T [list_file]`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "gzip -t /home/labex/project/backups/system-backup.tar.gz && cmp -s <(tar -tzf /home/labex/project/backups/system-backup.tar.gz | LC_ALL=C sort) <(printf 'config/\\nconfig/app.conf\\ndata/\\ndata/transactions.csv\\nlogs/\\nlogs/app.log\\n') && cmp -s <(tar -xOzf /home/labex/project/backups/system-backup.tar.gz 'data/transactions.csv') <(printf '%s' 'id,amount\nT1,100\nT2,250\n') && cmp -s <(tar -xOzf /home/labex/project/backups/system-backup.tar.gz 'config/app.conf') <(printf '%s' 'database=localhost\napi_key=practice-only\n') && cmp -s <(tar -xOzf /home/labex/project/backups/system-backup.tar.gz 'logs/app.log') <(printf '%s' 'INFO local backup fixture\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tar\\s+[^\\n;]*system-backup\\.tar\\.gz\\s+[^\\n;]*-T\\s+(?:/home/labex/project/|~/project/)?backup-list\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
+      "title_vi": "Tạo bản sao lưu toàn hệ thống",
+      "content_vi": "## Tạo một Kho lưu trữ Sao lưu Toàn bộ Hệ thống\n\nVới danh sách các thư mục quan trọng đã sẵn sàng, đã đến lúc tạo kho lưu trữ sao lưu. Công cụ chuẩn trong Linux cho công việc này là `tar` (Tape Archive). Nó có thể đóng gói nhiều tệp và thư mục thành một tệp duy nhất. Chúng ta cũng sẽ nén kho lưu trữ để tiết kiệm dung lượng bằng cách sử dụng `gzip`.\n\n### Các Nhiệm vụ\n\n- Sử dụng lệnh `tar` để tạo một kho lưu trữ sao lưu được nén.\n- Kho lưu trữ phải được đặt tên là `system-backup.tar.gz`.\n- Kho lưu trữ phải được đặt trong thư mục `~/project/backups/`.\n- Nội dung của kho lưu trữ phải được xác định bởi tệp `backup-list.txt` mà bạn đã tạo ở bước trước.\n\n### Các Yêu cầu\n\n- Kho lưu trữ cuối cùng phải được đặt tại `~/project/backups/system-backup.tar.gz`.\n- Bạn phải sử dụng lệnh `tar`.\n- Bạn phải sử dụng tùy chọn `-T` với `tar` để đọc danh sách các tệp/thư mục từ `backup-list.txt`.\n- Kho lưu trữ phải được nén bằng `gzip` (sử dụng tùy chọn `z` trong `tar`).\n\n### Ví dụ\n\nSau khi tạo kho lưu trữ sao lưu, thư mục `backups` của bạn sẽ chứa kho lưu trữ nén mới:\n\n```bash\n~/project/backups/\n└── system-backup.tar.gz\n```\n\nKhi bạn chạy `ls -lh ~/project/backups/`, bạn sẽ thấy tệp lưu trữ cùng với kích thước của nó:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 1.2K Sep 11 15:08 system-backup.tar.gz\n```\n\n### Gợi ý\n\n- Các tùy chọn phổ biến để tạo kho lưu trữ nén bằng `tar` là `c` (create - tạo), `z` (compress with gzip - nén bằng gzip), `v` (verbose - chi tiết, để xem tiến trình), và `f` (specify filename - chỉ định tên tệp).\n- Tùy chọn `-T` ra lệnh cho `tar` lấy tên của các tệp cần lưu trữ từ tệp theo sau nó, thay vì từ dòng lệnh.\n- Cấu trúc lệnh sẽ trông giống như `tar -czvf [archive_name] -T [list_file]`.",
+      "task_vi": "- Sử dụng lệnh `tar` để tạo một tệp lưu trữ sao lưu được nén.\n- Tệp lưu trữ phải được đặt tên là `system-backup.tar.gz`.\n- Tệp lưu trữ phải được đặt trong thư mục `~/project/backups/`.\n- Nội dung của tệp lưu trữ phải được xác định bởi tệp `backup-list.txt` mà bạn đã tạo ở bước trước.",
+      "hint_vi": "- Các tùy chọn phổ biến để tạo tệp nén bằng `tar` là `c` (tạo), `z` (nén bằng gzip), `v` (hiện tiến trình), và `f` (chỉ định tên tệp).\n- Tùy chọn `-T` bảo `tar` lấy tên các tệp cần nén từ tệp theo sau nó, thay vì từ dòng lệnh.\n- Cấu trúc lệnh sẽ có dạng như `tar -czvf [archive_name] -T [list_file]`."
+    },
+    {
+      "id": "source-596621-section-3-v2",
+      "title": "Verifying Backup Integrity",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Verifying Backup Integrity\n\nA backup is useless if it's corrupted or incomplete. A crucial step in any backup strategy is verification. You must ensure that the archive you created contains all the intended files and is readable.\n\n### Tasks\n\n- Use the `tar` command to list the contents of the `system-backup.tar.gz` archive without extracting it.\n- Redirect the output of this command to a new file named `backup-contents.txt` in the `~/project` directory.\n\n### Requirements\n\n- You must create a file named `backup-contents.txt` in `~/project`.\n- This file must contain the list of all files and directories stored within `system-backup.tar.gz`.\n- Do not extract the files; only list them.\n\n### Examples\n\nAfter creating the verification file, your project directory should contain the new `backup-contents.txt` file:\n\n```bash\n~/project/\n├── backup-contents.txt\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nWhen you run `cat backup-contents.txt`, you should see a detailed listing of all files in the archive:\n\n```plaintext\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 data/\n-rw-rw-r-- labex/labex      46 2025-09-11 15:08 data/transactions.csv\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 config/\n-rw-rw-r-- labex/labex      72 2025-09-11 15:08 config/app.conf\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 logs/\n-rw-rw-r-- labex/labex      49 2025-09-11 15:08 logs/app.log\n```\n\n### Hints\n\n- The `tar` command has an option to list (`t`) the contents of an archive.\n- Combine the `t` option with `z` (for gzip), `v` (for a detailed list), and `f` (to specify the file).\n- Use the output redirection operator `>` to save the command's output to a file.\n",
+      "task": "- Use the `tar` command to list the contents of the `system-backup.tar.gz` archive without extracting it.\n- Redirect the output of this command to a new file named `backup-contents.txt` in the `~/project` directory.",
+      "hint": "- The `tar` command has an option to list (`t`) the contents of an archive.\n- Combine the `t` option with `z` (for gzip), `v` (for a detailed list), and `f` (to specify the file).\n- Use the output redirection operator `>` to save the command's output to a file.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -s /home/labex/project/backup-contents.txt && { cmp -s /home/labex/project/backup-contents.txt <(tar -tzf /home/labex/project/backups/system-backup.tar.gz) || cmp -s /home/labex/project/backup-contents.txt <(tar -tvzf /home/labex/project/backups/system-backup.tar.gz); }"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*tar\\s+-[a-zA-Z]*t[a-zA-Z]*\\s+[^\\n;]*system-backup\\.tar\\.gz\\s*>\\s*(?:/home/labex/project/|~/project/)?backup-contents\\.txt\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
+      "title_vi": "Kiểm tra tính toàn vẹn của bản sao lưu",
+      "content_vi": "## Xác thực tính toàn vẹn của bản sao lưu\n\nMột bản sao lưu sẽ trở nên vô dụng nếu nó bị hỏng hoặc không hoàn chỉnh. Một bước cực kỳ quan trọng trong bất kỳ chiến lược sao lưu nào là xác thực. Bạn phải đảm bảo rằng tệp lưu trữ bạn đã tạo chứa tất cả các tệp dự định và có thể đọc được.\n\n### Các tác vụ\n\n- Sử dụng lệnh `tar` để liệt kê nội dung của tệp lưu trữ `system-backup.tar.gz` mà không cần giải nén nó.\n- Chuyển hướng đầu ra của lệnh này vào một tệp mới có tên là `backup-contents.txt` trong thư mục `~/project`.\n\n### Yêu cầu\n\n- Bạn phải tạo một tệp có tên là `backup-contents.txt` trong thư mục `~/project`.\n- Tệp này phải chứa danh sách tất cả các tệp và thư mục được lưu trữ bên trong `system-backup.tar.gz`.\n- Không giải nén các tệp; chỉ liệt kê chúng.\n\n### Ví dụ\n\nSau khi tạo tệp xác thực, thư mục dự án của bạn sẽ chứa tệp `backup-contents.txt` mới:\n\n```bash\n~/project/\n├── backup-contents.txt\n├── backup-list.txt\n├── backups/\n├── config/\n├── data/\n└── logs/\n```\n\nKhi bạn chạy `cat backup-contents.txt`, bạn sẽ thấy danh sách chi tiết của tất cả các tệp trong tệp lưu trữ:\n\n```plaintext\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 data/\n-rw-rw-r-- labex/labex      46 2025-09-11 15:08 data/transactions.csv\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 config/\n-rw-rw-r-- labex/labex      72 2025-09-11 15:08 config/app.conf\ndrwxrwxr-x labex/labex       0 2025-09-11 15:08 logs/\n-rw-rw-r-- labex/labex      49 2025-09-11 15:08 logs/app.log\n```\n\n### Gợi ý\n\n- Lệnh `tar` có một tùy chọn để liệt kê (`t`) nội dung của một tệp lưu trữ.\n- Kết hợp tùy chọn `t` với `z` (dành cho gzip), `v` (để hiển thị danh sách chi tiết), và `f` (để chỉ định tệp).\n- Sử dụng toán tử chuyển hướng đầu ra `>` để lưu đầu ra của lệnh vào một tệp.",
+      "task_vi": "- Sử dụng lệnh `tar` để liệt kê nội dung của tệp lưu trữ `system-backup.tar.gz` mà không cần giải nén nó.\n- Chuyển hướng đầu ra của lệnh này vào một tệp mới có tên là `backup-contents.txt` trong thư mục `~/project`.",
+      "hint_vi": "- Lệnh `tar` có tùy chọn để liệt kê (`t`) nội dung của một tệp lưu trữ.\n- Kết hợp tùy chọn `t` với `z` (cho gzip), `v` (để hiển thị danh sách chi tiết), và `f` (để chỉ định tệp).\n- Sử dụng toán tử chuyển hướng đầu ra `>` để lưu kết quả của lệnh vào một tệp."
+    },
+    {
+      "id": "source-596621-section-4-v2",
+      "title": "Restoring Files from a Backup",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Restoring Files from a Backup\n\nDisaster strikes! A junior developer, while trying to clear some space, has accidentally deleted the main application configuration file, `app.conf`. The application is now down. It's up to you, the Backup Sentinel, to restore this critical file from your backup and save the day.\n\n### Tasks\n\n1. First, simulate the accident by deleting the `config/app.conf` file.\n2. Then, use the `tar` command to restore *only* the `config/app.conf` file from your `system-backup.tar.gz` archive. The file should be restored to its original location.\n\n### Requirements\n\n- The file `~/project/config/app.conf` must be present after you complete the task.\n- You must extract only the single `config/app.conf` file, not the entire archive.\n\n### Examples\n\nAfter restoring the `app.conf` file, your `config` directory should contain the restored file:\n\n```bash\n~/project/config/\n├── app.conf\n└── ...\n```\n\nWhen you run `ls -l ~/project/config/app.conf`, you should see the restored file:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 72 Sep 11 15:08 /home/labex/project/config/app.conf\n```\n\nYou can verify the file content is correct by checking it contains the expected configuration:\n\n```bash\n## This should show the database and API key settings\ncat ~/project/config/app.conf\n```\n\n### Hints\n\n- The `rm` command is used to delete files.\n- The `tar` command uses the `x` option to extract files.\n- To extract a specific file, you can add its path (as it appears in the archive) to the end of the `tar -x` command.\n- The full path to the file inside the archive is `config/app.conf`.\n",
+      "task": "1. First, simulate the accident by deleting the `config/app.conf` file.\n2. Then, use the `tar` command to restore *only* the `config/app.conf` file from your `system-backup.tar.gz` archive. The file should be restored to its original location.",
+      "hint": "- The `rm` command is used to delete files.\n- The `tar` command uses the `x` option to extract files.\n- To extract a specific file, you can add its path (as it appears in the archive) to the end of the `tar -x` command.\n- The full path to the file inside the archive is `config/app.conf`.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "cmp -s '/home/labex/project/config/app.conf' <(printf '%s' 'database=localhost\napi_key=practice-only\n')"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*rm\\s+config/app\\.conf\\s*$"
+              ],
+              [
+                "^\\s*tar\\s+-xzf\\s+backups/system-backup\\.tar\\.gz\\s+config/app\\.conf\\s*$"
+              ]
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
+      "title_vi": "Khôi phục tệp từ bản sao lưu",
+      "content_vi": "## Khôi phục tệp từ bản sao lưu\n\nThảm họa xảy ra! Một lập trình viên cấp dưới, trong lúc cố gắng dọn dẹp dung lượng trống, đã vô tình xóa mất tệp cấu hình ứng dụng chính, `app.conf`. Ứng dụng hiện đang bị ngừng hoạt động. Nhiệm vụ của bạn, Người bảo vệ Sao lưu (Backup Sentinel), là khôi phục tệp quan trọng này từ bản sao lưu của bạn và cứu nguy tình thế.\n\n### Nhiệm vụ\n\n1. Đầu tiên, mô phỏng tai nạn bằng cách xóa tệp `config/app.conf`.\n2. Sau đó, sử dụng lệnh `tar` để chỉ khôi phục *duy nhất* tệp `config/app.conf` từ tệp lưu trữ `system-backup.tar.gz` của bạn. Tệp phải được khôi phục về vị trí ban đầu của nó.\n\n### Yêu cầu\n\n- Tệp `~/project/config/app.conf` phải tồn tại sau khi bạn hoàn thành nhiệm vụ.\n- Bạn phải giải nén chỉ một tệp `config/app.conf` đơn lẻ, không phải toàn bộ tệp lưu trữ.\n\n### Ví dụ\n\nSau khi khôi phục tệp `app.conf`, thư mục `config` của bạn sẽ chứa tệp đã được khôi phục:\n\n```bash\n~/project/config/\n├── app.conf\n└── ...\n```\n\nKhi bạn chạy lệnh `ls -l ~/project/config/app.conf`, bạn sẽ thấy tệp đã được khôi phục:\n\n```plaintext\n-rw-rw-r-- 1 labex labex 72 Sep 11 15:08 /home/labex/project/config/app.conf\n```\n\nBạn có thể xác minh nội dung tệp là chính xác bằng cách kiểm tra xem nó có chứa cấu hình mong đợi hay không:\n\n```bash\n## Điều này sẽ hiển thị các cài đặt cơ sở dữ liệu và khóa API\ncat ~/project/config/app.conf\n```\n\n### Gợi ý\n\n- Lệnh `rm` được sử dụng để xóa các tệp.\n- Lệnh `tar` sử dụng tùy chọn `x` để giải nén các tệp.\n- Để giải nén một tệp cụ thể, bạn có thể thêm đường dẫn của nó (như cách nó xuất hiện trong tệp lưu trữ) vào cuối lệnh `tar -x`.\n- Đường dẫn đầy đủ tới tệp bên trong tệp lưu trữ là `config/app.conf`.",
+      "task_vi": "1. Đầu tiên, hãy mô phỏng sự cố bằng cách xóa tệp `config/app.conf`.\n2. Sau đó, sử dụng lệnh `tar` để khôi phục *chỉ* tệp `config/app.conf` từ kho lưu trữ `system-backup.tar.gz` của bạn. Tệp phải được khôi phục về vị trí ban đầu của nó.",
+      "hint_vi": "- Lệnh `rm` dùng để xóa tệp.\n- Lệnh `tar` dùng tùy chọn `x` để giải nén tệp.\n- Để giải nén một tệp cụ thể, bạn có thể thêm đường dẫn của nó (như hiển thị trong kho lưu trữ) vào cuối lệnh `tar -x`.\n- Đường dẫn đầy đủ đến tệp bên trong kho lưu trữ là `config/app.conf`."
+    },
+    {
+      "id": "source-596621-section-5-v2",
+      "title": "Scheduling Automated Backup Tasks",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Scheduling Automated Backup Tasks\n\nYou saved the day, but a hero's work is never done. Relying on manual backups is risky. The final step is to automate the process so that backups are created regularly without any human intervention. For this, we will use `cron`, the standard Linux task scheduler.\n\n### Tasks\n\n- Create a cron job that automatically runs a backup command.\n- The job should run **every minute** (for the purpose of this challenge).\n- The command should create a new, compressed `tar` archive inside the `~/project/backups/` directory.\n- To prevent overwriting, each new backup file must have a unique name that includes a timestamp (e.g., `backup-2023-10-27_15-30-00.tar.gz`).\n\n### Requirements\n\n- You must use `crontab -e` to edit your cron jobs.\n- The cron schedule must be `* * * * *` to run every minute.\n- The backup command within the cron job must use an **absolute path** for the output directory.\n- The backup command must back up the `data`, `config`, and `logs` directories from `/home/labex/project`. You may either list the directories directly after `-C /home/labex/project` or reuse the `/home/labex/project/backup-list.txt` manifest with `-T`.\n- The backup filename must include a timestamp.\n\n### Examples\n\nAfter setting up the cron job, you can verify it's working by checking your crontab and waiting for automatic backups to appear. When you run `crontab -l`, you should see your new backup job:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project data config logs\n```\n\nThe same backup can also reuse the manifest you created earlier:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project -T /home/labex/project/backup-list.txt\n```\n\nAfter a minute or two, your `backups` directory should start showing timestamped backup files:\n\n```bash\n~/project/backups/\n├── backup-2025-09-11_15-30-00.tar.gz\n├── backup-2025-09-11_15-31-00.tar.gz\n├── backup-2025-09-11_15-32-00.tar.gz\n└── system-backup.tar.gz\n```\n\n### Hints\n\n- Run `crontab -e` to open the cron job editor. You may be asked to select an editor; `nano` is a good choice.\n- The format for a cron job is: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` means every minute of every hour of every day.\n- You can use the `date` command to generate a timestamp. For example, `date +%Y-%m-%d_%H-%M-%S` will produce a format like `2023-10-27_15-30-00`.\n- To use the output of a command within another command, use `$(command)`.\n- **Important:** In a crontab, the percent sign (`%`) has a special meaning (it's treated as a newline). You must escape it with a backslash (`\\%`) when using it with the `date` command.\n- Your final command in the crontab might look like: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`\n",
+      "task": "- Create a cron job that automatically runs a backup command.\n- The job should run **every minute** (for the purpose of this challenge).\n- The command should create a new, compressed `tar` archive inside the `~/project/backups/` directory.\n- To prevent overwriting, each new backup file must have a unique name that includes a timestamp (e.g., `backup-2023-10-27_15-30-00.tar.gz`).",
+      "hint": "- Run `crontab -e` to open the cron job editor. You may be asked to select an editor; `nano` is a good choice.\n- The format for a cron job is: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` means every minute of every hour of every day.\n- You can use the `date` command to generate a timestamp. For example, `date +%Y-%m-%d_%H-%M-%S` will produce a format like `2023-10-27_15-30-00`.\n- To use the output of a command within another command, use `$(command)`.\n- **Important:** In a crontab, the percent sign (`%`) has a special meaning (it's treated as a newline). You must escape it with a backslash (`\\%`) when using it with the `date` command.\n- Your final command in the crontab might look like: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa xác nhận private crontab và daemon tồn tại xuyên phiên để chạy backup mỗi phút. Không dùng một lệnh tar thay cho tác vụ cron."
+      },
+      "required_capabilities": [
+        "private-cron"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "entry=$(crontab -l) && printf '%s\\n' \"$entry\" | grep -Eq '^\\* \\* \\* \\* \\* .*tar .* /home/labex/project/backups/[^ ]*\\$\\(date ' && printf '%s\\n' \"$entry\" | grep -Fq -- '-C /home/labex/project' && printf '%s\\n' \"$entry\" | grep -Eq '(data config logs|-T /home/labex/project/backup-list\\.txt)' && latest=$(find /home/labex/project/backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%T@ %p\\n' | sort -nr | head -n1 | cut -d' ' -f2-) && test -n \"$latest\" && gzip -t \"$latest\" && tar -tzf \"$latest\" | grep -Fxq data/transactions.csv && tar -tzf \"$latest\" | grep -Fxq config/app.conf && tar -tzf \"$latest\" | grep -Fxq logs/app.log"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "cron_scheduler"
+        ]
+      },
+      "title_vi": "Lập lịch tác vụ sao lưu tự động",
+      "content_vi": "## Lên lịch Tác vụ Sao lưu Tự động\n\nBạn đã cứu nguy cho tình huống này, nhưng công việc của một người anh hùng thì không bao giờ kết thúc. Việc phụ thuộc vào các bản sao lưu thủ công rất rủi ro. Bước cuối cùng là tự động hóa quy trình để các bản sao lưu được tạo ra định kỳ mà không cần sự can thiệp của con người. Đối với việc này, chúng ta sẽ sử dụng `cron`, trình lập lịch tác vụ tiêu chuẩn trên Linux.\n\n### Các Tác vụ\n\n- Tạo một cron job tự động chạy một lệnh sao lưu.\n- Tác vụ này nên chạy **mỗi phút một lần** (cho mục đích của thử thách này).\n- Lệnh phải tạo một tệp lưu trữ `tar` nén mới bên trong thư mục `~/project/backups/`.\n- Để tránh ghi đè, mỗi tệp sao lưu mới phải có một tên duy nhất bao gồm dấu thời gian (ví dụ: `backup-2023-10-27_15-30-00.tar.gz`).\n\n### Yêu cầu\n\n- Bạn phải sử dụng `crontab -e` để chỉnh sửa các cron job của mình.\n- Lịch trình cron phải là `* * * * *` để chạy mỗi phút một lần.\n- Lệnh sao lưu bên trong cron job phải sử dụng **đường dẫn tuyệt đối** cho thư mục đầu ra.\n- Lệnh sao lưu phải sao lưu các thư mục `data`, `config`, và `logs` từ `/home/labex/project`. Bạn có thể liệt kê trực tiếp các thư mục ngay sau `-C /home/labex/project` hoặc sử dụng lại tệp danh sách `/home/labex/project/backup-list.txt` với tùy chọn `-T`.\n- Tên tệp sao lưu phải bao gồm dấu thời gian.\n\n### Ví dụ\n\nSau khi thiết lập cron job, bạn có thể xác minh nó đang hoạt động bằng cách kiểm tra crontab của mình và đợi các bản sao lưu tự động xuất hiện. Khi bạn chạy `crontab -l`, bạn sẽ thấy tác vụ sao lưu mới của mình:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project data config logs\n```\n\nBản sao lưu tương tự cũng có thể sử dụng lại tệp danh sách mà bạn đã tạo trước đó:\n\n```bash\n## Example output (your exact command may vary)\n* * * * * tar -czf /home/labex/project/backups/backup-$(date +\\%Y-\\%m-\\%d_\\%H-\\%M-\\%S).tar.gz -C /home/labex/project -T /home/labex/project/backup-list.txt\n```\n\nSau một hoặc hai phút, thư mục `backups` của bạn sẽ bắt đầu hiển thị các tệp sao lưu có đính kèm dấu thời gian:\n\n```bash\n~/project/backups/\n├── backup-2025-09-11_15-30-00.tar.gz\n├── backup-2025-09-11_15-31-00.tar.gz\n├── backup-2025-09-11_15-32-00.tar.gz\n└── system-backup.tar.gz\n```\n\n### Gợi ý\n\n- Chạy `crontab -e` để mở trình chỉnh sửa cron job. Bạn có thể được yêu cầu chọn một trình soạn thảo; `nano` là một sự lựa chọn tốt.\n- Định dạng cho một cron job là: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` có nghĩa là mỗi phút của mỗi giờ trong mọi ngày.\n- Bạn có thể sử dụng lệnh `date` để tạo dấu thời gian. Ví dụ, `date +%Y-%m-%d_%H-%M-%S` sẽ tạo ra định dạng như `2023-10-27_15-30-00`.\n- Để sử dụng đầu ra của một lệnh bên trong một lệnh khác, hãy sử dụng `$(command)`.\n- **Quan trọng:** Trong crontab, dấu phần trăm (`%`) có ý nghĩa đặc biệt (nó được coi là một ký tự xuống dòng). Bạn phải thoát nó bằng dấu gạch chéo ngược (`\\%`) khi sử dụng với lệnh `date`.\n- Lệnh cuối cùng của bạn trong crontab có thể trông giống như sau: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`",
+      "task_vi": "- Tạo một cron job tự động chạy một lệnh sao lưu.\n- Job này nên chạy **mỗi phút** (cho mục đích của thử thách này).\n- Lệnh này phải tạo một tệp lưu trữ `tar` được nén mới bên trong thư mục `~/project/backups/`.\n- Để tránh ghi đè, mỗi tệp sao lưu mới phải có một tên duy nhất bao gồm dấu thời gian (ví dụ: `backup-2023-10-27_15-30-00.tar.gz`).",
+      "hint_vi": "- Chạy `crontab -e` để mở trình soạn thảo cron job. Bạn có thể được yêu cầu chọn trình soạn thảo; `nano` là một lựa chọn tốt.\n- Định dạng của một cron job là: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` nghĩa là mỗi phút của mỗi giờ mỗi ngày.\n- Bạn có thể dùng lệnh `date` để tạo dấu thời gian. Ví dụ, `date +%Y-%m-%d_%H-%M-%S` sẽ tạo ra định dạng như `2023-10-27_15-30-00`.\n- Để sử dụng đầu ra của một lệnh trong lệnh khác, hãy dùng `$(command)`.\n- **Quan trọng:** Trong crontab, ký tự phần trăm (`%`) có ý nghĩa đặc biệt (được coi là ký tự xuống dòng). Bạn phải thoát nó bằng dấu gạch chéo ngược (`\\%`) khi dùng với lệnh `date`.\n- Lệnh cuối cùng của bạn trong crontab có thể trông như sau: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`"
+    }
+  ],
+  "title_vi": "Ngày 9: Lập Lịch Tự Động Sao Lưu"
+}

@@ -1,0 +1,507 @@
+{
+  "version": 1,
+  "course_id": "linux-basic-commands-practice-online",
+  "provider": "docker",
+  "expected_tasks": 49,
+  "provenance": "Public functional requirements; independent EN/VI text and local graders. Original private VM bytes and graders are not recovered.",
+  "lessons": [
+    {
+      "lab_id": "linux-linux-cat-command-file-concatenating-210986",
+      "source_lab_id": 210986,
+      "setup_manifest": "server/data/environment-setups/linux-linux-cat-command-file-concatenating-210986.json",
+      "steps": [
+        {
+          "id": "commands-210986-section-1-v1",
+          "commands": [
+            "cd /home/labex/project\npwd\nls"
+          ]
+        },
+        {
+          "id": "commands-210986-section-2-v1",
+          "commands": [
+            "cat daily_report.txt"
+          ]
+        },
+        {
+          "id": "commands-210986-section-3-v1",
+          "commands": [
+            "cat sales.txt marketing.txt > combined_report.txt\ncat combined_report.txt"
+          ]
+        },
+        {
+          "id": "commands-210986-section-4-v1",
+          "commands": [
+            "cat -n daily_report.txt"
+          ]
+        },
+        {
+          "id": "commands-210986-section-5-v1",
+          "commands": [
+            "cat -E daily_report.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-linux-more-command-file-scrolling-214299",
+      "source_lab_id": 214299,
+      "setup_manifest": "server/data/environment-setups/linux-linux-more-command-file-scrolling-214299.json",
+      "steps": [
+        {
+          "id": "commands-214299-section-1-v1",
+          "commands": [
+            "cd /home/labex/project\nls"
+          ]
+        },
+        {
+          "id": "commands-214299-section-2-v1",
+          "commands": [
+            {
+              "command": "more weather_data.txt",
+              "input": [
+                {
+                  "wait_for": "--More--",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "commands-214299-section-3-v1",
+          "commands": [
+            {
+              "command": "more +100 weather_data.txt",
+              "input": [
+                {
+                  "wait_for": "--More--",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "commands-214299-section-4-v1",
+          "commands": [
+            {
+              "command": "more -10 weather_data.txt",
+              "input": [
+                {
+                  "wait_for": "--More--",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "commands-214299-section-5-v1",
+          "commands": [
+            {
+              "command": "more +/\"2023-07-15\" weather_data.txt",
+              "input": [
+                {
+                  "wait_for": "--More--",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-linux-less-command-file-paging-214301",
+      "source_lab_id": 214301,
+      "setup_manifest": "server/data/environment-setups/linux-linux-less-command-file-paging-214301.json",
+      "steps": [
+        {
+          "id": "commands-214301-section-1-v1",
+          "commands": [
+            {
+              "command": "less server_log.txt",
+              "input": [
+                {
+                  "wait_for": "2025-01-15 08:",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "commands-214301-section-2-v1",
+          "commands": [
+            {
+              "command": "less server_log.txt",
+              "input": [
+                {
+                  "wait_for": "2025-01-15 08:",
+                  "text": " Gb gq",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "commands-214301-section-3-v1",
+          "commands": [
+            {
+              "command": "less server_log.txt",
+              "input": [
+                {
+                  "wait_for": "2025-01-15 08:",
+                  "text": "/ERROR\nnNq",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "commands-214301-section-4-v1",
+          "commands": [
+            {
+              "command": "less -N server_log.txt",
+              "input": [
+                {
+                  "wait_for": "2025-01-15 08:",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "commands-214301-section-5-v1",
+          "commands": [
+            {
+              "command": "less +/ERROR:.Database server_log.txt",
+              "input": [
+                {
+                  "wait_for": "2025-01-15 08:",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-viewing-log-and-configuration-files-in-linux-387914",
+      "source_lab_id": 387914,
+      "setup_manifest": "server/data/environment-setups/linux-viewing-log-and-configuration-files-in-linux-387914.json",
+      "steps": [
+        {
+          "id": "commands-387914-section-1-v1",
+          "commands": [
+            "cat system_overview.txt",
+            {
+              "command": "more large_log.txt",
+              "input": [
+                {
+                  "wait_for": "--More--",
+                  "text": "/ERROR\nq",
+                  "raw": true
+                }
+              ]
+            },
+            "printf '%s\\n' 'Maintenance window: Sunday 02:00 UTC' > answer1.txt",
+            "printf '%s\\n' '2025-01-15 ERROR Database unavailable' > answer2.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-linux-head-command-file-beginning-display-214302",
+      "source_lab_id": 214302,
+      "setup_manifest": "server/data/environment-setups/linux-linux-head-command-file-beginning-display-214302.json",
+      "steps": [
+        {
+          "id": "commands-214302-section-1-v1",
+          "commands": [
+            "head access.log"
+          ]
+        },
+        {
+          "id": "commands-214302-section-2-v1",
+          "commands": [
+            "head -n 5 access.log"
+          ]
+        },
+        {
+          "id": "commands-214302-section-3-v1",
+          "commands": [
+            "head access.log error.log"
+          ]
+        },
+        {
+          "id": "commands-214302-section-4-v1",
+          "commands": [
+            "cut -d '\"' -f2 access.log | head -n 3"
+          ]
+        },
+        {
+          "id": "commands-214302-section-5-v1",
+          "commands": [
+            "grep \"/admin\" access.log | head -n 3"
+          ]
+        },
+        {
+          "id": "commands-214302-section-6-v1",
+          "commands": [
+            "ls -lh access.log\nhead -n 15 access.log"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-linux-tail-command-file-end-display-214303",
+      "source_lab_id": 214303,
+      "setup_manifest": "server/data/environment-setups/linux-linux-tail-command-file-end-display-214303.json",
+      "steps": [
+        {
+          "id": "commands-214303-section-1-v1",
+          "commands": [
+            "tail /home/labex/project/system.log"
+          ]
+        },
+        {
+          "id": "commands-214303-section-2-v1",
+          "commands": [
+            "tail -n 5 /home/labex/project/system.log"
+          ]
+        },
+        {
+          "id": "commands-214303-section-3-v1",
+          "commands": [
+            "tail -n +50 /home/labex/project/system.log"
+          ]
+        },
+        {
+          "id": "commands-214303-section-4-v1",
+          "commands": [
+            {
+              "command": "(sleep 1; printf '%s\\n' '[INFO] New log entry for testing' >> /home/labex/project/system.log) & tail -f /home/labex/project/system.log",
+              "allowed_status": [
+                0,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "\r\n[INFO] New log entry for testing",
+                  "text": "\u0003",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "commands-214303-section-5-v1",
+          "commands": [
+            {
+              "command": "(sleep 1; printf '%s\\n' '[WARNING] Unusual network activity detected' >> /home/labex/project/system.log) & tail -n 3 -f /home/labex/project/system.log",
+              "allowed_status": [
+                0,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "\r\n[WARNING] Unusual network activity detected",
+                  "text": "\u0003",
+                  "raw": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-linux-nl-command-line-numbering-210988",
+      "source_lab_id": 210988,
+      "setup_manifest": "server/data/environment-setups/linux-linux-nl-command-line-numbering-210988.json",
+      "steps": [
+        {
+          "id": "commands-210988-section-1-v1",
+          "commands": [
+            "nl config.txt | tee nl-basic.txt"
+          ]
+        },
+        {
+          "id": "commands-210988-section-2-v1",
+          "commands": [
+            "nl -b a config.txt | tee nl-all-lines.txt"
+          ]
+        },
+        {
+          "id": "commands-210988-section-3-v1",
+          "commands": [
+            "nl -n rz config.txt | tee nl-zero-padded.txt"
+          ]
+        },
+        {
+          "id": "commands-210988-section-4-v1",
+          "commands": [
+            "nl -b p'^[^#]' config.txt | tee nl-settings-only.txt"
+          ]
+        },
+        {
+          "id": "commands-210988-section-5-v1",
+          "commands": [
+            "nl -b a -n rz -s ': ' -w 3 config.txt | tee nl-combined.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-rapid-threat-detection-387930",
+      "source_lab_id": 387930,
+      "setup_manifest": "server/data/environment-setups/linux-rapid-threat-detection-387930.json",
+      "steps": [
+        {
+          "id": "commands-387930-section-1-v1",
+          "commands": [
+            "tail -n 20 auth_log.txt > recent_logins.txt\nhead -n 15 network_traffic.txt > recent_traffic.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-linux-which-command-command-locating-215210",
+      "source_lab_id": 215210,
+      "setup_manifest": "server/data/environment-setups/linux-linux-which-command-command-locating-215210.json",
+      "steps": [
+        {
+          "id": "commands-215210-section-1-v1",
+          "commands": [
+            "which gcc\nwhich python"
+          ]
+        },
+        {
+          "id": "commands-215210-section-2-v1",
+          "commands": [
+            "which techbuild\ncat > ~/check_techbuild.sh <<'EOF'\n#!/bin/bash\nif which techbuild >/dev/null 2>&1; then\n  echo 'techbuild is installed'\nelse\n  echo 'techbuild is not installed'\nfi\nEOF\nchmod +x ~/check_techbuild.sh\n~/check_techbuild.sh"
+          ]
+        },
+        {
+          "id": "commands-215210-section-3-v1",
+          "commands": [
+            "which -a python"
+          ]
+        },
+        {
+          "id": "commands-215210-section-4-v1",
+          "commands": [
+            "export PATH=$HOME/custom_bin:$PATH\nwhich prioritydemo\nwhich -a prioritydemo"
+          ]
+        },
+        {
+          "id": "commands-215210-section-5-v1",
+          "commands": [
+            "cat > ~/hello <<'EOF'\n#!/bin/bash\necho 'Hello from TechCorp!'\nEOF\nchmod +x ~/hello\nexport PATH=\"$PATH:$HOME\"\nhello\nwhich hello"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-linux-whereis-command-file-and-command-finding-215211",
+      "source_lab_id": 215211,
+      "setup_manifest": "server/data/environment-setups/linux-linux-whereis-command-file-and-command-finding-215211.json",
+      "steps": [
+        {
+          "id": "commands-215211-section-1-v1",
+          "commands": [
+            "whereis ls"
+          ]
+        },
+        {
+          "id": "commands-215211-section-2-v1",
+          "commands": [
+            "whereis -b grep\nwhereis -b nonexistent"
+          ]
+        },
+        {
+          "id": "commands-215211-section-3-v1",
+          "commands": [
+            "whereis -m ssh\nls /usr/share/man/man1/ssh.1.gz"
+          ]
+        },
+        {
+          "id": "commands-215211-section-4-v1",
+          "commands": [
+            "whereis -bm python3"
+          ]
+        },
+        {
+          "id": "commands-215211-section-5-v1",
+          "commands": [
+            "whereis -s bash\nwhereis bash"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-linux-find-command-file-searching-219191",
+      "source_lab_id": 219191,
+      "setup_manifest": "server/data/environment-setups/linux-linux-find-command-file-searching-219191.json",
+      "steps": [
+        {
+          "id": "commands-219191-section-1-v1",
+          "commands": [
+            "find . -name \"clue.txt\""
+          ]
+        },
+        {
+          "id": "commands-219191-section-2-v1",
+          "commands": [
+            "find . -name \"*.txt\" -o -name \"*.log\""
+          ]
+        },
+        {
+          "id": "commands-219191-section-3-v1",
+          "commands": [
+            "find . -type f -size +1M"
+          ]
+        },
+        {
+          "id": "commands-219191-section-4-v1",
+          "commands": [
+            "find . -type f -mtime -1"
+          ]
+        },
+        {
+          "id": "commands-219191-section-5-v1",
+          "commands": [
+            "find . -name \"*.txt\" -exec cat {} \\;"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "linux-discover-critical-system-resources-388032",
+      "source_lab_id": 388032,
+      "setup_manifest": "server/data/environment-setups/linux-discover-critical-system-resources-388032.json",
+      "steps": [
+        {
+          "id": "commands-388032-section-1-v1",
+          "commands": [
+            "which python3\nwhereis gcc\nfind /etc -type f -name \"*.conf\" > config_files.txt"
+          ]
+        }
+      ]
+    }
+  ],
+  "source_plan": "tests/scenarios/linux-commands-course.json"
+}

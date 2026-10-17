@@ -1,0 +1,128 @@
+{
+  "id": "linux-backup-system-log-17989",
+  "course_id": "linux-for-noobs",
+  "order": 13,
+  "title": "Back Up a Log Directory",
+  "title_vi": "Sao Lưu Bản Ghi Log Hệ Thống",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "overview": "Three application logs need to travel together as one compressed backup. The source directory must remain available after the archive is created.  The preceding guided lab practiced creating and listi",
+  "source_url": "https://labex.io/tutorials/linux-backup-system-log-17989",
+  "source_lab_id": 17989,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Three application logs need to travel together as one compressed backup. The source directory must remain available after the archive is created.\n\nThe preceding guided lab practiced creating and listing a `.tar.gz` archive. This challenge applies that exact workflow to one backup file.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Ba tệp nhật ký ứng dụng (application log) cần được gom lại với nhau thành một bản sao lưu nén duy nhất. Thư mục nguồn phải vẫn có sẵn sau khi tệp lưu trữ được tạo.\n\nBài lab có hướng dẫn trước đó đã luyện tập cách tạo và liệt kê một tệp lưu trữ `.tar.gz`. Thử thách này áp dụng chính xác quy trình làm việc đó cho một tệp sao lưu duy nhất."
+    },
+    {
+      "id": "source-17989-section-1-v3",
+      "title": "Create the Log Backup",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe directory `/home/labex/project/log-backup/source/logs` contains three log files and no backup exists yet.\n\n### Scope\n\n- Work in `/home/labex/project/log-backup`.\n- Create `logs-backup.tar.gz`.\n- Store the directory under the top-level archive path `logs/`.\n- Keep the source directory unchanged.\n\n### Your Goal\n\nCreate one readable compressed tar archive containing the complete `logs` directory.\n\n### Acceptance Criteria\n\n- `logs-backup.tar.gz` is a readable gzip-compressed tar archive.\n- It contains `logs/api.log`, `logs/worker.log`, and `logs/scheduler.log`.\n- The three source files still exist with their original content.\n\n### Hints\n\nHow did the guided lab create a compressed tar archive?\n\nReview the `tar` options used for the `.tar.gz` example and the `-C` option that chooses where archived paths begin.",
+      "title_vi": "Tạo bản sao lưu nhật ký",
+      "task": "Thực hiện hướng dẫn: Create the Log Backup",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "gzip -t /home/labex/project/log-backup/logs-backup.tar.gz && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/api.log) <(printf %s 'INFO api ready\n') && cmp -s /home/labex/project/log-backup/source/logs/api.log <(printf %s 'INFO api ready\n') && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/worker.log) <(printf %s 'INFO worker ready\n') && cmp -s /home/labex/project/log-backup/source/logs/worker.log <(printf %s 'INFO worker ready\n') && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/scheduler.log) <(printf %s 'INFO scheduler ready\n') && cmp -s /home/labex/project/log-backup/source/logs/scheduler.log <(printf %s 'INFO scheduler ready\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "### Tình trạng hiện tại\n\nThư mục `/home/labex/project/log-backup/source/logs` chứa ba tệp nhật ký và chưa có bản sao lưu nào tồn tại.\n\n### Phạm vi\n\n- Làm việc trong `/home/labex/project/log-backup`.\n- Tạo `logs-backup.tar.gz`.\n- Lưu trữ thư mục dưới đường dẫn lưu trữ cấp cao nhất `logs/`.\n- Giữ nguyên thư mục nguồn không đổi.\n\n### Mục tiêu của bạn\n\nTạo một tệp lưu trữ tar nén có thể đọc được chứa toàn bộ thư mục `logs`.\n\n### Tiêu chí chấp nhận\n\n- `logs-backup.tar.gz` là một tệp lưu trữ tar nén bằng gzip có thể đọc được.\n- Nó chứa `logs/api.log`, `logs/worker.log` và `logs/scheduler.log`.\n- Ba tệp nguồn vẫn tồn tại với nội dung ban đầu của chúng.\n\n### Gợi ý\n\nPhòng thí nghiệm hướng dẫn đã tạo một tệp lưu trữ tar nén như thế nào?\n\nXem lại các tùy chọn `tar` được sử dụng cho ví dụ `.tar.gz` và tùy chọn `-C` dùng để chọn nơi bắt đầu các đường dẫn được lưu trữ.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo bản sao lưu nhật ký",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You created and inspected one compressed archive while preserving its source directory.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã tạo và kiểm tra một tệp nén trong khi vẫn giữ lại thư mục nguồn của nó."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-17989-section-1-v3",
+      "title": "Create the Log Backup",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe directory `/home/labex/project/log-backup/source/logs` contains three log files and no backup exists yet.\n\n### Scope\n\n- Work in `/home/labex/project/log-backup`.\n- Create `logs-backup.tar.gz`.\n- Store the directory under the top-level archive path `logs/`.\n- Keep the source directory unchanged.\n\n### Your Goal\n\nCreate one readable compressed tar archive containing the complete `logs` directory.\n\n### Acceptance Criteria\n\n- `logs-backup.tar.gz` is a readable gzip-compressed tar archive.\n- It contains `logs/api.log`, `logs/worker.log`, and `logs/scheduler.log`.\n- The three source files still exist with their original content.\n\n### Hints\n\nHow did the guided lab create a compressed tar archive?\n\nReview the `tar` options used for the `.tar.gz` example and the `-C` option that chooses where archived paths begin.",
+      "title_vi": "Tạo bản sao lưu nhật ký",
+      "task": "Thực hiện hướng dẫn: Create the Log Backup",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "gzip -t /home/labex/project/log-backup/logs-backup.tar.gz && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/api.log) <(printf %s 'INFO api ready\n') && cmp -s /home/labex/project/log-backup/source/logs/api.log <(printf %s 'INFO api ready\n') && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/worker.log) <(printf %s 'INFO worker ready\n') && cmp -s /home/labex/project/log-backup/source/logs/worker.log <(printf %s 'INFO worker ready\n') && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/scheduler.log) <(printf %s 'INFO scheduler ready\n') && cmp -s /home/labex/project/log-backup/source/logs/scheduler.log <(printf %s 'INFO scheduler ready\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "gzip -t /home/labex/project/log-backup/logs-backup.tar.gz && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/api.log) <(printf %s 'INFO api ready\n') && cmp -s /home/labex/project/log-backup/source/logs/api.log <(printf %s 'INFO api ready\n') && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/worker.log) <(printf %s 'INFO worker ready\n') && cmp -s /home/labex/project/log-backup/source/logs/worker.log <(printf %s 'INFO worker ready\n') && cmp -s <(tar -xOzf /home/labex/project/log-backup/logs-backup.tar.gz logs/scheduler.log) <(printf %s 'INFO scheduler ready\n') && cmp -s /home/labex/project/log-backup/source/logs/scheduler.log <(printf %s 'INFO scheduler ready\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "archives"
+        ]
+      },
+      "content_vi": "### Tình trạng hiện tại\n\nThư mục `/home/labex/project/log-backup/source/logs` chứa ba tệp nhật ký và chưa có bản sao lưu nào tồn tại.\n\n### Phạm vi\n\n- Làm việc trong `/home/labex/project/log-backup`.\n- Tạo `logs-backup.tar.gz`.\n- Lưu trữ thư mục dưới đường dẫn lưu trữ cấp cao nhất `logs/`.\n- Giữ nguyên thư mục nguồn không đổi.\n\n### Mục tiêu của bạn\n\nTạo một tệp lưu trữ tar nén có thể đọc được chứa toàn bộ thư mục `logs`.\n\n### Tiêu chí chấp nhận\n\n- `logs-backup.tar.gz` là một tệp lưu trữ tar nén bằng gzip có thể đọc được.\n- Nó chứa `logs/api.log`, `logs/worker.log` và `logs/scheduler.log`.\n- Ba tệp nguồn vẫn tồn tại với nội dung ban đầu của chúng.\n\n### Gợi ý\n\nPhòng thí nghiệm hướng dẫn đã tạo một tệp lưu trữ tar nén như thế nào?\n\nXem lại các tùy chọn `tar` được sử dụng cho ví dụ `.tar.gz` và tùy chọn `-C` dùng để chọn nơi bắt đầu các đường dẫn được lưu trữ.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo bản sao lưu nhật ký",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-backup-system-log-17989.json"
+}

@@ -1,0 +1,273 @@
+{
+  "version": 1,
+  "course_id": "shell-for-beginners",
+  "lessons": [
+    {
+      "lab_id": "linux-hello-bash-388809",
+      "source_lab_id": 388809,
+      "setup_manifest": "server/data/environment-setups/linux-hello-bash-388809.json",
+      "steps": [
+        {
+          "id": "source-388809-section-1-v4",
+          "commands": [],
+          "unsupported": true
+        },
+        {
+          "id": "source-388809-section-2-v4",
+          "commands": [
+            "touch /home/labex/project/hello.sh"
+          ]
+        },
+        {
+          "id": "source-388809-section-3-v4",
+          "commands": [
+            "cat >/home/labex/project/hello.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\necho 'Hello, World!'\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388809-section-4-v4",
+          "commands": [
+            "chmod +x /home/labex/project/hello.sh"
+          ]
+        },
+        {
+          "id": "source-388809-section-5-v4",
+          "commands": [
+            "./hello.sh"
+          ]
+        },
+        {
+          "id": "source-388809-section-6-v4",
+          "commands": [
+            "cat hello.sh"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "shell-working-with-shell-variables-388810",
+      "source_lab_id": 388810,
+      "setup_manifest": "server/data/environment-setups/shell-working-with-shell-variables-388810.json",
+      "steps": [
+        {
+          "id": "source-388810-section-1-v4",
+          "commands": [
+            "cat >/home/labex/project/variables.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\nprintf 'Price per apple: %s\nMy first letters: %s\nGreeting: %s\n' \"$PRICE_PER_APPLE\" \"$MyFirstLetters\" \"$greeting\"\nLOCAL_SCRIPT",
+            "chmod +x variables.sh",
+            "./variables.sh"
+          ]
+        },
+        {
+          "id": "source-388810-section-2-v4",
+          "commands": [
+            "cat >/home/labex/project/variables.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\necho \"The price of an Apple today is: \\$HK $PRICE_PER_APPLE\"\necho \"The first 10 letters in the alphabet are: ${MyFirstLetters}DEFGHIJ\"\necho $greeting\necho \"$greeting\"\nLOCAL_SCRIPT",
+            "./variables.sh"
+          ]
+        },
+        {
+          "id": "source-388810-section-3-v4",
+          "commands": [
+            "cat >>/home/labex/project/variables.sh <<'LOCAL_SCRIPT'\nCURRENT_DATE=$(date +%Y-%m-%d)\nFILES_IN_DIR=$(ls)\nUPTIME=$(uptime -p)\necho \"Today's date is: $CURRENT_DATE\"\nprintf 'Files in the current directory:\n%s\nSystem uptime: %s\n' \"$FILES_IN_DIR\" \"$UPTIME\"\nLOCAL_SCRIPT",
+            "./variables.sh"
+          ]
+        },
+        {
+          "id": "source-388810-section-4-v4",
+          "commands": [
+            "cat >/home/labex/project/arithmetic.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nX=10\nY=5\nSUM=$((X+Y)); DIFF=$((X-Y)); PRODUCT=$((X*Y)); QUOTIENT=$((X/Y)); REMAINDER=$((X%Y))\necho \"Sum of $X and $Y is: $SUM\"\necho \"Difference between $X and $Y is: $DIFF\"\necho \"Product of $X and $Y is: $PRODUCT\"\necho \"Quotient of $X divided by $Y is: $QUOTIENT\"\necho \"Remainder of $X divided by $Y is: $REMAINDER\"\nX=$((X+1)); echo \"After incrementing, X is now: $X\"\nY=$((Y-1)); echo \"After decrementing, Y is now: $Y\"\nLOCAL_SCRIPT",
+            "chmod +x arithmetic.sh",
+            "./arithmetic.sh"
+          ]
+        },
+        {
+          "id": "source-388810-section-5-v4",
+          "commands": [
+            "cat >/home/labex/project/environment.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\necho \"Home directory: $HOME\"\necho \"Current user: $LOGNAME\"\necho \"Shell being used: $SHELL\"\necho \"Current PATH: $PATH\"\nexport MY_VARIABLE=\"Hello from my variable\"\necho \"My new variable: $MY_VARIABLE\"\nbash -c 'echo \"MY_VARIABLE in child process: $MY_VARIABLE\"'\nunset MY_VARIABLE\necho \"MY_VARIABLE after unsetting: $MY_VARIABLE\"\nLOCAL_SCRIPT",
+            "chmod +x environment.sh",
+            "./environment.sh"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "shell-finding-the-pirate-s-treasure-388807",
+      "source_lab_id": 388807,
+      "setup_manifest": "server/data/environment-setups/shell-finding-the-pirate-s-treasure-388807.json",
+      "steps": [
+        {
+          "id": "source-388807-section-1-v4",
+          "commands": [
+            "cat >/home/labex/project/treasure_map.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nLATITUDE=15\nLONGITUDE=25\nPACES_NORTH=$((LATITUDE*2))\nPACES_EAST=$((LONGITUDE/5))\necho \"The treasure is buried $PACES_NORTH paces north and $PACES_EAST paces east from the old oak tree.\"\nLOCAL_SCRIPT",
+            "chmod +x treasure_map.sh",
+            "./treasure_map.sh"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "shell-passing-arguments-to-the-script-388811",
+      "source_lab_id": 388811,
+      "setup_manifest": "server/data/environment-setups/shell-passing-arguments-to-the-script-388811.json",
+      "steps": [
+        {
+          "id": "source-388811-section-1-v4",
+          "commands": [
+            "cat >/home/labex/project/arguments.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388811-section-2-v4",
+          "commands": [
+            "cat >/home/labex/project/arguments.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\necho \"Script name: $0\"\necho \"First argument: $1\"\necho \"Second argument: $2\"\necho \"Third argument: $3\"\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388811-section-3-v4",
+          "commands": [
+            "chmod +x arguments.sh"
+          ]
+        },
+        {
+          "id": "source-388811-section-4-v4",
+          "commands": [
+            "./arguments.sh hello world example"
+          ]
+        },
+        {
+          "id": "source-388811-section-5-v4",
+          "commands": [
+            "cat >/home/labex/project/arguments.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nif [ \"$#\" -eq 0 ]; then\n echo \"No arguments provided.\"\nelif [ \"$#\" -eq 1 ]; then\n echo \"One argument provided: $1\"\nelif [ \"$#\" -eq 2 ]; then\n echo \"Two arguments provided: $1 and $2\"\nelse\n echo \"More than two arguments provided:\"\n echo \"First argument: $1\"\n echo \"Second argument: $2\"\n echo \"Third argument: $3\"\n echo \"Total number of arguments: $#\"\nfi\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388811-section-6-v4",
+          "commands": [
+            "./arguments.sh",
+            "./arguments.sh one",
+            "./arguments.sh one two",
+            "./arguments.sh one two three four"
+          ]
+        },
+        {
+          "id": "source-388811-section-7-v4",
+          "commands": [
+            "cat >/home/labex/project/arguments.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\necho \"Total number of arguments: $#\"\necho \"All arguments:\"\ncount=1\nfor arg in \"$@\"; do\n echo \"Argument $count: $arg\"\n count=$((count+1))\ndone\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388811-section-8-v4",
+          "commands": [
+            "./arguments.sh apple banana cherry date"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "shell-shell-arrays-388812",
+      "source_lab_id": 388812,
+      "setup_manifest": "server/data/environment-setups/shell-shell-arrays-388812.json",
+      "steps": [
+        {
+          "id": "source-388812-section-1-v4",
+          "commands": [
+            "touch arrays.sh"
+          ]
+        },
+        {
+          "id": "source-388812-section-2-v4",
+          "commands": [
+            "cat >/home/labex/project/arrays.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nNUMBERS=()\nSTRINGS=()\nNAMES=()\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388812-section-3-v4",
+          "commands": [
+            "cat >>/home/labex/project/arrays.sh <<'LOCAL_SCRIPT'\nNUMBERS+=(1 2 3)\nSTRINGS+=(\"hello\" \"world\")\nNAMES+=(\"John\" \"Eric\" \"Jessica\")\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388812-section-4-v4",
+          "commands": [
+            "cat >>/home/labex/project/arrays.sh <<'LOCAL_SCRIPT'\nNumberOfNames=${#NAMES[@]}\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388812-section-5-v4",
+          "commands": [
+            "cat >>/home/labex/project/arrays.sh <<'LOCAL_SCRIPT'\nsecond_name=${NAMES[1]}\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388812-section-6-v4",
+          "commands": [
+            "cat >>/home/labex/project/arrays.sh <<'LOCAL_SCRIPT'\necho \"NUMBERS array: ${NUMBERS[@]}\"\necho \"STRINGS array: ${STRINGS[@]}\"\necho \"The number of names listed in the NAMES array: $NumberOfNames\"\necho \"The second name on the NAMES list is: $second_name\"\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388812-section-7-v4",
+          "commands": [
+            "chmod +x arrays.sh",
+            "./arrays.sh"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "shell-interstellar-cargo-manifest-388869",
+      "source_lab_id": 388869,
+      "setup_manifest": "server/data/environment-setups/shell-interstellar-cargo-manifest-388869.json",
+      "steps": [
+        {
+          "id": "source-388869-section-1-v4",
+          "commands": [
+            "cat >/home/labex/project/cargo_manifest.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nforward_bay=(\"Space Suits\" \"Oxygen Tanks\" \"Repair Kits\")\nmidship_bay=(\"Food Supplies\" \"Water Containers\" \"Medical Equipment\")\naft_bay=(\"Spare Parts\" \"Fuel Cells\" \"Scientific Instruments\")\ncase \"${1:-}\" in\n forward) label='Forward'; items=(\"${forward_bay[@]}\");;\n midship) label='Midship'; items=(\"${midship_bay[@]}\");;\n aft) label='Aft'; items=(\"${aft_bay[@]}\");;\n '') echo 'Please specify a cargo bay: forward, midship, or aft'; exit;;\n *) echo 'Invalid cargo bay. Choose forward, midship, or aft.'; exit;;\nesac\necho \"$label Bay Inventory:\"\ni=1\nfor item in \"${items[@]}\"; do printf '%s. %s\n' \"$i\" \"$item\"; i=$((i+1)); done\nLOCAL_SCRIPT",
+            "chmod +x cargo_manifest.sh",
+            "./cargo_manifest.sh forward",
+            "./cargo_manifest.sh midship",
+            "./cargo_manifest.sh aft"
+          ]
+        }
+      ]
+    },
+    {
+      "lab_id": "shell-arithmetic-operations-in-shell-388813",
+      "source_lab_id": 388813,
+      "setup_manifest": "server/data/environment-setups/shell-arithmetic-operations-in-shell-388813.json",
+      "steps": [
+        {
+          "id": "source-388813-section-1-v4",
+          "commands": [
+            "cat >/home/labex/project/fruit_basket.sh <<'LOCAL_SCRIPT'\n#!/bin/bash\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388813-section-2-v4",
+          "commands": [
+            "cat >>/home/labex/project/fruit_basket.sh <<'LOCAL_SCRIPT'\nCOST_PINEAPPLE=50\nCOST_BANANA=4\nCOST_WATERMELON=23\nCOST_BASKET=1\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388813-section-3-v4",
+          "commands": [
+            "cat >>/home/labex/project/fruit_basket.sh <<'LOCAL_SCRIPT'\nTOTAL=$((COST_PINEAPPLE + COST_BANANA*2 + COST_WATERMELON*3 + COST_BASKET))\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388813-section-4-v4",
+          "commands": [
+            "cat >>/home/labex/project/fruit_basket.sh <<'LOCAL_SCRIPT'\necho \"Total Cost is $TOTAL cents\"\nLOCAL_SCRIPT"
+          ]
+        },
+        {
+          "id": "source-388813-section-5-v4",
+          "commands": [
+            "chmod +x fruit_basket.sh",
+            "./fruit_basket.sh"
+          ]
+        }
+      ]
+    }
+  ],
+  "expected_tasks": 33,
+  "source_plan": "tests/scenarios/shell-reviewed-course.json"
+}

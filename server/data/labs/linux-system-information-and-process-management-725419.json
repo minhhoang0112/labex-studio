@@ -1,0 +1,555 @@
+{
+  "id": "linux-system-information-and-process-management-725419",
+  "course_id": "linux-for-noobs",
+  "order": 24,
+  "title": "System Information and Process Management",
+  "title_vi": "Thông tin hệ thống và quản lý tiến trình",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "A running Linux system is more than its files. The kernel manages hardware and processes, each command runs as a process with an identifier, and the shell tracks foreground and background jobs. Admini",
+  "source_url": "https://labex.io/tutorials/linux-system-information-and-process-management-725419",
+  "source_lab_id": 725419,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A running Linux system is more than its files. The kernel manages hardware and processes, each command runs as a process with an identifier, and the shell tracks foreground and background jobs. Administrators first observe this state, then act on the smallest relevant process.\n\nIn this lab, you will identify the operating system and kernel, interpret uptime and load averages, inspect process relationships, find processes by name, send termination signals, practice interactive job control, interpret exit status, run a detached command with `nohup`, and read recent kernel messages.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một hệ thống Linux đang chạy không chỉ có các tệp. Kernel quản lý phần cứng và tiến trình, mỗi lệnh chạy dưới dạng một tiến trình có mã định danh và shell theo dõi các tác vụ tiền cảnh và nền. Quản trị viên trước hết quan sát trạng thái này, rồi tác động lên tiến trình có liên quan ở phạm vi nhỏ nhất.\n\nTrong bài này, bạn sẽ nhận diện hệ điều hành và kernel, diễn giải thời gian hoạt động và tải trung bình, kiểm tra quan hệ giữa các tiến trình, tìm tiến trình theo tên, gửi tín hiệu kết thúc, thực hành điều khiển tác vụ tương tác, diễn giải trạng thái thoát, chạy lệnh tách terminal bằng `nohup` và đọc thông báo kernel gần đây."
+    },
+    {
+      "id": "source-725419-section-1-v3",
+      "title": "Identify the System and Interpret Load",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify the kernel and distribution, check how long the system has been running, and learn what load averages represent.\n\nCreate and enter a workspace:\n\n```bash\nmkdir -p /home/labex/project/process-lab\n```\n\n```bash\ncd /home/labex/project/process-lab\n```\n\nThe `uname` command reports kernel information. The options `-s`, `-r`, and `-m` select the kernel name, kernel release, and machine architecture:\n\n```bash\nuname -srm\n```\n\n`uname -a` displays all available fields in one line:\n\n```bash\nuname -a\n```\n\nThe kernel is not the same thing as the Linux distribution. Read the distribution metadata:\n\n```bash\ncat /etc/os-release\n```\n\nLook for fields such as `NAME`, `VERSION`, and `ID`. Next, check uptime and load:\n\n```bash\nuptime\n```\n\nThe output includes the current time, how long the system has been running, the number of logged-in users, and three load averages. Those averages describe runnable or uninterruptible work over approximately 1, 5, and 15 minutes. They are not percentages; their meaning depends partly on the number of CPU cores.\n\nView the kernel's compact load record:\n\n```bash\ncat /proc/loadavg\n```\n\nThe first three values match the load-average idea. Later fields show runnable tasks and the most recently assigned process ID.\n\nSave a small system summary for later reference:\n\n```bash\nuname -srm > system-summary.txt\n```\n\n```bash\nuptime >> system-summary.txt\n```\n\n```bash\ncat system-summary.txt\n```\n\nThe file should contain one kernel line and one uptime line.",
+      "title_vi": "Nhận diện hệ thống và diễn giải tải",
+      "task": "Thực hiện hướng dẫn: Identify the System and Interpret Load",
+      "hint": "Chạy lệnh: mkdir -p /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/process-lab/system-summary.txt && test \"$(head -n1 /home/labex/project/process-lab/system-summary.txt)\" = \"$(uname -srm)\" && sed -n 2p /home/labex/project/process-lab/system-summary.txt | grep -Eq \"up .*load average\""
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ nhận diện kernel và bản phân phối, kiểm tra hệ thống đã chạy bao lâu và tìm hiểu ý nghĩa của tải trung bình.\n\nTạo và đi vào thư mục làm việc:\n\n```bash\nmkdir -p /home/labex/project/process-lab\n```\n\n```bash\ncd /home/labex/project/process-lab\n```\n\nLệnh `uname` báo thông tin kernel. Các tùy chọn `-s`, `-r` và `-m` lần lượt chọn tên kernel, phiên bản kernel và kiến trúc máy:\n\n```bash\nuname -srm\n```\n\n`uname -a` hiển thị tất cả trường có sẵn trên một dòng:\n\n```bash\nuname -a\n```\n\nKernel không phải là bản phân phối Linux. Đọc siêu dữ liệu của bản phân phối:\n\n```bash\ncat /etc/os-release\n```\n\nTìm những trường như `NAME`, `VERSION` và `ID`. Tiếp theo, kiểm tra thời gian hoạt động và tải:\n\n```bash\nuptime\n```\n\nĐầu ra gồm thời gian hiện tại, thời gian hệ thống đã chạy, số người dùng đăng nhập và ba giá trị tải trung bình. Chúng mô tả công việc có thể chạy hoặc đang chờ không thể ngắt trong khoảng 1, 5 và 15 phút. Chúng không phải phần trăm; ý nghĩa còn phụ thuộc một phần vào số lõi CPU.\n\nXem bản ghi tải ngắn gọn của kernel:\n\n```bash\ncat /proc/loadavg\n```\n\nBa giá trị đầu tương ứng với khái niệm tải trung bình. Các trường sau cho biết tác vụ có thể chạy và mã tiến trình được cấp gần đây nhất.\n\nLưu bản tóm tắt hệ thống nhỏ để tham khảo về sau:\n\n```bash\nuname -srm > system-summary.txt\n```\n\n```bash\nuptime >> system-summary.txt\n```\n\n```bash\ncat system-summary.txt\n```\n\nTệp phải chứa một dòng kernel và một dòng thời gian hoạt động.",
+      "task_vi": "Thực hiện hướng dẫn: Nhận diện hệ thống và diễn giải tải",
+      "hint_vi": "Chạy lệnh: mkdir -p /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-2-v3",
+      "title": "Inspect Processes and Resource Activity",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect process identifiers, parent relationships, states, and a snapshot of system resource activity.\n\nA process is a running program. Every process has a process ID, or PID. Most processes also have a parent process ID, or PPID, identifying the process that started them.\n\nThe `ps` command displays a process snapshot. Select useful fields and sort by PID:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid | head -n 15\n```\n\nThe `-e` option selects all processes and `-o` defines the columns:\n\n- `PID` is the process identifier.\n- `PPID` is the parent identifier.\n- `USER` is the process owner.\n- `STAT` is the process state plus optional flags.\n- `COMMAND` is the executable name.\n\nCommon state letters include `R` for running, `S` for interruptible sleep, `D` for uninterruptible sleep, `T` for stopped, and `Z` for zombie. A sleeping process is often simply waiting for work.\n\nThe BSD-style `ps aux` form provides CPU and memory columns plus complete command lines:\n\n```bash\nps aux | head -n 10\n```\n\n`top` updates continuously when used interactively. Batch mode makes one stable snapshot: `-b` selects batch output and `-n 1` requests one update.\n\n```bash\ntop -b -n 1 | head -n 12\n```\n\nThe header summarizes uptime, load, task states, CPU use, and memory. The process table below it helps locate active resource consumers.\n\nNow open the interactive display:\n\n```bash\ntop\n```\n\nWatch the values update, locate the `%CPU` and `%MEM` columns, and then press `q` to return to the shell. Interactive `top` is useful when you need to observe changes over time; batch mode is better when output must be saved or processed by another command.\n\nSave a focused process snapshot as an observable result:\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid > process-snapshot.txt\n```\n\n```bash\nhead -n 5 process-snapshot.txt\n```",
+      "title_vi": "Kiểm tra tiến trình và hoạt động tài nguyên",
+      "task": "Thực hiện hướng dẫn: Inspect Processes and Resource Activity",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/process-lab/process-snapshot.txt && head -n1 /home/labex/project/process-lab/process-snapshot.txt | grep -Eq \"PID.*PPID.*USER.*STAT.*COMMAND\""
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra mã tiến trình, quan hệ cha, trạng thái và ảnh chụp hoạt động tài nguyên hệ thống.\n\nTiến trình là một chương trình đang chạy. Mỗi tiến trình có mã tiến trình, gọi là PID. Phần lớn tiến trình cũng có mã tiến trình cha, PPID, xác định tiến trình đã khởi chạy nó.\n\nLệnh `ps` hiển thị ảnh chụp tiến trình. Chọn các trường hữu ích và sắp xếp theo PID:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid | head -n 15\n```\n\nTùy chọn `-e` chọn mọi tiến trình và `-o` định nghĩa các cột:\n\n- `PID` là mã tiến trình.\n- `PPID` là mã tiến trình cha.\n- `USER` là chủ sở hữu tiến trình.\n- `STAT` là trạng thái tiến trình kèm các cờ tùy chọn.\n- `COMMAND` là tên chương trình thực thi.\n\nCác chữ cái trạng thái thường gặp gồm `R` cho đang chạy, `S` cho ngủ có thể ngắt, `D` cho ngủ không thể ngắt, `T` cho đã dừng và `Z` cho zombie. Một tiến trình đang ngủ thường chỉ đang chờ công việc.\n\nDạng `ps aux` theo phong cách BSD cung cấp các cột CPU và bộ nhớ cùng dòng lệnh đầy đủ:\n\n```bash\nps aux | head -n 10\n```\n\n`top` cập nhật liên tục khi dùng tương tác. Chế độ batch tạo một ảnh chụp ổn định: `-b` chọn đầu ra batch và `-n 1` yêu cầu một lần cập nhật.\n\n```bash\ntop -b -n 1 | head -n 12\n```\n\nPhần đầu tóm tắt thời gian hoạt động, tải, trạng thái tác vụ, mức dùng CPU và bộ nhớ. Bảng tiến trình phía dưới giúp tìm những tiến trình đang tiêu thụ tài nguyên.\n\nBây giờ mở màn hình tương tác:\n\n```bash\ntop\n```\n\nQuan sát giá trị cập nhật, tìm cột `%CPU` và `%MEM`, rồi nhấn `q` để quay về shell. `top` tương tác hữu ích để quan sát thay đổi theo thời gian; chế độ batch phù hợp hơn khi cần lưu đầu ra hoặc xử lý bằng lệnh khác.\n\nLưu ảnh chụp tiến trình có chọn lọc làm kết quả có thể quan sát:\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid > process-snapshot.txt\n```\n\n```bash\nhead -n 5 process-snapshot.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra tiến trình và hoạt động tài nguyên",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-3-v3",
+      "title": "Start and Locate a Practice Process",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will start a harmless background process, capture its PID, and locate it with both `ps` and `pgrep`.\n\nThe trailing `&` asks the shell to run a command in the background and return the prompt immediately. Start a five-minute sleep process with the visible name `labex-worker`:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-worker sleep 300' &\n```\n\nThe special shell value `$!` contains the PID of the most recently started background process. Save it before starting another background command:\n\n```bash\nworker_pid=$!\n```\n\n```bash\necho \"$worker_pid\" > worker.pid\n```\n\nInspect exactly that process. The `-p` option selects a PID and `-o` chooses fields:\n\n```bash\nps -o pid,ppid,user,stat,etime,args -p \"$worker_pid\"\n```\n\n`ETIME` shows elapsed runtime, while `ARGS` includes the visible process name. Use `pgrep -f` to search the complete command line; `-a` also prints it:\n\n```bash\npgrep -af labex-worker\n```\n\nThe PID from `pgrep` should match `worker.pid`. Searching by a precise pattern is safer than acting on every process with a broad name.",
+      "title_vi": "Khởi chạy và tìm tiến trình thực hành",
+      "task": "Thực hiện hướng dẫn: Start and Locate a Practice Process",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pid=$(cat /home/labex/project/process-lab/worker.pid) && test \"$pid\" -gt 1 && ps -o args= -p \"$pid\" | grep -Fxq \"labex-worker 300\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*bash\\s+-c\\s+'exec -a labex-worker sleep 300'\\s*&\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ khởi chạy một tiến trình nền vô hại, lấy PID của nó và tìm nó bằng cả `ps` lẫn `pgrep`.\n\nDấu `&` ở cuối yêu cầu shell chạy lệnh trong nền và trả dấu nhắc ngay. Khởi chạy tiến trình ngủ năm phút với tên hiển thị `labex-worker`:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-worker sleep 300' &\n```\n\nGiá trị shell đặc biệt `$!` chứa PID của tiến trình nền được khởi chạy gần nhất. Lưu nó trước khi khởi chạy lệnh nền khác:\n\n```bash\nworker_pid=$!\n```\n\n```bash\necho \"$worker_pid\" > worker.pid\n```\n\nKiểm tra chính xác tiến trình đó. Tùy chọn `-p` chọn PID và `-o` chọn trường:\n\n```bash\nps -o pid,ppid,user,stat,etime,args -p \"$worker_pid\"\n```\n\n`ETIME` cho biết thời gian đã chạy, còn `ARGS` gồm tên tiến trình hiển thị. Dùng `pgrep -f` để tìm trong toàn bộ dòng lệnh; `-a` cũng in dòng lệnh đó:\n\n```bash\npgrep -af labex-worker\n```\n\nPID từ `pgrep` phải khớp với `worker.pid`. Tìm bằng mẫu chính xác an toàn hơn tác động lên mọi tiến trình có tên chung chung.",
+      "task_vi": "Thực hiện hướng dẫn: Khởi chạy và tìm tiến trình thực hành",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-4-v3",
+      "title": "Stop Processes with Signals",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will request a graceful termination with SIGTERM and use SIGKILL only for a process designed to ignore that request.\n\nThe `kill` command sends a signal to a PID. Without an explicit signal, it sends SIGTERM, signal 15. SIGTERM requests an orderly shutdown and gives the process a chance to clean up.\n\nRead the worker PID and send SIGTERM:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nworker_pid=$(cat worker.pid)\n```\n\n```bash\nkill \"$worker_pid\"\n```\n\n```bash\nsleep 1\n```\n\nThe following expected `ps` failure proves the process ended:\n\n```bash\nps -p \"$worker_pid\" || echo \"labex-worker stopped after SIGTERM\"\n```\n\nNow start a controlled process that intentionally ignores SIGTERM:\n\n```bash\nbash -c 'trap \"\" TERM; exec -a labex-stubborn sleep 300' &\n```\n\n```bash\nstubborn_pid=$!\n```\n\n```bash\necho \"$stubborn_pid\" > stubborn.pid\n```\n\nGive the new shell a moment to install its signal handler:\n\n```bash\nsleep 1\n```\n\nSend SIGTERM, wait briefly, and inspect the process:\n\n```bash\nkill -TERM \"$stubborn_pid\"\n```\n\n```bash\nsleep 1\n```\n\n```bash\nps -o pid,stat,args -p \"$stubborn_pid\"\n```\n\nIt should still be present because this practice process ignores SIGTERM. SIGKILL, signal 9, cannot be caught or ignored. Use it only after a graceful signal is ineffective:\n\n```bash\nkill -KILL \"$stubborn_pid\"\n```\n\nReap the terminated background job. The nonzero status is expected, so `|| true` lets the practice sequence continue:\n\n```bash\nwait \"$stubborn_pid\" 2>/dev/null || true\n```\n\n```bash\nps -p \"$stubborn_pid\" || echo \"labex-stubborn required SIGKILL\"\n```\n\nSIGKILL gives a process no opportunity to save state or release application resources cleanly, so it is a last resort.\n\n`kill` targets a known PID. When you need to select a process by its name or full command line, `pkill` combines matching and signaling. Start one more controlled process with a distinctive command line:\n\n```bash\nbash -c 'exec -a labex-helper sleep 300' &\n```\n\n```bash\nhelper_pid=$!\necho \"$helper_pid\" > helper.pid\n```\n\nConfirm the exact full-command match before acting:\n\n```bash\npgrep -af '^labex-helper 300$'\n```\n\nSend SIGTERM to that exact match with `pkill -f`. The anchors `^` and `$` keep this training pattern from matching unrelated command lines:\n\n```bash\npkill -TERM -f '^labex-helper 300$'\n```\n\n```bash\nwait \"$helper_pid\" 2>/dev/null || true\nps -p \"$helper_pid\" || echo \"labex-helper stopped by pkill\"\n```\n\nUse precise `pkill` patterns and inspect matches first with `pgrep`; broad patterns can stop more processes than intended.",
+      "title_vi": "Dừng tiến trình bằng tín hiệu",
+      "task": "Thực hiện hướng dẫn: Stop Processes with Signals",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "for name in worker stubborn helper; do pid=$(cat /home/labex/project/process-lab/\"$name.pid\") && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null || exit 1; done"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*kill\\s+\"\\$worker_pid\"\\s*$"
+                ],
+                [
+                  "^\\s*kill\\s+-KILL\\s+\"\\$stubborn_pid\"\\s*$"
+                ],
+                [
+                  "^\\s*pkill\\s+-TERM\\s+-f\\s+'\\^labex-helper 300\\$'\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ yêu cầu kết thúc có trật tự bằng SIGTERM và chỉ dùng SIGKILL cho tiến trình được thiết kế để bỏ qua yêu cầu đó.\n\nLệnh `kill` gửi tín hiệu tới một PID. Nếu không chỉ định tín hiệu, nó gửi SIGTERM, tín hiệu 15. SIGTERM yêu cầu tắt có trật tự và cho tiến trình cơ hội dọn dẹp.\n\nĐọc PID của worker và gửi SIGTERM:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nworker_pid=$(cat worker.pid)\n```\n\n```bash\nkill \"$worker_pid\"\n```\n\n```bash\nsleep 1\n```\n\nLỗi `ps` dự kiến sau đây chứng minh tiến trình đã kết thúc:\n\n```bash\nps -p \"$worker_pid\" || echo \"labex-worker stopped after SIGTERM\"\n```\n\nBây giờ khởi chạy một tiến trình được kiểm soát, chủ ý bỏ qua SIGTERM:\n\n```bash\nbash -c 'trap \"\" TERM; exec -a labex-stubborn sleep 300' &\n```\n\n```bash\nstubborn_pid=$!\n```\n\n```bash\necho \"$stubborn_pid\" > stubborn.pid\n```\n\nCho shell mới một chút thời gian cài đặt bộ xử lý tín hiệu:\n\n```bash\nsleep 1\n```\n\nGửi SIGTERM, chờ ngắn rồi kiểm tra tiến trình:\n\n```bash\nkill -TERM \"$stubborn_pid\"\n```\n\n```bash\nsleep 1\n```\n\n```bash\nps -o pid,stat,args -p \"$stubborn_pid\"\n```\n\nNó vẫn phải tồn tại vì tiến trình thực hành này bỏ qua SIGTERM. SIGKILL, tín hiệu 9, không thể bị bắt hoặc bỏ qua. Chỉ dùng khi tín hiệu kết thúc có trật tự không hiệu quả:\n\n```bash\nkill -KILL \"$stubborn_pid\"\n```\n\nThu hồi trạng thái tác vụ nền đã kết thúc. Trạng thái khác 0 là điều dự kiến nên `|| true` cho phép chuỗi thực hành tiếp tục:\n\n```bash\nwait \"$stubborn_pid\" 2>/dev/null || true\n```\n\n```bash\nps -p \"$stubborn_pid\" || echo \"labex-stubborn required SIGKILL\"\n```\n\nSIGKILL không cho tiến trình cơ hội lưu trạng thái hoặc giải phóng tài nguyên ứng dụng một cách sạch sẽ, nên đây là biện pháp cuối cùng.\n\n`kill` nhắm tới một PID đã biết. Khi cần chọn tiến trình theo tên hoặc toàn bộ dòng lệnh, `pkill` kết hợp việc khớp và gửi tín hiệu. Khởi chạy thêm một tiến trình được kiểm soát với dòng lệnh đặc trưng:\n\n```bash\nbash -c 'exec -a labex-helper sleep 300' &\n```\n\n```bash\nhelper_pid=$!\necho \"$helper_pid\" > helper.pid\n```\n\nXác nhận mẫu khớp chính xác toàn bộ dòng lệnh trước khi tác động:\n\n```bash\npgrep -af '^labex-helper 300$'\n```\n\nGửi SIGTERM tới phần khớp chính xác đó bằng `pkill -f`. Các ký hiệu neo `^` và `$` ngăn mẫu thực hành này khớp các dòng lệnh không liên quan:\n\n```bash\npkill -TERM -f '^labex-helper 300$'\n```\n\n```bash\nwait \"$helper_pid\" 2>/dev/null || true\nps -p \"$helper_pid\" || echo \"labex-helper stopped by pkill\"\n```\n\nDùng mẫu `pkill` chính xác và kiểm tra phần khớp trước bằng `pgrep`; mẫu quá rộng có thể dừng nhiều tiến trình hơn dự định.",
+      "task_vi": "Thực hiện hướng dẫn: Dừng tiến trình bằng tín hiệu",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-5-v3",
+      "title": "Control Foreground and Background Jobs",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will suspend a foreground command, resume it in the background, return it to the foreground, and interrupt it.\n\nJob control belongs to the current interactive shell. Start a foreground sleep process with a recognizable name:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nThe terminal is now occupied by the foreground process. Press `Ctrl+Z`. The shell sends a stop signal and returns the prompt.\n\nList jobs known to this shell. The `-l` option includes the process ID:\n\n```bash\njobs -l\n```\n\nYou should see a `Stopped` job. Resume job number 1 in the background:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nThe state should now be `Running`, and the prompt remains available. Bring the job back to the foreground:\n\n```bash\nfg %1\n```\n\nPress `Ctrl+C` to send an interrupt signal to the foreground job. The prompt should return. Confirm that no practice job remains:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nCreate a completion marker after you have finished the interactive sequence:\n\n```bash\ntouch job-control.done\n```\n\nUse job control for commands attached to the current terminal. Later you will use `nohup` for work that should not depend on the terminal session.",
+      "title_vi": "Điều khiển tác vụ tiền cảnh và nền",
+      "task": "Thực hiện hướng dẫn: Control Foreground and Background Jobs",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tạm dừng một lệnh tiền cảnh, tiếp tục nó trong nền, đưa nó về tiền cảnh rồi ngắt nó.\n\nĐiều khiển tác vụ thuộc về shell tương tác hiện tại. Khởi chạy tiến trình ngủ ở tiền cảnh với tên dễ nhận biết:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nTerminal hiện bị tiến trình tiền cảnh chiếm dụng. Nhấn `Ctrl+Z`. Shell gửi tín hiệu dừng và trả lại dấu nhắc.\n\nLiệt kê các tác vụ mà shell này biết. Tùy chọn `-l` bao gồm mã tiến trình:\n\n```bash\njobs -l\n```\n\nBạn sẽ thấy một tác vụ `Stopped`. Tiếp tục tác vụ số 1 trong nền:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nTrạng thái giờ phải là `Running` và dấu nhắc vẫn dùng được. Đưa tác vụ trở lại tiền cảnh:\n\n```bash\nfg %1\n```\n\nNhấn `Ctrl+C` để gửi tín hiệu ngắt tới tác vụ tiền cảnh. Dấu nhắc phải trở lại. Xác nhận không còn tác vụ thực hành:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nTạo dấu mốc hoàn thành sau khi kết thúc chuỗi tương tác:\n\n```bash\ntouch job-control.done\n```\n\nDùng điều khiển tác vụ cho các lệnh gắn với terminal hiện tại. Sau này bạn sẽ dùng `nohup` cho công việc không nên phụ thuộc phiên terminal.",
+      "task_vi": "Thực hiện hướng dẫn: Điều khiển tác vụ tiền cảnh và nền",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-6-v3",
+      "title": "Read Exit Status and Run Detached Work",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will interpret command exit status and run a short background task whose output survives independently of the terminal display.\n\nEvery command returns an integer status. Zero means success; a nonzero value means some kind of failure. The shell variable `$?` contains the status of the command that just finished.\n\nRun a successful command, then immediately print its status:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\ntrue\n```\n\n```bash\necho \"true status: $?\"\n```\n\nThe result is `0`. Now run a command that cannot find its path:\n\n```bash\nls missing-path\n```\n\nCapture its status before another command replaces `$?`:\n\n```bash\nmissing_status=$?\n```\n\n```bash\necho \"missing-path status: $missing_status\"\n```\n\nThe value is nonzero. Save both expected interpretations:\n\n```bash\nprintf 'success=0\\nfailure=%s\\n' \"$missing_status\" > exit-status.txt\n```\n\nThe `nohup` command makes a program ignore the terminal hangup signal. The final `&` starts it in the background. The redirection `< /dev/null` disconnects terminal input, while `> nohup.log 2>&1` sends both output streams to a log:\n\n```bash\nnohup bash -c 'for item in one two three; do echo \"background: $item\"; sleep 1; done' < /dev/null > nohup.log 2>&1 &\n```\n\nSave the background PID and allow the short task to finish:\n\n```bash\necho $! > nohup.pid\n```\n\n```bash\nsleep 4\n```\n\n```bash\ncat nohup.log\n```\n\nYou should see three lines, from `background: one` through `background: three`. For long-running work, the saved PID and log provide ways to inspect progress.",
+      "title_vi": "Đọc trạng thái thoát và chạy tác vụ tách terminal",
+      "task": "Thực hiện hướng dẫn: Read Exit Status and Run Detached Work",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/process-lab/exit-status.txt <(printf %s 'success=0\nfailure=2\n') && cmp -s /home/labex/project/process-lab/nohup.log <(printf %s 'background: one\nbackground: two\nbackground: three\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ diễn giải trạng thái thoát của lệnh và chạy một tác vụ nền ngắn có đầu ra được giữ độc lập với màn hình terminal.\n\nMỗi lệnh trả về một trạng thái số nguyên. Số 0 nghĩa là thành công; giá trị khác 0 biểu thị một dạng lỗi. Biến shell `$?` chứa trạng thái của lệnh vừa kết thúc.\n\nChạy một lệnh thành công rồi in ngay trạng thái của nó:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\ntrue\n```\n\n```bash\necho \"true status: $?\"\n```\n\nKết quả là `0`. Bây giờ chạy một lệnh không tìm được đường dẫn:\n\n```bash\nls missing-path\n```\n\nLấy trạng thái của nó trước khi lệnh khác thay thế `$?`:\n\n```bash\nmissing_status=$?\n```\n\n```bash\necho \"missing-path status: $missing_status\"\n```\n\nGiá trị khác 0. Lưu cả hai cách diễn giải dự kiến:\n\n```bash\nprintf 'success=0\\nfailure=%s\\n' \"$missing_status\" > exit-status.txt\n```\n\nLệnh `nohup` khiến chương trình bỏ qua tín hiệu ngắt kết nối terminal. Dấu `&` cuối cùng khởi chạy nó trong nền. Chuyển hướng `< /dev/null` ngắt đầu vào terminal, còn `> nohup.log 2>&1` đưa cả hai luồng đầu ra vào log:\n\n```bash\nnohup bash -c 'for item in one two three; do echo \"background: $item\"; sleep 1; done' < /dev/null > nohup.log 2>&1 &\n```\n\nLưu PID nền và chờ tác vụ ngắn hoàn tất:\n\n```bash\necho $! > nohup.pid\n```\n\n```bash\nsleep 4\n```\n\n```bash\ncat nohup.log\n```\n\nBạn sẽ thấy ba dòng, từ `background: one` đến `background: three`. Với công việc chạy lâu, PID và log đã lưu cung cấp cách kiểm tra tiến độ.",
+      "task_vi": "Thực hiện hướng dẫn: Đọc trạng thái thoát và chạy tác vụ tách terminal",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-7-v3",
+      "title": "Inspect Recent Kernel Messages",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect the kernel message buffer and save the running kernel release as a stable reference.\n\nThe kernel records messages about startup, hardware, drivers, and runtime events in a ring buffer. `dmesg` reads that buffer. Administrative privileges are commonly required:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThe exact messages vary by machine and time. Focus on the timestamp-like field and the component or subsystem that produced each message.\n\nThe `--level` option filters by severity. Display recent warnings and errors:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nNo output does not mean the command failed; it can mean that the current buffer has no messages at those levels. Search recent messages for common storage and network terms:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nAgain, results depend on the current system. Save the kernel release reported by `uname -r`:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nKernel messages are evidence, not automatic diagnoses. Combine them with process state, service logs, and observed symptoms before deciding on an action.",
+      "title_vi": "Kiểm tra thông báo kernel gần đây",
+      "task": "Thực hiện hướng dẫn: Inspect Recent Kernel Messages",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu đọc kernel log dmesg; runtime chưa cấp CAP_SYSLOG."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra bộ đệm thông báo kernel và lưu phiên bản kernel đang chạy làm tham chiếu ổn định.\n\nKernel ghi thông báo về khởi động, phần cứng, trình điều khiển và sự kiện khi chạy vào một bộ đệm vòng. `dmesg` đọc bộ đệm đó. Thông thường cần quyền quản trị:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThông báo cụ thể thay đổi theo máy và thời điểm. Chú ý trường giống dấu thời gian và thành phần hoặc hệ thống con đã tạo mỗi thông báo.\n\nTùy chọn `--level` lọc theo mức nghiêm trọng. Hiển thị cảnh báo và lỗi gần đây:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nKhông có đầu ra không có nghĩa lệnh thất bại; có thể bộ đệm hiện tại không có thông báo ở các mức đó. Tìm thông báo gần đây chứa thuật ngữ lưu trữ và mạng thường gặp:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nMột lần nữa, kết quả phụ thuộc hệ thống hiện tại. Lưu phiên bản kernel do `uname -r` báo:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nThông báo kernel là bằng chứng, không phải chẩn đoán tự động. Kết hợp chúng với trạng thái tiến trình, log dịch vụ và triệu chứng quan sát được trước khi quyết định hành động.",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra thông báo kernel gần đây",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "section-8",
+      "title": "Summary",
+      "position": 8,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You identified a Linux system, interpreted uptime and load averages, and inspected process IDs, parents, owners, states, and resource activity with both snapshot and interactive tools. You started and found named processes, targeted them precisely with `kill` and `pkill`, used SIGTERM before SIGKILL, and practiced foreground and background job control.\n\nYou also interpreted exit status, ran detached work with `nohup` and explicit logging, and inspected kernel messages with `dmesg`. These observation-first habits are the foundation of safe process troubleshooting and prepare you for service, logging, and network diagnostics later in the course.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã nhận diện một hệ thống Linux, diễn giải thời gian hoạt động và tải trung bình, kiểm tra mã tiến trình, tiến trình cha, chủ sở hữu, trạng thái và hoạt động tài nguyên bằng công cụ chụp trạng thái lẫn tương tác. Bạn đã khởi chạy và tìm tiến trình có tên, nhắm chính xác bằng `kill` và `pkill`, dùng SIGTERM trước SIGKILL và thực hành điều khiển tác vụ tiền cảnh và nền.\n\nBạn cũng diễn giải trạng thái thoát, chạy tác vụ tách terminal bằng `nohup` với log rõ ràng và kiểm tra thông báo kernel bằng `dmesg`. Thói quen quan sát trước này là nền tảng xử lý sự cố tiến trình an toàn và chuẩn bị cho chẩn đoán dịch vụ, log và mạng về sau trong khóa học."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725419-section-1-v3",
+      "title": "Identify the System and Interpret Load",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will identify the kernel and distribution, check how long the system has been running, and learn what load averages represent.\n\nCreate and enter a workspace:\n\n```bash\nmkdir -p /home/labex/project/process-lab\n```\n\n```bash\ncd /home/labex/project/process-lab\n```\n\nThe `uname` command reports kernel information. The options `-s`, `-r`, and `-m` select the kernel name, kernel release, and machine architecture:\n\n```bash\nuname -srm\n```\n\n`uname -a` displays all available fields in one line:\n\n```bash\nuname -a\n```\n\nThe kernel is not the same thing as the Linux distribution. Read the distribution metadata:\n\n```bash\ncat /etc/os-release\n```\n\nLook for fields such as `NAME`, `VERSION`, and `ID`. Next, check uptime and load:\n\n```bash\nuptime\n```\n\nThe output includes the current time, how long the system has been running, the number of logged-in users, and three load averages. Those averages describe runnable or uninterruptible work over approximately 1, 5, and 15 minutes. They are not percentages; their meaning depends partly on the number of CPU cores.\n\nView the kernel's compact load record:\n\n```bash\ncat /proc/loadavg\n```\n\nThe first three values match the load-average idea. Later fields show runnable tasks and the most recently assigned process ID.\n\nSave a small system summary for later reference:\n\n```bash\nuname -srm > system-summary.txt\n```\n\n```bash\nuptime >> system-summary.txt\n```\n\n```bash\ncat system-summary.txt\n```\n\nThe file should contain one kernel line and one uptime line.",
+      "title_vi": "Nhận diện hệ thống và diễn giải tải",
+      "task": "Thực hiện hướng dẫn: Identify the System and Interpret Load",
+      "hint": "Chạy lệnh: mkdir -p /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/process-lab/system-summary.txt && test \"$(head -n1 /home/labex/project/process-lab/system-summary.txt)\" = \"$(uname -srm)\" && sed -n 2p /home/labex/project/process-lab/system-summary.txt | grep -Eq \"up .*load average\""
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ nhận diện kernel và bản phân phối, kiểm tra hệ thống đã chạy bao lâu và tìm hiểu ý nghĩa của tải trung bình.\n\nTạo và đi vào thư mục làm việc:\n\n```bash\nmkdir -p /home/labex/project/process-lab\n```\n\n```bash\ncd /home/labex/project/process-lab\n```\n\nLệnh `uname` báo thông tin kernel. Các tùy chọn `-s`, `-r` và `-m` lần lượt chọn tên kernel, phiên bản kernel và kiến trúc máy:\n\n```bash\nuname -srm\n```\n\n`uname -a` hiển thị tất cả trường có sẵn trên một dòng:\n\n```bash\nuname -a\n```\n\nKernel không phải là bản phân phối Linux. Đọc siêu dữ liệu của bản phân phối:\n\n```bash\ncat /etc/os-release\n```\n\nTìm những trường như `NAME`, `VERSION` và `ID`. Tiếp theo, kiểm tra thời gian hoạt động và tải:\n\n```bash\nuptime\n```\n\nĐầu ra gồm thời gian hiện tại, thời gian hệ thống đã chạy, số người dùng đăng nhập và ba giá trị tải trung bình. Chúng mô tả công việc có thể chạy hoặc đang chờ không thể ngắt trong khoảng 1, 5 và 15 phút. Chúng không phải phần trăm; ý nghĩa còn phụ thuộc một phần vào số lõi CPU.\n\nXem bản ghi tải ngắn gọn của kernel:\n\n```bash\ncat /proc/loadavg\n```\n\nBa giá trị đầu tương ứng với khái niệm tải trung bình. Các trường sau cho biết tác vụ có thể chạy và mã tiến trình được cấp gần đây nhất.\n\nLưu bản tóm tắt hệ thống nhỏ để tham khảo về sau:\n\n```bash\nuname -srm > system-summary.txt\n```\n\n```bash\nuptime >> system-summary.txt\n```\n\n```bash\ncat system-summary.txt\n```\n\nTệp phải chứa một dòng kernel và một dòng thời gian hoạt động.",
+      "task_vi": "Thực hiện hướng dẫn: Nhận diện hệ thống và diễn giải tải",
+      "hint_vi": "Chạy lệnh: mkdir -p /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-2-v3",
+      "title": "Inspect Processes and Resource Activity",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect process identifiers, parent relationships, states, and a snapshot of system resource activity.\n\nA process is a running program. Every process has a process ID, or PID. Most processes also have a parent process ID, or PPID, identifying the process that started them.\n\nThe `ps` command displays a process snapshot. Select useful fields and sort by PID:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid | head -n 15\n```\n\nThe `-e` option selects all processes and `-o` defines the columns:\n\n- `PID` is the process identifier.\n- `PPID` is the parent identifier.\n- `USER` is the process owner.\n- `STAT` is the process state plus optional flags.\n- `COMMAND` is the executable name.\n\nCommon state letters include `R` for running, `S` for interruptible sleep, `D` for uninterruptible sleep, `T` for stopped, and `Z` for zombie. A sleeping process is often simply waiting for work.\n\nThe BSD-style `ps aux` form provides CPU and memory columns plus complete command lines:\n\n```bash\nps aux | head -n 10\n```\n\n`top` updates continuously when used interactively. Batch mode makes one stable snapshot: `-b` selects batch output and `-n 1` requests one update.\n\n```bash\ntop -b -n 1 | head -n 12\n```\n\nThe header summarizes uptime, load, task states, CPU use, and memory. The process table below it helps locate active resource consumers.\n\nNow open the interactive display:\n\n```bash\ntop\n```\n\nWatch the values update, locate the `%CPU` and `%MEM` columns, and then press `q` to return to the shell. Interactive `top` is useful when you need to observe changes over time; batch mode is better when output must be saved or processed by another command.\n\nSave a focused process snapshot as an observable result:\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid > process-snapshot.txt\n```\n\n```bash\nhead -n 5 process-snapshot.txt\n```",
+      "title_vi": "Kiểm tra tiến trình và hoạt động tài nguyên",
+      "task": "Thực hiện hướng dẫn: Inspect Processes and Resource Activity",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/process-lab/process-snapshot.txt && head -n1 /home/labex/project/process-lab/process-snapshot.txt | grep -Eq \"PID.*PPID.*USER.*STAT.*COMMAND\""
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra mã tiến trình, quan hệ cha, trạng thái và ảnh chụp hoạt động tài nguyên hệ thống.\n\nTiến trình là một chương trình đang chạy. Mỗi tiến trình có mã tiến trình, gọi là PID. Phần lớn tiến trình cũng có mã tiến trình cha, PPID, xác định tiến trình đã khởi chạy nó.\n\nLệnh `ps` hiển thị ảnh chụp tiến trình. Chọn các trường hữu ích và sắp xếp theo PID:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid | head -n 15\n```\n\nTùy chọn `-e` chọn mọi tiến trình và `-o` định nghĩa các cột:\n\n- `PID` là mã tiến trình.\n- `PPID` là mã tiến trình cha.\n- `USER` là chủ sở hữu tiến trình.\n- `STAT` là trạng thái tiến trình kèm các cờ tùy chọn.\n- `COMMAND` là tên chương trình thực thi.\n\nCác chữ cái trạng thái thường gặp gồm `R` cho đang chạy, `S` cho ngủ có thể ngắt, `D` cho ngủ không thể ngắt, `T` cho đã dừng và `Z` cho zombie. Một tiến trình đang ngủ thường chỉ đang chờ công việc.\n\nDạng `ps aux` theo phong cách BSD cung cấp các cột CPU và bộ nhớ cùng dòng lệnh đầy đủ:\n\n```bash\nps aux | head -n 10\n```\n\n`top` cập nhật liên tục khi dùng tương tác. Chế độ batch tạo một ảnh chụp ổn định: `-b` chọn đầu ra batch và `-n 1` yêu cầu một lần cập nhật.\n\n```bash\ntop -b -n 1 | head -n 12\n```\n\nPhần đầu tóm tắt thời gian hoạt động, tải, trạng thái tác vụ, mức dùng CPU và bộ nhớ. Bảng tiến trình phía dưới giúp tìm những tiến trình đang tiêu thụ tài nguyên.\n\nBây giờ mở màn hình tương tác:\n\n```bash\ntop\n```\n\nQuan sát giá trị cập nhật, tìm cột `%CPU` và `%MEM`, rồi nhấn `q` để quay về shell. `top` tương tác hữu ích để quan sát thay đổi theo thời gian; chế độ batch phù hợp hơn khi cần lưu đầu ra hoặc xử lý bằng lệnh khác.\n\nLưu ảnh chụp tiến trình có chọn lọc làm kết quả có thể quan sát:\n\n```bash\nps -eo pid,ppid,user,stat,comm --sort=pid > process-snapshot.txt\n```\n\n```bash\nhead -n 5 process-snapshot.txt\n```",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra tiến trình và hoạt động tài nguyên",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-3-v3",
+      "title": "Start and Locate a Practice Process",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will start a harmless background process, capture its PID, and locate it with both `ps` and `pgrep`.\n\nThe trailing `&` asks the shell to run a command in the background and return the prompt immediately. Start a five-minute sleep process with the visible name `labex-worker`:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-worker sleep 300' &\n```\n\nThe special shell value `$!` contains the PID of the most recently started background process. Save it before starting another background command:\n\n```bash\nworker_pid=$!\n```\n\n```bash\necho \"$worker_pid\" > worker.pid\n```\n\nInspect exactly that process. The `-p` option selects a PID and `-o` chooses fields:\n\n```bash\nps -o pid,ppid,user,stat,etime,args -p \"$worker_pid\"\n```\n\n`ETIME` shows elapsed runtime, while `ARGS` includes the visible process name. Use `pgrep -f` to search the complete command line; `-a` also prints it:\n\n```bash\npgrep -af labex-worker\n```\n\nThe PID from `pgrep` should match `worker.pid`. Searching by a precise pattern is safer than acting on every process with a broad name.",
+      "title_vi": "Khởi chạy và tìm tiến trình thực hành",
+      "task": "Thực hiện hướng dẫn: Start and Locate a Practice Process",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pid=$(cat /home/labex/project/process-lab/worker.pid) && test \"$pid\" -gt 1 && ps -o args= -p \"$pid\" | grep -Fxq \"labex-worker 300\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*bash\\s+-c\\s+'exec -a labex-worker sleep 300'\\s*&\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ khởi chạy một tiến trình nền vô hại, lấy PID của nó và tìm nó bằng cả `ps` lẫn `pgrep`.\n\nDấu `&` ở cuối yêu cầu shell chạy lệnh trong nền và trả dấu nhắc ngay. Khởi chạy tiến trình ngủ năm phút với tên hiển thị `labex-worker`:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-worker sleep 300' &\n```\n\nGiá trị shell đặc biệt `$!` chứa PID của tiến trình nền được khởi chạy gần nhất. Lưu nó trước khi khởi chạy lệnh nền khác:\n\n```bash\nworker_pid=$!\n```\n\n```bash\necho \"$worker_pid\" > worker.pid\n```\n\nKiểm tra chính xác tiến trình đó. Tùy chọn `-p` chọn PID và `-o` chọn trường:\n\n```bash\nps -o pid,ppid,user,stat,etime,args -p \"$worker_pid\"\n```\n\n`ETIME` cho biết thời gian đã chạy, còn `ARGS` gồm tên tiến trình hiển thị. Dùng `pgrep -f` để tìm trong toàn bộ dòng lệnh; `-a` cũng in dòng lệnh đó:\n\n```bash\npgrep -af labex-worker\n```\n\nPID từ `pgrep` phải khớp với `worker.pid`. Tìm bằng mẫu chính xác an toàn hơn tác động lên mọi tiến trình có tên chung chung.",
+      "task_vi": "Thực hiện hướng dẫn: Khởi chạy và tìm tiến trình thực hành",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-4-v3",
+      "title": "Stop Processes with Signals",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will request a graceful termination with SIGTERM and use SIGKILL only for a process designed to ignore that request.\n\nThe `kill` command sends a signal to a PID. Without an explicit signal, it sends SIGTERM, signal 15. SIGTERM requests an orderly shutdown and gives the process a chance to clean up.\n\nRead the worker PID and send SIGTERM:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nworker_pid=$(cat worker.pid)\n```\n\n```bash\nkill \"$worker_pid\"\n```\n\n```bash\nsleep 1\n```\n\nThe following expected `ps` failure proves the process ended:\n\n```bash\nps -p \"$worker_pid\" || echo \"labex-worker stopped after SIGTERM\"\n```\n\nNow start a controlled process that intentionally ignores SIGTERM:\n\n```bash\nbash -c 'trap \"\" TERM; exec -a labex-stubborn sleep 300' &\n```\n\n```bash\nstubborn_pid=$!\n```\n\n```bash\necho \"$stubborn_pid\" > stubborn.pid\n```\n\nGive the new shell a moment to install its signal handler:\n\n```bash\nsleep 1\n```\n\nSend SIGTERM, wait briefly, and inspect the process:\n\n```bash\nkill -TERM \"$stubborn_pid\"\n```\n\n```bash\nsleep 1\n```\n\n```bash\nps -o pid,stat,args -p \"$stubborn_pid\"\n```\n\nIt should still be present because this practice process ignores SIGTERM. SIGKILL, signal 9, cannot be caught or ignored. Use it only after a graceful signal is ineffective:\n\n```bash\nkill -KILL \"$stubborn_pid\"\n```\n\nReap the terminated background job. The nonzero status is expected, so `|| true` lets the practice sequence continue:\n\n```bash\nwait \"$stubborn_pid\" 2>/dev/null || true\n```\n\n```bash\nps -p \"$stubborn_pid\" || echo \"labex-stubborn required SIGKILL\"\n```\n\nSIGKILL gives a process no opportunity to save state or release application resources cleanly, so it is a last resort.\n\n`kill` targets a known PID. When you need to select a process by its name or full command line, `pkill` combines matching and signaling. Start one more controlled process with a distinctive command line:\n\n```bash\nbash -c 'exec -a labex-helper sleep 300' &\n```\n\n```bash\nhelper_pid=$!\necho \"$helper_pid\" > helper.pid\n```\n\nConfirm the exact full-command match before acting:\n\n```bash\npgrep -af '^labex-helper 300$'\n```\n\nSend SIGTERM to that exact match with `pkill -f`. The anchors `^` and `$` keep this training pattern from matching unrelated command lines:\n\n```bash\npkill -TERM -f '^labex-helper 300$'\n```\n\n```bash\nwait \"$helper_pid\" 2>/dev/null || true\nps -p \"$helper_pid\" || echo \"labex-helper stopped by pkill\"\n```\n\nUse precise `pkill` patterns and inspect matches first with `pgrep`; broad patterns can stop more processes than intended.",
+      "title_vi": "Dừng tiến trình bằng tín hiệu",
+      "task": "Thực hiện hướng dẫn: Stop Processes with Signals",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "for name in worker stubborn helper; do pid=$(cat /home/labex/project/process-lab/\"$name.pid\") && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null || exit 1; done"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*kill\\s+\"\\$worker_pid\"\\s*$"
+                ],
+                [
+                  "^\\s*kill\\s+-KILL\\s+\"\\$stubborn_pid\"\\s*$"
+                ],
+                [
+                  "^\\s*pkill\\s+-TERM\\s+-f\\s+'\\^labex-helper 300\\$'\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ yêu cầu kết thúc có trật tự bằng SIGTERM và chỉ dùng SIGKILL cho tiến trình được thiết kế để bỏ qua yêu cầu đó.\n\nLệnh `kill` gửi tín hiệu tới một PID. Nếu không chỉ định tín hiệu, nó gửi SIGTERM, tín hiệu 15. SIGTERM yêu cầu tắt có trật tự và cho tiến trình cơ hội dọn dẹp.\n\nĐọc PID của worker và gửi SIGTERM:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nworker_pid=$(cat worker.pid)\n```\n\n```bash\nkill \"$worker_pid\"\n```\n\n```bash\nsleep 1\n```\n\nLỗi `ps` dự kiến sau đây chứng minh tiến trình đã kết thúc:\n\n```bash\nps -p \"$worker_pid\" || echo \"labex-worker stopped after SIGTERM\"\n```\n\nBây giờ khởi chạy một tiến trình được kiểm soát, chủ ý bỏ qua SIGTERM:\n\n```bash\nbash -c 'trap \"\" TERM; exec -a labex-stubborn sleep 300' &\n```\n\n```bash\nstubborn_pid=$!\n```\n\n```bash\necho \"$stubborn_pid\" > stubborn.pid\n```\n\nCho shell mới một chút thời gian cài đặt bộ xử lý tín hiệu:\n\n```bash\nsleep 1\n```\n\nGửi SIGTERM, chờ ngắn rồi kiểm tra tiến trình:\n\n```bash\nkill -TERM \"$stubborn_pid\"\n```\n\n```bash\nsleep 1\n```\n\n```bash\nps -o pid,stat,args -p \"$stubborn_pid\"\n```\n\nNó vẫn phải tồn tại vì tiến trình thực hành này bỏ qua SIGTERM. SIGKILL, tín hiệu 9, không thể bị bắt hoặc bỏ qua. Chỉ dùng khi tín hiệu kết thúc có trật tự không hiệu quả:\n\n```bash\nkill -KILL \"$stubborn_pid\"\n```\n\nThu hồi trạng thái tác vụ nền đã kết thúc. Trạng thái khác 0 là điều dự kiến nên `|| true` cho phép chuỗi thực hành tiếp tục:\n\n```bash\nwait \"$stubborn_pid\" 2>/dev/null || true\n```\n\n```bash\nps -p \"$stubborn_pid\" || echo \"labex-stubborn required SIGKILL\"\n```\n\nSIGKILL không cho tiến trình cơ hội lưu trạng thái hoặc giải phóng tài nguyên ứng dụng một cách sạch sẽ, nên đây là biện pháp cuối cùng.\n\n`kill` nhắm tới một PID đã biết. Khi cần chọn tiến trình theo tên hoặc toàn bộ dòng lệnh, `pkill` kết hợp việc khớp và gửi tín hiệu. Khởi chạy thêm một tiến trình được kiểm soát với dòng lệnh đặc trưng:\n\n```bash\nbash -c 'exec -a labex-helper sleep 300' &\n```\n\n```bash\nhelper_pid=$!\necho \"$helper_pid\" > helper.pid\n```\n\nXác nhận mẫu khớp chính xác toàn bộ dòng lệnh trước khi tác động:\n\n```bash\npgrep -af '^labex-helper 300$'\n```\n\nGửi SIGTERM tới phần khớp chính xác đó bằng `pkill -f`. Các ký hiệu neo `^` và `$` ngăn mẫu thực hành này khớp các dòng lệnh không liên quan:\n\n```bash\npkill -TERM -f '^labex-helper 300$'\n```\n\n```bash\nwait \"$helper_pid\" 2>/dev/null || true\nps -p \"$helper_pid\" || echo \"labex-helper stopped by pkill\"\n```\n\nDùng mẫu `pkill` chính xác và kiểm tra phần khớp trước bằng `pgrep`; mẫu quá rộng có thể dừng nhiều tiến trình hơn dự định.",
+      "task_vi": "Thực hiện hướng dẫn: Dừng tiến trình bằng tín hiệu",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-5-v3",
+      "title": "Control Foreground and Background Jobs",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will suspend a foreground command, resume it in the background, return it to the foreground, and interrupt it.\n\nJob control belongs to the current interactive shell. Start a foreground sleep process with a recognizable name:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nThe terminal is now occupied by the foreground process. Press `Ctrl+Z`. The shell sends a stop signal and returns the prompt.\n\nList jobs known to this shell. The `-l` option includes the process ID:\n\n```bash\njobs -l\n```\n\nYou should see a `Stopped` job. Resume job number 1 in the background:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nThe state should now be `Running`, and the prompt remains available. Bring the job back to the foreground:\n\n```bash\nfg %1\n```\n\nPress `Ctrl+C` to send an interrupt signal to the foreground job. The prompt should return. Confirm that no practice job remains:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nCreate a completion marker after you have finished the interactive sequence:\n\n```bash\ntouch job-control.done\n```\n\nUse job control for commands attached to the current terminal. Later you will use `nohup` for work that should not depend on the terminal session.",
+      "title_vi": "Điều khiển tác vụ tiền cảnh và nền",
+      "task": "Thực hiện hướng dẫn: Control Foreground and Background Jobs",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ tạm dừng một lệnh tiền cảnh, tiếp tục nó trong nền, đưa nó về tiền cảnh rồi ngắt nó.\n\nĐiều khiển tác vụ thuộc về shell tương tác hiện tại. Khởi chạy tiến trình ngủ ở tiền cảnh với tên dễ nhận biết:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nTerminal hiện bị tiến trình tiền cảnh chiếm dụng. Nhấn `Ctrl+Z`. Shell gửi tín hiệu dừng và trả lại dấu nhắc.\n\nLiệt kê các tác vụ mà shell này biết. Tùy chọn `-l` bao gồm mã tiến trình:\n\n```bash\njobs -l\n```\n\nBạn sẽ thấy một tác vụ `Stopped`. Tiếp tục tác vụ số 1 trong nền:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nTrạng thái giờ phải là `Running` và dấu nhắc vẫn dùng được. Đưa tác vụ trở lại tiền cảnh:\n\n```bash\nfg %1\n```\n\nNhấn `Ctrl+C` để gửi tín hiệu ngắt tới tác vụ tiền cảnh. Dấu nhắc phải trở lại. Xác nhận không còn tác vụ thực hành:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nTạo dấu mốc hoàn thành sau khi kết thúc chuỗi tương tác:\n\n```bash\ntouch job-control.done\n```\n\nDùng điều khiển tác vụ cho các lệnh gắn với terminal hiện tại. Sau này bạn sẽ dùng `nohup` cho công việc không nên phụ thuộc phiên terminal.",
+      "task_vi": "Thực hiện hướng dẫn: Điều khiển tác vụ tiền cảnh và nền",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-6-v3",
+      "title": "Read Exit Status and Run Detached Work",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will interpret command exit status and run a short background task whose output survives independently of the terminal display.\n\nEvery command returns an integer status. Zero means success; a nonzero value means some kind of failure. The shell variable `$?` contains the status of the command that just finished.\n\nRun a successful command, then immediately print its status:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\ntrue\n```\n\n```bash\necho \"true status: $?\"\n```\n\nThe result is `0`. Now run a command that cannot find its path:\n\n```bash\nls missing-path\n```\n\nCapture its status before another command replaces `$?`:\n\n```bash\nmissing_status=$?\n```\n\n```bash\necho \"missing-path status: $missing_status\"\n```\n\nThe value is nonzero. Save both expected interpretations:\n\n```bash\nprintf 'success=0\\nfailure=%s\\n' \"$missing_status\" > exit-status.txt\n```\n\nThe `nohup` command makes a program ignore the terminal hangup signal. The final `&` starts it in the background. The redirection `< /dev/null` disconnects terminal input, while `> nohup.log 2>&1` sends both output streams to a log:\n\n```bash\nnohup bash -c 'for item in one two three; do echo \"background: $item\"; sleep 1; done' < /dev/null > nohup.log 2>&1 &\n```\n\nSave the background PID and allow the short task to finish:\n\n```bash\necho $! > nohup.pid\n```\n\n```bash\nsleep 4\n```\n\n```bash\ncat nohup.log\n```\n\nYou should see three lines, from `background: one` through `background: three`. For long-running work, the saved PID and log provide ways to inspect progress.",
+      "title_vi": "Đọc trạng thái thoát và chạy tác vụ tách terminal",
+      "task": "Thực hiện hướng dẫn: Read Exit Status and Run Detached Work",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/process-lab/exit-status.txt <(printf %s 'success=0\nfailure=2\n') && cmp -s /home/labex/project/process-lab/nohup.log <(printf %s 'background: one\nbackground: two\nbackground: three\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ diễn giải trạng thái thoát của lệnh và chạy một tác vụ nền ngắn có đầu ra được giữ độc lập với màn hình terminal.\n\nMỗi lệnh trả về một trạng thái số nguyên. Số 0 nghĩa là thành công; giá trị khác 0 biểu thị một dạng lỗi. Biến shell `$?` chứa trạng thái của lệnh vừa kết thúc.\n\nChạy một lệnh thành công rồi in ngay trạng thái của nó:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\ntrue\n```\n\n```bash\necho \"true status: $?\"\n```\n\nKết quả là `0`. Bây giờ chạy một lệnh không tìm được đường dẫn:\n\n```bash\nls missing-path\n```\n\nLấy trạng thái của nó trước khi lệnh khác thay thế `$?`:\n\n```bash\nmissing_status=$?\n```\n\n```bash\necho \"missing-path status: $missing_status\"\n```\n\nGiá trị khác 0. Lưu cả hai cách diễn giải dự kiến:\n\n```bash\nprintf 'success=0\\nfailure=%s\\n' \"$missing_status\" > exit-status.txt\n```\n\nLệnh `nohup` khiến chương trình bỏ qua tín hiệu ngắt kết nối terminal. Dấu `&` cuối cùng khởi chạy nó trong nền. Chuyển hướng `< /dev/null` ngắt đầu vào terminal, còn `> nohup.log 2>&1` đưa cả hai luồng đầu ra vào log:\n\n```bash\nnohup bash -c 'for item in one two three; do echo \"background: $item\"; sleep 1; done' < /dev/null > nohup.log 2>&1 &\n```\n\nLưu PID nền và chờ tác vụ ngắn hoàn tất:\n\n```bash\necho $! > nohup.pid\n```\n\n```bash\nsleep 4\n```\n\n```bash\ncat nohup.log\n```\n\nBạn sẽ thấy ba dòng, từ `background: one` đến `background: three`. Với công việc chạy lâu, PID và log đã lưu cung cấp cách kiểm tra tiến độ.",
+      "task_vi": "Thực hiện hướng dẫn: Đọc trạng thái thoát và chạy tác vụ tách terminal",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    },
+    {
+      "id": "source-725419-section-7-v3",
+      "title": "Inspect Recent Kernel Messages",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect the kernel message buffer and save the running kernel release as a stable reference.\n\nThe kernel records messages about startup, hardware, drivers, and runtime events in a ring buffer. `dmesg` reads that buffer. Administrative privileges are commonly required:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThe exact messages vary by machine and time. Focus on the timestamp-like field and the component or subsystem that produced each message.\n\nThe `--level` option filters by severity. Display recent warnings and errors:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nNo output does not mean the command failed; it can mean that the current buffer has no messages at those levels. Search recent messages for common storage and network terms:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nAgain, results depend on the current system. Save the kernel release reported by `uname -r`:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nKernel messages are evidence, not automatic diagnoses. Combine them with process state, service logs, and observed symptoms before deciding on an action.",
+      "title_vi": "Kiểm tra thông báo kernel gần đây",
+      "task": "Thực hiện hướng dẫn: Inspect Recent Kernel Messages",
+      "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu đọc kernel log dmesg; runtime chưa cấp CAP_SYSLOG."
+      },
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra bộ đệm thông báo kernel và lưu phiên bản kernel đang chạy làm tham chiếu ổn định.\n\nKernel ghi thông báo về khởi động, phần cứng, trình điều khiển và sự kiện khi chạy vào một bộ đệm vòng. `dmesg` đọc bộ đệm đó. Thông thường cần quyền quản trị:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThông báo cụ thể thay đổi theo máy và thời điểm. Chú ý trường giống dấu thời gian và thành phần hoặc hệ thống con đã tạo mỗi thông báo.\n\nTùy chọn `--level` lọc theo mức nghiêm trọng. Hiển thị cảnh báo và lỗi gần đây:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nKhông có đầu ra không có nghĩa lệnh thất bại; có thể bộ đệm hiện tại không có thông báo ở các mức đó. Tìm thông báo gần đây chứa thuật ngữ lưu trữ và mạng thường gặp:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nMột lần nữa, kết quả phụ thuộc hệ thống hiện tại. Lưu phiên bản kernel do `uname -r` báo:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nThông báo kernel là bằng chứng, không phải chẩn đoán tự động. Kết hợp chúng với trạng thái tiến trình, log dịch vụ và triệu chứng quan sát được trước khi quyết định hành động.",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra thông báo kernel gần đây",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-system-information-and-process-management-725419.json"
+}

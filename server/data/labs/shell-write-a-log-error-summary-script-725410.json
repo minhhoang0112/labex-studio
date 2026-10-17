@@ -1,0 +1,128 @@
+{
+  "id": "shell-write-a-log-error-summary-script-725410",
+  "course_id": "linux-for-noobs",
+  "order": 35,
+  "title": "Write a Log Error Summary Script",
+  "title_vi": "Viết script tóm tắt lỗi trong log",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "20 mins",
+  "overview": "Three application logs need the same simple check: count lines that begin with ERROR and print one result per file. Repeating the commands manually is unnecessary when a short loop can handle every .log file.",
+  "source_url": "https://labex.io/tutorials/shell-write-a-log-error-summary-script-725410",
+  "source_lab_id": 725410,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Three application logs need the same simple check: count lines that begin with `ERROR` and print one result per file. Repeating the commands manually is unnecessary when a short loop can handle every `.log` file.\n\nThe preceding guided lab built this exact kind of loop step by step. This challenge asks for one small reusable script, without extra copying, report directories, or error-handling requirements.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Ba log ứng dụng cần cùng một phép kiểm tra đơn giản: đếm các dòng bắt đầu bằng `ERROR` và in một kết quả cho mỗi tệp. Không cần lặp lại lệnh thủ công khi một vòng lặp ngắn có thể xử lý mọi tệp `.log`.\n\nBài hướng dẫn trước đã xây dựng chính loại vòng lặp này từng bước. Thử thách yêu cầu một script tái sử dụng nhỏ, không thêm yêu cầu sao chép, thư mục báo cáo hoặc xử lý lỗi."
+    },
+    {
+      "id": "source-725410-section-1-v3",
+      "title": "Create the Error Summary Script",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/log-automation/logs` contains `api.log`, `healthy.log`, and `worker.log`.\n\n### Scope\n\n- Create `/home/labex/project/log-automation/process-logs.sh`.\n- Its first argument is the directory containing the logs.\n- Process files ending in `.log`.\n- For each file, count lines beginning with `ERROR`.\n- Print one line in the format `filename errors=count`.\n\n### Your Goal\n\nLeave one executable script that prints the correct error summary when run as `./process-logs.sh logs`.\n\n### Acceptance Criteria\n\n- The script starts with `#!/bin/bash` and is executable.\n- `./process-logs.sh logs` prints:\n\n```text\napi.log errors=1\nhealthy.log errors=0\nworker.log errors=2\n```\n\n### Hints\n\nWhich guided example is the closest match?\n\nReview the loop that iterated over `\"$log_dir\"/*.log`, counted `^ERROR` lines, and printed the basename with its count.",
+      "title_vi": "Tạo script tóm tắt lỗi",
+      "task": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
+      "hint": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/log-automation/logs` chứa `api.log`, `healthy.log` và `worker.log`.\n\n### Phạm vi\n\n- Tạo `/home/labex/project/log-automation/process-logs.sh`.\n- Đối số đầu tiên của nó là thư mục chứa log.\n- Xử lý các tệp kết thúc bằng `.log`.\n- Với mỗi tệp, đếm những dòng bắt đầu bằng `ERROR`.\n- In một dòng theo định dạng `filename errors=count`.\n\n### Mục tiêu của bạn\n\nTạo một script có thể thực thi, in đúng tóm tắt lỗi khi chạy `./process-logs.sh logs`.\n\n### Tiêu chí đạt\n\n- Script bắt đầu bằng `#!/bin/bash` và có quyền thực thi.\n- `./process-logs.sh logs` in ra:\n\n```text\napi.log errors=1\nhealthy.log errors=0\nworker.log errors=2\n```\n\n### Gợi ý\n\nVí dụ được hướng dẫn nào gần giống nhất?\n\nXem lại vòng lặp duyệt `\"$log_dir\"/*.log`, đếm dòng `^ERROR` và in tên cơ sở cùng số lượng.",
+      "task_vi": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
+      "hint_vi": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR"
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You turned a familiar log-counting loop into one short reusable Bash script.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã biến một vòng lặp đếm log quen thuộc thành một script Bash ngắn có thể tái sử dụng."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725410-section-1-v3",
+      "title": "Create the Error Summary Script",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/log-automation/logs` contains `api.log`, `healthy.log`, and `worker.log`.\n\n### Scope\n\n- Create `/home/labex/project/log-automation/process-logs.sh`.\n- Its first argument is the directory containing the logs.\n- Process files ending in `.log`.\n- For each file, count lines beginning with `ERROR`.\n- Print one line in the format `filename errors=count`.\n\n### Your Goal\n\nLeave one executable script that prints the correct error summary when run as `./process-logs.sh logs`.\n\n### Acceptance Criteria\n\n- The script starts with `#!/bin/bash` and is executable.\n- `./process-logs.sh logs` prints:\n\n```text\napi.log errors=1\nhealthy.log errors=0\nworker.log errors=2\n```\n\n### Hints\n\nWhich guided example is the closest match?\n\nReview the loop that iterated over `\"$log_dir\"/*.log`, counted `^ERROR` lines, and printed the basename with its count.",
+      "title_vi": "Tạo script tóm tắt lỗi",
+      "task": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
+      "hint": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/log-automation/logs` chứa `api.log`, `healthy.log` và `worker.log`.\n\n### Phạm vi\n\n- Tạo `/home/labex/project/log-automation/process-logs.sh`.\n- Đối số đầu tiên của nó là thư mục chứa log.\n- Xử lý các tệp kết thúc bằng `.log`.\n- Với mỗi tệp, đếm những dòng bắt đầu bằng `ERROR`.\n- In một dòng theo định dạng `filename errors=count`.\n\n### Mục tiêu của bạn\n\nTạo một script có thể thực thi, in đúng tóm tắt lỗi khi chạy `./process-logs.sh logs`.\n\n### Tiêu chí đạt\n\n- Script bắt đầu bằng `#!/bin/bash` và có quyền thực thi.\n- `./process-logs.sh logs` in ra:\n\n```text\napi.log errors=1\nhealthy.log errors=0\nworker.log errors=2\n```\n\n### Gợi ý\n\nVí dụ được hướng dẫn nào gần giống nhất?\n\nXem lại vòng lặp duyệt `\"$log_dir\"/*.log`, đếm dòng `^ERROR` và in tên cơ sở cùng số lượng.",
+      "task_vi": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
+      "hint_vi": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR"
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/shell-write-a-log-error-summary-script-725410.json"
+}

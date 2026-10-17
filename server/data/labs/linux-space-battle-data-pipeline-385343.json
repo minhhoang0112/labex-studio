@@ -1,0 +1,125 @@
+{
+  "id": "linux-space-battle-data-pipeline-385343",
+  "course_id": "linux-for-noobs",
+  "order": 17,
+  "title": "Select Sensor Alert Events",
+  "title_vi": "Xây Dựng Pipeline Dữ Liệu Space Battle",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "10 mins",
+  "overview": "A sensor export mixes normal, warning, and alert records. An operator needs a smaller file containing every alert and nothing else.  The preceding guided lab practiced filtering delimited records with",
+  "source_url": "https://labex.io/tutorials/linux-space-battle-data-pipeline-385343",
+  "source_lab_id": 385343,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A sensor export mixes normal, warning, and alert records. An operator needs a smaller file containing every alert and nothing else.\n\nThe preceding guided lab practiced filtering delimited records with `grep` and saving the result. This challenge has that single outcome.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một bản xuất dữ liệu cảm biến chứa lẫn các bản ghi bình thường, cảnh báo và báo động. Người vận hành cần một tệp nhỏ hơn chứa tất cả bản ghi báo động và không có bản ghi nào khác.\n\nBài thực hành có hướng dẫn trước đó đã luyện cách lọc bản ghi phân cách bằng `grep` rồi lưu kết quả. Thử thách này chỉ có một mục tiêu đó."
+    },
+    {
+      "id": "source-385343-section-1-v3",
+      "title": "Create the Alert-Only File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/sensor-pipeline/sensor-events.csv` contains six comma-separated records. The third field is the event level.\n\n### Scope\n\n- Select records whose third field is `ALERT`.\n- Preserve each selected line exactly as it appears in the source.\n- Save the result as `alert-events.csv` in the same workspace.\n\n### Your Goal\n\nCreate one file containing all and only the alert records.\n\n### Acceptance Criteria\n\n- `alert-events.csv` contains exactly the three source lines with `,ALERT,`.\n- The lines remain in source order and are otherwise unchanged.\n\n### Hints\n\nWhat fixed text distinguishes the required records?\n\nThe guided lab filtered comma-separated records by searching for the delimiter, level, and delimiter together.",
+      "title_vi": "Tạo tệp chỉ chứa bản ghi báo động",
+      "task": "Thực hiện hướng dẫn: Create the Alert-Only File",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/sensor-pipeline/sensor-events.csv <(printf %s '01,alpha,INFO,ready\n02,beta,ALERT,heat\n03,gamma,INFO,ready\n04,alpha,ALERT,power\n05,beta,OK,done\n06,gamma,ALERT,fan\n') && cmp -s /home/labex/project/sensor-pipeline/alert-events.csv <(grep \",ALERT,\" /home/labex/project/sensor-pipeline/sensor-events.csv)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/sensor-pipeline/sensor-events.csv` chứa sáu bản ghi phân cách bằng dấu phẩy. Trường thứ ba là mức độ sự kiện.\n\n### Phạm vi\n\n- Chọn các bản ghi có trường thứ ba là `ALERT`.\n- Giữ nguyên từng dòng được chọn như trong tệp nguồn.\n- Lưu kết quả thành `alert-events.csv` trong cùng không gian làm việc.\n\n### Mục tiêu của bạn\n\nTạo một tệp chứa đầy đủ và chỉ các bản ghi báo động.\n\n### Tiêu chí nghiệm thu\n\n- `alert-events.csv` chứa chính xác ba dòng nguồn có `,ALERT,`.\n- Các dòng giữ nguyên thứ tự trong nguồn và không thay đổi nội dung khác.\n\n### Gợi ý\n\nĐoạn văn bản cố định nào phân biệt các bản ghi cần chọn?\n\nBài có hướng dẫn đã lọc các bản ghi phân cách bằng dấu phẩy bằng cách tìm đồng thời dấu phân cách, mức độ và dấu phân cách.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo tệp chỉ chứa bản ghi báo động",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You used a familiar text filter and redirection to produce one complete alert-only data file.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã dùng bộ lọc văn bản quen thuộc và chuyển hướng để tạo một tệp dữ liệu đầy đủ chỉ chứa các bản ghi báo động."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-385343-section-1-v3",
+      "title": "Create the Alert-Only File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/sensor-pipeline/sensor-events.csv` contains six comma-separated records. The third field is the event level.\n\n### Scope\n\n- Select records whose third field is `ALERT`.\n- Preserve each selected line exactly as it appears in the source.\n- Save the result as `alert-events.csv` in the same workspace.\n\n### Your Goal\n\nCreate one file containing all and only the alert records.\n\n### Acceptance Criteria\n\n- `alert-events.csv` contains exactly the three source lines with `,ALERT,`.\n- The lines remain in source order and are otherwise unchanged.\n\n### Hints\n\nWhat fixed text distinguishes the required records?\n\nThe guided lab filtered comma-separated records by searching for the delimiter, level, and delimiter together.",
+      "title_vi": "Tạo tệp chỉ chứa bản ghi báo động",
+      "task": "Thực hiện hướng dẫn: Create the Alert-Only File",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/sensor-pipeline/sensor-events.csv <(printf %s '01,alpha,INFO,ready\n02,beta,ALERT,heat\n03,gamma,INFO,ready\n04,alpha,ALERT,power\n05,beta,OK,done\n06,gamma,ALERT,fan\n') && cmp -s /home/labex/project/sensor-pipeline/alert-events.csv <(grep \",ALERT,\" /home/labex/project/sensor-pipeline/sensor-events.csv)"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/sensor-pipeline/sensor-events.csv <(printf %s '01,alpha,INFO,ready\n02,beta,ALERT,heat\n03,gamma,INFO,ready\n04,alpha,ALERT,power\n05,beta,OK,done\n06,gamma,ALERT,fan\n') && cmp -s /home/labex/project/sensor-pipeline/alert-events.csv <(grep \",ALERT,\" /home/labex/project/sensor-pipeline/sensor-events.csv)"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/sensor-pipeline/sensor-events.csv` chứa sáu bản ghi phân cách bằng dấu phẩy. Trường thứ ba là mức độ sự kiện.\n\n### Phạm vi\n\n- Chọn các bản ghi có trường thứ ba là `ALERT`.\n- Giữ nguyên từng dòng được chọn như trong tệp nguồn.\n- Lưu kết quả thành `alert-events.csv` trong cùng không gian làm việc.\n\n### Mục tiêu của bạn\n\nTạo một tệp chứa đầy đủ và chỉ các bản ghi báo động.\n\n### Tiêu chí nghiệm thu\n\n- `alert-events.csv` chứa chính xác ba dòng nguồn có `,ALERT,`.\n- Các dòng giữ nguyên thứ tự trong nguồn và không thay đổi nội dung khác.\n\n### Gợi ý\n\nĐoạn văn bản cố định nào phân biệt các bản ghi cần chọn?\n\nBài có hướng dẫn đã lọc các bản ghi phân cách bằng dấu phẩy bằng cách tìm đồng thời dấu phân cách, mức độ và dấu phân cách.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo tệp chỉ chứa bản ghi báo động",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-space-battle-data-pipeline-385343.json"
+}

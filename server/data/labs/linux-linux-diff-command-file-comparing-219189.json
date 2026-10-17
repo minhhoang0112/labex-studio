@@ -1,0 +1,431 @@
+{
+  "id": "linux-linux-diff-command-file-comparing-219189",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219189,
+  "source_url": "https://labex.io/tutorials/linux-linux-diff-command-file-comparing-219189",
+  "order": 30,
+  "title": "Linux diff Command: File Comparing",
+  "title_vi": "Lệnh diff: so sánh tệp",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux diff Command: File Comparing",
+  "sections": [
+    {
+      "id": "commands-219189-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux diff Command: File Comparing. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh diff: so sánh tệp. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219189-section-1-v1",
+      "title": "Understanding the Basic Usage of diff",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "So sánh cơ bản",
+      "content": "Compare the two text files.\n\n```bash\ndiff file1.txt file2.txt\n```",
+      "content_vi": "So sánh hai tệp văn bản.\n\n```bash\ndiff file1.txt file2.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bdiff\\s+file1\\.txt\\s+file2\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-2-v1",
+      "title": "Comparing Python Scripts",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "So sánh mã Python",
+      "content": "Identify code differences.\n\n```bash\ndiff script_v1.py script_v2.py\n```",
+      "content_vi": "Tìm các thay đổi trong mã.\n\n```bash\ndiff script_v1.py script_v2.py\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bdiff\\s+script_v1\\.py\\s+script_v2\\.py"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-3-v1",
+      "title": "Using the Unified Format",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Định dạng unified",
+      "content": "Include context around changes.\n\n```bash\ndiff -u script_v1.py script_v2.py\n```",
+      "content_vi": "Hiển thị ngữ cảnh quanh thay đổi.\n\n```bash\ndiff -u script_v1.py script_v2.py\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bdiff\\s+-u\\s+script_v1\\.py"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-4-v1",
+      "title": "Ignoring Whitespace Changes",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Bỏ qua khoảng trắng",
+      "content": "Create a whitespace variant and compare with -w. Exit status 1 means differences, not a command error.\n\n```bash\nsed 's/    /        /g' script_v2.py > script_v3.py\ndiff -w script_v2.py script_v3.py\n```",
+      "content_vi": "Tạo biến thể khoảng trắng rồi so sánh bằng -w. Mã 1 biểu thị có khác biệt.\n\n```bash\nsed 's/    /        /g' script_v2.py > script_v3.py\ndiff -w script_v2.py script_v3.py\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdiff\\s+-w\\s+script_v2\\.py\\s+script_v3\\.py"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s script_v3.py\ndiff -w script_v2.py script_v3.py"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-5-v1",
+      "title": "Comparing Directories",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "So sánh thư mục",
+      "content": "Create different directory trees and compare recursively.\n\n```bash\nmkdir -p dir1 dir2\necho 'This is a file in dir1' > dir1/file.txt\necho 'This is a file in dir2' > dir2/file.txt\necho 'unique to dir1' > dir1/unique1.txt\necho 'unique to dir2' > dir2/unique2.txt\ndiff -r dir1 dir2\n```",
+      "content_vi": "Tạo hai cây thư mục khác nhau rồi so sánh đệ quy.\n\n```bash\nmkdir -p dir1 dir2\necho 'This is a file in dir1' > dir1/file.txt\necho 'This is a file in dir2' > dir2/file.txt\necho 'unique to dir1' > dir1/unique1.txt\necho 'unique to dir2' > dir2/unique2.txt\ndiff -r dir1 dir2\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdiff\\s+-r\\s+dir1\\s+dir2"
+              ]
+            ],
+            "allowed_status": [
+              0,
+              1
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -f dir1/unique1.txt\ntest -f dir2/unique2.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219189-section-1-v1",
+      "title": "Understanding the Basic Usage of diff",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "So sánh cơ bản",
+      "content": "Compare the two text files.\n\n```bash\ndiff file1.txt file2.txt\n```",
+      "content_vi": "So sánh hai tệp văn bản.\n\n```bash\ndiff file1.txt file2.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bdiff\\s+file1\\.txt\\s+file2\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-2-v1",
+      "title": "Comparing Python Scripts",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "So sánh mã Python",
+      "content": "Identify code differences.\n\n```bash\ndiff script_v1.py script_v2.py\n```",
+      "content_vi": "Tìm các thay đổi trong mã.\n\n```bash\ndiff script_v1.py script_v2.py\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bdiff\\s+script_v1\\.py\\s+script_v2\\.py"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-3-v1",
+      "title": "Using the Unified Format",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Định dạng unified",
+      "content": "Include context around changes.\n\n```bash\ndiff -u script_v1.py script_v2.py\n```",
+      "content_vi": "Hiển thị ngữ cảnh quanh thay đổi.\n\n```bash\ndiff -u script_v1.py script_v2.py\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bdiff\\s+-u\\s+script_v1\\.py"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-4-v1",
+      "title": "Ignoring Whitespace Changes",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Bỏ qua khoảng trắng",
+      "content": "Create a whitespace variant and compare with -w. Exit status 1 means differences, not a command error.\n\n```bash\nsed 's/    /        /g' script_v2.py > script_v3.py\ndiff -w script_v2.py script_v3.py\n```",
+      "content_vi": "Tạo biến thể khoảng trắng rồi so sánh bằng -w. Mã 1 biểu thị có khác biệt.\n\n```bash\nsed 's/    /        /g' script_v2.py > script_v3.py\ndiff -w script_v2.py script_v3.py\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdiff\\s+-w\\s+script_v2\\.py\\s+script_v3\\.py"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s script_v3.py\ndiff -w script_v2.py script_v3.py"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219189-section-5-v1",
+      "title": "Comparing Directories",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "So sánh thư mục",
+      "content": "Create different directory trees and compare recursively.\n\n```bash\nmkdir -p dir1 dir2\necho 'This is a file in dir1' > dir1/file.txt\necho 'This is a file in dir2' > dir2/file.txt\necho 'unique to dir1' > dir1/unique1.txt\necho 'unique to dir2' > dir2/unique2.txt\ndiff -r dir1 dir2\n```",
+      "content_vi": "Tạo hai cây thư mục khác nhau rồi so sánh đệ quy.\n\n```bash\nmkdir -p dir1 dir2\necho 'This is a file in dir1' > dir1/file.txt\necho 'This is a file in dir2' > dir2/file.txt\necho 'unique to dir1' > dir1/unique1.txt\necho 'unique to dir2' > dir2/unique2.txt\ndiff -r dir1 dir2\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bdiff\\s+-r\\s+dir1\\s+dir2"
+              ]
+            ],
+            "allowed_status": [
+              0,
+              1
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -f dir1/unique1.txt\ntest -f dir2/unique2.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-diff-command-file-comparing-219189.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

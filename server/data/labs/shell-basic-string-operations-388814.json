@@ -1,0 +1,299 @@
+{
+  "id": "shell-basic-string-operations-388814",
+  "course_id": "shell-for-beginners",
+  "order": 8,
+  "title": "Basic String Operations",
+  "title_vi": "Các Thao Tác Chuỗi Cơ Bản Trong Shell",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Master string length (${#string}), substring extraction (${string:offset:length}), and string replacement in Bash.",
+  "source_url": "https://labex.io/tutorials/shell-basic-string-operations-388814",
+  "source_lab_id": 388814,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388814-section-1-v4",
+      "title": "Creating a Script File",
+      "title_vi": "Tạo tệp kịch bản",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create string_operations.sh with a Bash shebang.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\n```\n\nRun:\n\n```bash\nbash ~/project/string_operations.sh \n```",
+      "content_vi": "Tạo string_operations.sh với shebang Bash.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\n```\n\nChạy:\n\n```bash\nbash ~/project/string_operations.sh \n```",
+      "task": "Create string_operations.sh with a Bash shebang.",
+      "task_vi": "Tạo string_operations.sh với shebang Bash.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['#!/bin/bash']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388814-section-2-v4",
+      "title": "String Length",
+      "title_vi": "Độ dài chuỗi",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Measure STRING with ${#STRING}; punctuation and spaces count.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "content_vi": "Đo STRING bằng ${#STRING}; dấu câu và khoảng trắng đều được tính.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "task": "Measure STRING with ${#STRING}; punctuation and spaces count.",
+      "task_vi": "Đo STRING bằng ${#STRING}; dấu câu và khoảng trắng đều được tính.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['${#STRING}']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Its length is: 13']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388814-section-3-v4",
+      "title": "Finding Character Position",
+      "title_vi": "Tìm vị trí ký tự",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Find j in the alphabet with expr index; indexing starts at 1.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "content_vi": "Tìm j trong bảng chữ cái bằng expr index; vị trí bắt đầu từ 1.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "task": "Find j in the alphabet with expr index; indexing starts at 1.",
+      "task_vi": "Tìm j trong bảng chữ cái bằng expr index; vị trí bắt đầu từ 1.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['expr index']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['It is at position: 10']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388814-section-4-v4",
+      "title": "Substring Extraction",
+      "title_vi": "Trích xuất chuỗi con",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Extract five characters at offset 10; Bash offsets start at zero.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\nSTART=10\nLENGTH=5\nSUBSTRING=${STRING:$START:$LENGTH}\necho \"The substring is: $SUBSTRING\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "content_vi": "Cắt năm ký tự tại vị trí 10; chỉ số Bash bắt đầu từ 0.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\nSTART=10\nLENGTH=5\nSUBSTRING=${STRING:$START:$LENGTH}\necho \"The substring is: $SUBSTRING\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "task": "Extract five characters at offset 10; Bash offsets start at zero.",
+      "task_vi": "Cắt năm ký tự tại vị trí 10; chỉ số Bash bắt đầu từ 0.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['${STRING:']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The substring is: brown']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388814-section-5-v4",
+      "title": "String Replacement",
+      "title_vi": "Thay thế chuỗi",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Compare first/all replacements and anchored prefix/suffix replacement.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\nSTART=10\nLENGTH=5\nSUBSTRING=${STRING:$START:$LENGTH}\necho \"The substring is: $SUBSTRING\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\necho \"${STRING/o/O}\"\necho \"${STRING//o/O}\"\necho \"${STRING/#The quick/The slow}\"\necho \"${STRING/%dog/cat}\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "content_vi": "So sánh thay lần đầu, toàn bộ, đầu chuỗi và cuối chuỗi.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\nSTART=10\nLENGTH=5\nSUBSTRING=${STRING:$START:$LENGTH}\necho \"The substring is: $SUBSTRING\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\necho \"${STRING/o/O}\"\necho \"${STRING//o/O}\"\necho \"${STRING/#The quick/The slow}\"\necho \"${STRING/%dog/cat}\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "task": "Compare first/all replacements and anchored prefix/suffix replacement.",
+      "task_vi": "So sánh thay lần đầu, toàn bộ, đầu chuỗi và cuối chuỗi.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['${STRING/o/O}', '${STRING//o/O}', '${STRING/#', '${STRING/%']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The quick brOwn fox jumps over the lazy dog', 'The quick brOwn fOx jumps Over the lazy dOg', 'The slow brown fox jumps over the lazy dog', 'The quick brown fox jumps over the lazy cat']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388814-section-1-v4",
+      "title": "Creating a Script File",
+      "title_vi": "Tạo tệp kịch bản",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create string_operations.sh with a Bash shebang.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\n```\n\nRun:\n\n```bash\nbash ~/project/string_operations.sh \n```",
+      "content_vi": "Tạo string_operations.sh với shebang Bash.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\n```\n\nChạy:\n\n```bash\nbash ~/project/string_operations.sh \n```",
+      "task": "Create string_operations.sh with a Bash shebang.",
+      "task_vi": "Tạo string_operations.sh với shebang Bash.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['#!/bin/bash']), 'Required concepts missing'\nif False: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388814-section-2-v4",
+      "title": "String Length",
+      "title_vi": "Độ dài chuỗi",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Measure STRING with ${#STRING}; punctuation and spaces count.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "content_vi": "Đo STRING bằng ${#STRING}; dấu câu và khoảng trắng đều được tính.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "task": "Measure STRING with ${#STRING}; punctuation and spaces count.",
+      "task_vi": "Đo STRING bằng ${#STRING}; dấu câu và khoảng trắng đều được tính.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['${#STRING}']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Its length is: 13']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388814-section-3-v4",
+      "title": "Finding Character Position",
+      "title_vi": "Tìm vị trí ký tự",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Find j in the alphabet with expr index; indexing starts at 1.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "content_vi": "Tìm j trong bảng chữ cái bằng expr index; vị trí bắt đầu từ 1.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "task": "Find j in the alphabet with expr index; indexing starts at 1.",
+      "task_vi": "Tìm j trong bảng chữ cái bằng expr index; vị trí bắt đầu từ 1.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['expr index']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['It is at position: 10']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388814-section-4-v4",
+      "title": "Substring Extraction",
+      "title_vi": "Trích xuất chuỗi con",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Extract five characters at offset 10; Bash offsets start at zero.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\nSTART=10\nLENGTH=5\nSUBSTRING=${STRING:$START:$LENGTH}\necho \"The substring is: $SUBSTRING\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "content_vi": "Cắt năm ký tự tại vị trí 10; chỉ số Bash bắt đầu từ 0.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\nSTART=10\nLENGTH=5\nSUBSTRING=${STRING:$START:$LENGTH}\necho \"The substring is: $SUBSTRING\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "task": "Extract five characters at offset 10; Bash offsets start at zero.",
+      "task_vi": "Cắt năm ký tự tại vị trí 10; chỉ số Bash bắt đầu từ 0.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['${STRING:']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The substring is: brown']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388814-section-5-v4",
+      "title": "String Replacement",
+      "title_vi": "Thay thế chuỗi",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Compare first/all replacements and anchored prefix/suffix replacement.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\nSTART=10\nLENGTH=5\nSUBSTRING=${STRING:$START:$LENGTH}\necho \"The substring is: $SUBSTRING\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\necho \"${STRING/o/O}\"\necho \"${STRING//o/O}\"\necho \"${STRING/#The quick/The slow}\"\necho \"${STRING/%dog/cat}\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "content_vi": "So sánh thay lần đầu, toàn bộ, đầu chuỗi và cuối chuỗi.\n\n`~/project/string_operations.sh`:\n\n```bash\n#!/bin/bash\nSTRING=\"Hello, World!\"\nLENGTH=${#STRING}\necho \"The string is: $STRING\"\necho \"Its length is: $LENGTH\"\n\nSTRING=\"abcdefghijklmnopqrstuvwxyz\"\nCHAR=\"j\"\nPOSITION=$(expr index \"$STRING\" \"$CHAR\")\necho \"It is at position: $POSITION\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\nSTART=10\nLENGTH=5\nSUBSTRING=${STRING:$START:$LENGTH}\necho \"The substring is: $SUBSTRING\"\n\nSTRING=\"The quick brown fox jumps over the lazy dog\"\necho \"${STRING/o/O}\"\necho \"${STRING//o/O}\"\necho \"${STRING/#The quick/The slow}\"\necho \"${STRING/%dog/cat}\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/string_operations.sh\n~/project/string_operations.sh \n```",
+      "task": "Compare first/all replacements and anchored prefix/suffix replacement.",
+      "task_vi": "So sánh thay lần đầu, toàn bộ, đầu chuỗi và cuối chuỗi.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/string_operations.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['${STRING/o/O}', '${STRING//o/O}', '${STRING/#', '${STRING/%']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The quick brOwn fox jumps over the lazy dog', 'The quick brOwn fOx jumps Over the lazy dOg', 'The slow brown fox jumps over the lazy dog', 'The quick brown fox jumps over the lazy cat']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-basic-string-operations-388814",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

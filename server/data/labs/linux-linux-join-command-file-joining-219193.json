@@ -1,0 +1,423 @@
+{
+  "id": "linux-linux-join-command-file-joining-219193",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 219193,
+  "source_url": "https://labex.io/tutorials/linux-linux-join-command-file-joining-219193",
+  "order": 31,
+  "title": "Linux join Command: File Joining",
+  "title_vi": "Lệnh join: ghép tệp",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux join Command: File Joining",
+  "sections": [
+    {
+      "id": "commands-219193-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux join Command: File Joining. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh join: ghép tệp. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-219193-section-1-v1",
+      "title": "Understanding the Data Files",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem hai bảng",
+      "content": "Read employee and salary tables.\n\n```bash\ncat employees.txt salaries.txt\n```",
+      "content_vi": "Đọc bảng nhân viên và lương.\n\n```bash\ncat employees.txt salaries.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bcat\\s+employees\\.txt\\s+salaries\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-2-v1",
+      "title": "Basic Join Operation",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Ghép theo mã",
+      "content": "Join records on the first field.\n\n```bash\njoin employees.txt salaries.txt\n```",
+      "content_vi": "Ghép bản ghi theo trường đầu tiên.\n\n```bash\njoin employees.txt salaries.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bjoin\\s+employees\\.txt\\s+salaries\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-3-v1",
+      "title": "Customizing the Join Output",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đổi thứ tự đầu ra",
+      "content": "Select name, department, salary and identifier.\n\n```bash\njoin -o 1.2,1.3,2.2,1.1 employees.txt salaries.txt\n```",
+      "content_vi": "Chọn tên, phòng ban, lương rồi mã.\n\n```bash\njoin -o 1.2,1.3,2.2,1.1 employees.txt salaries.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bjoin\\s+-o\\s+1\\.2,1\\.3,2\\.2,1\\.1"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-4-v1",
+      "title": "Handling Unmatched Records",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Bản ghi không khớp",
+      "content": "Append Alex and include unmatched employees.\n\n```bash\necho '1006 Alex IT' >> employees.txt\njoin -a 1 employees.txt salaries.txt\n```",
+      "content_vi": "Thêm Alex và giữ nhân viên chưa có lương.\n\n```bash\necho '1006 Alex IT' >> employees.txt\njoin -a 1 employees.txt salaries.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bjoin\\s+-a\\s+1\\s+employees\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ngrep -qx '1006 Alex IT' employees.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-5-v1",
+      "title": "Joining on a Different Field",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Ghép theo trường khác",
+      "content": "Sort both inputs by their join keys before joining department names.\n\n```bash\nprintf '%s\\n' 'Engineering ENG' 'Marketing MKT' 'Sales SLS' 'HR HRS' 'Finance FIN' 'IT ITS' > departments.txt\nsort -k3,3 employees.txt > employees_by_department.txt\nsort departments.txt > departments_sorted.txt\njoin -1 3 -2 1 employees_by_department.txt departments_sorted.txt\n```",
+      "content_vi": "Sắp xếp cả hai đầu vào theo khóa phòng ban trước khi ghép.\n\n```bash\nprintf '%s\\n' 'Engineering ENG' 'Marketing MKT' 'Sales SLS' 'HR HRS' 'Finance FIN' 'IT ITS' > departments.txt\nsort -k3,3 employees.txt > employees_by_department.txt\nsort departments.txt > departments_sorted.txt\njoin -1 3 -2 1 employees_by_department.txt departments_sorted.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bjoin\\s+-1\\s+3\\s+-2\\s+1\\s+employees_by_department\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s departments_sorted.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-219193-section-1-v1",
+      "title": "Understanding the Data Files",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem hai bảng",
+      "content": "Read employee and salary tables.\n\n```bash\ncat employees.txt salaries.txt\n```",
+      "content_vi": "Đọc bảng nhân viên và lương.\n\n```bash\ncat employees.txt salaries.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bcat\\s+employees\\.txt\\s+salaries\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-2-v1",
+      "title": "Basic Join Operation",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Ghép theo mã",
+      "content": "Join records on the first field.\n\n```bash\njoin employees.txt salaries.txt\n```",
+      "content_vi": "Ghép bản ghi theo trường đầu tiên.\n\n```bash\njoin employees.txt salaries.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bjoin\\s+employees\\.txt\\s+salaries\\.txt"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-3-v1",
+      "title": "Customizing the Join Output",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đổi thứ tự đầu ra",
+      "content": "Select name, department, salary and identifier.\n\n```bash\njoin -o 1.2,1.3,2.2,1.1 employees.txt salaries.txt\n```",
+      "content_vi": "Chọn tên, phòng ban, lương rồi mã.\n\n```bash\njoin -o 1.2,1.3,2.2,1.1 employees.txt salaries.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "\\bjoin\\s+-o\\s+1\\.2,1\\.3,2\\.2,1\\.1"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-4-v1",
+      "title": "Handling Unmatched Records",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Bản ghi không khớp",
+      "content": "Append Alex and include unmatched employees.\n\n```bash\necho '1006 Alex IT' >> employees.txt\njoin -a 1 employees.txt salaries.txt\n```",
+      "content_vi": "Thêm Alex và giữ nhân viên chưa có lương.\n\n```bash\necho '1006 Alex IT' >> employees.txt\njoin -a 1 employees.txt salaries.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bjoin\\s+-a\\s+1\\s+employees\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ngrep -qx '1006 Alex IT' employees.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-219193-section-5-v1",
+      "title": "Joining on a Different Field",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Ghép theo trường khác",
+      "content": "Sort both inputs by their join keys before joining department names.\n\n```bash\nprintf '%s\\n' 'Engineering ENG' 'Marketing MKT' 'Sales SLS' 'HR HRS' 'Finance FIN' 'IT ITS' > departments.txt\nsort -k3,3 employees.txt > employees_by_department.txt\nsort departments.txt > departments_sorted.txt\njoin -1 3 -2 1 employees_by_department.txt departments_sorted.txt\n```",
+      "content_vi": "Sắp xếp cả hai đầu vào theo khóa phòng ban trước khi ghép.\n\n```bash\nprintf '%s\\n' 'Engineering ENG' 'Marketing MKT' 'Sales SLS' 'HR HRS' 'Finance FIN' 'IT ITS' > departments.txt\nsort -k3,3 employees.txt > employees_by_department.txt\nsort departments.txt > departments_sorted.txt\njoin -1 3 -2 1 employees_by_department.txt departments_sorted.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "\\bjoin\\s+-1\\s+3\\s+-2\\s+1\\s+employees_by_department\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "set -e\ncd /home/labex/project/\ntest -s departments_sorted.txt"
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-join-command-file-joining-219193.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

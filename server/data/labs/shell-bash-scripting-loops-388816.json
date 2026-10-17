@@ -1,0 +1,299 @@
+{
+  "id": "shell-bash-scripting-loops-388816",
+  "course_id": "shell-for-beginners",
+  "order": 11,
+  "title": "Bash Scripting Loops",
+  "title_vi": "Vòng Lặp For, While và Until Trong Bash",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Master for loops, while loops, until loops, break, and continue in Bash.",
+  "source_url": "https://labex.io/tutorials/shell-bash-scripting-loops-388816",
+  "source_lab_id": 388816,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388816-section-1-v4",
+      "title": "Setting Up the Environment",
+      "title_vi": "Chuẩn bị môi trường",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create bash_loops under ~/project and enter it.",
+      "content_vi": "Tạo bash_loops trong ~/project rồi chuyển vào thư mục đó.",
+      "task": "Create bash_loops under ~/project and enter it.",
+      "task_vi": "Tạo bash_loops trong ~/project rồi chuyển vào thư mục đó.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "test -d /home/labex/project/bash_loops"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388816-section-2-v4",
+      "title": "The for Loop",
+      "title_vi": "Vòng lặp for",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In bash_loops, greet Alice/Bob/Charlie/David and iterate numbers 1–5.\n\n`~/project/bash_loops/for_loop.sh`:\n\n```bash\n#!/bin/bash\nNAMES=(Alice Bob Charlie David)\nfor name in \"${NAMES[@]}\"; do echo \"Hello, $name!\"; done\nfor i in {1..5}; do echo \"Number: $i\"; done\n```\n\nRun:\n\n```bash\nchmod +x ~/project/bash_loops/for_loop.sh\n~/project/bash_loops/for_loop.sh \n```",
+      "content_vi": "Trong bash_loops, chào Alice/Bob/Charlie/David và duyệt số 1–5.\n\n`~/project/bash_loops/for_loop.sh`:\n\n```bash\n#!/bin/bash\nNAMES=(Alice Bob Charlie David)\nfor name in \"${NAMES[@]}\"; do echo \"Hello, $name!\"; done\nfor i in {1..5}; do echo \"Number: $i\"; done\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/bash_loops/for_loop.sh\n~/project/bash_loops/for_loop.sh \n```",
+      "task": "In bash_loops, greet Alice/Bob/Charlie/David and iterate numbers 1–5.",
+      "task_vi": "Trong bash_loops, chào Alice/Bob/Charlie/David và duyệt số 1–5.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/bash_loops/for_loop.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['for ', '${NAMES[@]}']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Hello, Alice!', 'Hello, David!', 'Number: 1', 'Number: 5']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388816-section-3-v4",
+      "title": "The while Loop",
+      "title_vi": "Vòng lặp while",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Count down 5→1 using while, pause one second, then announce launch.\n\n`~/project/bash_loops/while_loop.sh`:\n\n```bash\n#!/bin/bash\ncount=5\necho \"Countdown:\"\nwhile [ \"$count\" -gt 0 ]; do\n  echo \"$count\"\n  count=$((count - 1))\n  sleep 1\ndone\necho \"Blast off!\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/bash_loops/while_loop.sh\n~/project/bash_loops/while_loop.sh \n```",
+      "content_vi": "Dùng while đếm ngược 5→1, nghỉ mỗi giây rồi thông báo phóng.\n\n`~/project/bash_loops/while_loop.sh`:\n\n```bash\n#!/bin/bash\ncount=5\necho \"Countdown:\"\nwhile [ \"$count\" -gt 0 ]; do\n  echo \"$count\"\n  count=$((count - 1))\n  sleep 1\ndone\necho \"Blast off!\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/bash_loops/while_loop.sh\n~/project/bash_loops/while_loop.sh \n```",
+      "task": "Count down 5→1 using while, pause one second, then announce launch.",
+      "task_vi": "Dùng while đếm ngược 5→1, nghỉ mỗi giây rồi thông báo phóng.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/bash_loops/while_loop.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['while', 'sleep 1']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Countdown:\\n5\\n4\\n3\\n2\\n1\\nBlast off!']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388816-section-4-v4",
+      "title": "The until Loop",
+      "title_vi": "Vòng lặp until",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use until to count upward from 1 through 5, pausing each second.\n\n`~/project/bash_loops/until_loop.sh`:\n\n```bash\n#!/bin/bash\ncount=1\necho \"Counting up to 5:\"\nuntil [ \"$count\" -gt 5 ]; do\n  echo \"$count\"\n  count=$((count + 1))\n  sleep 1\ndone\n```\n\nRun:\n\n```bash\nchmod +x ~/project/bash_loops/until_loop.sh\n~/project/bash_loops/until_loop.sh \n```",
+      "content_vi": "Dùng until đếm từ 1 đến 5, nghỉ một giây mỗi vòng.\n\n`~/project/bash_loops/until_loop.sh`:\n\n```bash\n#!/bin/bash\ncount=1\necho \"Counting up to 5:\"\nuntil [ \"$count\" -gt 5 ]; do\n  echo \"$count\"\n  count=$((count + 1))\n  sleep 1\ndone\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/bash_loops/until_loop.sh\n~/project/bash_loops/until_loop.sh \n```",
+      "task": "Use until to count upward from 1 through 5, pausing each second.",
+      "task_vi": "Dùng until đếm từ 1 đến 5, nghỉ một giây mỗi vòng.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/bash_loops/until_loop.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['until', 'sleep 1']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Counting up to 5:\\n1\\n2\\n3\\n4\\n5']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388816-section-5-v4",
+      "title": "Using break and continue Statements",
+      "title_vi": "Dùng break và continue",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Break at 6; use continue in a second loop to print odd numbers through 9.\n\n`~/project/bash_loops/break_continue.sh`:\n\n```bash\n#!/bin/bash\necho \"Demonstration of break:\"\nfor i in {1..10}; do\n  if [ \"$i\" -eq 6 ]; then echo \"Breaking the loop at $i\"; break; fi\n  echo \"$i\"\ndone\necho \"Demonstration of continue (printing odd numbers):\"\nfor i in {1..10}; do\n  if [ $((i % 2)) -eq 0 ]; then continue; fi\n  echo \"$i\"\ndone\n```\n\nRun:\n\n```bash\nchmod +x ~/project/bash_loops/break_continue.sh\n~/project/bash_loops/break_continue.sh \n```",
+      "content_vi": "Dừng tại 6; dùng continue ở vòng thứ hai để in số lẻ đến 9.\n\n`~/project/bash_loops/break_continue.sh`:\n\n```bash\n#!/bin/bash\necho \"Demonstration of break:\"\nfor i in {1..10}; do\n  if [ \"$i\" -eq 6 ]; then echo \"Breaking the loop at $i\"; break; fi\n  echo \"$i\"\ndone\necho \"Demonstration of continue (printing odd numbers):\"\nfor i in {1..10}; do\n  if [ $((i % 2)) -eq 0 ]; then continue; fi\n  echo \"$i\"\ndone\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/bash_loops/break_continue.sh\n~/project/bash_loops/break_continue.sh \n```",
+      "task": "Break at 6; use continue in a second loop to print odd numbers through 9.",
+      "task_vi": "Dừng tại 6; dùng continue ở vòng thứ hai để in số lẻ đến 9.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/bash_loops/break_continue.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['break', 'continue']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Breaking the loop at 6', '1\\n3\\n5\\n7\\n9']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388816-section-1-v4",
+      "title": "Setting Up the Environment",
+      "title_vi": "Chuẩn bị môi trường",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create bash_loops under ~/project and enter it.",
+      "content_vi": "Tạo bash_loops trong ~/project rồi chuyển vào thư mục đó.",
+      "task": "Create bash_loops under ~/project and enter it.",
+      "task_vi": "Tạo bash_loops trong ~/project rồi chuyển vào thư mục đó.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "test -d /home/labex/project/bash_loops"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388816-section-2-v4",
+      "title": "The for Loop",
+      "title_vi": "Vòng lặp for",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In bash_loops, greet Alice/Bob/Charlie/David and iterate numbers 1–5.\n\n`~/project/bash_loops/for_loop.sh`:\n\n```bash\n#!/bin/bash\nNAMES=(Alice Bob Charlie David)\nfor name in \"${NAMES[@]}\"; do echo \"Hello, $name!\"; done\nfor i in {1..5}; do echo \"Number: $i\"; done\n```\n\nRun:\n\n```bash\nchmod +x ~/project/bash_loops/for_loop.sh\n~/project/bash_loops/for_loop.sh \n```",
+      "content_vi": "Trong bash_loops, chào Alice/Bob/Charlie/David và duyệt số 1–5.\n\n`~/project/bash_loops/for_loop.sh`:\n\n```bash\n#!/bin/bash\nNAMES=(Alice Bob Charlie David)\nfor name in \"${NAMES[@]}\"; do echo \"Hello, $name!\"; done\nfor i in {1..5}; do echo \"Number: $i\"; done\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/bash_loops/for_loop.sh\n~/project/bash_loops/for_loop.sh \n```",
+      "task": "In bash_loops, greet Alice/Bob/Charlie/David and iterate numbers 1–5.",
+      "task_vi": "Trong bash_loops, chào Alice/Bob/Charlie/David và duyệt số 1–5.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/bash_loops/for_loop.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['for ', '${NAMES[@]}']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Hello, Alice!', 'Hello, David!', 'Number: 1', 'Number: 5']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388816-section-3-v4",
+      "title": "The while Loop",
+      "title_vi": "Vòng lặp while",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Count down 5→1 using while, pause one second, then announce launch.\n\n`~/project/bash_loops/while_loop.sh`:\n\n```bash\n#!/bin/bash\ncount=5\necho \"Countdown:\"\nwhile [ \"$count\" -gt 0 ]; do\n  echo \"$count\"\n  count=$((count - 1))\n  sleep 1\ndone\necho \"Blast off!\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/bash_loops/while_loop.sh\n~/project/bash_loops/while_loop.sh \n```",
+      "content_vi": "Dùng while đếm ngược 5→1, nghỉ mỗi giây rồi thông báo phóng.\n\n`~/project/bash_loops/while_loop.sh`:\n\n```bash\n#!/bin/bash\ncount=5\necho \"Countdown:\"\nwhile [ \"$count\" -gt 0 ]; do\n  echo \"$count\"\n  count=$((count - 1))\n  sleep 1\ndone\necho \"Blast off!\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/bash_loops/while_loop.sh\n~/project/bash_loops/while_loop.sh \n```",
+      "task": "Count down 5→1 using while, pause one second, then announce launch.",
+      "task_vi": "Dùng while đếm ngược 5→1, nghỉ mỗi giây rồi thông báo phóng.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/bash_loops/while_loop.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['while', 'sleep 1']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Countdown:\\n5\\n4\\n3\\n2\\n1\\nBlast off!']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388816-section-4-v4",
+      "title": "The until Loop",
+      "title_vi": "Vòng lặp until",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use until to count upward from 1 through 5, pausing each second.\n\n`~/project/bash_loops/until_loop.sh`:\n\n```bash\n#!/bin/bash\ncount=1\necho \"Counting up to 5:\"\nuntil [ \"$count\" -gt 5 ]; do\n  echo \"$count\"\n  count=$((count + 1))\n  sleep 1\ndone\n```\n\nRun:\n\n```bash\nchmod +x ~/project/bash_loops/until_loop.sh\n~/project/bash_loops/until_loop.sh \n```",
+      "content_vi": "Dùng until đếm từ 1 đến 5, nghỉ một giây mỗi vòng.\n\n`~/project/bash_loops/until_loop.sh`:\n\n```bash\n#!/bin/bash\ncount=1\necho \"Counting up to 5:\"\nuntil [ \"$count\" -gt 5 ]; do\n  echo \"$count\"\n  count=$((count + 1))\n  sleep 1\ndone\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/bash_loops/until_loop.sh\n~/project/bash_loops/until_loop.sh \n```",
+      "task": "Use until to count upward from 1 through 5, pausing each second.",
+      "task_vi": "Dùng until đếm từ 1 đến 5, nghỉ một giây mỗi vòng.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/bash_loops/until_loop.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['until', 'sleep 1']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Counting up to 5:\\n1\\n2\\n3\\n4\\n5']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388816-section-5-v4",
+      "title": "Using break and continue Statements",
+      "title_vi": "Dùng break và continue",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Break at 6; use continue in a second loop to print odd numbers through 9.\n\n`~/project/bash_loops/break_continue.sh`:\n\n```bash\n#!/bin/bash\necho \"Demonstration of break:\"\nfor i in {1..10}; do\n  if [ \"$i\" -eq 6 ]; then echo \"Breaking the loop at $i\"; break; fi\n  echo \"$i\"\ndone\necho \"Demonstration of continue (printing odd numbers):\"\nfor i in {1..10}; do\n  if [ $((i % 2)) -eq 0 ]; then continue; fi\n  echo \"$i\"\ndone\n```\n\nRun:\n\n```bash\nchmod +x ~/project/bash_loops/break_continue.sh\n~/project/bash_loops/break_continue.sh \n```",
+      "content_vi": "Dừng tại 6; dùng continue ở vòng thứ hai để in số lẻ đến 9.\n\n`~/project/bash_loops/break_continue.sh`:\n\n```bash\n#!/bin/bash\necho \"Demonstration of break:\"\nfor i in {1..10}; do\n  if [ \"$i\" -eq 6 ]; then echo \"Breaking the loop at $i\"; break; fi\n  echo \"$i\"\ndone\necho \"Demonstration of continue (printing odd numbers):\"\nfor i in {1..10}; do\n  if [ $((i % 2)) -eq 0 ]; then continue; fi\n  echo \"$i\"\ndone\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/bash_loops/break_continue.sh\n~/project/bash_loops/break_continue.sh \n```",
+      "task": "Break at 6; use continue in a second loop to print odd numbers through 9.",
+      "task_vi": "Dừng tại 6; dùng continue ở vòng thứ hai để in số lẻ đến 9.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/bash_loops/break_continue.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['break', 'continue']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Breaking the loop at 6', '1\\n3\\n5\\n7\\n9']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-bash-scripting-loops-388816",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

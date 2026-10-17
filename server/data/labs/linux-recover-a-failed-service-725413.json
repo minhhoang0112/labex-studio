@@ -1,0 +1,93 @@
+{
+  "id": "linux-recover-a-failed-service-725413",
+  "course_id": "linux-for-noobs",
+  "order": 29,
+  "title": "Recover a Failed Service",
+  "title_vi": "Khôi phục một dịch vụ bị lỗi",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "20 mins",
+  "overview": "A report-export service cannot start because its small configuration file contains an invalid port value. The service log explains the accepted range.  The preceding guided lab practiced the same reco",
+  "source_url": "https://labex.io/tutorials/linux-recover-a-failed-service-725413",
+  "source_lab_id": 725413,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A report-export service cannot start because its small configuration file contains an invalid port value. The service log explains the accepted range.\n\nThe preceding guided lab practiced the same recovery pattern: inspect status, read the journal, repair one configuration value, reset the failed state, and start the service.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một dịch vụ xuất báo cáo không thể khởi chạy vì tệp cấu hình nhỏ của nó chứa giá trị cổng không hợp lệ. Log dịch vụ giải thích phạm vi được chấp nhận.\n\nBài hướng dẫn trước đã thực hành cùng mẫu khôi phục: kiểm tra trạng thái, đọc journal, sửa một giá trị cấu hình, đặt lại trạng thái lỗi và khởi chạy dịch vụ."
+    },
+    {
+      "id": "source-725413-section-1-v3",
+      "title": "Return the Service to Active",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`labex-report-export.service` is failed. It reads one `PORT` assignment from `/etc/labex-report-export.conf`.\n\n### Scope\n\n- Use service status and journal evidence to understand the failure.\n- Change only the invalid `PORT` value.\n- Choose a numeric port from `1024` through `65535`.\n- Do not edit the unit file or unrelated services.\n\n### Your Goal\n\nLeave `labex-report-export.service` active with a valid configured port.\n\n### Acceptance Criteria\n\n- `systemctl is-active labex-report-export.service` reports `active`.\n- `/etc/labex-report-export.conf` contains one in-range numeric `PORT` value.\n\n### Hints\n\nWhere should diagnosis begin?\n\nUse the same `systemctl status` and unit-specific `journalctl` commands practiced in the guided lab. The failure message states what is invalid.",
+      "title_vi": "Đưa dịch vụ trở lại trạng thái hoạt động",
+      "task": "Thực hiện hướng dẫn: Return the Service to Active",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "### Tình huống hiện tại\n\n`labex-report-export.service` bị lỗi. Nó đọc một phép gán `PORT` từ `/etc/labex-report-export.conf`.\n\n### Phạm vi\n\n- Dùng trạng thái dịch vụ và bằng chứng journal để hiểu lỗi.\n- Chỉ thay giá trị `PORT` không hợp lệ.\n- Chọn cổng dạng số từ `1024` đến `65535`.\n- Không sửa tệp unit hoặc dịch vụ không liên quan.\n\n### Mục tiêu của bạn\n\nĐể `labex-report-export.service` hoạt động với cổng được cấu hình hợp lệ.\n\n### Tiêu chí đạt\n\n- `systemctl is-active labex-report-export.service` báo `active`.\n- `/etc/labex-report-export.conf` chứa một giá trị `PORT` dạng số trong phạm vi.\n\n### Gợi ý\n\nNên bắt đầu chẩn đoán từ đâu?\n\nDùng cùng lệnh `systemctl status` và `journalctl` dành riêng cho unit đã luyện trong bài hướng dẫn. Thông báo lỗi cho biết điều gì không hợp lệ.",
+      "task_vi": "Thực hiện hướng dẫn: Đưa dịch vụ trở lại trạng thái hoạt động",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You used service evidence to repair one invalid value and return one failed unit to service.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã dùng bằng chứng dịch vụ để sửa một giá trị không hợp lệ và đưa một unit lỗi trở lại phục vụ."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725413-section-1-v3",
+      "title": "Return the Service to Active",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`labex-report-export.service` is failed. It reads one `PORT` assignment from `/etc/labex-report-export.conf`.\n\n### Scope\n\n- Use service status and journal evidence to understand the failure.\n- Change only the invalid `PORT` value.\n- Choose a numeric port from `1024` through `65535`.\n- Do not edit the unit file or unrelated services.\n\n### Your Goal\n\nLeave `labex-report-export.service` active with a valid configured port.\n\n### Acceptance Criteria\n\n- `systemctl is-active labex-report-export.service` reports `active`.\n- `/etc/labex-report-export.conf` contains one in-range numeric `PORT` value.\n\n### Hints\n\nWhere should diagnosis begin?\n\nUse the same `systemctl status` and unit-specific `journalctl` commands practiced in the guided lab. The failure message states what is invalid.",
+      "title_vi": "Đưa dịch vụ trở lại trạng thái hoạt động",
+      "task": "Thực hiện hướng dẫn: Return the Service to Active",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+      },
+      "required_capabilities": [],
+      "content_vi": "### Tình huống hiện tại\n\n`labex-report-export.service` bị lỗi. Nó đọc một phép gán `PORT` từ `/etc/labex-report-export.conf`.\n\n### Phạm vi\n\n- Dùng trạng thái dịch vụ và bằng chứng journal để hiểu lỗi.\n- Chỉ thay giá trị `PORT` không hợp lệ.\n- Chọn cổng dạng số từ `1024` đến `65535`.\n- Không sửa tệp unit hoặc dịch vụ không liên quan.\n\n### Mục tiêu của bạn\n\nĐể `labex-report-export.service` hoạt động với cổng được cấu hình hợp lệ.\n\n### Tiêu chí đạt\n\n- `systemctl is-active labex-report-export.service` báo `active`.\n- `/etc/labex-report-export.conf` chứa một giá trị `PORT` dạng số trong phạm vi.\n\n### Gợi ý\n\nNên bắt đầu chẩn đoán từ đâu?\n\nDùng cùng lệnh `systemctl status` và `journalctl` dành riêng cho unit đã luyện trong bài hướng dẫn. Thông báo lỗi cho biết điều gì không hợp lệ.",
+      "task_vi": "Thực hiện hướng dẫn: Đưa dịch vụ trở lại trạng thái hoạt động",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-recover-a-failed-service-725413.json"
+}

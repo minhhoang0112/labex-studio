@@ -1,0 +1,153 @@
+{
+  "id": "linux-stop-a-runaway-process-725412",
+  "course_id": "linux-for-noobs",
+  "order": 25,
+  "title": "Stop a Runaway Process",
+  "title_vi": "Dừng một tiến trình chạy mất kiểm soát",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "overview": "A test process named  labex-runaway  was left running after an experiment. Its PID was recorded so an operator can target it without affecting unrelated processes.  The preceding guided lab practiced",
+  "source_url": "https://labex.io/tutorials/linux-stop-a-runaway-process-725412",
+  "source_lab_id": 725412,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A test process named `labex-runaway` was left running after an experiment. Its PID was recorded so an operator can target it without affecting unrelated processes.\n\nThe preceding guided lab practiced reading a PID file, inspecting that PID, sending `SIGTERM`, and confirming that the process stopped.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một tiến trình thử nghiệm tên `labex-runaway` bị để chạy sau một thí nghiệm. PID của nó đã được ghi lại để người vận hành nhắm tới mà không ảnh hưởng tiến trình không liên quan.\n\nBài hướng dẫn trước đã luyện đọc tệp PID, kiểm tra PID đó, gửi `SIGTERM` và xác nhận tiến trình đã dừng."
+    },
+    {
+      "id": "source-725412-section-1-v3",
+      "title": "Stop the Recorded Process",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/system-recovery/runaway.pid` contains the PID of one running `labex-runaway` process owned by `labex`.\n\n### Scope\n\n- Use the PID in `runaway.pid`.\n- Stop that process with the normal termination signal.\n- Do not signal any other process.\n\n### Your Goal\n\nLeave the recorded `labex-runaway` process stopped.\n\n### Acceptance Criteria\n\n- The PID recorded in `runaway.pid` is no longer running.\n- No unrelated process is changed.\n\n### Hints\n\nWhat safe sequence did the guided lab use?\n\nRead the PID, inspect that exact PID with `ps`, pass it to `kill`, wait briefly, and inspect the same PID again.",
+      "title_vi": "Dừng tiến trình đã ghi nhận",
+      "task": "Thực hiện hướng dẫn: Stop the Recorded Process",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pid=$(cat /home/labex/project/system-recovery/runaway.pid) && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*kill\\s+\"\\$pid\"\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/system-recovery/runaway.pid` chứa PID của một tiến trình `labex-runaway` đang chạy, thuộc sở hữu `labex`.\n\n### Phạm vi\n\n- Sử dụng PID trong `runaway.pid`.\n- Dừng tiến trình đó bằng tín hiệu kết thúc thông thường.\n- Không gửi tín hiệu tới tiến trình nào khác.\n\n### Mục tiêu của bạn\n\nĐể tiến trình `labex-runaway` đã ghi nhận ở trạng thái dừng.\n\n### Tiêu chí đạt\n\n- PID ghi trong `runaway.pid` không còn chạy.\n- Không có tiến trình không liên quan nào bị thay đổi.\n\n### Gợi ý\n\nBài hướng dẫn đã dùng trình tự an toàn nào?\n\nĐọc PID, kiểm tra đúng PID đó bằng `ps`, truyền nó cho `kill`, chờ ngắn rồi kiểm tra lại cùng PID.",
+      "task_vi": "Thực hiện hướng dẫn: Dừng tiến trình đã ghi nhận",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You safely stopped one known process by inspecting and signaling its recorded PID.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã dừng an toàn một tiến trình đã biết bằng cách kiểm tra và gửi tín hiệu tới PID đã ghi của nó."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-725412-section-1-v3",
+      "title": "Stop the Recorded Process",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/system-recovery/runaway.pid` contains the PID of one running `labex-runaway` process owned by `labex`.\n\n### Scope\n\n- Use the PID in `runaway.pid`.\n- Stop that process with the normal termination signal.\n- Do not signal any other process.\n\n### Your Goal\n\nLeave the recorded `labex-runaway` process stopped.\n\n### Acceptance Criteria\n\n- The PID recorded in `runaway.pid` is no longer running.\n- No unrelated process is changed.\n\n### Hints\n\nWhat safe sequence did the guided lab use?\n\nRead the PID, inspect that exact PID with `ps`, pass it to `kill`, wait briefly, and inspect the same PID again.",
+      "title_vi": "Dừng tiến trình đã ghi nhận",
+      "task": "Thực hiện hướng dẫn: Stop the Recorded Process",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pid=$(cat /home/labex/project/system-recovery/runaway.pid) && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*kill\\s+\"\\$pid\"\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/system-recovery/runaway.pid` chứa PID của một tiến trình `labex-runaway` đang chạy, thuộc sở hữu `labex`.\n\n### Phạm vi\n\n- Sử dụng PID trong `runaway.pid`.\n- Dừng tiến trình đó bằng tín hiệu kết thúc thông thường.\n- Không gửi tín hiệu tới tiến trình nào khác.\n\n### Mục tiêu của bạn\n\nĐể tiến trình `labex-runaway` đã ghi nhận ở trạng thái dừng.\n\n### Tiêu chí đạt\n\n- PID ghi trong `runaway.pid` không còn chạy.\n- Không có tiến trình không liên quan nào bị thay đổi.\n\n### Gợi ý\n\nBài hướng dẫn đã dùng trình tự an toàn nào?\n\nĐọc PID, kiểm tra đúng PID đó bằng `ps`, truyền nó cho `kill`, chờ ngắn rồi kiểm tra lại cùng PID.",
+      "task_vi": "Thực hiện hướng dẫn: Dừng tiến trình đã ghi nhận",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-stop-a-runaway-process-725412.json"
+}

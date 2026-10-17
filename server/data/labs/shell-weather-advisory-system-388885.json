@@ -1,0 +1,99 @@
+{
+  "id": "shell-weather-advisory-system-388885",
+  "course_id": "shell-for-beginners",
+  "order": 10,
+  "title": "Weather Advisory System",
+  "title_vi": "Thử Thách: Hệ Thống Cảnh Báo Thời Tiết",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "5 mins",
+  "overview": "Implement a weather advisory script using nested conditions.",
+  "source_url": "https://labex.io/tutorials/shell-weather-advisory-system-388885",
+  "source_lab_id": 388885,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388885-section-1-v4",
+      "title": "Complete the Weather Advisory Script",
+      "title_vi": "Hoàn thiện kịch bản tư vấn thời tiết",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Complete the provided weather_advisor.sh. Read Celsius from stdin; handle <0, 0–10, 11–20 and >20. Preserve the four source advice strings shown below.\n\n- `-2` → `It's freezing! Wear a heavy coat and gloves.`\n- `0` → `It's cold. A warm jacket is recommended.`\n- `10` → `It's cold. A warm jacket is recommended.`\n- `11` → `It's cool. A light jacket should suffice.`\n- `20` → `It's cool. A light jacket should suffice.`\n- `21` → `It's warm. Enjoy the pleasant weather!`",
+      "content_vi": "Hoàn thiện weather_advisor.sh có sẵn. Đọc độ C từ stdin; xử lý <0, 0–10, 11–20 và >20. Giữ bốn thông báo trong mã dưới đây.\n\n- `-2` → `It's freezing! Wear a heavy coat and gloves.`\n- `0` → `It's cold. A warm jacket is recommended.`\n- `10` → `It's cold. A warm jacket is recommended.`\n- `11` → `It's cool. A light jacket should suffice.`\n- `20` → `It's cool. A light jacket should suffice.`\n- `21` → `It's warm. Enjoy the pleasant weather!`",
+      "task": "Complete the provided weather_advisor.sh. Read Celsius from stdin; handle <0, 0–10, 11–20 and >20. Preserve the four source advice strings shown below.",
+      "task_vi": "Hoàn thiện weather_advisor.sh có sẵn. Đọc độ C từ stdin; xử lý <0, 0–10, 11–20 và >20. Giữ bốn thông báo trong mã dưới đây.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/weather_advisor.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['read', 'if']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    for number, expected in [(-2, \"It's freezing! Wear a heavy coat and gloves.\"), (0, \"It's cold. A warm jacket is recommended.\"), (10, \"It's cold. A warm jacket is recommended.\"), (11, \"It's cool. A light jacket should suffice.\"), (20, \"It's cool. A light jacket should suffice.\"), (21, \"It's warm. Enjoy the pleasant weather!\")]:\n        assert expected in execute([str(p)], str(number)+'\\n').stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388885-section-1-v4",
+      "title": "Complete the Weather Advisory Script",
+      "title_vi": "Hoàn thiện kịch bản tư vấn thời tiết",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Complete the provided weather_advisor.sh. Read Celsius from stdin; handle <0, 0–10, 11–20 and >20. Preserve the four source advice strings shown below.\n\n- `-2` → `It's freezing! Wear a heavy coat and gloves.`\n- `0` → `It's cold. A warm jacket is recommended.`\n- `10` → `It's cold. A warm jacket is recommended.`\n- `11` → `It's cool. A light jacket should suffice.`\n- `20` → `It's cool. A light jacket should suffice.`\n- `21` → `It's warm. Enjoy the pleasant weather!`",
+      "content_vi": "Hoàn thiện weather_advisor.sh có sẵn. Đọc độ C từ stdin; xử lý <0, 0–10, 11–20 và >20. Giữ bốn thông báo trong mã dưới đây.\n\n- `-2` → `It's freezing! Wear a heavy coat and gloves.`\n- `0` → `It's cold. A warm jacket is recommended.`\n- `10` → `It's cold. A warm jacket is recommended.`\n- `11` → `It's cool. A light jacket should suffice.`\n- `20` → `It's cool. A light jacket should suffice.`\n- `21` → `It's warm. Enjoy the pleasant weather!`",
+      "task": "Complete the provided weather_advisor.sh. Read Celsius from stdin; handle <0, 0–10, 11–20 and >20. Preserve the four source advice strings shown below.",
+      "task_vi": "Hoàn thiện weather_advisor.sh có sẵn. Đọc độ C từ stdin; xử lý <0, 0–10, 11–20 và >20. Giữ bốn thông báo trong mã dưới đây.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/weather_advisor.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['read', 'if']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    for number, expected in [(-2, \"It's freezing! Wear a heavy coat and gloves.\"), (0, \"It's cold. A warm jacket is recommended.\"), (10, \"It's cold. A warm jacket is recommended.\"), (11, \"It's cool. A light jacket should suffice.\"), (20, \"It's cool. A light jacket should suffice.\"), (21, \"It's warm. Enjoy the pleasant weather!\")]:\n        assert expected in execute([str(p)], str(number)+'\\n').stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-weather-advisory-system-388885",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

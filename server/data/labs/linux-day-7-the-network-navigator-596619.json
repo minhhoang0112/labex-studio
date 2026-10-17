@@ -1,0 +1,503 @@
+{
+  "id": "linux-day-7-the-network-navigator-596619",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 7,
+  "title": "The Network Navigator",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "Welcome, Network Navigator! You've just been hired as a Junior System Administrator at a fast-growing tech startup. This morning, a critical web server has gone offline. Users are reporting they can't access the company's internal portal.",
+  "source_url": "https://labex.io/tutorials/linux-day-7-the-network-navigator-596619",
+  "source_lab_id": 596619,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-7-the-network-navigator-596619",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-7-the-network-navigator-596619.json",
+    "reference_sha256": "8e6c6764ad4b15e2da2df89ce154e3a39f94bd4e441fd63f7749e3ddbfedfd2e",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "intro-only-visible"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-7-the-network-navigator-596619.json",
+  "sections": [
+    {
+      "id": "source-596619-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nWelcome, Network Navigator! You've just been hired as a Junior System Administrator at a fast-growing tech startup. This morning, a critical web server has gone offline. Users are reporting they can't access the company's internal portal.\n\nYour senior admin is tied up in a meeting and has tasked you with the initial diagnosis. It's your time to shine! Your mission is to systematically investigate the server's network status, identify the root cause, and restore connectivity. Let's get this server back online!\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Important Notice</div>\n<div class=\"text-sm\">\nThis challenge covers skills beyond <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. If you have not learned these topics yet, skip it for now and continue to <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, the next course in the <a href=\"https://labex.io/learn/linux\" class=\"underline\">Linux learning path</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>When to return:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Complete the <a href=\"https://labex.io/labs/linux-linux-networking-and-firewall-basics-725414?course=linux-for-noobs\" class=\"underline\">Linux Networking and Firewall Basics</a> Guided Lab, then return and try this challenge again.</li>\n</ol>\n</div>\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Giới thiệu\n\nChào mừng bạn, Chuyên gia điều hướng mạng! Bạn vừa được tuyển dụng làm Quản trị viên hệ thống cấp độ sơ cấp tại một công ty khởi nghiệp công nghệ đang phát triển nhanh chóng. Sáng nay, một máy chủ web quan trọng đã bị ngoại tuyến. Người dùng đang báo cáo rằng họ không thể truy cập vào cổng thông tin nội bộ của công ty.\n\nQuản trị viên cấp cao của bạn đang bận họp và đã giao cho bạn nhiệm vụ chẩn đoán ban đầu. Đây là thời điểm để bạn tỏa sáng! Nhiệm vụ của bạn là điều tra một cách có hệ thống trạng thái mạng của máy chủ, xác định nguyên nhân gốc rễ và khôi phục kết nối. Hãy đưa máy chủ này hoạt động trở lại nhé!\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Thông báo quan trọng</div>\n<div class=\"text-sm\">\nThử thách này bao gồm các kỹ năng nằm ngoài <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Làm quen nhanh với Linux</a>. Nếu bạn chưa học các chủ đề này, hãy bỏ qua nó lúc này và tiếp tục với <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux cho người mới bắt đầu</a>, khóa học tiếp theo trong <a href=\"https://labex.io/learn/linux\" class=\"underline\">lộ trình học Linux</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>Khi nào nên quay lại:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Hoàn thành Bài lab có hướng dẫn <a href=\"https://labex.io/labs/linux-linux-networking-and-firewall-basics-725414?course=linux-for-noobs\" class=\"underline\">Cơ bản về Mạng và Tường lửa Linux</a>, sau đó quay lại và thử lại thử thách này.</li>\n</ol>\n</div>"
+    },
+    {
+      "id": "source-596619-section-1-v2",
+      "title": "Checking Network Interface Status",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Checking Network Interface Status\n\nYour first step as a Network Navigator is to gather basic information. Is the network hardware even recognized and active? You need to check the status of all network interfaces on the server. The modern tool for this job is the `ip` command.\n\n### Tasks\n\n- Use the `ip` command to display the status and configuration of all network interfaces.\n\n### Requirements\n\n- You must use the `ip addr` command to perform this check.\n\n### Examples\n\nAfter running the command, you should see output showing network interfaces like `lo` (loopback) and `eth0` (or similar). Look for the state of your main interface - it should show `UP` to indicate it's active.\n\n```bash\n## Expected output format (interface names may vary)\n1: lo: 65536 qdisc noqueue state UNKNOWN group default qlen 1000 < LOOPBACK,UP,LOWER_UP > mtu\nlink/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\ninet 127.0.0.1/8 scope host lo\nvalid_lft forever preferred_lft forever\n2: eth0: 1500 qdisc mq state UP group default qlen 1000 < BROADCAST,MULTICAST,UP,LOWER_UP > mtu\nlink/ether 00:16:3e:04:b0:40 brd ff:ff:ff:ff:ff:ff\ninet 172.16.50.108/24 metric 100 brd 172.16.50.255 scope global dynamic eth0\nvalid_lft 1892159216sec preferred_lft 1892159216sec\n```\n\n### Hints\n\n- The `ip` command is a powerful tool with many subcommands. The one for managing addresses is `addr`.\n- You can use `ip addr show` or its shorter alias `ip addr`.\n",
+      "task": "- Use the `ip` command to display the status and configuration of all network interfaces.",
+      "hint": "- The `ip` command is a powerful tool with many subcommands. The one for managing addresses is `addr`.\n- You can use `ip addr show` or its shorter alias `ip addr`.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*ip\\s+addr\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Kiểm tra trạng thái giao diện mạng",
+      "content_vi": "## Kiểm tra Trạng thái Giao diện Mạng\n\nBước đầu tiên của bạn với tư cách là một Người điều hướng Mạng là thu thập thông tin cơ bản. Liệu phần cứng mạng có được nhận diện và đang hoạt động hay không? Bạn cần kiểm tra trạng thái của tất cả các giao diện mạng trên máy chủ. Công cụ hiện đại cho công việc này là lệnh `ip`.\n\n### Các nhiệm vụ\n\n- Sử dụng lệnh `ip` để hiển thị trạng thái và cấu hình của tất cả các giao diện mạng.\n\n### Các yêu cầu\n\n- Bạn phải sử dụng lệnh `ip addr` để thực hiện việc kiểm tra này.\n\n### Ví dụ\n\nSau khi chạy lệnh, bạn sẽ thấy đầu ra hiển thị các giao diện mạng như `lo` (loopback) và `eth0` (hoặc tương tự). Hãy tìm trạng thái của giao diện chính của bạn - nó sẽ hiển thị `UP` để biểu thị rằng nó đang hoạt động.\n\n```bash\n## Expected output format (interface names may vary)\n1: lo: 65536 qdisc noqueue state UNKNOWN group default qlen 1000 < LOOPBACK,UP,LOWER_UP > mtu\nlink/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\ninet 127.0.0.1/8 scope host lo\nvalid_lft forever preferred_lft forever\n2: eth0: 1500 qdisc mq state UP group default qlen 1000 < BROADCAST,MULTICAST,UP,LOWER_UP > mtu\nlink/ether 00:16:3e:04:b0:40 brd ff:ff:ff:ff:ff:ff\ninet 172.16.50.108/24 metric 100 brd 172.16.50.255 scope global dynamic eth0\nvalid_lft 1892159216sec preferred_lft 1892159216sec\n```\n\n### Gợi ý\n\n- Lệnh `ip` là một công cụ mạnh mẽ với nhiều lệnh con. Lệnh dùng để quản lý các địa chỉ là `addr`.\n- Bạn có thể sử dụng `ip addr show` hoặc tên viết tắt ngắn hơn của nó là `ip addr`."
+    },
+    {
+      "id": "source-596619-section-2-v2",
+      "title": "Verifying IP Address Configuration",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Verifying IP Address Configuration\n\nOkay, the interface is `UP`. That's a good start. But does it have an IP address? An interface without an IP address can't communicate on the network. While `ip addr` shows this, let's use another classic command, `ifconfig`, to double-check. It's good to know multiple tools for the same job.\n\n### Tasks\n\n- Use the `ifconfig` command to verify the IP address configuration.\n\n### Requirements\n\n- You must use the `ifconfig` command.\n\n### Examples\n\nThe output should display your network interfaces with their IP addresses. Look for the `inet` field under your main network interface (like `eth0`) to confirm the IP configuration.\n\n```bash\n## Expected output showing IP configuration\neth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 172.16.50.108  netmask 255.255.255.0  broadcast 172.16.50.255\n        ether 00:16:3e:04:b0:40  txqueuelen 1000  (Ethernet)\n\nlo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536\n        inet 127.0.0.1  netmask 255.0.0.0\n```\n\n### Hints\n\n- The `ifconfig` command is part of the `net-tools` package, which we've already installed for you.\n- Running `ifconfig` without any arguments will display all active interfaces.\n",
+      "task": "- Use the `ifconfig` command to verify the IP address configuration.",
+      "hint": "- The `ifconfig` command is part of the `net-tools` package, which we've already installed for you.\n- Running `ifconfig` without any arguments will display all active interfaces.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bước yêu cầu ifconfig nhưng runtime hiện chưa có net-tools/ifconfig. Không dùng ip addr để tự động chấm thay yêu cầu này."
+      },
+      "required_capabilities": [
+        "ifconfig-tool"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ifconfig(?:\\s+-a)?\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "ifconfig"
+        ]
+      },
+      "title_vi": "Kiểm tra cấu hình địa chỉ IP",
+      "content_vi": "## Xác minh Cấu hình Địa chỉ IP\n\nĐược rồi, giao diện mạng đã ở trạng thái `UP`. Đó là một khởi đầu tốt. Nhưng nó có địa chỉ IP chưa? Một giao diện mạng không có địa chỉ IP thì không thể giao tiếp trên mạng. Mặc dù `ip addr` hiển thị điều này, chúng ta hãy sử dụng một lệnh kinh điển khác, `ifconfig`, để kiểm tra lại. Thật tốt khi biết nhiều công cụ cho cùng एक công việc.\n\n### Các nhiệm vụ\n\n- Sử dụng lệnh `ifconfig` để xác minh cấu hình địa chỉ IP.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `ifconfig`.\n\n### Ví dụ\n\nĐầu ra phải hiển thị các giao diện mạng của bạn cùng với các địa chỉ IP của chúng. Hãy tìm trường `inet` dưới giao diện mạng chính của bạn (như `eth0`) để xác nhận cấu hình IP.\n\n```bash\n## Expected output showing IP configuration\neth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 172.16.50.108  netmask 255.255.255.0  broadcast 172.16.50.255\n        ether 00:16:3e:04:b0:40  txqueuelen 1000  (Ethernet)\n\nlo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536\n        inet 127.0.0.1  netmask 255.0.0.0\n```\n\n### Gợi ý\n\n- Lệnh `ifconfig` là một phần của gói `net-tools`, mà chúng tôi đã cài đặt sẵn cho bạn.\n- Chạy `ifconfig` mà không có bất kỳ đối số nào sẽ hiển thị tất cả các giao diện đang hoạt động."
+    },
+    {
+      "id": "source-596619-section-3-v2",
+      "title": "Testing Connectivity to Remote Hosts",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Testing Connectivity to Remote Hosts\n\nThe server has an active interface and an IP address. The next logical step is to check if it can reach the outside world. A failure here could indicate a problem with the gateway or DNS settings. The `ping` command is the perfect tool for this test.\n\n### Tasks\n\n- Test the server's connectivity to the internet by sending exactly **3** ICMP packets to Google's public DNS server at `8.8.8.8`.\n\n### Requirements\n\n- You must use the `ping` command.\n- You must limit the number of packets sent to **3**.\n- The target IP address must be `8.8.8.8`.\n\n### Examples\n\nIf connectivity is working, you should see replies from the target IP address with timing information. The summary at the end should show 3 packets transmitted and 3 packets received with 0% packet loss.\n\n```bash\n## Expected successful output pattern\nPING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=119 time=4.33 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=119 time=4.30 ms\n64 bytes from 8.8.8.8: icmp_seq=3 ttl=119 time=4.30 ms\n\n--- 8.8.8.8 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2002ms\nrtt min/avg/max/mdev = 4.298/4.309/4.329/0.014 ms\n```\n\n### Hints\n\n- The `ping` command will run indefinitely unless you tell it to stop.\n- Use the `-c` option to specify the `c`ount of packets to send.\n",
+      "task": "- Test the server's connectivity to the internet by sending exactly **3** ICMP packets to Google's public DNS server at `8.8.8.8`.",
+      "hint": "- The `ping` command will run indefinitely unless you tell it to stop.\n- Use the `-c` option to specify the `c`ount of packets to send.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bước yêu cầu ping -c 3 8.8.8.8. Network namespace hiện không có đường ra Internet hoặc quyền ICMP cần thiết."
+      },
+      "required_capabilities": [
+        "internet-icmp"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ping\\s+-c\\s*3\\s+8\\.8\\.8\\.8\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "external_icmp"
+        ]
+      },
+      "title_vi": "Kiểm tra kết nối tới máy chủ từ xa",
+      "content_vi": "## Kiểm tra kết nối đến các máy chủ từ xa\n\nMáy chủ có một giao diện mạng hoạt động và một địa chỉ IP. Bước tiếp theo hợp lý là kiểm tra xem nó có thể kết nối với thế giới bên ngoài hay không. Lỗi ở bước này có thể chỉ ra sự cố với cổng mặc định (gateway) hoặc cài đặt DNS. Lệnh `ping` là công cụ hoàn hảo cho bài kiểm tra này.\n\n### Nhiệm vụ\n\n- Kiểm tra kết nối của máy chủ với internet bằng cách gửi chính xác **3** gói tin ICMP đến máy chủ DNS công cộng của Google tại `8.8.8.8`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `ping`.\n- Bạn phải giới hạn số lượng gói tin gửi đi là **3**.\n- Địa chỉ IP đích phải là `8.8.8.8`.\n\n### Ví dụ\n\nNếu kết nối hoạt động tốt, bạn sẽ thấy các phản hồi từ địa chỉ IP đích kèm theo thông tin thời gian. Phần tổng kết ở cuối phải hiển thị 3 gói tin được truyền đi và 3 gói tin nhận được với 0% gói tin bị mất.\n\n```bash\n## Expected successful output pattern\nPING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=119 time=4.33 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=119 time=4.30 ms\n64 bytes from 8.8.8.8: icmp_seq=3 ttl=119 time=4.30 ms\n\n--- 8.8.8.8 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2002ms\nrtt min/avg/max/mdev = 4.298/4.309/4.329/0.014 ms\n```\n\n### Gợi ý\n\n- Lệnh `ping` sẽ chạy vô thời hạn trừ khi bạn yêu cầu nó dừng lại.\n- Sử dụng tùy chọn `-c` để chỉ định số lượng (`c`ount) gói tin cần gửi."
+    },
+    {
+      "id": "source-596619-section-4-v2",
+      "title": "Inspecting Open Network Ports",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Inspecting Open Network Ports\n\nConnectivity is good! So, why is the internal portal still inaccessible? The problem might be with the application itself. Is the web server process actually running and listening for connections on the correct port? The `ss` (socket statistics) command is a modern and fast tool to investigate this.\n\n### Tasks\n\n- The internal portal is supposed to be running on port `8000`. Use the `ss` command to check if any process is listening for TCP connections on port `8000`.\n\n### Requirements\n\n- You must use the `ss` command.\n- Your command should be constructed to show listening TCP sockets.\n\n### Examples\n\nIf a process is listening on port 8000, you should see output containing information about the listening socket. Look for a line that shows port 8000 in the Local Address column.\n\n```bash\n## Expected output showing a listening process on port 8000\nLISTEN 0      5            0.0.0.0:8000       0.0.0.0:*    users:((\"python3\",pid=3765,fd=3))\n```\n\n### Hints\n\n- The `ss` command has several useful flags:\n  - `-t`: Show `T`CP sockets.\n  - `-l`: Show `l`istening sockets.\n  - `-n`: Show `n`umeric port numbers instead of service names.\n  - `-p`: Show the `p`rocess using the socket.\n- You can combine these flags, like `ss -tlnp`.\n- To find a specific port, you can pipe the output of `ss` to the `grep` command. For example: `ss -tlnp | grep 8000`.\n",
+      "task": "- The internal portal is supposed to be running on port `8000`. Use the `ss` command to check if any process is listening for TCP connections on port `8000`.",
+      "hint": "- The `ss` command has several useful flags:\n  - `-t`: Show `T`CP sockets.\n  - `-l`: Show `l`istening sockets.\n  - `-n`: Show `n`umeric port numbers instead of service names.\n  - `-p`: Show the `p`rocess using the socket.\n- You can combine these flags, like `ss -tlnp`.\n- To find a specific port, you can pipe the output of `ss` to the `grep` command. For example: `ss -tlnp | grep 8000`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa có portal TCP8000 trong namespace dùng chung để quan sát và kiểm tra đúng kịch bản bằng ss."
+      },
+      "required_capabilities": [
+        "portal-network-fixture"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "ss -tln | grep -Eq 'LISTEN[[:space:]].*[:.]8000[[:space:]]'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*ss\\s+-(?=[a-zA-Z]*t)(?=[a-zA-Z]*l)[a-zA-Z]+(?:\\s*\\|\\s*grep\\s+['\\\"]?8000['\\\"]?)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "network_ports"
+        ]
+      },
+      "title_vi": "Kiểm tra cổng mạng mở",
+      "content_vi": "## Kiểm tra các cổng mạng đang mở\n\nKhả năng kết nối rất tốt! Vậy tại sao cổng thông tin nội bộ vẫn không thể truy cập được? Vấn đề có thể nằm ở chính ứng dụng. Tiến trình máy chủ web có thực sự đang chạy và lắng nghe các kết nối trên đúng cổng không? Lệnh `ss` (thống kê socket - socket statistics) là một công cụ hiện đại và nhanh chóng để điều tra việc này.\n\n### Nhiệm vụ\n\n- Cổng thông tin nội bộ được cho là đang chạy trên cổng `8000`. Sử dụng lệnh `ss` để kiểm tra xem có tiến trình nào đang lắng nghe các kết nối TCP trên cổng `8000` hay không.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `ss`.\n- Lệnh của bạn phải được cấu trúc để hiển thị các socket TCP đang lắng nghe.\n\n### Ví dụ\n\nNếu một tiến trình đang lắng nghe trên cổng 8000, bạn sẽ thấy đầu ra chứa thông tin về socket đang lắng nghe. Hãy tìm một dòng hiển thị cổng 8000 trong cột Địa chỉ cục bộ (Local Address).\n\n```bash\n## Expected output showing a listening process on port 8000\nLISTEN 0      5            0.0.0.0:8000       0.0.0.0:*    users:((\"python3\",pid=3765,fd=3))\n```\n\n### Gợi ý\n\n- Lệnh `ss` có một số cờ hữu ích:\n  - `-t`: Hiển thị các socket `T`CP.\n  - `-l`: Hiển thị các socket đang `l`ắng nghe (listening).\n  - `-n`: Hiển thị số hiệu cổng dạng `n`umber thay vì tên dịch vụ.\n  - `-p`: Hiển thị `p`rocess (tiến trình) đang sử dụng socket.\n- Bạn có thể kết hợp các cờ này, như `ss -tlnp`.\n- Để tìm một cổng cụ thể, bạn có thể chuyển tiếp (pipe) đầu ra của `ss` sang lệnh `grep`. Ví dụ: `ss -tlnp | grep 8000`."
+    },
+    {
+      "id": "source-596619-section-5-v2",
+      "title": "Configuring Basic Firewall Rules",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Configuring Basic Firewall Rules\n\nYou've confirmed it all: the interface is up, the IP is set, internet connectivity works, and the application is listening on the correct port. There's only one major suspect left: the firewall. It's likely blocking incoming traffic to the portal. Your final task is to configure the firewall so traffic can reach the portal again. We'll use `ufw` (Uncomplicated Firewall), a user-friendly front-end for managing firewall rules.\n\n### Tasks\n\n1. Add a firewall rule to allow incoming traffic on port `8000`.\n2. Add a firewall rule to allow incoming SSH traffic (port 22).\n3. Enable the firewall to apply the new rules.\n\n### Requirements\n\n- You must use the `ufw` command for all operations.\n- You must use `sudo` because modifying firewall rules requires administrative privileges.\n\n### Examples\n\nAfter configuring the firewall rules, running `sudo ufw status` should show that the firewall is active with port 8000 and SSH (port 22) allowed.\n\n```bash\n## Expected output after enabling firewall with port 8000 and SSH allowed\nStatus: active\n\nTo                         Action      From\n--                         ------      ----\n22                         ALLOW       Anywhere\n8000                       ALLOW       Anywhere\n22 (v6)                    ALLOW       Anywhere (v6)\n8000 (v6)                  ALLOW       Anywhere (v6)\n```\n\nWhen adding the rule, you should see:\n\n```bash\nRules updated\nRules updated (v6)\n```\n\nWhen enabling the firewall, you should see:\n\n```bash\nFirewall is active and enabled on system startup\n```\n\n### Hints\n\n- The syntax for `ufw` is very straightforward. To allow traffic on a port, use `ufw allow <port>`.\n- You can allow traffic on port 8000 using `ufw allow 8000`.\n- You can allow SSH traffic specifically using `ufw allow ssh` or `ufw allow 22`.\n- **Critical Warning:** If you do not properly open the SSH port (22), verification will fail because verification depends on this port for SSH connectivity.\n- **Important Warning:** Do not modify firewall rules for other ports arbitrarily, as this may cause online VM failures.\n- After adding your rules, you must enable the firewall with `ufw enable`.\n",
+      "task": "1. Add a firewall rule to allow incoming traffic on port `8000`.\n2. Add a firewall rule to allow incoming SSH traffic (port 22).\n3. Enable the firewall to apply the new rules.",
+      "hint": "- The syntax for `ufw` is very straightforward. To allow traffic on a port, use `ufw allow <port>`.\n- You can allow traffic on port 8000 using `ufw allow 8000`.\n- You can allow SSH traffic specifically using `ufw allow ssh` or `ufw allow 22`.\n- **Critical Warning:** If you do not properly open the SSH port (22), verification will fail because verification depends on this port for SSH connectivity.\n- **Important Warning:** Do not modify firewall rules for other ports arbitrarily, as this may cause online VM failures.\n- After adding your rules, you must enable the firewall with `ufw enable`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa hỗ trợ UFW thực trong network namespace riêng có NET_ADMIN và cấu hình firewall riêng."
+      },
+      "required_capabilities": [
+        "private-firewall"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "sudo -n ufw status | grep -q '^Status: active' && sudo -n ufw status | grep -Eq '^8000([[:space:]]|/tcp).*ALLOW' && sudo -n ufw status | grep -Eq '^22([[:space:]]|/tcp).*ALLOW'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+8000(?:/tcp)?\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+(?:22(?:/tcp)?|ssh)\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+(?:--force\\s+)?enable\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "firewall"
+        ]
+      },
+      "title_vi": "Cấu hình quy tắc tường lửa cơ bản",
+      "content_vi": "## Cấu hình Quy tắc Tường lửa Cơ bản\n\nBạn đã xác nhận mọi thứ: giao diện mạng đang hoạt động, địa chỉ IP đã được thiết lập, kết nối internet hoạt động và ứng dụng đang lắng nghe trên đúng cổng. Chỉ còn lại một nghi phạm chính: tường lửa. Rất có thể nó đang chặn lưu lượng truy cập đến cổng thông tin (portal). Nhiệm vụ cuối cùng của bạn là cấu hình tường lửa để lưu lượng truy cập có thể đến được cổng thông tin một lần nữa. Chúng ta sẽ sử dụng `ufw` (Uncomplicated Firewall), một giao diện thân thiện với người dùng để quản lý các quy tắc tường lửa.\n\n### Các nhiệm vụ\n\n1. Thêm quy tắc tường lửa để cho phép lưu lượng truy cập đến trên cổng `8000`.\n2. Thêm quy tắc tường lửa để cho phép lưu lượng truy cập SSH đến (cổng 22).\n3. Bật tường lửa để áp dụng các quy tắc mới.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `ufw` cho tất cả các thao tác.\n- Bạn phải sử dụng `sudo` vì việc sửa đổi các quy tắc tường lửa đòi hỏi quyền quản trị viên.\n\n### Ví dụ\n\nSau khi cấu hình các quy tắc tường lửa, việc chạy `sudo ufw status` sẽ hiển thị rằng tường lửa đang hoạt động với cổng 8000 và SSH (cổng 22) được cho phép.\n\n```bash\n## Expected output after enabling firewall with port 8000 and SSH allowed\nStatus: active\n\nTo                         Action      From\n--                         ------      ----\n22                         ALLOW       Anywhere\n8000                       ALLOW       Anywhere\n22 (v6)                    ALLOW       Anywhere (v6)\n8000 (v6)                  ALLOW       Anywhere (v6)\n```\n\nKhi thêm quy tắc, bạn sẽ thấy:\n\n```bash\nRules updated\nRules updated (v6)\n```\n\nKhi bật tường lửa, bạn sẽ thấy:\n\n```bash\nFirewall is active and enabled on system startup\n```\n\n### Gợi ý\n\n- Cú pháp cho `ufw` rất đơn giản. Để cho phép lưu lượng truy cập trên một cổng, hãy sử dụng `ufw allow <port>`.\n- Bạn có thể cho phép lưu lượng truy cập trên cổng 8000 bằng cách sử dụng `ufw allow 8000`.\n- Bạn có thể cho phép lưu lượng truy cập SSH cụ thể bằng cách sử dụng `ufw allow ssh` hoặc `ufw allow 22`.\n- **Cảnh báo quan trọng:** Nếu bạn không mở đúng cổng SSH (22), việc kiểm tra xác thực sẽ thất bại vì quá trình kiểm tra phụ thuộc vào cổng này để kết nối SSH.\n- **Cảnh báo quan trọng:** Không tùy ý sửa đổi các quy tắc tường lửa cho các cổng khác, vì điều này có thể gây ra lỗi máy ảo trực tuyến.\n- Sau khi thêm các quy tắc của bạn, bạn phải bật tường lửa bằng `ufw enable`."
+    },
+    {
+      "id": "source-596619-section-6-v2",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nExcellent work, Navigator! By systematically checking the network interfaces, verifying IP configuration, testing connectivity, inspecting open ports, and finally configuring the firewall, you have successfully diagnosed and resolved the issue. The internal portal is now back online, and you've earned the respect of your team.\n\nYou've demonstrated a solid grasp of fundamental Linux networking tools like `ip`, `ifconfig`, `ping`, `ss`, and `ufw`. This logical, step-by-step troubleshooting process is a critical skill for any system administrator and will be invaluable in your career. Keep honing your skills!\n",
+      "title_vi": "Tóm tắt",
+      "content_vi": "## Tổng kết\n\nLàm xuất sắc lắm, Chuyên gia định hướng! Bằng cách kiểm tra có hệ thống các giao diện mạng, xác minh cấu hình IP, kiểm tra kết nối, kiểm tra các cổng đang mở, và cuối cùng là cấu hình tường lửa, bạn đã chẩn đoán và giải quyết thành công sự cố. Cổng thông tin nội bộ hiện đã hoạt động trở lại và bạn đã giành được sự tôn trọng từ nhóm của mình.\n\nBạn đã thể hiện sự nắm vững chắc chắn các công cụ mạng Linux cơ bản như `ip`, `ifconfig`, `ping`, `ss` và `ufw`. Quy trình khắc phục sự cố theo từng bước, có logic này là một kỹ năng quan trọng đối với bất kỳ quản trị viên hệ thống nào và sẽ cực kỳ có giá trị trong sự nghiệp của bạn. Hãy tiếp tục mài giũa các kỹ năng của bạn!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596619-section-1-v2",
+      "title": "Checking Network Interface Status",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Checking Network Interface Status\n\nYour first step as a Network Navigator is to gather basic information. Is the network hardware even recognized and active? You need to check the status of all network interfaces on the server. The modern tool for this job is the `ip` command.\n\n### Tasks\n\n- Use the `ip` command to display the status and configuration of all network interfaces.\n\n### Requirements\n\n- You must use the `ip addr` command to perform this check.\n\n### Examples\n\nAfter running the command, you should see output showing network interfaces like `lo` (loopback) and `eth0` (or similar). Look for the state of your main interface - it should show `UP` to indicate it's active.\n\n```bash\n## Expected output format (interface names may vary)\n1: lo: 65536 qdisc noqueue state UNKNOWN group default qlen 1000 < LOOPBACK,UP,LOWER_UP > mtu\nlink/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\ninet 127.0.0.1/8 scope host lo\nvalid_lft forever preferred_lft forever\n2: eth0: 1500 qdisc mq state UP group default qlen 1000 < BROADCAST,MULTICAST,UP,LOWER_UP > mtu\nlink/ether 00:16:3e:04:b0:40 brd ff:ff:ff:ff:ff:ff\ninet 172.16.50.108/24 metric 100 brd 172.16.50.255 scope global dynamic eth0\nvalid_lft 1892159216sec preferred_lft 1892159216sec\n```\n\n### Hints\n\n- The `ip` command is a powerful tool with many subcommands. The one for managing addresses is `addr`.\n- You can use `ip addr show` or its shorter alias `ip addr`.\n",
+      "task": "- Use the `ip` command to display the status and configuration of all network interfaces.",
+      "hint": "- The `ip` command is a powerful tool with many subcommands. The one for managing addresses is `addr`.\n- You can use `ip addr show` or its shorter alias `ip addr`.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*ip\\s+addr\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Kiểm tra trạng thái giao diện mạng",
+      "content_vi": "## Kiểm tra Trạng thái Giao diện Mạng\n\nBước đầu tiên của bạn với tư cách là một Người điều hướng Mạng là thu thập thông tin cơ bản. Liệu phần cứng mạng có được nhận diện và đang hoạt động hay không? Bạn cần kiểm tra trạng thái của tất cả các giao diện mạng trên máy chủ. Công cụ hiện đại cho công việc này là lệnh `ip`.\n\n### Các nhiệm vụ\n\n- Sử dụng lệnh `ip` để hiển thị trạng thái và cấu hình của tất cả các giao diện mạng.\n\n### Các yêu cầu\n\n- Bạn phải sử dụng lệnh `ip addr` để thực hiện việc kiểm tra này.\n\n### Ví dụ\n\nSau khi chạy lệnh, bạn sẽ thấy đầu ra hiển thị các giao diện mạng như `lo` (loopback) và `eth0` (hoặc tương tự). Hãy tìm trạng thái của giao diện chính của bạn - nó sẽ hiển thị `UP` để biểu thị rằng nó đang hoạt động.\n\n```bash\n## Expected output format (interface names may vary)\n1: lo: 65536 qdisc noqueue state UNKNOWN group default qlen 1000 < LOOPBACK,UP,LOWER_UP > mtu\nlink/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\ninet 127.0.0.1/8 scope host lo\nvalid_lft forever preferred_lft forever\n2: eth0: 1500 qdisc mq state UP group default qlen 1000 < BROADCAST,MULTICAST,UP,LOWER_UP > mtu\nlink/ether 00:16:3e:04:b0:40 brd ff:ff:ff:ff:ff:ff\ninet 172.16.50.108/24 metric 100 brd 172.16.50.255 scope global dynamic eth0\nvalid_lft 1892159216sec preferred_lft 1892159216sec\n```\n\n### Gợi ý\n\n- Lệnh `ip` là một công cụ mạnh mẽ với nhiều lệnh con. Lệnh dùng để quản lý các địa chỉ là `addr`.\n- Bạn có thể sử dụng `ip addr show` hoặc tên viết tắt ngắn hơn của nó là `ip addr`.",
+      "task_vi": "- Sử dụng lệnh `ip` để hiển thị trạng thái và cấu hình của tất cả các giao diện mạng.",
+      "hint_vi": "Lệnh `ip` là một công cụ mạnh mẽ với nhiều lệnh con. Lệnh quản lý địa chỉ là `addr`.\nBạn có thể dùng `ip addr show` hoặc bí danh ngắn hơn của nó là `ip addr`."
+    },
+    {
+      "id": "source-596619-section-2-v2",
+      "title": "Verifying IP Address Configuration",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Verifying IP Address Configuration\n\nOkay, the interface is `UP`. That's a good start. But does it have an IP address? An interface without an IP address can't communicate on the network. While `ip addr` shows this, let's use another classic command, `ifconfig`, to double-check. It's good to know multiple tools for the same job.\n\n### Tasks\n\n- Use the `ifconfig` command to verify the IP address configuration.\n\n### Requirements\n\n- You must use the `ifconfig` command.\n\n### Examples\n\nThe output should display your network interfaces with their IP addresses. Look for the `inet` field under your main network interface (like `eth0`) to confirm the IP configuration.\n\n```bash\n## Expected output showing IP configuration\neth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 172.16.50.108  netmask 255.255.255.0  broadcast 172.16.50.255\n        ether 00:16:3e:04:b0:40  txqueuelen 1000  (Ethernet)\n\nlo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536\n        inet 127.0.0.1  netmask 255.0.0.0\n```\n\n### Hints\n\n- The `ifconfig` command is part of the `net-tools` package, which we've already installed for you.\n- Running `ifconfig` without any arguments will display all active interfaces.\n",
+      "task": "- Use the `ifconfig` command to verify the IP address configuration.",
+      "hint": "- The `ifconfig` command is part of the `net-tools` package, which we've already installed for you.\n- Running `ifconfig` without any arguments will display all active interfaces.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bước yêu cầu ifconfig nhưng runtime hiện chưa có net-tools/ifconfig. Không dùng ip addr để tự động chấm thay yêu cầu này."
+      },
+      "required_capabilities": [
+        "ifconfig-tool"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ifconfig(?:\\s+-a)?\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "ifconfig"
+        ]
+      },
+      "title_vi": "Kiểm tra cấu hình địa chỉ IP",
+      "content_vi": "## Xác minh Cấu hình Địa chỉ IP\n\nĐược rồi, giao diện mạng đã ở trạng thái `UP`. Đó là một khởi đầu tốt. Nhưng nó có địa chỉ IP chưa? Một giao diện mạng không có địa chỉ IP thì không thể giao tiếp trên mạng. Mặc dù `ip addr` hiển thị điều này, chúng ta hãy sử dụng một lệnh kinh điển khác, `ifconfig`, để kiểm tra lại. Thật tốt khi biết nhiều công cụ cho cùng एक công việc.\n\n### Các nhiệm vụ\n\n- Sử dụng lệnh `ifconfig` để xác minh cấu hình địa chỉ IP.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `ifconfig`.\n\n### Ví dụ\n\nĐầu ra phải hiển thị các giao diện mạng của bạn cùng với các địa chỉ IP của chúng. Hãy tìm trường `inet` dưới giao diện mạng chính của bạn (như `eth0`) để xác nhận cấu hình IP.\n\n```bash\n## Expected output showing IP configuration\neth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\n        inet 172.16.50.108  netmask 255.255.255.0  broadcast 172.16.50.255\n        ether 00:16:3e:04:b0:40  txqueuelen 1000  (Ethernet)\n\nlo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536\n        inet 127.0.0.1  netmask 255.0.0.0\n```\n\n### Gợi ý\n\n- Lệnh `ifconfig` là một phần của gói `net-tools`, mà chúng tôi đã cài đặt sẵn cho bạn.\n- Chạy `ifconfig` mà không có bất kỳ đối số nào sẽ hiển thị tất cả các giao diện đang hoạt động.",
+      "task_vi": "- Sử dụng lệnh `ifconfig` để xác minh cấu hình địa chỉ IP.",
+      "hint_vi": "Lệnh `ifconfig` thuộc gói `net-tools` mà chúng tôi đã cài đặt sẵn cho bạn.\nChạy `ifconfig` không kèm tham số sẽ hiển thị tất cả các giao diện đang hoạt động."
+    },
+    {
+      "id": "source-596619-section-3-v2",
+      "title": "Testing Connectivity to Remote Hosts",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Testing Connectivity to Remote Hosts\n\nThe server has an active interface and an IP address. The next logical step is to check if it can reach the outside world. A failure here could indicate a problem with the gateway or DNS settings. The `ping` command is the perfect tool for this test.\n\n### Tasks\n\n- Test the server's connectivity to the internet by sending exactly **3** ICMP packets to Google's public DNS server at `8.8.8.8`.\n\n### Requirements\n\n- You must use the `ping` command.\n- You must limit the number of packets sent to **3**.\n- The target IP address must be `8.8.8.8`.\n\n### Examples\n\nIf connectivity is working, you should see replies from the target IP address with timing information. The summary at the end should show 3 packets transmitted and 3 packets received with 0% packet loss.\n\n```bash\n## Expected successful output pattern\nPING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=119 time=4.33 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=119 time=4.30 ms\n64 bytes from 8.8.8.8: icmp_seq=3 ttl=119 time=4.30 ms\n\n--- 8.8.8.8 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2002ms\nrtt min/avg/max/mdev = 4.298/4.309/4.329/0.014 ms\n```\n\n### Hints\n\n- The `ping` command will run indefinitely unless you tell it to stop.\n- Use the `-c` option to specify the `c`ount of packets to send.\n",
+      "task": "- Test the server's connectivity to the internet by sending exactly **3** ICMP packets to Google's public DNS server at `8.8.8.8`.",
+      "hint": "- The `ping` command will run indefinitely unless you tell it to stop.\n- Use the `-c` option to specify the `c`ount of packets to send.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bước yêu cầu ping -c 3 8.8.8.8. Network namespace hiện không có đường ra Internet hoặc quyền ICMP cần thiết."
+      },
+      "required_capabilities": [
+        "internet-icmp"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ping\\s+-c\\s*3\\s+8\\.8\\.8\\.8\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "external_icmp"
+        ]
+      },
+      "title_vi": "Kiểm tra kết nối tới máy chủ từ xa",
+      "content_vi": "## Kiểm tra kết nối đến các máy chủ từ xa\n\nMáy chủ có một giao diện mạng hoạt động và một địa chỉ IP. Bước tiếp theo hợp lý là kiểm tra xem nó có thể kết nối với thế giới bên ngoài hay không. Lỗi ở bước này có thể chỉ ra sự cố với cổng mặc định (gateway) hoặc cài đặt DNS. Lệnh `ping` là công cụ hoàn hảo cho bài kiểm tra này.\n\n### Nhiệm vụ\n\n- Kiểm tra kết nối của máy chủ với internet bằng cách gửi chính xác **3** gói tin ICMP đến máy chủ DNS công cộng của Google tại `8.8.8.8`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `ping`.\n- Bạn phải giới hạn số lượng gói tin gửi đi là **3**.\n- Địa chỉ IP đích phải là `8.8.8.8`.\n\n### Ví dụ\n\nNếu kết nối hoạt động tốt, bạn sẽ thấy các phản hồi từ địa chỉ IP đích kèm theo thông tin thời gian. Phần tổng kết ở cuối phải hiển thị 3 gói tin được truyền đi và 3 gói tin nhận được với 0% gói tin bị mất.\n\n```bash\n## Expected successful output pattern\nPING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=119 time=4.33 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=119 time=4.30 ms\n64 bytes from 8.8.8.8: icmp_seq=3 ttl=119 time=4.30 ms\n\n--- 8.8.8.8 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2002ms\nrtt min/avg/max/mdev = 4.298/4.309/4.329/0.014 ms\n```\n\n### Gợi ý\n\n- Lệnh `ping` sẽ chạy vô thời hạn trừ khi bạn yêu cầu nó dừng lại.\n- Sử dụng tùy chọn `-c` để chỉ định số lượng (`c`ount) gói tin cần gửi.",
+      "task_vi": "- Kiểm tra kết nối Internet của máy chủ bằng cách gửi chính xác **3** gói tin ICMP đến máy chủ DNS công cộng của Google tại địa chỉ `8.8.8.8`.",
+      "hint_vi": "Lệnh `ping` sẽ chạy vô thời hạn trừ khi bạn yêu cầu dừng lại.\nSử dụng tùy chọn `-c` để chỉ định số lượng gói tin cần gửi."
+    },
+    {
+      "id": "source-596619-section-4-v2",
+      "title": "Inspecting Open Network Ports",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Inspecting Open Network Ports\n\nConnectivity is good! So, why is the internal portal still inaccessible? The problem might be with the application itself. Is the web server process actually running and listening for connections on the correct port? The `ss` (socket statistics) command is a modern and fast tool to investigate this.\n\n### Tasks\n\n- The internal portal is supposed to be running on port `8000`. Use the `ss` command to check if any process is listening for TCP connections on port `8000`.\n\n### Requirements\n\n- You must use the `ss` command.\n- Your command should be constructed to show listening TCP sockets.\n\n### Examples\n\nIf a process is listening on port 8000, you should see output containing information about the listening socket. Look for a line that shows port 8000 in the Local Address column.\n\n```bash\n## Expected output showing a listening process on port 8000\nLISTEN 0      5            0.0.0.0:8000       0.0.0.0:*    users:((\"python3\",pid=3765,fd=3))\n```\n\n### Hints\n\n- The `ss` command has several useful flags:\n  - `-t`: Show `T`CP sockets.\n  - `-l`: Show `l`istening sockets.\n  - `-n`: Show `n`umeric port numbers instead of service names.\n  - `-p`: Show the `p`rocess using the socket.\n- You can combine these flags, like `ss -tlnp`.\n- To find a specific port, you can pipe the output of `ss` to the `grep` command. For example: `ss -tlnp | grep 8000`.\n",
+      "task": "- The internal portal is supposed to be running on port `8000`. Use the `ss` command to check if any process is listening for TCP connections on port `8000`.",
+      "hint": "- The `ss` command has several useful flags:\n  - `-t`: Show `T`CP sockets.\n  - `-l`: Show `l`istening sockets.\n  - `-n`: Show `n`umeric port numbers instead of service names.\n  - `-p`: Show the `p`rocess using the socket.\n- You can combine these flags, like `ss -tlnp`.\n- To find a specific port, you can pipe the output of `ss` to the `grep` command. For example: `ss -tlnp | grep 8000`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa có portal TCP8000 trong namespace dùng chung để quan sát và kiểm tra đúng kịch bản bằng ss."
+      },
+      "required_capabilities": [
+        "portal-network-fixture"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "ss -tln | grep -Eq 'LISTEN[[:space:]].*[:.]8000[[:space:]]'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*ss\\s+-(?=[a-zA-Z]*t)(?=[a-zA-Z]*l)[a-zA-Z]+(?:\\s*\\|\\s*grep\\s+['\\\"]?8000['\\\"]?)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "network_ports"
+        ]
+      },
+      "title_vi": "Kiểm tra cổng mạng mở",
+      "content_vi": "## Kiểm tra các cổng mạng đang mở\n\nKhả năng kết nối rất tốt! Vậy tại sao cổng thông tin nội bộ vẫn không thể truy cập được? Vấn đề có thể nằm ở chính ứng dụng. Tiến trình máy chủ web có thực sự đang chạy và lắng nghe các kết nối trên đúng cổng không? Lệnh `ss` (thống kê socket - socket statistics) là một công cụ hiện đại và nhanh chóng để điều tra việc này.\n\n### Nhiệm vụ\n\n- Cổng thông tin nội bộ được cho là đang chạy trên cổng `8000`. Sử dụng lệnh `ss` để kiểm tra xem có tiến trình nào đang lắng nghe các kết nối TCP trên cổng `8000` hay không.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `ss`.\n- Lệnh của bạn phải được cấu trúc để hiển thị các socket TCP đang lắng nghe.\n\n### Ví dụ\n\nNếu một tiến trình đang lắng nghe trên cổng 8000, bạn sẽ thấy đầu ra chứa thông tin về socket đang lắng nghe. Hãy tìm một dòng hiển thị cổng 8000 trong cột Địa chỉ cục bộ (Local Address).\n\n```bash\n## Expected output showing a listening process on port 8000\nLISTEN 0      5            0.0.0.0:8000       0.0.0.0:*    users:((\"python3\",pid=3765,fd=3))\n```\n\n### Gợi ý\n\n- Lệnh `ss` có một số cờ hữu ích:\n  - `-t`: Hiển thị các socket `T`CP.\n  - `-l`: Hiển thị các socket đang `l`ắng nghe (listening).\n  - `-n`: Hiển thị số hiệu cổng dạng `n`umber thay vì tên dịch vụ.\n  - `-p`: Hiển thị `p`rocess (tiến trình) đang sử dụng socket.\n- Bạn có thể kết hợp các cờ này, như `ss -tlnp`.\n- Để tìm một cổng cụ thể, bạn có thể chuyển tiếp (pipe) đầu ra của `ss` sang lệnh `grep`. Ví dụ: `ss -tlnp | grep 8000`.",
+      "task_vi": "- Cổng thông tin nội bộ dự kiến sẽ chạy trên cổng `8000`. Sử dụng lệnh `ss` để kiểm tra xem có tiến trình nào đang lắng nghe các kết nối TCP trên cổng `8000` hay không.",
+      "hint_vi": "- Lệnh `ss` có một số cờ hữu ích:\n  - `-t`: Hiển thị socket `T`CP.\n  - `-l`: Hiển thị các socket đang `l`ắng nghe (listening).\n  - `-n`: Hiển thị số cổng dưới dạng `n`umeric thay vì tên dịch vụ.\n  - `-p`: Hiển thị tiến trình (`p`rocess) đang dùng socket.\n- Bạn có thể kết hợp các cờ này, như `ss -tlnp`.\n- Để tìm một cổng cụ thể, bạn có thể chuyển (pipe) đầu ra của `ss` sang lệnh `grep`. Ví dụ: `ss -tlnp | grep 8000`."
+    },
+    {
+      "id": "source-596619-section-5-v2",
+      "title": "Configuring Basic Firewall Rules",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Configuring Basic Firewall Rules\n\nYou've confirmed it all: the interface is up, the IP is set, internet connectivity works, and the application is listening on the correct port. There's only one major suspect left: the firewall. It's likely blocking incoming traffic to the portal. Your final task is to configure the firewall so traffic can reach the portal again. We'll use `ufw` (Uncomplicated Firewall), a user-friendly front-end for managing firewall rules.\n\n### Tasks\n\n1. Add a firewall rule to allow incoming traffic on port `8000`.\n2. Add a firewall rule to allow incoming SSH traffic (port 22).\n3. Enable the firewall to apply the new rules.\n\n### Requirements\n\n- You must use the `ufw` command for all operations.\n- You must use `sudo` because modifying firewall rules requires administrative privileges.\n\n### Examples\n\nAfter configuring the firewall rules, running `sudo ufw status` should show that the firewall is active with port 8000 and SSH (port 22) allowed.\n\n```bash\n## Expected output after enabling firewall with port 8000 and SSH allowed\nStatus: active\n\nTo                         Action      From\n--                         ------      ----\n22                         ALLOW       Anywhere\n8000                       ALLOW       Anywhere\n22 (v6)                    ALLOW       Anywhere (v6)\n8000 (v6)                  ALLOW       Anywhere (v6)\n```\n\nWhen adding the rule, you should see:\n\n```bash\nRules updated\nRules updated (v6)\n```\n\nWhen enabling the firewall, you should see:\n\n```bash\nFirewall is active and enabled on system startup\n```\n\n### Hints\n\n- The syntax for `ufw` is very straightforward. To allow traffic on a port, use `ufw allow <port>`.\n- You can allow traffic on port 8000 using `ufw allow 8000`.\n- You can allow SSH traffic specifically using `ufw allow ssh` or `ufw allow 22`.\n- **Critical Warning:** If you do not properly open the SSH port (22), verification will fail because verification depends on this port for SSH connectivity.\n- **Important Warning:** Do not modify firewall rules for other ports arbitrarily, as this may cause online VM failures.\n- After adding your rules, you must enable the firewall with `ufw enable`.\n",
+      "task": "1. Add a firewall rule to allow incoming traffic on port `8000`.\n2. Add a firewall rule to allow incoming SSH traffic (port 22).\n3. Enable the firewall to apply the new rules.",
+      "hint": "- The syntax for `ufw` is very straightforward. To allow traffic on a port, use `ufw allow <port>`.\n- You can allow traffic on port 8000 using `ufw allow 8000`.\n- You can allow SSH traffic specifically using `ufw allow ssh` or `ufw allow 22`.\n- **Critical Warning:** If you do not properly open the SSH port (22), verification will fail because verification depends on this port for SSH connectivity.\n- **Important Warning:** Do not modify firewall rules for other ports arbitrarily, as this may cause online VM failures.\n- After adding your rules, you must enable the firewall with `ufw enable`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa hỗ trợ UFW thực trong network namespace riêng có NET_ADMIN và cấu hình firewall riêng."
+      },
+      "required_capabilities": [
+        "private-firewall"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "sudo -n ufw status | grep -q '^Status: active' && sudo -n ufw status | grep -Eq '^8000([[:space:]]|/tcp).*ALLOW' && sudo -n ufw status | grep -Eq '^22([[:space:]]|/tcp).*ALLOW'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+8000(?:/tcp)?\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+(?:22(?:/tcp)?|ssh)\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+(?:--force\\s+)?enable\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "firewall"
+        ]
+      },
+      "title_vi": "Cấu hình quy tắc tường lửa cơ bản",
+      "content_vi": "## Cấu hình Quy tắc Tường lửa Cơ bản\n\nBạn đã xác nhận mọi thứ: giao diện mạng đang hoạt động, địa chỉ IP đã được thiết lập, kết nối internet hoạt động và ứng dụng đang lắng nghe trên đúng cổng. Chỉ còn lại một nghi phạm chính: tường lửa. Rất có thể nó đang chặn lưu lượng truy cập đến cổng thông tin (portal). Nhiệm vụ cuối cùng của bạn là cấu hình tường lửa để lưu lượng truy cập có thể đến được cổng thông tin một lần nữa. Chúng ta sẽ sử dụng `ufw` (Uncomplicated Firewall), một giao diện thân thiện với người dùng để quản lý các quy tắc tường lửa.\n\n### Các nhiệm vụ\n\n1. Thêm quy tắc tường lửa để cho phép lưu lượng truy cập đến trên cổng `8000`.\n2. Thêm quy tắc tường lửa để cho phép lưu lượng truy cập SSH đến (cổng 22).\n3. Bật tường lửa để áp dụng các quy tắc mới.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `ufw` cho tất cả các thao tác.\n- Bạn phải sử dụng `sudo` vì việc sửa đổi các quy tắc tường lửa đòi hỏi quyền quản trị viên.\n\n### Ví dụ\n\nSau khi cấu hình các quy tắc tường lửa, việc chạy `sudo ufw status` sẽ hiển thị rằng tường lửa đang hoạt động với cổng 8000 và SSH (cổng 22) được cho phép.\n\n```bash\n## Expected output after enabling firewall with port 8000 and SSH allowed\nStatus: active\n\nTo                         Action      From\n--                         ------      ----\n22                         ALLOW       Anywhere\n8000                       ALLOW       Anywhere\n22 (v6)                    ALLOW       Anywhere (v6)\n8000 (v6)                  ALLOW       Anywhere (v6)\n```\n\nKhi thêm quy tắc, bạn sẽ thấy:\n\n```bash\nRules updated\nRules updated (v6)\n```\n\nKhi bật tường lửa, bạn sẽ thấy:\n\n```bash\nFirewall is active and enabled on system startup\n```\n\n### Gợi ý\n\n- Cú pháp cho `ufw` rất đơn giản. Để cho phép lưu lượng truy cập trên một cổng, hãy sử dụng `ufw allow <port>`.\n- Bạn có thể cho phép lưu lượng truy cập trên cổng 8000 bằng cách sử dụng `ufw allow 8000`.\n- Bạn có thể cho phép lưu lượng truy cập SSH cụ thể bằng cách sử dụng `ufw allow ssh` hoặc `ufw allow 22`.\n- **Cảnh báo quan trọng:** Nếu bạn không mở đúng cổng SSH (22), việc kiểm tra xác thực sẽ thất bại vì quá trình kiểm tra phụ thuộc vào cổng này để kết nối SSH.\n- **Cảnh báo quan trọng:** Không tùy ý sửa đổi các quy tắc tường lửa cho các cổng khác, vì điều này có thể gây ra lỗi máy ảo trực tuyến.\n- Sau khi thêm các quy tắc của bạn, bạn phải bật tường lửa bằng `ufw enable`.",
+      "task_vi": "1. Thêm một quy tắc tường lửa để cho phép lưu lượng truy cập đến trên cổng `8000`.\n2. Thêm một quy tắc tường lửa để cho phép lưu lượng truy cập SSH đến (cổng 22).\n3. Bật tường lửa để áp dụng các quy tắc mới.",
+      "hint_vi": "Cú pháp của `ufw` rất đơn giản. Để cho phép lưu lượng truy cập trên một cổng, hãy dùng `ufw allow <port>`.\nBạn có thể cho phép lưu lượng trên cổng 8000 bằng cách dùng `ufw allow 8000`.\nBạn có thể cho phép lưu lượng SSH cụ thể bằng `ufw allow ssh` hoặc `ufw allow 22`.\n**Cảnh báo quan trọng:** Nếu bạn không mở đúng cổng SSH (22), việc xác thực sẽ thất bại vì quá trình này phụ thuộc vào cổng này để kết nối SSH.\n**Lưu ý quan trọng:** Không tự ý sửa đổi quy tắc tường lửa cho các cổng khác, vì điều này có thể làm lỗi máy ảo trực tuyến.\nSetelah menambahkan aturan, Anda harus mengaktifkan firewall dengan `ufw enable`.\nSau khi thêm các quy tắc, bạn phải bật tường lửa bằng lệnh `ufw enable`."
+    }
+  ],
+  "title_vi": "Ngày 7: Định Vị Mạng Dịch Vụ"
+}

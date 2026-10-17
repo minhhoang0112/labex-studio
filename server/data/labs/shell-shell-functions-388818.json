@@ -1,0 +1,299 @@
+{
+  "id": "shell-shell-functions-388818",
+  "course_id": "shell-for-beginners",
+  "order": 13,
+  "title": "Shell Functions",
+  "title_vi": "Xây Dựng Hàm Trong Shell Script",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Define functions, pass parameters, handle return values, use local variables, and build calculator functions.",
+  "source_url": "https://labex.io/tutorials/shell-shell-functions-388818",
+  "source_lab_id": 388818,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388818-section-1-v4",
+      "title": "Creating Your First Shell Function",
+      "title_vi": "Viết hàm shell đầu tiên",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Define and invoke greet inside functions.sh.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\ngreet() { echo \"Hello, World!\"; }\ngreet\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Định nghĩa và gọi greet trong functions.sh.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\ngreet() { echo \"Hello, World!\"; }\ngreet\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Define and invoke greet inside functions.sh.",
+      "task_vi": "Định nghĩa và gọi greet trong functions.sh.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['greet']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Hello, World!']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388818-section-2-v4",
+      "title": "Functions with Parameters",
+      "title_vi": "Hàm có tham số",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Pass Alice to greet and 5,3 to calculate; function parameters have their own positions.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\ngreet() { echo \"Hello, $1!\"; }\ncalculate() { echo \"The sum of $1 and $2 is $(($1 + $2))\"; }\ngreet Alice\ncalculate 5 3\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Truyền Alice cho greet và 5,3 cho calculate; hàm có tham số vị trí riêng.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\ngreet() { echo \"Hello, $1!\"; }\ncalculate() { echo \"The sum of $1 and $2 is $(($1 + $2))\"; }\ngreet Alice\ncalculate 5 3\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Pass Alice to greet and 5,3 to calculate; function parameters have their own positions.",
+      "task_vi": "Truyền Alice cho greet và 5,3 cho calculate; hàm có tham số vị trí riêng.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['$1', '$2', 'calculate']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Hello, Alice!', 'The sum of 5 and 3 is 8']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388818-section-3-v4",
+      "title": "Return Values from Functions",
+      "title_vi": "Lấy kết quả từ hàm",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Capture get_square output and compare with a function changing global RESULT.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nget_square() { echo $(($1 * $1)); }\nRESULT=0\nset_global_result() { RESULT=$(($1 * $1)); }\nsquare_of_5=$(get_square 5)\necho \"The square of 5 is $square_of_5\"\nset_global_result 6\necho \"The square of 6 is $RESULT\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Hứng đầu ra get_square rồi so sánh với hàm thay đổi biến toàn cục RESULT.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nget_square() { echo $(($1 * $1)); }\nRESULT=0\nset_global_result() { RESULT=$(($1 * $1)); }\nsquare_of_5=$(get_square 5)\necho \"The square of 5 is $square_of_5\"\nset_global_result 6\necho \"The square of 6 is $RESULT\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Capture get_square output and compare with a function changing global RESULT.",
+      "task_vi": "Hứng đầu ra get_square rồi so sánh với hàm thay đổi biến toàn cục RESULT.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['get_square', 'set_global_result', '$(']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The square of 5 is 25', 'The square of 6 is 36']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388818-section-4-v4",
+      "title": "Understanding Variable Scope",
+      "title_vi": "Phạm vi của biến",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Observe GLOBAL_VAR inside/outside a function; local LOCAL_VAR disappears outside it.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nGLOBAL_VAR=\"I'm global\"\ndemonstrate_scope() {\n  local LOCAL_VAR=\"I'm local\"\n  echo \"Inside function: GLOBAL_VAR = $GLOBAL_VAR\"\n  echo \"Inside function: LOCAL_VAR = $LOCAL_VAR\"\n}\ndemonstrate_scope\necho \"Outside function: GLOBAL_VAR = $GLOBAL_VAR\"\necho \"Outside function: LOCAL_VAR = $LOCAL_VAR\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Quan sát GLOBAL_VAR trong/ngoài hàm; LOCAL_VAR khai báo local chỉ tồn tại trong hàm.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nGLOBAL_VAR=\"I'm global\"\ndemonstrate_scope() {\n  local LOCAL_VAR=\"I'm local\"\n  echo \"Inside function: GLOBAL_VAR = $GLOBAL_VAR\"\n  echo \"Inside function: LOCAL_VAR = $LOCAL_VAR\"\n}\ndemonstrate_scope\necho \"Outside function: GLOBAL_VAR = $GLOBAL_VAR\"\necho \"Outside function: LOCAL_VAR = $LOCAL_VAR\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Observe GLOBAL_VAR inside/outside a function; local LOCAL_VAR disappears outside it.",
+      "task_vi": "Quan sát GLOBAL_VAR trong/ngoài hàm; LOCAL_VAR khai báo local chỉ tồn tại trong hàm.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['local LOCAL_VAR', 'demonstrate_scope']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in [\"Inside function: LOCAL_VAR = I'm local\", \"Outside function: GLOBAL_VAR = I'm global\", 'Outside function: LOCAL_VAR =']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388818-section-5-v4",
+      "title": "Advanced Function - ENGLISH_CALC",
+      "title_vi": "Hàm nâng cao ENGLISH_CALC",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Implement ENGLISH_CALC for plus/minus/times and reject divide with return 1.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nENGLISH_CALC() {\n  local num1=$1 operation=$2 num2=$3 result\n  case \"$operation\" in\n    plus) result=$((num1 + num2)); echo \"$num1 + $num2 = $result\" ;;\n    minus) result=$((num1 - num2)); echo \"$num1 - $num2 = $result\" ;;\n    times) result=$((num1 * num2)); echo \"$num1 * $num2 = $result\" ;;\n    *) echo \"Invalid operation. Please use 'plus', 'minus', or 'times'.\"; return 1 ;;\n  esac\n}\nENGLISH_CALC 3 plus 5\nENGLISH_CALC 5 minus 1\nENGLISH_CALC 4 times 6\nENGLISH_CALC 2 divide 2\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Viết ENGLISH_CALC cho plus/minus/times và từ chối divide bằng return 1.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nENGLISH_CALC() {\n  local num1=$1 operation=$2 num2=$3 result\n  case \"$operation\" in\n    plus) result=$((num1 + num2)); echo \"$num1 + $num2 = $result\" ;;\n    minus) result=$((num1 - num2)); echo \"$num1 - $num2 = $result\" ;;\n    times) result=$((num1 * num2)); echo \"$num1 * $num2 = $result\" ;;\n    *) echo \"Invalid operation. Please use 'plus', 'minus', or 'times'.\"; return 1 ;;\n  esac\n}\nENGLISH_CALC 3 plus 5\nENGLISH_CALC 5 minus 1\nENGLISH_CALC 4 times 6\nENGLISH_CALC 2 divide 2\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Implement ENGLISH_CALC for plus/minus/times and reject divide with return 1.",
+      "task_vi": "Viết ENGLISH_CALC cho plus/minus/times và từ chối divide bằng return 1.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['ENGLISH_CALC', 'return 1']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['3 + 5 = 8', '5 - 1 = 4', '4 * 6 = 24', 'Invalid operation.']),result.stdout\n    assert result.returncode == 1\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388818-section-1-v4",
+      "title": "Creating Your First Shell Function",
+      "title_vi": "Viết hàm shell đầu tiên",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Define and invoke greet inside functions.sh.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\ngreet() { echo \"Hello, World!\"; }\ngreet\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Định nghĩa và gọi greet trong functions.sh.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\ngreet() { echo \"Hello, World!\"; }\ngreet\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Define and invoke greet inside functions.sh.",
+      "task_vi": "Định nghĩa và gọi greet trong functions.sh.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['greet']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Hello, World!']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388818-section-2-v4",
+      "title": "Functions with Parameters",
+      "title_vi": "Hàm có tham số",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Pass Alice to greet and 5,3 to calculate; function parameters have their own positions.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\ngreet() { echo \"Hello, $1!\"; }\ncalculate() { echo \"The sum of $1 and $2 is $(($1 + $2))\"; }\ngreet Alice\ncalculate 5 3\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Truyền Alice cho greet và 5,3 cho calculate; hàm có tham số vị trí riêng.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\ngreet() { echo \"Hello, $1!\"; }\ncalculate() { echo \"The sum of $1 and $2 is $(($1 + $2))\"; }\ngreet Alice\ncalculate 5 3\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Pass Alice to greet and 5,3 to calculate; function parameters have their own positions.",
+      "task_vi": "Truyền Alice cho greet và 5,3 cho calculate; hàm có tham số vị trí riêng.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['$1', '$2', 'calculate']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['Hello, Alice!', 'The sum of 5 and 3 is 8']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388818-section-3-v4",
+      "title": "Return Values from Functions",
+      "title_vi": "Lấy kết quả từ hàm",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Capture get_square output and compare with a function changing global RESULT.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nget_square() { echo $(($1 * $1)); }\nRESULT=0\nset_global_result() { RESULT=$(($1 * $1)); }\nsquare_of_5=$(get_square 5)\necho \"The square of 5 is $square_of_5\"\nset_global_result 6\necho \"The square of 6 is $RESULT\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Hứng đầu ra get_square rồi so sánh với hàm thay đổi biến toàn cục RESULT.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nget_square() { echo $(($1 * $1)); }\nRESULT=0\nset_global_result() { RESULT=$(($1 * $1)); }\nsquare_of_5=$(get_square 5)\necho \"The square of 5 is $square_of_5\"\nset_global_result 6\necho \"The square of 6 is $RESULT\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Capture get_square output and compare with a function changing global RESULT.",
+      "task_vi": "Hứng đầu ra get_square rồi so sánh với hàm thay đổi biến toàn cục RESULT.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['get_square', 'set_global_result', '$(']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['The square of 5 is 25', 'The square of 6 is 36']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388818-section-4-v4",
+      "title": "Understanding Variable Scope",
+      "title_vi": "Phạm vi của biến",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Observe GLOBAL_VAR inside/outside a function; local LOCAL_VAR disappears outside it.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nGLOBAL_VAR=\"I'm global\"\ndemonstrate_scope() {\n  local LOCAL_VAR=\"I'm local\"\n  echo \"Inside function: GLOBAL_VAR = $GLOBAL_VAR\"\n  echo \"Inside function: LOCAL_VAR = $LOCAL_VAR\"\n}\ndemonstrate_scope\necho \"Outside function: GLOBAL_VAR = $GLOBAL_VAR\"\necho \"Outside function: LOCAL_VAR = $LOCAL_VAR\"\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Quan sát GLOBAL_VAR trong/ngoài hàm; LOCAL_VAR khai báo local chỉ tồn tại trong hàm.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nGLOBAL_VAR=\"I'm global\"\ndemonstrate_scope() {\n  local LOCAL_VAR=\"I'm local\"\n  echo \"Inside function: GLOBAL_VAR = $GLOBAL_VAR\"\n  echo \"Inside function: LOCAL_VAR = $LOCAL_VAR\"\n}\ndemonstrate_scope\necho \"Outside function: GLOBAL_VAR = $GLOBAL_VAR\"\necho \"Outside function: LOCAL_VAR = $LOCAL_VAR\"\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Observe GLOBAL_VAR inside/outside a function; local LOCAL_VAR disappears outside it.",
+      "task_vi": "Quan sát GLOBAL_VAR trong/ngoài hàm; LOCAL_VAR khai báo local chỉ tồn tại trong hàm.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['local LOCAL_VAR', 'demonstrate_scope']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in [\"Inside function: LOCAL_VAR = I'm local\", \"Outside function: GLOBAL_VAR = I'm global\", 'Outside function: LOCAL_VAR =']),result.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "source-388818-section-5-v4",
+      "title": "Advanced Function - ENGLISH_CALC",
+      "title_vi": "Hàm nâng cao ENGLISH_CALC",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Implement ENGLISH_CALC for plus/minus/times and reject divide with return 1.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nENGLISH_CALC() {\n  local num1=$1 operation=$2 num2=$3 result\n  case \"$operation\" in\n    plus) result=$((num1 + num2)); echo \"$num1 + $num2 = $result\" ;;\n    minus) result=$((num1 - num2)); echo \"$num1 - $num2 = $result\" ;;\n    times) result=$((num1 * num2)); echo \"$num1 * $num2 = $result\" ;;\n    *) echo \"Invalid operation. Please use 'plus', 'minus', or 'times'.\"; return 1 ;;\n  esac\n}\nENGLISH_CALC 3 plus 5\nENGLISH_CALC 5 minus 1\nENGLISH_CALC 4 times 6\nENGLISH_CALC 2 divide 2\n```\n\nRun:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "content_vi": "Viết ENGLISH_CALC cho plus/minus/times và từ chối divide bằng return 1.\n\n`~/project/functions.sh`:\n\n```bash\n#!/bin/bash\nENGLISH_CALC() {\n  local num1=$1 operation=$2 num2=$3 result\n  case \"$operation\" in\n    plus) result=$((num1 + num2)); echo \"$num1 + $num2 = $result\" ;;\n    minus) result=$((num1 - num2)); echo \"$num1 - $num2 = $result\" ;;\n    times) result=$((num1 * num2)); echo \"$num1 * $num2 = $result\" ;;\n    *) echo \"Invalid operation. Please use 'plus', 'minus', or 'times'.\"; return 1 ;;\n  esac\n}\nENGLISH_CALC 3 plus 5\nENGLISH_CALC 5 minus 1\nENGLISH_CALC 4 times 6\nENGLISH_CALC 2 divide 2\n```\n\nChạy:\n\n```bash\nchmod +x ~/project/functions.sh\n~/project/functions.sh \n```",
+      "task": "Implement ENGLISH_CALC for plus/minus/times and reject divide with return 1.",
+      "task_vi": "Viết ENGLISH_CALC cho plus/minus/times và từ chối divide bằng return 1.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/functions.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['ENGLISH_CALC', 'return 1']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in ['3 + 5 = 8', '5 - 1 = 4', '4 * 6 = 24', 'Invalid operation.']),result.stdout\n    assert result.returncode == 1\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-shell-functions-388818",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "id": "linux-analyzing-path-directories-385344",
+  "course_id": "linux-for-noobs",
+  "order": 19,
+  "title": "Normalize a PATH-Style List",
+  "title_vi": "Phân Tích Thư Mục Biến PATH",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "10 mins",
+  "overview": "A configuration export stores directory names on one colon-separated line and repeats some entries. A normalized list is easier to inspect and compare.  This challenge combines only text-processing co",
+  "source_url": "https://labex.io/tutorials/linux-analyzing-path-directories-385344",
+  "source_lab_id": 385344,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A configuration export stores directory names on one colon-separated line and repeats some entries. A normalized list is easier to inspect and compare.\n\nThis challenge combines only text-processing commands already introduced: translate a delimiter, sort lines, remove adjacent duplicates, and save the result.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một bản xuất cấu hình lưu trữ tên thư mục trên một dòng phân cách bằng dấu hai chấm và lặp lại một số mục. Danh sách đã chuẩn hóa sẽ dễ kiểm tra và so sánh hơn.\n\nThử thách này chỉ kết hợp các lệnh xử lý văn bản đã được giới thiệu: dịch dấu phân cách, sắp xếp các dòng, xóa các dòng trùng lặp liền kề và lưu kết quả."
+    },
+    {
+      "id": "source-385344-section-1-v3",
+      "title": "Create the Normalized Directory List",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/path-audit/configured-path.txt` contains one colon-separated line. Some directory strings occur more than once.\n\n### Scope\n\n- Convert each colon-separated entry into its own line.\n- Sort the lines alphabetically.\n- Keep each distinct directory string once.\n- Save the result as `path-directories.txt`.\n\n### Your Goal\n\nCreate one sorted, duplicate-free directory list.\n\n### Acceptance Criteria\n\n- `path-directories.txt` contains the four distinct source directory strings, one per line.\n- The lines are alphabetically sorted.\n- The source file remains unchanged.\n\n### Hints\n\nWhy should sorting happen before uniq?\n\n`uniq` removes adjacent repeated lines. Sorting first brings equal directory strings together.",
+      "title_vi": "Tạo danh sách thư mục đã chuẩn hóa",
+      "task": "Thực hiện hướng dẫn: Create the Normalized Directory List",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/path-audit/configured-path.txt <(printf %s '/usr/bin:/home/labex/bin:/bin:/usr/local/bin:/usr/bin:/bin\n') && cmp -s /home/labex/project/path-audit/path-directories.txt <(printf %s '/bin\n/home/labex/bin\n/usr/bin\n/usr/local/bin\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/path-audit/configured-path.txt` chứa một dòng được phân tách bằng dấu hai chấm. Một số chuỗi thư mục xuất hiện nhiều hơn một lần.\n\n### Phạm vi\n\n- Chuyển đổi mỗi mục được phân tách bằng dấu hai chấm thành một dòng riêng biệt.\n- Sắp xếp các dòng theo thứ tự bảng chữ cái.\n- Giữ lại mỗi chuỗi thư mục riêng biệt một lần duy nhất.\n- Lưu kết quả thành `path-directories.txt`.\n\n### Mục tiêu của bạn\n\nTạo một danh sách thư mục đã được sắp xếp và không có trùng lặp.\n\n### Tiêu chí chấp nhận\n\n- `path-directories.txt` chứa bốn chuỗi thư mục nguồn riêng biệt, mỗi thư mục nằm trên một dòng.\n- Các dòng được sắp xếp theo thứ tự bảng chữ cái.\n- Tệp nguồn giữ nguyên không thay đổi.\n\n### Gợi ý\n\nTại sao việc sắp xếp nên diễn ra trước lệnh `uniq`?\n\n`uniq` loại bỏ các dòng lặp lại liền kề. Việc sắp xếp trước sẽ đưa các chuỗi thư mục giống nhau lại gần nhau.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo danh sách thư mục đã chuẩn hóa",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You built one normalized list by combining delimiter translation, sorting, duplicate removal, and redirection.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã xây dựng một danh sách chuẩn hóa bằng cách kết hợp việc chuyển đổi dấu phân cách, sắp xếp, loại bỏ các mục trùng lặp và chuyển hướng."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-385344-section-1-v3",
+      "title": "Create the Normalized Directory List",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/path-audit/configured-path.txt` contains one colon-separated line. Some directory strings occur more than once.\n\n### Scope\n\n- Convert each colon-separated entry into its own line.\n- Sort the lines alphabetically.\n- Keep each distinct directory string once.\n- Save the result as `path-directories.txt`.\n\n### Your Goal\n\nCreate one sorted, duplicate-free directory list.\n\n### Acceptance Criteria\n\n- `path-directories.txt` contains the four distinct source directory strings, one per line.\n- The lines are alphabetically sorted.\n- The source file remains unchanged.\n\n### Hints\n\nWhy should sorting happen before uniq?\n\n`uniq` removes adjacent repeated lines. Sorting first brings equal directory strings together.",
+      "title_vi": "Tạo danh sách thư mục đã chuẩn hóa",
+      "task": "Thực hiện hướng dẫn: Create the Normalized Directory List",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/path-audit/configured-path.txt <(printf %s '/usr/bin:/home/labex/bin:/bin:/usr/local/bin:/usr/bin:/bin\n') && cmp -s /home/labex/project/path-audit/path-directories.txt <(printf %s '/bin\n/home/labex/bin\n/usr/bin\n/usr/local/bin\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/path-audit/configured-path.txt <(printf %s '/usr/bin:/home/labex/bin:/bin:/usr/local/bin:/usr/bin:/bin\n') && cmp -s /home/labex/project/path-audit/path-directories.txt <(printf %s '/bin\n/home/labex/bin\n/usr/bin\n/usr/local/bin\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/path-audit/configured-path.txt` chứa một dòng được phân tách bằng dấu hai chấm. Một số chuỗi thư mục xuất hiện nhiều hơn một lần.\n\n### Phạm vi\n\n- Chuyển đổi mỗi mục được phân tách bằng dấu hai chấm thành một dòng riêng biệt.\n- Sắp xếp các dòng theo thứ tự bảng chữ cái.\n- Giữ lại mỗi chuỗi thư mục riêng biệt một lần duy nhất.\n- Lưu kết quả thành `path-directories.txt`.\n\n### Mục tiêu của bạn\n\nTạo một danh sách thư mục đã được sắp xếp và không có trùng lặp.\n\n### Tiêu chí chấp nhận\n\n- `path-directories.txt` chứa bốn chuỗi thư mục nguồn riêng biệt, mỗi thư mục nằm trên một dòng.\n- Các dòng được sắp xếp theo thứ tự bảng chữ cái.\n- Tệp nguồn giữ nguyên không thay đổi.\n\n### Gợi ý\n\nTại sao việc sắp xếp nên diễn ra trước lệnh `uniq`?\n\n`uniq` loại bỏ các dòng lặp lại liền kề. Việc sắp xếp trước sẽ đưa các chuỗi thư mục giống nhau lại gần nhau.",
+      "task_vi": "Thực hiện hướng dẫn: Tạo danh sách thư mục đã chuẩn hóa",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-analyzing-path-directories-385344.json"
+}

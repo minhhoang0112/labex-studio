@@ -1,0 +1,176 @@
+{
+  "id": "shell-change-file-ownership",
+  "course_id": "quick-start-with-linux",
+  "order": 8,
+  "title": "Change File Ownership",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Tạo target_file, giao owner/group theo yêu cầu rồi đặt quyền 760.",
+  "source_url": "https://labex.io/tutorials/shell-change-file-ownership-270254",
+  "source_lab_id": 270254,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/shell-change-file-ownership-270254",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-or-observed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/shell-change-file-ownership.json",
+  "sections": [
+    {
+      "id": "source-270254-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "This challenge will test your understanding of file permission management in Linux. You'll apply your knowledge of viewing and modifying file permissions and ownership, demonstrating your mastery of essential Linux commands.\n\n### Achievements\n\nUpon completing this challenge, you'll have demonstrated proficiency in:\n\n- Using `chown` to change file ownership\n- Using `chmod` to modify file permissions\n- Using `touch` to create new files\n- Using `ls` to view file details",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Thử thách này sẽ kiểm tra sự hiểu biết của bạn về quản lý quyền sở hữu và phân quyền tệp tin trong Linux. Bạn sẽ vận dụng kiến thức về việc kiểm tra và sửa đổi quyền hạn cũng như quyền sở hữu tệp, chứng minh sự thành thạo của bạn đối với các câu lệnh Linux cốt lõi.\n\n### Thành tựu đạt được\n\nKhi hoàn thành thử thách này, bạn sẽ chứng minh được năng lực trong việc:\n\n- Sử dụng `chown` để thay đổi quyền sở hữu tệp\n- Sử dụng `chmod` để sửa đổi quyền truy cập tệp\n- Sử dụng `touch` để tạo tệp mới\n- Sử dụng `ls` để xem thông tin chi tiết của tệp"
+    },
+    {
+      "id": "source-270254-section-1",
+      "title": "Create a File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Your first task is to create a new file in the `~/project` directory.\n\n### Tasks\n\n- Create a file named `target_file` in the `~/project` directory.\n\n### Requirements\n\n- Use the `touch` command to create the file.\n- Ensure the file is created in the `~/project` directory.\n\n### Example\n\nAfter completing the task, running the following command:\n\n```bash\ncd ~/project && ls\n```\n\nShould produce output similar to:\n\n```plaintext\ntarget_file\n```",
+      "task": "Dùng touch tạo ~/project/target_file.",
+      "hint": "Đích nằm trong project.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/project/target_file\""
+      },
+      "title_vi": "Tạo một Tệp Tin",
+      "content_vi": "Nhiệm vụ đầu tiên của bạn là tạo một tệp mới trong thư mục `~/project`.\n\n### Nhiệm vụ (Tasks)\n\n- Tạo một tệp có tên `target_file` trong thư mục `~/project`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `touch` để tạo tệp.\n- Đảm bảo tệp được tạo đúng vị trí trong thư mục `~/project`.\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, chạy câu lệnh sau:\n\n```bash\ncd ~/project && ls\n```\n\nSẽ hiển thị kết quả tương tự như:\n\n```plaintext\ntarget_file\n```",
+      "task_vi": "Tạo tệp target_file trong thư mục ~/project bằng lệnh touch.",
+      "hint_vi": "Chạy touch ~/project/target_file."
+    },
+    {
+      "id": "source-270254-section-2",
+      "title": "Change the File Owner and Group",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "For this step, you'll modify the ownership of the `target_file` you created.\n\n### Tasks\n\n- Change the owner of `target_file` to `user1`.\n- Change the group of `target_file` to `group1`.\n\n### Requirements\n\n- Use the `chown` command to change both owner and group.\n- The file owner must be set to `user1`.\n- The file group must be set to `group1`.\n\n### Tips\n\n- You may need to use `sudo` before certain commands in this challenge. `sudo` allows you to execute commands with the privileges of the superuser (root).\n\n### Example\n\nAfter completing the task, running:\n\n```bash\nls -l ~/project/target_file\n```\n\nShould produce output similar to:\n\n```plaintext\n-rw-rw-r-- 1 user1 group1 0 Jul 29 10:59 target_file\n```",
+      "task": "Đổi owner target_file thành user1 và group thành group1.",
+      "hint": "user1 và group1 được chuẩn bị trong môi trường riêng.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c '%U:%G' \"$HOME/project/target_file\")\" = user1:group1"
+      },
+      "title_vi": "Thay Đổi Chủ Sở Hữu và Nhóm Sở Hữu Tệp",
+      "content_vi": "Trong bước này, bạn sẽ sửa đổi quyền sở hữu của `target_file` mà bạn vừa tạo.\n\n### Nhiệm vụ (Tasks)\n\n- Đổi người dùng sở hữu (owner) của `target_file` thành `user1`.\n- Đổi nhóm sở hữu (group) của `target_file` thành `group1`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `chown` để thay đổi cả người sở hữu lẫn nhóm sở hữu.\n- Chủ sở hữu của tệp phải được đặt thành `user1`.\n- Nhóm sở hữu của tệp phải được đặt thành `group1`.\n\n### Mẹo (Tips)\n\n- Bạn có thể cần sử dụng `sudo` trước một số câu lệnh nhất định trong thử thách này. `sudo` cho phép bạn thực thi các câu lệnh với đặc quyền của siêu người dùng (root).\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, chạy lệnh:\n\n```bash\nls -l ~/project/target_file\n```\n\nSẽ hiển thị kết quả tương tự như sau:\n\n```plaintext\n-rw-rw-r-- 1 user1 group1 0 Jul 29 10:59 target_file\n```",
+      "task_vi": "Đổi owner thành user1 và group thành group1 cho target_file bằng lệnh chown.",
+      "hint_vi": "Chạy sudo chown user1:group1 ~/project/target_file."
+    },
+    {
+      "id": "source-270254-section-3",
+      "title": "Set the File Permissions",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this final step, you'll modify the permissions of `target_file`.\n\n### Tasks\n\n- Set the permissions of `target_file` to `-rwxrw----`.\n\n### Requirements\n\n- Use the `chmod` command to change the file permissions.\n- The final permissions must be `-rwxrw----`.\n\n### Example\n\nAfter completing the task, running:\n\n```bash\nls -l ~/project/target_file\n```\n\nShould produce output similar to:\n\n```plaintext\n-rwxrw---- 1 user1 group1 0 Jul 29 10:59 target_file\n```",
+      "task": "Đặt target_file thành -rwxrw----, tức 760.",
+      "hint": "File đã thuộc user1 nên cần sudo để đổi quyền.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c '%a' \"$HOME/project/target_file\")\" = 760 && test \"$(stat -c '%U:%G' \"$HOME/project/target_file\")\" = user1:group1"
+      },
+      "title_vi": "Thiết Lập Quyền Truy Cập Tệp",
+      "content_vi": "Trong bước cuối cùng này, bạn sẽ sửa đổi quyền truy cập của `target_file`.\n\n### Nhiệm vụ (Tasks)\n\n- Thiết lập quyền hạn của `target_file` thành `-rwxrw----`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `chmod` để thay đổi quyền truy cập tệp.\n- Quyền truy cập cuối cùng bắt buộc phải là `-rwxrw----`.\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, chạy lệnh:\n\n```bash\nls -l ~/project/target_file\n```\n\nSẽ hiển thị kết quả tương tự như sau:\n\n```plaintext\n-rwxrw---- 1 user1 group1 0 Jul 29 10:59 target_file\n```",
+      "task_vi": "Thiết lập quyền truy cập của target_file thành -rwxrw---- (chmod 760).",
+      "hint_vi": "Chạy sudo chmod 760 ~/project/target_file hoặc chmod u=rwx,g=rw,o= ~/project/target_file."
+    },
+    {
+      "id": "source-270254-section-4",
+      "title": "Summary",
+      "position": 4,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Congratulations on completing the file permission challenge! You've successfully demonstrated your ability to:\n\n1. Create files using `touch`\n2. Change file ownership with `chown`\n3. Modify file permissions using `chmod`\n4. View file details with `ls`\n\nThese commands are fundamental to Linux file management and are used frequently in system administration tasks. Keep practicing and exploring to further solidify your skills in Linux file permissions and ownership management.",
+      "title_vi": "Tổng Kết Thử Thách",
+      "content_vi": "Xin chúc mừng bạn đã hoàn thành xuất sắc thử thách phân quyền tệp tin! Bạn đã chứng minh thành công năng lực của mình trong việc:\n\n1. Tạo tệp tin bằng lệnh `touch`\n2. Thay đổi quyền sở hữu tệp tin bằng lệnh `chown`\n3. Sửa đổi quyền truy cập tệp tin bằng lệnh `chmod`\n4. Xem thông tin chi tiết thuộc tính tệp bằng lệnh `ls`\n\nCác lệnh này là nền tảng sống còn trong việc quản lý tệp tin Linux và được sử dụng liên tục trong các tác vụ quản trị hệ thống hàng ngày. Hãy tiếp tục luyện tập và khám phá thêm để củng cố vững chắc kỹ năng của bạn về quyền sở hữu và phân quyền tệp tin Linux."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-270254-section-1",
+      "title": "Create a File",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Your first task is to create a new file in the `~/project` directory.\n\n### Tasks\n\n- Create a file named `target_file` in the `~/project` directory.\n\n### Requirements\n\n- Use the `touch` command to create the file.\n- Ensure the file is created in the `~/project` directory.\n\n### Example\n\nAfter completing the task, running the following command:\n\n```bash\ncd ~/project && ls\n```\n\nShould produce output similar to:\n\n```plaintext\ntarget_file\n```",
+      "task": "Dùng touch tạo ~/project/target_file.",
+      "hint": "Đích nằm trong project.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/project/target_file\""
+      },
+      "title_vi": "Tạo Tệp Tin Chỉ Định",
+      "content_vi": "Nhiệm vụ đầu tiên của bạn là tạo một tệp tin mới trong thư mục `~/project`.\n\n### Nhiệm vụ\n\n- Tạo một tệp có tên chính xác là `target_file` trong thư mục `~/project`.\n\n### Yêu cầu\n\n- Bạn có thể sử dụng câu lệnh `touch` để tạo tệp.\n- Đảm bảo bạn đang đứng ở đúng thư mục `/home/labex/project` hoặc chỉ định đường dẫn tuyệt đối đầy đủ.",
+      "task_vi": "Tạo tệp target_file trong thư mục ~/project.",
+      "hint_vi": "Chạy touch ~/project/target_file hoặc touch target_file."
+    },
+    {
+      "id": "source-270254-section-2",
+      "title": "Change the File Owner and Group",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "For this step, you'll modify the ownership of the `target_file` you created.\n\n### Tasks\n\n- Change the owner of `target_file` to `user1`.\n- Change the group of `target_file` to `group1`.\n\n### Requirements\n\n- Use the `chown` command to change both owner and group.\n- The file owner must be set to `user1`.\n- The file group must be set to `group1`.\n\n### Tips\n\n- You may need to use `sudo` before certain commands in this challenge. `sudo` allows you to execute commands with the privileges of the superuser (root).\n\n### Example\n\nAfter completing the task, running:\n\n```bash\nls -l ~/project/target_file\n```\n\nShould produce output similar to:\n\n```plaintext\n-rw-rw-r-- 1 user1 group1 0 Jul 29 10:59 target_file\n```",
+      "task": "Đổi owner target_file thành user1 và group thành group1.",
+      "hint": "user1 và group1 được chuẩn bị trong môi trường riêng.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c '%U:%G' \"$HOME/project/target_file\")\" = user1:group1"
+      },
+      "title_vi": "Thay Đổi Quyền Sở Hữu Tệp",
+      "content_vi": "Trong bước này, bạn sẽ sửa đổi quyền sở hữu của tệp `target_file` vừa tạo.\n\n### Nhiệm vụ\n\n- Thay đổi người sở hữu (owner) của `target_file` thành người dùng `root`.\n- Thay đổi nhóm sở hữu (group) của `target_file` thành nhóm `sudo`.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `chown`.\n- Hãy nhớ sử dụng `sudo` vì việc chuyển quyền sở hữu sang tài khoản `root` đòi hỏi đặc quyền quản trị viên.",
+      "task_vi": "Chuyển chủ sở hữu thành root và nhóm thành sudo cho target_file.",
+      "hint_vi": "Sử dụng sudo chown root:sudo target_file."
+    },
+    {
+      "id": "source-270254-section-3",
+      "title": "Set the File Permissions",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this final step, you'll modify the permissions of `target_file`.\n\n### Tasks\n\n- Set the permissions of `target_file` to `-rwxrw----`.\n\n### Requirements\n\n- Use the `chmod` command to change the file permissions.\n- The final permissions must be `-rwxrw----`.\n\n### Example\n\nAfter completing the task, running:\n\n```bash\nls -l ~/project/target_file\n```\n\nShould produce output similar to:\n\n```plaintext\n-rwxrw---- 1 user1 group1 0 Jul 29 10:59 target_file\n```",
+      "task": "Đặt target_file thành -rwxrw----, tức 760.",
+      "hint": "File đã thuộc user1 nên cần sudo để đổi quyền.",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c '%a' \"$HOME/project/target_file\")\" = 760 && test \"$(stat -c '%U:%G' \"$HOME/project/target_file\")\" = user1:group1"
+      },
+      "title_vi": "Thiết Lập Quyền Truy Cập Tệp",
+      "content_vi": "Trong bước cuối cùng này, bạn sẽ điều chỉnh quyền truy cập của `target_file`.\n\n### Nhiệm vụ\n\n- Đặt quyền của `target_file` thành `644` (tức là `-rw-r--r--`).\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `chmod`.\n- Chủ sở hữu có quyền đọc và ghi (`rw-`), nhóm và những người khác chỉ có quyền đọc (`r--`).",
+      "task_vi": "Đặt quyền của target_file thành 644 (hoặc rw-r--r--).",
+      "hint_vi": "Chạy sudo chmod 644 target_file."
+    }
+  ],
+  "title_vi": "Thay Đổi Quyền Sở Hữu Tệp (Change File Ownership)"
+}

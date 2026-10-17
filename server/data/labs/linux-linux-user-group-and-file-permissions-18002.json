@@ -1,0 +1,633 @@
+{
+  "id": "linux-linux-user-group-and-file-permissions-18002",
+  "course_id": "linux-for-noobs",
+  "order": 6,
+  "title": "Linux User Group and File Permissions",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "60 mins",
+  "overview": "Linux is a multi-user operating system. Every process and file belongs to a user, and every user has a primary group plus optional supplementary groups. Together, identity, ownership, and permission b",
+  "source_url": "https://labex.io/tutorials/linux-linux-user-group-and-file-permissions-18002",
+  "source_lab_id": 18002,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Linux is a multi-user operating system. Every process and file belongs to a user, and every user has a primary group plus optional supplementary groups. Together, identity, ownership, and permission bits determine who can read, change, execute, or enter a resource.\n\nIn this lab, you will build a small team environment using dedicated practice accounts. You will create a user, manage group membership, secure a file, inspect an account lock, control default permissions with `umask`, and configure sticky-bit and setgid directories. All work stays inside the lab environment and leaves the default `labex` login path unchanged.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Linux là hệ điều hành nhiều người dùng. Mỗi tiến trình và tệp đều thuộc về một người dùng; mỗi người dùng có một nhóm chính và có thể có thêm các nhóm bổ sung. Danh tính, quyền sở hữu và các bit phân quyền cùng quyết định ai có thể đọc, sửa, thực thi hoặc truy cập một tài nguyên.\n\nTrong bài thực hành này, bạn sẽ xây dựng môi trường nhóm nhỏ bằng các tài khoản thực hành riêng. Bạn sẽ tạo người dùng, quản lý thành viên nhóm, bảo vệ tệp, kiểm tra trạng thái khóa tài khoản, kiểm soát quyền mặc định bằng `umask` và cấu hình thư mục có sticky bit và setgid. Mọi thao tác đều diễn ra trong môi trường bài lab và giữ nguyên cách đăng nhập mặc định bằng tài khoản `labex`."
+    },
+    {
+      "id": "source-18002-section-1-v3",
+      "title": "Inspect Identities and Create a Practice User",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect your current identity and create a separate account for permission exercises. Linux represents a user with a username and numeric user ID (UID). It also records a primary group ID (GID) and any supplementary groups.\n\nFirst, confirm the identity of the current shell:\n\n```bash\nwhoami\n```\n\nThe output should be `labex`. Now display the UID, primary group, and supplementary groups associated with this account:\n\n```bash\nid\n```\n\nThe exact numeric IDs can vary, but the output labels them as `uid`, `gid`, and `groups`.\n\nCreating an account changes system files, so it requires administrative privileges. `sudo` means “superuser do”: it runs the following command with elevated authority after checking that the current account is allowed to do so. Use it only for the command that needs administration, and read the complete command before pressing Enter.\n\nThe `useradd` command below uses three options:\n\n- `-m` creates the home directory.\n- `-U` creates a same-named primary group.\n- `-s /bin/bash` selects Bash as the account's login shell.\n\nCreate a practice user named `jack`:\n\n```bash\nsudo useradd -m -U -s /bin/bash jack\n```\n\nInspect the new account and its home directory:\n\n```bash\nid jack\n```\n\n```bash\nls -ld /home/jack\n```\n\nThe `id` output should show `jack` as both the user and primary group. The directory listing should show that `/home/jack` exists and belongs to `jack:jack`.",
+      "task": "Thực hiện hướng dẫn: Inspect Identities and Create a Practice User",
+      "hint": "Chạy lệnh: whoami",
+      "title_vi": "Kiểm tra danh tính và tạo người dùng thực hành",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra danh tính và tạo người dùng thực hành",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(id -gn jack)\" = jack && test \"$(getent passwd jack | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/jack)\" = jack:jack"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra danh tính hiện tại và tạo một tài khoản riêng để thực hành phân quyền. Linux biểu diễn một người dùng bằng tên và mã định danh người dùng dạng số (UID). Hệ thống cũng lưu mã nhóm chính (GID) và các nhóm bổ sung.\n\nTrước hết, xác nhận danh tính của shell hiện tại:\n\n```bash\nwhoami\n```\n\nKết quả phải là `labex`. Tiếp theo, hiển thị UID, nhóm chính và các nhóm bổ sung của tài khoản này:\n\n```bash\nid\n```\n\nCác mã số cụ thể có thể khác nhau, nhưng kết quả sẽ gắn nhãn chúng là `uid`, `gid` và `groups`.\n\nTạo tài khoản làm thay đổi các tệp hệ thống nên cần quyền quản trị. `sudo` có nghĩa là “superuser do”: lệnh này chạy lệnh đứng sau nó với quyền cao hơn sau khi kiểm tra tài khoản hiện tại có được phép hay không. Chỉ dùng `sudo` cho lệnh cần quyền quản trị và đọc toàn bộ lệnh trước khi nhấn Enter.\n\nLệnh `useradd` dưới đây sử dụng ba tùy chọn:\n\n- `-m` tạo thư mục home.\n- `-U` tạo nhóm chính có cùng tên với người dùng.\n- `-s /bin/bash` chọn Bash làm shell đăng nhập của tài khoản.\n\nTạo người dùng thực hành tên `jack`:\n\n```bash\nsudo useradd -m -U -s /bin/bash jack\n```\n\nKiểm tra tài khoản mới và thư mục home của tài khoản:\n\n```bash\nid jack\n```\n\n```bash\nls -ld /home/jack\n```\n\nKết quả `id` phải hiển thị `jack` là cả người dùng lẫn nhóm chính. Danh sách thư mục phải cho thấy `/home/jack` tồn tại và thuộc về `jack:jack`.",
+      "hint_vi": "Chạy lệnh: whoami"
+    },
+    {
+      "id": "source-18002-section-2-v3",
+      "title": "Manage Supplementary Groups",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a team group and add users to supplementary groups. A user's primary group normally becomes the group owner of newly created files. Supplementary groups grant access to additional shared resources.\n\nCreate a group named `developers`:\n\n```bash\nsudo groupadd developers\n```\n\nThe `usermod -aG` options mean \"append to supplementary groups.\" The `-a` is important: without it, `-G` can replace existing supplementary memberships. Add `jack` to both `developers` and `sudo`:\n\n```bash\nsudo usermod -aG developers,sudo jack\n```\n\nAlso register `labex` as a member of `developers`. The current shell will not immediately gain the new group identity; you will refresh it safely in the final step.\n\n```bash\nsudo usermod -aG developers labex\n```\n\nInspect both accounts:\n\n```bash\ngroups jack\n```\n\n```bash\ngroups labex\n```\n\nThe first output should include `jack`, `developers`, and `sudo`. The second should include `developers`. Membership in `sudo` allows an authenticated account to request elevated privileges; it should be granted only to trusted administrators.",
+      "task": "Thực hiện hướng dẫn: Manage Supplementary Groups",
+      "hint": "Chạy lệnh: sudo groupadd developers",
+      "title_vi": "Quản lý các nhóm bổ sung",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Quản lý các nhóm bổ sung",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "id -nG jack | tr \" \" \"\\n\" | grep -Fxq developers && id -nG jack | tr \" \" \"\\n\" | grep -Fxq sudo && id -nG labex | tr \" \" \"\\n\" | grep -Fxq developers"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo nhóm làm việc và thêm người dùng vào các nhóm bổ sung. Nhóm chính của người dùng thường trở thành nhóm sở hữu của tệp mới tạo. Các nhóm bổ sung cấp quyền truy cập vào những tài nguyên dùng chung khác.\n\nTạo nhóm tên `developers`:\n\n```bash\nsudo groupadd developers\n```\n\nCác tùy chọn `usermod -aG` có nghĩa là “thêm vào các nhóm bổ sung”. `-a` rất quan trọng: nếu thiếu nó, `-G` có thể thay thế danh sách nhóm bổ sung hiện có. Thêm `jack` vào cả `developers` và `sudo`:\n\n```bash\nsudo usermod -aG developers,sudo jack\n```\n\nĐồng thời đăng ký `labex` làm thành viên của `developers`. Shell hiện tại chưa nhận ngay danh tính nhóm mới; bạn sẽ cập nhật nhóm an toàn ở bước cuối.\n\n```bash\nsudo usermod -aG developers labex\n```\n\nKiểm tra cả hai tài khoản:\n\n```bash\ngroups jack\n```\n\n```bash\ngroups labex\n```\n\nKết quả thứ nhất phải có `jack`, `developers` và `sudo`. Kết quả thứ hai phải có `developers`. Thành viên nhóm `sudo` có thể yêu cầu quyền cao hơn sau khi xác thực; chỉ nên cấp quyền thành viên này cho quản trị viên đáng tin cậy.",
+      "hint_vi": "Chạy lệnh: sudo groupadd developers"
+    },
+    {
+      "id": "source-18002-section-3-v3",
+      "title": "Control File Ownership and Permissions",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will secure a team report with a specific owner, group, and permission mode. A long listing displays the file type first, followed by three permission triplets for the owner, group, and others.\n\nCreate an empty report in the project directory:\n\n```bash\ntouch /home/labex/project/secure-report.txt\n```\n\nChange both owners with the `user:group` form of `chown`:\n\n```bash\nsudo chown jack:developers /home/labex/project/secure-report.txt\n```\n\nSet mode `640`:\n\n```bash\nsudo chmod 640 /home/labex/project/secure-report.txt\n```\n\nIn numeric notation, read is `4`, write is `2`, and execute is `1`. Therefore:\n\n- Owner `6` means read and write (`4 + 2`).\n- Group `4` means read only.\n- Others `0` means no access.\n\nInspect the result:\n\n```bash\nls -l /home/labex/project/secure-report.txt\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/secure-report.txt\n```\n\nThe stable `stat` fields should report `owner=jack group=developers mode=640`.",
+      "task": "Thực hiện hướng dẫn: Control File Ownership and Permissions",
+      "hint": "Chạy lệnh: touch /home/labex/project/secure-report.txt",
+      "title_vi": "Kiểm soát quyền sở hữu và quyền truy cập tệp",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Kiểm soát quyền sở hữu và quyền truy cập tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %U:%G:%a /home/labex/project/secure-report.txt)\" = jack:developers:640"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ bảo vệ báo cáo của nhóm bằng chủ sở hữu, nhóm và chế độ phân quyền cụ thể. Kết quả liệt kê dạng dài hiển thị loại tệp trước, tiếp theo là ba bộ quyền dành cho chủ sở hữu, nhóm và những người dùng khác.\n\nTạo báo cáo rỗng trong thư mục dự án:\n\n```bash\ntouch /home/labex/project/secure-report.txt\n```\n\nThay đổi cả chủ sở hữu và nhóm bằng dạng `user:group` của `chown`:\n\n```bash\nsudo chown jack:developers /home/labex/project/secure-report.txt\n```\n\nĐặt chế độ `640`:\n\n```bash\nsudo chmod 640 /home/labex/project/secure-report.txt\n```\n\nTrong cách biểu diễn bằng số, quyền đọc là `4`, quyền ghi là `2` và quyền thực thi là `1`. Vì vậy:\n\n- Chủ sở hữu `6` có quyền đọc và ghi (`4 + 2`).\n- Nhóm `4` chỉ có quyền đọc.\n- Những người dùng khác `0` không có quyền truy cập.\n\nKiểm tra kết quả:\n\n```bash\nls -l /home/labex/project/secure-report.txt\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/secure-report.txt\n```\n\nCác trường ổn định của `stat` phải hiển thị `owner=jack group=developers mode=640`.",
+      "hint_vi": "Chạy lệnh: touch /home/labex/project/secure-report.txt"
+    },
+    {
+      "id": "source-18002-section-4-v3",
+      "title": "Inspect and Change an Account Lock",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will practice temporarily locking and unlocking a dedicated account. Linux stores password hashes and account status in `/etc/shadow`. A leading `!` in the password field marks password authentication as locked.\n\nThe setup created a practice account named `contractor`. Display only the first character of its password field so that the hash itself is never printed. Read the pipeline from left to right: `getent shadow contractor` retrieves the account's shadow record; the first `cut` uses `:` as a delimiter and selects field 2; the second `cut` keeps character 1 of that field:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nThe initial character should normally be `$`, which is the beginning of a modern password-hash format. Lock the account with `usermod -L`:\n\n```bash\nsudo usermod -L contractor\n```\n\nInspect the first character again:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nIt should now be `!`. Unlock the account with `usermod -U` and confirm that the `!` disappears:\n\n```bash\nsudo usermod -U contractor\n```\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nFor this scenario, the contractor has now left the team. Lock the account one final time while preserving its files:\n\n```bash\nsudo usermod -L contractor\n```\n\nLocking password authentication does not delete the account, remove its home directory, or necessarily terminate existing sessions. It is different from deleting a user and is useful when files must be retained for review.",
+      "task": "Thực hiện hướng dẫn: Inspect and Change an Account Lock",
+      "hint": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1",
+      "title_vi": "Kiểm tra và thay đổi trạng thái khóa tài khoản",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa dựng trạng thái mật khẩu ban đầu và kiểm chứng chuỗi khóa/mở/khóa tài khoản contractor."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra và thay đổi trạng thái khóa tài khoản",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ thực hành tạm khóa và mở khóa một tài khoản riêng. Linux lưu mã băm mật khẩu và trạng thái tài khoản trong `/etc/shadow`. Dấu `!` ở đầu trường mật khẩu cho biết xác thực bằng mật khẩu đã bị khóa.\n\nPhần thiết lập đã tạo tài khoản thực hành tên `contractor`. Chỉ hiển thị ký tự đầu tiên của trường mật khẩu để không in ra chính mã băm. Đọc pipeline từ trái sang phải: `getent shadow contractor` lấy bản ghi shadow của tài khoản; lệnh `cut` thứ nhất dùng `:` làm dấu phân cách và chọn trường 2; lệnh `cut` thứ hai giữ lại ký tự đầu tiên của trường đó:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nKý tự ban đầu thông thường phải là `$`, ký tự mở đầu của định dạng mã băm mật khẩu hiện đại. Khóa tài khoản bằng `usermod -L`:\n\n```bash\nsudo usermod -L contractor\n```\n\nKiểm tra lại ký tự đầu tiên:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nKý tự đó bây giờ phải là `!`. Mở khóa bằng `usermod -U` và xác nhận dấu `!` biến mất:\n\n```bash\nsudo usermod -U contractor\n```\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nTrong tình huống này, cộng tác viên đã rời nhóm. Khóa tài khoản lần cuối nhưng giữ lại các tệp của tài khoản:\n\n```bash\nsudo usermod -L contractor\n```\n\nKhóa xác thực bằng mật khẩu không xóa tài khoản, không xóa thư mục home và cũng không nhất thiết chấm dứt các phiên đang hoạt động. Thao tác này khác với xóa người dùng và hữu ích khi cần giữ lại các tệp để xem xét.",
+      "hint_vi": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1"
+    },
+    {
+      "id": "source-18002-section-5-v3",
+      "title": "Control Default Permissions with Umask",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `umask` to control the permission bits removed when the shell creates new files and directories. Programs usually start with a maximum mode of `666` for regular files and `777` for directories. A mask of `027` removes write permission from the group and all permissions from others.\n\nCreate a workspace for the experiment:\n\n```bash\nmkdir -p /home/labex/project/umask-demo\n```\n\nSave the current mask so that you can restore it later. The syntax `$(command)` is called **command substitution**: the shell runs the command inside the parentheses and replaces the entire expression with its output. The assignment stores that result in `original_umask`; as with other shell assignments, there are no spaces around `=`.\n\n```bash\noriginal_umask=$(umask)\n```\n\nApply mask `027`, then create a file and directory:\n\n```bash\numask 027\n```\n\n```bash\ntouch /home/labex/project/umask-demo/private-note.txt\n```\n\n```bash\nmkdir /home/labex/project/umask-demo/private-dir\n```\n\nInspect the resulting numeric modes:\n\n```bash\nstat -c '%a %n' /home/labex/project/umask-demo/private-note.txt /home/labex/project/umask-demo/private-dir\n```\n\nThe file should have mode `640`, while the directory should have mode `750`. Files do not receive execute bits automatically. Restore the shell's original mask:\n\n```bash\numask \"$original_umask\"\n```\n\nChanging `umask` affects objects created afterward; it does not rewrite permissions on existing objects.",
+      "task": "Thực hiện hướng dẫn: Control Default Permissions with Umask",
+      "hint": "Chạy lệnh: mkdir -p /home/labex/project/umask-demo",
+      "title_vi": "Kiểm soát quyền mặc định bằng Umask",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Kiểm soát quyền mặc định bằng Umask",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %a /home/labex/project/umask-demo/private-note.txt)\" = 640 && test \"$(stat -c %a /home/labex/project/umask-demo/private-dir)\" = 750"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `umask` để kiểm soát các bit quyền bị loại bỏ khi shell tạo tệp và thư mục mới. Chương trình thường bắt đầu với chế độ tối đa `666` cho tệp thông thường và `777` cho thư mục. Mặt nạ `027` loại bỏ quyền ghi của nhóm và mọi quyền của những người dùng khác.\n\nTạo không gian làm việc cho thử nghiệm:\n\n```bash\nmkdir -p /home/labex/project/umask-demo\n```\n\nLưu mặt nạ hiện tại để có thể khôi phục sau. Cú pháp `$(command)` được gọi là **thay thế lệnh** (command substitution): shell chạy lệnh trong ngoặc rồi thay toàn bộ biểu thức bằng kết quả của lệnh. Phép gán lưu kết quả đó vào `original_umask`; tương tự các phép gán shell khác, không có khoảng trắng quanh dấu `=`.\n\n```bash\noriginal_umask=$(umask)\n```\n\nÁp dụng mặt nạ `027`, sau đó tạo một tệp và một thư mục:\n\n```bash\numask 027\n```\n\n```bash\ntouch /home/labex/project/umask-demo/private-note.txt\n```\n\n```bash\nmkdir /home/labex/project/umask-demo/private-dir\n```\n\nKiểm tra chế độ phân quyền dạng số của các đối tượng vừa tạo:\n\n```bash\nstat -c '%a %n' /home/labex/project/umask-demo/private-note.txt /home/labex/project/umask-demo/private-dir\n```\n\nTệp phải có chế độ `640`, còn thư mục phải có chế độ `750`. Tệp không tự động nhận các bit thực thi. Khôi phục mặt nạ ban đầu của shell:\n\n```bash\numask \"$original_umask\"\n```\n\nThay đổi `umask` chỉ ảnh hưởng đến các đối tượng được tạo sau đó; thao tác này không ghi lại quyền của những đối tượng đã tồn tại.",
+      "hint_vi": "Chạy lệnh: mkdir -p /home/labex/project/umask-demo"
+    },
+    {
+      "id": "source-18002-section-6-v3",
+      "title": "Protect a Shared Directory with the Sticky Bit",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will configure a public drop box where everyone can create files but users cannot delete files owned by someone else. Ordinary mode `777` grants all users full directory access. Adding the sticky bit changes deletion rules inside the directory.\n\nCreate the shared directory and set mode `1777`. The leading `1` enables the sticky bit.\n\n```bash\nmkdir /tmp/shared-dropbox\n```\n\n```bash\nchmod 1777 /tmp/shared-dropbox\n```\n\nUse `sudo -u` to create one file as each practice account:\n\n```bash\nsudo -u jack touch /tmp/shared-dropbox/jack-note.txt\n```\n\n```bash\nsudo -u contractor touch /tmp/shared-dropbox/contractor-note.txt\n```\n\nNow let `jack` try to delete the contractor's file:\n\n```bash\nsudo -u jack rm /tmp/shared-dropbox/contractor-note.txt\n```\n\nThis failure is intentional. You should see `Operation not permitted`, and the contractor's file should remain. Inspect the directory:\n\n```bash\nls -ld /tmp/shared-dropbox\n```\n\nThe permissions should end in a lowercase `t`, such as `drwxrwxrwt`. Lowercase `t` means the sticky bit and execute permission for others are both set. Uppercase `T` would mean the sticky bit is set without the corresponding execute bit.",
+      "task": "Thực hiện hướng dẫn: Protect a Shared Directory with the Sticky Bit",
+      "hint": "Chạy lệnh: mkdir /tmp/shared-dropbox",
+      "title_vi": "Bảo vệ thư mục dùng chung bằng Sticky Bit",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Bảo vệ thư mục dùng chung bằng Sticky Bit",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %a /tmp/shared-dropbox)\" = 1777 && test \"$(stat -c %U /tmp/shared-dropbox/jack-note.txt)\" = jack && test \"$(stat -c %U /tmp/shared-dropbox/contractor-note.txt)\" = contractor"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ cấu hình thư mục nhận tệp công cộng: mọi người đều có thể tạo tệp, nhưng người dùng không thể xóa tệp thuộc về người khác. Chế độ thông thường `777` cấp cho mọi người toàn quyền truy cập thư mục. Thêm sticky bit làm thay đổi quy tắc xóa tệp bên trong thư mục.\n\nTạo thư mục dùng chung và đặt chế độ `1777`. Chữ số `1` ở đầu bật sticky bit.\n\n```bash\nmkdir /tmp/shared-dropbox\n```\n\n```bash\nchmod 1777 /tmp/shared-dropbox\n```\n\nDùng `sudo -u` để tạo một tệp dưới danh tính của mỗi tài khoản thực hành:\n\n```bash\nsudo -u jack touch /tmp/shared-dropbox/jack-note.txt\n```\n\n```bash\nsudo -u contractor touch /tmp/shared-dropbox/contractor-note.txt\n```\n\nBây giờ cho `jack` thử xóa tệp của cộng tác viên:\n\n```bash\nsudo -u jack rm /tmp/shared-dropbox/contractor-note.txt\n```\n\nThao tác thất bại này là có chủ đích. Bạn phải thấy `Operation not permitted`, và tệp của cộng tác viên vẫn còn. Kiểm tra thư mục:\n\n```bash\nls -ld /tmp/shared-dropbox\n```\n\nChuỗi quyền phải kết thúc bằng chữ `t` thường, chẳng hạn `drwxrwxrwt`. `t` thường có nghĩa là cả sticky bit và quyền thực thi dành cho những người dùng khác đều được bật. Chữ `T` hoa có nghĩa là sticky bit được bật nhưng thiếu bit thực thi tương ứng.",
+      "hint_vi": "Chạy lệnh: mkdir /tmp/shared-dropbox"
+    },
+    {
+      "id": "source-18002-section-7-v3",
+      "title": "Configure a Setgid Team Directory",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will prepare a private collaboration directory. On a directory, setgid causes newly created children to inherit the directory's group instead of the creator's primary group. This keeps team files associated with one shared group.\n\nCreate the directory:\n\n```bash\nmkdir /home/labex/project/team-share\n```\n\nMake `jack` the owner and `developers` the group owner:\n\n```bash\nsudo chown jack:developers /home/labex/project/team-share\n```\n\nSet mode `2770`. The leading `2` enables setgid; `770` grants full access to the owner and group while denying access to others.\n\n```bash\nsudo chmod 2770 /home/labex/project/team-share\n```\n\nInspect the result:\n\n```bash\nls -ld /home/labex/project/team-share\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share\n```\n\nThe long listing should show `s` in the group execute position, such as `drwxrws---`. Lowercase `s` means both setgid and group execute are active. Uppercase `S` would mean setgid is present but group execute is missing.\n\nSetuid, represented by an `s` in the owner execute position, is another special bit commonly found on carefully controlled system executables. Recognize it when reading permissions, but do not add it to arbitrary programs.",
+      "task": "Thực hiện hướng dẫn: Configure a Setgid Team Directory",
+      "hint": "Chạy lệnh: mkdir /home/labex/project/team-share",
+      "title_vi": "Cấu hình thư mục làm việc nhóm với Setgid",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Cấu hình thư mục làm việc nhóm với Setgid",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %U:%G:%a /home/labex/project/team-share)\" = jack:developers:2770"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ chuẩn bị thư mục cộng tác riêng. Với thư mục, setgid khiến các đối tượng con mới tạo kế thừa nhóm của thư mục thay vì nhóm chính của người tạo. Nhờ đó, các tệp của nhóm luôn gắn với cùng một nhóm dùng chung.\n\nTạo thư mục:\n\n```bash\nmkdir /home/labex/project/team-share\n```\n\nĐặt `jack` làm chủ sở hữu và `developers` làm nhóm sở hữu:\n\n```bash\nsudo chown jack:developers /home/labex/project/team-share\n```\n\nĐặt chế độ `2770`. Chữ số `2` ở đầu bật setgid; `770` cấp toàn quyền cho chủ sở hữu và nhóm, đồng thời từ chối quyền truy cập của những người dùng khác.\n\n```bash\nsudo chmod 2770 /home/labex/project/team-share\n```\n\nKiểm tra kết quả:\n\n```bash\nls -ld /home/labex/project/team-share\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share\n```\n\nKết quả liệt kê dạng dài phải có chữ `s` ở vị trí quyền thực thi của nhóm, chẳng hạn `drwxrws---`. Chữ `s` thường có nghĩa là cả setgid và quyền thực thi của nhóm đều được bật. Chữ `S` hoa có nghĩa là có setgid nhưng thiếu quyền thực thi của nhóm.\n\nSetuid, được biểu diễn bằng chữ `s` ở vị trí quyền thực thi của chủ sở hữu, là một bit đặc biệt khác thường xuất hiện trên các chương trình hệ thống được kiểm soát chặt chẽ. Hãy nhận biết nó khi đọc quyền, nhưng không thêm bit này vào chương trình tùy ý.",
+      "hint_vi": "Chạy lệnh: mkdir /home/labex/project/team-share"
+    },
+    {
+      "id": "source-18002-section-8-v3",
+      "title": "Refresh Group Membership and Verify Inheritance",
+      "position": 8,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will activate the `developers` membership in a child shell and prove that setgid controls the group of a new file. Adding a user to `/etc/group` does not rewrite the supplementary groups of an already running shell.\n\nStart a child shell with `developers` as its active group:\n\n```bash\nnewgrp developers\n```\n\nThe prompt may refresh. You are still the `labex` user, but the child shell now has `developers` as its effective group. Confirm both identities:\n\n```bash\nid\n```\n\nCreate a file in the setgid directory:\n\n```bash\ntouch /home/labex/project/team-share/labex-note.txt\n```\n\nInspect the new file:\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share/labex-note.txt\n```\n\nThe owner should be `labex`, while the group should be `developers`. Setgid inherits the group owner; the file's read and write bits still depend on the creating process and its `umask`.\n\nExit the child shell and return to the original terminal session:\n\n```bash\nexit\n```\n\nThe file remains in place after the child shell closes.",
+      "task": "Thực hiện hướng dẫn: Refresh Group Membership and Verify Inheritance",
+      "hint": "Chạy lệnh: newgrp developers",
+      "title_vi": "Cập nhật thành viên nhóm và kiểm tra sự kế thừa",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần kiểm chứng newgrp mở subshell, group mới và thoát về shell ban đầu; chưa có bài kiểm tra tương tác phù hợp."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Cập nhật thành viên nhóm và kiểm tra sự kế thừa",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kích hoạt tư cách thành viên `developers` trong một shell con và chứng minh setgid quyết định nhóm của tệp mới. Thêm người dùng vào `/etc/group` không thay đổi các nhóm bổ sung của shell đang chạy.\n\nKhởi động shell con với `developers` làm nhóm hoạt động:\n\n```bash\nnewgrp developers\n```\n\nDấu nhắc có thể thay đổi. Bạn vẫn là người dùng `labex`, nhưng shell con hiện có `developers` làm nhóm hiệu lực. Xác nhận cả hai danh tính:\n\n```bash\nid\n```\n\nTạo tệp trong thư mục có setgid:\n\n```bash\ntouch /home/labex/project/team-share/labex-note.txt\n```\n\nKiểm tra tệp mới:\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share/labex-note.txt\n```\n\nChủ sở hữu phải là `labex`, còn nhóm phải là `developers`. Setgid giúp kế thừa nhóm sở hữu; các bit đọc và ghi của tệp vẫn phụ thuộc vào tiến trình tạo tệp và `umask` của tiến trình đó.\n\nThoát shell con và trở về phiên terminal ban đầu:\n\n```bash\nexit\n```\n\nTệp vẫn còn sau khi shell con đóng.",
+      "hint_vi": "Chạy lệnh: newgrp developers"
+    },
+    {
+      "id": "section-9",
+      "title": "Summary",
+      "position": 9,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You practiced the core identity and access model used by Linux systems. You created a user and team group, managed supplementary memberships, assigned ownership, and translated numeric permission modes into practical access rules. You also inspected an account lock without exposing its password hash.\n\nYou then moved beyond ordinary permissions: `umask` controlled defaults, the sticky bit protected files in a public directory, and setgid preserved team group ownership in a private collaboration directory. Finally, you used `newgrp` to refresh group membership and verified the inherited group on a real file.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã thực hành mô hình danh tính và quyền truy cập cốt lõi của hệ thống Linux. Bạn đã tạo người dùng và nhóm làm việc, quản lý thành viên nhóm bổ sung, gán quyền sở hữu và chuyển các chế độ phân quyền dạng số thành quy tắc truy cập thực tế. Bạn cũng đã kiểm tra trạng thái khóa tài khoản mà không để lộ mã băm mật khẩu.\n\nTiếp đó, bạn đã tìm hiểu các cơ chế ngoài quyền thông thường: `umask` kiểm soát quyền mặc định, sticky bit bảo vệ tệp trong thư mục công cộng, còn setgid duy trì nhóm sở hữu trong thư mục cộng tác riêng. Cuối cùng, bạn dùng `newgrp` để cập nhật tư cách thành viên nhóm và kiểm chứng nhóm được kế thừa trên một tệp thực."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-18002-section-1-v3",
+      "title": "Inspect Identities and Create a Practice User",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will inspect your current identity and create a separate account for permission exercises. Linux represents a user with a username and numeric user ID (UID). It also records a primary group ID (GID) and any supplementary groups.\n\nFirst, confirm the identity of the current shell:\n\n```bash\nwhoami\n```\n\nThe output should be `labex`. Now display the UID, primary group, and supplementary groups associated with this account:\n\n```bash\nid\n```\n\nThe exact numeric IDs can vary, but the output labels them as `uid`, `gid`, and `groups`.\n\nCreating an account changes system files, so it requires administrative privileges. `sudo` means “superuser do”: it runs the following command with elevated authority after checking that the current account is allowed to do so. Use it only for the command that needs administration, and read the complete command before pressing Enter.\n\nThe `useradd` command below uses three options:\n\n- `-m` creates the home directory.\n- `-U` creates a same-named primary group.\n- `-s /bin/bash` selects Bash as the account's login shell.\n\nCreate a practice user named `jack`:\n\n```bash\nsudo useradd -m -U -s /bin/bash jack\n```\n\nInspect the new account and its home directory:\n\n```bash\nid jack\n```\n\n```bash\nls -ld /home/jack\n```\n\nThe `id` output should show `jack` as both the user and primary group. The directory listing should show that `/home/jack` exists and belongs to `jack:jack`.",
+      "task": "Thực hiện hướng dẫn: Inspect Identities and Create a Practice User",
+      "hint": "Chạy lệnh: whoami",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Kiểm tra danh tính và tạo người dùng thực hành",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra danh tính và tạo người dùng thực hành",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(id -gn jack)\" = jack && test \"$(getent passwd jack | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/jack)\" = jack:jack"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test \"$(id -gn jack)\" = jack && test \"$(getent passwd jack | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/jack)\" = jack:jack"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ kiểm tra danh tính hiện tại và tạo một tài khoản riêng để thực hành phân quyền. Linux biểu diễn một người dùng bằng tên và mã định danh người dùng dạng số (UID). Hệ thống cũng lưu mã nhóm chính (GID) và các nhóm bổ sung.\n\nTrước hết, xác nhận danh tính của shell hiện tại:\n\n```bash\nwhoami\n```\n\nKết quả phải là `labex`. Tiếp theo, hiển thị UID, nhóm chính và các nhóm bổ sung của tài khoản này:\n\n```bash\nid\n```\n\nCác mã số cụ thể có thể khác nhau, nhưng kết quả sẽ gắn nhãn chúng là `uid`, `gid` và `groups`.\n\nTạo tài khoản làm thay đổi các tệp hệ thống nên cần quyền quản trị. `sudo` có nghĩa là “superuser do”: lệnh này chạy lệnh đứng sau nó với quyền cao hơn sau khi kiểm tra tài khoản hiện tại có được phép hay không. Chỉ dùng `sudo` cho lệnh cần quyền quản trị và đọc toàn bộ lệnh trước khi nhấn Enter.\n\nLệnh `useradd` dưới đây sử dụng ba tùy chọn:\n\n- `-m` tạo thư mục home.\n- `-U` tạo nhóm chính có cùng tên với người dùng.\n- `-s /bin/bash` chọn Bash làm shell đăng nhập của tài khoản.\n\nTạo người dùng thực hành tên `jack`:\n\n```bash\nsudo useradd -m -U -s /bin/bash jack\n```\n\nKiểm tra tài khoản mới và thư mục home của tài khoản:\n\n```bash\nid jack\n```\n\n```bash\nls -ld /home/jack\n```\n\nKết quả `id` phải hiển thị `jack` là cả người dùng lẫn nhóm chính. Danh sách thư mục phải cho thấy `/home/jack` tồn tại và thuộc về `jack:jack`.",
+      "hint_vi": "Chạy lệnh: whoami"
+    },
+    {
+      "id": "source-18002-section-2-v3",
+      "title": "Manage Supplementary Groups",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will create a team group and add users to supplementary groups. A user's primary group normally becomes the group owner of newly created files. Supplementary groups grant access to additional shared resources.\n\nCreate a group named `developers`:\n\n```bash\nsudo groupadd developers\n```\n\nThe `usermod -aG` options mean \"append to supplementary groups.\" The `-a` is important: without it, `-G` can replace existing supplementary memberships. Add `jack` to both `developers` and `sudo`:\n\n```bash\nsudo usermod -aG developers,sudo jack\n```\n\nAlso register `labex` as a member of `developers`. The current shell will not immediately gain the new group identity; you will refresh it safely in the final step.\n\n```bash\nsudo usermod -aG developers labex\n```\n\nInspect both accounts:\n\n```bash\ngroups jack\n```\n\n```bash\ngroups labex\n```\n\nThe first output should include `jack`, `developers`, and `sudo`. The second should include `developers`. Membership in `sudo` allows an authenticated account to request elevated privileges; it should be granted only to trusted administrators.",
+      "task": "Thực hiện hướng dẫn: Manage Supplementary Groups",
+      "hint": "Chạy lệnh: sudo groupadd developers",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Quản lý các nhóm bổ sung",
+      "task_vi": "Thực hiện hướng dẫn: Quản lý các nhóm bổ sung",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "id -nG jack | tr \" \" \"\\n\" | grep -Fxq developers && id -nG jack | tr \" \" \"\\n\" | grep -Fxq sudo && id -nG labex | tr \" \" \"\\n\" | grep -Fxq developers"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "id -nG jack | tr \" \" \"\\n\" | grep -Fxq developers && id -nG jack | tr \" \" \"\\n\" | grep -Fxq sudo && id -nG labex | tr \" \" \"\\n\" | grep -Fxq developers"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ tạo nhóm làm việc và thêm người dùng vào các nhóm bổ sung. Nhóm chính của người dùng thường trở thành nhóm sở hữu của tệp mới tạo. Các nhóm bổ sung cấp quyền truy cập vào những tài nguyên dùng chung khác.\n\nTạo nhóm tên `developers`:\n\n```bash\nsudo groupadd developers\n```\n\nCác tùy chọn `usermod -aG` có nghĩa là “thêm vào các nhóm bổ sung”. `-a` rất quan trọng: nếu thiếu nó, `-G` có thể thay thế danh sách nhóm bổ sung hiện có. Thêm `jack` vào cả `developers` và `sudo`:\n\n```bash\nsudo usermod -aG developers,sudo jack\n```\n\nĐồng thời đăng ký `labex` làm thành viên của `developers`. Shell hiện tại chưa nhận ngay danh tính nhóm mới; bạn sẽ cập nhật nhóm an toàn ở bước cuối.\n\n```bash\nsudo usermod -aG developers labex\n```\n\nKiểm tra cả hai tài khoản:\n\n```bash\ngroups jack\n```\n\n```bash\ngroups labex\n```\n\nKết quả thứ nhất phải có `jack`, `developers` và `sudo`. Kết quả thứ hai phải có `developers`. Thành viên nhóm `sudo` có thể yêu cầu quyền cao hơn sau khi xác thực; chỉ nên cấp quyền thành viên này cho quản trị viên đáng tin cậy.",
+      "hint_vi": "Chạy lệnh: sudo groupadd developers"
+    },
+    {
+      "id": "source-18002-section-3-v3",
+      "title": "Control File Ownership and Permissions",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will secure a team report with a specific owner, group, and permission mode. A long listing displays the file type first, followed by three permission triplets for the owner, group, and others.\n\nCreate an empty report in the project directory:\n\n```bash\ntouch /home/labex/project/secure-report.txt\n```\n\nChange both owners with the `user:group` form of `chown`:\n\n```bash\nsudo chown jack:developers /home/labex/project/secure-report.txt\n```\n\nSet mode `640`:\n\n```bash\nsudo chmod 640 /home/labex/project/secure-report.txt\n```\n\nIn numeric notation, read is `4`, write is `2`, and execute is `1`. Therefore:\n\n- Owner `6` means read and write (`4 + 2`).\n- Group `4` means read only.\n- Others `0` means no access.\n\nInspect the result:\n\n```bash\nls -l /home/labex/project/secure-report.txt\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/secure-report.txt\n```\n\nThe stable `stat` fields should report `owner=jack group=developers mode=640`.",
+      "task": "Thực hiện hướng dẫn: Control File Ownership and Permissions",
+      "hint": "Chạy lệnh: touch /home/labex/project/secure-report.txt",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Kiểm soát quyền sở hữu và quyền truy cập tệp",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm soát quyền sở hữu và quyền truy cập tệp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %U:%G:%a /home/labex/project/secure-report.txt)\" = jack:developers:640"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test \"$(stat -c %U:%G:%a /home/labex/project/secure-report.txt)\" = jack:developers:640"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ bảo vệ báo cáo của nhóm bằng chủ sở hữu, nhóm và chế độ phân quyền cụ thể. Kết quả liệt kê dạng dài hiển thị loại tệp trước, tiếp theo là ba bộ quyền dành cho chủ sở hữu, nhóm và những người dùng khác.\n\nTạo báo cáo rỗng trong thư mục dự án:\n\n```bash\ntouch /home/labex/project/secure-report.txt\n```\n\nThay đổi cả chủ sở hữu và nhóm bằng dạng `user:group` của `chown`:\n\n```bash\nsudo chown jack:developers /home/labex/project/secure-report.txt\n```\n\nĐặt chế độ `640`:\n\n```bash\nsudo chmod 640 /home/labex/project/secure-report.txt\n```\n\nTrong cách biểu diễn bằng số, quyền đọc là `4`, quyền ghi là `2` và quyền thực thi là `1`. Vì vậy:\n\n- Chủ sở hữu `6` có quyền đọc và ghi (`4 + 2`).\n- Nhóm `4` chỉ có quyền đọc.\n- Những người dùng khác `0` không có quyền truy cập.\n\nKiểm tra kết quả:\n\n```bash\nls -l /home/labex/project/secure-report.txt\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/secure-report.txt\n```\n\nCác trường ổn định của `stat` phải hiển thị `owner=jack group=developers mode=640`.",
+      "hint_vi": "Chạy lệnh: touch /home/labex/project/secure-report.txt"
+    },
+    {
+      "id": "source-18002-section-4-v3",
+      "title": "Inspect and Change an Account Lock",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will practice temporarily locking and unlocking a dedicated account. Linux stores password hashes and account status in `/etc/shadow`. A leading `!` in the password field marks password authentication as locked.\n\nThe setup created a practice account named `contractor`. Display only the first character of its password field so that the hash itself is never printed. Read the pipeline from left to right: `getent shadow contractor` retrieves the account's shadow record; the first `cut` uses `:` as a delimiter and selects field 2; the second `cut` keeps character 1 of that field:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nThe initial character should normally be `$`, which is the beginning of a modern password-hash format. Lock the account with `usermod -L`:\n\n```bash\nsudo usermod -L contractor\n```\n\nInspect the first character again:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nIt should now be `!`. Unlock the account with `usermod -U` and confirm that the `!` disappears:\n\n```bash\nsudo usermod -U contractor\n```\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nFor this scenario, the contractor has now left the team. Lock the account one final time while preserving its files:\n\n```bash\nsudo usermod -L contractor\n```\n\nLocking password authentication does not delete the account, remove its home directory, or necessarily terminate existing sessions. It is different from deleting a user and is useful when files must be retained for review.",
+      "task": "Thực hiện hướng dẫn: Inspect and Change an Account Lock",
+      "hint": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Chưa dựng trạng thái mật khẩu ban đầu và kiểm chứng chuỗi khóa/mở/khóa tài khoản contractor."
+      },
+      "title_vi": "Kiểm tra và thay đổi trạng thái khóa tài khoản",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm tra và thay đổi trạng thái khóa tài khoản",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ thực hành tạm khóa và mở khóa một tài khoản riêng. Linux lưu mã băm mật khẩu và trạng thái tài khoản trong `/etc/shadow`. Dấu `!` ở đầu trường mật khẩu cho biết xác thực bằng mật khẩu đã bị khóa.\n\nPhần thiết lập đã tạo tài khoản thực hành tên `contractor`. Chỉ hiển thị ký tự đầu tiên của trường mật khẩu để không in ra chính mã băm. Đọc pipeline từ trái sang phải: `getent shadow contractor` lấy bản ghi shadow của tài khoản; lệnh `cut` thứ nhất dùng `:` làm dấu phân cách và chọn trường 2; lệnh `cut` thứ hai giữ lại ký tự đầu tiên của trường đó:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nKý tự ban đầu thông thường phải là `$`, ký tự mở đầu của định dạng mã băm mật khẩu hiện đại. Khóa tài khoản bằng `usermod -L`:\n\n```bash\nsudo usermod -L contractor\n```\n\nKiểm tra lại ký tự đầu tiên:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nKý tự đó bây giờ phải là `!`. Mở khóa bằng `usermod -U` và xác nhận dấu `!` biến mất:\n\n```bash\nsudo usermod -U contractor\n```\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nTrong tình huống này, cộng tác viên đã rời nhóm. Khóa tài khoản lần cuối nhưng giữ lại các tệp của tài khoản:\n\n```bash\nsudo usermod -L contractor\n```\n\nKhóa xác thực bằng mật khẩu không xóa tài khoản, không xóa thư mục home và cũng không nhất thiết chấm dứt các phiên đang hoạt động. Thao tác này khác với xóa người dùng và hữu ích khi cần giữ lại các tệp để xem xét.",
+      "hint_vi": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1"
+    },
+    {
+      "id": "source-18002-section-5-v3",
+      "title": "Control Default Permissions with Umask",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `umask` to control the permission bits removed when the shell creates new files and directories. Programs usually start with a maximum mode of `666` for regular files and `777` for directories. A mask of `027` removes write permission from the group and all permissions from others.\n\nCreate a workspace for the experiment:\n\n```bash\nmkdir -p /home/labex/project/umask-demo\n```\n\nSave the current mask so that you can restore it later. The syntax `$(command)` is called **command substitution**: the shell runs the command inside the parentheses and replaces the entire expression with its output. The assignment stores that result in `original_umask`; as with other shell assignments, there are no spaces around `=`.\n\n```bash\noriginal_umask=$(umask)\n```\n\nApply mask `027`, then create a file and directory:\n\n```bash\numask 027\n```\n\n```bash\ntouch /home/labex/project/umask-demo/private-note.txt\n```\n\n```bash\nmkdir /home/labex/project/umask-demo/private-dir\n```\n\nInspect the resulting numeric modes:\n\n```bash\nstat -c '%a %n' /home/labex/project/umask-demo/private-note.txt /home/labex/project/umask-demo/private-dir\n```\n\nThe file should have mode `640`, while the directory should have mode `750`. Files do not receive execute bits automatically. Restore the shell's original mask:\n\n```bash\numask \"$original_umask\"\n```\n\nChanging `umask` affects objects created afterward; it does not rewrite permissions on existing objects.",
+      "task": "Thực hiện hướng dẫn: Control Default Permissions with Umask",
+      "hint": "Chạy lệnh: mkdir -p /home/labex/project/umask-demo",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Kiểm soát quyền mặc định bằng Umask",
+      "task_vi": "Thực hiện hướng dẫn: Kiểm soát quyền mặc định bằng Umask",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %a /home/labex/project/umask-demo/private-note.txt)\" = 640 && test \"$(stat -c %a /home/labex/project/umask-demo/private-dir)\" = 750"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test \"$(stat -c %a /home/labex/project/umask-demo/private-note.txt)\" = 640 && test \"$(stat -c %a /home/labex/project/umask-demo/private-dir)\" = 750"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ dùng `umask` để kiểm soát các bit quyền bị loại bỏ khi shell tạo tệp và thư mục mới. Chương trình thường bắt đầu với chế độ tối đa `666` cho tệp thông thường và `777` cho thư mục. Mặt nạ `027` loại bỏ quyền ghi của nhóm và mọi quyền của những người dùng khác.\n\nTạo không gian làm việc cho thử nghiệm:\n\n```bash\nmkdir -p /home/labex/project/umask-demo\n```\n\nLưu mặt nạ hiện tại để có thể khôi phục sau. Cú pháp `$(command)` được gọi là **thay thế lệnh** (command substitution): shell chạy lệnh trong ngoặc rồi thay toàn bộ biểu thức bằng kết quả của lệnh. Phép gán lưu kết quả đó vào `original_umask`; tương tự các phép gán shell khác, không có khoảng trắng quanh dấu `=`.\n\n```bash\noriginal_umask=$(umask)\n```\n\nÁp dụng mặt nạ `027`, sau đó tạo một tệp và một thư mục:\n\n```bash\numask 027\n```\n\n```bash\ntouch /home/labex/project/umask-demo/private-note.txt\n```\n\n```bash\nmkdir /home/labex/project/umask-demo/private-dir\n```\n\nKiểm tra chế độ phân quyền dạng số của các đối tượng vừa tạo:\n\n```bash\nstat -c '%a %n' /home/labex/project/umask-demo/private-note.txt /home/labex/project/umask-demo/private-dir\n```\n\nTệp phải có chế độ `640`, còn thư mục phải có chế độ `750`. Tệp không tự động nhận các bit thực thi. Khôi phục mặt nạ ban đầu của shell:\n\n```bash\numask \"$original_umask\"\n```\n\nThay đổi `umask` chỉ ảnh hưởng đến các đối tượng được tạo sau đó; thao tác này không ghi lại quyền của những đối tượng đã tồn tại.",
+      "hint_vi": "Chạy lệnh: mkdir -p /home/labex/project/umask-demo"
+    },
+    {
+      "id": "source-18002-section-6-v3",
+      "title": "Protect a Shared Directory with the Sticky Bit",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will configure a public drop box where everyone can create files but users cannot delete files owned by someone else. Ordinary mode `777` grants all users full directory access. Adding the sticky bit changes deletion rules inside the directory.\n\nCreate the shared directory and set mode `1777`. The leading `1` enables the sticky bit.\n\n```bash\nmkdir /tmp/shared-dropbox\n```\n\n```bash\nchmod 1777 /tmp/shared-dropbox\n```\n\nUse `sudo -u` to create one file as each practice account:\n\n```bash\nsudo -u jack touch /tmp/shared-dropbox/jack-note.txt\n```\n\n```bash\nsudo -u contractor touch /tmp/shared-dropbox/contractor-note.txt\n```\n\nNow let `jack` try to delete the contractor's file:\n\n```bash\nsudo -u jack rm /tmp/shared-dropbox/contractor-note.txt\n```\n\nThis failure is intentional. You should see `Operation not permitted`, and the contractor's file should remain. Inspect the directory:\n\n```bash\nls -ld /tmp/shared-dropbox\n```\n\nThe permissions should end in a lowercase `t`, such as `drwxrwxrwt`. Lowercase `t` means the sticky bit and execute permission for others are both set. Uppercase `T` would mean the sticky bit is set without the corresponding execute bit.",
+      "task": "Thực hiện hướng dẫn: Protect a Shared Directory with the Sticky Bit",
+      "hint": "Chạy lệnh: mkdir /tmp/shared-dropbox",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Bảo vệ thư mục dùng chung bằng Sticky Bit",
+      "task_vi": "Thực hiện hướng dẫn: Bảo vệ thư mục dùng chung bằng Sticky Bit",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %a /tmp/shared-dropbox)\" = 1777 && test \"$(stat -c %U /tmp/shared-dropbox/jack-note.txt)\" = jack && test \"$(stat -c %U /tmp/shared-dropbox/contractor-note.txt)\" = contractor"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test \"$(stat -c %a /tmp/shared-dropbox)\" = 1777 && test \"$(stat -c %U /tmp/shared-dropbox/jack-note.txt)\" = jack && test \"$(stat -c %U /tmp/shared-dropbox/contractor-note.txt)\" = contractor"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ cấu hình thư mục nhận tệp công cộng: mọi người đều có thể tạo tệp, nhưng người dùng không thể xóa tệp thuộc về người khác. Chế độ thông thường `777` cấp cho mọi người toàn quyền truy cập thư mục. Thêm sticky bit làm thay đổi quy tắc xóa tệp bên trong thư mục.\n\nTạo thư mục dùng chung và đặt chế độ `1777`. Chữ số `1` ở đầu bật sticky bit.\n\n```bash\nmkdir /tmp/shared-dropbox\n```\n\n```bash\nchmod 1777 /tmp/shared-dropbox\n```\n\nDùng `sudo -u` để tạo một tệp dưới danh tính của mỗi tài khoản thực hành:\n\n```bash\nsudo -u jack touch /tmp/shared-dropbox/jack-note.txt\n```\n\n```bash\nsudo -u contractor touch /tmp/shared-dropbox/contractor-note.txt\n```\n\nBây giờ cho `jack` thử xóa tệp của cộng tác viên:\n\n```bash\nsudo -u jack rm /tmp/shared-dropbox/contractor-note.txt\n```\n\nThao tác thất bại này là có chủ đích. Bạn phải thấy `Operation not permitted`, và tệp của cộng tác viên vẫn còn. Kiểm tra thư mục:\n\n```bash\nls -ld /tmp/shared-dropbox\n```\n\nChuỗi quyền phải kết thúc bằng chữ `t` thường, chẳng hạn `drwxrwxrwt`. `t` thường có nghĩa là cả sticky bit và quyền thực thi dành cho những người dùng khác đều được bật. Chữ `T` hoa có nghĩa là sticky bit được bật nhưng thiếu bit thực thi tương ứng.",
+      "hint_vi": "Chạy lệnh: mkdir /tmp/shared-dropbox"
+    },
+    {
+      "id": "source-18002-section-7-v3",
+      "title": "Configure a Setgid Team Directory",
+      "position": 7,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will prepare a private collaboration directory. On a directory, setgid causes newly created children to inherit the directory's group instead of the creator's primary group. This keeps team files associated with one shared group.\n\nCreate the directory:\n\n```bash\nmkdir /home/labex/project/team-share\n```\n\nMake `jack` the owner and `developers` the group owner:\n\n```bash\nsudo chown jack:developers /home/labex/project/team-share\n```\n\nSet mode `2770`. The leading `2` enables setgid; `770` grants full access to the owner and group while denying access to others.\n\n```bash\nsudo chmod 2770 /home/labex/project/team-share\n```\n\nInspect the result:\n\n```bash\nls -ld /home/labex/project/team-share\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share\n```\n\nThe long listing should show `s` in the group execute position, such as `drwxrws---`. Lowercase `s` means both setgid and group execute are active. Uppercase `S` would mean setgid is present but group execute is missing.\n\nSetuid, represented by an `s` in the owner execute position, is another special bit commonly found on carefully controlled system executables. Recognize it when reading permissions, but do not add it to arbitrary programs.",
+      "task": "Thực hiện hướng dẫn: Configure a Setgid Team Directory",
+      "hint": "Chạy lệnh: mkdir /home/labex/project/team-share",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Cấu hình thư mục làm việc nhóm với Setgid",
+      "task_vi": "Thực hiện hướng dẫn: Cấu hình thư mục làm việc nhóm với Setgid",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %U:%G:%a /home/labex/project/team-share)\" = jack:developers:2770"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test \"$(stat -c %U:%G:%a /home/labex/project/team-share)\" = jack:developers:2770"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ chuẩn bị thư mục cộng tác riêng. Với thư mục, setgid khiến các đối tượng con mới tạo kế thừa nhóm của thư mục thay vì nhóm chính của người tạo. Nhờ đó, các tệp của nhóm luôn gắn với cùng một nhóm dùng chung.\n\nTạo thư mục:\n\n```bash\nmkdir /home/labex/project/team-share\n```\n\nĐặt `jack` làm chủ sở hữu và `developers` làm nhóm sở hữu:\n\n```bash\nsudo chown jack:developers /home/labex/project/team-share\n```\n\nĐặt chế độ `2770`. Chữ số `2` ở đầu bật setgid; `770` cấp toàn quyền cho chủ sở hữu và nhóm, đồng thời từ chối quyền truy cập của những người dùng khác.\n\n```bash\nsudo chmod 2770 /home/labex/project/team-share\n```\n\nKiểm tra kết quả:\n\n```bash\nls -ld /home/labex/project/team-share\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share\n```\n\nKết quả liệt kê dạng dài phải có chữ `s` ở vị trí quyền thực thi của nhóm, chẳng hạn `drwxrws---`. Chữ `s` thường có nghĩa là cả setgid và quyền thực thi của nhóm đều được bật. Chữ `S` hoa có nghĩa là có setgid nhưng thiếu quyền thực thi của nhóm.\n\nSetuid, được biểu diễn bằng chữ `s` ở vị trí quyền thực thi của chủ sở hữu, là một bit đặc biệt khác thường xuất hiện trên các chương trình hệ thống được kiểm soát chặt chẽ. Hãy nhận biết nó khi đọc quyền, nhưng không thêm bit này vào chương trình tùy ý.",
+      "hint_vi": "Chạy lệnh: mkdir /home/labex/project/team-share"
+    },
+    {
+      "id": "source-18002-section-8-v3",
+      "title": "Refresh Group Membership and Verify Inheritance",
+      "position": 8,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will activate the `developers` membership in a child shell and prove that setgid controls the group of a new file. Adding a user to `/etc/group` does not rewrite the supplementary groups of an already running shell.\n\nStart a child shell with `developers` as its active group:\n\n```bash\nnewgrp developers\n```\n\nThe prompt may refresh. You are still the `labex` user, but the child shell now has `developers` as its effective group. Confirm both identities:\n\n```bash\nid\n```\n\nCreate a file in the setgid directory:\n\n```bash\ntouch /home/labex/project/team-share/labex-note.txt\n```\n\nInspect the new file:\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share/labex-note.txt\n```\n\nThe owner should be `labex`, while the group should be `developers`. Setgid inherits the group owner; the file's read and write bits still depend on the creating process and its `umask`.\n\nExit the child shell and return to the original terminal session:\n\n```bash\nexit\n```\n\nThe file remains in place after the child shell closes.",
+      "task": "Thực hiện hướng dẫn: Refresh Group Membership and Verify Inheritance",
+      "hint": "Chạy lệnh: newgrp developers",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần kiểm chứng newgrp mở subshell, group mới và thoát về shell ban đầu; chưa có bài kiểm tra tương tác phù hợp."
+      },
+      "title_vi": "Cập nhật thành viên nhóm và kiểm tra sự kế thừa",
+      "task_vi": "Thực hiện hướng dẫn: Cập nhật thành viên nhóm và kiểm tra sự kế thừa",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ kích hoạt tư cách thành viên `developers` trong một shell con và chứng minh setgid quyết định nhóm của tệp mới. Thêm người dùng vào `/etc/group` không thay đổi các nhóm bổ sung của shell đang chạy.\n\nKhởi động shell con với `developers` làm nhóm hoạt động:\n\n```bash\nnewgrp developers\n```\n\nDấu nhắc có thể thay đổi. Bạn vẫn là người dùng `labex`, nhưng shell con hiện có `developers` làm nhóm hiệu lực. Xác nhận cả hai danh tính:\n\n```bash\nid\n```\n\nTạo tệp trong thư mục có setgid:\n\n```bash\ntouch /home/labex/project/team-share/labex-note.txt\n```\n\nKiểm tra tệp mới:\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share/labex-note.txt\n```\n\nChủ sở hữu phải là `labex`, còn nhóm phải là `developers`. Setgid giúp kế thừa nhóm sở hữu; các bit đọc và ghi của tệp vẫn phụ thuộc vào tiến trình tạo tệp và `umask` của tiến trình đó.\n\nThoát shell con và trở về phiên terminal ban đầu:\n\n```bash\nexit\n```\n\nTệp vẫn còn sau khi shell con đóng.",
+      "hint_vi": "Chạy lệnh: newgrp developers"
+    }
+  ],
+  "title_vi": "Nhóm Người Dùng và Quyền Hạn Tệp Linux",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-linux-user-group-and-file-permissions-18002.json"
+}

@@ -1,0 +1,99 @@
+{
+  "id": "shell-four-function-calculator-388893",
+  "course_id": "shell-for-beginners",
+  "order": 14,
+  "title": "Four Function Calculator",
+  "title_vi": "Thử Thách: Máy Tính 4 Phép Toán",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "5 mins",
+  "overview": "Write a modular calculator script with add, sub, mul, and div functions.",
+  "source_url": "https://labex.io/tutorials/shell-four-function-calculator-388893",
+  "source_lab_id": 388893,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice the reviewed shell concepts below. Instructions are independently written; functional requirements follow the linked public lesson.",
+      "content_vi": "Thực hành các khái niệm shell bên dưới. Hướng dẫn được biên soạn lại; yêu cầu chức năng theo bài công khai được liên kết."
+    },
+    {
+      "id": "source-388893-section-1-v4",
+      "title": "Create Calculator Functions",
+      "title_vi": "Viết các hàm máy tính",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Complete add, subtract, multiply and divide in calculator.sh. Read two integers and a quoted operator from stdin; reject division by zero.\n\n`10,5,+` → `Result: 15`; `10,5,-` → `Result: 5`; `10,5,*` → `Result: 50`; `10,5,/` → `Result: 2`; `10,0,/` → `Error: Division by zero is not allowed.`",
+      "content_vi": "Hoàn thiện add, subtract, multiply và divide trong calculator.sh. Đọc hai số nguyên và toán tử từ stdin; xử lý chia cho 0.\n\n`10,5,+` → `Result: 15`; `10,5,-` → `Result: 5`; `10,5,*` → `Result: 50`; `10,5,/` → `Result: 2`; `10,0,/` → `Error: Division by zero is not allowed.`",
+      "task": "Complete add, subtract, multiply and divide in calculator.sh. Read two integers and a quoted operator from stdin; reject division by zero.",
+      "task_vi": "Hoàn thiện add, subtract, multiply và divide trong calculator.sh. Đọc hai số nguyên và toán tử từ stdin; xử lý chia cho 0.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/calculator.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['add', 'subtract', 'multiply', 'divide', 'read']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    for a,b,op,expected in [(10,5,'+','Result: 15'),(10,5,'-','Result: 5'),(10,5,'*','Result: 50'),(10,5,'/','Result: 2'),(10,0,'/','Error: Division by zero is not allowed.'),(23,7,'+','Result: 30'),(9,3,'*','Result: 27')]:\n        assert expected in execute([str(p)], f'{a}\\n{b}\\n{op}\\n').stdout\n    for function,a,b,expected in [('add',23,7,'30'),('subtract',23,7,'16'),('multiply',9,3,'27'),('divide',27,3,'9'),('divide',10,0,'Error: Division by zero is not allowed.')]:\n        outcome=execute(['-c','source \\\"$1\\\" </dev/null >/dev/null; \\\"$2\\\" \\\"$3\\\" \\\"$4\\\"','bash',str(p),function,str(a),str(b)])\n        assert expected in outcome.stdout, outcome.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Review your scripts and retry their edge cases. Passing these local checks does not certify source-private grader parity.",
+      "content_vi": "Ôn lại script và thử trường hợp biên. Đạt bộ kiểm tra local không có nghĩa đã phục hồi bộ chấm riêng của nguồn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388893-section-1-v4",
+      "title": "Create Calculator Functions",
+      "title_vi": "Viết các hàm máy tính",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "Complete add, subtract, multiply and divide in calculator.sh. Read two integers and a quoted operator from stdin; reject division by zero.\n\n`10,5,+` → `Result: 15`; `10,5,-` → `Result: 5`; `10,5,*` → `Result: 50`; `10,5,/` → `Result: 2`; `10,0,/` → `Error: Division by zero is not allowed.`",
+      "content_vi": "Hoàn thiện add, subtract, multiply và divide trong calculator.sh. Đọc hai số nguyên và toán tử từ stdin; xử lý chia cho 0.\n\n`10,5,+` → `Result: 15`; `10,5,-` → `Result: 5`; `10,5,*` → `Result: 50`; `10,5,/` → `Result: 2`; `10,0,/` → `Error: Division by zero is not allowed.`",
+      "task": "Complete add, subtract, multiply and divide in calculator.sh. Read two integers and a quoted operator from stdin; reject division by zero.",
+      "task_vi": "Hoàn thiện add, subtract, multiply và divide trong calculator.sh. Đọc hai số nguyên và toán tử từ stdin; xử lý chia cho 0.",
+      "hint": "Review the file, interpreter and boundary cases.",
+      "hint_vi": "Kiểm tra tên tệp, trình thông dịch và các trường hợp biên.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LABEX_CHECK'\nimport os,pathlib,shutil,subprocess,tempfile\np=pathlib.Path('/home/labex/project/calculator.sh')\nassert p.is_file(), 'Create the requested file first'\ntext=p.read_text()\nassert all(token in text for token in ['add', 'subtract', 'multiply', 'divide', 'read']), 'Required concepts missing'\nif True: assert os.access(p,os.X_OK), 'Add execute permission'\nwith tempfile.TemporaryDirectory(prefix='labex-shell-check-') as directory:\n    work=pathlib.Path(directory)\n    source=p\n    if p.suffix == '.sh':\n        p=work/source.name\n        # Preserve teaching delays in the learner file; suppress sleep only in\n        # this isolated behavior probe so a five-second loop does not time out.\n        p.write_text(text if False else text.replace('sleep 1', ':').replace('sleep 2', ':'))\n        p.chmod(0o700)\n        assert subprocess.run(['/bin/bash','-n',str(p)],capture_output=True).returncode == 0\n    def execute(arguments, data=''):\n        return subprocess.run(['/bin/bash',*arguments],input=data,text=True,capture_output=True,cwd=work,timeout=2)\n    result=execute([str(p),*[]],'')\n    assert all(item in result.stdout for item in []),result.stdout\n    for a,b,op,expected in [(10,5,'+','Result: 15'),(10,5,'-','Result: 5'),(10,5,'*','Result: 50'),(10,5,'/','Result: 2'),(10,0,'/','Error: Division by zero is not allowed.'),(23,7,'+','Result: 30'),(9,3,'*','Result: 27')]:\n        assert expected in execute([str(p)], f'{a}\\n{b}\\n{op}\\n').stdout\n    for function,a,b,expected in [('add',23,7,'30'),('subtract',23,7,'16'),('multiply',9,3,'27'),('divide',27,3,'9'),('divide',10,0,'Error: Division by zero is not allowed.')]:\n        outcome=execute(['-c','source \\\"$1\\\" </dev/null >/dev/null; \\\"$2\\\" \\\"$3\\\" \\\"$4\\\"','bash',str(p),function,str(a),str(b)])\n        assert expected in outcome.stdout, outcome.stdout\nLABEX_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "fidelity": "public-functional-requirements-reviewed",
+    "reviewed_at": "2026-10-17",
+    "source_url": "https://labex.io/tutorials/shell-four-function-calculator-388893",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false
+  }
+}

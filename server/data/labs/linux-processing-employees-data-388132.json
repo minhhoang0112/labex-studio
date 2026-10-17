@@ -1,0 +1,159 @@
+{
+  "id": "linux-processing-employees-data-388132",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 388132,
+  "source_url": "https://labex.io/tutorials/linux-processing-employees-data-388132",
+  "order": 35,
+  "title": "Processing Employees Data",
+  "title_vi": "Xử lý dữ liệu nhân viên",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "5 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Processing Employees Data",
+  "sections": [
+    {
+      "id": "commands-388132-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Processing Employees Data. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Xử lý dữ liệu nhân viên. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-388132-section-1-v1",
+      "title": "Combining and Processing Data",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Ghép và định dạng dữ liệu",
+      "content": "Join employee IDs with departments, format “name works in department”, sort, and save employee_departments.txt.",
+      "content_vi": "Ghép mã nhân viên với phòng ban, định dạng “tên works in phòng ban”, sắp xếp và lưu employee_departments.txt.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s 'e4873b7a5a5478eb4a2ca063c3c49ddbebcde93e4dc875ebbd7be5e34576166e  /home/labex/project/employees.txt\naa47c3938350f80cfbb33d69e40c7945ffb9d45db91fad85cc5c4d82455c0f5e  /home/labex/project/departments.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bjoin\\s+employees\\.txt\\s+departments\\.txt[^\\n]*\\bawk\\b[^\\n]*employee_departments\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s employee_departments.txt\ncmp -s employee_departments.txt <(join employees.txt departments.txt | awk '{print $2, $3, \"works in\", $4}' | sort)"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388132-section-2-v1",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-388132-section-1-v1",
+      "title": "Combining and Processing Data",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Ghép và định dạng dữ liệu",
+      "content": "Join employee IDs with departments, format “name works in department”, sort, and save employee_departments.txt.",
+      "content_vi": "Ghép mã nhân viên với phòng ban, định dạng “tên works in phòng ban”, sắp xếp và lưu employee_departments.txt.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s 'e4873b7a5a5478eb4a2ca063c3c49ddbebcde93e4dc875ebbd7be5e34576166e  /home/labex/project/employees.txt\naa47c3938350f80cfbb33d69e40c7945ffb9d45db91fad85cc5c4d82455c0f5e  /home/labex/project/departments.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bjoin\\s+employees\\.txt\\s+departments\\.txt[^\\n]*\\bawk\\b[^\\n]*employee_departments\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s employee_departments.txt\ncmp -s employee_departments.txt <(join employees.txt departments.txt | awk '{print $2, $3, \"works in\", $4}' | sort)"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-processing-employees-data-388132.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

@@ -1,0 +1,529 @@
+{
+  "id": "linux-day-6-the-process-overseer-596618",
+  "course_id": "become-a-junior-system-administrator",
+  "order": 6,
+  "title": "The Process Overseer",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "curriculum_version": 2,
+  "overview": "Welcome, Junior System Administrator! It's a busy Monday morning at \"LabEx,\" and a critical alert just came in: the main application server is experiencing a significant slowdown, affecting all users. The senior administrators are tied up in an emergency meeting, and it's up to you to investigate and stabilize the system.",
+  "source_url": "https://labex.io/tutorials/linux-day-6-the-process-overseer-596618",
+  "source_lab_id": 596618,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-day-6-the-process-overseer-596618",
+    "observed_at": "2026-10-16",
+    "reference_path": "server/data/reference/junior-sysadmin/linux-day-6-the-process-overseer-596618.json",
+    "reference_sha256": "f79c55bfb6ae8e4dd930761b45ec9062d59d4bda0e8c032e0b017f38bb1b0157",
+    "fidelity": {
+      "content": "user-provided-source-text-preserved",
+      "section_outline": "user-provided-official-API-reference",
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-and-reconstructed",
+      "live_outline": "matched-all-ten",
+      "live_body": "intro-only-visible"
+    },
+    "limitation": "Local independently authored checks and fixture content; incompatible runtime tasks explicitly unsupported."
+  },
+  "environment_setup": "server/data/environment-setups/linux-day-6-the-process-overseer-596618.json",
+  "sections": [
+    {
+      "id": "source-596618-section-0-v2",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Introduction\n\nWelcome, Junior System Administrator! It's a busy Monday morning at \"LabEx,\" and a critical alert just came in: the main application server is experiencing a significant slowdown, affecting all users. The senior administrators are tied up in an emergency meeting, and it's up to you to investigate and stabilize the system.\n\nThis is your moment to shine. Your mission is to dive into the server's command line, diagnose the issue by inspecting the running processes, neutralize any resource-hogging culprits, and ensure essential services remain operational. By the end of this challenge, you'll have proven your ability to manage a live Linux environment under pressure, a core skill for any system administrator.\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Important Notice</div>\n<div class=\"text-sm\">\nThis challenge covers skills beyond <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. If you have not learned these topics yet, skip it for now and continue to <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, the next course in the <a href=\"https://labex.io/learn/linux\" class=\"underline\">Linux learning path</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>When to return:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Complete the <a href=\"https://labex.io/labs/linux-system-information-and-process-management-725419?course=linux-for-noobs\" class=\"underline\">System Information and Process Management</a> Guided Lab, then return and try this challenge again.</li>\n</ol>\n</div>\n",
+      "title_vi": "Giới thiệu",
+      "content_vi": "## Giới thiệu\n\nChào mừng bạn, Quản trị viên Hệ thống Tập sự! Đó là một buổi sáng thứ Hai bận rộn tại \"LabEx\", và một cảnh báo quan trọng vừa được gửi đến: máy chủ ứng dụng chính đang gặp tình trạng chậm đáng kể, ảnh hưởng đến tất cả người dùng. Các quản trị viên cấp cao đang bận họp khẩn cấp, và nhiệm vụ điều tra, ổn định hệ thống được giao cho bạn.\n\nĐây là thời điểm để bạn tỏa sáng. Sứ mệnh của bạn là truy cập vào dòng lệnh của máy chủ, chẩn đoán sự cố bằng cách kiểm tra các tiến trình đang chạy, vô hiệu hóa bất kỳ tác nhân nào ngốn tài nguyên, và đảm bảo các dịch vụ thiết yếu vẫn hoạt động. Đến cuối thử thách này, bạn sẽ chứng minh được khả năng quản lý môi trường Linux trực tiếp dưới áp lực, một kỹ năng cốt lõi cho bất kỳ quản trị viên hệ thống nào.\n\n<div class=\"p-4 my-4 bg-gray-50\">\n<div class=\"font-semibold mb-2\">Thông báo quan trọng</div>\n<div class=\"text-sm\">\nThử thách này bao gồm các kỹ năng nằm ngoài <a href=\"https://labex.io/courses/quick-start-with-linux\" class=\"underline\">Quick Start with Linux</a>. Nếu bạn chưa học các chủ đề này, hãy bỏ qua nó lúc này và tiếp tục với <a href=\"https://labex.io/courses/linux-for-noobs\" class=\"underline\">Linux for Noobs</a>, khóa học tiếp theo trong <a href=\"https://labex.io/learn/linux\" class=\"underline\">lộ trình học Linux</a>.\n</div>\n<div class=\"text-sm mt-3\">\n<strong>Khi nào nên quay lại:</strong>\n</div>\n<ol class=\"text-sm mt-1 ml-4 list-decimal\">\n<li>Hoàn thành Lab có hướng dẫn <a href=\"https://labex.io/labs/linux-system-information-and-process-management-725419?course=linux-for-noobs\" class=\"underline\">System Information and Process Management</a>, sau đó quay lại và thử lại thử thách này.</li>\n</ol>\n</div>"
+    },
+    {
+      "id": "source-596618-section-1-v2",
+      "title": "Listing Active System Processes",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Listing Active System Processes\n\nYour first step as the Process Overseer is to get a complete picture of what's currently running on the server. A static snapshot of all active processes will help you begin your investigation and identify anything unusual.\n\n### Tasks\n\n- Use a single command to generate a detailed list of all processes running on the system.\n\n### Requirements\n\n- The command must display processes for all users, not just your own.\n- The output format should be user-oriented, showing details like the user who owns the process, CPU/memory usage, and the full command that started it.\n\n### Examples\n\nAfter running the command, you should see output similar to this:\n\n```plaintext\nUSER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         1  0.0  0.1 169848  9064 ?        Ss   08:30   0:02 /sbin/init\nlabex     1234  0.0  0.0   2324   564 pts/0    S+   08:35   0:00 bash /home/labex/project/resource_hog.sh\nlabex     1235  0.0  0.0   2324   564 ?        S    08:35   0:00 bash /home/labex/project/critical_service.sh\n...\n```\n\nThe output will show multiple processes with columns for user, process ID, CPU usage, memory usage, and the command that started each process.\n\n### Hints\n\n- The most common command for this task is `ps`.\n- Think about which options for the `ps` command would show processes for **a**ll users, in a **u**ser-friendly format, and include processes not attached to a te**x**minal.\n",
+      "task": "- Use a single command to generate a detailed list of all processes running on the system.",
+      "hint": "- The most common command for this task is `ps`.\n- Think about which options for the `ps` command would show processes for **a**ll users, in a **u**ser-friendly format, and include processes not attached to a te**x**minal.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*ps\\s+aux\\s*$",
+            "^\\s*ps\\s+-aux\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Liệt kê tiến trình hệ thống đang hoạt động",
+      "content_vi": "## Liệt kê các tiến trình đang hoạt động của hệ thống\n\nBước đầu tiên của bạn với tư cách là Người giám sát tiến trình (Process Overseer) là có được cái nhìn tổng quan hoàn chỉnh về những gì đang chạy trên máy chủ. Một ảnh chụp nhanh tĩnh (static snapshot) của tất cả các tiến trình đang hoạt động sẽ giúp bạn bắt đầu cuộc điều tra và xác định bất kỳ điều gì bất thường.\n\n### Nhiệm vụ\n\n- Sử dụng một lệnh duy nhất để tạo danh sách chi tiết của tất cả các tiến trình đang chạy trên hệ thống.\n\n### Yêu cầu\n\n- Lệnh phải hiển thị các tiến trình của tất cả người dùng, không chỉ của riêng bạn.\n- Định dạng đầu ra phải hướng đến người dùng, hiển thị các chi tiết như người dùng sở hữu tiến trình, mức sử dụng CPU/bộ nhớ và lệnh đầy đủ đã khởin chạy nó.\n\n### Ví dụ\n\nSau khi chạy lệnh, bạn sẽ thấy đầu ra tương tự như thế này:\n\n```plaintext\nUSER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         1  0.0  0.1 169848  9064 ?        Ss   08:30   0:02 /sbin/init\nlabex     1234  0.0  0.0   2324   564 pts/0    S+   08:35   0:00 bash /home/labex/project/resource_hog.sh\nlabex     1235  0.0  0.0   2324   564 ?        S    08:35   0:00 bash /home/labex/project/critical_service.sh\n...\n```\n\nĐầu ra sẽ hiển thị nhiều tiến trình với các cột cho người dùng, ID tiến trình, mức sử dụng CPU, mức sử dụng bộ nhớ và lệnh đã khởi chạy mỗi tiến trình.\n\n### Gợi ý\n\n- Lệnh phổ biến nhất cho tác vụ này là `ps`.\n- Hãy suy nghĩ xem tùy chọn nào của lệnh `ps` sẽ hiển thị các tiến trình cho **tất cả** người dùng (**a**ll), theo định dạng thân thiện với người dùng (**u**ser-friendly), và bao gồm cả các tiến trình không gắn liền với thiết bị đầu cuối (**x**)."
+    },
+    {
+      "id": "source-596618-section-2-v2",
+      "title": "Monitoring Process Resource Usage",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Monitoring Process Resource Usage\n\nThe static list from `ps` was a good start, but the server's load is changing every second. You need a live, dynamic view to see which process is actively causing the slowdown. It's time to bring out a more powerful monitoring tool.\n\n### Tasks\n\n- Launch an interactive command-line utility to monitor system processes and their resource usage in real-time.\n- Identify the name of the script that is consuming the most CPU.\n\n### Requirements\n\n- You must use a tool that provides a continuously updated, real-time view of system processes.\n- The tool should allow you to sort processes by CPU usage by default.\n- Once you have identified the top consumer, exit the tool to proceed to the next step.\n\n### Examples\n\nWhen you launch the monitoring tool, you should see an interactive display that updates automatically, showing something like:\n\n```plaintext\ntop - 09:15:30 up  1:45,  1 user,  load average: 1.50, 1.20, 0.85\nTasks: 105 total,   2 running, 103 sleeping,   0 stopped,   0 zombie\n%Cpu(s): 45.0 us,  5.0 sy,  0.0 ni, 50.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   2048.0 total,    850.4 free,    950.2 used,    247.4 buff/cache\nMiB Swap:      0.0 total,      0.0 free,      0.0 used,      0.0 avail Mem\n\n  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n 1234 labex     20   0   12884   1564   1320 R  95.0   0.1   2:15.30 bash /home/labex/project/resource_hog.sh\n 1235 labex     20   0   12884   1564   1320 S   0.0   0.1   0:00.00 bash /home/labex/project/critical_service.sh\n    1 root      20   0  169848   9064   6868 S   0.0   0.4   0:02.15 systemd\n...\n```\n\nThe display will show system statistics at the top and a list of processes sorted by CPU usage, with the highest CPU-consuming process at the top.\n\n### Hints\n\n- This popular command is often referred to as the \"Task Manager\" of the Linux world.\n- You can exit this interactive tool by pressing the `q` key.\n",
+      "task": "- Launch an interactive command-line utility to monitor system processes and their resource usage in real-time.\n- Identify the name of the script that is consuming the most CPU.",
+      "hint": "- This popular command is often referred to as the \"Task Manager\" of the Linux world.\n- You can exit this interactive tool by pressing the `q` key.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần các process mẫu và vòng đời PID namespace dùng chung xuyên phiên terminal/bộ kiểm tra. Runtime hiện chưa có supervisor cho kịch bản này."
+      },
+      "required_capabilities": [
+        "persistent-process-fixtures"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pgrep -f '^/bin/bash /home/labex/project/[r]esource_hog[.]sh$' >/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*top\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "persistent_processes"
+        ]
+      },
+      "title_vi": "Giám sát mức sử dụng tài nguyên tiến trình",
+      "content_vi": "## Theo dõi mức sử dụng tài nguyên của tiến trình\n\nDanh sách tĩnh từ `ps` là một khởi đầu tốt, nhưng tải của máy chủ đang thay đổi từng giây. Bạn cần một chế độ xem trực tiếp, động để xem tiến trình nào đang thực sự gây ra tình trạng chậm hệ thống. Đã đến lúc sử dụng một công cụ giám sát mạnh mẽ hơn.\n\n### Nhiệm vụ\n\n- Khởi chạy một tiện ích dòng lệnh tương tác để theo dõi các tiến trình hệ thống và mức sử dụng tài nguyên của chúng trong thời gian thực.\n- Xác định tên của tập lệnh (script) đang tiêu tốn nhiều CPU nhất.\n\n### Yêu cầu\n\n- Bạn phải sử dụng một công cụ cung cấp chế độ xem liên tục được cập nhật, theo thời gian thực về các tiến trình hệ thống.\n- Công cụ này phải cho phép bạn sắp xếp các tiến trình theo mức sử dụng CPU theo mặc định.\n- Sau khi bạn đã xác định được tiến trình tiêu tốn nhiều nhất, hãy thoát khỏi công cụ để chuyển sang bước tiếp theo.\n\n### Ví dụ\n\nKhi bạn khởi chạy công cụ giám sát, bạn sẽ thấy một màn hình tương tác tự động cập nhật, hiển thị đại loại như sau:\n\n```plaintext\ntop - 09:15:30 up  1:45,  1 user,  load average: 1.50, 1.20, 0.85\nTasks: 105 total,   2 running, 103 sleeping,   0 stopped,   0 zombie\n%Cpu(s): 45.0 us,  5.0 sy,  0.0 ni, 50.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   2048.0 total,    850.4 free,    950.2 used,    247.4 buff/cache\nMiB Swap:      0.0 total,      0.0 free,      0.0 used,      0.0 avail Mem\n\n  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n 1234 labex     20   0   12884   1564   1320 R  95.0   0.1   2:15.30 bash /home/labex/project/resource_hog.sh\n 1235 labex     20   0   12884   1564   1320 S   0.0   0.1   0:00.00 bash /home/labex/project/critical_service.sh\n    1 root      20   0  169848   9064   6868 S   0.0   0.4   0:02.15 systemd\n...\n```\n\nMàn hình sẽ hiển thị các thống kê hệ thống ở trên cùng và danh sách các tiến trình được sắp xếp theo mức sử dụng CPU, với tiến trình tiêu tốn CPU nhiều nhất ở trên cùng.\n\n### Gợi ý\n\n- Lệnh phổ biến này thường được gọi là \"Trình quản lý tác vụ\" (Task Manager) của thế giới Linux.\n- Bạn có thể thoát khỏi công cụ tương tác này bằng cách nhấn phím `q`."
+    },
+    {
+      "id": "source-596618-section-3-v2",
+      "title": "Identifying Key Processes",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Identifying Key Processes\n\nYou've found the troublemaker: `resource_hog.sh`. However, a good sysadmin doesn't just terminate processes wildly. You also noticed `critical_service.sh` running. Before you take any action against the hog, you should identify and understand all the key processes running on the system.\n\n### Tasks\n\n- Find the Process ID (PID) of the `critical_service.sh` script.\n- Verify that the critical service is running properly.\n\n### Requirements\n\n- You must use the `pgrep` command to find the PID of the process running `critical_service.sh`.\n- The command should successfully locate the running process and display its PID.\n\n### Examples\n\nAfter finding the PID with `pgrep`, you should see output like:\n\n```bash\n1235\n```\n\nThis number (1235 in this example) is the Process ID of the critical service process.\n\nYou can verify the process details using:\n\n```bash\nps -p 1235 -o pid,ppid,cmd\n```\n\nWhich should show output similar to:\n\n```bash\nPID PPID CMD\n1235 1 /bin/bash /home/labex/project/critical_service.sh\n```\n\n### Hints\n\n- `pgrep` can find a PID based on a process name.\n- Use `pgrep -f` to match against the full command line.\n",
+      "task": "- Find the Process ID (PID) of the `critical_service.sh` script.\n- Verify that the critical service is running properly.",
+      "hint": "- `pgrep` can find a PID based on a process name.\n- Use `pgrep -f` to match against the full command line.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần các process mẫu và vòng đời PID namespace dùng chung xuyên phiên terminal/bộ kiểm tra. Runtime hiện chưa có supervisor cho kịch bản này."
+      },
+      "required_capabilities": [
+        "persistent-process-fixtures"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pgrep -f '^/bin/bash /home/labex/project/[c]ritical_service[.]sh$' >/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*pgrep\\s+-f\\s+['\\\"]?critical_service\\.sh['\\\"]?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "persistent_processes"
+        ]
+      },
+      "title_vi": "Xác định các tiến trình chính",
+      "content_vi": "## Xác định các Tiến trình Chính\n\nBạn đã tìm ra thủ phạm: `resource_hog.sh`. Tuy nhiên, một quản trị viên hệ thống giỏi không chỉ chấm dứt các tiến trình một cách bừa bãi. Bạn cũng nhận thấy `critical_service.sh` đang chạy. Trước khi bạn thực hiện bất kỳ hành động nào đối với tiến trình tiêu tốn tài nguyên, bạn nên xác định và hiểu rõ tất cả các tiến trình chính đang chạy trên hệ thống.\n\n### Nhiệm vụ\n\n- Tìm ID Tiến trình (PID) của tập lệnh `critical_service.sh`.\n- Xác minh rằng dịch vụ quan trọng đang chạy bình thường.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `pgrep` để tìm PID của tiến trình đang chạy `critical_service.sh`.\n- Lệnh này phải xác định thành công tiến trình đang chạy và hiển thị PID của nó.\n\n### Ví dụ\n\nSau khi tìm thấy PID bằng `pgrep`, bạn sẽ thấy đầu ra như sau:\n\n```bash\n1235\n```\n\nCon số này (1235 trong ví dụ này) là ID Tiến trình của tiến trình dịch vụ quan trọng.\n\nBạn có thể xác minh chi tiết tiến trình bằng cách sử dụng:\n\n```bash\nps -p 1235 -o pid,ppid,cmd\n```\n\nLệnh này sẽ hiển thị đầu ra tương tự như:\n\n```bash\nPID PPID CMD\n1235 1 /bin/bash /home/labex/project/critical_service.sh\n```\n\n### Gợi ý\n\n- `pgrep` có thể tìm PID dựa trên tên tiến trình.\n- Sử dụng `pgrep -f` để khớp với toàn bộ dòng lệnh."
+    },
+    {
+      "id": "source-596618-section-4-v2",
+      "title": "Terminating a Misbehaving Process",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Terminating a Misbehaving Process\n\nNow that you've identified the key processes, it's time to deal with the `resource_hog.sh` that has been slowing down the server. You need to terminate this process to restore normal operation.\n\n### Tasks\n\n- Terminate the `resource_hog.sh` process.\n\n### Requirements\n\n- You must use a command that can terminate a process based on its name, without needing to find its PID first.\n- Use the `pkill` command to stop the `resource_hog.sh` script.\n\n### Examples\n\nTo verify that the process has been terminated, you can check the process list afterward. Before termination, you might see:\n\n```bash\nlabex 1234 95.0 0.0 2324 564 pts/0 R+ 09:15 5:00 bash /home/labex/project/resource_hog.sh\n```\n\nAfter successful termination, running the same check command should show no matching processes (only the grep command itself):\n\n```bash\nlabex 2345 0.0 0.0 2324 564 pts/0 S+ 09:20 0:00 grep resource_hog\n```\n\n### Hints\n\n- The `pkill` command sends a termination signal to processes based on their name.\n- After running the command, you can use `ps aux | grep resource_hog` to verify that the process is no longer running.\n",
+      "task": "- Terminate the `resource_hog.sh` process.",
+      "hint": "- The `pkill` command sends a termination signal to processes based on their name.\n- After running the command, you can use `ps aux | grep resource_hog` to verify that the process is no longer running.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần các process mẫu và vòng đời PID namespace dùng chung xuyên phiên terminal/bộ kiểm tra. Runtime hiện chưa có supervisor cho kịch bản này."
+      },
+      "required_capabilities": [
+        "persistent-process-fixtures"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! pgrep -f '^/bin/bash /home/labex/project/[r]esource_hog[.]sh$' >/dev/null && pgrep -f '^/bin/bash /home/labex/project/[c]ritical_service[.]sh$' >/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*pkill\\s+-f\\s+['\\\"]?resource_hog\\.sh['\\\"]?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "persistent_processes"
+        ]
+      },
+      "title_vi": "Tiêu diệt tiến trình lỗi",
+      "content_vi": "## Chấm dứt một tiến trình hoạt động bất thường\n\nBây giờ bạn đã xác định được các tiến trình chính, đã đến lúc xử lý `resource_hog.sh` đang làm chậm máy chủ. Bạn cần chấm dứt tiến trình này để khôi phục hoạt động bình thường.\n\n### Nhiệm vụ\n\n- Chấm dứt tiến trình `resource_hog.sh`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng một lệnh có thể chấm dứt tiến trình dựa trên tên của nó, mà không cần tìm PID của nó trước.\n- Sử dụng lệnh `pkill` để dừng tập lệnh `resource_hog.sh`.\n\n### Ví dụ\n\nĐể xác minh rằng tiến trình đã bị chấm dứt, bạn có thể kiểm tra danh sách tiến trình sau đó. Trước khi chấm dứt, bạn có thể thấy:\n\n```bash\nlabex 1234 95.0 0.0 2324 564 pts/0 R+ 09:15 5:00 bash /home/labex/project/resource_hog.sh\n```\n\nSau khi chấm dứt thành công, việc chạy lại lệnh kiểm tra tương tự sẽ không hiển thị tiến trình nào khớp (chỉ hiển thị bản thân lệnh grep):\n\n```bash\nlabex 2345 0.0 0.0 2324 564 pts/0 S+ 09:20 0:00 grep resource_hog\n```\n\n### Gợi ý\n\n- Lệnh `pkill` gửi tín hiệu chấm dứt đến các tiến trình dựa trên tên của chúng.\n- Sau khi chạy lệnh, bạn có thể sử dụng `ps aux | grep resource_hog` để xác minh rằng tiến trình không còn chạy nữa."
+    },
+    {
+      "id": "source-596618-section-5-v2",
+      "title": "Starting and Managing Background Processes",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Starting and Managing Background Processes\n\nThe server is stable again! Excellent work. Just as you're about to take a break, a developer sends you a message. They need you to run a long-running script, `data_processor.sh`, on the server. You can't keep your terminal session open for hours just for this script. You need to run it in the background so it continues even after you log out.\n\n### Tasks\n\n- Start the `data_processor.sh` script so that it runs in the background and is immune to hangups (i.e., it won't stop if you close your terminal).\n\n### Requirements\n\n- You must be in the `~/project` directory.\n- Use the `nohup` command to run the script.\n- Use the `&` operator to send the process to the background.\n- Redirect all output (both standard output and standard error) from the script to a file named `processor.log`.\n\n### Examples\n\nAfter successfully starting the script in the background, you should see output similar to:\n\n```bash\n[1] 3456\nnohup: ignoring input and appending output to 'processor.log'\n```\n\nThe `[1] 3456` indicates the job number and process ID. You can verify the script is running by checking the log file:\n\n```bash\ncat processor.log\n```\n\nThis might show output like:\n\n```plaintext\nStarting data processing at Mon Sep 11 10:30:00 UTC 2025\n```\n\nAnd you can confirm the process is still running:\n\n```bash\nps aux | grep data_processor\n```\n\nWhich should show the background process is active.\n\n### Hints\n\n- The `nohup` command stands for \"no hang up.\"\n- The `&` symbol at the end of a command tells the shell to run it as a background job.\n- You can redirect standard output with `>` and standard error with `2>&1`.\n",
+      "task": "- Start the `data_processor.sh` script so that it runs in the background and is immune to hangups (i.e., it won't stop if you close your terminal).",
+      "hint": "- The `nohup` command stands for \"no hang up.\"\n- The `&` symbol at the end of a command tells the shell to run it as a background job.\n- You can redirect standard output with `>` and standard error with `2>&1`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần các process mẫu và vòng đời PID namespace dùng chung xuyên phiên terminal/bộ kiểm tra. Runtime hiện chưa có supervisor cho kịch bản này."
+      },
+      "required_capabilities": [
+        "persistent-process-fixtures"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pgrep -f '^(/bin/)?bash (/home/labex/project/|\\./)?[d]ata_processor[.]sh$' >/dev/null && test -s /home/labex/project/processor.log && grep -Fq 'Starting data processing at ' /home/labex/project/processor.log"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*nohup\\s+(?:bash\\s+)?(?:\\./|/home/labex/project/)data_processor\\.sh\\s*>\\s*processor\\.log\\s+2>&1\\s*&\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "persistent_processes"
+        ]
+      },
+      "title_vi": "Khởi động và Quản lý Tiến trình Nền",
+      "content_vi": "## Khởi động và Quản lý Tiến trình Nền\n\nMáy chủ đã ổn định trở lại! Công việc xuất sắc. Ngay khi bạn chuẩn bị nghỉ ngơi, một lập trình viên gửi tin nhắn cho bạn. Họ cần bạn chạy một tập lệnh chạy lâu, `data_processor.sh`, trên máy chủ. Bạn không thể giữ phiên terminal của mình mở trong nhiều giờ chỉ vì tập lệnh này. Bạn cần chạy nó ở chế độ nền để nó tiếp tục chạy ngay cả sau khi bạn đăng xuất.\n\n### Các nhiệm vụ\n\n- Khởi động tập lệnh `data_processor.sh` sao cho nó chạy ở chế độ nền và miễn nhiễm với việc bị treo (nghĩa là nó sẽ không dừng nếu bạn đóng terminal của mình).\n\n### Yêu cầu\n\n- Bạn phải ở trong thư mục `~/project`.\n- Sử dụng lệnh `nohup` để chạy tập lệnh.\n- Sử dụng toán tử `&` để gửi tiến trình vào nền.\n- Chuyển hướng toàn bộ đầu ra (cả đầu ra chuẩn và lỗi chuẩn) từ tập lệnh vào một tệp có tên là `processor.log`.\n\n### Ví dụ\n\nSau khi khởi động thành công tập lệnh ở chế độ nền, bạn sẽ thấy đầu ra tương tự như sau:\n\n```bash\n[1] 3456\nnohup: ignoring input and appending output to 'processor.log'\n```\n\nPhần `[1] 3456` biểu thị số lượng công việc (job number) và ID tiến trình (process ID). Bạn có thể xác minh tập lệnh đang chạy bằng cách kiểm tra tệp nhật ký:\n\n```bash\ncat processor.log\n```\n\nThao tác này có thể hiển thị đầu ra như sau:\n\n```plaintext\nStarting data processing at Mon Sep 11 10:30:00 UTC 2025\n```\n\nVà bạn có thể xác nhận tiến trình vẫn đang chạy:\n\n```bash\nps aux | grep data_processor\n```\n\nLệnh này sẽ cho thấy tiến trình nền đang hoạt động.\n\n### Gợi ý\n\n- Lệnh `nohup` là viết tắt của \"no hang up\" (không treo).\n- Ký hiệu `&` ở cuối lệnh bảo shell chạy nó như một công việc nền (background job).\n- Bạn có thể chuyển hướng đầu ra chuẩn bằng `>` và lỗi chuẩn bằng `2>&1`."
+    },
+    {
+      "id": "source-596618-section-6-v2",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "## Summary\n\nCongratulations, Administrator! You have successfully navigated a critical server performance issue and demonstrated your mastery of Linux process management. The server is stable, critical services are prioritized, and long-running tasks are humming along in the background.\n\nIn this challenge, you have proven your ability to:\n\n- List and inspect all running processes using `ps`.\n- Monitor system resources in real-time with `top`.\n- Identify important processes using `pgrep`.\n- Terminate misbehaving processes cleanly with `pkill`.\n- Run and manage background jobs that persist after logout using `nohup` and `&`.\n\nThese are fundamental, high-value skills that are essential for any role in system administration, DevOps, or backend development. You've turned a potential crisis into an opportunity to showcase your expertise. Well done!\n",
+      "title_vi": "Tổng quan",
+      "content_vi": "## Tóm tắt\n\nChúc mừng Quản trị viên! Bạn đã xử lý thành công một sự cố hiệu năng máy chủ nghiêm trọng và thể hiện sự làm chủ của mình đối với việc quản lý tiến trình Linux. Máy chủ hiện đã ổn định, các dịch vụ quan trọng được ưu tiên và các tác vụ chạy dài hạn đang hoạt động ổn định ở chế độ nền.\n\nTrong thử thách này, bạn đã chứng minh được khả năng của mình trong việc:\n\n- Liệt kê và kiểm tra tất cả các tiến trình đang chạy bằng `ps`.\n- Giám sát tài nguyên hệ thống trong thời gian thực với `top`.\n- Nhận diện các tiến trình quan trọng bằng `pgrep`.\n- Chấm dứt các tiến trình hoạt động bất thường một cách sạch sẽ bằng `pkill`.\n- Chạy và quản lý các công việc nền tiếp tục duy trì ngay cả sau khi đăng xuất bằng `nohup` và `&`.\n\nĐây là những kỹ năng nền tảng, có giá trị cao, cần thiết cho bất kỳ vai trò nào trong quản trị hệ thống, DevOps hoặc phát triển backend. Bạn đã biến một cuộc khủng hoảng tiềm ẩn thành cơ hội để thể hiện chuyên môn của mình. Làm rất tốt!"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-596618-section-1-v2",
+      "title": "Listing Active System Processes",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Listing Active System Processes\n\nYour first step as the Process Overseer is to get a complete picture of what's currently running on the server. A static snapshot of all active processes will help you begin your investigation and identify anything unusual.\n\n### Tasks\n\n- Use a single command to generate a detailed list of all processes running on the system.\n\n### Requirements\n\n- The command must display processes for all users, not just your own.\n- The output format should be user-oriented, showing details like the user who owns the process, CPU/memory usage, and the full command that started it.\n\n### Examples\n\nAfter running the command, you should see output similar to this:\n\n```plaintext\nUSER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         1  0.0  0.1 169848  9064 ?        Ss   08:30   0:02 /sbin/init\nlabex     1234  0.0  0.0   2324   564 pts/0    S+   08:35   0:00 bash /home/labex/project/resource_hog.sh\nlabex     1235  0.0  0.0   2324   564 ?        S    08:35   0:00 bash /home/labex/project/critical_service.sh\n...\n```\n\nThe output will show multiple processes with columns for user, process ID, CPU usage, memory usage, and the command that started each process.\n\n### Hints\n\n- The most common command for this task is `ps`.\n- Think about which options for the `ps` command would show processes for **a**ll users, in a **u**ser-friendly format, and include processes not attached to a te**x**minal.\n",
+      "task": "- Use a single command to generate a detailed list of all processes running on the system.",
+      "hint": "- The most common command for this task is `ps`.\n- Think about which options for the `ps` command would show processes for **a**ll users, in a **u**ser-friendly format, and include processes not attached to a te**x**minal.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*ps\\s+aux\\s*$",
+            "^\\s*ps\\s+-aux\\s*$"
+          ]
+        ]
+      },
+      "required_capabilities": [
+        "terminal"
+      ],
+      "title_vi": "Liệt kê tiến trình hệ thống đang hoạt động",
+      "content_vi": "## Liệt kê các tiến trình đang hoạt động của hệ thống\n\nBước đầu tiên của bạn với tư cách là Người giám sát tiến trình (Process Overseer) là có được cái nhìn tổng quan hoàn chỉnh về những gì đang chạy trên máy chủ. Một ảnh chụp nhanh tĩnh (static snapshot) của tất cả các tiến trình đang hoạt động sẽ giúp bạn bắt đầu cuộc điều tra và xác định bất kỳ điều gì bất thường.\n\n### Nhiệm vụ\n\n- Sử dụng một lệnh duy nhất để tạo danh sách chi tiết của tất cả các tiến trình đang chạy trên hệ thống.\n\n### Yêu cầu\n\n- Lệnh phải hiển thị các tiến trình của tất cả người dùng, không chỉ của riêng bạn.\n- Định dạng đầu ra phải hướng đến người dùng, hiển thị các chi tiết như người dùng sở hữu tiến trình, mức sử dụng CPU/bộ nhớ và lệnh đầy đủ đã khởin chạy nó.\n\n### Ví dụ\n\nSau khi chạy lệnh, bạn sẽ thấy đầu ra tương tự như thế này:\n\n```plaintext\nUSER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         1  0.0  0.1 169848  9064 ?        Ss   08:30   0:02 /sbin/init\nlabex     1234  0.0  0.0   2324   564 pts/0    S+   08:35   0:00 bash /home/labex/project/resource_hog.sh\nlabex     1235  0.0  0.0   2324   564 ?        S    08:35   0:00 bash /home/labex/project/critical_service.sh\n...\n```\n\nĐầu ra sẽ hiển thị nhiều tiến trình với các cột cho người dùng, ID tiến trình, mức sử dụng CPU, mức sử dụng bộ nhớ và lệnh đã khởi chạy mỗi tiến trình.\n\n### Gợi ý\n\n- Lệnh phổ biến nhất cho tác vụ này là `ps`.\n- Hãy suy nghĩ xem tùy chọn nào của lệnh `ps` sẽ hiển thị các tiến trình cho **tất cả** người dùng (**a**ll), theo định dạng thân thiện với người dùng (**u**ser-friendly), và bao gồm cả các tiến trình không gắn liền với thiết bị đầu cuối (**x**).",
+      "task_vi": "- Sử dụng một lệnh duy nhất để tạo danh sách chi tiết của tất cả các tiến trình đang chạy trên hệ thống.",
+      "hint_vi": "Lệnh phổ biến nhất cho tác vụ này là `ps`.\nHãy nghĩ xem các tùy chọn nào của lệnh `ps` sẽ hiển thị tiến trình của tất cả người dùng, theo định dạng thân thiện với người dùng, và bao gồm cả các tiến trình không gắn với terminal."
+    },
+    {
+      "id": "source-596618-section-2-v2",
+      "title": "Monitoring Process Resource Usage",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Monitoring Process Resource Usage\n\nThe static list from `ps` was a good start, but the server's load is changing every second. You need a live, dynamic view to see which process is actively causing the slowdown. It's time to bring out a more powerful monitoring tool.\n\n### Tasks\n\n- Launch an interactive command-line utility to monitor system processes and their resource usage in real-time.\n- Identify the name of the script that is consuming the most CPU.\n\n### Requirements\n\n- You must use a tool that provides a continuously updated, real-time view of system processes.\n- The tool should allow you to sort processes by CPU usage by default.\n- Once you have identified the top consumer, exit the tool to proceed to the next step.\n\n### Examples\n\nWhen you launch the monitoring tool, you should see an interactive display that updates automatically, showing something like:\n\n```plaintext\ntop - 09:15:30 up  1:45,  1 user,  load average: 1.50, 1.20, 0.85\nTasks: 105 total,   2 running, 103 sleeping,   0 stopped,   0 zombie\n%Cpu(s): 45.0 us,  5.0 sy,  0.0 ni, 50.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   2048.0 total,    850.4 free,    950.2 used,    247.4 buff/cache\nMiB Swap:      0.0 total,      0.0 free,      0.0 used,      0.0 avail Mem\n\n  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n 1234 labex     20   0   12884   1564   1320 R  95.0   0.1   2:15.30 bash /home/labex/project/resource_hog.sh\n 1235 labex     20   0   12884   1564   1320 S   0.0   0.1   0:00.00 bash /home/labex/project/critical_service.sh\n    1 root      20   0  169848   9064   6868 S   0.0   0.4   0:02.15 systemd\n...\n```\n\nThe display will show system statistics at the top and a list of processes sorted by CPU usage, with the highest CPU-consuming process at the top.\n\n### Hints\n\n- This popular command is often referred to as the \"Task Manager\" of the Linux world.\n- You can exit this interactive tool by pressing the `q` key.\n",
+      "task": "- Launch an interactive command-line utility to monitor system processes and their resource usage in real-time.\n- Identify the name of the script that is consuming the most CPU.",
+      "hint": "- This popular command is often referred to as the \"Task Manager\" of the Linux world.\n- You can exit this interactive tool by pressing the `q` key.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần các process mẫu và vòng đời PID namespace dùng chung xuyên phiên terminal/bộ kiểm tra. Runtime hiện chưa có supervisor cho kịch bản này."
+      },
+      "required_capabilities": [
+        "persistent-process-fixtures"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pgrep -f '^/bin/bash /home/labex/project/[r]esource_hog[.]sh$' >/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*top\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "persistent_processes"
+        ]
+      },
+      "title_vi": "Giám sát mức sử dụng tài nguyên tiến trình",
+      "content_vi": "## Theo dõi mức sử dụng tài nguyên của tiến trình\n\nDanh sách tĩnh từ `ps` là một khởi đầu tốt, nhưng tải của máy chủ đang thay đổi từng giây. Bạn cần một chế độ xem trực tiếp, động để xem tiến trình nào đang thực sự gây ra tình trạng chậm hệ thống. Đã đến lúc sử dụng một công cụ giám sát mạnh mẽ hơn.\n\n### Nhiệm vụ\n\n- Khởi chạy một tiện ích dòng lệnh tương tác để theo dõi các tiến trình hệ thống và mức sử dụng tài nguyên của chúng trong thời gian thực.\n- Xác định tên của tập lệnh (script) đang tiêu tốn nhiều CPU nhất.\n\n### Yêu cầu\n\n- Bạn phải sử dụng một công cụ cung cấp chế độ xem liên tục được cập nhật, theo thời gian thực về các tiến trình hệ thống.\n- Công cụ này phải cho phép bạn sắp xếp các tiến trình theo mức sử dụng CPU theo mặc định.\n- Sau khi bạn đã xác định được tiến trình tiêu tốn nhiều nhất, hãy thoát khỏi công cụ để chuyển sang bước tiếp theo.\n\n### Ví dụ\n\nKhi bạn khởi chạy công cụ giám sát, bạn sẽ thấy một màn hình tương tác tự động cập nhật, hiển thị đại loại như sau:\n\n```plaintext\ntop - 09:15:30 up  1:45,  1 user,  load average: 1.50, 1.20, 0.85\nTasks: 105 total,   2 running, 103 sleeping,   0 stopped,   0 zombie\n%Cpu(s): 45.0 us,  5.0 sy,  0.0 ni, 50.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   2048.0 total,    850.4 free,    950.2 used,    247.4 buff/cache\nMiB Swap:      0.0 total,      0.0 free,      0.0 used,      0.0 avail Mem\n\n  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n 1234 labex     20   0   12884   1564   1320 R  95.0   0.1   2:15.30 bash /home/labex/project/resource_hog.sh\n 1235 labex     20   0   12884   1564   1320 S   0.0   0.1   0:00.00 bash /home/labex/project/critical_service.sh\n    1 root      20   0  169848   9064   6868 S   0.0   0.4   0:02.15 systemd\n...\n```\n\nMàn hình sẽ hiển thị các thống kê hệ thống ở trên cùng và danh sách các tiến trình được sắp xếp theo mức sử dụng CPU, với tiến trình tiêu tốn CPU nhiều nhất ở trên cùng.\n\n### Gợi ý\n\n- Lệnh phổ biến này thường được gọi là \"Trình quản lý tác vụ\" (Task Manager) của thế giới Linux.\n- Bạn có thể thoát khỏi công cụ tương tác này bằng cách nhấn phím `q`.",
+      "task_vi": "- Khởi động một tiện ích dòng lệnh tương tác để theo dõi các tiến trình hệ thống và mức sử dụng tài nguyên của chúng trong thời gian thực.\n- Xác định tên của tập lệnh (script) đang tiêu thụ nhiều CPU nhất.",
+      "hint_vi": "Lệnh phổ biến này thường được ví là \"Task Manager\" của thế giới Linux.\nBạn có thể thoát khỏi công cụ tương tác này bằng cách nhấn phím `q`."
+    },
+    {
+      "id": "source-596618-section-3-v2",
+      "title": "Identifying Key Processes",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Identifying Key Processes\n\nYou've found the troublemaker: `resource_hog.sh`. However, a good sysadmin doesn't just terminate processes wildly. You also noticed `critical_service.sh` running. Before you take any action against the hog, you should identify and understand all the key processes running on the system.\n\n### Tasks\n\n- Find the Process ID (PID) of the `critical_service.sh` script.\n- Verify that the critical service is running properly.\n\n### Requirements\n\n- You must use the `pgrep` command to find the PID of the process running `critical_service.sh`.\n- The command should successfully locate the running process and display its PID.\n\n### Examples\n\nAfter finding the PID with `pgrep`, you should see output like:\n\n```bash\n1235\n```\n\nThis number (1235 in this example) is the Process ID of the critical service process.\n\nYou can verify the process details using:\n\n```bash\nps -p 1235 -o pid,ppid,cmd\n```\n\nWhich should show output similar to:\n\n```bash\nPID PPID CMD\n1235 1 /bin/bash /home/labex/project/critical_service.sh\n```\n\n### Hints\n\n- `pgrep` can find a PID based on a process name.\n- Use `pgrep -f` to match against the full command line.\n",
+      "task": "- Find the Process ID (PID) of the `critical_service.sh` script.\n- Verify that the critical service is running properly.",
+      "hint": "- `pgrep` can find a PID based on a process name.\n- Use `pgrep -f` to match against the full command line.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần các process mẫu và vòng đời PID namespace dùng chung xuyên phiên terminal/bộ kiểm tra. Runtime hiện chưa có supervisor cho kịch bản này."
+      },
+      "required_capabilities": [
+        "persistent-process-fixtures"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pgrep -f '^/bin/bash /home/labex/project/[c]ritical_service[.]sh$' >/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*pgrep\\s+-f\\s+['\\\"]?critical_service\\.sh['\\\"]?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "persistent_processes"
+        ]
+      },
+      "title_vi": "Xác định các tiến trình chính",
+      "content_vi": "## Xác định các Tiến trình Chính\n\nBạn đã tìm ra thủ phạm: `resource_hog.sh`. Tuy nhiên, một quản trị viên hệ thống giỏi không chỉ chấm dứt các tiến trình một cách bừa bãi. Bạn cũng nhận thấy `critical_service.sh` đang chạy. Trước khi bạn thực hiện bất kỳ hành động nào đối với tiến trình tiêu tốn tài nguyên, bạn nên xác định và hiểu rõ tất cả các tiến trình chính đang chạy trên hệ thống.\n\n### Nhiệm vụ\n\n- Tìm ID Tiến trình (PID) của tập lệnh `critical_service.sh`.\n- Xác minh rằng dịch vụ quan trọng đang chạy bình thường.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `pgrep` để tìm PID của tiến trình đang chạy `critical_service.sh`.\n- Lệnh này phải xác định thành công tiến trình đang chạy và hiển thị PID của nó.\n\n### Ví dụ\n\nSau khi tìm thấy PID bằng `pgrep`, bạn sẽ thấy đầu ra như sau:\n\n```bash\n1235\n```\n\nCon số này (1235 trong ví dụ này) là ID Tiến trình của tiến trình dịch vụ quan trọng.\n\nBạn có thể xác minh chi tiết tiến trình bằng cách sử dụng:\n\n```bash\nps -p 1235 -o pid,ppid,cmd\n```\n\nLệnh này sẽ hiển thị đầu ra tương tự như:\n\n```bash\nPID PPID CMD\n1235 1 /bin/bash /home/labex/project/critical_service.sh\n```\n\n### Gợi ý\n\n- `pgrep` có thể tìm PID dựa trên tên tiến trình.\n- Sử dụng `pgrep -f` để khớp với toàn bộ dòng lệnh.",
+      "task_vi": "- Tìm ID tiến trình (PID) của tập lệnh `critical_service.sh`.\n- Xác minh rằng dịch vụ quan trọng đang chạy bình thường.",
+      "hint_vi": "`pgrep` có thể tìm PID dựa vào tên tiến trình.\nSử dụng `pgrep -f` để khớp với toàn bộ dòng lệnh."
+    },
+    {
+      "id": "source-596618-section-4-v2",
+      "title": "Terminating a Misbehaving Process",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Terminating a Misbehaving Process\n\nNow that you've identified the key processes, it's time to deal with the `resource_hog.sh` that has been slowing down the server. You need to terminate this process to restore normal operation.\n\n### Tasks\n\n- Terminate the `resource_hog.sh` process.\n\n### Requirements\n\n- You must use a command that can terminate a process based on its name, without needing to find its PID first.\n- Use the `pkill` command to stop the `resource_hog.sh` script.\n\n### Examples\n\nTo verify that the process has been terminated, you can check the process list afterward. Before termination, you might see:\n\n```bash\nlabex 1234 95.0 0.0 2324 564 pts/0 R+ 09:15 5:00 bash /home/labex/project/resource_hog.sh\n```\n\nAfter successful termination, running the same check command should show no matching processes (only the grep command itself):\n\n```bash\nlabex 2345 0.0 0.0 2324 564 pts/0 S+ 09:20 0:00 grep resource_hog\n```\n\n### Hints\n\n- The `pkill` command sends a termination signal to processes based on their name.\n- After running the command, you can use `ps aux | grep resource_hog` to verify that the process is no longer running.\n",
+      "task": "- Terminate the `resource_hog.sh` process.",
+      "hint": "- The `pkill` command sends a termination signal to processes based on their name.\n- After running the command, you can use `ps aux | grep resource_hog` to verify that the process is no longer running.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần các process mẫu và vòng đời PID namespace dùng chung xuyên phiên terminal/bộ kiểm tra. Runtime hiện chưa có supervisor cho kịch bản này."
+      },
+      "required_capabilities": [
+        "persistent-process-fixtures"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! pgrep -f '^/bin/bash /home/labex/project/[r]esource_hog[.]sh$' >/dev/null && pgrep -f '^/bin/bash /home/labex/project/[c]ritical_service[.]sh$' >/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*pkill\\s+-f\\s+['\\\"]?resource_hog\\.sh['\\\"]?\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "persistent_processes"
+        ]
+      },
+      "title_vi": "Tiêu diệt tiến trình lỗi",
+      "content_vi": "## Chấm dứt một tiến trình hoạt động bất thường\n\nBây giờ bạn đã xác định được các tiến trình chính, đã đến lúc xử lý `resource_hog.sh` đang làm chậm máy chủ. Bạn cần chấm dứt tiến trình này để khôi phục hoạt động bình thường.\n\n### Nhiệm vụ\n\n- Chấm dứt tiến trình `resource_hog.sh`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng một lệnh có thể chấm dứt tiến trình dựa trên tên của nó, mà không cần tìm PID của nó trước.\n- Sử dụng lệnh `pkill` để dừng tập lệnh `resource_hog.sh`.\n\n### Ví dụ\n\nĐể xác minh rằng tiến trình đã bị chấm dứt, bạn có thể kiểm tra danh sách tiến trình sau đó. Trước khi chấm dứt, bạn có thể thấy:\n\n```bash\nlabex 1234 95.0 0.0 2324 564 pts/0 R+ 09:15 5:00 bash /home/labex/project/resource_hog.sh\n```\n\nSau khi chấm dứt thành công, việc chạy lại lệnh kiểm tra tương tự sẽ không hiển thị tiến trình nào khớp (chỉ hiển thị bản thân lệnh grep):\n\n```bash\nlabex 2345 0.0 0.0 2324 564 pts/0 S+ 09:20 0:00 grep resource_hog\n```\n\n### Gợi ý\n\n- Lệnh `pkill` gửi tín hiệu chấm dứt đến các tiến trình dựa trên tên của chúng.\n- Sau khi chạy lệnh, bạn có thể sử dụng `ps aux | grep resource_hog` để xác minh rằng tiến trình không còn chạy nữa.",
+      "task_vi": "- Chấm dứt tiến trình `resource_hog.sh`.",
+      "hint_vi": "- Lệnh `pkill` gửi tín hiệu kết thúc đến các tiến trình dựa trên tên của chúng.\n- Sau khi chạy lệnh, bạn có thể dùng `ps aux | grep resource_hog` để kiểm tra tiến trình đã dừng hoạt động chưa."
+    },
+    {
+      "id": "source-596618-section-5-v2",
+      "title": "Starting and Managing Background Processes",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "## Starting and Managing Background Processes\n\nThe server is stable again! Excellent work. Just as you're about to take a break, a developer sends you a message. They need you to run a long-running script, `data_processor.sh`, on the server. You can't keep your terminal session open for hours just for this script. You need to run it in the background so it continues even after you log out.\n\n### Tasks\n\n- Start the `data_processor.sh` script so that it runs in the background and is immune to hangups (i.e., it won't stop if you close your terminal).\n\n### Requirements\n\n- You must be in the `~/project` directory.\n- Use the `nohup` command to run the script.\n- Use the `&` operator to send the process to the background.\n- Redirect all output (both standard output and standard error) from the script to a file named `processor.log`.\n\n### Examples\n\nAfter successfully starting the script in the background, you should see output similar to:\n\n```bash\n[1] 3456\nnohup: ignoring input and appending output to 'processor.log'\n```\n\nThe `[1] 3456` indicates the job number and process ID. You can verify the script is running by checking the log file:\n\n```bash\ncat processor.log\n```\n\nThis might show output like:\n\n```plaintext\nStarting data processing at Mon Sep 11 10:30:00 UTC 2025\n```\n\nAnd you can confirm the process is still running:\n\n```bash\nps aux | grep data_processor\n```\n\nWhich should show the background process is active.\n\n### Hints\n\n- The `nohup` command stands for \"no hang up.\"\n- The `&` symbol at the end of a command tells the shell to run it as a background job.\n- You can redirect standard output with `>` and standard error with `2>&1`.\n",
+      "task": "- Start the `data_processor.sh` script so that it runs in the background and is immune to hangups (i.e., it won't stop if you close your terminal).",
+      "hint": "- The `nohup` command stands for \"no hang up.\"\n- The `&` symbol at the end of a command tells the shell to run it as a background job.\n- You can redirect standard output with `>` and standard error with `2>&1`.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Cần các process mẫu và vòng đời PID namespace dùng chung xuyên phiên terminal/bộ kiểm tra. Runtime hiện chưa có supervisor cho kịch bản này."
+      },
+      "required_capabilities": [
+        "persistent-process-fixtures"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pgrep -f '^(/bin/)?bash (/home/labex/project/|\\./)?[d]ata_processor[.]sh$' >/dev/null && test -s /home/labex/project/processor.log && grep -Fq 'Starting data processing at ' /home/labex/project/processor.log"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*nohup\\s+(?:bash\\s+)?(?:\\./|/home/labex/project/)data_processor\\.sh\\s*>\\s*processor\\.log\\s+2>&1\\s*&\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "persistent_processes"
+        ]
+      },
+      "title_vi": "Khởi động và Quản lý Tiến trình Nền",
+      "content_vi": "## Khởi động và Quản lý Tiến trình Nền\n\nMáy chủ đã ổn định trở lại! Công việc xuất sắc. Ngay khi bạn chuẩn bị nghỉ ngơi, một lập trình viên gửi tin nhắn cho bạn. Họ cần bạn chạy một tập lệnh chạy lâu, `data_processor.sh`, trên máy chủ. Bạn không thể giữ phiên terminal của mình mở trong nhiều giờ chỉ vì tập lệnh này. Bạn cần chạy nó ở chế độ nền để nó tiếp tục chạy ngay cả sau khi bạn đăng xuất.\n\n### Các nhiệm vụ\n\n- Khởi động tập lệnh `data_processor.sh` sao cho nó chạy ở chế độ nền và miễn nhiễm với việc bị treo (nghĩa là nó sẽ không dừng nếu bạn đóng terminal của mình).\n\n### Yêu cầu\n\n- Bạn phải ở trong thư mục `~/project`.\n- Sử dụng lệnh `nohup` để chạy tập lệnh.\n- Sử dụng toán tử `&` để gửi tiến trình vào nền.\n- Chuyển hướng toàn bộ đầu ra (cả đầu ra chuẩn và lỗi chuẩn) từ tập lệnh vào một tệp có tên là `processor.log`.\n\n### Ví dụ\n\nSau khi khởi động thành công tập lệnh ở chế độ nền, bạn sẽ thấy đầu ra tương tự như sau:\n\n```bash\n[1] 3456\nnohup: ignoring input and appending output to 'processor.log'\n```\n\nPhần `[1] 3456` biểu thị số lượng công việc (job number) và ID tiến trình (process ID). Bạn có thể xác minh tập lệnh đang chạy bằng cách kiểm tra tệp nhật ký:\n\n```bash\ncat processor.log\n```\n\nThao tác này có thể hiển thị đầu ra như sau:\n\n```plaintext\nStarting data processing at Mon Sep 11 10:30:00 UTC 2025\n```\n\nVà bạn có thể xác nhận tiến trình vẫn đang chạy:\n\n```bash\nps aux | grep data_processor\n```\n\nLệnh này sẽ cho thấy tiến trình nền đang hoạt động.\n\n### Gợi ý\n\n- Lệnh `nohup` là viết tắt của \"no hang up\" (không treo).\n- Ký hiệu `&` ở cuối lệnh bảo shell chạy nó như một công việc nền (background job).\n- Bạn có thể chuyển hướng đầu ra chuẩn bằng `>` và lỗi chuẩn bằng `2>&1`.",
+      "task_vi": "- Khởi động tập lệnh `data_processor.sh` sao cho nó chạy ở chế độ nền (background) và miễn nhiễm với việc ngắt kết nối (tức là nó sẽ không dừng lại nếu bạn đóng terminal của mình).",
+      "hint_vi": "- Lệnh `nohup` là viết tắt của \"no hang up\" (không ngắt kết nối).\n- Ký hiệu `&` ở cuối lệnh yêu cầu shell chạy nó dưới dạng tiến trình nền (background job).\n- Bạn có thể chuyển hướng đầu ra chuẩn bằng `>` và lỗi chuẩn bằng `2>&1`."
+    }
+  ],
+  "title_vi": "Ngày 6: Giám Sát Tiến Trình Hệ Thống"
+}

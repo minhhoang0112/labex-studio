@@ -1,0 +1,283 @@
+{
+  "id": "linux-get-help-on-linux-commands-18000",
+  "course_id": "linux-for-noobs",
+  "order": 4,
+  "title": "Get Help on Linux Commands",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "overview": "Experienced Linux users do not memorize every command and option. They know how to ask the system what a name means, find a short usage summary, open complete documentation, and search manuals by topi",
+  "source_url": "https://labex.io/tutorials/linux-get-help-on-linux-commands-18000",
+  "source_lab_id": 18000,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Experienced Linux users do not memorize every command and option. They know how to ask the system what a name means, find a short usage summary, open complete documentation, and search manuals by topic.\n\nThis lab follows directly from basic file operations. You will investigate familiar commands such as `cd`, `ls`, and `cp`, then save small evidence files under `/home/labex/project/command-help`. By the end, unfamiliar syntax will be a documentation question rather than a roadblock.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Người dùng Linux có kinh nghiệm không ghi nhớ mọi lệnh và tùy chọn. Họ biết cách hỏi hệ thống ý nghĩa của một tên, tìm tóm tắt cách sử dụng ngắn gọn, mở tài liệu đầy đủ và tìm kiếm tài liệu hướng dẫn theo chủ đề.\n\nPhòng thực hành này nối tiếp trực tiếp các thao tác tệp cơ bản. Bạn sẽ tìm hiểu các lệnh quen thuộc như `cd`, `ls`, và `cp`, sau đó lưu các tệp bằng chứng nhỏ dưới `/home/labex/project/command-help`. Cuối cùng, cú pháp lạ sẽ chỉ là một câu hỏi về tài liệu thay vì một vật cản đường."
+    },
+    {
+      "id": "source-18000-section-1-v3",
+      "title": "Identify What a Command Name Means",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will distinguish shell builtins, aliases, and executable files before choosing the right help source.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/command-help\n```\n\nSome commands are built into the shell because they must change the shell itself. Ask the shell what `cd` is:\n\n```bash\ntype cd\n```\n\nYou should see output containing:\n\n```text\ncd is a shell builtin\n```\n\nOther names may be aliases—short replacements configured by the shell—or external programs stored as files. Inspect `ls`:\n\n```bash\ntype ls\n```\n\nDepending on the shell configuration, the output may identify an alias or an executable path. Use `type -a` to show every matching form the shell can find:\n\n```bash\ntype -a ls\n```\n\n`command -V` provides another readable description:\n\n```bash\ncommand -V cp\n```\n\n`command -v` prints the command or path the shell would actually choose:\n\n```bash\ncommand -v cp\n```\n\nSave a short classification report. The first `>` creates or replaces the report; each later `>>` appends another command's output without erasing earlier lines:\n\n```bash\ntype cd > command-types.txt\ntype ls >> command-types.txt\ncommand -V cp >> command-types.txt\n```\n\n```bash\ncat command-types.txt\n```\n\nThe report should identify `cd` as a builtin and describe both `ls` and `cp`. Knowing the command type helps because shell builtins use shell-specific documentation, while external programs commonly support `--help` and manual pages.",
+      "task": "Thực hiện hướng dẫn: Identify What a Command Name Means",
+      "hint": "Chạy lệnh: cd /home/labex/project/command-help",
+      "title_vi": "Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ phân biệt các lệnh nội bộ của shell (shell builtin), alias và tệp thực thi trước khi chọn nguồn trợ giúp phù hợp.\n\nVào không gian làm việc của lab:\n\n```bash\ncd /home/labex/project/command-help\n```\n\nMột số lệnh được tích hợp sẵn trong shell vì chúng phải thay đổi chính shell đó. Hãy hỏi shell xem `cd` là gì:\n\n```bash\ntype cd\n```\n\nBạn sẽ thấy đầu ra chứa:\n\n```text\ncd is a shell builtin\n```\n\nCác tên khác có thể là alias — các từ thay thế ngắn gọn được cấu hình bởi shell — hoặc các chương trình bên ngoài được lưu trữ dưới dạng tệp. Kiểm tra `ls`:\n\n```bash\ntype ls\n```\n\nTùy thuộc vào cấu hình của shell, đầu ra có thể xác định một alias hoặc một đường dẫn tệp thực thi. Sử dụng `type -a` để hiển thị mọi dạng trùng khớp mà shell có thể tìm thấy:\n\n```bash\ntype -a ls\n```\n\n`command -V` cung cấp một mô tả dễ đọc khác:\n\n```bash\ncommand -V cp\n```\n\n`command -v` in ra lệnh hoặc đường dẫn mà shell thực sự sẽ chọn:\n\n```bash\ncommand -v cp\n```\n\nLưu một báo cáo phân loại ngắn. Dấu `>` đầu tiên tạo ra hoặc thay thế báo cáo; mỗi dấu `>>` sau đó sẽ nối thêm đầu ra của một lệnh khác mà không xóa các dòng trước đó:\n\n```bash\ntype cd > command-types.txt\ntype ls >> command-types.txt\ncommand -V cp >> command-types.txt\n```\n\n```bash\ncat command-types.txt\n```\n\nBáo cáo phải xác định `cd` là một lệnh nội bộ (builtin) và mô tả cả `ls` và `cp`. Việc biết loại lệnh rất hữu ích vì các lệnh nội bộ của shell sử dụng tài liệu đặc thù của shell, trong khi các chương trình bên ngoài thường hỗ trợ `--help` và các trang hướng dẫn sử dụng (manual pages).",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/command-help"
+    },
+    {
+      "id": "source-18000-section-2-v3",
+      "title": "Read Quick Help and Usage Syntax",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use builtin help and `--help`, then learn how to read common notation in a usage line.\n\nBecause `cd` is a shell builtin, ask Bash for its documentation. The lab terminal uses Zsh, and `help` is a Bash builtin rather than a standalone command, so invoke Bash explicitly:\n\n```bash\nbash -c 'help cd'\n```\n\nThe first line begins with a usage pattern similar to `cd [-L|[-P ...]] [dir]`. You do not need to understand every option yet. Focus on the structure: the command name comes first, and items in square brackets are optional.\n\nExternal programs often support `--help`. The complete `ls` help is long, so this is the course's first deliberate use of a **pipeline**. A pipe is written as `|`. The command on the left writes normal output, and the command on the right receives that output as its input. Here, `head -n 8` keeps only the first eight lines:\n\n```bash\nls --help | head -n 8\n```\n\nThe first line has this general form:\n\n```text\nUsage: ls [OPTION]... [FILE]...\n```\n\n`[OPTION]...` means zero or more options. `[FILE]...` means zero or more file or directory arguments. The brackets describe the syntax; you do not type them literally.\n\nCheck quick help for copying:\n\n```bash\ncp --help | head -n 8\n```\n\nSave the first few lines from both commands with section labels. `>` starts a new file, while `>>` appends each following section:\n\n```bash\necho \"=== ls ===\" > quick-help.txt\nls --help | head -n 3 >> quick-help.txt\necho \"=== cp ===\" >> quick-help.txt\ncp --help | head -n 3 >> quick-help.txt\n```\n\n```bash\ncat quick-help.txt\n```\n\nThis small file is not a replacement for the full help text; it proves that you can find and recognize command usage lines.",
+      "task": "Thực hiện hướng dẫn: Read Quick Help and Usage Syntax",
+      "hint": "Chạy lệnh: bash -c 'help cd'",
+      "title_vi": "Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng trợ giúp tích hợp (builtin help) và `--help`, sau đó học cách đọc các ký hiệu phổ biến trong dòng cách dùng (usage line).\n\nVì `cd` là một lệnh tích hợp của shell, hãy yêu cầu Bash cung cấp tài liệu cho nó. Terminal của lab sử dụng Zsh, và `help` là một lệnh tích hợp của Bash chứ không phải là một lệnh độc lập, vì vậy hãy gọi Bash một cách tường minh:\n\n```bash\nbash -c 'help cd'\n```\n\nDòng đầu tiên bắt đầu bằng một mẫu cách dùng tương tự như `cd [-L|[-P ...]] [dir]`. Bạn chưa cần phải hiểu mọi tùy chọn ngay lập tức. Hãy tập trung vào cấu trúc: tên lệnh đứng ở đầu tiên, và các mục nằm trong ngoặc vuông là tùy chọn.\n\nCác chương trình bên ngoài thường hỗ trợ `--help`. Trợ giúp đầy đủ của `ls` khá dài, vì vậy đây là lần đầu tiên khóa học sử dụng có chủ đích một **pipeline** (đường ống). Một dấu ống được viết là `|`. Lệnh ở bên trái ghi đầu ra thông thường, và lệnh ở bên phía phải nhận đầu ra đó làm đầu vào của nó. Ở đây, `head -n 8` chỉ giữ lại tám dòng đầu tiên:\n\n```bash\nls --help | head -n 8\n```\n\nDòng đầu tiên có dạng tổng quát sau:\n\n```text\nUsage: ls [OPTION]... [FILE]...\n```\n\n`[OPTION]...` có nghĩa là không có hoặc có nhiều tùy chọn. `[FILE]...` có nghĩa là không có hoặc có nhiều đối số tệp hoặc thư mục. Các dấu ngoặc vuông mô tả cú pháp; bạn không gõ chúng theo nghĩa đen.\n\nKiểm tra trợ giúp nhanh cho việc sao chép:\n\n```bash\ncp --help | head -n 8\n```\n\nLưu một vài dòng đầu tiên từ cả hai lệnh kèm theo nhãn phần. `>` tạo một tệp mới, trong khi `>>` nối thêm từng phần tiếp theo:\n\n```bash\necho \"=== ls ===\" > quick-help.txt\nls --help | head -n 3 >> quick-help.txt\necho \"=== cp ===\" >> quick-help.txt\ncp --help | head -n 3 >> quick-help.txt\n```\n\n```bash\ncat quick-help.txt\n```\n\nTệp nhỏ này không phải để thay thế cho văn bản trợ giúp đầy đủ; nó chứng minh rằng bạn có thể tìm và nhận diện các dòng cách dùng của lệnh.",
+      "hint_vi": "Chạy lệnh: bash -c 'help cd'"
+    },
+    {
+      "id": "source-18000-section-3-v3",
+      "title": "Navigate a Manual Page",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use the interactive `man` viewer and learn what manual sections mean.\n\nOpen the manual page for `ls`:\n\n```bash\nman ls\n```\n\nThe manual opens in a pager, usually `less`. Practice these keys inside the viewer:\n\n- **Down Arrow**: move down one line;\n- **Space**: move forward one screen;\n- **b**: move backward one screen;\n- type `/sort` and press Enter: search forward for `sort`;\n- **n**: move to the next match;\n- **q**: quit and return to the shell prompt.\n\nThe heading usually shows `LS(1)`. The number is a manual section. Section 1 contains ordinary user commands; other sections cover system calls, library functions, configuration formats, and administration commands.\n\nUse `man -f` for a one-line description, also known as a “whatis” lookup:\n\n```bash\nman -f ls\n```\n\nSave a non-interactive excerpt of the same manual page. Read this pipeline from left to right: `-P cat` makes `man` print instead of opening a pager, `col -b` removes terminal-formatting control characters, `head -n 20` keeps twenty lines, and `>` stores the final stream:\n\n```bash\nman -P cat ls | col -b | head -n 20 > ls-man-excerpt.txt\n```\n\n```bash\ncat ls-man-excerpt.txt\n```\n\nYou should see the manual heading, name, synopsis, and beginning of the description. This confirms that interactive and non-interactive views come from the same documentation.",
+      "task": "Thực hiện hướng dẫn: Navigate a Manual Page",
+      "hint": "Chạy lệnh: man ls",
+      "title_vi": "Tra Cứu Sách Hướng Dẫn Chi Tiết (Man Page)",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tra Cứu Sách Hướng Dẫn Chi Tiết (Man Page)",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ sử dụng trình xem tương tác `man` và tìm hiểu ý nghĩa của các phần tài liệu hướng dẫn (manual sections).\n\nMở trang hướng dẫn cho lệnh `ls`:\n\n```bash\nman ls\n```\n\nTrang hướng dẫn mở ra trong một trình phân trang (pager), thường là `less`. Hãy thực hành các phím sau bên trong trình xem:\n\n- **Down Arrow**: di chuyển xuống một dòng;\n- **Space**: di chuyển tới trước một màn hình;\n- **b**: di chuyển lùi lại một màn hình;\n- gõ `/sort` và nhấn Enter: tìm kiếm tới trước chuỗi `sort`;\n- **n**: chuyển đến kết quả khớp tiếp theo;\n- **q**: thoát và quay lại dấu nhắc lệnh shell.\n\nPhần đầu đề thường hiển thị `LS(1)`. Số đó là một phần tài liệu hướng dẫn. Phần 1 chứa các lệnh người dùng thông thường; các phần khác bao gồm các lệnh gọi hệ thống, hàm thư viện, định dạng cấu hình và lệnh quản trị.\n\nSử dụng `man -f` để xem mô tả một dòng, còn được gọi là tra cứu “whatis”:\n\n```bash\nman -f ls\n```\n\nLưu một đoạn trích xuất không tương tác của chính trang hướng dẫn đó. Đọc đường ống (pipeline) này từ trái sang phải: `-P cat` khiến `man` in ra thay vì mở trình phân trang, `col -b` loại bỏ các ký tự điều khiển định dạng đầu cuối, `head -n 20` giữ lại hai mươi dòng, và `>` lưu trữ luồng dữ liệu cuối cùng:\n\n```bash\nman -P cat ls | col -b | head -n 20 > ls-man-excerpt.txt\n```\n\n```bash\ncat ls-man-excerpt.txt\n```\n\nBạn sẽ thấy phần đầu đề, tên, cú pháp và phần mở đầu của mô tả trong trang hướng dẫn. Điều này xác nhận rằng các góc nhìn tương tác và không tương tác đều đến từ cùng một tài liệu.",
+      "hint_vi": "Chạy lệnh: man ls"
+    },
+    {
+      "id": "source-18000-section-4-v3",
+      "title": "Discover Commands by Topic",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `apropos` when you know the task but not the command name.\n\n`apropos` searches the short descriptions stored in the manual database. Search for password-related documentation:\n\n```bash\napropos password | head -n 15\n```\n\nEach result contains a manual name, its section in parentheses, and a short description. One result should describe `passwd`.\n\nSearch for file-related topics:\n\n```bash\napropos file | head -n 20\n```\n\nBroad keywords return many results. A more specific phrase can be more useful:\n\n```bash\napropos \"copy files\"\n```\n\nYou can also filter a broad result. The `-i` option makes `grep` ignore letter case, while `-m 5` stops after five matching lines:\n\n```bash\napropos file | grep -i -m 5 'copy'\n```\n\nSave the full password search so it can be examined later:\n\n```bash\napropos password > password-topics.txt\n```\n\n```bash\ngrep -E '^passwd|change.*password' password-topics.txt | head\n```\n\nWhen `apropos` finds nothing on a newly installed system, the manual database may need `sudo mandb`. This lab prepared the database automatically, but remembering that relationship makes the tool easier to troubleshoot elsewhere.",
+      "task": "Thực hiện hướng dẫn: Discover Commands by Topic",
+      "hint": "Chạy lệnh: apropos password | head -n 15",
+      "title_vi": "Tìm Kiếm Lệnh Theo Chủ Đề với Apropos",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Tìm Kiếm Lệnh Theo Chủ Đề với Apropos",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ sử dụng `apropos` khi bạn biết tác vụ nhưng không biết tên lệnh.\n\n`apropos` tìm kiếm các mô tả ngắn được lưu trữ trong cơ sở dữ liệu hướng dẫn sử dụng (manual database). Tìm kiếm tài liệu liên quan đến mật khẩu:\n\n```bash\napropos password | head -n 15\n```\n\nMỗi kết quả bao gồm tên tài liệu hướng dẫn, phần của nó trong ngoặc đơn và một mô tả ngắn. Một trong các kết quả sẽ mô tả `passwd`.\n\nTìm kiếm các chủ đề liên quan đến tệp:\n\n```bash\napropos file | head -n 20\n```\n\nCác từ khóa chung chung trả về rất nhiều kết quả. Một cụm từ cụ thể hơn có thể hữu ích hơn:\n\n```bash\napropos \"copy files\"\n```\n\nBạn cũng có thể lọc một kết quả chung chung. Tùy chọn `-i` làm cho `grep` bỏ qua phân biệt chữ hoa chữ thường, trong khi `-m 5` dừng lại sau năm dòng khớp:\n\n```bash\napropos file | grep -i -m 5 'copy'\n```\n\nLưu toàn bộ kết quả tìm kiếm mật khẩu để có thể xem lại sau:\n\n```bash\napropos password > password-topics.txt\n```\n\n```bash\ngrep -E '^passwd|change.*password' password-topics.txt | head\n```\n\nKhi `apropos` không tìm thấy gì trên một hệ thống mới cài đặt, cơ sở dữ liệu hướng dẫn có thể cần lệnh `sudo mandb`. Lab này đã chuẩn bị sẵn cơ sở dữ liệu một cách tự động, nhưng ghi nhớ mối quan hệ đó sẽ giúp công cụ này dễ khắc phục sự cố hơn ở các môi trường khác.",
+      "hint_vi": "Chạy lệnh: apropos password | head -n 15"
+    },
+    {
+      "id": "section-5",
+      "title": "Summary",
+      "position": 5,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You learned a repeatable help strategy: use `type` or `command -V` to identify a name, shell-specific help such as Bash's `help` or a program's `--help` for quick syntax, `man` for complete documentation, and `apropos` when you know the topic but not the command. These tools remove the need to memorize every option and prepare you to investigate unfamiliar commands throughout the rest of the course.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã học được một chiến lược trợ giúp có thể lặp lại: sử dụng `type` hoặc `command -V` để xác định một tên, trợ giúp đặc trưng cho shell như `help` của Bash hoặc `--help` của một chương trình để biết cú pháp nhanh, `man` để có tài liệu hoàn chỉnh, và `apropos` khi bạn biết chủ đề nhưng chưa rõ lệnh. Các công cụ này loại bỏ nhu cầu phải ghi nhớ mọi tùy chọn và chuẩn bị cho bạn khả năng tìm hiểu các lệnh chưa quen thuộc trong phần còn lại của khóa học."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-18000-section-1-v3",
+      "title": "Identify What a Command Name Means",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will distinguish shell builtins, aliases, and executable files before choosing the right help source.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/command-help\n```\n\nSome commands are built into the shell because they must change the shell itself. Ask the shell what `cd` is:\n\n```bash\ntype cd\n```\n\nYou should see output containing:\n\n```text\ncd is a shell builtin\n```\n\nOther names may be aliases—short replacements configured by the shell—or external programs stored as files. Inspect `ls`:\n\n```bash\ntype ls\n```\n\nDepending on the shell configuration, the output may identify an alias or an executable path. Use `type -a` to show every matching form the shell can find:\n\n```bash\ntype -a ls\n```\n\n`command -V` provides another readable description:\n\n```bash\ncommand -V cp\n```\n\n`command -v` prints the command or path the shell would actually choose:\n\n```bash\ncommand -v cp\n```\n\nSave a short classification report. The first `>` creates or replaces the report; each later `>>` appends another command's output without erasing earlier lines:\n\n```bash\ntype cd > command-types.txt\ntype ls >> command-types.txt\ncommand -V cp >> command-types.txt\n```\n\n```bash\ncat command-types.txt\n```\n\nThe report should identify `cd` as a builtin and describe both `ls` and `cp`. Knowing the command type helps because shell builtins use shell-specific documentation, while external programs commonly support `--help` and manual pages.",
+      "task": "Thực hiện hướng dẫn: Identify What a Command Name Means",
+      "hint": "Chạy lệnh: cd /home/labex/project/command-help",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
+      "task_vi": "Thực hiện hướng dẫn: Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ phân biệt các lệnh nội bộ của shell (shell builtin), alias và tệp thực thi trước khi chọn nguồn trợ giúp phù hợp.\n\nVào không gian làm việc của lab:\n\n```bash\ncd /home/labex/project/command-help\n```\n\nMột số lệnh được tích hợp sẵn trong shell vì chúng phải thay đổi chính shell đó. Hãy hỏi shell xem `cd` là gì:\n\n```bash\ntype cd\n```\n\nBạn sẽ thấy đầu ra chứa:\n\n```text\ncd is a shell builtin\n```\n\nCác tên khác có thể là alias — các từ thay thế ngắn gọn được cấu hình bởi shell — hoặc các chương trình bên ngoài được lưu trữ dưới dạng tệp. Kiểm tra `ls`:\n\n```bash\ntype ls\n```\n\nTùy thuộc vào cấu hình của shell, đầu ra có thể xác định một alias hoặc một đường dẫn tệp thực thi. Sử dụng `type -a` để hiển thị mọi dạng trùng khớp mà shell có thể tìm thấy:\n\n```bash\ntype -a ls\n```\n\n`command -V` cung cấp một mô tả dễ đọc khác:\n\n```bash\ncommand -V cp\n```\n\n`command -v` in ra lệnh hoặc đường dẫn mà shell thực sự sẽ chọn:\n\n```bash\ncommand -v cp\n```\n\nLưu một báo cáo phân loại ngắn. Dấu `>` đầu tiên tạo ra hoặc thay thế báo cáo; mỗi dấu `>>` sau đó sẽ nối thêm đầu ra của một lệnh khác mà không xóa các dòng trước đó:\n\n```bash\ntype cd > command-types.txt\ntype ls >> command-types.txt\ncommand -V cp >> command-types.txt\n```\n\n```bash\ncat command-types.txt\n```\n\nBáo cáo phải xác định `cd` là một lệnh nội bộ (builtin) và mô tả cả `ls` và `cp`. Việc biết loại lệnh rất hữu ích vì các lệnh nội bộ của shell sử dụng tài liệu đặc thù của shell, trong khi các chương trình bên ngoài thường hỗ trợ `--help` và các trang hướng dẫn sử dụng (manual pages).",
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/command-help"
+    },
+    {
+      "id": "source-18000-section-2-v3",
+      "title": "Read Quick Help and Usage Syntax",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use builtin help and `--help`, then learn how to read common notation in a usage line.\n\nBecause `cd` is a shell builtin, ask Bash for its documentation. The lab terminal uses Zsh, and `help` is a Bash builtin rather than a standalone command, so invoke Bash explicitly:\n\n```bash\nbash -c 'help cd'\n```\n\nThe first line begins with a usage pattern similar to `cd [-L|[-P ...]] [dir]`. You do not need to understand every option yet. Focus on the structure: the command name comes first, and items in square brackets are optional.\n\nExternal programs often support `--help`. The complete `ls` help is long, so this is the course's first deliberate use of a **pipeline**. A pipe is written as `|`. The command on the left writes normal output, and the command on the right receives that output as its input. Here, `head -n 8` keeps only the first eight lines:\n\n```bash\nls --help | head -n 8\n```\n\nThe first line has this general form:\n\n```text\nUsage: ls [OPTION]... [FILE]...\n```\n\n`[OPTION]...` means zero or more options. `[FILE]...` means zero or more file or directory arguments. The brackets describe the syntax; you do not type them literally.\n\nCheck quick help for copying:\n\n```bash\ncp --help | head -n 8\n```\n\nSave the first few lines from both commands with section labels. `>` starts a new file, while `>>` appends each following section:\n\n```bash\necho \"=== ls ===\" > quick-help.txt\nls --help | head -n 3 >> quick-help.txt\necho \"=== cp ===\" >> quick-help.txt\ncp --help | head -n 3 >> quick-help.txt\n```\n\n```bash\ncat quick-help.txt\n```\n\nThis small file is not a replacement for the full help text; it proves that you can find and recognize command usage lines.",
+      "task": "Thực hiện hướng dẫn: Read Quick Help and Usage Syntax",
+      "hint": "Chạy lệnh: bash -c 'help cd'",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
+      "task_vi": "Thực hiện hướng dẫn: Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "Trong bước này, bạn sẽ sử dụng trợ giúp tích hợp (builtin help) và `--help`, sau đó học cách đọc các ký hiệu phổ biến trong dòng cách dùng (usage line).\n\nVì `cd` là một lệnh tích hợp của shell, hãy yêu cầu Bash cung cấp tài liệu cho nó. Terminal của lab sử dụng Zsh, và `help` là một lệnh tích hợp của Bash chứ không phải là một lệnh độc lập, vì vậy hãy gọi Bash một cách tường minh:\n\n```bash\nbash -c 'help cd'\n```\n\nDòng đầu tiên bắt đầu bằng một mẫu cách dùng tương tự như `cd [-L|[-P ...]] [dir]`. Bạn chưa cần phải hiểu mọi tùy chọn ngay lập tức. Hãy tập trung vào cấu trúc: tên lệnh đứng ở đầu tiên, và các mục nằm trong ngoặc vuông là tùy chọn.\n\nCác chương trình bên ngoài thường hỗ trợ `--help`. Trợ giúp đầy đủ của `ls` khá dài, vì vậy đây là lần đầu tiên khóa học sử dụng có chủ đích một **pipeline** (đường ống). Một dấu ống được viết là `|`. Lệnh ở bên trái ghi đầu ra thông thường, và lệnh ở bên phía phải nhận đầu ra đó làm đầu vào của nó. Ở đây, `head -n 8` chỉ giữ lại tám dòng đầu tiên:\n\n```bash\nls --help | head -n 8\n```\n\nDòng đầu tiên có dạng tổng quát sau:\n\n```text\nUsage: ls [OPTION]... [FILE]...\n```\n\n`[OPTION]...` có nghĩa là không có hoặc có nhiều tùy chọn. `[FILE]...` có nghĩa là không có hoặc có nhiều đối số tệp hoặc thư mục. Các dấu ngoặc vuông mô tả cú pháp; bạn không gõ chúng theo nghĩa đen.\n\nKiểm tra trợ giúp nhanh cho việc sao chép:\n\n```bash\ncp --help | head -n 8\n```\n\nLưu một vài dòng đầu tiên từ cả hai lệnh kèm theo nhãn phần. `>` tạo một tệp mới, trong khi `>>` nối thêm từng phần tiếp theo:\n\n```bash\necho \"=== ls ===\" > quick-help.txt\nls --help | head -n 3 >> quick-help.txt\necho \"=== cp ===\" >> quick-help.txt\ncp --help | head -n 3 >> quick-help.txt\n```\n\n```bash\ncat quick-help.txt\n```\n\nTệp nhỏ này không phải để thay thế cho văn bản trợ giúp đầy đủ; nó chứng minh rằng bạn có thể tìm và nhận diện các dòng cách dùng của lệnh.",
+      "hint_vi": "Chạy lệnh: bash -c 'help cd'"
+    },
+    {
+      "id": "source-18000-section-3-v3",
+      "title": "Navigate a Manual Page",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use the interactive `man` viewer and learn what manual sections mean.\n\nOpen the manual page for `ls`:\n\n```bash\nman ls\n```\n\nThe manual opens in a pager, usually `less`. Practice these keys inside the viewer:\n\n- **Down Arrow**: move down one line;\n- **Space**: move forward one screen;\n- **b**: move backward one screen;\n- type `/sort` and press Enter: search forward for `sort`;\n- **n**: move to the next match;\n- **q**: quit and return to the shell prompt.\n\nThe heading usually shows `LS(1)`. The number is a manual section. Section 1 contains ordinary user commands; other sections cover system calls, library functions, configuration formats, and administration commands.\n\nUse `man -f` for a one-line description, also known as a “whatis” lookup:\n\n```bash\nman -f ls\n```\n\nSave a non-interactive excerpt of the same manual page. Read this pipeline from left to right: `-P cat` makes `man` print instead of opening a pager, `col -b` removes terminal-formatting control characters, `head -n 20` keeps twenty lines, and `>` stores the final stream:\n\n```bash\nman -P cat ls | col -b | head -n 20 > ls-man-excerpt.txt\n```\n\n```bash\ncat ls-man-excerpt.txt\n```\n\nYou should see the manual heading, name, synopsis, and beginning of the description. This confirms that interactive and non-interactive views come from the same documentation.",
+      "task": "Thực hiện hướng dẫn: Navigate a Manual Page",
+      "hint": "Chạy lệnh: man ls",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Tra Cứu Sách Hướng Dẫn Chi Tiết (Man Page)",
+      "task_vi": "Thực hiện hướng dẫn: Tra Cứu Sách Hướng Dẫn Chi Tiết (Man Page)",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ sử dụng trình xem tương tác `man` và tìm hiểu ý nghĩa của các phần tài liệu hướng dẫn (manual sections).\n\nMở trang hướng dẫn cho lệnh `ls`:\n\n```bash\nman ls\n```\n\nTrang hướng dẫn mở ra trong một trình phân trang (pager), thường là `less`. Hãy thực hành các phím sau bên trong trình xem:\n\n- **Down Arrow**: di chuyển xuống một dòng;\n- **Space**: di chuyển tới trước một màn hình;\n- **b**: di chuyển lùi lại một màn hình;\n- gõ `/sort` và nhấn Enter: tìm kiếm tới trước chuỗi `sort`;\n- **n**: chuyển đến kết quả khớp tiếp theo;\n- **q**: thoát và quay lại dấu nhắc lệnh shell.\n\nPhần đầu đề thường hiển thị `LS(1)`. Số đó là một phần tài liệu hướng dẫn. Phần 1 chứa các lệnh người dùng thông thường; các phần khác bao gồm các lệnh gọi hệ thống, hàm thư viện, định dạng cấu hình và lệnh quản trị.\n\nSử dụng `man -f` để xem mô tả một dòng, còn được gọi là tra cứu “whatis”:\n\n```bash\nman -f ls\n```\n\nLưu một đoạn trích xuất không tương tác của chính trang hướng dẫn đó. Đọc đường ống (pipeline) này từ trái sang phải: `-P cat` khiến `man` in ra thay vì mở trình phân trang, `col -b` loại bỏ các ký tự điều khiển định dạng đầu cuối, `head -n 20` giữ lại hai mươi dòng, và `>` lưu trữ luồng dữ liệu cuối cùng:\n\n```bash\nman -P cat ls | col -b | head -n 20 > ls-man-excerpt.txt\n```\n\n```bash\ncat ls-man-excerpt.txt\n```\n\nBạn sẽ thấy phần đầu đề, tên, cú pháp và phần mở đầu của mô tả trong trang hướng dẫn. Điều này xác nhận rằng các góc nhìn tương tác và không tương tác đều đến từ cùng một tài liệu.",
+      "hint_vi": "Chạy lệnh: man ls"
+    },
+    {
+      "id": "source-18000-section-4-v3",
+      "title": "Discover Commands by Topic",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "In this step, you will use `apropos` when you know the task but not the command name.\n\n`apropos` searches the short descriptions stored in the manual database. Search for password-related documentation:\n\n```bash\napropos password | head -n 15\n```\n\nEach result contains a manual name, its section in parentheses, and a short description. One result should describe `passwd`.\n\nSearch for file-related topics:\n\n```bash\napropos file | head -n 20\n```\n\nBroad keywords return many results. A more specific phrase can be more useful:\n\n```bash\napropos \"copy files\"\n```\n\nYou can also filter a broad result. The `-i` option makes `grep` ignore letter case, while `-m 5` stops after five matching lines:\n\n```bash\napropos file | grep -i -m 5 'copy'\n```\n\nSave the full password search so it can be examined later:\n\n```bash\napropos password > password-topics.txt\n```\n\n```bash\ngrep -E '^passwd|change.*password' password-topics.txt | head\n```\n\nWhen `apropos` finds nothing on a newly installed system, the manual database may need `sudo mandb`. This lab prepared the database automatically, but remembering that relationship makes the tool easier to troubleshoot elsewhere.",
+      "task": "Thực hiện hướng dẫn: Discover Commands by Topic",
+      "hint": "Chạy lệnh: apropos password | head -n 15",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Tìm Kiếm Lệnh Theo Chủ Đề với Apropos",
+      "task_vi": "Thực hiện hướng dẫn: Tìm Kiếm Lệnh Theo Chủ Đề với Apropos",
+      "required_capabilities": [],
+      "content_vi": "Trong bước này, bạn sẽ sử dụng `apropos` khi bạn biết tác vụ nhưng không biết tên lệnh.\n\n`apropos` tìm kiếm các mô tả ngắn được lưu trữ trong cơ sở dữ liệu hướng dẫn sử dụng (manual database). Tìm kiếm tài liệu liên quan đến mật khẩu:\n\n```bash\napropos password | head -n 15\n```\n\nMỗi kết quả bao gồm tên tài liệu hướng dẫn, phần của nó trong ngoặc đơn và một mô tả ngắn. Một trong các kết quả sẽ mô tả `passwd`.\n\nTìm kiếm các chủ đề liên quan đến tệp:\n\n```bash\napropos file | head -n 20\n```\n\nCác từ khóa chung chung trả về rất nhiều kết quả. Một cụm từ cụ thể hơn có thể hữu ích hơn:\n\n```bash\napropos \"copy files\"\n```\n\nBạn cũng có thể lọc một kết quả chung chung. Tùy chọn `-i` làm cho `grep` bỏ qua phân biệt chữ hoa chữ thường, trong khi `-m 5` dừng lại sau năm dòng khớp:\n\n```bash\napropos file | grep -i -m 5 'copy'\n```\n\nLưu toàn bộ kết quả tìm kiếm mật khẩu để có thể xem lại sau:\n\n```bash\napropos password > password-topics.txt\n```\n\n```bash\ngrep -E '^passwd|change.*password' password-topics.txt | head\n```\n\nKhi `apropos` không tìm thấy gì trên một hệ thống mới cài đặt, cơ sở dữ liệu hướng dẫn có thể cần lệnh `sudo mandb`. Lab này đã chuẩn bị sẵn cơ sở dữ liệu một cách tự động, nhưng ghi nhớ mối quan hệ đó sẽ giúp công cụ này dễ khắc phục sự cố hơn ở các môi trường khác.",
+      "hint_vi": "Chạy lệnh: apropos password | head -n 15"
+    }
+  ],
+  "title_vi": "Tra Cứu Trợ Giúp Câu Lệnh Linux",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-get-help-on-linux-commands-18000.json"
+}

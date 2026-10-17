@@ -1,0 +1,125 @@
+{
+  "id": "linux-find-a-file-17993",
+  "course_id": "linux-for-noobs",
+  "order": 9,
+  "title": "Find and Protect a Configuration File",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "15 mins",
+  "overview": "A project tree contains one active configuration file and one similarly named backup. The active file is writable by everyone and must be made private without changing its content.  This challenge com",
+  "source_url": "https://labex.io/tutorials/linux-find-a-file-17993",
+  "source_lab_id": 17993,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A project tree contains one active configuration file and one similarly named backup. The active file is writable by everyone and must be made private without changing its content.\n\nThis challenge combines the exact-name search from the preceding file lab with the numeric permission mode introduced earlier.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Cây dự án chứa một tệp cấu hình đang hoạt động và một tệp sao lưu có tên tương tự. Tệp đang hoạt động có thể ghi bởi mọi người và phải được chuyển thành chế độ riêng tư mà không làm thay đổi nội dung của nó.\n\nThử thách này kết hợp việc tìm kiếm theo tên chính xác từ phòng thí nghiệm tệp trước đó với chế độ quyền truy cập dạng số đã được giới thiệu trước đó."
+    },
+    {
+      "id": "source-17993-section-1-v3",
+      "title": "Protect the Active Configuration",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nBelow `/home/labex/project/file-search` is one regular file named exactly `app.conf`. A backup with a longer name must remain unchanged.\n\n### Scope\n\n- Search only below `/home/labex/project/file-search`.\n- Target the regular file named exactly `app.conf`.\n- Do not move, rename, or edit the file.\n\n### Your Goal\n\nSet the active `app.conf` permission mode to `600`, so only its owner can read and write it.\n\n### Acceptance Criteria\n\n- The exact `app.conf` remains at its original path with its original content.\n- Its numeric mode is `600` (`rw-------`).\n- `app.conf.backup` remains unchanged.\n\n### Hints\n\nHow can I avoid matching the backup?\n\nUse the exact-name form of `find` practiced in the preceding guided lab, together with the regular-file test.",
+      "task": "Thực hiện hướng dẫn: Protect the Active Configuration",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "title_vi": "Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình hình hiện tại\n\nBên dưới `/home/labex/project/file-search` có một tệp thông thường có tên chính xác là `app.conf`. Một bản sao lưu (backup) với tên dài hơn phải được giữ nguyên không thay đổi.\n\n### Phạm vi\n\n- Chỉ tìm kiếm bên dưới thư mục `/home/labex/project/file-search`.\n- Nhắm mục tiêu vào tệp thông thường có tên chính xác là `app.conf`.\n- Không di chuyển, đổi tên hoặc chỉnh sửa tệp.\n\n### Mục tiêu của bạn\n\nĐặt chế độ quyền (permission mode) của tệp `app.conf` đang hoạt động thành `600`, sao cho chỉ chủ sở hữu của nó mới có quyền đọc và ghi.\n\n### Tiêu chí chấp nhận\n\n- Tệp `app.conf` chính xác vẫn nằm ở đường dẫn ban đầu với nội dung ban đầu của nó.\n- Chế độ dạng số của nó là `600` (`rw-------`).\n- Tệp `app.conf.backup` vẫn không thay đổi.\n\n### Gợi ý\n\nLàm thế nào tôi có thể tránh khớp với tệp sao lưu?\n\nSử dụng dạng tìm kiếm tên chính xác của lệnh `find` đã được thực hành trong phòng thí nghiệm hướng dẫn trước đó, kết hợp với phép kiểm tra tệp thông thường (regular-file test).",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You found one exact file in a directory tree and protected it with a permission mode already practiced earlier in the course.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã tìm thấy chính xác một tệp trong cây thư mục và bảo vệ nó bằng một chế độ quyền đã được thực hành trước đó trong khóa học."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-17993-section-1-v3",
+      "title": "Protect the Active Configuration",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nBelow `/home/labex/project/file-search` is one regular file named exactly `app.conf`. A backup with a longer name must remain unchanged.\n\n### Scope\n\n- Search only below `/home/labex/project/file-search`.\n- Target the regular file named exactly `app.conf`.\n- Do not move, rename, or edit the file.\n\n### Your Goal\n\nSet the active `app.conf` permission mode to `600`, so only its owner can read and write it.\n\n### Acceptance Criteria\n\n- The exact `app.conf` remains at its original path with its original content.\n- Its numeric mode is `600` (`rw-------`).\n- `app.conf.backup` remains unchanged.\n\n### Hints\n\nHow can I avoid matching the backup?\n\nUse the exact-name form of `find` practiced in the preceding guided lab, together with the regular-file test.",
+      "task": "Thực hiện hướng dẫn: Protect the Active Configuration",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
+      "task_vi": "Thực hiện hướng dẫn: Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình hình hiện tại\n\nBên dưới `/home/labex/project/file-search` có một tệp thông thường có tên chính xác là `app.conf`. Một bản sao lưu (backup) với tên dài hơn phải được giữ nguyên không thay đổi.\n\n### Phạm vi\n\n- Chỉ tìm kiếm bên dưới thư mục `/home/labex/project/file-search`.\n- Nhắm mục tiêu vào tệp thông thường có tên chính xác là `app.conf`.\n- Không di chuyển, đổi tên hoặc chỉnh sửa tệp.\n\n### Mục tiêu của bạn\n\nĐặt chế độ quyền (permission mode) của tệp `app.conf` đang hoạt động thành `600`, sao cho chỉ chủ sở hữu của nó mới có quyền đọc và ghi.\n\n### Tiêu chí chấp nhận\n\n- Tệp `app.conf` chính xác vẫn nằm ở đường dẫn ban đầu với nội dung ban đầu của nó.\n- Chế độ dạng số của nó là `600` (`rw-------`).\n- Tệp `app.conf.backup` vẫn không thay đổi.\n\n### Gợi ý\n\nLàm thế nào tôi có thể tránh khớp với tệp sao lưu?\n\nSử dụng dạng tìm kiếm tên chính xác của lệnh `find` đã được thực hành trong phòng thí nghiệm hướng dẫn trước đó, kết hợp với phép kiểm tra tệp thông thường (regular-file test).",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "title_vi": "Tìm Kiếm và Bảo Vệ Tệp Cấu Hình",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-find-a-file-17993.json"
+}

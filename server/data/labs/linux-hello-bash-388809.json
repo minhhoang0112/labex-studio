@@ -1,0 +1,817 @@
+{
+  "id": "linux-hello-bash-388809",
+  "course_id": "shell-for-beginners",
+  "order": 1,
+  "title": "Hello, Bash!",
+  "title_vi": "Xin Chào, Bash Shell!",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "42 mins",
+  "overview": "Learn how to write, make executable, and run your very first Bash shell script in Linux.",
+  "source_url": "https://labex.io/tutorials/linux-hello-bash-388809",
+  "source_lab_id": 388809,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice Hello, Bash!. The tasks below retain the source filenames, data and required behavior; explanations are locally written.",
+      "content_vi": "Thực hành Xin Chào, Bash Shell!. Các bước dưới giữ đúng tên tệp, dữ kiện và hành vi nguồn; phần giải thích do dự án biên soạn."
+    },
+    {
+      "id": "source-388809-section-1-v4",
+      "title": "Introduction to WebIDE (VS Code)",
+      "title_vi": "Giới thiệu WebIDE (VS Code)",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Explore the source WebIDE: file explorer, editor and integrated terminal. This local runtime does not provide WebIDE yet.",
+      "content_vi": "Làm quen WebIDE ở nguồn: trình duyệt tệp, vùng soạn thảo và terminal tích hợp. Runtime local chưa cung cấp WebIDE; bước này chưa chấm được.",
+      "task": "Explore the source WebIDE: file explorer, editor and integrated terminal. This local runtime does not provide WebIDE yet.",
+      "task_vi": "Làm quen WebIDE ở nguồn: trình duyệt tệp, vùng soạn thảo và terminal tích hợp. Runtime local chưa cung cấp WebIDE; bước này chưa chấm được.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bước nguồn yêu cầu WebIDE (VS Code). Không thể xác nhận thao tác WebIDE bằng thư mục terminal có sẵn."
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "unsupported",
+          "reason": "Bước nguồn yêu cầu WebIDE (VS Code). Không thể xác nhận thao tác WebIDE bằng thư mục terminal có sẵn."
+        },
+        "namespace": {
+          "kind": "unsupported",
+          "reason": "Bước nguồn yêu cầu WebIDE (VS Code). Không thể xác nhận thao tác WebIDE bằng thư mục terminal có sẵn."
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-2-v4",
+      "title": "Create a Shell Script File",
+      "title_vi": "Tạo tệp Shell Script",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create hello.sh in the project directory.\n\n```bash\ntouch hello.sh\n```",
+      "content_vi": "Tạo tệp hello.sh trong thư mục project.\n\n```bash\ntouch hello.sh\n```",
+      "task": "Create hello.sh in the project directory.",
+      "task_vi": "Tạo tệp hello.sh trong thư mục project.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/hello.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/hello.sh"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/hello.sh"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-3-v4",
+      "title": "Edit the Shell Script",
+      "title_vi": "Chỉnh sửa nội dung Shell Script",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use Bash and print the source greeting.\n\n```bash\n#!/bin/bash\necho 'Hello, World!'\n```",
+      "content_vi": "Dùng Bash và in đúng lời chào của bài nguồn.\n\n```bash\n#!/bin/bash\necho 'Hello, World!'\n```",
+      "task": "Use Bash and print the source greeting.",
+      "task_vi": "Dùng Bash và in đúng lời chào của bài nguồn.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-4-v4",
+      "title": "Make the Script Executable",
+      "title_vi": "Cấp quyền thực thi cho Script",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Give the script execute permission.\n\n```bash\nchmod +x hello.sh\n```",
+      "content_vi": "Cấp quyền thực thi cho script.\n\n```bash\nchmod +x hello.sh\n```",
+      "task": "Give the script execute permission.",
+      "task_vi": "Cấp quyền thực thi cho script.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/hello.sh && test -x /home/labex/project/hello.sh && bash -n /home/labex/project/hello.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/hello.sh && test -x /home/labex/project/hello.sh && bash -n /home/labex/project/hello.sh"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/hello.sh && test -x /home/labex/project/hello.sh && bash -n /home/labex/project/hello.sh"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-5-v4",
+      "title": "Execute the Script",
+      "title_vi": "Chạy thử Script",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Run hello.sh and check its greeting.\n\n```bash\n./hello.sh\n```",
+      "content_vi": "Chạy hello.sh và kiểm tra lời chào.\n\n```bash\n./hello.sh\n```",
+      "task": "Run hello.sh and check its greeting.",
+      "task_vi": "Chạy hello.sh và kiểm tra lời chào.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-6-v4",
+      "title": "View the Script Contents",
+      "title_vi": "Xem lại nội dung tệp",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Display the script contents with cat.\n\n```bash\ncat hello.sh\n```",
+      "content_vi": "Dùng cat để xem nội dung script.\n\n```bash\ncat hello.sh\n```",
+      "task": "Display the script contents with cat.",
+      "task_vi": "Dùng cat để xem nội dung script.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/hello.sh"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*cat\\s+(?:-n\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/hello.sh"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*cat\\s+(?:-n\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/hello.sh"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*cat\\s+(?:-n\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "section-7",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 7,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "### Summary\n\nCongratulations! You have successfully completed **Hello, Bash!**.",
+      "content_vi": "### Tổng kết bài học\n\nChúc mừng! Bạn đã hoàn thành xuất sắc bài thực hành **Xin Chào, Bash Shell!**."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388809-section-1-v4",
+      "title": "Introduction to WebIDE (VS Code)",
+      "title_vi": "Giới thiệu WebIDE (VS Code)",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Explore the source WebIDE: file explorer, editor and integrated terminal. This local runtime does not provide WebIDE yet.",
+      "content_vi": "Làm quen WebIDE ở nguồn: trình duyệt tệp, vùng soạn thảo và terminal tích hợp. Runtime local chưa cung cấp WebIDE; bước này chưa chấm được.",
+      "task": "Explore the source WebIDE: file explorer, editor and integrated terminal. This local runtime does not provide WebIDE yet.",
+      "task_vi": "Làm quen WebIDE ở nguồn: trình duyệt tệp, vùng soạn thảo và terminal tích hợp. Runtime local chưa cung cấp WebIDE; bước này chưa chấm được.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bước nguồn yêu cầu WebIDE (VS Code). Không thể xác nhận thao tác WebIDE bằng thư mục terminal có sẵn."
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "unsupported",
+          "reason": "Bước nguồn yêu cầu WebIDE (VS Code). Không thể xác nhận thao tác WebIDE bằng thư mục terminal có sẵn."
+        },
+        "namespace": {
+          "kind": "unsupported",
+          "reason": "Bước nguồn yêu cầu WebIDE (VS Code). Không thể xác nhận thao tác WebIDE bằng thư mục terminal có sẵn."
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-2-v4",
+      "title": "Create a Shell Script File",
+      "title_vi": "Tạo tệp Shell Script",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create hello.sh in the project directory.\n\n```bash\ntouch hello.sh\n```",
+      "content_vi": "Tạo tệp hello.sh trong thư mục project.\n\n```bash\ntouch hello.sh\n```",
+      "task": "Create hello.sh in the project directory.",
+      "task_vi": "Tạo tệp hello.sh trong thư mục project.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/hello.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/hello.sh"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/hello.sh"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-3-v4",
+      "title": "Edit the Shell Script",
+      "title_vi": "Chỉnh sửa nội dung Shell Script",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use Bash and print the source greeting.\n\n```bash\n#!/bin/bash\necho 'Hello, World!'\n```",
+      "content_vi": "Dùng Bash và in đúng lời chào của bài nguồn.\n\n```bash\n#!/bin/bash\necho 'Hello, World!'\n```",
+      "task": "Use Bash and print the source greeting.",
+      "task_vi": "Dùng Bash và in đúng lời chào của bài nguồn.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-4-v4",
+      "title": "Make the Script Executable",
+      "title_vi": "Cấp quyền thực thi cho Script",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Give the script execute permission.\n\n```bash\nchmod +x hello.sh\n```",
+      "content_vi": "Cấp quyền thực thi cho script.\n\n```bash\nchmod +x hello.sh\n```",
+      "task": "Give the script execute permission.",
+      "task_vi": "Cấp quyền thực thi cho script.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/hello.sh && test -x /home/labex/project/hello.sh && bash -n /home/labex/project/hello.sh"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/hello.sh && test -x /home/labex/project/hello.sh && bash -n /home/labex/project/hello.sh"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/hello.sh && test -x /home/labex/project/hello.sh && bash -n /home/labex/project/hello.sh"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-5-v4",
+      "title": "Execute the Script",
+      "title_vi": "Chạy thử Script",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Run hello.sh and check its greeting.\n\n```bash\n./hello.sh\n```",
+      "content_vi": "Chạy hello.sh và kiểm tra lời chào.\n\n```bash\n./hello.sh\n```",
+      "task": "Run hello.sh and check its greeting.",
+      "task_vi": "Chạy hello.sh và kiểm tra lời chào.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('hello.sh'); assert p.returncode==0 and p.stdout=='Hello, World!\\n'\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*(?:bash\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388809-section-6-v4",
+      "title": "View the Script Contents",
+      "title_vi": "Xem lại nội dung tệp",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Display the script contents with cat.\n\n```bash\ncat hello.sh\n```",
+      "content_vi": "Dùng cat để xem nội dung script.\n\n```bash\ncat hello.sh\n```",
+      "task": "Display the script contents with cat.",
+      "task_vi": "Dùng cat để xem nội dung script.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/hello.sh"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^\\s*cat\\s+(?:-n\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/hello.sh"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*cat\\s+(?:-n\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/hello.sh"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "^\\s*cat\\s+(?:-n\\s+)?(?:\\./|/home/labex/project/|~/project/)?hello\\.sh\\s*$"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "date": "2026-10-17",
+    "fidelity": "public-requirements-aligned-local-wording",
+    "private_grader_recovered": false,
+    "integration_status": "requires-current-smoke-proof"
+  },
+  "environment_setup": "server/data/environment-setups/linux-hello-bash-388809.json"
+}

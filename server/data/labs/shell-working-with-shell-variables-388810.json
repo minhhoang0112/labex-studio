@@ -1,0 +1,519 @@
+{
+  "id": "shell-working-with-shell-variables-388810",
+  "course_id": "shell-for-beginners",
+  "order": 2,
+  "title": "Working with Shell Variables",
+  "title_vi": "Làm Việc Với Biến Trong Shell",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Learn how to define, reference, and manipulate shell variables, command substitution, and arithmetic expansion.",
+  "source_url": "https://labex.io/tutorials/shell-working-with-shell-variables-388810",
+  "source_lab_id": 388810,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Practice Working with Shell Variables. The tasks below retain the source filenames, data and required behavior; explanations are locally written.",
+      "content_vi": "Thực hành Làm Việc Với Biến Trong Shell. Các bước dưới giữ đúng tên tệp, dữ kiện và hành vi nguồn; phần giải thích do dự án biên soạn."
+    },
+    {
+      "id": "source-388810-section-1-v4",
+      "title": "Create Shell Variables",
+      "title_vi": "Khai báo biến trong Shell",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Define PRICE_PER_APPLE=5, MyFirstLetters=ABC and greeting with eight internal spaces; keep quoting when printing.\n\n```bash\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\nprintf 'Price per apple: %s\nMy first letters: %s\nGreeting: %s\n' \"$PRICE_PER_APPLE\" \"$MyFirstLetters\" \"$greeting\"\n```",
+      "content_vi": "Khai báo PRICE_PER_APPLE=5, MyFirstLetters=ABC và greeting có tám dấu cách bên trong; đặt biến trong dấu nháy khi in.\n\n```bash\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\nprintf 'Price per apple: %s\nMy first letters: %s\nGreeting: %s\n' \"$PRICE_PER_APPLE\" \"$MyFirstLetters\" \"$greeting\"\n```",
+      "task": "Define PRICE_PER_APPLE=5, MyFirstLetters=ABC and greeting with eight internal spaces; keep quoting when printing.",
+      "task_vi": "Khai báo PRICE_PER_APPLE=5, MyFirstLetters=ABC và greeting có tám dấu cách bên trong; đặt biến trong dấu nháy khi in.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/variables.sh && bash -n /home/labex/project/variables.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$PRICE_PER_APPLE\" = 5 && test \"$MyFirstLetters\" = ABC && test \"$greeting\" = \"Hello        world!\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/variables.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/variables.sh && bash -n /home/labex/project/variables.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$PRICE_PER_APPLE\" = 5 && test \"$MyFirstLetters\" = ABC && test \"$greeting\" = \"Hello        world!\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/variables.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/variables.sh && bash -n /home/labex/project/variables.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$PRICE_PER_APPLE\" = 5 && test \"$MyFirstLetters\" = ABC && test \"$greeting\" = \"Hello        world!\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/variables.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388810-section-2-v4",
+      "title": "Referencing Shell Variables",
+      "title_vi": "Truy xuất giá trị của biến",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Compare escaped dollar signs, braced expansion and quoted versus unquoted spaces.\n\n```bash\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\necho \"The price of an Apple today is: \\$HK $PRICE_PER_APPLE\"\necho \"The first 10 letters in the alphabet are: ${MyFirstLetters}DEFGHIJ\"\necho $greeting\necho \"$greeting\"\n```",
+      "content_vi": "So sánh dấu đô la được escape, mở rộng biến với ngoặc nhọn và khoảng trắng khi có hoặc không có dấu nháy.\n\n```bash\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\necho \"The price of an Apple today is: \\$HK $PRICE_PER_APPLE\"\necho \"The first 10 letters in the alphabet are: ${MyFirstLetters}DEFGHIJ\"\necho $greeting\necho \"$greeting\"\n```",
+      "task": "Compare escaped dollar signs, braced expansion and quoted versus unquoted spaces.",
+      "task_vi": "So sánh dấu đô la được escape, mở rộng biến với ngoặc nhọn và khoảng trắng khi có hoặc không có dấu nháy.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert '$HK 5' in p.stdout and 'ABCDEFGHIJ' in p.stdout\nassert '\\nHello world!\\nHello        world!\\n' in p.stdout\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert '$HK 5' in p.stdout and 'ABCDEFGHIJ' in p.stdout\nassert '\\nHello world!\\nHello        world!\\n' in p.stdout\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert '$HK 5' in p.stdout and 'ABCDEFGHIJ' in p.stdout\nassert '\\nHello world!\\nHello        world!\\n' in p.stdout\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388810-section-3-v4",
+      "title": "Command Substitution",
+      "title_vi": "Gán kết quả lệnh vào biến (Command Substitution)",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Capture date, directory listing and readable uptime in variables.\n\n```bash\nCURRENT_DATE=$(date +%Y-%m-%d)\nFILES_IN_DIR=$(ls)\nUPTIME=$(uptime -p)\necho \"Today's date is: $CURRENT_DATE\"\nprintf 'Files in the current directory:\n%s\nSystem uptime: %s\n' \"$FILES_IN_DIR\" \"$UPTIME\"\n```",
+      "content_vi": "Lưu ngày hiện tại, danh sách thư mục và thời gian hoạt động dễ đọc vào các biến.\n\n```bash\nCURRENT_DATE=$(date +%Y-%m-%d)\nFILES_IN_DIR=$(ls)\nUPTIME=$(uptime -p)\necho \"Today's date is: $CURRENT_DATE\"\nprintf 'Files in the current directory:\n%s\nSystem uptime: %s\n' \"$FILES_IN_DIR\" \"$UPTIME\"\n```",
+      "task": "Capture date, directory listing and readable uptime in variables.",
+      "task_vi": "Lưu ngày hiện tại, danh sách thư mục và thời gian hoạt động dễ đọc vào các biến.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert re.search(r\"Today's date is: \\d{4}-\\d{2}-\\d{2}\",p.stdout)\nassert 'Files in the current directory:' in p.stdout and 'variables.sh' in p.stdout and 'System uptime: up' in p.stdout\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert re.search(r\"Today's date is: \\d{4}-\\d{2}-\\d{2}\",p.stdout)\nassert 'Files in the current directory:' in p.stdout and 'variables.sh' in p.stdout and 'System uptime: up' in p.stdout\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert re.search(r\"Today's date is: \\d{4}-\\d{2}-\\d{2}\",p.stdout)\nassert 'Files in the current directory:' in p.stdout and 'variables.sh' in p.stdout and 'System uptime: up' in p.stdout\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388810-section-4-v4",
+      "title": "Arithmetic Operations",
+      "title_vi": "Phép tính số học với biến",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create arithmetic.sh; use X=10 and Y=5 for arithmetic, then increment X and decrement Y.\n\n```bash\n#!/bin/bash\nX=10\nY=5\nSUM=$((X+Y)); DIFF=$((X-Y)); PRODUCT=$((X*Y)); QUOTIENT=$((X/Y)); REMAINDER=$((X%Y))\necho \"Sum of $X and $Y is: $SUM\"\necho \"Difference between $X and $Y is: $DIFF\"\necho \"Product of $X and $Y is: $PRODUCT\"\necho \"Quotient of $X divided by $Y is: $QUOTIENT\"\necho \"Remainder of $X divided by $Y is: $REMAINDER\"\nX=$((X+1)); echo \"After incrementing, X is now: $X\"\nY=$((Y-1)); echo \"After decrementing, Y is now: $Y\"\n```",
+      "content_vi": "Tạo arithmetic.sh; dùng X=10, Y=5 để tính toán, sau đó tăng X và giảm Y một đơn vị.\n\n```bash\n#!/bin/bash\nX=10\nY=5\nSUM=$((X+Y)); DIFF=$((X-Y)); PRODUCT=$((X*Y)); QUOTIENT=$((X/Y)); REMAINDER=$((X%Y))\necho \"Sum of $X and $Y is: $SUM\"\necho \"Difference between $X and $Y is: $DIFF\"\necho \"Product of $X and $Y is: $PRODUCT\"\necho \"Quotient of $X divided by $Y is: $QUOTIENT\"\necho \"Remainder of $X divided by $Y is: $REMAINDER\"\nX=$((X+1)); echo \"After incrementing, X is now: $X\"\nY=$((Y-1)); echo \"After decrementing, Y is now: $Y\"\n```",
+      "task": "Create arithmetic.sh; use X=10 and Y=5 for arithmetic, then increment X and decrement Y.",
+      "task_vi": "Tạo arithmetic.sh; dùng X=10, Y=5 để tính toán, sau đó tăng X và giảm Y một đơn vị.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arithmetic.sh && bash -n /home/labex/project/arithmetic.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$SUM:$DIFF:$PRODUCT:$QUOTIENT:$REMAINDER:$X:$Y\" = \"15:5:50:2:0:11:4\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arithmetic.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arithmetic.sh && bash -n /home/labex/project/arithmetic.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$SUM:$DIFF:$PRODUCT:$QUOTIENT:$REMAINDER:$X:$Y\" = \"15:5:50:2:0:11:4\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arithmetic.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arithmetic.sh && bash -n /home/labex/project/arithmetic.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$SUM:$DIFF:$PRODUCT:$QUOTIENT:$REMAINDER:$X:$Y\" = \"15:5:50:2:0:11:4\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arithmetic.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388810-section-5-v4",
+      "title": "Using Environment Variables",
+      "title_vi": "Sử dụng biến môi trường hệ thống",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use environment.sh to display environment values, export MY_VARIABLE to a child Bash, then unset it. Shell paths depend on the runtime.\n\n```bash\n#!/bin/bash\necho \"Home directory: $HOME\"\necho \"Current user: $LOGNAME\"\necho \"Shell being used: $SHELL\"\necho \"Current PATH: $PATH\"\nexport MY_VARIABLE=\"Hello from my variable\"\necho \"My new variable: $MY_VARIABLE\"\nbash -c 'echo \"MY_VARIABLE in child process: $MY_VARIABLE\"'\nunset MY_VARIABLE\necho \"MY_VARIABLE after unsetting: $MY_VARIABLE\"\n```",
+      "content_vi": "Trong environment.sh, xem biến môi trường, export MY_VARIABLE cho Bash con rồi unset. Đường dẫn shell phụ thuộc môi trường đang dùng.\n\n```bash\n#!/bin/bash\necho \"Home directory: $HOME\"\necho \"Current user: $LOGNAME\"\necho \"Shell being used: $SHELL\"\necho \"Current PATH: $PATH\"\nexport MY_VARIABLE=\"Hello from my variable\"\necho \"My new variable: $MY_VARIABLE\"\nbash -c 'echo \"MY_VARIABLE in child process: $MY_VARIABLE\"'\nunset MY_VARIABLE\necho \"MY_VARIABLE after unsetting: $MY_VARIABLE\"\n```",
+      "task": "Use environment.sh to display environment values, export MY_VARIABLE to a child Bash, then unset it. Shell paths depend on the runtime.",
+      "task_vi": "Trong environment.sh, xem biến môi trường, export MY_VARIABLE cho Bash con rồi unset. Đường dẫn shell phụ thuộc môi trường đang dùng.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('environment.sh'); assert p.returncode==0\nassert 'Home directory: /home/labex' in p.stdout and 'Current user: labex' in p.stdout\nassert 'MY_VARIABLE in child process: Hello from my variable' in p.stdout\nassert p.stdout.endswith('MY_VARIABLE after unsetting: \\n')\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('environment.sh'); assert p.returncode==0\nassert 'Home directory: /home/labex' in p.stdout and 'Current user: labex' in p.stdout\nassert 'MY_VARIABLE in child process: Hello from my variable' in p.stdout\nassert p.stdout.endswith('MY_VARIABLE after unsetting: \\n')\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('environment.sh'); assert p.returncode==0\nassert 'Home directory: /home/labex' in p.stdout and 'Current user: labex' in p.stdout\nassert 'MY_VARIABLE in child process: Hello from my variable' in p.stdout\nassert p.stdout.endswith('MY_VARIABLE after unsetting: \\n')\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "section-6",
+      "title": "Summary",
+      "title_vi": "Tổng kết bài học",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "### Summary\n\nCongratulations! You have successfully completed **Working with Shell Variables**.",
+      "content_vi": "### Tổng kết bài học\n\nChúc mừng! Bạn đã hoàn thành xuất sắc bài thực hành **Làm Việc Với Biến Trong Shell**."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-388810-section-1-v4",
+      "title": "Create Shell Variables",
+      "title_vi": "Khai báo biến trong Shell",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Define PRICE_PER_APPLE=5, MyFirstLetters=ABC and greeting with eight internal spaces; keep quoting when printing.\n\n```bash\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\nprintf 'Price per apple: %s\nMy first letters: %s\nGreeting: %s\n' \"$PRICE_PER_APPLE\" \"$MyFirstLetters\" \"$greeting\"\n```",
+      "content_vi": "Khai báo PRICE_PER_APPLE=5, MyFirstLetters=ABC và greeting có tám dấu cách bên trong; đặt biến trong dấu nháy khi in.\n\n```bash\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\nprintf 'Price per apple: %s\nMy first letters: %s\nGreeting: %s\n' \"$PRICE_PER_APPLE\" \"$MyFirstLetters\" \"$greeting\"\n```",
+      "task": "Define PRICE_PER_APPLE=5, MyFirstLetters=ABC and greeting with eight internal spaces; keep quoting when printing.",
+      "task_vi": "Khai báo PRICE_PER_APPLE=5, MyFirstLetters=ABC và greeting có tám dấu cách bên trong; đặt biến trong dấu nháy khi in.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/variables.sh && bash -n /home/labex/project/variables.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$PRICE_PER_APPLE\" = 5 && test \"$MyFirstLetters\" = ABC && test \"$greeting\" = \"Hello        world!\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/variables.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/variables.sh && bash -n /home/labex/project/variables.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$PRICE_PER_APPLE\" = 5 && test \"$MyFirstLetters\" = ABC && test \"$greeting\" = \"Hello        world!\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/variables.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/variables.sh && bash -n /home/labex/project/variables.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$PRICE_PER_APPLE\" = 5 && test \"$MyFirstLetters\" = ABC && test \"$greeting\" = \"Hello        world!\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/variables.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388810-section-2-v4",
+      "title": "Referencing Shell Variables",
+      "title_vi": "Truy xuất giá trị của biến",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Compare escaped dollar signs, braced expansion and quoted versus unquoted spaces.\n\n```bash\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\necho \"The price of an Apple today is: \\$HK $PRICE_PER_APPLE\"\necho \"The first 10 letters in the alphabet are: ${MyFirstLetters}DEFGHIJ\"\necho $greeting\necho \"$greeting\"\n```",
+      "content_vi": "So sánh dấu đô la được escape, mở rộng biến với ngoặc nhọn và khoảng trắng khi có hoặc không có dấu nháy.\n\n```bash\n#!/bin/bash\nPRICE_PER_APPLE=5\nMyFirstLetters=ABC\ngreeting='Hello        world!'\necho \"The price of an Apple today is: \\$HK $PRICE_PER_APPLE\"\necho \"The first 10 letters in the alphabet are: ${MyFirstLetters}DEFGHIJ\"\necho $greeting\necho \"$greeting\"\n```",
+      "task": "Compare escaped dollar signs, braced expansion and quoted versus unquoted spaces.",
+      "task_vi": "So sánh dấu đô la được escape, mở rộng biến với ngoặc nhọn và khoảng trắng khi có hoặc không có dấu nháy.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert '$HK 5' in p.stdout and 'ABCDEFGHIJ' in p.stdout\nassert '\\nHello world!\\nHello        world!\\n' in p.stdout\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert '$HK 5' in p.stdout and 'ABCDEFGHIJ' in p.stdout\nassert '\\nHello world!\\nHello        world!\\n' in p.stdout\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert '$HK 5' in p.stdout and 'ABCDEFGHIJ' in p.stdout\nassert '\\nHello world!\\nHello        world!\\n' in p.stdout\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388810-section-3-v4",
+      "title": "Command Substitution",
+      "title_vi": "Gán kết quả lệnh vào biến (Command Substitution)",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Capture date, directory listing and readable uptime in variables.\n\n```bash\nCURRENT_DATE=$(date +%Y-%m-%d)\nFILES_IN_DIR=$(ls)\nUPTIME=$(uptime -p)\necho \"Today's date is: $CURRENT_DATE\"\nprintf 'Files in the current directory:\n%s\nSystem uptime: %s\n' \"$FILES_IN_DIR\" \"$UPTIME\"\n```",
+      "content_vi": "Lưu ngày hiện tại, danh sách thư mục và thời gian hoạt động dễ đọc vào các biến.\n\n```bash\nCURRENT_DATE=$(date +%Y-%m-%d)\nFILES_IN_DIR=$(ls)\nUPTIME=$(uptime -p)\necho \"Today's date is: $CURRENT_DATE\"\nprintf 'Files in the current directory:\n%s\nSystem uptime: %s\n' \"$FILES_IN_DIR\" \"$UPTIME\"\n```",
+      "task": "Capture date, directory listing and readable uptime in variables.",
+      "task_vi": "Lưu ngày hiện tại, danh sách thư mục và thời gian hoạt động dễ đọc vào các biến.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert re.search(r\"Today's date is: \\d{4}-\\d{2}-\\d{2}\",p.stdout)\nassert 'Files in the current directory:' in p.stdout and 'variables.sh' in p.stdout and 'System uptime: up' in p.stdout\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert re.search(r\"Today's date is: \\d{4}-\\d{2}-\\d{2}\",p.stdout)\nassert 'Files in the current directory:' in p.stdout and 'variables.sh' in p.stdout and 'System uptime: up' in p.stdout\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('variables.sh'); assert p.returncode==0\nassert re.search(r\"Today's date is: \\d{4}-\\d{2}-\\d{2}\",p.stdout)\nassert 'Files in the current directory:' in p.stdout and 'variables.sh' in p.stdout and 'System uptime: up' in p.stdout\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388810-section-4-v4",
+      "title": "Arithmetic Operations",
+      "title_vi": "Phép tính số học với biến",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Create arithmetic.sh; use X=10 and Y=5 for arithmetic, then increment X and decrement Y.\n\n```bash\n#!/bin/bash\nX=10\nY=5\nSUM=$((X+Y)); DIFF=$((X-Y)); PRODUCT=$((X*Y)); QUOTIENT=$((X/Y)); REMAINDER=$((X%Y))\necho \"Sum of $X and $Y is: $SUM\"\necho \"Difference between $X and $Y is: $DIFF\"\necho \"Product of $X and $Y is: $PRODUCT\"\necho \"Quotient of $X divided by $Y is: $QUOTIENT\"\necho \"Remainder of $X divided by $Y is: $REMAINDER\"\nX=$((X+1)); echo \"After incrementing, X is now: $X\"\nY=$((Y-1)); echo \"After decrementing, Y is now: $Y\"\n```",
+      "content_vi": "Tạo arithmetic.sh; dùng X=10, Y=5 để tính toán, sau đó tăng X và giảm Y một đơn vị.\n\n```bash\n#!/bin/bash\nX=10\nY=5\nSUM=$((X+Y)); DIFF=$((X-Y)); PRODUCT=$((X*Y)); QUOTIENT=$((X/Y)); REMAINDER=$((X%Y))\necho \"Sum of $X and $Y is: $SUM\"\necho \"Difference between $X and $Y is: $DIFF\"\necho \"Product of $X and $Y is: $PRODUCT\"\necho \"Quotient of $X divided by $Y is: $QUOTIENT\"\necho \"Remainder of $X divided by $Y is: $REMAINDER\"\nX=$((X+1)); echo \"After incrementing, X is now: $X\"\nY=$((Y-1)); echo \"After decrementing, Y is now: $Y\"\n```",
+      "task": "Create arithmetic.sh; use X=10 and Y=5 for arithmetic, then increment X and decrement Y.",
+      "task_vi": "Tạo arithmetic.sh; dùng X=10, Y=5 để tính toán, sau đó tăng X và giảm Y một đơn vị.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/arithmetic.sh && bash -n /home/labex/project/arithmetic.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$SUM:$DIFF:$PRODUCT:$QUOTIENT:$REMAINDER:$X:$Y\" = \"15:5:50:2:0:11:4\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arithmetic.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arithmetic.sh && bash -n /home/labex/project/arithmetic.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$SUM:$DIFF:$PRODUCT:$QUOTIENT:$REMAINDER:$X:$Y\" = \"15:5:50:2:0:11:4\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arithmetic.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/arithmetic.sh && bash -n /home/labex/project/arithmetic.sh && bash -c 'trap '\"'\"'__local_source_status=$?; test \"$__local_source_status\" = 0 && (test \"$SUM:$DIFF:$PRODUCT:$QUOTIENT:$REMAINDER:$X:$Y\" = \"15:5:50:2:0:11:4\") && printf '\"'\"'\"'\"'\"'\"'\"'\"'%s\\n'\"'\"'\"'\"'\"'\"'\"'\"' '\"'\"'\"'\"'\"'\"'\"'\"'__LOCAL_VARIABLE_ASSERTION_PASSED__'\"'\"'\"'\"'\"'\"'\"'\"''\"'\"' EXIT\nsource \"$1\"  >/dev/null' _ /home/labex/project/arithmetic.sh | grep -Fxq '__LOCAL_VARIABLE_ASSERTION_PASSED__'"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "source-388810-section-5-v4",
+      "title": "Using Environment Variables",
+      "title_vi": "Sử dụng biến môi trường hệ thống",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "Use environment.sh to display environment values, export MY_VARIABLE to a child Bash, then unset it. Shell paths depend on the runtime.\n\n```bash\n#!/bin/bash\necho \"Home directory: $HOME\"\necho \"Current user: $LOGNAME\"\necho \"Shell being used: $SHELL\"\necho \"Current PATH: $PATH\"\nexport MY_VARIABLE=\"Hello from my variable\"\necho \"My new variable: $MY_VARIABLE\"\nbash -c 'echo \"MY_VARIABLE in child process: $MY_VARIABLE\"'\nunset MY_VARIABLE\necho \"MY_VARIABLE after unsetting: $MY_VARIABLE\"\n```",
+      "content_vi": "Trong environment.sh, xem biến môi trường, export MY_VARIABLE cho Bash con rồi unset. Đường dẫn shell phụ thuộc môi trường đang dùng.\n\n```bash\n#!/bin/bash\necho \"Home directory: $HOME\"\necho \"Current user: $LOGNAME\"\necho \"Shell being used: $SHELL\"\necho \"Current PATH: $PATH\"\nexport MY_VARIABLE=\"Hello from my variable\"\necho \"My new variable: $MY_VARIABLE\"\nbash -c 'echo \"MY_VARIABLE in child process: $MY_VARIABLE\"'\nunset MY_VARIABLE\necho \"MY_VARIABLE after unsetting: $MY_VARIABLE\"\n```",
+      "task": "Use environment.sh to display environment values, export MY_VARIABLE to a child Bash, then unset it. Shell paths depend on the runtime.",
+      "task_vi": "Trong environment.sh, xem biến môi trường, export MY_VARIABLE cho Bash con rồi unset. Đường dẫn shell phụ thuộc môi trường đang dùng.",
+      "hint": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "hint_vi": "Thực hiện đúng tên tệp, dữ kiện và kết quả trong hướng dẫn.",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('environment.sh'); assert p.returncode==0\nassert 'Home directory: /home/labex' in p.stdout and 'Current user: labex' in p.stdout\nassert 'MY_VARIABLE in child process: Hello from my variable' in p.stdout\nassert p.stdout.endswith('MY_VARIABLE after unsetting: \\n')\nLOCAL_CHECK"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('environment.sh'); assert p.returncode==0\nassert 'Home directory: /home/labex' in p.stdout and 'Current user: labex' in p.stdout\nassert 'MY_VARIABLE in child process: Hello from my variable' in p.stdout\nassert p.stdout.endswith('MY_VARIABLE after unsetting: \\n')\nLOCAL_CHECK"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess, os, re\nroot=pathlib.Path('/home/labex/project')\ndef run(name,*args):\n return subprocess.run(['/bin/bash',str(root/name),*args],cwd=root,text=True,capture_output=True,timeout=2)\np=run('environment.sh'); assert p.returncode==0\nassert 'Home directory: /home/labex' in p.stdout and 'Current user: labex' in p.stdout\nassert 'MY_VARIABLE in child process: Hello from my variable' in p.stdout\nassert p.stdout.endswith('MY_VARIABLE after unsetting: \\n')\nLOCAL_CHECK"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ],
+  "curriculum_version": 4,
+  "backend_audit": {
+    "date": "2026-10-17",
+    "fidelity": "public-requirements-aligned-local-wording",
+    "private_grader_recovered": false,
+    "integration_status": "requires-current-smoke-proof"
+  },
+  "environment_setup": "server/data/environment-setups/shell-working-with-shell-variables-388810.json"
+}

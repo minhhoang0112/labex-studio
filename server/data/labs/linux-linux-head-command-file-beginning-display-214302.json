@@ -1,0 +1,487 @@
+{
+  "id": "linux-linux-head-command-file-beginning-display-214302",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 214302,
+  "source_url": "https://labex.io/tutorials/linux-linux-head-command-file-beginning-display-214302",
+  "order": 15,
+  "title": "Linux head Command: File Beginning Display",
+  "title_vi": "Lệnh head: đọc đầu tệp",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "30 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux head Command: File Beginning Display",
+  "sections": [
+    {
+      "id": "commands-214302-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux head Command: File Beginning Display. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh head: đọc đầu tệp. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-214302-section-1-v1",
+      "title": "Understanding the Basics of head",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Mặc định mười dòng",
+      "content": "Read the start of access.log; head defaults to ten lines.\n\n```bash\nhead access.log\n```",
+      "content_vi": "Đọc đầu access.log; head mặc định hiện mười dòng.\n\n```bash\nhead access.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)head\\ access\\.log\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-2-v1",
+      "title": "Customizing the Number of Lines",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chọn năm dòng",
+      "content": "Limit the preview to five lines.\n\n```bash\nhead -n 5 access.log\n```",
+      "content_vi": "Giới hạn phần xem trước còn năm dòng.\n\n```bash\nhead -n 5 access.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)head\\ \\-n\\ 5\\ access\\.log\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-3-v1",
+      "title": "Examining Multiple Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đọc nhiều tệp",
+      "content": "Read both log beginnings and notice their headers.\n\n```bash\nhead access.log error.log\n```",
+      "content_vi": "Đọc đầu cả hai nhật ký và quan sát tiêu đề phân cách.\n\n```bash\nhead access.log error.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)head\\ access\\.log\\ error\\.log\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-4-v1",
+      "title": "Using head with Pipes",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Kết hợp đường ống",
+      "content": "Select the quoted HTTP request field, then keep three lines.\n\n```bash\ncut -d '\"' -f2 access.log | head -n 3\n```",
+      "content_vi": "Chọn trường yêu cầu HTTP nằm trong dấu nháy rồi giữ ba dòng.\n\n```bash\ncut -d '\"' -f2 access.log | head -n 3\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)cut\\ \\-d\\ '\"'\\ \\-f2\\ access\\.log\\ \\|\\ head\\ \\-n\\ 3\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-5-v1",
+      "title": "Investigating with head and grep",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Lọc bằng grep",
+      "content": "Filter /admin requests before taking the first three matches.\n\n```bash\ngrep \"/admin\" access.log | head -n 3\n```",
+      "content_vi": "Lọc yêu cầu /admin rồi lấy ba kết quả đầu.\n\n```bash\ngrep \"/admin\" access.log | head -n 3\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)grep\\ \"/admin\"\\ access\\.log\\ \\|\\ head\\ \\-n\\ 3\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-6-v1",
+      "title": "Exploring Large Files with head",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem trước tệp lớn",
+      "content": "Inspect the file size, then preview fifteen lines.\n\n```bash\nls -lh access.log\nhead -n 15 access.log\n```",
+      "content_vi": "Xem kích thước tệp rồi đọc trước mười lăm dòng.\n\n```bash\nls -lh access.log\nhead -n 15 access.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^ls\\s+-lh\\s+access\\.log\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^head\\s+-n\\s+15\\s+access\\.log\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-7-v1",
+      "title": "Summary",
+      "position": 7,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-214302-section-1-v1",
+      "title": "Understanding the Basics of head",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Mặc định mười dòng",
+      "content": "Read the start of access.log; head defaults to ten lines.\n\n```bash\nhead access.log\n```",
+      "content_vi": "Đọc đầu access.log; head mặc định hiện mười dòng.\n\n```bash\nhead access.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)head\\ access\\.log\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-2-v1",
+      "title": "Customizing the Number of Lines",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chọn năm dòng",
+      "content": "Limit the preview to five lines.\n\n```bash\nhead -n 5 access.log\n```",
+      "content_vi": "Giới hạn phần xem trước còn năm dòng.\n\n```bash\nhead -n 5 access.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)head\\ \\-n\\ 5\\ access\\.log\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-3-v1",
+      "title": "Examining Multiple Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đọc nhiều tệp",
+      "content": "Read both log beginnings and notice their headers.\n\n```bash\nhead access.log error.log\n```",
+      "content_vi": "Đọc đầu cả hai nhật ký và quan sát tiêu đề phân cách.\n\n```bash\nhead access.log error.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)head\\ access\\.log\\ error\\.log\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-4-v1",
+      "title": "Using head with Pipes",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Kết hợp đường ống",
+      "content": "Select the quoted HTTP request field, then keep three lines.\n\n```bash\ncut -d '\"' -f2 access.log | head -n 3\n```",
+      "content_vi": "Chọn trường yêu cầu HTTP nằm trong dấu nháy rồi giữ ba dòng.\n\n```bash\ncut -d '\"' -f2 access.log | head -n 3\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)cut\\ \\-d\\ '\"'\\ \\-f2\\ access\\.log\\ \\|\\ head\\ \\-n\\ 3\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-5-v1",
+      "title": "Investigating with head and grep",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Lọc bằng grep",
+      "content": "Filter /admin requests before taking the first three matches.\n\n```bash\ngrep \"/admin\" access.log | head -n 3\n```",
+      "content_vi": "Lọc yêu cầu /admin rồi lấy ba kết quả đầu.\n\n```bash\ngrep \"/admin\" access.log | head -n 3\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)grep\\ \"/admin\"\\ access\\.log\\ \\|\\ head\\ \\-n\\ 3\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-214302-section-6-v1",
+      "title": "Exploring Large Files with head",
+      "position": 6,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xem trước tệp lớn",
+      "content": "Inspect the file size, then preview fifteen lines.\n\n```bash\nls -lh access.log\nhead -n 15 access.log\n```",
+      "content_vi": "Xem kích thước tệp rồi đọc trước mười lăm dòng.\n\n```bash\nls -lh access.log\nhead -n 15 access.log\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^ls\\s+-lh\\s+access\\.log\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^head\\s+-n\\s+15\\s+access\\.log\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-head-command-file-beginning-display-214302.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

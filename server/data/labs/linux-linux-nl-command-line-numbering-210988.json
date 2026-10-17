@@ -1,0 +1,307 @@
+{
+  "id": "linux-linux-nl-command-line-numbering-210988",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 210988,
+  "source_url": "https://labex.io/tutorials/linux-linux-nl-command-line-numbering-210988",
+  "order": 17,
+  "title": "Linux nl Command: Line Numbering",
+  "title_vi": "Lệnh nl: đánh số dòng",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux nl Command: Line Numbering",
+  "sections": [
+    {
+      "id": "commands-210988-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux nl Command: Line Numbering. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh nl: đánh số dòng. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-210988-section-1-v1",
+      "title": "Understanding the Basic nl Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đánh số dòng có nội dung",
+      "content": "Number nonempty lines; tee also saves the output.\n\n```bash\nnl config.txt | tee nl-basic.txt\n```",
+      "content_vi": "Đánh số dòng có nội dung; tee đồng thời lưu kết quả.\n\n```bash\nnl config.txt | tee nl-basic.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-basic.txt && cmp -s /home/labex/project/nl-basic.txt <(nl /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-2-v1",
+      "title": "Numbering All Lines, Including Blank Lines",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đánh số cả dòng trống",
+      "content": "Use -b a to include blank lines.\n\n```bash\nnl -b a config.txt | tee nl-all-lines.txt\n```",
+      "content_vi": "Dùng -b a để đánh số cả dòng trống.\n\n```bash\nnl -b a config.txt | tee nl-all-lines.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-all-lines.txt && cmp -s /home/labex/project/nl-all-lines.txt <(nl -b a /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-3-v1",
+      "title": "Customizing Number Format",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Thêm số không phía trước",
+      "content": "Use right alignment with zero padding.\n\n```bash\nnl -n rz config.txt | tee nl-zero-padded.txt\n```",
+      "content_vi": "Căn phải và thêm số không phía trước.\n\n```bash\nnl -n rz config.txt | tee nl-zero-padded.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-zero-padded.txt && cmp -s /home/labex/project/nl-zero-padded.txt <(nl -n rz /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-4-v1",
+      "title": "Numbering Specific Line Types",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chọn loại dòng",
+      "content": "Number lines whose first character is not #.\n\n```bash\nnl -b p'^[^#]' config.txt | tee nl-settings-only.txt\n```",
+      "content_vi": "Đánh số dòng có ký tự đầu khác #.\n\n```bash\nnl -b p'^[^#]' config.txt | tee nl-settings-only.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-settings-only.txt && cmp -s /home/labex/project/nl-settings-only.txt <(nl -b p'^[^#]' /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-5-v1",
+      "title": "Combining Options for Complex Numbering",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Kết hợp định dạng",
+      "content": "Number every line with three digits and a colon separator.\n\n```bash\nnl -b a -n rz -s ': ' -w 3 config.txt | tee nl-combined.txt\n```",
+      "content_vi": "Đánh số mọi dòng bằng ba chữ số và dấu hai chấm.\n\n```bash\nnl -b a -n rz -s ': ' -w 3 config.txt | tee nl-combined.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-combined.txt && cmp -s /home/labex/project/nl-combined.txt <(nl -b a -n rz -s ': ' -w 3 /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-210988-section-1-v1",
+      "title": "Understanding the Basic nl Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đánh số dòng có nội dung",
+      "content": "Number nonempty lines; tee also saves the output.\n\n```bash\nnl config.txt | tee nl-basic.txt\n```",
+      "content_vi": "Đánh số dòng có nội dung; tee đồng thời lưu kết quả.\n\n```bash\nnl config.txt | tee nl-basic.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-basic.txt && cmp -s /home/labex/project/nl-basic.txt <(nl /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-2-v1",
+      "title": "Numbering All Lines, Including Blank Lines",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đánh số cả dòng trống",
+      "content": "Use -b a to include blank lines.\n\n```bash\nnl -b a config.txt | tee nl-all-lines.txt\n```",
+      "content_vi": "Dùng -b a để đánh số cả dòng trống.\n\n```bash\nnl -b a config.txt | tee nl-all-lines.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-all-lines.txt && cmp -s /home/labex/project/nl-all-lines.txt <(nl -b a /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-3-v1",
+      "title": "Customizing Number Format",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Thêm số không phía trước",
+      "content": "Use right alignment with zero padding.\n\n```bash\nnl -n rz config.txt | tee nl-zero-padded.txt\n```",
+      "content_vi": "Căn phải và thêm số không phía trước.\n\n```bash\nnl -n rz config.txt | tee nl-zero-padded.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-zero-padded.txt && cmp -s /home/labex/project/nl-zero-padded.txt <(nl -n rz /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-4-v1",
+      "title": "Numbering Specific Line Types",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Chọn loại dòng",
+      "content": "Number lines whose first character is not #.\n\n```bash\nnl -b p'^[^#]' config.txt | tee nl-settings-only.txt\n```",
+      "content_vi": "Đánh số dòng có ký tự đầu khác #.\n\n```bash\nnl -b p'^[^#]' config.txt | tee nl-settings-only.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-settings-only.txt && cmp -s /home/labex/project/nl-settings-only.txt <(nl -b p'^[^#]' /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-210988-section-5-v1",
+      "title": "Combining Options for Complex Numbering",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Kết hợp định dạng",
+      "content": "Number every line with three digits and a colon separator.\n\n```bash\nnl -b a -n rz -s ': ' -w 3 config.txt | tee nl-combined.txt\n```",
+      "content_vi": "Đánh số mọi dòng bằng ba chữ số và dấu hai chấm.\n\n```bash\nnl -b a -n rz -s ': ' -w 3 config.txt | tee nl-combined.txt\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "state",
+        "command": "test -f /home/labex/project/nl-combined.txt && cmp -s /home/labex/project/nl-combined.txt <(nl -b a -n rz -s ': ' -w 3 /home/labex/project/config.txt)"
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-nl-command-line-numbering-210988.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

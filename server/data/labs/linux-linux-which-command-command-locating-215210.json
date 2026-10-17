@@ -1,0 +1,563 @@
+{
+  "id": "linux-linux-which-command-command-locating-215210",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 215210,
+  "source_url": "https://labex.io/tutorials/linux-linux-which-command-command-locating-215210",
+  "order": 19,
+  "title": "Linux which Command: Command Locating",
+  "title_vi": "Lệnh which: tìm chương trình trong PATH",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Linux which Command: Command Locating",
+  "sections": [
+    {
+      "id": "commands-215210-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Linux which Command: Command Locating. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Lệnh which: tìm chương trình trong PATH. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-215210-section-1-v1",
+      "title": "Understanding the Basics of 'which'",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm lệnh đã cài",
+      "content": "Locate gcc and python. Paths depend on the installed distribution; use the real executables, not a fabricated output.\n\n```bash\nwhich gcc\nwhich python\n```",
+      "content_vi": "Tìm gcc và python. Đường dẫn phụ thuộc bản phân phối; phải dùng chương trình thật.\n\n```bash\nwhich gcc\nwhich python\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+gcc\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+python\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-2-v1",
+      "title": "Handling Non-existent Commands",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xử lý lệnh không tồn tại",
+      "content": "Check techbuild, then create and execute a script which reports whether it exists.\n\n```bash\nwhich techbuild\ncat > ~/check_techbuild.sh <<'EOF'\n#!/bin/bash\nif which techbuild >/dev/null 2>&1; then\n  echo 'techbuild is installed'\nelse\n  echo 'techbuild is not installed'\nfi\nEOF\nchmod +x ~/check_techbuild.sh\n~/check_techbuild.sh\n```",
+      "content_vi": "Kiểm tra techbuild, rồi tạo và chạy script thông báo nó có tồn tại hay không.\n\n```bash\nwhich techbuild\ncat > ~/check_techbuild.sh <<'EOF'\n#!/bin/bash\nif which techbuild >/dev/null 2>&1; then\n  echo 'techbuild is installed'\nelse\n  echo 'techbuild is not installed'\nfi\nEOF\nchmod +x ~/check_techbuild.sh\n~/check_techbuild.sh\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+techbuild\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              1
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^(?:~/|/home/labex/)check_techbuild\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "test -x /home/labex/check_techbuild.sh && grep -Eq \"which[[:space:]]+techbuild\" /home/labex/check_techbuild.sh && test \"$(/home/labex/check_techbuild.sh)\" = \"techbuild is not installed\""
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-3-v1",
+      "title": "Discovering Multiple Installations",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm mọi bản cài đặt",
+      "content": "List every matching python executable along PATH; multiple paths may reference one underlying binary.\n\n```bash\nwhich -a python\n```",
+      "content_vi": "Liệt kê mọi python trong PATH; nhiều đường dẫn có thể trỏ cùng một chương trình.\n\n```bash\nwhich -a python\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)which\\ \\-a\\ python\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-4-v1",
+      "title": "Understanding PATH Priority",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Thứ tự ưu tiên PATH",
+      "content": "Put custom_bin first, then compare the first prioritydemo match with all matches.\n\n```bash\nexport PATH=$HOME/custom_bin:$PATH\nwhich prioritydemo\nwhich -a prioritydemo\n```",
+      "content_vi": "Đưa custom_bin lên đầu, rồi so sánh vị trí prioritydemo đầu tiên với toàn bộ kết quả.\n\n```bash\nexport PATH=$HOME/custom_bin:$PATH\nwhich prioritydemo\nwhich -a prioritydemo\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^export\\s+PATH=\\$HOME/custom_bin:\\$PATH\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+prioritydemo\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+-a\\s+prioritydemo\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-5-v1",
+      "title": "Creating a Custom Command",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tạo lệnh tùy chỉnh",
+      "content": "Create executable ~/hello, add HOME to PATH, run hello and locate it.\n\n```bash\ncat > ~/hello <<'EOF'\n#!/bin/bash\necho 'Hello from TechCorp!'\nEOF\nchmod +x ~/hello\nexport PATH=\"$PATH:$HOME\"\nhello\nwhich hello\n```",
+      "content_vi": "Tạo ~/hello có quyền chạy, thêm HOME vào PATH, chạy hello rồi tìm vị trí.\n\n```bash\ncat > ~/hello <<'EOF'\n#!/bin/bash\necho 'Hello from TechCorp!'\nEOF\nchmod +x ~/hello\nexport PATH=\"$PATH:$HOME\"\nhello\nwhich hello\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -x /home/labex/hello && test \"$(/home/labex/hello)\" = \"Hello from TechCorp!\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^hello\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+hello\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-6-v1",
+      "title": "Summary",
+      "position": 6,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-215210-section-1-v1",
+      "title": "Understanding the Basics of 'which'",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm lệnh đã cài",
+      "content": "Locate gcc and python. Paths depend on the installed distribution; use the real executables, not a fabricated output.\n\n```bash\nwhich gcc\nwhich python\n```",
+      "content_vi": "Tìm gcc và python. Đường dẫn phụ thuộc bản phân phối; phải dùng chương trình thật.\n\n```bash\nwhich gcc\nwhich python\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+gcc\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+python\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-2-v1",
+      "title": "Handling Non-existent Commands",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Xử lý lệnh không tồn tại",
+      "content": "Check techbuild, then create and execute a script which reports whether it exists.\n\n```bash\nwhich techbuild\ncat > ~/check_techbuild.sh <<'EOF'\n#!/bin/bash\nif which techbuild >/dev/null 2>&1; then\n  echo 'techbuild is installed'\nelse\n  echo 'techbuild is not installed'\nfi\nEOF\nchmod +x ~/check_techbuild.sh\n~/check_techbuild.sh\n```",
+      "content_vi": "Kiểm tra techbuild, rồi tạo và chạy script thông báo nó có tồn tại hay không.\n\n```bash\nwhich techbuild\ncat > ~/check_techbuild.sh <<'EOF'\n#!/bin/bash\nif which techbuild >/dev/null 2>&1; then\n  echo 'techbuild is installed'\nelse\n  echo 'techbuild is not installed'\nfi\nEOF\nchmod +x ~/check_techbuild.sh\n~/check_techbuild.sh\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+techbuild\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              1
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^(?:~/|/home/labex/)check_techbuild\\.sh\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "state",
+            "command": "test -x /home/labex/check_techbuild.sh && grep -Eq \"which[[:space:]]+techbuild\" /home/labex/check_techbuild.sh && test \"$(/home/labex/check_techbuild.sh)\" = \"techbuild is not installed\""
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-3-v1",
+      "title": "Discovering Multiple Installations",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tìm mọi bản cài đặt",
+      "content": "List every matching python executable along PATH; multiple paths may reference one underlying binary.\n\n```bash\nwhich -a python\n```",
+      "content_vi": "Liệt kê mọi python trong PATH; nhiều đường dẫn có thể trỏ cùng một chương trình.\n\n```bash\nwhich -a python\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(^|[;&|]\\s*)which\\ \\-a\\ python\\s*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-4-v1",
+      "title": "Understanding PATH Priority",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Thứ tự ưu tiên PATH",
+      "content": "Put custom_bin first, then compare the first prioritydemo match with all matches.\n\n```bash\nexport PATH=$HOME/custom_bin:$PATH\nwhich prioritydemo\nwhich -a prioritydemo\n```",
+      "content_vi": "Đưa custom_bin lên đầu, rồi so sánh vị trí prioritydemo đầu tiên với toàn bộ kết quả.\n\n```bash\nexport PATH=$HOME/custom_bin:$PATH\nwhich prioritydemo\nwhich -a prioritydemo\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^export\\s+PATH=\\$HOME/custom_bin:\\$PATH\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+prioritydemo\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+-a\\s+prioritydemo\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-215210-section-5-v1",
+      "title": "Creating a Custom Command",
+      "position": 5,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tạo lệnh tùy chỉnh",
+      "content": "Create executable ~/hello, add HOME to PATH, run hello and locate it.\n\n```bash\ncat > ~/hello <<'EOF'\n#!/bin/bash\necho 'Hello from TechCorp!'\nEOF\nchmod +x ~/hello\nexport PATH=\"$PATH:$HOME\"\nhello\nwhich hello\n```",
+      "content_vi": "Tạo ~/hello có quyền chạy, thêm HOME vào PATH, chạy hello rồi tìm vị trí.\n\n```bash\ncat > ~/hello <<'EOF'\n#!/bin/bash\necho 'Hello from TechCorp!'\nEOF\nchmod +x ~/hello\nexport PATH=\"$PATH:$HOME\"\nhello\nwhich hello\n```",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -x /home/labex/hello && test \"$(/home/labex/hello)\" = \"Hello from TechCorp!\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^hello\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "^which\\s+hello\\s*$"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-linux-which-command-command-locating-215210.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

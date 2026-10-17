@@ -1,0 +1,465 @@
+{
+  "id": "linux-word-count-and-sorting-388125",
+  "course_id": "linux-basic-commands-practice-online",
+  "source_lab_id": 388125,
+  "source_url": "https://labex.io/tutorials/linux-word-count-and-sorting-388125",
+  "order": 34,
+  "title": "Word Count and Sorting",
+  "title_vi": "Đếm từ và sắp xếp",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "5 mins",
+  "required_capabilities": [
+    "terminal",
+    "files",
+    "shell",
+    "package_management"
+  ],
+  "overview": "Command-line practice: Word Count and Sorting",
+  "sections": [
+    {
+      "id": "commands-388125-section-0-v1",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Giới thiệu",
+      "content": "Practice Word Count and Sorting. Use the prepared private Linux environment. Explanations and checks here are locally authored from the linked public requirements.",
+      "content_vi": "Thực hành Đếm từ và sắp xếp. Dùng terminal Linux riêng của bài. Hướng dẫn và bộ kiểm tra local được biên soạn lại theo yêu cầu công khai đã liên kết."
+    },
+    {
+      "id": "commands-388125-section-1-v1",
+      "title": "Counting Lines with wc",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đếm dòng log",
+      "content": "Save only the access-log line count.",
+      "content_vi": "Chỉ lưu số dòng của access.log.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '1bac1e39c28dcfafbd8008c25c91fc1100e0e7105e9f7dd05b642628cce182dd  /home/labex/project/access.log\na9b3bf1c4b6475e2f3837dcaa970a6df131e064a28e3689995635c2a2c3e7ed3  /home/labex/project/documents/guide.txt\n1ce82b1cb308522ce1988aada829b1ecdf5cfb0223b7637e6d9fce3e95f349f2  /home/labex/project/documents/notes.txt\nb3ed29a966e515dbccd33fa0901b9fc02c53d7a3aab5ce06844f92a443e4baad  /home/labex/project/numbers.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bwc\\b[^\\n]*task1_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s task1_output.txt\ncmp -s task1_output.txt <(wc -l < access.log)"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388125-section-2-v1",
+      "title": "Finding Frequent Patterns with sort and uniq",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Năm IP thường gặp",
+      "content": "Save the five most frequent IPs without counts.",
+      "content_vi": "Lưu năm IP thường gặp nhất, không kèm số lần.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '1bac1e39c28dcfafbd8008c25c91fc1100e0e7105e9f7dd05b642628cce182dd  /home/labex/project/access.log\na9b3bf1c4b6475e2f3837dcaa970a6df131e064a28e3689995635c2a2c3e7ed3  /home/labex/project/documents/guide.txt\n1ce82b1cb308522ce1988aada829b1ecdf5cfb0223b7637e6d9fce3e95f349f2  /home/labex/project/documents/notes.txt\nb3ed29a966e515dbccd33fa0901b9fc02c53d7a3aab5ce06844f92a443e4baad  /home/labex/project/numbers.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bcut\\b[^\\n]*task2_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s task2_output.txt\ncmp -s task2_output.txt <(cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -n 5 | awk '{print $2}')"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388125-section-3-v1",
+      "title": "Counting Words Across Multiple Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tổng số từ",
+      "content": "Save the total word count across document files.",
+      "content_vi": "Lưu tổng số từ của các tệp tài liệu.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '1bac1e39c28dcfafbd8008c25c91fc1100e0e7105e9f7dd05b642628cce182dd  /home/labex/project/access.log\na9b3bf1c4b6475e2f3837dcaa970a6df131e064a28e3689995635c2a2c3e7ed3  /home/labex/project/documents/guide.txt\n1ce82b1cb308522ce1988aada829b1ecdf5cfb0223b7637e6d9fce3e95f349f2  /home/labex/project/documents/notes.txt\nb3ed29a966e515dbccd33fa0901b9fc02c53d7a3aab5ce06844f92a443e4baad  /home/labex/project/numbers.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bwc\\b[^\\n]*task3_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s task3_output.txt\ncmp -s task3_output.txt <(wc -w documents/*.txt | tail -n 1 | awk '{print $1}')"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388125-section-4-v1",
+      "title": "Sorting Numerical Data",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Mười số lớn nhất",
+      "content": "Save the ten largest numbers in descending order.",
+      "content_vi": "Lưu mười số lớn nhất theo thứ tự giảm dần.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '1bac1e39c28dcfafbd8008c25c91fc1100e0e7105e9f7dd05b642628cce182dd  /home/labex/project/access.log\na9b3bf1c4b6475e2f3837dcaa970a6df131e064a28e3689995635c2a2c3e7ed3  /home/labex/project/documents/guide.txt\n1ce82b1cb308522ce1988aada829b1ecdf5cfb0223b7637e6d9fce3e95f349f2  /home/labex/project/documents/notes.txt\nb3ed29a966e515dbccd33fa0901b9fc02c53d7a3aab5ce06844f92a443e4baad  /home/labex/project/numbers.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bsort\\b[^\\n]*task4_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s task4_output.txt\ncmp -s task4_output.txt <(sort -nr numbers.txt | head -n 10)"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388125-section-5-v1",
+      "title": "Summary",
+      "position": 5,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "title_vi": "Tổng kết",
+      "content": "Review the command options and verify your results. Try the exercise again without copying commands.",
+      "content_vi": "Ôn lại tùy chọn lệnh và tự kiểm tra kết quả. Thử làm lại mà không chép lệnh mẫu."
+    }
+  ],
+  "steps": [
+    {
+      "id": "commands-388125-section-1-v1",
+      "title": "Counting Lines with wc",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Đếm dòng log",
+      "content": "Save only the access-log line count.",
+      "content_vi": "Chỉ lưu số dòng của access.log.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '1bac1e39c28dcfafbd8008c25c91fc1100e0e7105e9f7dd05b642628cce182dd  /home/labex/project/access.log\na9b3bf1c4b6475e2f3837dcaa970a6df131e064a28e3689995635c2a2c3e7ed3  /home/labex/project/documents/guide.txt\n1ce82b1cb308522ce1988aada829b1ecdf5cfb0223b7637e6d9fce3e95f349f2  /home/labex/project/documents/notes.txt\nb3ed29a966e515dbccd33fa0901b9fc02c53d7a3aab5ce06844f92a443e4baad  /home/labex/project/numbers.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bwc\\b[^\\n]*task1_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s task1_output.txt\ncmp -s task1_output.txt <(wc -l < access.log)"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388125-section-2-v1",
+      "title": "Finding Frequent Patterns with sort and uniq",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Năm IP thường gặp",
+      "content": "Save the five most frequent IPs without counts.",
+      "content_vi": "Lưu năm IP thường gặp nhất, không kèm số lần.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '1bac1e39c28dcfafbd8008c25c91fc1100e0e7105e9f7dd05b642628cce182dd  /home/labex/project/access.log\na9b3bf1c4b6475e2f3837dcaa970a6df131e064a28e3689995635c2a2c3e7ed3  /home/labex/project/documents/guide.txt\n1ce82b1cb308522ce1988aada829b1ecdf5cfb0223b7637e6d9fce3e95f349f2  /home/labex/project/documents/notes.txt\nb3ed29a966e515dbccd33fa0901b9fc02c53d7a3aab5ce06844f92a443e4baad  /home/labex/project/numbers.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bcut\\b[^\\n]*task2_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s task2_output.txt\ncmp -s task2_output.txt <(cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -n 5 | awk '{print $2}')"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388125-section-3-v1",
+      "title": "Counting Words Across Multiple Files",
+      "position": 3,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Tổng số từ",
+      "content": "Save the total word count across document files.",
+      "content_vi": "Lưu tổng số từ của các tệp tài liệu.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '1bac1e39c28dcfafbd8008c25c91fc1100e0e7105e9f7dd05b642628cce182dd  /home/labex/project/access.log\na9b3bf1c4b6475e2f3837dcaa970a6df131e064a28e3689995635c2a2c3e7ed3  /home/labex/project/documents/guide.txt\n1ce82b1cb308522ce1988aada829b1ecdf5cfb0223b7637e6d9fce3e95f349f2  /home/labex/project/documents/notes.txt\nb3ed29a966e515dbccd33fa0901b9fc02c53d7a3aab5ce06844f92a443e4baad  /home/labex/project/numbers.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bwc\\b[^\\n]*task3_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s task3_output.txt\ncmp -s task3_output.txt <(wc -w documents/*.txt | tail -n 1 | awk '{print $1}')"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    },
+    {
+      "id": "commands-388125-section-4-v1",
+      "title": "Sorting Numerical Data",
+      "position": 4,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "title_vi": "Mười số lớn nhất",
+      "content": "Save the ten largest numbers in descending order.",
+      "content_vi": "Lưu mười số lớn nhất theo thứ tự giảm dần.",
+      "task": "Perform the actions described above and check the result.",
+      "task_vi": "Thực hiện yêu cầu trong hướng dẫn và kiểm tra kết quả.",
+      "hint": "Check the paths, options and resulting state; use the terminal error message to adjust your command.",
+      "hint_vi": "Kiểm tra đường dẫn, tùy chọn và trạng thái kết quả; đọc thông báo lỗi terminal để sửa lệnh.",
+      "verification": {
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "set -e\nprintf %s '1bac1e39c28dcfafbd8008c25c91fc1100e0e7105e9f7dd05b642628cce182dd  /home/labex/project/access.log\na9b3bf1c4b6475e2f3837dcaa970a6df131e064a28e3689995635c2a2c3e7ed3  /home/labex/project/documents/guide.txt\n1ce82b1cb308522ce1988aada829b1ecdf5cfb0223b7637e6d9fce3e95f349f2  /home/labex/project/documents/notes.txt\nb3ed29a966e515dbccd33fa0901b9fc02c53d7a3aab5ce06844f92a443e4baad  /home/labex/project/numbers.txt\n' | sha256sum -c - >/dev/null"
+          },
+          {
+            "kind": "all",
+            "checks": [
+              {
+                "kind": "commands",
+                "user": "labex",
+                "groups": [
+                  [
+                    "\\bsort\\b[^\\n]*task4_output\\.txt"
+                  ]
+                ],
+                "allowed_status": [
+                  0
+                ]
+              },
+              {
+                "kind": "state",
+                "command": "set -e\ncd /home/labex/project/\ntest -s task4_output.txt\ncmp -s task4_output.txt <(sort -nr numbers.txt | head -n 10)"
+              }
+            ]
+          }
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ]
+    }
+  ],
+  "curriculum_version": 1,
+  "environment_setup": "server/data/environment-setups/linux-word-count-and-sorting-388125.json",
+  "backend_audit": {
+    "date": "2026-10-17",
+    "source_outline": "REA-snapshot-2026-10-16",
+    "source_requirements": "public-page-reviewed",
+    "prose": "independently-authored-en-vi",
+    "private_grader_recovered": false,
+    "integration_status": "see-current-isolated-smoke-report"
+  }
+}

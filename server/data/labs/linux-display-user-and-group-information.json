@@ -1,0 +1,170 @@
+{
+  "id": "linux-display-user-and-group-information",
+  "course_id": "quick-start-with-linux",
+  "order": 2,
+  "title": "Display User and Group Information",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Hai thử thách nhận diện tài khoản và nhóm; không yêu cầu tạo file đầu ra.",
+  "source_url": "https://labex.io/tutorials/linux-display-user-and-group-information-8718",
+  "source_lab_id": 8718,
+  "source": {
+    "provider": "LabEx",
+    "url": "https://labex.io/tutorials/linux-display-user-and-group-information-8718",
+    "outline_evidence_id": "ev_2987a1f8d0e50c98e0c112111e84a87c469f7fc4362016b74a1e84a167e9adcc",
+    "observed_at": "2026-10-16",
+    "fidelity": {
+      "section_outline": "observed",
+      "content_summary": false,
+      "original_private_checks": "unknown",
+      "fixtures": "requirement-derived-or-observed",
+      "content": "existing-workspace-bodies-preserved"
+    },
+    "limitation": "Existing workspace lesson bodies and independently authored local graders; original private grader and VM image are unknown."
+  },
+  "environment_setup": "server/data/environment-setups/linux-display-user-and-group-information.json",
+  "sections": [
+    {
+      "id": "source-8718-section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "In this challenge, you will identify the account currently logged in to the Linux environment and inspect the account's group memberships. These tasks are common when checking permissions, troubleshooting access issues, or confirming which user a shell session is running as.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "# Nhận Diện Người Dùng Và Nhóm Hệ Thống\n\nTrong thử thách này, bạn sẽ thực hành nhận diện tài khoản người dùng hiện đang đăng nhập vào môi trường Linux và kiểm tra các thông tin nhóm mà tài khoản đó trực thuộc. Đây là kỹ năng nền tảng trong quản trị hệ thống khi bạn cần kiểm tra quyền truy cập, chẩn đoán sự cố phân quyền hoặc xác định người dùng đang thực thi shell."
+    },
+    {
+      "id": "source-8718-section-1",
+      "title": "Display Your Current User Identity",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you will use a Linux command to display your current user identity.\n\n> **Note**: This is a **Challenge** rather than a guided lab. Challenges are a different type of resource provided by LabEx, designed for assessment and testing your skills rather than teaching. You'll need to apply your existing knowledge to complete the tasks independently.\n\n### Tasks\n\n- Display your current user identity.\n\n### Requirement\n\n- Use the appropriate Linux command to display your current user identity.\n\n### Example\n\nWhen you complete this step, your terminal should print only the current username. The example below shows the expected output format, not the command you should type. Your username might be different depending on the environment.\n\n```bash\nlabex\n```",
+      "task": "Hiện riêng tên tài khoản đang chạy shell.",
+      "hint": "Áp dụng lệnh nhận diện đã học.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*whoami\\s*$",
+            "^\\s*id\\s+-un\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hiển Thị Danh Tính Người Dùng Hiện Tại",
+      "content_vi": "### Xác định tài khoản đang chạy shell\n\nTrong bước này, bạn sẽ sử dụng câu lệnh Linux để hiển thị danh tính tài khoản người dùng của bạn.\n\n> **Lưu ý**: Đây là bài **Thử thách** (Challenge). Các bài thử thách được thiết kế để kiểm tra và đánh giá kỹ năng thực hành độc lập của bạn thay vì cầm tay chỉ việc từng bước. Bạn cần vận dụng kiến thức đã học để giải quyết nhiệm vụ.\n\n### Nhiệm vụ\n\n- Hiển thị danh tính người dùng hiện tại của bạn.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh Linux phù hợp để xuất ra tên người dùng đang chạy phiên shell.\n\n### Ví dụ\n\nKhi bạn hoàn thành bước này, terminal chỉ in ra tên tài khoản hiện tại. Ví dụ dưới đây minh họa định dạng kết quả kỳ vọng:\n\n```bash\nlabex\n```",
+      "task_vi": "Chạy câu lệnh hiển thị tên người dùng hiện tại (whoami hoặc id -un).",
+      "hint_vi": "Sử dụng lệnh whoami hoặc id -un trong terminal."
+    },
+    {
+      "id": "source-8718-section-2",
+      "title": "Display User and Group Information",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you will use a Linux command to display detailed user and group information.\n\n### Tasks\n\n- Display user and group information.\n\n### Requirement\n\n- Use the appropriate Linux command to display detailed user and group information, including fields such as `uid`, `gid`, and `groups`.\n\n### Example\n\nWhen you complete this step, your terminal should show detailed identity information similar to the following. The exact numeric IDs and group names in your environment may differ.\n\n```bash\nuid=1000(labex) gid=1000(labex) groups=1000(labex),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lpadmin),126(sambashare)\n```",
+      "task": "Hiện thông tin gồm UID, GID và các nhóm của tài khoản.",
+      "hint": "Đọc trực tiếp kết quả trên terminal.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*id\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hiển Thị Thông Tin Người Dùng và Nhóm",
+      "content_vi": "### Kiểm tra UID, GID và Nhóm\n\nTiếp tục sử dụng câu lệnh Linux để xem chi tiết thông tin danh tính bao gồm UID (User ID), GID (Group ID) và các nhóm mà tài khoản của bạn thuộc về.\n\n### Nhiệm vụ\n\n- Chạy lệnh hiển thị thông tin UID, GID và danh sách nhóm của người dùng hiện tại.\n\n### Ví dụ kết quả kỳ vọng:\n\n```text\nuid=1000(labex) gid=1000(labex) groups=1000(labex)...\n```",
+      "task_vi": "Chạy lệnh id để in ra UID, GID và các nhóm hệ thống.",
+      "hint_vi": "Chạy lệnh id trong terminal."
+    },
+    {
+      "id": "source-8718-section-3",
+      "title": "Summary",
+      "position": 3,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "Congratulations! You have successfully completed the \"Display User and Group Information\" challenge. By using `whoami` and `id`, you learned how to check which user is currently logged in and how to inspect the account's `uid`, primary `gid`, and supplementary `groups`. These checks are useful when verifying permissions, troubleshooting access problems, and confirming the execution context of scripts or services. To explore these commands further, you can review their manual pages with `man whoami` and `man id`.",
+      "title_vi": "Tổng kết thử thách",
+      "content_vi": "### Chúc mừng bạn đã hoàn thành thử thách!\n\nBạn đã vận dụng thành thạo các câu lệnh nhận diện người dùng và nhóm trong Linux:\n- `whoami` hoặc `id -un`: Xuất riêng tên người dùng đang đăng nhập.\n- `id`: Xuất đầy đủ UID, GID và các nhóm phụ thuộc."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-8718-section-1",
+      "title": "Display Your Current User Identity",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you will use a Linux command to display your current user identity.\n\n> **Note**: This is a **Challenge** rather than a guided lab. Challenges are a different type of resource provided by LabEx, designed for assessment and testing your skills rather than teaching. You'll need to apply your existing knowledge to complete the tasks independently.\n\n### Tasks\n\n- Display your current user identity.\n\n### Requirement\n\n- Use the appropriate Linux command to display your current user identity.\n\n### Example\n\nWhen you complete this step, your terminal should print only the current username. The example below shows the expected output format, not the command you should type. Your username might be different depending on the environment.\n\n```bash\nlabex\n```",
+      "task": "Hiện riêng tên tài khoản đang chạy shell.",
+      "hint": "Áp dụng lệnh nhận diện đã học.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*whoami\\s*$",
+            "^\\s*id\\s+-un\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hiển Thị Danh Tính Người Dùng Hiện Tại",
+      "content_vi": "### Xác định tài khoản đang chạy shell\n\nTrong bước này, bạn sẽ sử dụng câu lệnh Linux để hiển thị danh tính tài khoản người dùng của bạn.\n\n> **Lưu ý**: Đây là bài **Thử thách** (Challenge). Các bài thử thách được thiết kế để kiểm tra và đánh giá kỹ năng thực hành độc lập của bạn thay vì cầm tay chỉ việc từng bước. Bạn cần vận dụng kiến thức đã học để giải quyết nhiệm vụ.\n\n### Nhiệm vụ\n\n- Hiển thị danh tính người dùng hiện tại của bạn.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh Linux phù hợp để xuất ra tên người dùng đang chạy phiên shell.\n\n### Ví dụ\n\nKhi bạn hoàn thành bước này, terminal chỉ in ra tên tài khoản hiện tại. Ví dụ dưới đây minh họa định dạng kết quả kỳ vọng:\n\n```bash\nlabex\n```",
+      "task_vi": "Chạy câu lệnh hiển thị tên người dùng hiện tại (whoami hoặc id -un).",
+      "hint_vi": "Sử dụng lệnh whoami hoặc id -un trong terminal."
+    },
+    {
+      "id": "source-8718-section-2",
+      "title": "Display User and Group Information",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": true,
+      "content": "In this step, you will use a Linux command to display detailed user and group information.\n\n### Tasks\n\n- Display user and group information.\n\n### Requirement\n\n- Use the appropriate Linux command to display detailed user and group information, including fields such as `uid`, `gid`, and `groups`.\n\n### Example\n\nWhen you complete this step, your terminal should show detailed identity information similar to the following. The exact numeric IDs and group names in your environment may differ.\n\n```bash\nuid=1000(labex) gid=1000(labex) groups=1000(labex),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lpadmin),126(sambashare)\n```",
+      "task": "Hiện thông tin gồm UID, GID và các nhóm của tài khoản.",
+      "hint": "Đọc trực tiếp kết quả trên terminal.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*id\\s*$"
+          ]
+        ]
+      },
+      "title_vi": "Hiển Thị Thông Tin Người Dùng và Nhóm",
+      "content_vi": "### Kiểm tra UID, GID và Nhóm\n\nTiếp tục sử dụng câu lệnh Linux để xem chi tiết thông tin danh tính bao gồm UID (User ID), GID (Group ID) và các nhóm mà tài khoản của bạn thuộc về.\n\n### Nhiệm vụ\n\n- Chạy lệnh hiển thị thông tin UID, GID và danh sách nhóm của người dùng hiện tại.\n\n### Ví dụ kết quả kỳ vọng:\n\n```text\nuid=1000(labex) gid=1000(labex) groups=1000(labex)...\n```",
+      "task_vi": "Chạy lệnh id để in ra UID, GID và các nhóm hệ thống.",
+      "hint_vi": "Chạy lệnh id trong terminal."
+    }
+  ],
+  "title_vi": "Nhận Diện Người Dùng Và Nhóm Hệ Thống"
+}

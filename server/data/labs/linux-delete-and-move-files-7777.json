@@ -1,0 +1,125 @@
+{
+  "id": "linux-delete-and-move-files-7777",
+  "course_id": "linux-for-noobs",
+  "order": 5,
+  "title": "Archive a Draft File",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "10 mins",
+  "overview": "A draft note has finished review and now belongs in the archive. Moving it to the archive and giving it its final name is one operation: the content stays the same while its path changes.  This challe",
+  "source_url": "https://labex.io/tutorials/linux-delete-and-move-files-7777",
+  "source_lab_id": 7777,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A draft note has finished review and now belongs in the archive. Moving it to the archive and giving it its final name is one operation: the content stays the same while its path changes.\n\nThis challenge focuses only on the `mv` behavior practiced in the preceding file-operations lab.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một ghi chú nháp đã hoàn tất quá trình đánh giá và bây giờ thuộc về kho lưu trữ (archive). Việc di chuyển nó vào kho lưu trữ và đặt tên cuối cùng cho nó là một thao tác duy nhất: nội dung vẫn giữ nguyên trong khi đường dẫn của nó thay đổi.\n\nThử thách này chỉ tập trung vào hành vi của `mv` đã được thực hành trong bài lab thao tác tệp trước đó."
+    },
+    {
+      "id": "source-7777-section-1-v3",
+      "title": "Archive the Draft",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe file `incoming/draft-notes.txt` is ready to be archived. The empty `archive` directory already exists beside `incoming`.\n\n### Scope\n\n- Workspace: `/home/labex/project/file-organization`\n- Source: `incoming/draft-notes.txt`\n- Destination: `archive/final-notes.txt`\n- Keep the file content unchanged.\n\n### Your Goal\n\nMove the draft to `archive/final-notes.txt`.\n\n### Acceptance Criteria\n\n- `archive/final-notes.txt` exists with the original draft content.\n- `incoming/draft-notes.txt` no longer exists.\n\n### Hints\n\nCan one command move and rename the file?\n\nYes. The guided lab showed that `mv` can use a destination path ending in a new filename.",
+      "task": "Thực hiện hướng dẫn: Archive the Draft",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "title_vi": "Lưu Trữ Tệp Bản Nháp",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "task_vi": "Thực hiện hướng dẫn: Lưu Trữ Tệp Bản Nháp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-organization/archive/final-notes.txt <(printf %s 'Reviewed draft notes.\n') && test ! -e /home/labex/project/file-organization/incoming/draft-notes.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình hình hiện tại\n\nTệp `incoming/draft-notes.txt` đã sẵn sàng để được lưu trữ. Thư mục trống `archive` đã tồn tại bên cạnh `incoming`.\n\n### Phạm vi\n\n- Không gian làm việc: `/home/labex/project/file-organization`\n- Nguồn: `incoming/draft-notes.txt`\n- Đích: `archive/final-notes.txt`\n- Giữ nguyên nội dung tệp không thay đổi.\n\n### Mục tiêu của bạn\n\nDi chuyển bản nháp đến `archive/final-notes.txt`.\n\n### Tiêu chí chấp nhận\n\n- `archive/final-notes.txt` tồn tại với nội dung bản nháp ban đầu.\n- `incoming/draft-notes.txt` không còn tồn tại.\n\n### Gợi ý\n\nLiệu một lệnh có thể vừa di chuyển vừa đổi tên tệp không?\n\nCó. Bàilab hướng dẫn đã cho thấy rằng `mv` có thể sử dụng đường dẫn đích kết thúc bằng một tên tệp mới.",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You applied one focused file operation: `mv` changed a file's location and name while preserving its content.",
+      "title_vi": "Tổng kết",
+      "content_vi": "Bạn đã áp dụng một thao tác tệp tập trung: `mv` đã thay đổi vị trí và tên của một tệp trong khi vẫn giữ nguyên nội dung của nó."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-7777-section-1-v3",
+      "title": "Archive the Draft",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\nThe file `incoming/draft-notes.txt` is ready to be archived. The empty `archive` directory already exists beside `incoming`.\n\n### Scope\n\n- Workspace: `/home/labex/project/file-organization`\n- Source: `incoming/draft-notes.txt`\n- Destination: `archive/final-notes.txt`\n- Keep the file content unchanged.\n\n### Your Goal\n\nMove the draft to `archive/final-notes.txt`.\n\n### Acceptance Criteria\n\n- `archive/final-notes.txt` exists with the original draft content.\n- `incoming/draft-notes.txt` no longer exists.\n\n### Hints\n\nCan one command move and rename the file?\n\nYes. The guided lab showed that `mv` can use a destination path ending in a new filename.",
+      "task": "Thực hiện hướng dẫn: Archive the Draft",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "title_vi": "Lưu Trữ Tệp Bản Nháp",
+      "task_vi": "Thực hiện hướng dẫn: Lưu Trữ Tệp Bản Nháp",
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-organization/archive/final-notes.txt <(printf %s 'Reviewed draft notes.\n') && test ! -e /home/labex/project/file-organization/incoming/draft-notes.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-organization/archive/final-notes.txt <(printf %s 'Reviewed draft notes.\n') && test ! -e /home/labex/project/file-organization/incoming/draft-notes.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình hình hiện tại\n\nTệp `incoming/draft-notes.txt` đã sẵn sàng để được lưu trữ. Thư mục trống `archive` đã tồn tại bên cạnh `incoming`.\n\n### Phạm vi\n\n- Không gian làm việc: `/home/labex/project/file-organization`\n- Nguồn: `incoming/draft-notes.txt`\n- Đích: `archive/final-notes.txt`\n- Giữ nguyên nội dung tệp không thay đổi.\n\n### Mục tiêu của bạn\n\nDi chuyển bản nháp đến `archive/final-notes.txt`.\n\n### Tiêu chí chấp nhận\n\n- `archive/final-notes.txt` tồn tại với nội dung bản nháp ban đầu.\n- `incoming/draft-notes.txt` không còn tồn tại.\n\n### Gợi ý\n\nLiệu một lệnh có thể vừa di chuyển vừa đổi tên tệp không?\n\nCó. Bàilab hướng dẫn đã cho thấy rằng `mv` có thể sử dụng đường dẫn đích kết thúc bằng một tên tệp mới.",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "title_vi": "Lưu Trữ Tệp Bản Nháp",
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-delete-and-move-files-7777.json"
+}

@@ -1,0 +1,125 @@
+{
+  "id": "linux-analyze-historical-commands-17988",
+  "course_id": "linux-for-noobs",
+  "order": 23,
+  "title": "Extract Programs from Command History",
+  "title_vi": "Trích xuất tên chương trình từ lịch sử lệnh",
+  "type": "challenge",
+  "difficulty": "Beginner",
+  "estimated_time": "10 mins",
+  "overview": "A small history export stores a record number and a program name on each pipe-delimited line. An analyst needs only the program field for a later report.  This challenge applies field extraction from",
+  "source_url": "https://labex.io/tutorials/linux-analyze-historical-commands-17988",
+  "source_lab_id": 17988,
+  "sections": [
+    {
+      "id": "section-0",
+      "title": "Introduction",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "A small history export stores a record number and a program name on each pipe-delimited line. An analyst needs only the program field for a later report.\n\nThis challenge applies field extraction from the pipeline lab and file redirection from the stream lab to one simple artifact.",
+      "title_vi": "Giới thiệu",
+      "content_vi": "Một bản xuất lịch sử nhỏ lưu số thứ tự bản ghi và tên chương trình trên mỗi dòng được phân cách bằng dấu gạch đứng. Một người phân tích chỉ cần trường tên chương trình cho báo cáo sau này.\n\nThử thách này áp dụng cách trích xuất trường từ bài pipeline và chuyển hướng tệp từ bài luồng vào một sản phẩm đầu ra đơn giản."
+    },
+    {
+      "id": "source-17988-section-1-v3",
+      "title": "Extract the Program Field",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/history-analysis/command-history.txt` contains five records. Each line has a history number in field 1 and a program name in field 2, separated by `|`.\n\n### Scope\n\n- Extract field 2 from every record.\n- Keep the original record order and repeated names.\n- Save the result as `programs.txt`.\n\n### Your Goal\n\nCreate one file containing the five program names, one per line.\n\n### Acceptance Criteria\n\n- `programs.txt` contains exactly one field-2 value for each source record.\n- History numbers and delimiter characters are absent.\n- The source order and repeated `ls` entry are preserved.\n\n### Hints\n\nWhich field tool applies?\n\nThe pipeline lab used `cut` with a chosen delimiter and field number. Redirect that command's standard output to the required file.",
+      "title_vi": "Trích xuất trường tên chương trình",
+      "task": "Thực hiện hướng dẫn: Extract the Program Field",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/history-analysis/programs.txt <(printf %s 'ls\npwd\ncat\nls\ngrep\n') && cmp -s /home/labex/project/history-analysis/command-history.txt <(printf %s '1|ls|/home/labex\n2|pwd|/home/labex\n3|cat|notes.txt\n4|ls|-la\n5|grep|ERROR app.log\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/history-analysis/command-history.txt` chứa năm bản ghi. Mỗi dòng có số lịch sử ở trường 1 và tên chương trình ở trường 2, phân cách bằng `|`.\n\n### Phạm vi\n\n- Trích xuất trường 2 từ mọi bản ghi.\n- Giữ thứ tự bản ghi ban đầu và các tên lặp lại.\n- Lưu kết quả thành `programs.txt`.\n\n### Mục tiêu của bạn\n\nTạo một tệp chứa năm tên chương trình, mỗi dòng một tên.\n\n### Tiêu chí đạt\n\n- `programs.txt` chứa đúng một giá trị trường 2 cho mỗi bản ghi nguồn.\n- Không có số lịch sử và ký tự phân cách.\n- Giữ nguyên thứ tự nguồn và mục `ls` lặp lại.\n\n### Gợi ý\n\nCông cụ xử lý trường nào phù hợp?\n\nBài pipeline đã dùng `cut` với ký tự phân cách và số trường được chọn. Chuyển hướng đầu ra chuẩn của lệnh đó vào tệp yêu cầu.",
+      "task_vi": "Thực hiện hướng dẫn: Trích xuất trường tên chương trình",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Summary",
+      "position": 2,
+      "kind": "summary",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "has_solution": false,
+      "content": "You extracted one delimited field and saved it with standard-output redirection.",
+      "title_vi": "Tổng kết bài học",
+      "content_vi": "Bạn đã trích xuất một trường có phân cách và lưu nó bằng chuyển hướng đầu ra chuẩn."
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-17988-section-1-v3",
+      "title": "Extract the Program Field",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "has_solution": false,
+      "content": "### Current Situation\n\n`/home/labex/project/history-analysis/command-history.txt` contains five records. Each line has a history number in field 1 and a program name in field 2, separated by `|`.\n\n### Scope\n\n- Extract field 2 from every record.\n- Keep the original record order and repeated names.\n- Save the result as `programs.txt`.\n\n### Your Goal\n\nCreate one file containing the five program names, one per line.\n\n### Acceptance Criteria\n\n- `programs.txt` contains exactly one field-2 value for each source record.\n- History numbers and delimiter characters are absent.\n- The source order and repeated `ls` entry are preserved.\n\n### Hints\n\nWhich field tool applies?\n\nThe pipeline lab used `cut` with a chosen delimiter and field number. Redirect that command's standard output to the required file.",
+      "title_vi": "Trích xuất trường tên chương trình",
+      "task": "Thực hiện hướng dẫn: Extract the Program Field",
+      "hint": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+      },
+      "required_capabilities": [],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/history-analysis/programs.txt <(printf %s 'ls\npwd\ncat\nls\ngrep\n') && cmp -s /home/labex/project/history-analysis/command-history.txt <(printf %s '1|ls|/home/labex\n2|pwd|/home/labex\n3|cat|notes.txt\n4|ls|-la\n5|grep|ERROR app.log\n')"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/history-analysis/programs.txt <(printf %s 'ls\npwd\ncat\nls\ngrep\n') && cmp -s /home/labex/project/history-analysis/command-history.txt <(printf %s '1|ls|/home/labex\n2|pwd|/home/labex\n3|cat|notes.txt\n4|ls|-la\n5|grep|ERROR app.log\n')"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
+          "terminal",
+          "files"
+        ]
+      },
+      "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/history-analysis/command-history.txt` chứa năm bản ghi. Mỗi dòng có số lịch sử ở trường 1 và tên chương trình ở trường 2, phân cách bằng `|`.\n\n### Phạm vi\n\n- Trích xuất trường 2 từ mọi bản ghi.\n- Giữ thứ tự bản ghi ban đầu và các tên lặp lại.\n- Lưu kết quả thành `programs.txt`.\n\n### Mục tiêu của bạn\n\nTạo một tệp chứa năm tên chương trình, mỗi dòng một tên.\n\n### Tiêu chí đạt\n\n- `programs.txt` chứa đúng một giá trị trường 2 cho mỗi bản ghi nguồn.\n- Không có số lịch sử và ký tự phân cách.\n- Giữ nguyên thứ tự nguồn và mục `ls` lặp lại.\n\n### Gợi ý\n\nCông cụ xử lý trường nào phù hợp?\n\nBài pipeline đã dùng `cut` với ký tự phân cách và số trường được chọn. Chuyển hướng đầu ra chuẩn của lệnh đó vào tệp yêu cầu.",
+      "task_vi": "Thực hiện hướng dẫn: Trích xuất trường tên chương trình",
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+    }
+  ],
+  "curriculum_version": 3,
+  "backend_audit": {
+    "date": "2026-10-16",
+    "source": "existing-local-Anti-course-bodies",
+    "source_body_fidelity": "preserved-exactly-from-pre-audit-copy",
+    "original_private_checks": "not-observed",
+    "fixtures": "independently-reconstructed",
+    "integration_status": "candidate-checks-require-Docker-smoke-report"
+  },
+  "environment_setup": "server/data/environment-setups/linux-analyze-historical-commands-17988.json"
+}
