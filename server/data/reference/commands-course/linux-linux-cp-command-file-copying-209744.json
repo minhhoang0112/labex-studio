@@ -1,0 +1,246 @@
+{
+  "tutorial": {
+    "id": 209744,
+    "name": "Linux cp Command: File Copying",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 35,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/file_copying",
+        "name": "File Copying",
+        "desc": "File copying covers duplicating files and directories while preserving or intentionally changing attributes.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "shell/glob_patterns",
+        "name": "Glob Patterns",
+        "desc": "Glob patterns cover matching groups of pathnames with shell pattern syntax.",
+        "project": {
+          "key": "shell",
+          "name": "Shell",
+          "desc": ""
+        },
+        "group": {
+          "key": "shell/skills",
+          "name": "Shell",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/directory_listing",
+        "name": "Directory Listing",
+        "desc": "Directory listing covers inspecting directory contents, hidden entries, file types, and listing formats.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/directory_navigation",
+        "name": "Directory Navigation",
+        "desc": "Directory navigation covers moving through filesystem locations and tracking the current working directory.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/filesystem_paths",
+        "name": "Filesystem Paths",
+        "desc": "Filesystem paths cover absolute paths, relative paths, current directories, parent directories, and path resolution.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_viewing",
+        "name": "File Viewing",
+        "desc": "File viewing covers reading file content with tools suited for short files, long files, and paged inspection.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/filesystem_hierarchy",
+        "name": "Filesystem Hierarchy",
+        "desc": "Filesystem hierarchy covers the purpose of standard Linux directories such as /etc, /var, /tmp, /dev, /proc, and /sys.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_metadata",
+        "name": "File Metadata",
+        "desc": "File metadata covers inspecting file types, sizes, timestamps, inode details, and link-related attributes.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-cp",
+    "alias": "linux-linux-cp-command-file-copying-209744",
+    "icon": "https://icons.labex.io/linux-cp-command-file-copying.png",
+    "show_in_tutorial": true,
+    "description": "Learn the Linux cp command for efficient file and directory copying. Learn basic usage, advanced options like recursive copying, preserving attributes, and using wildcards. Perfect for beginners to enhance their file management skills in Linux.",
+    "default_console_type": 2,
+    "meta_title": "Linux cp Command Tutorial: Mastering File and Directory Copying",
+    "meta_description": "Comprehensive guide on using the Linux cp command for file and directory copying, including advanced options and best practices.",
+    "meta_keywords": "linux cp command, file copying, directory copying, recursive copy, preserve attributes, wildcards, interactive copying, linux file management, command line skills, linux tutorial",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, you'll explore the powerful `cp` command in Linux, an essential tool for file and directory management. You'll learn how to efficiently copy files and directories, understand various options to customize the copying process, and apply these skills in practical scenarios. By the end of this lab, you'll be comfortable using `cp` for everyday file management tasks and backups.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basic cp Command",
+      "layout": "doc-workbench-split",
+      "text": "## Understanding the Basic cp Command\n\nThe `cp` command is fundamental for duplicating files in Linux. Let's start with a simple scenario where you need to create a backup of an important document.\n\nIn your project directory (`~/project`), there's a file named `important_report.txt`. Your task is to create a backup of this file in the same directory.\n\nFirst, let's check the contents of your project directory:\n\n```bash\nls ~/project\n```\n\nYou should see `important_report.txt` listed among other files. Don't worry if you see additional files; we'll focus on `important_report.txt` for now.\n\nNow, let's create a backup:\n\n```bash\ncp ~/project/important_report.txt ~/project/important_report_backup.txt\n```\n\nThis command creates a copy of `important_report.txt` named `important_report_backup.txt` in the same directory. Here's what each part of the command means:\n\n- `cp`: This is the command for copying files.\n- `~/project/important_report.txt`: This is the source file we want to copy. The `~` symbol represents your home directory.\n- `~/project/important_report_backup.txt`: This is the destination file. We're creating a new file with \"\\_backup\" added to the name.\n\nTo verify the copy was created successfully, list the contents of the directory again:\n\n```bash\nls ~/project\n```\n\nYou should now see both `important_report.txt` and `important_report_backup.txt`. If you don't see the new file, double-check that you typed the `cp` command correctly.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Copying Files to Different Directories",
+      "layout": "doc-workbench-split",
+      "text": "## Copying Files to Different Directories\n\nOften, you'll need to copy files to different locations. Let's simulate a scenario where you're organizing your music collection.\n\nFirst, let's check if the music directory exists:\n\n```bash\nls ~/project\n```\n\nYou should see a directory named `music` listed. If it's not there, don't worry; it was created in the setup script.\n\nNow, let's copy a music file from your project directory to the music directory:\n\n```bash\ncp ~/project/favorite_song.mp3 ~/project/music/\n```\n\nThis command copies `favorite_song.mp3` from your project directory to the `music` directory. Let's break down the command:\n\n- `cp`: The copy command.\n- `~/project/favorite_song.mp3`: The source file we're copying.\n- `~/project/music/`: The destination directory. Notice the trailing slash (`/`) - this tells `cp` that `music` is a directory.\n\nTo verify the file was copied successfully, list the contents of the music directory:\n\n```bash\nls ~/project/music\n```\n\nYou should see `favorite_song.mp3` listed. If you don't see it, make sure you typed the `cp` command correctly and that `favorite_song.mp3` exists in your project directory.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Copying Multiple Files at Once",
+      "layout": "doc-workbench-split",
+      "text": "## Copying Multiple Files at Once\n\nYou can copy multiple files in a single command, which is useful for batch operations. Let's organize your document collection.\n\nFirst, let's check if the documents directory exists:\n\n```bash\nls ~/project\n```\n\nYou should see a directory named `documents` listed.\n\nNow, let's copy multiple text files to this documents directory:\n\n```bash\ncp ~/project/report1.txt ~/project/report2.txt ~/project/notes.txt ~/project/documents/\n```\n\nThis command copies `report1.txt`, `report2.txt`, and `notes.txt` to the `documents` directory. Here's how it works:\n\n- `cp`: The copy command.\n- `~/project/report1.txt ~/project/report2.txt ~/project/notes.txt`: These are the source files we're copying. You can list as many files as you need, separated by spaces.\n- `~/project/documents/`: This is the destination directory.\n\nVerify the files were copied:\n\n```bash\nls ~/project/documents\n```\n\nYou should see all three files (`report1.txt`, `report2.txt`, and `notes.txt`) listed. If any are missing, double-check the `cp` command for typos.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Using the -i Option for Interactive Copying",
+      "layout": "doc-workbench-split",
+      "text": "## Using the -i Option for Interactive Copying\n\nWhen copying files, you might encounter situations where the destination already contains a file with the same name. The `-i` option makes `cp` interactive, prompting you before overwriting existing files.\n\nLet's simulate this scenario:\n\nFirst, let's see the content of an existing file:\n\n```bash\ncat ~/project/test_file.txt\n```\n\n> Tips: If you're unfamiliar with the `cat` command, don't worry; it will be explained in detail later.\n\nYou should see \"Original content\" displayed.\n\nNow, let's try to copy a file with the same name:\n\n```bash\ncp -i ~/project/new_test_file.txt ~/project/test_file.txt\n```\n\nWhen prompted, type `y` and press Enter to overwrite the file. If you don't want to overwrite, type `n` and press Enter.\n\nThe `-i` option stands for \"interactive\". It tells `cp` to ask for confirmation before overwriting any existing files. This is a safety measure to prevent accidental data loss.\n\nNow, check the content of the file:\n\n```bash\ncat ~/project/test_file.txt\n```\n\nIf you chose to overwrite, you should see \"New content\" displayed. If not, you'll still see \"Original content\".\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Recursive Copying with the -r Option",
+      "layout": "doc-workbench-split",
+      "text": "## Recursive Copying with the -r Option\n\nThe `-r` option allows you to copy directories and their contents recursively. This is particularly useful for backing up entire directory structures.\n\nLet's create a backup of the entire website directory:\n\n```bash\ncp -r ~/project/website ~/project/website_backup\n```\n\nThis command copies the `website` directory and all its contents to a new directory called `website_backup`. Here's what each part means:\n\n- `cp`: The copy command.\n- `-r`: This option stands for \"recursive\". It tells `cp` to copy directories and their contents.\n- `~/project/website`: This is the source directory we're copying.\n- `~/project/website_backup`: This is the new directory where we're copying everything.\n\nVerify the backup was created successfully:\n\n```bash\nls -R ~/project/website_backup\n```\n\nYou should see the entire directory structure and files listed. The `-R` option with `ls` shows the contents of directories recursively.\n\nIf you don't see the expected structure, make sure you typed the `cp -r` command correctly.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Preserving File Attributes with the -p Option",
+      "layout": "doc-workbench-split",
+      "text": "## Preserving File Attributes with the -p Option\n\nWhen copying files, you might want to preserve the original file's attributes such as timestamps and permissions. The `-p` option does this for you.\n\nLet's demonstrate this:\n\nFirst, let's look at the attributes of the original file:\n\n```bash\nls -l ~/project/old_file.txt\n```\n\nNote the date and time shown.\n\nNow, let's copy the file while preserving its attributes:\n\n```bash\ncp -p ~/project/old_file.txt ~/project/preserved_file.txt\n```\n\nThe `-p` option stands for \"preserve\". It maintains the original file's modification time, access time, and permissions.\n\nLet's compare the attributes of both files:\n\n```bash\nls -l ~/project/old_file.txt ~/project/preserved_file.txt\n```\n\nYou should see that both files have the same date and time. If they differ, make sure you used the `-p` option with `cp`.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 7,
+      "title": "Using Wildcards for Selective Copying",
+      "layout": "doc-workbench-split",
+      "text": "## Using Wildcards for Selective Copying\n\nWildcards allow you to copy multiple files based on patterns. This is useful when you want to copy files of a certain type or with specific naming conventions.\n\nLet's copy all text files to the text_files directory:\n\n```bash\ncp ~/project/*.txt ~/project/text_files/\n```\n\nAnd copy all PDF files to the pdf_files directory:\n\n```bash\ncp ~/project/*.pdf ~/project/pdf_files/\n```\n\nHere's what the wildcard (`*`) means:\n\n- `*.txt` matches any file that ends with \".txt\"\n- `*.pdf` matches any file that ends with \".pdf\"\n\nThis allows you to copy multiple files without listing them individually.\n\nVerify the files were copied correctly:\n\n```bash\nls ~/project/text_files\nls ~/project/pdf_files\n```\n\nYou should see all .txt files in the text_files directory and all .pdf files in the pdf_files directory.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, you've mastered the essential uses of the Linux `cp` command. You've learned how to:\n\n1. Copy single files\n2. Copy files to different directories\n3. Copy multiple files at once\n4. Use the `-i` option for interactive copying\n5. Recursively copy directories with the `-r` option\n6. Preserve file attributes with the `-p` option\n7. Use wildcards for selective copying\n\nAdditional `cp` options not covered in this lab include:\n\n- `-u`: Copy only when the source file is newer than the destination file or when the destination file is missing\n- `-v`: Verbose mode, explaining what is being done\n- `-n`: No clobber; do not overwrite an existing file\n- `-l`: Create hard links instead of copying files\n- `-s`: Create symbolic links instead of copying files\n\nThe `cp` command is a powerful tool for file management in Linux. With these skills, you're now equipped to handle a wide range of file copying tasks efficiently and effectively.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    },
+    {
+      "name": "Shell",
+      "alias": "shell"
+    }
+  ]
+}

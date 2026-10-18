@@ -1,0 +1,151 @@
+{
+  "tutorial": {
+    "id": 214301,
+    "name": "Linux less Command: File Paging",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/file_viewing",
+        "name": "File Viewing",
+        "desc": "File viewing covers reading file content with tools suited for short files, long files, and paged inspection.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_pattern_searching",
+        "name": "Text Pattern Searching",
+        "desc": "Text pattern searching covers finding text with literal strings and regular expression patterns.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_counting",
+        "name": "Text Counting",
+        "desc": "Text counting covers measuring lines, words, bytes, characters, and record counts in text input.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-less",
+    "alias": "linux-linux-less-command-file-paging-214301",
+    "icon": "https://icons.labex.io/linux-less-command-file-paging.png",
+    "show_in_tutorial": true,
+    "description": "Learn the Linux 'less' command for efficient text file viewing and navigation. Learn to use search, line numbers, and pattern matching features.",
+    "default_console_type": 2,
+    "meta_title": "Linux less Command Tutorial: Efficient Text File Navigation",
+    "meta_description": "Learn to use the Linux 'less' command for viewing large text files, searching content, displaying line numbers, and navigating efficiently in the terminal.",
+    "meta_keywords": "Linux, less command, text file viewer, terminal, navigation, search, line numbers, pattern matching",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this tutorial, you will learn how to use the `less` command in Linux to efficiently navigate and analyze large log files. The `less` command is a powerful tool for viewing text files in the terminal, allowing users to scroll through content, search for specific information, and view file contents page by page.\n\nImagine you are a system administrator tasked with investigating a series of server errors. You have access to a large log file containing information about system events, but the file is too big to open in a regular text editor. This is where the `less` command becomes invaluable.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Accessing the Log File",
+      "layout": "doc-workbench-split",
+      "text": "## Accessing the Log File\n\nFirst, let's navigate to the directory containing our log file and view its contents.\n\n1. Open your terminal. You should be in the `/home/labex/project` directory by default.\n\n2. List the contents of the directory:\n\n```bash\nls\n```\n\nYou should see a file named `server_log.txt`.\n\n3. To view the contents of this file using the `less` command, type:\n\n```bash\nless server_log.txt\n```\n\nThis command opens the `server_log.txt` file using `less`. You can now view the contents of the file.\n\nNote: The content you see may differ from the example below, as the log file is dynamically generated.\n\n```\n2023-11-05 08:00:01 INFO: Server startup complete\n2023-11-05 08:15:23 WARNING: High CPU usage detected\n2023-11-05 08:30:45 ERROR: Database connection failed\n2023-11-05 08:31:02 INFO: Retrying database connection\n2023-11-05 08:31:05 INFO: Database connection established\n...\n```\n\nTo exit the `less` view, press the `q` key.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Navigating Through the File",
+      "layout": "doc-workbench-split",
+      "text": "## Navigating Through the File\n\nNow that we have opened the file, let's learn how to navigate through it.\n\n1. Open the log file again using `less`:\n\n```bash\nless server_log.txt\n```\n\n2. Use the following keys to navigate:\n   - Press `Space` or `Page Down` to move forward one page\n   - Press `b` or `Page Up` to move backward one page\n   - Use the `Up` and `Down` arrow keys to move line by line\n   - Press `G` (Shift + g) to go to the end of the file\n   - Press `g` to go to the beginning of the file\n\nTry these navigation commands to familiarize yourself with moving through the file.\n\n3. When you're done exploring, press `q` to exit `less`.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Searching for Specific Content",
+      "layout": "doc-workbench-split",
+      "text": "## Searching for Specific Content\n\nAs a system administrator, you often need to find specific information quickly. The `less` command provides powerful search capabilities.\n\n1. Open the log file again:\n\n```bash\nless server_log.txt\n```\n\n2. To search for the word \"ERROR\", type `/ERROR` and press Enter. This will highlight all occurrences of \"ERROR\" in the file.\n3. Press `n` to move to the next occurrence of \"ERROR\", or `N` to move to the previous occurrence.\n4. Now, let's search for a specific date. First, navigate to the beginning of the file by pressing `g`, then look at the dates in the log entries. Choose a date that appears in the file (for example, if you see \"2025-01-15\" in the file, search for that date). Type `/` followed by the date you want to search for (e.g., `/2025-01-15`) and press Enter.\n5. Use `n` and `N` to navigate between occurrences of this date.\n6. When you're done searching, press `q` to exit `less`.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Displaying Line Numbers",
+      "layout": "doc-workbench-split",
+      "text": "## Displaying Line Numbers\n\nWhen analyzing logs, it can be helpful to see line numbers for reference.\n\n1. Open the log file with line numbers displayed:\n\n```bash\nless -N server_log.txt\n```\n\nThe `-N` option tells `less` to display line numbers.\n\n2. You should now see line numbers at the left side of each line:\n\n```\n     1 2023-11-05 08:00:01 INFO: Server startup complete\n     2 2023-11-05 08:15:23 WARNING: High CPU usage detected\n     3 2023-11-05 08:30:45 ERROR: Database connection failed\n     4 2023-11-05 08:31:02 INFO: Retrying database connection\n     5 2023-11-05 08:31:05 INFO: Database connection established\n...\n```\n\n3. Navigate through the file as before. Notice how the line numbers help you keep track of your position in the file.\n\n4. When you're done, press `q` to exit `less`.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Starting from a Specific Pattern",
+      "layout": "doc-workbench-split",
+      "text": "## Starting from a Specific Pattern\n\nSometimes, you may want to start viewing the file from a specific point. The `less` command allows you to do this easily.\n\n1. Let's say you want to start viewing the file from the first occurrence of a database error. Use this command:\n\n```bash\nless +/ERROR:.Database server_log.txt\n```\n\nThis command tells `less` to open the file and immediately jump to the first line containing \"ERROR:\" followed by any character and then \"Database\".\n\n2. You should now see the file opened at the first database error:\n\n```\n2023-11-05 08:30:45 ERROR: Database connection failed\n2023-11-05 08:31:02 INFO: Retrying database connection\n2023-11-05 08:31:05 INFO: Database connection established\n...\n```\n\n3. You can continue to navigate through the file from this point as before.\n\n4. When you're done, press `q` to exit `less`.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this tutorial, you learned how to use the `less` command to efficiently navigate and analyze large log files. You practiced opening files, scrolling through content, searching for specific information, displaying line numbers, and starting from a specific pattern in the file.\n\nThese skills are crucial for system administrators and developers who often need to quickly analyze large log files to troubleshoot issues or monitor system performance.\n\nOther useful `less` parameters not covered in this tutorial include:\n\n- `-i`: Ignore case in searches\n- `-F`: Quit if the entire file can be displayed on one screen\n- `-S`: Chop long lines instead of wrapping them\n- `+F`: Keep reading the file, displaying new contents as they appear (similar to `tail -f`)\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

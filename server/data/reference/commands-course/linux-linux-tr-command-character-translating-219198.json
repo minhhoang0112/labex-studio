@@ -1,0 +1,151 @@
+{
+  "tutorial": {
+    "id": 219198,
+    "name": "Linux tr Command: Character Translating",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/text_stream_editing",
+        "name": "Text Stream Editing",
+        "desc": "Text stream editing covers transforming text streams with substitutions, deletions, selections, and scripted edits.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/command_pipelines",
+        "name": "Command Pipelines",
+        "desc": "Command pipelines cover passing output from one command into another to build composed command-line workflows.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_creation",
+        "name": "File Creation",
+        "desc": "File creation covers creating empty files, writing new file content, and understanding creation effects on metadata.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-tr",
+    "alias": "linux-linux-tr-command-character-translating-219198",
+    "icon": "https://icons.labex.io/linux-tr-command-character-translating.png",
+    "show_in_tutorial": true,
+    "description": "Learn the Linux tr command for character-level transformations in text streams. Learn to translate characters, delete specific characters, work with character classes, and squeeze repeated characters. This hands-on tutorial covers essential tr command operations for text processing in Linux.",
+    "default_console_type": 2,
+    "meta_title": "Linux tr Command Tutorial: Text Transformation Techniques",
+    "meta_description": "Learn to use the Linux tr command for character translation, deletion, and manipulation in text streams. Master text processing techniques with practical exercises.",
+    "meta_keywords": "Linux, tr command, character translation, text processing, command line, tutorial, text manipulation, character classes, squeeze repeats",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, we will explore the `tr` command in Linux, a versatile utility for transforming text at the character level. The `tr` command, short for \"translate,\" is widely used for tasks such as converting case, removing specific characters, and basic data cleaning. By the end of this lab, you will be proficient in using `tr` for various text manipulation scenarios. This lab is designed for beginners, so don't worry if you're new to Linux commands - we'll guide you through each step carefully.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basics of tr",
+      "layout": "doc-workbench-split",
+      "text": "## Understanding the Basics of tr\n\nLet's start by understanding the basic syntax of the `tr` command:\n\n```\ntr [OPTION]... SET1 [SET2]\n```\n\nThe `tr` command reads text from standard input (stdin), transforms it according to the specified options and character sets, and writes the result to standard output (stdout).\n\nLet's begin with a simple example. We'll create a file named `greeting.txt` with a basic greeting message and then use `tr` to convert all lowercase letters to uppercase.\n\nFirst, create the file:\n\n```bash\necho \"hello, world\" > ~/project/greeting.txt\n```\n\n> Tips: You can copy and paste the file creation commands into the terminal to create the files correctly.\n\nThis command creates a new file named `greeting.txt` in your project directory (`~/project/`) with the content \"hello, world\".\n\nNow, let's use `tr` to convert all lowercase letters to uppercase:\n\n```bash\ncat ~/project/greeting.txt | tr 'a-z' 'A-Z'\n```\n\nYou should see the following output:\n\n```\nHELLO, WORLD\n```\n\nLet's break down this command:\n\n1. `cat ~/project/greeting.txt`: This reads the contents of the file.\n2. `|`: This is a pipe symbol. It takes the output of the command on its left and feeds it as input to the command on its right.\n3. `tr 'a-z' 'A-Z'`: This is our `tr` command. It translates each character in the first set ('a-z', which represents all lowercase letters) to the corresponding character in the second set ('A-Z', which represents all uppercase letters).\n\nNote that this command doesn't modify the original file. If you want to save the transformed text, you would need to redirect the output to a new file.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Deleting Characters with tr",
+      "layout": "doc-workbench-split",
+      "text": "## Deleting Characters with tr\n\nThe `tr` command can also delete specific characters from the input. This is particularly useful when you need to clean up text by removing unwanted characters. Let's create a file with some punctuation and then remove it.\n\nFirst, create a file with punctuation:\n\n```bash\necho \"Hello, World! How are you?\" > ~/project/punctuated.txt\n```\n\n> Tips: You can copy and paste the file creation commands into the terminal to create the files correctly.\n\nNow, let's use `tr` to remove all punctuation:\n\n```bash\ncat ~/project/punctuated.txt | tr -d '[:punct:]'\n```\n\nYou should see:\n\n```\nHello World How are you\n```\n\nLet's break down this command:\n\n1. `cat ~/project/punctuated.txt`: This reads the contents of the file.\n2. `|`: This pipes the output to the `tr` command.\n3. `tr -d '[:punct:]'`:\n   - The `-d` option tells `tr` to delete the specified characters.\n   - `[:punct:]` is a character class that represents all punctuation characters. Character classes are predefined sets of characters that make it easier to specify groups of characters.\n\nThis command removes all punctuation characters from the text, leaving only letters, numbers, and spaces.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Translating Multiple Characters",
+      "layout": "doc-workbench-split",
+      "text": "## Translating Multiple Characters\n\nNow let's explore a more complex translation. We'll create a file with some encoded text and use `tr` to decode it. This example demonstrates how `tr` can be used for simple encryption and decryption.\n\nFirst, create a file with encoded text:\n\n```bash\necho \"Uijt jt b tfdsfu nfttbhf.\" > ~/project/encoded.txt\n```\n\n> Tips: You can copy and paste the file creation commands into the terminal to create the files correctly.\n\nNow, let's decode it:\n\n```bash\ncat ~/project/encoded.txt | tr 'b-zaB-ZA' 'a-zA-Z'\n```\n\nYou should see:\n\n```\nThis is a secret message.\n```\n\nLet's break down this command:\n\n1. `cat ~/project/encoded.txt`: This reads the contents of the encoded file.\n2. `|`: This pipes the output to the `tr` command.\n3. `tr 'b-zaB-ZA' 'a-zA-Z'`:\n   - The first set `b-zaB-ZA` combines two shifted alphabets:\n     - `b-za`: lowercase letters b through z, followed by a\n     - `B-ZA`: uppercase letters B through Z, followed by A\n   - Together, they cover each letter that should be shifted back by one position.\n   - The second set `a-zA-Z` is: lowercase a through z, followed by uppercase A through Z.\n   - This creates a mapping where each letter in the first set is replaced by the corresponding letter in the second set:\n     - b (1st in first set) → a (1st in second set)\n     - c (2nd in first set) → b (2nd in second set)\n     - ...\n     - a (26th in first set) → z (26th in second set)\n     - B (27th in first set) → A (27th in second set)\n     - ...\n     - A (52nd in first set) → Z (52nd in second set)\n   - This effectively shifts each letter in the input back by one position in the alphabet for both lowercase and uppercase characters, which correctly decodes the message.\n\nThis type of substitution is a very simple form of encryption called a Caesar cipher. While it's not secure for real-world use, it's a great example of how `tr` can be used for character-by-character substitution.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Using Character Classes with tr",
+      "layout": "doc-workbench-split",
+      "text": "## Using Character Classes with tr\n\nThe `tr` command supports various character classes, which are predefined sets of characters. These can be very useful for more complex text transformations. Let's use some of these in a practical scenario.\n\nFirst, create a file with mixed content:\n\n```bash\necho \"User123 logged in at 09:45 AM on 2023-08-15\" > ~/project/log_entry.txt\n```\n\n> Tips: You can copy and paste the file creation commands into the terminal to create the files correctly.\n\nNow, let's extract only the digits from this log entry:\n\n```bash\ncat ~/project/log_entry.txt | tr -cd '[:digit:]'\n```\n\nYou should see:\n\n```\n12309452023815\n```\n\nLet's break down this command:\n\n1. `cat ~/project/log_entry.txt`: This reads the contents of the log file.\n2. `|`: This pipes the output to the `tr` command.\n3. `tr -cd '[:digit:]'`:\n   - The `-c` option complements the set (meaning \"not in this set\").\n   - The `-d` option deletes the specified characters.\n   - `[:digit:]` is a character class that represents all digits (0-9).\n   - Together, `-cd '[:digit:]'` means \"delete all characters that are not digits\".\n\nThis command is useful for extracting numerical data from mixed text, which can be helpful in log analysis or data cleaning tasks.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Squeezing Repeats with tr",
+      "layout": "doc-workbench-split",
+      "text": "## Squeezing Repeats with tr\n\nThe `tr` command can also \"squeeze\" repeated characters into a single occurrence. This is useful for cleaning up data with unnecessary repetition. Let's create a file with some repeated characters and then clean it up.\n\nFirst, create a file with repeated spaces:\n\n```bash\necho \"This    is    a    test    with    extra    spaces.\" > ~/project/spaced.txt\n```\n\n> Tips: You can copy and paste the file creation commands into the terminal to create the files correctly.\n\nNow, let's use `tr` to squeeze the repeated spaces:\n\n```bash\ncat ~/project/spaced.txt | tr -s ' '\n```\n\nYou should see:\n\n```\nThis is a test with extra spaces.\n```\n\nLet's break down this command:\n\n1. `cat ~/project/spaced.txt`: This reads the contents of the file with extra spaces.\n2. `|`: This pipes the output to the `tr` command.\n3. `tr -s ' '`:\n   - The `-s` option squeezes repeats of the specified character into a single occurrence.\n   - `' '` specifies that we want to squeeze space characters.\n\nThis command is particularly useful when dealing with poorly formatted data or when you need to normalize whitespace in a text file.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, we explored the versatile `tr` command in Linux. We learned how to:\n\n1. Convert text case\n2. Delete specific characters\n3. Translate multiple characters\n4. Use character classes\n5. Squeeze repeated characters\n\nThe `tr` command is a powerful tool for text manipulation. Here are some additional options we didn't cover in detail:\n\n- `-c`: Complement the set of characters in string1, that is, operate on all characters not in string1\n- `-t`: Truncate string1 to the length of string2\n\nFor more advanced text processing tasks, you might want to explore other commands like `sed` and `awk` in future labs.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

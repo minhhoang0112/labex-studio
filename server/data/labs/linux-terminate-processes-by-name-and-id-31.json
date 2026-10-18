@@ -1,0 +1,95 @@
+{
+  "id": "linux-terminate-processes-by-name-and-id-31",
+  "source_lab_id": 31,
+  "course_id": "linux-practice-challenges",
+  "title": "Terminate Processes by Name and ID",
+  "title_vi": "Introduction",
+  "difficulty": "Intermediate",
+  "estimated_time": "14 mins",
+  "sections": [
+    {
+      "id": "linux-terminate-processes-by-name-and-id-31-step-0",
+      "title": "Introduction",
+      "title_vi": "Introduction",
+      "content": "## Introduction\n\nIn this challenge, you will learn how to terminate processes in Linux using different commands. Process management is a fundamental skill for any Linux administrator or user, as it allows you to control running applications and services effectively.\n\n### Achievements\n\n- `kill` - Send a signal to a process\n- `killall` - Kill all processes by name\n- `pkill` - Kill all processes by name\n",
+      "content_vi": "## Introduction\n\nIn this challenge, you will learn how to terminate processes in Linux using different commands. Process management is a fundamental skill for any Linux administrator or user, as it allows you to control running applications and services effectively.\n\n### Achievements\n\n- `kill` - Send a signal to a process\n- `killall` - Kill all processes by name\n- `pkill` - Kill all processes by name\n",
+      "layout": "doc-fullscreen",
+      "need_verify": false
+    },
+    {
+      "id": "linux-terminate-processes-by-name-and-id-31-step-1",
+      "title": "Send Signal To Process",
+      "title_vi": "Send Signal To Process",
+      "content": "## Send Signal To Process\n\nIn Linux, every running program or service is represented as a process with a unique Process ID (PID). The `kill` command allows you to send signals to processes, with the most common signal being used to terminate them.\n\nWe have run a background script process that continuously writes to a log file. Now you need to use `kill` to send a signal to terminate it.\n\n### Requirements\n\n- Find the process ID of the background script (`/tmp/background-process.sh`)\n- Send a signal to kill this process\n- Only use `kill` to terminate the process\n\n### Tips\n\n- Use `ps aux | grep [process-name]` to find the PID of a process\n- The `-9` signal (SIGKILL) forces a process to terminate immediately\n- Remember that some operations require root privileges (sudo)\n",
+      "content_vi": "## Send Signal To Process\n\nIn Linux, every running program or service is represented as a process with a unique Process ID (PID). The `kill` command allows you to send signals to processes, with the most common signal being used to terminate them.\n\nWe have run a background script process that continuously writes to a log file. Now you need to use `kill` to send a signal to terminate it.\n\n### Requirements\n\n- Find the process ID of the background script (`/tmp/background-process.sh`)\n- Send a signal to kill this process\n- Only use `kill` to terminate the process\n\n### Tips\n\n- Use `ps aux | grep [process-name]` to find the PID of a process\n- The `-9` signal (SIGKILL) forces a process to terminate immediately\n- Remember that some operations require root privileges (sudo)\n",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "kind": "task"
+    },
+    {
+      "id": "linux-terminate-processes-by-name-and-id-31-step-2",
+      "title": "Kill All Process",
+      "title_vi": "Kill All Process",
+      "content": "## Kill All Process\n\nWhile `kill` is powerful for terminating individual processes by their PID, Linux provides more convenient commands when you need to terminate multiple processes with the same name.\n\nThe `killall` and `pkill` commands allow you to terminate processes by their name rather than requiring you to look up each PID individually. This is particularly useful when dealing with multiple instances of the same program.\n\nIn this step, we'll practice using these commands to terminate all instances of the nginx web server that we started earlier.\n\n### Requirements\n\n- Kill all `nginx` processes\n- Use `killall` or `pkill` to kill all `nginx` processes\n\n### Tips\n\n- `killall` requires an exact match of the process name\n- `pkill` allows for more flexible pattern matching\n- Both commands may require root privileges (sudo) for system processes\n",
+      "content_vi": "## Kill All Process\n\nWhile `kill` is powerful for terminating individual processes by their PID, Linux provides more convenient commands when you need to terminate multiple processes with the same name.\n\nThe `killall` and `pkill` commands allow you to terminate processes by their name rather than requiring you to look up each PID individually. This is particularly useful when dealing with multiple instances of the same program.\n\nIn this step, we'll practice using these commands to terminate all instances of the nginx web server that we started earlier.\n\n### Requirements\n\n- Kill all `nginx` processes\n- Use `killall` or `pkill` to kill all `nginx` processes\n\n### Tips\n\n- `killall` requires an exact match of the process name\n- `pkill` allows for more flexible pattern matching\n- Both commands may require root privileges (sudo) for system processes\n",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "kind": "task"
+    },
+    {
+      "id": "linux-terminate-processes-by-name-and-id-31-step-3",
+      "title": "Summary",
+      "title_vi": "Summary",
+      "content": "## Summary\n\nCongratulations! You have successfully completed this challenge.\n\nIn this challenge, you learned essential Linux process management skills:\n\n1. How to identify processes using the `ps` command\n2. How to terminate a specific process by its PID using the `kill` command\n3. How to terminate multiple processes by name using `killall` or `pkill`\n\nThese commands are fundamental tools in a Linux administrator's toolkit, allowing you to manage and control running processes effectively. Whether you need to stop a misbehaving application or restart a service, these commands give you precise control over your system's processes.\n\nKeep learning and have fun!\n",
+      "content_vi": "## Summary\n\nCongratulations! You have successfully completed this challenge.\n\nIn this challenge, you learned essential Linux process management skills:\n\n1. How to identify processes using the `ps` command\n2. How to terminate a specific process by its PID using the `kill` command\n3. How to terminate multiple processes by name using `killall` or `pkill`\n\nThese commands are fundamental tools in a Linux administrator's toolkit, allowing you to manage and control running processes effectively. Whether you need to stop a misbehaving application or restart a service, these commands give you precise control over your system's processes.\n\nKeep learning and have fun!\n",
+      "layout": "doc-fullscreen",
+      "need_verify": false
+    }
+  ],
+  "steps": [
+    {
+      "id": "linux-terminate-processes-by-name-and-id-31-step-1",
+      "title": "Send Signal To Process",
+      "title_vi": "Send Signal To Process",
+      "content": "## Send Signal To Process\n\nIn Linux, every running program or service is represented as a process with a unique Process ID (PID). The `kill` command allows you to send signals to processes, with the most common signal being used to terminate them.\n\nWe have run a background script process that continuously writes to a log file. Now you need to use `kill` to send a signal to terminate it.\n\n### Requirements\n\n- Find the process ID of the background script (`/tmp/background-process.sh`)\n- Send a signal to kill this process\n- Only use `kill` to terminate the process\n\n### Tips\n\n- Use `ps aux | grep [process-name]` to find the PID of a process\n- The `-9` signal (SIGKILL) forces a process to terminate immediately\n- Remember that some operations require root privileges (sudo)\n",
+      "content_vi": "## Send Signal To Process\n\nIn Linux, every running program or service is represented as a process with a unique Process ID (PID). The `kill` command allows you to send signals to processes, with the most common signal being used to terminate them.\n\nWe have run a background script process that continuously writes to a log file. Now you need to use `kill` to send a signal to terminate it.\n\n### Requirements\n\n- Find the process ID of the background script (`/tmp/background-process.sh`)\n- Send a signal to kill this process\n- Only use `kill` to terminate the process\n\n### Tips\n\n- Use `ps aux | grep [process-name]` to find the PID of a process\n- The `-9` signal (SIGKILL) forces a process to terminate immediately\n- Remember that some operations require root privileges (sudo)\n",
+      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "hint": "Xem huong dan va kiem tra ket qua."
+    },
+    {
+      "id": "linux-terminate-processes-by-name-and-id-31-step-2",
+      "title": "Kill All Process",
+      "title_vi": "Kill All Process",
+      "content": "## Kill All Process\n\nWhile `kill` is powerful for terminating individual processes by their PID, Linux provides more convenient commands when you need to terminate multiple processes with the same name.\n\nThe `killall` and `pkill` commands allow you to terminate processes by their name rather than requiring you to look up each PID individually. This is particularly useful when dealing with multiple instances of the same program.\n\nIn this step, we'll practice using these commands to terminate all instances of the nginx web server that we started earlier.\n\n### Requirements\n\n- Kill all `nginx` processes\n- Use `killall` or `pkill` to kill all `nginx` processes\n\n### Tips\n\n- `killall` requires an exact match of the process name\n- `pkill` allows for more flexible pattern matching\n- Both commands may require root privileges (sudo) for system processes\n",
+      "content_vi": "## Kill All Process\n\nWhile `kill` is powerful for terminating individual processes by their PID, Linux provides more convenient commands when you need to terminate multiple processes with the same name.\n\nThe `killall` and `pkill` commands allow you to terminate processes by their name rather than requiring you to look up each PID individually. This is particularly useful when dealing with multiple instances of the same program.\n\nIn this step, we'll practice using these commands to terminate all instances of the nginx web server that we started earlier.\n\n### Requirements\n\n- Kill all `nginx` processes\n- Use `killall` or `pkill` to kill all `nginx` processes\n\n### Tips\n\n- `killall` requires an exact match of the process name\n- `pkill` allows for more flexible pattern matching\n- Both commands may require root privileges (sudo) for system processes\n",
+      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "hint": "Xem huong dan va kiem tra ket qua."
+    }
+  ]
+}

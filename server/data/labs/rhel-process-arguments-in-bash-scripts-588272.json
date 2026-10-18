@@ -1,0 +1,63 @@
+{
+  "id": "rhel-process-arguments-in-bash-scripts-588272",
+  "source_lab_id": 588272,
+  "course_id": "linux-practice-challenges",
+  "title": "Process Arguments in Bash Scripts",
+  "title_vi": "Introduction",
+  "difficulty": "Beginner",
+  "estimated_time": "5 mins",
+  "sections": [
+    {
+      "id": "rhel-process-arguments-in-bash-scripts-588272-step-0",
+      "title": "Introduction",
+      "title_vi": "Introduction",
+      "content": "## Introduction\n\nIn this challenge, you will create a bash script that processes command-line arguments. This script will demonstrate key concepts in bash scripting, including handling command-line arguments, using special variables, and displaying process information. This task is essential for system administrators and developers who need to create flexible and informative command-line tools.\n\n### Environment\n\nLabEx uses Red Hat Universal Base Image 9 (UBI9) to simulate the exam environment. It may not be identical to the actual RHCSA exam environment, but it provides a good representation of the tasks you'll encounter.\n\nThere are two users in the environment:\n\n- `labex`: A standard user with sudo privileges, password: `labex`.\n- `root`: The system administrator, password: `redhat`.\n\nThe challenge features real exam questions, along with explanations, requirements, and automated verification scripts to help you confirm task completion. It effectively simulates the knowledge areas covered in the RHCSA exam.\n",
+      "content_vi": "## Introduction\n\nIn this challenge, you will create a bash script that processes command-line arguments. This script will demonstrate key concepts in bash scripting, including handling command-line arguments, using special variables, and displaying process information. This task is essential for system administrators and developers who need to create flexible and informative command-line tools.\n\n### Environment\n\nLabEx uses Red Hat Universal Base Image 9 (UBI9) to simulate the exam environment. It may not be identical to the actual RHCSA exam environment, but it provides a good representation of the tasks you'll encounter.\n\nThere are two users in the environment:\n\n- `labex`: A standard user with sudo privileges, password: `labex`.\n- `root`: The system administrator, password: `redhat`.\n\nThe challenge features real exam questions, along with explanations, requirements, and automated verification scripts to help you confirm task completion. It effectively simulates the knowledge areas covered in the RHCSA exam.\n",
+      "layout": "doc-fullscreen",
+      "need_verify": false
+    },
+    {
+      "id": "rhel-process-arguments-in-bash-scripts-588272-step-1",
+      "title": "Create and Configure the Bash Script",
+      "title_vi": "Create and Configure the Bash Script",
+      "content": "## Create and Configure the Bash Script\n\nLet's create a bash script that processes and displays information about the arguments passed to it.\n\n### Tasks\n\n- Create a bash script named `argts.sh` in the `/home/labex/` directory\n- Make the script executable\n- Implement the script to display the following information:\n  - Total count of supplied arguments\n  - Value of the first argument\n  - PID of the script\n  - All supplied arguments\n\n### Requirements\n\n- The script must be created at `/home/labex/argts.sh`\n- The script must have the correct shebang line: `#!/bin/bash`\n- The script must be executable\n- The script must use appropriate bash special variables to display the required information\n- The output should be formatted clearly with a header line of equal signs\n\n### Example\n\nWhen the script is run with arguments, it should produce output similar to this:\n\n```\n$ /home/labex/argts.sh one two three\n===========================\nThe total count of the supp argts: 3\nThe value of the first arg is: one\nThe PID of the script is : 12345\nAll the argts: one two three\n```\n",
+      "content_vi": "## Create and Configure the Bash Script\n\nLet's create a bash script that processes and displays information about the arguments passed to it.\n\n### Tasks\n\n- Create a bash script named `argts.sh` in the `/home/labex/` directory\n- Make the script executable\n- Implement the script to display the following information:\n  - Total count of supplied arguments\n  - Value of the first argument\n  - PID of the script\n  - All supplied arguments\n\n### Requirements\n\n- The script must be created at `/home/labex/argts.sh`\n- The script must have the correct shebang line: `#!/bin/bash`\n- The script must be executable\n- The script must use appropriate bash special variables to display the required information\n- The output should be formatted clearly with a header line of equal signs\n\n### Example\n\nWhen the script is run with arguments, it should produce output similar to this:\n\n```\n$ /home/labex/argts.sh one two three\n===========================\nThe total count of the supp argts: 3\nThe value of the first arg is: one\nThe PID of the script is : 12345\nAll the argts: one two three\n```\n",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "kind": "task"
+    },
+    {
+      "id": "rhel-process-arguments-in-bash-scripts-588272-step-2",
+      "title": "Summary",
+      "title_vi": "Summary",
+      "content": "## Summary\n\nIn this challenge, you created a bash script that processes and displays information about command-line arguments. This exercise demonstrates essential bash scripting concepts such as accessing special variables (`$#`, `$1`, `$$`, `$*`), creating executable scripts, and formatting output. These skills are crucial for system administrators and developers who need to create flexible command-line tools and process user input effectively.\n",
+      "content_vi": "## Summary\n\nIn this challenge, you created a bash script that processes and displays information about command-line arguments. This exercise demonstrates essential bash scripting concepts such as accessing special variables (`$#`, `$1`, `$$`, `$*`), creating executable scripts, and formatting output. These skills are crucial for system administrators and developers who need to create flexible command-line tools and process user input effectively.\n",
+      "layout": "doc-fullscreen",
+      "need_verify": false
+    }
+  ],
+  "steps": [
+    {
+      "id": "rhel-process-arguments-in-bash-scripts-588272-step-1",
+      "title": "Create and Configure the Bash Script",
+      "title_vi": "Create and Configure the Bash Script",
+      "content": "## Create and Configure the Bash Script\n\nLet's create a bash script that processes and displays information about the arguments passed to it.\n\n### Tasks\n\n- Create a bash script named `argts.sh` in the `/home/labex/` directory\n- Make the script executable\n- Implement the script to display the following information:\n  - Total count of supplied arguments\n  - Value of the first argument\n  - PID of the script\n  - All supplied arguments\n\n### Requirements\n\n- The script must be created at `/home/labex/argts.sh`\n- The script must have the correct shebang line: `#!/bin/bash`\n- The script must be executable\n- The script must use appropriate bash special variables to display the required information\n- The output should be formatted clearly with a header line of equal signs\n\n### Example\n\nWhen the script is run with arguments, it should produce output similar to this:\n\n```\n$ /home/labex/argts.sh one two three\n===========================\nThe total count of the supp argts: 3\nThe value of the first arg is: one\nThe PID of the script is : 12345\nAll the argts: one two three\n```\n",
+      "content_vi": "## Create and Configure the Bash Script\n\nLet's create a bash script that processes and displays information about the arguments passed to it.\n\n### Tasks\n\n- Create a bash script named `argts.sh` in the `/home/labex/` directory\n- Make the script executable\n- Implement the script to display the following information:\n  - Total count of supplied arguments\n  - Value of the first argument\n  - PID of the script\n  - All supplied arguments\n\n### Requirements\n\n- The script must be created at `/home/labex/argts.sh`\n- The script must have the correct shebang line: `#!/bin/bash`\n- The script must be executable\n- The script must use appropriate bash special variables to display the required information\n- The output should be formatted clearly with a header line of equal signs\n\n### Example\n\nWhen the script is run with arguments, it should produce output similar to this:\n\n```\n$ /home/labex/argts.sh one two three\n===========================\nThe total count of the supp argts: 3\nThe value of the first arg is: one\nThe PID of the script is : 12345\nAll the argts: one two three\n```\n",
+      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "hint": "Xem huong dan va kiem tra ket qua."
+    }
+  ]
+}

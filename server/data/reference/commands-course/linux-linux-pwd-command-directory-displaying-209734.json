@@ -1,0 +1,135 @@
+{
+  "tutorial": {
+    "id": 209734,
+    "name": "Linux pwd Command: Directory Displaying",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 15,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/filesystem_paths",
+        "name": "Filesystem Paths",
+        "desc": "Filesystem paths cover absolute paths, relative paths, current directories, parent directories, and path resolution.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/directory_navigation",
+        "name": "Directory Navigation",
+        "desc": "Directory navigation covers moving through filesystem locations and tracking the current working directory.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/filesystem_links",
+        "name": "Filesystem Links",
+        "desc": "Filesystem links cover creating and inspecting hard links, symbolic links, link targets, and link behavior.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-pwd",
+    "alias": "linux-linux-pwd-command-directory-displaying-209734",
+    "icon": "https://icons.labex.io/linux-pwd-command-directory-displaying.png",
+    "show_in_tutorial": true,
+    "description": "This tutorial provides an overview of the pwd command in Linux, offering insights into its purpose and practical usage.",
+    "default_console_type": 2,
+    "meta_title": "Linux Command Tutorial | pwd Command Overview",
+    "meta_description": "Explore the Linux pwd command and learn how to use it to display the current working directory in your terminal.",
+    "meta_keywords": "linux, command, pwd, working directory, file system, terminal",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, we'll explore the `pwd` command in Linux, a fundamental tool for navigating your digital workspace. Imagine you're a detective in a vast library of information, and `pwd` is your trusty compass, always ready to tell you exactly where you are. Whether you're a beginner just starting your Linux journey or looking to solidify your understanding, this lab will equip you with the skills to confidently navigate the Linux file system.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding Your Starting Point",
+      "layout": "doc-workbench-split",
+      "text": "## Understanding Your Starting Point\n\nLet's begin our exploration by understanding where we are in the file system. The `pwd` command, short for \"print working directory,\" is your first tool in this journey.\n\n1. Open your terminal. You'll see a prompt waiting for your command. This prompt typically ends with a `$` sign.\n\n   ![Terminal command prompt](https://file.labex.io/namespace/33fa8aba-d546-42e9-9692-64968aeaf0cc/linux/lab-linux-command-pwd/en/../assets/20240807-09-12-54-eFTo6Fr0.png)\n\n2. Type the following command and press Enter:\n\n   ```bash\n   pwd\n   ```\n\n3. You should see output similar to this:\n\n   ```\n   /home/labex/project\n   ```\n\nThis output tells you that you're currently in the `project` folder, which is inside the `labex` user's home directory. This is what we call an absolute path - it starts from the root directory (`/`) and shows the full route to your current location.\n\n##### What's happening here?\n\nThink of the Linux file system as a tree. The `/` at the beginning represents the root of this tree. Each subsequent name separated by `/` is a branch or folder. So, `/home/labex/project` means you're in the `project` folder, which is inside `labex`, which is inside `home`, which is directly under the root.\n\nIf you're wondering why you started in the `project` folder, it's because the LabEx environment is set up this way for convenience. In a typical Linux system, you might start in your home directory (`/home/username`).\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Exploring Your Current Directory",
+      "layout": "doc-workbench-split",
+      "text": "## Exploring Your Current Directory\n\nNow that we know where we are, let's take a closer look at our current directory.\n\n1. We're going to use the `ls` command to list the contents of our current directory. Type:\n\n   ```bash\n   ls\n   ```\n\n2. You might see some files or directories listed. If the directory is empty, you won't see any output. That's perfectly normal!\n\n3. Now, let's use `pwd` again to remind ourselves where we are:\n\n   ```bash\n   pwd\n   ```\n\n4. You should see the same output as before:\n\n   ```\n   /home/labex/project\n   ```\n\nThis step helps you understand that `pwd` always shows your current location, regardless of what files or directories are in that location.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Exploring pwd Options",
+      "layout": "doc-workbench-split",
+      "text": "## Exploring pwd Options\n\nThe `pwd` command has a couple of options that become useful when your current directory involves a symbolic link. In this step, you'll move into the symbolic link created during setup so you can see the difference directly.\n\n> Note: A symbolic link is like a shortcut to another directory. You do not need to master symbolic links yet. Focus on comparing the paths shown by each `pwd` command.\n\n1. Move into the symbolic link directory:\n\n   ```bash\n   cd /home/labex/project/symlink_dir\n   ```\n\n2. Use `pwd` without any options:\n\n   ```bash\n   pwd\n   ```\n\n   You should see:\n\n   ```\n   /home/labex/project/symlink_dir\n   ```\n\n3. Now use the `-L` option to show the logical path:\n\n   ```bash\n   pwd -L\n   ```\n\n   You should see the same symbolic link path:\n\n   ```\n   /home/labex/project/symlink_dir\n   ```\n\n4. Finally, use the `-P` option to show the physical path on disk:\n\n   ```bash\n   pwd -P\n   ```\n\n   This time, you should see the real directory that the symbolic link points to:\n\n   ```\n   /home/labex/project/real_dir\n   ```\n\nHere, `pwd` and `pwd -L` both keep the symbolic link name in the result, while `pwd -P` resolves the link and shows the actual directory.\n\nThe key difference between the two options is:\n\n- `-L` (logical): Shows the path you used to reach the current directory, keeping symbolic link names in the result\n- `-P` (physical): Shows the actual directory on disk after resolving symbolic links\n\nThe important takeaway is that these commands can show different results when your current working directory includes a symbolic link.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, we've explored the `pwd` command, your trusty navigator in the Linux file system. We've learned how to:\n\n1. Use `pwd` to identify our current location in the file system.\n2. Understand the concept of absolute paths.\n3. Use `pwd` in conjunction with other commands like `ls`.\n4. Explore the `-L` and `-P` options of the `pwd` command and understand their differences when dealing with symbolic links.\n\nThese skills will serve as a foundation as you continue your Linux journey, helping you always know where you are in your digital workspace.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

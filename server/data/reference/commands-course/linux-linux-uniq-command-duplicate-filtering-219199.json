@@ -1,0 +1,211 @@
+{
+  "tutorial": {
+    "id": 219199,
+    "name": "Linux uniq Command: Duplicate Filtering",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/file_viewing",
+        "name": "File Viewing",
+        "desc": "File viewing covers reading file content with tools suited for short files, long files, and paged inspection.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_deduplication",
+        "name": "Text Deduplication",
+        "desc": "Text deduplication covers identifying, removing, and counting repeated records in sorted or prepared text input.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/directory_navigation",
+        "name": "Directory Navigation",
+        "desc": "Directory navigation covers moving through filesystem locations and tracking the current working directory.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_sorting",
+        "name": "Text Sorting",
+        "desc": "Text sorting covers ordering text records by lexical, numeric, field-based, and reverse criteria.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/output_redirection",
+        "name": "Output Redirection",
+        "desc": "Output redirection covers writing, appending, separating, and combining command output and error streams.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_counting",
+        "name": "Text Counting",
+        "desc": "Text counting covers measuring lines, words, bytes, characters, and record counts in text input.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_pattern_searching",
+        "name": "Text Pattern Searching",
+        "desc": "Text pattern searching covers finding text with literal strings and regular expression patterns.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-uniq",
+    "alias": "linux-linux-uniq-command-duplicate-filtering-219199",
+    "icon": "https://icons.labex.io/linux-uniq-command-duplicate-filtering.png",
+    "show_in_tutorial": true,
+    "description": "Learn how to use the Linux uniq command in combination with sort to identify, filter, and analyze duplicate lines in text files. This tutorial covers basic usage, counting occurrences, and finding repeat entries, providing practical skills for data processing and analysis in Linux.",
+    "default_console_type": 2,
+    "meta_title": "Linux Tutorial: Using uniq and sort Commands for Data Analysis",
+    "meta_description": "Learn the Linux uniq and sort commands to process text files, remove duplicates, count occurrences, and identify repeat entries. Essential skills for data analysis and file manipulation in Linux.",
+    "meta_keywords": "Linux, uniq command, sort command, data analysis, text processing, duplicate removal, command line, tutorial",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, we will explore the `uniq` command in Linux, a powerful tool for identifying and filtering duplicate lines in text files. We'll use a scenario where you're a data analyst at an e-commerce company, tasked with analyzing customer purchase data. The `uniq` command will help you process this data efficiently, providing valuable insights into customer behavior.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Examining the Raw Customer Data",
+      "layout": "doc-workbench-split",
+      "text": "## Examining the Raw Customer Data\n\nLet's begin by examining our raw customer purchase data. This data represents daily purchases made by customers.\n\nFirst, we need to navigate to the project directory. In Linux, we use the `cd` command to change directories. The tilde (`~`) is a shortcut that represents your home directory.\n\n```bash\ncd ~/project\n```\n\nThis command changes our current working directory to `/home/labex/project`. Now that we're in the correct directory, let's view the contents of our customer data file. We'll use the `cat` command, which is short for \"concatenate\". It's commonly used to display the contents of files.\n\n```bash\ncat customer_purchases.txt\n```\n\nYou should see output similar to this:\n\n```\nAlice,Electronics\nBob,Books\nCharlie,Clothing\nAlice,Electronics\nDavid,Home Goods\nBob,Books\nEve,Toys\nCharlie,Clothing\nFrank,Sports\nAlice,Electronics\n```\n\nThis file contains customer names and their purchases, with some customers making multiple purchases. Each line represents a single purchase, with the customer's name followed by the category of item they purchased, separated by a comma.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Sorting the Data",
+      "layout": "doc-workbench-split",
+      "text": "## Sorting the Data\n\nBefore we can use the `uniq` command effectively, we need to sort our data. The `uniq` command works on adjacent duplicate lines, so sorting ensures that any duplicate entries are next to each other.\n\nWe'll use the `sort` command to alphabetically sort our customer data:\n\n```bash\nsort customer_purchases.txt > sorted_purchases.txt\n```\n\nLet's break down this command:\n\n- `sort` is the command to sort lines of text.\n- `customer_purchases.txt` is the input file we're sorting.\n- `>` is a redirection operator. It takes the output of the command on its left and writes it to the file on its right.\n- `sorted_purchases.txt` is the new file where we're saving the sorted data.\n\nNow, let's view the contents of the sorted file:\n\n```bash\ncat sorted_purchases.txt\n```\n\nYou should see output similar to this:\n\n```\nAlice,Electronics\nAlice,Electronics\nAlice,Electronics\nBob,Books\nBob,Books\nCharlie,Clothing\nCharlie,Clothing\nDavid,Home Goods\nEve,Toys\nFrank,Sports\n```\n\nNotice how the entries are now sorted alphabetically by customer name. This alphabetical sorting brings all purchases by the same customer together, which is crucial for the next steps.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Using uniq to Remove Duplicate Entries",
+      "layout": "doc-workbench-split",
+      "text": "## Using uniq to Remove Duplicate Entries\n\nNow that our data is sorted, we can use the `uniq` command to remove duplicate entries. This will give us a list of unique customer purchases.\n\nRun the following command:\n\n```bash\nuniq sorted_purchases.txt unique_purchases.txt\n```\n\nLet's break down this command:\n\n- `uniq` is the command to filter out repeated lines in a file.\n- `sorted_purchases.txt` is our input file (the sorted data).\n- `unique_purchases.txt` is the output file where we're saving the results.\n\nThe `uniq` command reads the sorted data from `sorted_purchases.txt`, removes adjacent duplicate lines, and saves the result in a new file called `unique_purchases.txt`.\n\nNow, let's view the contents of the new file:\n\n```bash\ncat unique_purchases.txt\n```\n\nYou should see output similar to this:\n\n```\nAlice,Electronics\nBob,Books\nCharlie,Clothing\nDavid,Home Goods\nEve,Toys\nFrank,Sports\n```\n\nNow we have a list of unique customer purchases, with each customer appearing only once. This gives us a clear view of the different types of purchases made, without repetition.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Counting Purchases with uniq -c",
+      "layout": "doc-workbench-split",
+      "text": "## Counting Purchases with uniq -c\n\nThe `uniq` command becomes even more powerful when we use its options. Let's use the `-c` option to count how many times each customer made a purchase.\n\nRun the following command:\n\n```bash\nuniq -c sorted_purchases.txt purchase_counts.txt\n```\n\nLet's break down this command:\n\n- `uniq` is our command to filter repeated lines.\n- `-c` is an option that tells `uniq` to prefix lines with the number of occurrences.\n- `sorted_purchases.txt` is our input file.\n- `purchase_counts.txt` is the output file where we're saving the results.\n\nThis command counts the number of occurrences of each unique line and saves the result in `purchase_counts.txt`.\n\nNow, let's view the contents of this new file:\n\n```bash\ncat purchase_counts.txt\n```\n\nYou should see output similar to this:\n\n```\n   3 Alice,Electronics\n   2 Bob,Books\n   2 Charlie,Clothing\n   1 David,Home Goods\n   1 Eve,Toys\n   1 Frank,Sports\n```\n\nThe number at the beginning of each line indicates how many times that customer made a purchase. For example, Alice made 3 purchases of Electronics, while Frank made 1 purchase of Sports items.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Finding Repeat Customers with uniq -d",
+      "layout": "doc-workbench-split",
+      "text": "## Finding Repeat Customers with uniq -d\n\nAs a data analyst, you might be interested in identifying repeat customers. We can use the `-d` option of the `uniq` command to display only the duplicate lines, which represent customers who made multiple purchases.\n\nRun the following command:\n\n```bash\nuniq -d sorted_purchases.txt repeat_customers.txt\n```\n\nLet's break down this command:\n\n- `uniq` is our command to filter repeated lines.\n- `-d` is an option that tells `uniq` to only print duplicate lines.\n- `sorted_purchases.txt` is our input file.\n- `repeat_customers.txt` is the output file where we're saving the results.\n\nThis command identifies duplicate lines in `sorted_purchases.txt` and saves them to `repeat_customers.txt`.\n\nLet's view the contents of this new file:\n\n```bash\ncat repeat_customers.txt\n```\n\nYou should see output similar to this:\n\n```\nAlice,Electronics\nBob,Books\nCharlie,Clothing\n```\n\nThese are the customers who made more than one purchase. This information could be valuable for customer loyalty programs or targeted marketing campaigns.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, we explored the `uniq` command in Linux and its application in analyzing customer purchase data. We learned how to:\n\n1. Prepare data for use with `uniq` by sorting it first.\n2. Use `uniq` to remove duplicate entries from a sorted file.\n3. Use `uniq -c` to count occurrences of each unique line.\n4. Use `uniq -d` to identify duplicate lines.\n\nThese skills are valuable for data analysis tasks, helping you to efficiently process and extract insights from large datasets.\n\nAdditional `uniq` command options not covered in this lab include:\n\n- `-u`: Display only unique lines (lines that appear exactly once)\n- `-i`: Ignore case when comparing lines\n- `-f N`: Skip the first N fields when comparing lines\n- `-s N`: Skip the first N characters when comparing lines\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

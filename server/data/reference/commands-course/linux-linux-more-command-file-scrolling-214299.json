@@ -1,0 +1,166 @@
+{
+  "tutorial": {
+    "id": 214299,
+    "name": "Linux more Command: File Scrolling",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/file_viewing",
+        "name": "File Viewing",
+        "desc": "File viewing covers reading file content with tools suited for short files, long files, and paged inspection.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/directory_listing",
+        "name": "Directory Listing",
+        "desc": "Directory listing covers inspecting directory contents, hidden entries, file types, and listing formats.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/filesystem_paths",
+        "name": "Filesystem Paths",
+        "desc": "Filesystem paths cover absolute paths, relative paths, current directories, parent directories, and path resolution.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_pattern_searching",
+        "name": "Text Pattern Searching",
+        "desc": "Text pattern searching covers finding text with literal strings and regular expression patterns.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-more",
+    "alias": "linux-linux-more-command-file-scrolling-214299",
+    "icon": "https://icons.labex.io/linux-more-command-file-scrolling.png",
+    "show_in_tutorial": true,
+    "description": "Learn the Linux more command for efficient text file viewing. This tutorial covers basic usage, starting from specific lines, customizing display, and searching within files. Enhance your command-line skills for navigating and exploring large text files in Linux.",
+    "default_console_type": 2,
+    "meta_title": "Linux more Command Tutorial: Efficient Text File Viewing",
+    "meta_description": "Learn to use the Linux more command for page-by-page text file viewing. Practice essential file navigation techniques and explore useful options to improve your Linux command-line proficiency.",
+    "meta_keywords": "Linux, more command, text file viewing, page navigation, file scrolling, command-line skills, search in file, custom display",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, we will explore the `more` command in Linux, a useful tool for viewing and navigating large text files. As a system administrator or data analyst, you'll often encounter large log files or datasets that are impractical to view all at once. The `more` command allows you to scroll through these files efficiently, making it an essential skill in your Linux toolkit.\n\nYou are a junior data analyst at a weather research station. Your task is to examine a large dataset containing historical weather information for the past year. The file is too big to view all at once, so you'll use the `more` command to navigate through it effectively.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Locating the Weather Data File",
+      "layout": "doc-workbench-split",
+      "text": "## Locating the Weather Data File\n\nFirst, let's locate our weather data file. It should be in your project directory.\n\n1. Open your terminal. By default, you should be in the `/home/labex/project` directory. If you're unsure, you can always check your current directory using the `pwd` command.\n\n2. List the contents of the directory:\n\n   ```bash\n   ls\n   ```\n\n   You should see a file named `weather_data.txt` among the listed files.\n\nIf you don't see the `weather_data.txt` file, don't worry. It's possible that you might be in a different directory. In that case, try changing to the project directory:\n\n```bash\ncd /home/labex/project\n```\n\nThen list the contents again using `ls`.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Basic Usage of the more Command",
+      "layout": "doc-workbench-split",
+      "text": "## Basic Usage of the more Command\n\nNow that we've located our file, let's use the `more` command to view its contents.\n\n1. Enter the following command:\n\n   ```bash\n   more weather_data.txt\n   ```\n\n2. You should now see the first page of the weather data file. The file is displayed one screen at a time.\n\n3. To navigate through the file:\n   - Press the `Space` bar to move to the next page.\n   - Press `Enter` to move down one line.\n   - Press `b` to go back one page.\n   - Press `q` to quit and return to the command prompt.\n\nTake some time to practice these navigation commands. Remember, in large files, using `Space` to move by pages is usually more efficient than moving line by line with `Enter`.\n\nIf you accidentally exit the `more` view, don't worry! You can always reopen the file by running the `more weather_data.txt` command again.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Starting from a Specific Line",
+      "layout": "doc-workbench-split",
+      "text": "## Starting from a Specific Line\n\nSometimes, you might want to start viewing the file from a specific line number. This is particularly useful when you're returning to a specific part of a large file.\n\n1. Let's start viewing from line 100 of our weather data file. Use the `more` command with the `+` option followed by the line number:\n\n   ```bash\n   more +100 weather_data.txt\n   ```\n\n2. The file will now open starting from line 100.\n\n3. You can verify you're at line 100 by pressing `=` while viewing the file. This will display the current line number at the bottom of the screen.\n\n4. Navigate through the file using the `Space` bar and exit using `q` as before.\n\nIf you see an error message or unexpected behavior, double-check that you've typed the command correctly. The `+` should be immediately followed by the number, with no space in between.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Customizing the Display",
+      "layout": "doc-workbench-split",
+      "text": "## Customizing the Display\n\nThe `more` command allows you to customize how many lines are displayed at once. This can be helpful when you're trying to view the file in smaller chunks.\n\n1. Let's display only 10 lines at a time. Use the `more` command with the `-` option followed by the number of lines:\n\n   ```bash\n   more -10 weather_data.txt\n   ```\n\n2. You should now see only 10 lines of the file at a time.\n\n3. Press `Enter` to advance one line at a time, or `Space` to move to the next 10-line block.\n\n4. As before, you can use `b` to go back and `q` to quit.\n\nIf you find 10 lines too few or too many, feel free to experiment with different numbers. For example, you could try `more -5 weather_data.txt` or `more -15 weather_data.txt`.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Searching for Specific Data",
+      "layout": "doc-workbench-split",
+      "text": "## Searching for Specific Data\n\nAs a data analyst, you often need to find specific information quickly. The `more` command allows you to search for patterns within the file.\n\n1. Let's say you want to find data for a specific date, like \"2023-07-15\". Use the following command:\n\n   ```bash\n   more +/\"2023-07-15\" weather_data.txt\n   ```\n\n   Note: The `+/` before the search term tells `more` to jump to the first matching area for this pattern. Depending on your terminal and pager behavior, you may see one or more context lines before the exact match.\n\n2. The file will open near the first occurrence of \"2023-07-15\", often with a little surrounding context.\n\n3. To find the next occurrence of the same pattern, you can:\n\n   - Type `/` and press `Enter` (this repeats the last search)\n   - Or type `/2023-08-15` and press `Enter` (this explicitly searches for the pattern again)\n\n4. If the pattern isn't found, you'll see a message \"Pattern not found\" at the bottom of the screen.\n\nRemember, the search is case-sensitive. If you're not finding what you expect, check your capitalization.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, you've learned how to use the `more` command to efficiently navigate large text files. You've explored its basic usage, how to start from specific lines, customize the display, and search for patterns within a file. These skills are crucial for working with large datasets or log files in Linux environments.\n\nAdditional `more` command options not covered in this lab include:\n\n- `-d`: Displays helpful prompts\n- `-f`: Counts logical lines instead of screen lines\n- `-p`: Clears the screen before displaying the page\n- `-c`: Repaints the screen instead of scrolling\n- `-s`: Squeezes multiple blank lines into one\n- `-u`: Suppresses underlining\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "tutorial": {
+    "id": 219196,
+    "name": "Linux sort Command: Text Sorting",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/text_sorting",
+        "name": "Text Sorting",
+        "desc": "Text sorting covers ordering text records by lexical, numeric, field-based, and reverse criteria.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_field_extraction",
+        "name": "Text Field Extraction",
+        "desc": "Text field extraction covers selecting columns, delimiters, records, and structured portions of text streams.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_viewing",
+        "name": "File Viewing",
+        "desc": "File viewing covers reading file content with tools suited for short files, long files, and paged inspection.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_deduplication",
+        "name": "Text Deduplication",
+        "desc": "Text deduplication covers identifying, removing, and counting repeated records in sorted or prepared text input.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-sort",
+    "alias": "linux-linux-sort-command-text-sorting-219196",
+    "icon": "https://icons.labex.io/linux-sort-command-text-sorting.png",
+    "show_in_tutorial": true,
+    "description": "This tutorial provides an introduction to the sort command in Linux, a utility for sorting lines of text files. The sort command is versatile and can be used to organize data in ascending or descending order.",
+    "default_console_type": 2,
+    "meta_title": "Linux sort Command: Text Sorting Made Easy",
+    "meta_description": "Mastering the Linux sort command to efficiently organize and sort text files.",
+    "meta_keywords": "linux lab, linux practice exercises, online kali linux terminal, practice linux commands online, data processing, text sorting, sort command, linux practice online, linux labs, linux tutor",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, you will explore the versatile `sort` command in Linux, a powerful utility for organizing and arranging text data. As a school administrator, you'll use various options of the `sort` command to efficiently manage and analyze student information. This hands-on experience will help you understand how to manipulate data in real-world scenarios using Linux command-line tools.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Basic Sorting of Student Names",
+      "layout": "doc-workbench-split",
+      "text": "## Basic Sorting of Student Names\n\nLet's start by sorting a list of student names alphabetically. This is a common task when creating class rosters or organizing student records.\n\nFirst, let's view the contents of our student list:\n\n```bash\ncat ~/project/students.txt\n```\n\nYou should see a list of student names in no particular order, similar to this:\n\n```\nDavid Lee\nAlice Johnson\nCharlie Brown\nBob Smith\nEve Wilson\n```\n\nNow, let's use the `sort` command to arrange these names alphabetically:\n\n```bash\nsort ~/project/students.txt\n```\n\nThis command will display the sorted list of student names on your screen. The output should look like this:\n\n```\nAlice Johnson\nBob Smith\nCharlie Brown\nDavid Lee\nEve Wilson\n```\n\nThe `sort` command, by default, sorts lines alphabetically. It compares the lines character by character, starting from the beginning of each line. This is why \"Alice\" comes before \"Bob\", and so on.\n\nIf you don't see any output, don't worry! The command worked, but it just displayed the result in the terminal. If you want to save the sorted list to a new file, you can use the output redirection operator `>` like this: `sort ~/project/students.txt > ~/project/sorted_students.txt`\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Sorting Student Ages",
+      "layout": "doc-workbench-split",
+      "text": "## Sorting Student Ages\n\nNext, we'll sort students by their ages. This could be useful when organizing students into age-appropriate groups or activities.\n\nLet's first look at our data:\n\n```bash\ncat ~/project/student_ages.txt\n```\n\nYou'll see a list of students with their ages, like this:\n\n```\nDavid Lee:21\nAlice Johnson:18\nCharlie Brown:19\nBob Smith:20\nEve Wilson:18\n```\n\nTo sort this list by age, we'll use the `-n` option, which tells `sort` to treat the numbers as numeric values rather than strings:\n\n```bash\nsort -n -t: -k2 ~/project/student_ages.txt\n```\n\nLet's break down this command:\n\n- `-n`: This option tells `sort` to perform a numeric sort.\n- `-t:`: This specifies that fields are separated by colons.\n- `-k2`: This tells `sort` to use the second field (the age) as the sorting key.\n\nThis will display the list of students sorted from youngest to oldest:\n\n```\nAlice Johnson:18\nEve Wilson:18\nCharlie Brown:19\nBob Smith:20\nDavid Lee:21\n```\n\nWithout the `-n` option, `sort` would treat the ages as strings, leading to an incorrect order (like 18, 19, 20, 21, 3). The `-n` option ensures proper numeric ordering.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Reverse Sorting of Student Grades",
+      "layout": "doc-workbench-split",
+      "text": "## Reverse Sorting of Student Grades\n\nNow, let's sort student grades in descending order. This is often used when ranking students or identifying top performers.\n\nFirst, view the current list:\n\n```bash\ncat ~/project/student_grades.txt\n```\n\nYou should see something like this:\n\n```\nDavid Lee:87\nAlice Johnson:92\nCharlie Brown:95\nBob Smith:88\nEve Wilson:91\n```\n\nTo sort the grades from highest to lowest, we'll use the `-r` option for reverse order, along with `-n` for numeric sorting:\n\n```bash\nsort -nr -t: -k2 ~/project/student_grades.txt\n```\n\nHere's what each part of the command does:\n\n- `-n`: Performs a numeric sort\n- `-r`: Reverses the sort order (descending instead of ascending)\n- `-t:`: Specifies that fields are separated by colons\n- `-k2`: Uses the second field (the grade) as the sorting key\n\nThis command will display the student grades from highest to lowest:\n\n```\nCharlie Brown:95\nAlice Johnson:92\nEve Wilson:91\nBob Smith:88\nDavid Lee:87\n```\n\nThe `-r` option is particularly useful when you want to see the highest values first, which is common in many real-world scenarios like ranking, identifying top performers, or prioritizing tasks.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Sorting Student Records by Multiple Fields",
+      "layout": "doc-workbench-split",
+      "text": "## Sorting Student Records by Multiple Fields\n\nIn this step, we'll sort a more complex student record that includes name, age, and grade. This is a common scenario when dealing with comprehensive student databases.\n\nLet's first look at our data:\n\n```bash\ncat ~/project/student_records.txt\n```\n\nYou'll see each line contains a student's name, age, and grade, separated by colons, like this:\n\n```\nDavid Lee:21:87\nAlice Johnson:18:92\nCharlie Brown:19:95\nBob Smith:20:88\nEve Wilson:18:91\n```\n\nTo sort this file by age (second field) and then by grade (third field) if ages are the same, we'll use:\n\n```bash\nsort -t: -k2n -k3nr ~/project/student_records.txt\n```\n\nHere's what each part of the command means:\n\n- `-t:` specifies that fields are separated by colons\n- `-k2n` sorts based on the second field (age) numerically\n- `-k3nr` then sorts based on the third field (grade) numerically in reverse order\n\nThis will display the student records sorted primarily by age (ascending) and secondarily by grade (descending) when ages are the same:\n\n```\nAlice Johnson:18:92\nEve Wilson:18:91\nCharlie Brown:19:95\nBob Smith:20:88\nDavid Lee:21:87\n```\n\nThis type of multi-key sorting is extremely useful when you need to organize data based on multiple criteria. In this case, we're grouping students by age, and within each age group, we're ranking them by their grades.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Removing Duplicate Entries",
+      "layout": "doc-workbench-split",
+      "text": "## Removing Duplicate Entries\n\nSometimes, student records might contain duplicates, perhaps due to data entry errors or multiple submissions. Let's learn how to remove these duplicates.\n\nFirst, let's look at a file with potential duplicates:\n\n```bash\ncat ~/project/student_clubs.txt\n```\n\nYou might see something like this:\n\n```\nAlice Johnson:Chess Club\nBob Smith:Debate Team\nCharlie Brown:Chess Club\nDavid Lee:Science Club\nEve Wilson:Debate Team\nAlice Johnson:Chess Club\nBob Smith:Science Club\n```\n\nTo sort this list and remove duplicates, we'll use the `-u` option:\n\n```bash\nsort -u ~/project/student_clubs.txt\n```\n\nThis command will display a sorted list of unique student club memberships:\n\n```\nAlice Johnson:Chess Club\nBob Smith:Debate Team\nBob Smith:Science Club\nCharlie Brown:Chess Club\nDavid Lee:Science Club\nEve Wilson:Debate Team\n```\n\nThe `-u` option tells `sort` to output only the first of an equal run. In other words, it removes duplicate lines after sorting. This is particularly useful when you need to create a list of unique entries or when you're trying to identify and eliminate redundant data.\n\nNote that \"Bob Smith\" appears twice because he's in two different clubs - these aren't considered duplicates as the entire line is different.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, you've learned how to use the `sort` command to organize various types of student data. You've explored several useful options:\n\n- Basic alphabetical sorting\n- Numeric sorting with `-n`\n- Reverse sorting with `-r`\n- Sorting by multiple fields with `-k`\n- Using custom field separators with `-t`\n- Removing duplicates with `-u`\n\nOther useful `sort` options include:\n\n- `-f`: Ignore case when sorting\n- `-b`: Ignore leading blanks\n- `-c`: Check if the input is already sorted\n- `-o`: Write output to a file instead of standard output\n\nThese skills will be invaluable when managing and analyzing data in various professional contexts, not just in educational settings.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

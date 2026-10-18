@@ -1,0 +1,181 @@
+{
+  "tutorial": {
+    "id": 219190,
+    "name": "Linux du Command: File Space Estimating",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/disk_usage_analysis",
+        "name": "Disk Usage Analysis",
+        "desc": "Disk usage analysis covers measuring filesystem space, directory sizes, and storage consumption patterns.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/filesystem_paths",
+        "name": "Filesystem Paths",
+        "desc": "Filesystem paths cover absolute paths, relative paths, current directories, parent directories, and path resolution.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_sorting",
+        "name": "Text Sorting",
+        "desc": "Text sorting covers ordering text records by lexical, numeric, field-based, and reverse criteria.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_searching",
+        "name": "File Searching",
+        "desc": "File searching covers locating filesystem objects by name, path, type, size, time, and other attributes.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/output_redirection",
+        "name": "Output Redirection",
+        "desc": "Output redirection covers writing, appending, separating, and combining command output and error streams.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-du",
+    "alias": "linux-linux-du-command-file-space-estimating-219190",
+    "icon": "https://icons.labex.io/linux-du-command-file-space-estimating.png",
+    "show_in_tutorial": true,
+    "description": "This tutorial provides an introduction to the du command in Linux, a utility for estimating disk space usage in directories and subdirectories.",
+    "default_console_type": 2,
+    "meta_title": "Linux du Command | Disk Usage Estimation",
+    "meta_description": "Learn how to use the Linux du command to estimate disk space usage in directories and subdirectories, with detailed examples and explanations.",
+    "meta_keywords": "Linux, du command, disk usage, directory, file, storage, space estimation",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, we will explore the `du` (disk usage) command in Linux, a powerful tool for estimating and analyzing disk space usage. Imagine you're a system administrator tasked with managing a rapidly growing file server. Your mission is to identify space-consuming directories and files, helping optimize storage utilization. The `du` command will be your trusty detective tool in this disk space investigation.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basics of du",
+      "layout": "doc-workbench-split",
+      "text": "## Understanding the Basics of du\n\nThe `du` command is your first line of defense in understanding disk space usage. Let's start by examining its basic functionality.\n\nFirst, let's navigate to the project directory where we'll conduct our investigation:\n\n```bash\ncd ~/project\n```\n\nNow, let's run a basic `du` command:\n\n```bash\ndu\n```\n\n> Tips: Files and folders are created randomly, and their sizes are also random, so the results may vary each time you run it.\n\nYou'll see output similar to this:\n\n```\n0       ./documents/reports\n0       ./documents\n10240   ./backups\n0       ./logs/archive\n0       ./logs/system\n5120    ./logs/application\n5120    ./logs\n15360   .\n```\n\nEach line shows two pieces of information:\n\n1. The disk usage (in KB)\n2. The corresponding directory path\n\nThe numbers might seem cryptic at first. They represent the disk usage in kilobytes (KB). But don't worry, we can make them more readable!\n\nLet's run the command with the `-h` (human-readable) option:\n\n```bash\ndu -h\n```\n\nNow you'll see output like this:\n\n```\n0       ./documents/reports\n0       ./documents\n10M     ./backups\n0       ./logs/archive\n0       ./logs/system\n5.0M    ./logs/application\n5.0M    ./logs\n15M     .\n```\n\nThe `-h` option converts the sizes to a more human-friendly format (K for Kilobytes, M for Megabytes, etc.). This makes it much easier for us humans to understand at a glance.\n\nA few things to note:\n\n- The `.` at the end represents the current directory (~/project in this case).\n- The disk usage of a directory includes the usage of all its subdirectories.\n- The sizes you see might be slightly different, as the setup script generates random file sizes.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Investigating Specific Directories",
+      "layout": "doc-workbench-split",
+      "text": "## Investigating Specific Directories\n\nNow that we understand the basics, let's dive deeper into specific directories. We'll focus on the `logs` directory, which seems to be using a significant amount of space.\n\nFirst, let's change to the logs directory:\n\n```bash\ncd ~/project/logs\n```\n\nNow, let's use `du` to examine this directory:\n\n```bash\ndu -h\n```\n\nYou might see output like this:\n\n```\n0       ./archive\n0       ./system\n5.0M    ./application\n5.0M    .\n```\n\nThis gives us a breakdown of the disk usage for each subdirectory within the logs directory. But what if we only want to see the total for the logs directory?\n\nWe can use the `--max-depth` option to limit how deep `du` looks into the directory structure:\n\n```bash\ndu -h --max-depth=0\n```\n\nThis will output only the total for the current directory:\n\n```\n5.0M    .\n```\n\nThe `--max-depth=0` tells `du` to only show the current directory, without going into any subdirectories.\n\nTo see just the immediate subdirectories, use `--max-depth=1`:\n\n```bash\ndu -h --max-depth=1\n```\n\nOutput:\n\n```\n0       ./archive\n0       ./system\n5.0M    ./application\n5.0M    .\n```\n\nThis gives us a clearer picture of which subdirectories are using the most space.\n\nThe `--max-depth` option is particularly useful when you're dealing with deeply nested directory structures and you want to focus on a specific level of the hierarchy.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Sorting and Analyzing Disk Usage",
+      "layout": "doc-workbench-split",
+      "text": "## Sorting and Analyzing Disk Usage\n\nNow that we've identified the subdirectories using the most space, let's learn how to sort the results. This will help us quickly identify the largest consumers of disk space.\n\nWe'll use the `sort` command in combination with `du`. Don't worry if you're not familiar with `sort` - we'll explain how it works.\n\nFirst, let's sort the output of `du` by size:\n\n```bash\ndu -h | sort -h\n```\n\nThis command does two things:\n\n1. `du -h`: Runs the disk usage command with human-readable output\n2. `|`: This is a pipe. It takes the output of the command on the left and feeds it as input to the command on the right.\n3. `sort -h`: Sorts the input numerically based on human-readable sizes\n\nYou might see output like this:\n\n```\n0       ./archive\n0       ./system\n5.0M    .\n5.0M    ./application\n```\n\nThe output is sorted from smallest to largest. But often, we're more interested in the largest directories first. To reverse the order, we can add the `-r` option to `sort`:\n\n```bash\ndu -h | sort -hr\n```\n\nOutput:\n\n```\n5.0M    ./application\n5.0M    .\n0       ./system\n0       ./archive\n```\n\nNow we can clearly see which subdirectories within the logs folder are using the most space, in descending order.\n\nTo focus only on the immediate subdirectories and sort them, we can combine the techniques we've learned:\n\n```bash\ndu -h --max-depth=1 | sort -hr\n```\n\nThis command will show and sort only the immediate subdirectories of the current directory.\n\nRemember, the power of the command line comes from combining simple commands to perform complex operations. We've just combined `du`, `sort`, and various options to quickly analyze disk usage!\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Finding the Largest Files",
+      "layout": "doc-workbench-split",
+      "text": "## Finding the Largest Files\n\nSo far, we've been looking at directory sizes. But what if we want to find the specific files that are taking up the most space? The `du` command primarily works with directories, but we can combine it with other commands to find large files.\n\nWe'll use the `find` command along with `du`. Don't worry if you're not familiar with `find` - we'll explain how it works.\n\nFirst, let's navigate back to the project directory:\n\n```bash\ncd ~/project\n```\n\nNow, let's use `find` and `du` to locate the largest files:\n\n```bash\nfind . -type f -exec du -h {} + | sort -hr | head -n 5\n```\n\nThis command might look complex, but let's break it down:\n\n1. `find . -type f`: Finds all files (`-type f`) in the current directory (`.`) and its subdirectories\n2. `-exec du -h {} +`: Executes `du -h` on each file found. The `{}` is replaced with the filename, and the `+` tells find to pass as many filenames as possible to each invocation of `du`.\n3. `sort -hr`: Sorts the results by size in reverse order (largest first)\n4. `head -n 5`: Shows only the top 5 results\n\nYou might see output like this:\n\n```\n10M     ./backups/large_backup.bak\n5.0M    ./logs/application/large_app_log.log\n0       ./logs/system/placeholder.log\n0       ./logs/archive/placeholder.log\n0       ./logs/application/placeholder.log\n```\n\nThis output shows us the five largest files in the project directory and their sizes.\n\nTo focus on files larger than a specific size, we can modify our command. Let's find files larger than 1MB:\n\n```bash\nfind . -type f -size +1M -exec du -h {} + | sort -hr\n```\n\nThis command adds `-size +1M` to filter for files larger than 1 megabyte.\n\nThese commands are incredibly useful when you're trying to free up disk space. They allow you to quickly identify the largest files, which are often the best candidates for deletion or archiving.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Generating a Disk Usage Report",
+      "layout": "doc-workbench-split",
+      "text": "## Generating a Disk Usage Report\n\nAs the final step in our disk space investigation, let's create a comprehensive disk usage report for the entire project directory. This report will help us summarize our findings and present them to the team.\n\nFirst, let's make sure we're in the project directory:\n\n```bash\ncd ~/project\n```\n\nNow, let's create a detailed report using `du` and save it to a file:\n\n```bash\ndu -h --max-depth=2 | sort -hr > disk_usage_report.txt\n```\n\nLet's break down this command:\n\n1. `du -h --max-depth=2`: Shows disk usage up to two levels deep in human-readable format\n2. `sort -hr`: Sorts the results by size in reverse order (largest first)\n3. `> disk_usage_report.txt`: Saves the output to a file named disk_usage_report.txt. The `>` is called a redirection operator - it takes the output that would normally go to the screen and \"redirects\" it to a file instead.\n\nNow that we've created our report, let's view its contents:\n\n```bash\ncat disk_usage_report.txt\n```\n\nYou should see a comprehensive list of directories and their sizes, sorted from largest to smallest.\n\nTo get a summary of the largest directories, we can use the `head` command to view just the top entries:\n\n```bash\nhead -n 10 disk_usage_report.txt\n```\n\nThis will show you the 10 largest directories in your project.\n\nThis report is a valuable tool for identifying which areas of your project are consuming the most disk space. It can help guide your efforts in optimizing storage usage or in discussions with your team about resource allocation.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, we've explored the powerful `du` command and its applications in managing disk space. We've learned how to:\n\n1. Use basic `du` command to estimate disk usage\n2. Make the output human-readable with the `-h` option\n3. Investigate specific directories and limit depth with `--max-depth`\n4. Sort and analyze disk usage results\n5. Find the largest files in a directory\n6. Generate comprehensive disk usage reports\n\nThese skills are essential for any system administrator or power user managing storage resources.\n\nAdditional `du` options not covered in this lab include:\n\n- `-s`: Display only a total for each argument\n- `-c`: Produce a grand total\n- `-a`: Show disk usage for files as well as directories\n- `--time`: Show the time of last modification for each directory\n- `--exclude=PATTERN`: Exclude files or directories matching PATTERN\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

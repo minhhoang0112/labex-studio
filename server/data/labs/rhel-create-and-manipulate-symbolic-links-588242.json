@@ -1,0 +1,63 @@
+{
+  "id": "rhel-create-and-manipulate-symbolic-links-588242",
+  "source_lab_id": 588242,
+  "course_id": "linux-practice-challenges",
+  "title": "Create and Manipulate Symbolic Links",
+  "title_vi": "Introduction",
+  "difficulty": "Intermediate",
+  "estimated_time": "5 mins",
+  "sections": [
+    {
+      "id": "rhel-create-and-manipulate-symbolic-links-588242-step-0",
+      "title": "Introduction",
+      "title_vi": "Introduction",
+      "content": "## Introduction\n\nIn this challenge, you will explore symbolic links (soft links) in a Linux system. You'll create a symbolic link, modify its content, and observe how it behaves when the target file is removed.\n\n### Environment\n\nLabEx uses Red Hat Universal Base Image 9 (UBI9) to simulate the exam environment. It may not be identical to the actual RHCSA exam environment, but it provides a good representation of the tasks you'll encounter.\n\nThere are two users in the environment:\n\n- `labex`: A standard user with sudo privileges, password: `labex`.\n- `root`: The system administrator, password: `redhat`.\n\nThe challenge features real exam questions, along with explanations, requirements, and automated verification scripts to help you confirm task completion. It effectively simulates the knowledge areas covered in the RHCSA exam.\n",
+      "content_vi": "## Introduction\n\nIn this challenge, you will explore symbolic links (soft links) in a Linux system. You'll create a symbolic link, modify its content, and observe how it behaves when the target file is removed.\n\n### Environment\n\nLabEx uses Red Hat Universal Base Image 9 (UBI9) to simulate the exam environment. It may not be identical to the actual RHCSA exam environment, but it provides a good representation of the tasks you'll encounter.\n\nThere are two users in the environment:\n\n- `labex`: A standard user with sudo privileges, password: `labex`.\n- `root`: The system administrator, password: `redhat`.\n\nThe challenge features real exam questions, along with explanations, requirements, and automated verification scripts to help you confirm task completion. It effectively simulates the knowledge areas covered in the RHCSA exam.\n",
+      "layout": "doc-fullscreen",
+      "need_verify": false
+    },
+    {
+      "id": "rhel-create-and-manipulate-symbolic-links-588242-step-1",
+      "title": "Create and Manipulate a Symbolic Link",
+      "title_vi": "Create and Manipulate a Symbolic Link",
+      "content": "## Create and Manipulate a Symbolic Link\n\nThis step involves creating a symbolic link, editing its content, and observing its behavior when the target file is removed.\n\n### Tasks\n\n1. Create a symbolic link named `soft1` in `/home/labex` pointing to `/tmp/hard2`.\n2. Edit the content of `soft1`.\n3. List the attributes of `soft1`.\n4. Remove the target file `hard2`.\n5. List the attributes of `soft1` again.\n\n### Requirements\n\n- Perform all operations as the `labex` user.\n- Create the symbolic link `soft1` in `/home/labex` directory.\n- The target file `hard2` should be in the `/tmp` directory.\n- Use `ln -s` to create the symbolic link.\n- Use `echo` to add content to the symbolic link.\n- Use `ls -l` to list file attributes.\n- Use `rm` to remove the target file.\n\n### Example\n\nAfter creating the symbolic link and editing its content, you might see output similar to this:\n\n```\n$ ls -l /home/labex/soft1\nlrwxrwxrwx 1 labex labex 10 Aug 28 10:00 /home/labex/soft1 -> /tmp/hard2\n```\n",
+      "content_vi": "## Create and Manipulate a Symbolic Link\n\nThis step involves creating a symbolic link, editing its content, and observing its behavior when the target file is removed.\n\n### Tasks\n\n1. Create a symbolic link named `soft1` in `/home/labex` pointing to `/tmp/hard2`.\n2. Edit the content of `soft1`.\n3. List the attributes of `soft1`.\n4. Remove the target file `hard2`.\n5. List the attributes of `soft1` again.\n\n### Requirements\n\n- Perform all operations as the `labex` user.\n- Create the symbolic link `soft1` in `/home/labex` directory.\n- The target file `hard2` should be in the `/tmp` directory.\n- Use `ln -s` to create the symbolic link.\n- Use `echo` to add content to the symbolic link.\n- Use `ls -l` to list file attributes.\n- Use `rm` to remove the target file.\n\n### Example\n\nAfter creating the symbolic link and editing its content, you might see output similar to this:\n\n```\n$ ls -l /home/labex/soft1\nlrwxrwxrwx 1 labex labex 10 Aug 28 10:00 /home/labex/soft1 -> /tmp/hard2\n```\n",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "kind": "task"
+    },
+    {
+      "id": "rhel-create-and-manipulate-symbolic-links-588242-step-2",
+      "title": "Summary",
+      "title_vi": "Summary",
+      "content": "## Summary\n\nIn this challenge, you learned how to create and manipulate symbolic links in a Linux system. You created a symbolic link, added content to it, observed its attributes, and experienced how it behaves when the target file is removed. This exercise demonstrates the flexibility of symbolic links and their behavior in different scenarios, which is crucial knowledge for system administration and file management in Linux environments.\n",
+      "content_vi": "## Summary\n\nIn this challenge, you learned how to create and manipulate symbolic links in a Linux system. You created a symbolic link, added content to it, observed its attributes, and experienced how it behaves when the target file is removed. This exercise demonstrates the flexibility of symbolic links and their behavior in different scenarios, which is crucial knowledge for system administration and file management in Linux environments.\n",
+      "layout": "doc-fullscreen",
+      "need_verify": false
+    }
+  ],
+  "steps": [
+    {
+      "id": "rhel-create-and-manipulate-symbolic-links-588242-step-1",
+      "title": "Create and Manipulate a Symbolic Link",
+      "title_vi": "Create and Manipulate a Symbolic Link",
+      "content": "## Create and Manipulate a Symbolic Link\n\nThis step involves creating a symbolic link, editing its content, and observing its behavior when the target file is removed.\n\n### Tasks\n\n1. Create a symbolic link named `soft1` in `/home/labex` pointing to `/tmp/hard2`.\n2. Edit the content of `soft1`.\n3. List the attributes of `soft1`.\n4. Remove the target file `hard2`.\n5. List the attributes of `soft1` again.\n\n### Requirements\n\n- Perform all operations as the `labex` user.\n- Create the symbolic link `soft1` in `/home/labex` directory.\n- The target file `hard2` should be in the `/tmp` directory.\n- Use `ln -s` to create the symbolic link.\n- Use `echo` to add content to the symbolic link.\n- Use `ls -l` to list file attributes.\n- Use `rm` to remove the target file.\n\n### Example\n\nAfter creating the symbolic link and editing its content, you might see output similar to this:\n\n```\n$ ls -l /home/labex/soft1\nlrwxrwxrwx 1 labex labex 10 Aug 28 10:00 /home/labex/soft1 -> /tmp/hard2\n```\n",
+      "content_vi": "## Create and Manipulate a Symbolic Link\n\nThis step involves creating a symbolic link, editing its content, and observing its behavior when the target file is removed.\n\n### Tasks\n\n1. Create a symbolic link named `soft1` in `/home/labex` pointing to `/tmp/hard2`.\n2. Edit the content of `soft1`.\n3. List the attributes of `soft1`.\n4. Remove the target file `hard2`.\n5. List the attributes of `soft1` again.\n\n### Requirements\n\n- Perform all operations as the `labex` user.\n- Create the symbolic link `soft1` in `/home/labex` directory.\n- The target file `hard2` should be in the `/tmp` directory.\n- Use `ln -s` to create the symbolic link.\n- Use `echo` to add content to the symbolic link.\n- Use `ls -l` to list file attributes.\n- Use `rm` to remove the target file.\n\n### Example\n\nAfter creating the symbolic link and editing its content, you might see output similar to this:\n\n```\n$ ls -l /home/labex/soft1\nlrwxrwxrwx 1 labex labex 10 Aug 28 10:00 /home/labex/soft1 -> /tmp/hard2\n```\n",
+      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "hint": "Xem huong dan va kiem tra ket qua."
+    }
+  ]
+}

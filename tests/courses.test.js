@@ -56,9 +56,8 @@ test("the learner receives a complete ordered Linux syllabus and accurate catalo
 
   const pending = await fetch(`${base}/courses/comptia-linux-plus-training-labs`).then(r => r.json());
   assert.equal(pending.labs.length, 33);
-  assert.equal(pending.course.imported_labs_count, 0);
-  assert.ok(pending.labs.every(lab => lab.availability.state === "reference-only" && !lab.availability.can_start_terminal));
-  assert.equal((await fetch(`${base}/labs/${pending.labs[0].id}`)).status, 409);
+  assert.equal(pending.course.imported_labs_count, 33);
+  assert.equal((await fetch(`${base}/labs/${pending.labs[0].id}`)).status, 200);
   const legacy = await fetch(`${base}/labs/linux-practice-log-analysis`).then(r => r.json());
   assert.ok(legacy.sections.every(section => section.kind === "task"));
   const junior = await fetch(base + "/labs/linux-day-6-the-process-overseer-596618").then(r => r.json());
@@ -81,15 +80,15 @@ test("the learner receives a complete ordered Linux syllabus and accurate catalo
   }
   const challenges = await fetch(`${base}/courses/linux-practice-challenges`).then(r => r.json());
   assert.equal(challenges.labs.length, 156);
-  assert.equal(challenges.course.imported_labs_count, 6);
-  assert.equal(challenges.labs.filter(item => item.reused).length, 6);
-  assert.equal(roadmap.totals.unique_imported_labs, 116);
-  assert.equal(roadmap.totals.imported_labs, 122);
-  const sharedId = "linux-display-user-and-group-information";
+  assert.equal(challenges.course.imported_labs_count, 33);
+  assert.equal(challenges.labs.filter(item => item.reused).length, 4);
+  assert.equal(roadmap.totals.unique_imported_labs, 178);
+  assert.equal(roadmap.totals.imported_labs, 182);
+  const sharedId = "linux-add-new-user-and-group-17987";
   assert.ok(challenges.labs.some(item => item.id === sharedId && item.reused));
   const shared = await fetch(`${base}/labs/${sharedId}?courseId=linux-practice-challenges`).then(r => r.json());
   assert.equal(shared.course_id, "linux-practice-challenges");
-  assert.equal(shared.primary_course_id, "quick-start-with-linux");
+  assert.equal(shared.primary_course_id, "linux-for-noobs");
   assert.deepEqual(shared.steps.map(step => step.id), challenges.labs.find(item => item.id === sharedId).step_ids);
   assert.equal((await fetch(`${base}/labs/${sharedId}?courseId=shell-for-beginners`)).status, 400);
 });

@@ -1,0 +1,151 @@
+{
+  "tutorial": {
+    "id": 388500,
+    "name": "Linux top Command: Real-time System Monitoring",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/process_inspection",
+        "name": "Process Inspection",
+        "desc": "Process inspection covers listing processes, interpreting identifiers, owners, states, and command lines.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/resource_monitoring",
+        "name": "Resource Monitoring",
+        "desc": "Resource monitoring covers observing CPU, memory, disk, process, and load behavior during system activity.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/user_identity",
+        "name": "User Identity",
+        "desc": "User identity covers recognizing effective users, groups, identifiers, login context, and ownership context.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-top",
+    "alias": "linux-linux-top-command-real-time-system-monitoring-388500",
+    "icon": "https://icons.labex.io/linux-top-command-real-time-system-monitoring.png",
+    "show_in_tutorial": true,
+    "description": "Learn the Linux top command for real-time system monitoring. Learn to use various options to sort processes, adjust update intervals, filter by user, and focus on active processes to effectively monitor system performance.",
+    "default_console_type": 2,
+    "meta_title": "Linux top Command Tutorial: Real-time System Monitoring",
+    "meta_description": "Learn to use the Linux top command for real-time system monitoring. Practice sorting processes, adjusting update intervals, filtering by user, and focusing on active processes.",
+    "meta_keywords": "Linux, top command, system monitoring, process management, resource usage, command line tools, system administration",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nWelcome to the lab on the Linux `top` command. In this lab, you will learn how to use the `top` command to monitor system processes and resource usage in real-time. This skill is essential for system administrators, developers, and anyone who needs to understand and manage system performance.\n\nImagine you are a junior system administrator responsible for maintaining a busy web server. The server has been reported to be sluggish, and you need to identify which processes are consuming the most resources. The `top` command will be your primary tool for this investigation, allowing you to view and analyze system activity in real-time.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Basic Usage of the top Command",
+      "layout": "doc-workbench-split",
+      "text": "## Basic Usage of the top Command\n\nLet's start by running the `top` command in its simplest form. This will give us a real-time, dynamic view of the system's processes.\n\nOpen a terminal and run the following command:\n\n```bash\ntop\n```\n\nYou should see a display similar to this:\n\n```\ntop - 14:30:23 up  5:10,  1 user,  load average: 0.15, 0.22, 0.28\nTasks: 213 total,   1 running, 212 sleeping,   0 stopped,   0 zombie\n%Cpu(s):  2.0 us,  1.3 system,  0.0 ni, 96.3 id,  0.3 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   7824.9 total,   2576.8 free,   2935.0 used,   2313.1 buff/cache\nMiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   4558.1 avail Mem\n\n  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n 1234 user      20   0 3626108 205008  89380 S   2.0   2.6   0:45.85 gnome-shell\n 5678 user      20   0  859492  51528  38060 S   1.3   0.6   0:10.91 Xorg\n 9101 user      20   0  722816  36096  29088 S   0.7   0.5   0:05.62 gnome-terminal\n```\n\nThis display is continuously updated (by default, every 3 seconds). Let's break down what we're seeing:\n\n1. The first line shows the current time, system uptime, number of users, and load average.\n2. The second line displays the total number of tasks and their states (running, sleeping, stopped, zombie).\n3. The third line shows CPU usage percentages.\n4. The fourth and fifth lines display memory and swap usage.\n5. The table below shows information about individual processes, sorted by CPU usage by default.\n\nTo exit `top`, press 'q'.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Sorting Processes in top",
+      "layout": "doc-workbench-split",
+      "text": "## Sorting Processes in top\n\nBy default, `top` sorts processes by CPU usage. However, you can change this sorting in real-time. Let's explore how to sort by memory usage instead.\n\n1. Run the `top` command:\n\n```bash\ntop\n```\n\n2. Once `top` is running, press the 'M' key (uppercase). This will sort the processes by memory usage (resident set size) instead of CPU usage.\n\nYou should now see the processes reordered, with the most memory-intensive processes at the top of the list.\n\n3. To sort by CPU usage again, press the 'P' key (uppercase).\n\n4. To sort by process ID (PID), press the 'N' key (uppercase).\n\n5. To reverse the current sort order, press 'R' (uppercase).\n\nRemember, you can always press 'h' or '?' while `top` is running to see a help screen with all available commands.\n\nExit `top` by pressing 'q' when you're done exploring.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Changing the Update Interval",
+      "layout": "doc-workbench-split",
+      "text": "## Changing the Update Interval\n\nBy default, `top` updates its display every 3 seconds. However, you can change this interval. Let's set it to update every 1 second for more frequent updates.\n\nRun `top` with the `-d` option:\n\n```bash\ntop -d 1\n```\n\nYou should now see the display updating more frequently. This can be useful when you're trying to catch short-lived processes or when you need to observe rapid changes in system activity.\n\nTo change the update interval while `top` is running:\n\n1. Press 'd' (lowercase).\n2. Enter the new delay in seconds (e.g., '0.5' for half a second).\n3. Press Enter.\n\nRemember that very short update intervals can themselves consume significant CPU resources, so use them judiciously.\n\nExit `top` by pressing 'q' when you're done.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Displaying Specific User's Processes",
+      "layout": "doc-workbench-split",
+      "text": "## Displaying Specific User's Processes\n\nAs a system administrator, you might often need to monitor processes for a specific user. The `top` command allows you to do this easily.\n\nLet's monitor processes for the current user (which is 'labex' in this lab environment):\n\n```bash\ntop -u labex\n```\n\nYou should now see only the processes owned by the 'labex' user.\n\nThis feature is particularly useful when you're trying to troubleshoot issues related to a specific user's activities or when you want to focus on your own processes in a multi-user system.\n\nExit `top` by pressing 'q' when you're done observing.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Displaying Only Active Processes",
+      "layout": "doc-workbench-split",
+      "text": "## Displaying Only Active Processes\n\nSometimes, you might want to focus only on active processes and ignore idle ones. The `top` command provides an option for this.\n\nRun `top` with the `-i` option:\n\n```bash\ntop -i\n```\n\nThis command will display only active processes, filtering out any process that has zero CPU usage since the last update.\n\nThis can be particularly useful when you're trying to identify which processes are currently consuming resources, without the clutter of idle processes.\n\nExit `top` by pressing 'q' when you're done observing.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nCongratulations! You've completed this lab on using the `top` command for real-time system monitoring. Let's recap what you've learned:\n\n1. Basic usage of the `top` command to display system processes and resource usage.\n2. How to sort processes by different criteria (CPU usage, memory usage, PID) within `top`.\n3. Changing the update interval of `top` for more or less frequent updates.\n4. Monitoring processes for a specific user.\n5. Displaying only active processes, filtering out idle ones.\n\nThese skills will be invaluable for monitoring and managing system resources, particularly in scenarios where you need to identify performance bottlenecks or troubleshoot system issues.\n\nHere are some additional `top` command options and interactive commands we didn't cover in this lab:\n\n- `-b`: Run in batch mode (useful for sending output to other programs or files)\n- `-n`: Number of iterations before `top` will terminate\n- 'k': Kill a process (by PID) from within `top`\n- 'r': Renice (change priority of) a process\n- 'c': Toggle display of command name/line\n- 'V': Display version information\n\nRemember, effective system monitoring is crucial for maintaining system performance and stability. Regular use of the `top` command can help you detect and prevent resource-related issues before they significantly impact your system's performance.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

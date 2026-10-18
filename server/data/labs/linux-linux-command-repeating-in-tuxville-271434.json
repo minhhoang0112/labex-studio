@@ -1,0 +1,95 @@
+{
+  "id": "linux-linux-command-repeating-in-tuxville-271434",
+  "source_lab_id": 271434,
+  "course_id": "linux-practice-challenges",
+  "title": "Linux Command Repeating in Tuxville",
+  "title_vi": "Introduction",
+  "difficulty": "Intermediate",
+  "estimated_time": "10 mins",
+  "sections": [
+    {
+      "id": "linux-linux-command-repeating-in-tuxville-271434-step-0",
+      "title": "Introduction",
+      "title_vi": "Introduction",
+      "content": "## Introduction\n\nIn the bustling medieval city of Tuxville, known for its vast markets and intricate craftsmanship, there lived a humble farmer named Gregor. One day, he overheard the royal cartographers saying they needed someone who could monitor the growth progress of the kingdom's crops and report it every hour. Considering this a golden opportunity to serve his kingdom and earn some silver coins, Gregor decided to venture into learning the craft of consistent observation with a bit of magic from the Linux realm. He needs your help to master the command that could repeat itself to watch over the crop fields tirelessly.\n",
+      "content_vi": "## Introduction\n\nIn the bustling medieval city of Tuxville, known for its vast markets and intricate craftsmanship, there lived a humble farmer named Gregor. One day, he overheard the royal cartographers saying they needed someone who could monitor the growth progress of the kingdom's crops and report it every hour. Considering this a golden opportunity to serve his kingdom and earn some silver coins, Gregor decided to venture into learning the craft of consistent observation with a bit of magic from the Linux realm. He needs your help to master the command that could repeat itself to watch over the crop fields tirelessly.\n",
+      "layout": "doc-fullscreen",
+      "need_verify": false
+    },
+    {
+      "id": "linux-linux-command-repeating-in-tuxville-271434-step-1",
+      "title": "Understanding the watch Command",
+      "title_vi": "Understanding the watch Command",
+      "content": "## Understanding the watch Command\n\nIn this step, you're going to help Gregor learn how to use the `watch` command to monitor the status of his crops.\n\n### Tasks\n\n- Task 1: Learn the syntax of the `watch` command and its basic operation.\n- Task 2: Use the `watch` command to repeatedly list the contents of the directory where crop reports are stored.\n\n### Requirements\n\n- Familiarize yourself with the `man` pages to understand how the `watch` command works.\n- The default working path for terminal operations is `/home/labex/project`, and the relative path is `~/project`.\n- Store the crop reports in a directory named `crops` inside the working path.\n- Use the `watch` command to monitor the `crops` directory.\n- Command instructions must be executed in the zsh terminal.\n\n### Example\n\nBefore using `watch`, Gregor's directory looks like this:\n\n```bash\nll /home/labex/project/crops\n```\n\n```plaintext\ntotal 0\n```\n\nAfter using `watch`, You can open a new terminal and create some files in the `crops` directory. The `watch` command will display the contents of the directory every 2 seconds.\n",
+      "content_vi": "## Understanding the watch Command\n\nIn this step, you're going to help Gregor learn how to use the `watch` command to monitor the status of his crops.\n\n### Tasks\n\n- Task 1: Learn the syntax of the `watch` command and its basic operation.\n- Task 2: Use the `watch` command to repeatedly list the contents of the directory where crop reports are stored.\n\n### Requirements\n\n- Familiarize yourself with the `man` pages to understand how the `watch` command works.\n- The default working path for terminal operations is `/home/labex/project`, and the relative path is `~/project`.\n- Store the crop reports in a directory named `crops` inside the working path.\n- Use the `watch` command to monitor the `crops` directory.\n- Command instructions must be executed in the zsh terminal.\n\n### Example\n\nBefore using `watch`, Gregor's directory looks like this:\n\n```bash\nll /home/labex/project/crops\n```\n\n```plaintext\ntotal 0\n```\n\nAfter using `watch`, You can open a new terminal and create some files in the `crops` directory. The `watch` command will display the contents of the directory every 2 seconds.\n",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "kind": "task"
+    },
+    {
+      "id": "linux-linux-command-repeating-in-tuxville-271434-step-2",
+      "title": "Generating a Report with Timestamps",
+      "title_vi": "Generating a Report with Timestamps",
+      "content": "## Generating a Report with Timestamps\n\nIn this step, Gregor will generate a report file with timestamps using the `watch` command.\n\n### Tasks\n\n- Task 1: Write a script that appends a new timestamp entry to a file called `report.txt` inside the `crops` directory every 1 second.\n- Task 2: Use the `watch` command to execute this script repeatedly.\n\n### Requirements\n\n- Create a script named `timestamp.sh` inside the `~/project/crops` directory. Use the `date` command inside the script to get the current timestamp.\n\n  ```bash\n  #!/bin/bash\n  echo \"$(date)\" >> /home/labex/project/crops/report.txt\n  ```\n\n- The `report.txt` file should contain the history of executed timestamps.\n- Utilize the `watch` command to run the script every 1 second.\n\n### Example\n\nAfter using the `watch` command to continuously execute the `timestamp.sh` script, the `report.txt` file will be updated with a new timestamp every second.\n\nYou can verify that the `watch` command is working correctly by executing the following script:\n\n```bash\ncat /home/labex/project/crops/report.txt\n```\n\nThe output should look like this:\n\n```plaintext\nSat Aug 12 09:00:01 UTC 2023\nSat Aug 12 09:02:01 UTC 2023\nSat Aug 12 09:04:01 UTC 2023\n```\n",
+      "content_vi": "## Generating a Report with Timestamps\n\nIn this step, Gregor will generate a report file with timestamps using the `watch` command.\n\n### Tasks\n\n- Task 1: Write a script that appends a new timestamp entry to a file called `report.txt` inside the `crops` directory every 1 second.\n- Task 2: Use the `watch` command to execute this script repeatedly.\n\n### Requirements\n\n- Create a script named `timestamp.sh` inside the `~/project/crops` directory. Use the `date` command inside the script to get the current timestamp.\n\n  ```bash\n  #!/bin/bash\n  echo \"$(date)\" >> /home/labex/project/crops/report.txt\n  ```\n\n- The `report.txt` file should contain the history of executed timestamps.\n- Utilize the `watch` command to run the script every 1 second.\n\n### Example\n\nAfter using the `watch` command to continuously execute the `timestamp.sh` script, the `report.txt` file will be updated with a new timestamp every second.\n\nYou can verify that the `watch` command is working correctly by executing the following script:\n\n```bash\ncat /home/labex/project/crops/report.txt\n```\n\nThe output should look like this:\n\n```plaintext\nSat Aug 12 09:00:01 UTC 2023\nSat Aug 12 09:02:01 UTC 2023\nSat Aug 12 09:04:01 UTC 2023\n```\n",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "kind": "task"
+    },
+    {
+      "id": "linux-linux-command-repeating-in-tuxville-271434-step-3",
+      "title": "Summary",
+      "title_vi": "Summary",
+      "content": "## Summary\n\nIn this challenge, you were tasked to guide Gregor in mastering the `watch` command to keep a vigilant eye over his crops. By utilizing this powerful command, you successfully helped him generate and continuously update a crop report that satisfies the royal cartographers' demands. Not only did you enrich your Linux command line prowess, but you also contributed to the well-being of Tuxville's agricultural excellence.\n",
+      "content_vi": "## Summary\n\nIn this challenge, you were tasked to guide Gregor in mastering the `watch` command to keep a vigilant eye over his crops. By utilizing this powerful command, you successfully helped him generate and continuously update a crop report that satisfies the royal cartographers' demands. Not only did you enrich your Linux command line prowess, but you also contributed to the well-being of Tuxville's agricultural excellence.\n",
+      "layout": "doc-fullscreen",
+      "need_verify": false
+    }
+  ],
+  "steps": [
+    {
+      "id": "linux-linux-command-repeating-in-tuxville-271434-step-1",
+      "title": "Understanding the watch Command",
+      "title_vi": "Understanding the watch Command",
+      "content": "## Understanding the watch Command\n\nIn this step, you're going to help Gregor learn how to use the `watch` command to monitor the status of his crops.\n\n### Tasks\n\n- Task 1: Learn the syntax of the `watch` command and its basic operation.\n- Task 2: Use the `watch` command to repeatedly list the contents of the directory where crop reports are stored.\n\n### Requirements\n\n- Familiarize yourself with the `man` pages to understand how the `watch` command works.\n- The default working path for terminal operations is `/home/labex/project`, and the relative path is `~/project`.\n- Store the crop reports in a directory named `crops` inside the working path.\n- Use the `watch` command to monitor the `crops` directory.\n- Command instructions must be executed in the zsh terminal.\n\n### Example\n\nBefore using `watch`, Gregor's directory looks like this:\n\n```bash\nll /home/labex/project/crops\n```\n\n```plaintext\ntotal 0\n```\n\nAfter using `watch`, You can open a new terminal and create some files in the `crops` directory. The `watch` command will display the contents of the directory every 2 seconds.\n",
+      "content_vi": "## Understanding the watch Command\n\nIn this step, you're going to help Gregor learn how to use the `watch` command to monitor the status of his crops.\n\n### Tasks\n\n- Task 1: Learn the syntax of the `watch` command and its basic operation.\n- Task 2: Use the `watch` command to repeatedly list the contents of the directory where crop reports are stored.\n\n### Requirements\n\n- Familiarize yourself with the `man` pages to understand how the `watch` command works.\n- The default working path for terminal operations is `/home/labex/project`, and the relative path is `~/project`.\n- Store the crop reports in a directory named `crops` inside the working path.\n- Use the `watch` command to monitor the `crops` directory.\n- Command instructions must be executed in the zsh terminal.\n\n### Example\n\nBefore using `watch`, Gregor's directory looks like this:\n\n```bash\nll /home/labex/project/crops\n```\n\n```plaintext\ntotal 0\n```\n\nAfter using `watch`, You can open a new terminal and create some files in the `crops` directory. The `watch` command will display the contents of the directory every 2 seconds.\n",
+      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "hint": "Xem huong dan va kiem tra ket qua."
+    },
+    {
+      "id": "linux-linux-command-repeating-in-tuxville-271434-step-2",
+      "title": "Generating a Report with Timestamps",
+      "title_vi": "Generating a Report with Timestamps",
+      "content": "## Generating a Report with Timestamps\n\nIn this step, Gregor will generate a report file with timestamps using the `watch` command.\n\n### Tasks\n\n- Task 1: Write a script that appends a new timestamp entry to a file called `report.txt` inside the `crops` directory every 1 second.\n- Task 2: Use the `watch` command to execute this script repeatedly.\n\n### Requirements\n\n- Create a script named `timestamp.sh` inside the `~/project/crops` directory. Use the `date` command inside the script to get the current timestamp.\n\n  ```bash\n  #!/bin/bash\n  echo \"$(date)\" >> /home/labex/project/crops/report.txt\n  ```\n\n- The `report.txt` file should contain the history of executed timestamps.\n- Utilize the `watch` command to run the script every 1 second.\n\n### Example\n\nAfter using the `watch` command to continuously execute the `timestamp.sh` script, the `report.txt` file will be updated with a new timestamp every second.\n\nYou can verify that the `watch` command is working correctly by executing the following script:\n\n```bash\ncat /home/labex/project/crops/report.txt\n```\n\nThe output should look like this:\n\n```plaintext\nSat Aug 12 09:00:01 UTC 2023\nSat Aug 12 09:02:01 UTC 2023\nSat Aug 12 09:04:01 UTC 2023\n```\n",
+      "content_vi": "## Generating a Report with Timestamps\n\nIn this step, Gregor will generate a report file with timestamps using the `watch` command.\n\n### Tasks\n\n- Task 1: Write a script that appends a new timestamp entry to a file called `report.txt` inside the `crops` directory every 1 second.\n- Task 2: Use the `watch` command to execute this script repeatedly.\n\n### Requirements\n\n- Create a script named `timestamp.sh` inside the `~/project/crops` directory. Use the `date` command inside the script to get the current timestamp.\n\n  ```bash\n  #!/bin/bash\n  echo \"$(date)\" >> /home/labex/project/crops/report.txt\n  ```\n\n- The `report.txt` file should contain the history of executed timestamps.\n- Utilize the `watch` command to run the script every 1 second.\n\n### Example\n\nAfter using the `watch` command to continuously execute the `timestamp.sh` script, the `report.txt` file will be updated with a new timestamp every second.\n\nYou can verify that the `watch` command is working correctly by executing the following script:\n\n```bash\ncat /home/labex/project/crops/report.txt\n```\n\nThe output should look like this:\n\n```plaintext\nSat Aug 12 09:00:01 UTC 2023\nSat Aug 12 09:02:01 UTC 2023\nSat Aug 12 09:04:01 UTC 2023\n```\n",
+      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+          ]
+        ],
+        "allowed_status": [
+          0
+        ]
+      },
+      "hint": "Xem huong dan va kiem tra ket qua."
+    }
+  ]
+}

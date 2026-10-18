@@ -1,0 +1,136 @@
+{
+  "tutorial": {
+    "id": 215211,
+    "name": "Linux whereis Command: File and Command Finding",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/command_lookup",
+        "name": "Command Lookup",
+        "desc": "Command lookup covers locating commands and recognizing aliases, shell builtins, functions, and external programs.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_searching",
+        "name": "File Searching",
+        "desc": "File searching covers locating filesystem objects by name, path, type, size, time, and other attributes.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-whereis",
+    "alias": "linux-linux-whereis-command-file-and-command-finding-215211",
+    "icon": "https://icons.labex.io/linux-whereis-command-file-and-command-finding.png",
+    "show_in_tutorial": true,
+    "description": "This tutorial introduces the whereis command in Linux, a utility designed to locate the binary, source, and manual page files for a specified command.",
+    "default_console_type": 2,
+    "meta_title": "Linux Command Tutorials | whereis Command",
+    "meta_description": "Learn how to use the Linux 'whereis' command to locate binary, source, and manual page files for a specified command.",
+    "meta_keywords": "Linux, whereis command, binary, source, manual page, command line, tutorial",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nWelcome to TechCorp's System Administration department! As a new junior system administrator, your task is to master the `whereis` command. This powerful tool will help you locate binary, source, and manual page files for various commands in the Linux system. By the end of this lab, you'll be able to efficiently navigate the file system and locate critical system components.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basics of 'whereis'",
+      "layout": "doc-workbench-split",
+      "text": "## Understanding the Basics of 'whereis'\n\nYour first task at TechCorp is to familiarize yourself with the `whereis` command. This command is used to locate the binary, source, and manual page files for a specified command.\n\nLet's start by using `whereis` to find information about the `ls` command:\n\n```bash\nwhereis ls\n```\n\nYou should see output similar to this:\n\n```\nls: /usr/bin/ls /usr/share/man/man1/ls.1.gz\n```\n\nThis output provides two pieces of information:\n\n1. `/usr/bin/ls`: This is the location of the `ls` binary executable. When you type `ls` in the terminal, this is the actual program that runs.\n2. `/usr/share/man/man1/ls.1.gz`: This is the location of the manual page for `ls`. Manual pages contain detailed information about how to use commands.\n\nThe `whereis` command searches for files in a restricted set of locations, including standard binary directories, library directories, and man page directories. This makes it faster than searching the entire file system.\n\nIf you're curious about what these paths mean:\n\n- `/usr/bin` is a common location for user commands.\n- `/usr/share/man` is where manual pages are typically stored.\n- `man1` indicates this is a user command manual (as opposed to system calls or library functions).\n- The `.gz` extension means the file is compressed to save space.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Finding Binary Files",
+      "layout": "doc-workbench-split",
+      "text": "## Finding Binary Files\n\nYour team lead asks you to locate the binary file for the `grep` command. The `-b` option of `whereis` is perfect for this task as it specifically searches for binary files.\n\nTry the following command:\n\n```bash\nwhereis -b grep\n```\n\nYou might see output like this:\n\n```\ngrep: /usr/bin/grep\n```\n\nThis output shows the location of the `grep` binary file. Binary files are the executable programs that run when you type a command. In this case, when you use the `grep` command, you're actually running the program located at `/usr/bin/grep`.\n\nNow, let's try to find the binary for a command that might not exist on the system. Use `whereis -b` to search for a fictional command called `nonexistent`:\n\n```bash\nwhereis -b nonexistent\n```\n\nYou should see:\n\n```\nnonexistent:\n```\n\nThis empty output indicates that no binary was found for the `nonexistent` command. This is useful when you're unsure if a particular command is installed on your system.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Locating Manual Pages",
+      "layout": "doc-workbench-split",
+      "text": "## Locating Manual Pages\n\nYour next task is to find the manual pages for the `ssh` command. Manual pages are essential for understanding how to use various commands.\n\nUse the `-m` option with `whereis` to locate manual pages:\n\n```bash\nwhereis -m ssh\n```\n\nYou might see output similar to this:\n\n```\nssh: /usr/share/man/man1/ssh.1.gz\n```\n\nThis output shows the location of the manual page for the `ssh` command. The `.gz` extension indicates that the file is compressed to save space.\n\nTo view the contents of a manual page, you would typically use the `man` command. However, as we haven't covered that command yet, let's just confirm that the file exists:\n\n```bash\nls /usr/share/man/man1/ssh.1.gz\n```\n\nIf the file exists, you'll see its name in the output. This confirms that the manual page is indeed present on your system.\n\nUnderstanding manual page locations is crucial for system administrators. It allows you to verify if documentation is available for a particular command, which can be invaluable when you need to understand how to use a tool or troubleshoot issues.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Combining Options",
+      "layout": "doc-workbench-split",
+      "text": "## Combining Options\n\nAs you become more comfortable with `whereis`, your team lead challenges you to find both the binary and the manual page for the `python3` command in one go.\n\nYou can combine the `-b` and `-m` options to achieve this:\n\n```bash\nwhereis -bm python3\n```\n\nYou might see output like this:\n\n```\npython3: /usr/bin/python3 /usr/lib/python3 /etc/python3 /usr/share/python3 /usr/share/man/man1/python3.1.gz\n```\n\nThis output provides a wealth of information:\n\n- `/usr/bin/python3`: The location of the Python 3 binary (the executable program)\n- `/usr/lib/python3`: The directory containing Python 3 libraries (reusable code used by Python programs)\n- `/etc/python3`: A directory containing Python 3 configuration files\n- `/usr/share/python3`: A directory containing shared Python 3 data\n- `/usr/share/man/man1/python3.1.gz`: The location of the Python 3 manual page\n\nThis comprehensive view is particularly useful when you're working with complex software that has multiple components spread across the file system. It gives you a quick overview of where everything is located.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Exploring Source Files",
+      "layout": "doc-workbench-split",
+      "text": "## Exploring Source Files\n\nFor the final task, your team lead wants you to check if the source files for the `bash` shell are available on the system. Source files can be useful for understanding how a program works or for compiling custom versions.\n\nUse the `-s` option to search for source files:\n\n```bash\nwhereis -s bash\n```\n\nThe output might be empty, as source files are not typically installed by default on most systems. If you do see output, it would indicate the location of `bash` source files on your system.\n\nNow, let's combine all options to get a complete picture of the `bash` command:\n\n```bash\nwhereis bash\n```\n\nThis command without any options will show all available information about `bash`, which might look like this:\n\n```\nbash: /usr/bin/bash /etc/bash.bashrc /usr/share/man/man1/bash.1.gz\n```\n\nThis output shows:\n\n- `/usr/bin/bash`: The binary executable for bash\n- `/etc/bash.bashrc`: A system-wide configuration file for bash\n- `/usr/share/man/man1/bash.1.gz`: The manual page for bash\n\nUnderstanding the locations of these files is crucial for system administration tasks. For example, if you need to modify the default behavior of bash for all users, you'd know to look in `/etc/bash.bashrc`.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, you've learned how to use the `whereis` command to locate binary, source, and manual page files for various commands in the Linux system. You've discovered how to:\n\n1. Find basic information about commands\n2. Locate binary files using the `-b` option\n3. Find manual pages using the `-m` option\n4. Combine options to get more comprehensive information\n5. Search for source files using the `-s` option\n\nThese skills will prove invaluable in your role as a system administrator, allowing you to quickly locate important files and understand the structure of your Linux system.\n\nAdditional `whereis` command options not covered in this lab include:\n\n- `-u`: Search for unusual entries (files that do not follow the usual naming pattern)\n- `-B`: Change or restrict the places where `whereis` searches for binaries\n- `-M`: Change or restrict the places where `whereis` searches for manual pages\n- `-S`: Change or restrict the places where `whereis` searches for sources\n\nAs you continue your journey in system administration, remember that `whereis` is just one of many tools at your disposal. It's particularly useful for quick lookups, but for more comprehensive file searches, you might want to explore commands like `find` or `locate` in the future.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

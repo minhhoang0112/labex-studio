@@ -1,0 +1,193 @@
+{
+  "tutorial": {
+    "id": 214302,
+    "name": "Linux head Command: File Beginning Display",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 30,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/file_viewing",
+        "name": "File Viewing",
+        "desc": "File viewing covers reading file content with tools suited for short files, long files, and paged inspection.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "shell/glob_patterns",
+        "name": "Glob Patterns",
+        "desc": "Glob patterns cover matching groups of pathnames with shell pattern syntax.",
+        "project": {
+          "key": "shell",
+          "name": "Shell",
+          "desc": ""
+        },
+        "group": {
+          "key": "shell/skills",
+          "name": "Shell",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/command_pipelines",
+        "name": "Command Pipelines",
+        "desc": "Command pipelines cover passing output from one command into another to build composed command-line workflows.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/text_pattern_searching",
+        "name": "Text Pattern Searching",
+        "desc": "Text pattern searching covers finding text with literal strings and regular expression patterns.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_metadata",
+        "name": "File Metadata",
+        "desc": "File metadata covers inspecting file types, sizes, timestamps, inode details, and link-related attributes.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-head",
+    "alias": "linux-linux-head-command-file-beginning-display-214302",
+    "icon": "https://icons.labex.io/linux-head-command-file-beginning-display.png",
+    "show_in_tutorial": true,
+    "description": "This tutorial explores the head command in Linux, a utility designed to display the initial lines of a text file. We will cover its basic usage and introduce various parameters for enhanced functionality.",
+    "default_console_type": 2,
+    "meta_title": "Linux Command Tutorial | Head Command",
+    "meta_description": "Learn how to use the Linux head command to preview files, choose a line count, inspect multiple files, and combine head with pipes.",
+    "meta_keywords": "Linux, head command, text file, command line, file inspection, terminal, tutorial",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, we will explore the `head` command in Linux, a powerful utility for previewing the beginning of text files. Imagine you're a digital detective tasked with quickly scanning through numerous files to find crucial information. The `head` command will be your trusty magnifying glass, allowing you to peek at the start of files without opening them entirely.\n\nWe'll simulate a scenario where you're investigating a collection of log files from a busy web server. Your goal is to efficiently examine these logs to identify potential issues and gather insights. Through this practical exercise, you'll learn how to use the `head` command effectively, making your file exploration tasks faster and more efficient.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basics of head",
+      "layout": "doc-workbench-split",
+      "text": "## Understanding the Basics of head\n\nIn this step, you will examine a simple log file to understand how `head` works.\n\nFirst, navigate to the project directory:\n\n```bash\ncd /home/labex/project\n```\n\nNow, let's use the `head` command on a file named `access.log`:\n\n```bash\nhead access.log\n```\n\nYou should see output similar to this:\n\n```\n192.168.1.100 - - [01/Jan/2024:00:00:01 +0000] \"GET /index.html HTTP/1.1\" 200 1234\n192.168.1.101 - - [01/Jan/2024:00:00:02 +0000] \"GET /style.css HTTP/1.1\" 200 567\n192.168.1.102 - - [01/Jan/2024:00:00:03 +0000] \"GET /logo.png HTTP/1.1\" 200 2345\n192.168.1.103 - - [01/Jan/2024:00:00:04 +0000] \"POST /login HTTP/1.1\" 302 -\n192.168.1.104 - - [01/Jan/2024:00:00:05 +0000] \"GET /dashboard HTTP/1.1\" 200 3456\n192.168.1.105 - - [01/Jan/2024:00:00:06 +0000] \"GET /api/user HTTP/1.1\" 200 789\n192.168.1.106 - - [01/Jan/2024:00:00:07 +0000] \"GET /images/banner.jpg HTTP/1.1\" 200 4567\n192.168.1.107 - - [01/Jan/2024:00:00:08 +0000] \"POST /comment HTTP/1.1\" 201 -\n192.168.1.108 - - [01/Jan/2024:00:00:09 +0000] \"GET /search?q=linux HTTP/1.1\" 200 2345\n192.168.1.109 - - [01/Jan/2024:00:00:10 +0000] \"GET /about HTTP/1.1\" 200 1234\n```\n\nBy default, `head` displays the first 10 lines of the file. Each line in this log represents a single request to the web server, showing the IP address, timestamp, HTTP method, requested resource, status code, and response size.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Customizing the Number of Lines",
+      "layout": "doc-workbench-split",
+      "text": "## Customizing the Number of Lines\n\nIn this step, you will customize the number of lines that `head` displays.\n\nTo view only the first 5 lines of the log, use the `-n` option:\n\n```bash\nhead -n 5 access.log\n```\n\nThis command should output:\n\n```\n192.168.1.100 - - [01/Jan/2024:00:00:01 +0000] \"GET /index.html HTTP/1.1\" 200 1234\n192.168.1.101 - - [01/Jan/2024:00:00:02 +0000] \"GET /style.css HTTP/1.1\" 200 567\n192.168.1.102 - - [01/Jan/2024:00:00:03 +0000] \"GET /logo.png HTTP/1.1\" 200 2345\n192.168.1.103 - - [01/Jan/2024:00:00:04 +0000] \"POST /login HTTP/1.1\" 302 -\n192.168.1.104 - - [01/Jan/2024:00:00:05 +0000] \"GET /dashboard HTTP/1.1\" 200 3456\n```\n\nThis can be particularly useful when you're looking for specific information near the beginning of a file but don't need to see all 10 lines.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Examining Multiple Files",
+      "layout": "doc-workbench-split",
+      "text": "## Examining Multiple Files\n\nIn this step, you will use `head` to view the beginnings of multiple files at once.\n\nLet's examine the starts of both `access.log` and `error.log`:\n\n```bash\nhead access.log error.log\n```\n\nYou should see output similar to this:\n\n```\n==> access.log <==\n192.168.1.120 - - [01/Jan/2024:00:00:53 +0000] \"POST /about HTTP/1.1\" 200 7616\n192.168.1.147 - - [01/Jan/2024:00:00:45 +0000] \"GET /dashboard HTTP/1.1\" 200 7348\n192.168.1.138 - - [01/Jan/2024:00:00:03 +0000] \"DELETE /comment HTTP/1.1\" 400 8341\n192.168.1.138 - - [01/Jan/2024:00:00:31 +0000] \"DELETE /about HTTP/1.1\" 200 3254\n192.168.1.122 - - [01/Jan/2024:00:00:15 +0000] \"PUT /index.html HTTP/1.1\" 500 6061\n192.168.1.125 - - [01/Jan/2024:00:00:09 +0000] \"DELETE /logo.png HTTP/1.1\" 301 4916\n192.168.1.148 - - [01/Jan/2024:00:00:33 +0000] \"POST /admin/dashboard HTTP/1.1\" 201 5546\n192.168.1.146 - - [01/Jan/2024:00:00:56 +0000] \"GET /images/banner.jpg HTTP/1.1\" 301 2332\n192.168.1.195 - - [01/Jan/2024:00:00:12 +0000] \"DELETE /dashboard HTTP/1.1\" 404 6740\n192.168.1.136 - - [01/Jan/2024:00:00:18 +0000] \"GET /login HTTP/1.1\" 200 2374\n\n==> error.log <==\n[01/Jan/2024:00:01:23 +0000] [error] [client 192.168.1.150] File does not exist: /var/www/html/missing.html\n[01/Jan/2024:00:02:34 +0000] [error] [client 192.168.1.151] PHP Parse error:  syntax error, unexpected ';' in /var/www/html/index.php on line 30\n[01/Jan/2024:00:03:45 +0000] [warn] [client 192.168.1.152] ModSecurity: Access denied with code 403 (phase 2). Matched phrase \"sql injection attempt\" at REQUEST_URI. [file \"/etc/modsecurity/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf\"] [line \"50\"] [id \"942100\"] [rev \"\"] [msg \"SQL Injection Attack Detected via libinjection\"] [data \"Matched Data: SQL injection found within REQUEST_URI: /vulnerable.php?id=1'\"] [severity \"CRITICAL\"] [ver \"OWASP_CRS/3.3.0\"] [maturity \"0\"] [accuracy \"0\"] [hostname \"example.com\"] [uri \"/vulnerable.php\"] [unique_id \"YvKp2H8AAQEAAAxxBGIAAAAC\"]\n[01/Jan/2024:00:04:56 +0000] [error] [client 192.168.1.153] AH01071: Got error 'PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function mysql_connect() in /var/www/html/db.php:15...'\n[01/Jan/2024:00:05:67 +0000] [warn] [client 192.168.1.154] ModSecurity: Warning. Matched \"Operator \\`Ge' with parameter \\`5' against variable \\`TX:ANOMALY_SCORE' (Value: \\`5' ) [file \"/etc/modsecurity/rules/REQUEST-949-BLOCKING-EVALUATION.conf\"] [line \"57\"] [id \"949110\"] [rev \"\"] [msg \"Inbound Anomaly Score Exceeded (Total Score: 5)\"] [data \"\"] [severity \"CRITICAL\"] [ver \"OWASP_CRS/3.3.0\"] [maturity \"0\"] [accuracy \"0\"] [hostname \"example.com\"] [uri \"/admin\"] [unique_id \"YvKp2H8AAQEAAAxxBGIAAAAD\"]\n[01/Jan/2024:00:06:78 +0000] [error] [client 192.168.1.155] PCE: Can't open perl script \"/var/www/html/cgi-bin/printenv\": No such file or directory\n[01/Jan/2024:00:07:89 +0000] [warn] [client 192.168.1.156] ModSecurity: Access denied with code 403 (phase 2). Matched phrase \"directory traversal attempt\" at ARGS:file. [file \"/etc/modsecurity/rules/REQUEST-930-APPLICATION-ATTACK-LFI.conf\"] [line \"75\"] [id \"930110\"] [rev \"\"] [msg \"Path Traversal Attack (/../)\"] [data \"Matched Data: ../ found within ARGS:file: ../../../etc/passwd\"] [severity \"CRITICAL\"] [ver \"OWASP_CRS/3.3.0\"] [maturity \"0\"] [accuracy \"0\"] [hostname \"example.com\"] [uri \"/download.php\"] [unique_id \"YvKp2H8AAQEAAAxxBGIAAAAE\"]\n[01/Jan/2024:00:08:90 +0000] [error] [client 192.168.1.157] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /var/www/html/memory_hog.php on line 10\n[01/Jan/2024:00:09:01 +0000] [warn] [client 192.168.1.158] ModSecurity: Warning. Pattern match \"(?i:(?:[\\s'\\\"`_''\\(\\)]*?(?:[\\d\\w]+[\\s'\\\"`_''\\(\\)]*?){2,}[\\s'\\\"`_''\\(\\)]*?(?:having|rongjitest|select|union|where|get_lst))\" at ARGS:username. [file \"/etc/modsecurity/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf\"] [line \"1126\"] [id \"942480\"] [rev \"\"] [msg \"SQL Injection Attack\"] [data \"Matched Data: union select found within ARGS:username: admin' UNION SELECT password FROM users--\"] [severity \"CRITICAL\"] [ver \"OWASP_CRS/3.3.0\"] [maturity \"0\"] [accuracy \"0\"] [hostname \"example.com\"] [uri \"/login.php\"] [unique_id \"YvKp2H8AAQEAAAxxBGIAAAAF\"]\n[01/Jan/2024:00:10:12 +0000] [error] [client 192.168.1.159] AH01797: client denied by server configuration: /var/www/html/restricted/\n```\n\nNotice how `head` clearly separates the output from each file with headers. This is incredibly useful when you need to quickly compare the beginnings of multiple files.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Using head with Pipes",
+      "layout": "doc-workbench-split",
+      "text": "## Using head with Pipes\n\nIn this step, you will combine `head` with another command by using a pipe.\n\nLet's say you want to see the first 3 lines of `access.log`, but only the parts showing the timestamp and the requested resource. You can use the `cut` command along with `head` to achieve this:\n\n```bash\ncut -d '\"' -f2 access.log | head -n 3\n```\n\nThis command should output:\n\n```\nPOST /about HTTP/1.1\nGET /dashboard HTTP/1.1\nDELETE /comment HTTP/1.1\n```\n\nThe `cut -d '\"' -f2 access.log` portion splits each line at the quotation marks and selects the second field, which contains the HTTP request. The `|` sends that output to `head -n 3`, which displays only its first three lines.\n\nThis combination allows you to quickly focus on specific parts of the log entries, making your investigation more efficient.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Investigating with head and grep",
+      "layout": "doc-workbench-split",
+      "text": "## Investigating with head and grep\n\nIn this step, you will combine `head` with `grep` to search for a specific pattern in the log.\n\nSuppose you've received reports of unusual activity related to the `/admin` page. You want to check the first few occurrences of `/admin` in the access log:\n\n```bash\ngrep \"/admin\" access.log | head -n 3\n```\n\nThis command should output something like:\n\n```\n192.168.1.148 - - [01/Jan/2024:00:00:33 +0000] \"POST /admin/dashboard HTTP/1.1\" 201 5546\n192.168.1.115 - - [01/Jan/2024:00:00:22 +0000] \"PUT /admin HTTP/1.1\" 302 1113\n192.168.1.163 - - [01/Jan/2024:00:00:56 +0000] \"POST /admin/dashboard HTTP/1.1\" 301 815\n```\n\nThe `grep \"/admin\" access.log` portion searches `access.log` for lines containing `/admin`. The `|` sends those matching lines to `head -n 3`, which displays only the first three matches.\n\nThis combination allows you to quickly focus on relevant entries in your log file, making your investigation more targeted and efficient.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Exploring Large Files with head",
+      "layout": "doc-workbench-split",
+      "text": "## Exploring Large Files with head\n\nIn this step, you will use `head` to examine a large log file without loading its entire content into memory.\n\nLet's simulate working with a large file by using the `access.log` file we've been working with. We'll pretend it's much larger than it actually is.\n\nFirst, let's check the file size:\n\n```bash\nls -lh access.log\n```\n\nNow, let's use `head` to view the first 15 lines:\n\n```bash\nhead -n 15 access.log\n```\n\nYou should see output similar to what we've seen before, but with 15 lines instead of 10.\n\nThe `head` command is fast because it reads only the beginning of the file, and it is memory-efficient because it does not load the entire file. This gives you a quick preview of the file's structure and content.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 7,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, we explored the `head` command, a powerful tool for quickly examining the beginning of files. We learned how to:\n\n1. Use `head` to view the first 10 lines of a file by default.\n2. Customize the number of lines displayed using the `-n` option.\n3. Examine multiple files simultaneously with `head`.\n4. Combine `head` with other commands like `cut` and `grep` using pipes.\n5. Use `head` to efficiently work with large files.\n\nAdditional `head` parameters not covered in this lab:\n\n- `-c`: Display the first few bytes of a file instead of lines.\n- `-q`: Suppress headers when examining multiple files.\n- `-v`: Always display headers when examining multiple files.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    },
+    {
+      "name": "Shell",
+      "alias": "shell"
+    }
+  ]
+}

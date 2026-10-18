@@ -1,0 +1,151 @@
+{
+  "tutorial": {
+    "id": 219193,
+    "name": "Linux join Command: File Joining",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 25,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/text_field_extraction",
+        "name": "Text Field Extraction",
+        "desc": "Text field extraction covers selecting columns, delimiters, records, and structured portions of text streams.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_viewing",
+        "name": "File Viewing",
+        "desc": "File viewing covers reading file content with tools suited for short files, long files, and paged inspection.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/directory_navigation",
+        "name": "Directory Navigation",
+        "desc": "Directory navigation covers moving through filesystem locations and tracking the current working directory.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-join",
+    "alias": "linux-linux-join-command-file-joining-219193",
+    "icon": "https://icons.labex.io/linux-join-command-file-joining.png",
+    "show_in_tutorial": true,
+    "description": "This tutorial provides an introduction to the join command in Linux, a utility that merges lines from two sorted text files based on a common field.",
+    "default_console_type": 2,
+    "meta_title": "Linux Command | Join Files | Merge Data",
+    "meta_description": "Learn how to use the powerful Linux join command to merge lines from two sorted text files based on a common field, combining data from multiple sources.",
+    "meta_keywords": "linux, join command, merge files, data integration, text processing",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, you will learn how to use the `join` command in Linux to merge data from multiple files. We'll simulate a scenario where you're working in a company's HR department and need to combine employee information from different databases. This practical exercise will demonstrate the power and flexibility of the `join` command for data processing tasks.\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Data Files",
+      "layout": "doc-workbench-split",
+      "text": "## Understanding the Data Files\n\nLet's start by examining the contents of our employee data files. We have two files: `employees.txt` and `salaries.txt`.\n\nFirst, change to the project directory:\n\n```bash\ncd /home/labex/project\n```\n\nThis command changes your current working directory to `/home/labex/project`. All subsequent operations will be performed in this directory.\n\nNow, let's view the contents of `employees.txt`:\n\n```bash\ncat employees.txt\n```\n\nThe `cat` command displays the contents of the file. You should see output similar to this:\n\n```\n1001 John Engineering\n1002 Sarah Marketing\n1003 Mike Sales\n1004 Emily HR\n1005 David Finance\n```\n\nEach line represents an employee with their ID, name, and department.\n\nNext, let's look at `salaries.txt`:\n\n```bash\ncat salaries.txt\n```\n\nThe output should be similar to:\n\n```\n1001 75000\n1002 65000\n1003 70000\n1004 60000\n1005 80000\n```\n\nThis file contains employee IDs and their corresponding salaries.\n\nThese files represent separate databases that we'll merge using the `join` command.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Basic Join Operation",
+      "layout": "doc-workbench-split",
+      "text": "## Basic Join Operation\n\nNow that we understand our data, let's use the `join` command to merge the information from both files based on the employee ID.\n\nRun the following command:\n\n```bash\njoin employees.txt salaries.txt\n```\n\nYou should see output like this:\n\n```\n1001 John Engineering 75000\n1002 Sarah Marketing 65000\n1003 Mike Sales 70000\n1004 Emily HR 60000\n1005 David Finance 80000\n```\n\nLet's break down what happened:\n\n1. The `join` command looked at the first field (employee ID) in both files.\n2. When it found matching IDs, it combined the lines from both files.\n3. The output shows the employee ID, followed by all fields from `employees.txt`, and then all fields from `salaries.txt` (except the ID, which would be redundant).\n\nThis gives us a complete view of each employee's information in one line. The `join` command is particularly useful when you have data split across multiple files but want to view or analyze it together.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Customizing the Join Output",
+      "layout": "doc-workbench-split",
+      "text": "## Customizing the Join Output\n\nSometimes, we might want to change the order of the fields in our output or only include specific fields. We can do this by specifying field numbers after the join command.\n\nTry this command:\n\n```bash\njoin -o 1.2,1.3,2.2,1.1 employees.txt salaries.txt\n```\n\nYou should see:\n\n```\nJohn Engineering 75000 1001\nSarah Marketing 65000 1002\nMike Sales 70000 1003\nEmily HR 60000 1004\nDavid Finance 80000 1005\n```\n\nLet's break down the `-o` option:\n\n- `-o` stands for \"output format\"\n- `1.2` means the second field from the first file (name)\n- `1.3` means the third field from the first file (department)\n- `2.2` means the second field from the second file (salary)\n- `1.1` means the first field from the first file (employee ID)\n\nThis allows us to customize the order of information in our output. It's particularly useful when you need to rearrange data for a specific report format or when you only need certain fields from each file.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Handling Unmatched Records",
+      "layout": "doc-workbench-split",
+      "text": "## Handling Unmatched Records\n\nIn real-world scenarios, you might have records in one file that don't have corresponding matches in the other file. Let's simulate this by adding a new employee who hasn't been assigned a salary yet.\n\nAdd this employee to `employees.txt`:\n\n```bash\necho \"1006 Alex IT\" >> employees.txt\n```\n\nThe `>>` operator appends the new line to the end of the file without overwriting existing content.\n\nNow, if we run our basic join command:\n\n```bash\njoin employees.txt salaries.txt\n```\n\nYou'll notice that Alex doesn't appear in the output because there's no matching record in `salaries.txt`.\n\nTo include unmatched records, we can use the `-a` option:\n\n```bash\njoin -a 1 employees.txt salaries.txt\n```\n\nNow you should see Alex in the output:\n\n```\n1001 John Engineering 75000\n1002 Sarah Marketing 65000\n1003 Mike Sales 70000\n1004 Emily HR 60000\n1005 David Finance 80000\n1006 Alex IT\n```\n\nThe `-a 1` option tells `join` to include unpairable lines from the first file (employees.txt). This is useful when you want to see all records from one file, even if they don't have matches in the other file.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Joining on a Different Field",
+      "layout": "doc-workbench-split",
+      "text": "## Joining on a Different Field\n\nSo far, we've been joining our files based on the first field (employee ID). But what if we want to join based on a different field? This can be useful when your files are organized differently or when you need to merge data based on a common attribute other than an ID.\n\nLet's create a new file called `departments.txt` with department codes:\n\n```bash\ncat << EOF > departments.txt\nEngineering ENG\nMarketing MKT\nSales SLS\nHR HRS\nFinance FIN\nIT ITS\nEOF\n```\n\nThis command creates a new file `departments.txt` with department names and their corresponding codes.\n\nNow, let's join this with our `employees.txt` file based on the department name:\n\n```bash\njoin -1 3 -2 1 employees.txt departments.txt\n```\n\nYou should see:\n\n```\nEngineering 1001 John ENG\nMarketing 1002 Sarah MKT\nSales 1003 Mike SLS\nHR 1004 Emily HRS\nFinance 1005 David FIN\nIT 1006 Alex ITS\n```\n\nLet's break down the command:\n\n- `-1 3` tells `join` to use the third field from the first file (employees.txt) as the join field\n- `-2 1` tells it to use the first field from the second file (departments.txt) as the join field\n\nThis allows us to join files based on any common field, not just the first one. It's particularly useful when your files have different structures but share some common information.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, you learned how to use the `join` command in Linux to merge data from multiple files. We explored several key features of `join`:\n\n- Basic joining of two files based on a common field\n- Customizing the output order using the `-o` option\n- Including unmatched records with the `-a` option\n- Joining on fields other than the first column using the `-1` and `-2` options\n\nAdditional `join` options not covered in this lab include:\n\n- `-t CHAR`: Use CHAR as input and output field separator\n- `-i`: Ignore differences in case when comparing fields\n- `-e STRING`: Replace missing input fields with STRING\n- `-j FIELD`: Equivalent to '-1 FIELD -2 FIELD'\n- `-v FILE_NUMBER`: Like `-a FILE_NUMBER`, but suppress joined output lines\n\nThe `join` command is a powerful tool for data processing in Linux, allowing you to combine information from multiple sources efficiently. As you continue to work with data in your Linux environment, remember that `join` can be a valuable asset for merging and analyzing information from different files.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    }
+  ]
+}

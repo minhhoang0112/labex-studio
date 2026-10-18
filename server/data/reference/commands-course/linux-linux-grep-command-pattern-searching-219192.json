@@ -1,0 +1,186 @@
+{
+  "tutorial": {
+    "id": 219192,
+    "name": "Linux grep Command: Pattern Searching",
+    "fee_type": 0,
+    "type": 0,
+    "difficulty": "Beginner",
+    "time": 35,
+    "from_community": false,
+    "max_lab_num": -1,
+    "allow_to_start": false,
+    "remain_num": 0,
+    "allow_to_view": false,
+    "skills": [
+      {
+        "key": "linux/text_pattern_searching",
+        "name": "Text Pattern Searching",
+        "desc": "Text pattern searching covers finding text with literal strings and regular expression patterns.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_creation",
+        "name": "File Creation",
+        "desc": "File creation covers creating empty files, writing new file content, and understanding creation effects on metadata.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      },
+      {
+        "key": "shell/glob_patterns",
+        "name": "Glob Patterns",
+        "desc": "Glob patterns cover matching groups of pathnames with shell pattern syntax.",
+        "project": {
+          "key": "shell",
+          "name": "Shell",
+          "desc": ""
+        },
+        "group": {
+          "key": "shell/skills",
+          "name": "Shell",
+          "desc": ""
+        }
+      },
+      {
+        "key": "linux/file_viewing",
+        "name": "File Viewing",
+        "desc": "File viewing covers reading file content with tools suited for short files, long files, and paged inspection.",
+        "project": {
+          "key": "linux",
+          "name": "Linux",
+          "desc": ""
+        },
+        "group": {
+          "key": "linux/skills",
+          "name": "Linux",
+          "desc": ""
+        }
+      }
+    ],
+    "hidden": false,
+    "path": "linux/lab-linux-command-grep",
+    "alias": "linux-linux-grep-command-pattern-searching-219192",
+    "icon": "https://icons.labex.io/linux-grep-command-pattern-searching.png",
+    "show_in_tutorial": true,
+    "description": "This tutorial provides an introduction to the grep command in Linux, a versatile utility for searching and matching patterns within text files. Additionally, we will explore regular expressions, powerful tools used with grep to define complex search patterns.",
+    "default_console_type": 2,
+    "meta_title": "Linux Command Grep | Regular Expressions",
+    "meta_description": "Explore the powerful Linux grep command and learn how to use regular expressions for advanced text searching and pattern matching.",
+    "meta_keywords": "Linux, grep, regular expressions, text search, pattern matching",
+    "skilltree_alias": "linux",
+    "practice_url": "",
+    "langs": [
+      "zh",
+      "es",
+      "fr",
+      "de",
+      "ja",
+      "ru",
+      "ko",
+      "pt",
+      "en"
+    ],
+    "ai_verify": false,
+    "repo_full_name": "labex-labs/scenarios"
+  },
+  "steps": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "layout": "doc-fullscreen",
+      "text": "## Introduction\n\nIn this lab, you will explore the `grep` command, a powerful tool for searching and matching patterns within text files in Linux. You'll learn how to use `grep` in a practical scenario: analyzing server logs to identify and troubleshoot issues in an e-commerce website. This hands-on experience will enhance your understanding of text processing and analysis in Linux environments, skills that are essential for system administrators and developers.\n\n### Prerequisites\n\n- Basic familiarity with the Linux command line\n- Access to a Linux terminal (either a physical machine or a virtual environment)\n",
+      "need_verify": false,
+      "has_solution": false
+    },
+    {
+      "position": 1,
+      "title": "Preparing the Environment",
+      "layout": "doc-workbench-split",
+      "text": "## Preparing the Environment\n\nImagine you're a junior system administrator for \"TechMart,\" a growing e-commerce platform. The website has been experiencing intermittent issues, and your team lead has asked you to analyze the server logs to identify potential problems. The logs are stored in the `/home/labex/project/logs` directory.\n\nFirst, let's navigate to the project directory and examine the contents:\n\n```bash\ncd /home/labex/project\nls -l logs\n```\n\nThis command does two things:\n\n1. `cd /home/labex/project` changes your current directory to `/home/labex/project`.\n2. `ls -l logs` lists the contents of the `logs` directory in a detailed format.\n\nFor beginners:\n\n- `cd` stands for \"change directory\". It's like opening a folder in a graphical file manager.\n- `ls` stands for \"list\". It shows you what's inside a directory.\n- The `-l` option (that's a lowercase L) tells `ls` to give you more details about each file, like its size and when it was last modified.\n\nYou should see several log files, such as `server.log`, `access.log`, and `error.log`. These files contain records of server activities, errors, and user interactions.\n\nIf you're not familiar with log files:\n\n- `server.log` typically contains general server information and errors.\n- `access.log` usually records who accessed the server and what they requested.\n- `error.log` often contains more detailed error messages.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 2,
+      "title": "Basic Usage of grep - Searching for Errors",
+      "layout": "doc-workbench-split",
+      "text": "## Basic Usage of grep - Searching for Errors\n\nThe `grep` command is used to search for specific patterns in files. Let's start by searching for error messages in the main server log file.\n\n```bash\ngrep \"ERROR\" logs/server.log\n```\n\nThis command will display all lines containing the word \"ERROR\" (in uppercase) in the `server.log` file.\n\nFor beginners:\n\n- `grep` stands for \"Global Regular Expression Print\".\n- The first argument \"ERROR\" is the pattern we're searching for.\n- The second argument `logs/server.log` is the file we're searching in.\n- `grep` is case-sensitive by default, so it will only match the exact pattern \"ERROR\".\n\nYou should see several lines of output, each containing the word \"ERROR\" along with additional information about the error.\n\nNow, let's count how many errors occurred:\n\n```bash\ngrep -c \"ERROR\" logs/server.log\n```\n\nThe `-c` option tells `grep` to count the number of matching lines instead of displaying them. This gives you a quick overview of how many errors are present in the log file.\n\nFor beginners:\n\n- Options in Linux commands are usually preceded by a hyphen (-).\n- You can often combine options, so `-ic` would perform a case-insensitive count.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 3,
+      "title": "Case-Insensitive Search",
+      "layout": "doc-workbench-split",
+      "text": "## Case-Insensitive Search\n\nIn real-world scenarios, error messages might be capitalized differently. To catch all variations, let's perform a case-insensitive search:\n\n```bash\ngrep -i \"error\" logs/server.log\n```\n\nThe `-i` option makes the search case-insensitive, so it will match \"error\", \"ERROR\", \"Error\", or any other combination of upper and lowercase letters.\n\nFor beginners:\n\n- Case-insensitive means it doesn't matter if letters are uppercase or lowercase.\n- This is useful because developers might use different capitalization styles, or users might report errors in various ways.\n\nYou should now see additional lines that weren't caught in the previous search, including any instances of \"error\" in lowercase or mixed case.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 4,
+      "title": "Searching Multiple Files",
+      "layout": "doc-workbench-split",
+      "text": "## Searching Multiple Files\n\nAs a system administrator, you often need to search across multiple log files. Let's search for a specific error across all log files:\n\n```bash\ngrep \"database connection failed\" logs/*\n```\n\nThis command searches for the phrase \"database connection failed\" in all files within the `logs` directory.\n\nFor beginners:\n\n- The `*` is called a wildcard. It matches any filename, so `logs/*` means \"all files in the logs directory\".\n- This is powerful because you don't need to know the exact filenames to search them all.\n\nThe output will show the matching lines prefixed with the filename they came from. This helps you identify which log file contains the specific error message.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 5,
+      "title": "Using Regular Expressions",
+      "layout": "doc-workbench-split",
+      "text": "## Using Regular Expressions\n\nRegular expressions (regex) allow for more complex search patterns. Let's search for lines that start with a timestamp in the format [YYYY-MM-DD]:\n\n```bash\ngrep \"2023-[0-9][0-9]-[0-9][0-9]\" logs/server.log\n```\n\nThis regular expression breaks down as follows:\n\n- `2023-` matches the year 2023 followed by a hyphen\n- `[0-9][0-9]` matches exactly two digits (for the month)\n- `-` matches another hyphen\n- `[0-9][0-9]` matches two more digits (for the day)\n\nFor beginners:\n\n- Regular expressions are a powerful way to describe patterns in text.\n- They can be complex, but they allow for very specific and flexible searches.\n- Don't worry if this seems confusing at first - regular expressions take practice to master.\n\nThis pattern will match lines starting with a timestamp for any day in 2023.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 6,
+      "title": "Displaying Context",
+      "layout": "doc-workbench-split",
+      "text": "## Displaying Context\n\nWhen troubleshooting, it's often helpful to see the context around a matched line. Let's display two lines before and after each critical error message:\n\n```bash\ngrep -B 2 -A 2 \"CRITICAL\" logs/server.log\n```\n\nIn this command:\n\n- `-B 2` shows 2 lines Before the match\n- `-A 2` shows 2 lines After the match\n\nFor beginners:\n\n- This is like looking at the surrounding area of a problem to get more clues.\n- It's especially useful when the lines before or after an error contain important information about what led to the error or its consequences.\n\nThis will help you understand what happened immediately before and after each critical error, providing valuable context for your investigation.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 7,
+      "title": "Inverting the Match",
+      "layout": "doc-workbench-split",
+      "text": "## Inverting the Match\n\nSometimes, it's useful to see everything except certain patterns. To focus on normal operations, we can see all lines that don't contain errors:\n\n```bash\ngrep -v \"ERROR\" logs/server.log\n```\n\nThe `-v` option inverts the match, showing all lines that don't contain \"ERROR\".\n\nFor beginners:\n\n- Think of `-v` as meaning \"not this\".\n- This is useful when you want to filter out known issues and focus on other parts of the log.\n- It can help you understand the normal flow of operations when errors aren't occurring.\n",
+      "need_verify": true,
+      "has_solution": false
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "layout": "doc-fullscreen",
+      "text": "## Summary\n\nIn this lab, you've learned how to use the `grep` command to analyze server logs effectively. You've practiced:\n\n1. Basic pattern matching\n2. Case-insensitive searches\n3. Searching across multiple files\n4. Using regular expressions\n5. Displaying context around matches\n6. Inverting matches\n\nThese skills are crucial for system administrators and developers who need to troubleshoot issues by analyzing log files.\n\nAdditional `grep` parameters not covered in this lab include:\n\n- `-n`: Display line numbers along with the matched lines\n- `-r` or `-R`: Recursively search subdirectories\n- `-l`: Only display the names of files with matching lines\n- `-w`: Match whole words only\n- `-E`: Use extended regular expressions\n- `-F`: Interpret the pattern as a fixed string, not a regular expression\n\nRemember, practice makes perfect. Try using these `grep` commands on your own files or logs to become more comfortable with them. Don't be afraid to consult the `grep` manual (`man grep`) for more detailed information on these and other options.\n",
+      "need_verify": false,
+      "has_solution": false
+    }
+  ],
+  "skilltrees": [
+    {
+      "name": "Linux",
+      "alias": "linux"
+    },
+    {
+      "name": "Shell",
+      "alias": "shell"
+    }
+  ]
+}
