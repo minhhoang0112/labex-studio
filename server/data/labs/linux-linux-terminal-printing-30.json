@@ -1,11 +1,14 @@
 {
   "id": "linux-linux-terminal-printing-30",
-  "source_lab_id": 30,
   "course_id": "linux-practice-challenges",
+  "order": 15,
   "title": "Linux Terminal Printing",
-  "title_vi": "Introduction",
+  "title_vi": "Linux Terminal Printing",
   "difficulty": "Intermediate",
-  "estimated_time": "5 mins",
+  "estimated_time": "15 mins",
+  "type": "challenge",
+  "source_url": "https://labex.io/tutorials/linux-linux-terminal-printing-30",
+  "overview": "Practical challenge: linux-linux-terminal-printing-30",
   "sections": [
     {
       "id": "linux-linux-terminal-printing-30-step-0",
@@ -23,8 +26,7 @@
       "content": "## Print Hello Linux\n\nThis challenge is to print \"Hello Linux\" in the terminal.\n\n### Requirements\n\n- must use the `echo` command.\n- must print **Hello Linux**, note the capitalization.\n",
       "content_vi": "## Print Hello Linux\n\nThis challenge is to print \"Hello Linux\" in the terminal.\n\n### Requirements\n\n- must use the `echo` command.\n- must print **Hello Linux**, note the capitalization.\n",
       "layout": "doc-workbench-split",
-      "need_verify": true,
-      "kind": "task"
+      "need_verify": true
     },
     {
       "id": "linux-linux-terminal-printing-30-step-2",
@@ -43,21 +45,67 @@
       "title_vi": "Print Hello Linux",
       "content": "## Print Hello Linux\n\nThis challenge is to print \"Hello Linux\" in the terminal.\n\n### Requirements\n\n- must use the `echo` command.\n- must print **Hello Linux**, note the capitalization.\n",
       "content_vi": "## Print Hello Linux\n\nThis challenge is to print \"Hello Linux\" in the terminal.\n\n### Requirements\n\n- must use the `echo` command.\n- must print **Hello Linux**, note the capitalization.\n",
-      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
-      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+            "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
           ]
         ],
         "allowed_status": [
-          0
+          0,
+          1
         ]
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
-  ]
+  ],
+  "curriculum_version": 1
 }

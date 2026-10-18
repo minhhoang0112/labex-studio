@@ -1,11 +1,14 @@
 {
   "id": "linux-galactic-secure-connections-with-linux-271388",
-  "source_lab_id": 271388,
   "course_id": "linux-practice-challenges",
+  "order": 86,
   "title": "Galactic Secure Connections with Linux",
-  "title_vi": "Introduction",
+  "title_vi": "Galactic Secure Connections with Linux",
   "difficulty": "Intermediate",
-  "estimated_time": "5 mins",
+  "estimated_time": "15 mins",
+  "type": "challenge",
+  "source_url": "https://labex.io/tutorials/linux-galactic-secure-connections-with-linux-271388",
+  "overview": "Practical challenge: linux-galactic-secure-connections-with-linux-271388",
   "sections": [
     {
       "id": "linux-galactic-secure-connections-with-linux-271388-step-0",
@@ -23,8 +26,7 @@
       "content": "## Secure Communication Setup\n\n### Tasks\n\n- Generate an SSH key pair for secure authentication.\n\n### Requirements\n\n- The working directory is `/home/labex/project`.\n- Use the correct command to generate an SSH key pair.\n\n### Example\n\nAfter completing the tasks, the SSH key pair should be generated in the `/home/labex/.ssh` directory.\n",
       "content_vi": "## Secure Communication Setup\n\n### Tasks\n\n- Generate an SSH key pair for secure authentication.\n\n### Requirements\n\n- The working directory is `/home/labex/project`.\n- Use the correct command to generate an SSH key pair.\n\n### Example\n\nAfter completing the tasks, the SSH key pair should be generated in the `/home/labex/.ssh` directory.\n",
       "layout": "doc-workbench-split",
-      "need_verify": true,
-      "kind": "task"
+      "need_verify": true
     },
     {
       "id": "linux-galactic-secure-connections-with-linux-271388-step-2",
@@ -43,21 +45,67 @@
       "title_vi": "Secure Communication Setup",
       "content": "## Secure Communication Setup\n\n### Tasks\n\n- Generate an SSH key pair for secure authentication.\n\n### Requirements\n\n- The working directory is `/home/labex/project`.\n- Use the correct command to generate an SSH key pair.\n\n### Example\n\nAfter completing the tasks, the SSH key pair should be generated in the `/home/labex/.ssh` directory.\n",
       "content_vi": "## Secure Communication Setup\n\n### Tasks\n\n- Generate an SSH key pair for secure authentication.\n\n### Requirements\n\n- The working directory is `/home/labex/project`.\n- Use the correct command to generate an SSH key pair.\n\n### Example\n\nAfter completing the tasks, the SSH key pair should be generated in the `/home/labex/.ssh` directory.\n",
-      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
-      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+            "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
           ]
         ],
         "allowed_status": [
-          0
+          0,
+          1
         ]
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
-  ]
+  ],
+  "curriculum_version": 1
 }
