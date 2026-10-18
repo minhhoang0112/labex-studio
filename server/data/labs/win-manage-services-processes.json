@@ -1,0 +1,231 @@
+{
+  "id": "win-manage-services-processes",
+  "course_id": "windows-powershell-for-sysadmins",
+  "order": 2,
+  "title": "Managing Windows Services and Processes",
+  "title_vi": "Quản Trị Dịch Vụ và Tiến Trình Windows",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Học cách giám sát tiến trình chiếm tài nguyên, lọc danh sách dịch vụ đang chạy (Running) và dừng/khởi động lại các Windows Services.",
+  "sections": [
+    {
+      "id": "win-ps-02-sec-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Managing Services and Processes in Windows\n\nAs a Windows SysAdmin, monitoring system health and restarting stuck background services is a daily operational task. PowerShell provides fast, scriptable cmdlets (`Get-Process`, `Stop-Process`, `Get-Service`, `Restart-Service`).\n",
+      "content_vi": "## Quản trị Dịch vụ và Tiến trình trong Windows\n\nLà một quản trị viên hệ thống Windows, việc giám sát tài nguyên và xử lý các dịch vụ bị treo (stuck services) là công việc hàng ngày. PowerShell cung cấp các cmdlet mạnh mẽ giúp thao tác tức thì và tự động hóa (`Get-Process`, `Stop-Process`, `Get-Service`, `Restart-Service`)."
+    },
+    {
+      "id": "win-ps-02-sec-1",
+      "title": "Filtering Running Services",
+      "title_vi": "Lọc Danh sách Dịch vụ Đang Chạy",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Query all services with Status equal to 'Running' and sort by DisplayName.",
+      "task_vi": "Truy vấn danh sách tất cả các dịch vụ có trạng thái 'Running' và sắp xếp theo tên hiển thị (DisplayName).",
+      "hint": "Run: Get-Service | Where-Object Status -eq 'Running'",
+      "hint_vi": "Chạy lệnh: Get-Service | Where-Object Status -eq 'Running'",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Service|Where-Object|Select-Object)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Filtering Services\n\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status\n```\n",
+      "content_vi": "### Lọc Dịch vụ\n\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status\n```"
+    },
+    {
+      "id": "win-ps-02-sec-2",
+      "title": "Locating Top CPU Processes",
+      "title_vi": "Tìm Tiến Trình Chiếm Nhiều CPU Nhất",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Sort processes by CPU descending and display the top 5 resource consumers.",
+      "task_vi": "Sắp xếp tiến trình giảm dần theo CPU và hiển thị 5 tiến trình tiêu tốn nhiều tài nguyên nhất.",
+      "hint": "Run: Get-Process | Sort-Object CPU -Descending | Select-Object -First 5",
+      "hint_vi": "Chạy lệnh: Get-Process | Sort-Object CPU -Descending | Select-Object -First 5",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Sort-Object|Get-Process|Select-Object)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Resource Inspection\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```\n",
+      "content_vi": "### Kiểm tra Tài nguyên\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-ps-02-sec-1",
+      "title": "Filtering Running Services",
+      "title_vi": "Lọc Danh sách Dịch vụ Đang Chạy",
+      "content": "### Filtering Services\n\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status\n```\n",
+      "content_vi": "### Lọc Dịch vụ\n\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status\n```",
+      "task": "Query all services with Status equal to 'Running' and sort by DisplayName.",
+      "task_vi": "Truy vấn danh sách tất cả các dịch vụ có trạng thái 'Running' và sắp xếp theo tên hiển thị (DisplayName).",
+      "hint": "Run: Get-Service | Where-Object Status -eq 'Running'",
+      "hint_vi": "Chạy lệnh: Get-Service | Where-Object Status -eq 'Running'",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Service|Where-Object|Select-Object)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Service|Where-Object|Select-Object)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Service|Where-Object|Select-Object)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "win-ps-02-sec-2",
+      "title": "Locating Top CPU Processes",
+      "title_vi": "Tìm Tiến Trình Chiếm Nhiều CPU Nhất",
+      "content": "### Resource Inspection\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```\n",
+      "content_vi": "### Kiểm tra Tài nguyên\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```",
+      "task": "Sort processes by CPU descending and display the top 5 resource consumers.",
+      "task_vi": "Sắp xếp tiến trình giảm dần theo CPU và hiển thị 5 tiến trình tiêu tốn nhiều tài nguyên nhất.",
+      "hint": "Run: Get-Process | Sort-Object CPU -Descending | Select-Object -First 5",
+      "hint_vi": "Chạy lệnh: Get-Process | Sort-Object CPU -Descending | Select-Object -First 5",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Sort-Object|Get-Process|Select-Object)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Sort-Object|Get-Process|Select-Object)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Sort-Object|Get-Process|Select-Object)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

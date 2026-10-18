@@ -1,0 +1,129 @@
+{
+  "id": "win-troubleshoot-network-connectivity",
+  "course_id": "windows-troubleshooting-and-incident-response",
+  "order": 3,
+  "title": "Windows Network Connectivity & Port Troubleshooting",
+  "title_vi": "Khắc Phục Sự Cố Kết Nối Mạng & Kiểm Tra Cổng Dịch Vụ",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "25 mins",
+  "overview": "Sử dụng Test-NetConnection (thay thế ping/telnet), Get-NetTCPConnection, chẩn đoán quy tắc Windows Firewall và phân giải tên miền.",
+  "sections": [
+    {
+      "id": "win-tr-03-sec-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## The Modern Network Troubleshooting Toolkit\n\nForget `ping` and `telnet`—PowerShell's `Test-NetConnection` (`tnc`) tests ICMP, TCP Port reachability, and trace route all in a single structured command.\n",
+      "content_vi": "## Bộ Công Cụ Chẩn Đoán Mạng Hiện Đại\n\n`Test-NetConnection` (`tnc`) của PowerShell là công cụ tối thượng: kiểm tra ICMP ping, kiểm tra cổng TCP dịch vụ cụ thể và dò đường định tuyến (trace route) trong một lệnh duy nhất."
+    },
+    {
+      "id": "win-tr-03-sec-1",
+      "title": "Testing TCP Port Reachability with Test-NetConnection",
+      "title_vi": "Kiểm Tra Thông Cổng TCP Với Test-NetConnection",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Use Test-NetConnection to test localhost TCP port 80 or 443.",
+      "task_vi": "Sử dụng lệnh Test-NetConnection để kiểm tra tính khả dụng của cổng TCP trên máy chủ.",
+      "hint": "Run: Test-NetConnection -ComputerName localhost -Port 80",
+      "hint_vi": "Chạy lệnh: Test-NetConnection -ComputerName localhost -Port 80",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Test-NetConnection|tnc|Get-NetTCPConnection)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Port Testing\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n",
+      "content_vi": "### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-tr-03-sec-1",
+      "title": "Testing TCP Port Reachability with Test-NetConnection",
+      "title_vi": "Kiểm Tra Thông Cổng TCP Với Test-NetConnection",
+      "content": "### Port Testing\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n",
+      "content_vi": "### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```",
+      "task": "Use Test-NetConnection to test localhost TCP port 80 or 443.",
+      "task_vi": "Sử dụng lệnh Test-NetConnection để kiểm tra tính khả dụng của cổng TCP trên máy chủ.",
+      "hint": "Run: Test-NetConnection -ComputerName localhost -Port 80",
+      "hint_vi": "Chạy lệnh: Test-NetConnection -ComputerName localhost -Port 80",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Test-NetConnection|tnc|Get-NetTCPConnection)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Test-NetConnection|tnc|Get-NetTCPConnection)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Test-NetConnection|tnc|Get-NetTCPConnection)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

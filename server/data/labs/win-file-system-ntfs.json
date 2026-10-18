@@ -1,0 +1,129 @@
+{
+  "id": "win-file-system-ntfs",
+  "course_id": "windows-powershell-for-sysadmins",
+  "order": 3,
+  "title": "Windows File System & NTFS Permissions",
+  "title_vi": "Hệ Thống Tệp Windows & Phân Quyền NTFS",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "overview": "Quản lý tệp tin, ổ đĩa và phân quyền bảo mật Access Control Lists (ACLs) với Get-Acl và Set-Acl.",
+  "sections": [
+    {
+      "id": "win-fs-03-sec-0",
+      "title": "Introduction to NTFS Security",
+      "title_vi": "Giới thiệu về Bảo mật NTFS",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## NTFS Access Control Lists (ACL)\n\nNTFS security governs file and folder access in Windows environments. Each file has a Security Descriptor containing Discretionary Access Control Lists (DACLs) specifying which Users or Groups have Read, Write, Modify, or FullControl rights.\n",
+      "content_vi": "## Danh sách Kiểm soát Truy cập NTFS (ACL)\n\nBảo mật NTFS là nền tảng quản lý truy cập tệp và thư mục trong hệ thống Windows. Mỗi tệp chứa một Security Descriptor gồm các DACL quy định rõ Người dùng (User) hoặc Nhóm (Group) nào có quyền Đọc (Read), Ghi (Write), Sửa (Modify) hay Toàn quyền (FullControl)."
+    },
+    {
+      "id": "win-fs-03-sec-1",
+      "title": "Creating Directory Structure & Inspecting ACL",
+      "title_vi": "Tạo Cấu Trúc Thư Mục & Xem Phân Quyền ACL",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Create a project directory structure and check its NTFS permissions using Get-Acl.",
+      "task_vi": "Tạo cấu trúc thư mục dự án và kiểm tra quyền bảo mật NTFS bằng Get-Acl.",
+      "hint": "Run: New-Item -ItemType Directory -Path ./FinanceDocs -Force; Get-Acl ./FinanceDocs",
+      "hint_vi": "Chạy lệnh: New-Item -ItemType Directory -Path ./FinanceDocs -Force; Get-Acl ./FinanceDocs",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:New-Item|Get-Acl|get-acl|mkdir)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Inspecting Permissions\n\n```powershell\nNew-Item -ItemType Directory -Path ./FinanceDocs -Force\n(Get-Acl ./FinanceDocs).Access | Format-Table IdentityReference, FileSystemRights, AccessControlType\n```\n",
+      "content_vi": "### Kiểm tra Phân quyền\n\n```powershell\nNew-Item -ItemType Directory -Path ./FinanceDocs -Force\n(Get-Acl ./FinanceDocs).Access | Format-Table IdentityReference, FileSystemRights, AccessControlType\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-fs-03-sec-1",
+      "title": "Creating Directory Structure & Inspecting ACL",
+      "title_vi": "Tạo Cấu Trúc Thư Mục & Xem Phân Quyền ACL",
+      "content": "### Inspecting Permissions\n\n```powershell\nNew-Item -ItemType Directory -Path ./FinanceDocs -Force\n(Get-Acl ./FinanceDocs).Access | Format-Table IdentityReference, FileSystemRights, AccessControlType\n```\n",
+      "content_vi": "### Kiểm tra Phân quyền\n\n```powershell\nNew-Item -ItemType Directory -Path ./FinanceDocs -Force\n(Get-Acl ./FinanceDocs).Access | Format-Table IdentityReference, FileSystemRights, AccessControlType\n```",
+      "task": "Create a project directory structure and check its NTFS permissions using Get-Acl.",
+      "task_vi": "Tạo cấu trúc thư mục dự án và kiểm tra quyền bảo mật NTFS bằng Get-Acl.",
+      "hint": "Run: New-Item -ItemType Directory -Path ./FinanceDocs -Force; Get-Acl ./FinanceDocs",
+      "hint_vi": "Chạy lệnh: New-Item -ItemType Directory -Path ./FinanceDocs -Force; Get-Acl ./FinanceDocs",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:New-Item|Get-Acl|get-acl|mkdir)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:New-Item|Get-Acl|get-acl|mkdir)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:New-Item|Get-Acl|get-acl|mkdir)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

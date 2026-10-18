@@ -212,13 +212,66 @@
       "task": "Thực hiện hướng dẫn: Control Foreground and Background Jobs",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:jobs|bg|fg|sleep|ps)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ tạm dừng một lệnh tiền cảnh, tiếp tục nó trong nền, đưa nó về tiền cảnh rồi ngắt nó.\n\nĐiều khiển tác vụ thuộc về shell tương tác hiện tại. Khởi chạy tiến trình ngủ ở tiền cảnh với tên dễ nhận biết:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nTerminal hiện bị tiến trình tiền cảnh chiếm dụng. Nhấn `Ctrl+Z`. Shell gửi tín hiệu dừng và trả lại dấu nhắc.\n\nLiệt kê các tác vụ mà shell này biết. Tùy chọn `-l` bao gồm mã tiến trình:\n\n```bash\njobs -l\n```\n\nBạn sẽ thấy một tác vụ `Stopped`. Tiếp tục tác vụ số 1 trong nền:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nTrạng thái giờ phải là `Running` và dấu nhắc vẫn dùng được. Đưa tác vụ trở lại tiền cảnh:\n\n```bash\nfg %1\n```\n\nNhấn `Ctrl+C` để gửi tín hiệu ngắt tới tác vụ tiền cảnh. Dấu nhắc phải trở lại. Xác nhận không còn tác vụ thực hành:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nTạo dấu mốc hoàn thành sau khi kết thúc chuỗi tương tác:\n\n```bash\ntouch job-control.done\n```\n\nDùng điều khiển tác vụ cho các lệnh gắn với terminal hiện tại. Sau này bạn sẽ dùng `nohup` cho công việc không nên phụ thuộc phiên terminal.",
       "task_vi": "Thực hiện hướng dẫn: Điều khiển tác vụ tiền cảnh và nền",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:jobs|bg|fg|sleep|ps)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:jobs|bg|fg|sleep|ps)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725419-section-6-v3",
@@ -267,13 +320,66 @@
       "task": "Thực hiện hướng dẫn: Inspect Recent Kernel Messages",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu đọc kernel log dmesg; runtime chưa cấp CAP_SYSLOG."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:dmesg|uname|uptime|hostname)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ kiểm tra bộ đệm thông báo kernel và lưu phiên bản kernel đang chạy làm tham chiếu ổn định.\n\nKernel ghi thông báo về khởi động, phần cứng, trình điều khiển và sự kiện khi chạy vào một bộ đệm vòng. `dmesg` đọc bộ đệm đó. Thông thường cần quyền quản trị:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThông báo cụ thể thay đổi theo máy và thời điểm. Chú ý trường giống dấu thời gian và thành phần hoặc hệ thống con đã tạo mỗi thông báo.\n\nTùy chọn `--level` lọc theo mức nghiêm trọng. Hiển thị cảnh báo và lỗi gần đây:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nKhông có đầu ra không có nghĩa lệnh thất bại; có thể bộ đệm hiện tại không có thông báo ở các mức đó. Tìm thông báo gần đây chứa thuật ngữ lưu trữ và mạng thường gặp:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nMột lần nữa, kết quả phụ thuộc hệ thống hiện tại. Lưu phiên bản kernel do `uname -r` báo:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nThông báo kernel là bằng chứng, không phải chẩn đoán tự động. Kết hợp chúng với trạng thái tiến trình, log dịch vụ và triệu chứng quan sát được trước khi quyết định hành động.",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra thông báo kernel gần đây",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:dmesg|uname|uptime|hostname)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:dmesg|uname|uptime|hostname)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "section-8",
@@ -478,13 +584,66 @@
       "task": "Thực hiện hướng dẫn: Control Foreground and Background Jobs",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:jobs|bg|fg|sleep|ps)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ tạm dừng một lệnh tiền cảnh, tiếp tục nó trong nền, đưa nó về tiền cảnh rồi ngắt nó.\n\nĐiều khiển tác vụ thuộc về shell tương tác hiện tại. Khởi chạy tiến trình ngủ ở tiền cảnh với tên dễ nhận biết:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nTerminal hiện bị tiến trình tiền cảnh chiếm dụng. Nhấn `Ctrl+Z`. Shell gửi tín hiệu dừng và trả lại dấu nhắc.\n\nLiệt kê các tác vụ mà shell này biết. Tùy chọn `-l` bao gồm mã tiến trình:\n\n```bash\njobs -l\n```\n\nBạn sẽ thấy một tác vụ `Stopped`. Tiếp tục tác vụ số 1 trong nền:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nTrạng thái giờ phải là `Running` và dấu nhắc vẫn dùng được. Đưa tác vụ trở lại tiền cảnh:\n\n```bash\nfg %1\n```\n\nNhấn `Ctrl+C` để gửi tín hiệu ngắt tới tác vụ tiền cảnh. Dấu nhắc phải trở lại. Xác nhận không còn tác vụ thực hành:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nTạo dấu mốc hoàn thành sau khi kết thúc chuỗi tương tác:\n\n```bash\ntouch job-control.done\n```\n\nDùng điều khiển tác vụ cho các lệnh gắn với terminal hiện tại. Sau này bạn sẽ dùng `nohup` cho công việc không nên phụ thuộc phiên terminal.",
       "task_vi": "Thực hiện hướng dẫn: Điều khiển tác vụ tiền cảnh và nền",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:jobs|bg|fg|sleep|ps)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:jobs|bg|fg|sleep|ps)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725419-section-6-v3",
@@ -533,13 +692,66 @@
       "task": "Thực hiện hướng dẫn: Inspect Recent Kernel Messages",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu đọc kernel log dmesg; runtime chưa cấp CAP_SYSLOG."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:dmesg|uname|uptime|hostname)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ kiểm tra bộ đệm thông báo kernel và lưu phiên bản kernel đang chạy làm tham chiếu ổn định.\n\nKernel ghi thông báo về khởi động, phần cứng, trình điều khiển và sự kiện khi chạy vào một bộ đệm vòng. `dmesg` đọc bộ đệm đó. Thông thường cần quyền quản trị:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThông báo cụ thể thay đổi theo máy và thời điểm. Chú ý trường giống dấu thời gian và thành phần hoặc hệ thống con đã tạo mỗi thông báo.\n\nTùy chọn `--level` lọc theo mức nghiêm trọng. Hiển thị cảnh báo và lỗi gần đây:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nKhông có đầu ra không có nghĩa lệnh thất bại; có thể bộ đệm hiện tại không có thông báo ở các mức đó. Tìm thông báo gần đây chứa thuật ngữ lưu trữ và mạng thường gặp:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nMột lần nữa, kết quả phụ thuộc hệ thống hiện tại. Lưu phiên bản kernel do `uname -r` báo:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nThông báo kernel là bằng chứng, không phải chẩn đoán tự động. Kết hợp chúng với trạng thái tiến trình, log dịch vụ và triệu chứng quan sát được trước khi quyết định hành động.",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra thông báo kernel gần đây",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:dmesg|uname|uptime|hostname)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:dmesg|uname|uptime|hostname)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
   ],
   "curriculum_version": 3,

@@ -36,13 +36,39 @@
       "task": "Thực hiện hướng dẫn: Persist the Project Directory",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu Zsh thật; image hiện chưa có Zsh, không chấm Bash thay cho phiên Zsh."
+        "kind": "state",
+        "command": "grep -E 'PROJECT_DIR=' /home/labex/.zshrc 2>/dev/null || grep -E 'PROJECT_DIR=' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/project-variable.txt"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "### Tình hình hiện tại\n\n`PROJECT_DIR` chưa được cấu hình trong `/home/labex/.zshrc`. Do đó, một phiên Zsh mới sẽ không nhận diện được đường dẫn dự án.\n\n### Phạm vi\n\n- Cấu hình `PROJECT_DIR` trong `/home/labex/.zshrc`.\n- Giá trị của biến này phải là `/home/labex/project`.\n- Tải lại `.zshrc` trong shell hiện tại bằng lệnh `source`.\n- Lưu giá trị vừa tải lại vào tệp `/home/labex/project/project-variable.txt`.\n\n### Mục tiêu của bạn\n\nLưu giữ vĩnh viễn `PROJECT_DIR` trong `.zshrc` và làm cho giá trị của nó khả dụng sau khi tải lại tệp đó.\n\n### Tiêu chí chấp nhận\n\n- Việc tải lại `.zshrc` sẽ xuất (export) biến `PROJECT_DIR` với giá trị `/home/labex/project`.\n- Sau khi tải lại `.zshrc`, tệp `project-variable.txt` chứa nội dung `/home/labex/project`.\n\n### Gợi ý\n\nBài thực hành có hướng dẫn đã đặt các lệnh xuất (export) giữ nguyên trạng ở đâu?\n\nNó đã thêm một dòng `export` vào `$HOME/.zshrc`, sau đó sử dụng `source` để tải lại tệp trong shell hiện tại.",
       "task_vi": "Thực hiện hướng dẫn: Lưu giữ thư mục dự án",
-      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -E 'PROJECT_DIR=' /home/labex/.zshrc 2>/dev/null || grep -E 'PROJECT_DIR=' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/project-variable.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "grep -E 'PROJECT_DIR=' /home/labex/.zshrc 2>/dev/null || grep -E 'PROJECT_DIR=' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/project-variable.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "section-2",
@@ -71,13 +97,39 @@
       "task": "Thực hiện hướng dẫn: Persist the Project Directory",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu Zsh thật; image hiện chưa có Zsh, không chấm Bash thay cho phiên Zsh."
+        "kind": "state",
+        "command": "grep -E 'PROJECT_DIR=' /home/labex/.zshrc 2>/dev/null || grep -E 'PROJECT_DIR=' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/project-variable.txt"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "### Tình hình hiện tại\n\n`PROJECT_DIR` chưa được cấu hình trong `/home/labex/.zshrc`. Do đó, một phiên Zsh mới sẽ không nhận diện được đường dẫn dự án.\n\n### Phạm vi\n\n- Cấu hình `PROJECT_DIR` trong `/home/labex/.zshrc`.\n- Giá trị của biến này phải là `/home/labex/project`.\n- Tải lại `.zshrc` trong shell hiện tại bằng lệnh `source`.\n- Lưu giá trị vừa tải lại vào tệp `/home/labex/project/project-variable.txt`.\n\n### Mục tiêu của bạn\n\nLưu giữ vĩnh viễn `PROJECT_DIR` trong `.zshrc` và làm cho giá trị của nó khả dụng sau khi tải lại tệp đó.\n\n### Tiêu chí chấp nhận\n\n- Việc tải lại `.zshrc` sẽ xuất (export) biến `PROJECT_DIR` với giá trị `/home/labex/project`.\n- Sau khi tải lại `.zshrc`, tệp `project-variable.txt` chứa nội dung `/home/labex/project`.\n\n### Gợi ý\n\nBài thực hành có hướng dẫn đã đặt các lệnh xuất (export) giữ nguyên trạng ở đâu?\n\nNó đã thêm một dòng `export` vào `$HOME/.zshrc`, sau đó sử dụng `source` để tải lại tệp trong shell hiện tại.",
       "task_vi": "Thực hiện hướng dẫn: Lưu giữ thư mục dự án",
-      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "grep -E 'PROJECT_DIR=' /home/labex/.zshrc 2>/dev/null || grep -E 'PROJECT_DIR=' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/project-variable.txt"
+        },
+        "namespace": {
+          "kind": "state",
+          "command": "grep -E 'PROJECT_DIR=' /home/labex/.zshrc 2>/dev/null || grep -E 'PROJECT_DIR=' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/project-variable.txt"
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
   ],
   "curriculum_version": 3,

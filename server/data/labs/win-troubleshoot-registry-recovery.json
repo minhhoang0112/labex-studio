@@ -1,0 +1,129 @@
+{
+  "id": "win-troubleshoot-registry-recovery",
+  "course_id": "windows-troubleshooting-and-incident-response",
+  "order": 4,
+  "title": "Windows Registry Inspection & System Recovery",
+  "title_vi": "Kiểm Tra Cấu Hình Registry & Khôi Phục Hệ Thống",
+  "type": "lab",
+  "difficulty": "Advanced",
+  "estimated_time": "30 mins",
+  "overview": "Khám phá cấu trúc HKLM, HKCU, truy vấn Registry keys với Get-ItemProperty, backup xuất khóa .reg an toàn và sửa các giá trị cấu hình hệ thống.",
+  "sections": [
+    {
+      "id": "win-tr-04-sec-0",
+      "title": "Introduction to Windows Registry",
+      "title_vi": "Giới thiệu về Windows Registry",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## The Central Database of Windows Configuration\n\nThe Windows Registry contains hardware settings, OS configurations, installed software paths, and user profiles. PowerShell exposes Registry hives as standard PSDrives (`HKLM:`, `HKCU:`), allowing you to navigate them just like file directories.\n",
+      "content_vi": "## Cơ Sở Dữ Liệu Cấu Hình Trung Tâm Của Windows\n\nWindows Registry lưu trữ cấu hình phần cứng, thiết lập hệ điều hành, đường dẫn phần mềm và profile người dùng. PowerShell ánh xạ các nhánh Registry thành ổ đĩa logic (`HKLM:`, `HKCU:`), cho phép bạn điều hướng giống như thư mục tệp."
+    },
+    {
+      "id": "win-tr-04-sec-1",
+      "title": "Navigating and Querying Registry Keys",
+      "title_vi": "Điều Hướng & Truy Vấn Khóa Registry",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Query the Windows NT CurrentVersion registry key using Get-ItemProperty.",
+      "task_vi": "Truy vấn thông tin phiên bản Windows trong nhánh Registry CurrentVersion bằng Get-ItemProperty.",
+      "hint": "Run: Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'",
+      "hint_vi": "Chạy lệnh: Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-ItemProperty|Get-Item|HKLM|CurrentVersion)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Querying Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n",
+      "content_vi": "### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-tr-04-sec-1",
+      "title": "Navigating and Querying Registry Keys",
+      "title_vi": "Điều Hướng & Truy Vấn Khóa Registry",
+      "content": "### Querying Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n",
+      "content_vi": "### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```",
+      "task": "Query the Windows NT CurrentVersion registry key using Get-ItemProperty.",
+      "task_vi": "Truy vấn thông tin phiên bản Windows trong nhánh Registry CurrentVersion bằng Get-ItemProperty.",
+      "hint": "Run: Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'",
+      "hint_vi": "Chạy lệnh: Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-ItemProperty|Get-Item|HKLM|CurrentVersion)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-ItemProperty|Get-Item|HKLM|CurrentVersion)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-ItemProperty|Get-Item|HKLM|CurrentVersion)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

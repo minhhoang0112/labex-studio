@@ -1,0 +1,129 @@
+{
+  "id": "win-server-dns-dhcp",
+  "course_id": "windows-server-administration-essentials",
+  "order": 3,
+  "title": "Windows Server Core Networking: DNS & DHCP Roles",
+  "title_vi": "Hạ Tầng Mạng Máy Chủ: Dịch Vụ DNS & DHCP",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "Cấu hình Forward/Reverse Lookup Zones, tạo bản ghi A/CNAME/MX, quản lý DHCP Scopes, Address Reservations và phân giải tên miền.",
+  "sections": [
+    {
+      "id": "win-net-03-sec-0",
+      "title": "Introduction to DNS & DHCP",
+      "title_vi": "Giới thiệu DNS và DHCP",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Core Infrastructure Services\n\nWithout DNS, Active Directory cannot locate Domain Controllers. Without DHCP, clients cannot obtain IP addresses automatically. Mastering DNS and DHCP management is mandatory for every system engineer.\n",
+      "content_vi": "## Các Dịch Vụ Hạ Tầng Cốt Lõi\n\nKhông có DNS, Active Directory không thể định vị máy chủ điều khiển miền. Không có DHCP, các máy trạm không thể nhận địa chỉ IP tự động. Nắm vững quản trị DNS và DHCP là yêu cầu bắt buộc của mọi kỹ sư hệ thống."
+    },
+    {
+      "id": "win-net-03-sec-1",
+      "title": "Querying DNS Records with Resolve-DnsName",
+      "title_vi": "Truy Vấn Bản Ghi DNS Với Resolve-DnsName",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Use Resolve-DnsName to query DNS records and test name resolution.",
+      "task_vi": "Sử dụng Resolve-DnsName để kiểm tra bản ghi phân giải tên miền trên máy chủ.",
+      "hint": "Run: Resolve-DnsName localhost or Resolve-DnsName -Name google.com",
+      "hint_vi": "Chạy lệnh: Resolve-DnsName localhost hoặc Resolve-DnsName -Name google.com",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Resolve-DnsName|nslookup|ipconfig)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### DNS Testing\n\n```powershell\nResolve-DnsName localhost\n```\n",
+      "content_vi": "### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-net-03-sec-1",
+      "title": "Querying DNS Records with Resolve-DnsName",
+      "title_vi": "Truy Vấn Bản Ghi DNS Với Resolve-DnsName",
+      "content": "### DNS Testing\n\n```powershell\nResolve-DnsName localhost\n```\n",
+      "content_vi": "### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```",
+      "task": "Use Resolve-DnsName to query DNS records and test name resolution.",
+      "task_vi": "Sử dụng Resolve-DnsName để kiểm tra bản ghi phân giải tên miền trên máy chủ.",
+      "hint": "Run: Resolve-DnsName localhost or Resolve-DnsName -Name google.com",
+      "hint_vi": "Chạy lệnh: Resolve-DnsName localhost hoặc Resolve-DnsName -Name google.com",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Resolve-DnsName|nslookup|ipconfig)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Resolve-DnsName|nslookup|ipconfig)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Resolve-DnsName|nslookup|ipconfig)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

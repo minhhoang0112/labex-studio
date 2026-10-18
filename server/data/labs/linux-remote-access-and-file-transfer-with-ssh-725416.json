@@ -36,13 +36,66 @@
       "task": "Thực hiện hướng dẫn: Inspect the SSH Target",
       "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh|cat|cd)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ nhận diện SSH client, phân giải tên đích, xác nhận máy chủ đang lắng nghe và xem trước khóa máy chủ công khai của nó.\n\nVào thư mục làm việc cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nHiển thị phiên bản OpenSSH client. Chương trình này ghi phiên bản vào lỗi chuẩn nên `2>&1` gộp nó với đầu ra chuẩn:\n\n```bash\nssh -V 2>&1\n```\n\nPhân giải đích cục bộ qua cấu hình dịch vụ tên của hệ thống:\n\n```bash\ngetent hosts localhost\n```\n\nXác nhận máy chủ SSH lắng nghe trên cổng TCP 22:\n\n```bash\nsudo ss -ltnp | grep ':22'\n```\n\n`ssh-keyscan` lấy khóa máy chủ công khai mà không đăng nhập. Chuyển khóa ED25519 qua đường ống tới `ssh-keygen -lf -` để hiển thị dấu vân tay:\n\n```bash\nssh-keyscan -t ed25519 localhost 2>/dev/null | ssh-keygen -lf -\n```\n\nTrong môi trường thực, so sánh dấu vân tay này với giá trị đáng tin do quản trị viên cung cấp trước khi chấp nhận. Lưu tóm tắt đích ngắn gọn:\n\n```bash\nprintf 'target=localhost\\nport=22\\nuser=remoteuser\\n' > ssh-target.txt\n```\n\n```bash\ncat ssh-target.txt\n```",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra đích SSH",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh|cat|cd)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh|cat|cd)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-2-v3",
@@ -57,13 +110,69 @@
       "task": "Thực hiện hướng dẫn: Open Your First Remote Shell",
       "hint": "Chạy lệnh: ssh remoteuser@localhost",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh\\s+)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ xác minh khóa máy chủ, xác thực bằng mật khẩu, kiểm tra tài khoản từ xa và đóng shell từ xa.\n\nKết nối với dạng `user@host`:\n\n```bash\nssh remoteuser@localhost\n```\n\nVì thiết lập ban đầu đã xóa mọi bản ghi khóa máy chủ `localhost` trước đó, SSH hỏi bạn có tin dấu vân tay được hiển thị không. Sau khi so sánh với Bước 1, nhập:\n\n```text\nyes\n```\n\nTại lời nhắc mật khẩu, nhập:\n\n```text\nRemoteLab123!\n```\n\nMật khẩu không hiển thị khi gõ. Sau khi đăng nhập, dấu nhắc thuộc về `remoteuser`, không phải `labex`. Xác nhận danh tính từ xa, máy và thư mục hiện tại:\n\n```bash\nwhoami\n```\n\n```bash\nhostname\n```\n\n```bash\npwd\n```\n\nTạo dấu mốc từ xa trong thư mục home của tài khoản từ xa:\n\n```bash\nmkdir -p ~/ssh-lab\n```\n\n```bash\nprintf 'connected as %s\\n' \"$(whoami)\" > ~/ssh-lab/connected.txt\n```\n\nĐóng shell từ xa và trở về dấu nhắc `labex` cục bộ:\n\n```bash\nexit\n```\n\nLệnh `exit` chỉ kết thúc shell từ xa; terminal cục bộ vẫn mở.",
       "task_vi": "Thực hiện hướng dẫn: Mở shell từ xa đầu tiên",
-      "hint_vi": "Chạy lệnh: ssh remoteuser@localhost"
+      "hint_vi": "Chạy lệnh: ssh remoteuser@localhost",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-3-v3",
@@ -78,13 +187,69 @@
       "task": "Thực hiện hướng dẫn: Run a Remote Command",
       "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh\\s+)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ chạy lệnh từ xa mà không mở shell tương tác kéo dài và lưu đầu ra của chúng ở cục bộ.\n\nTrở về thư mục làm việc cục bộ nếu cần:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nĐặt lệnh trong dấu nháy sau tên máy. SSH chạy nó từ xa và trả đầu ra về terminal cục bộ:\n\n```bash\nssh remoteuser@localhost 'whoami; uname -srm; uptime'\n```\n\nNhập `RemoteLab123!` khi được hỏi. Dấu chấm phẩy phân tách các lệnh được shell từ xa diễn giải.\n\nChạy lệnh từ xa thứ hai và chuyển hướng đầu ra trả về vào một tệp cục bộ:\n\n```bash\nssh remoteuser@localhost 'printf \"remote_user=%s\\nremote_home=%s\\n\" \"$(whoami)\" \"$HOME\"' > remote-context.txt\n```\n\nNhập lại mật khẩu. Chuyển hướng `>` do shell cục bộ xử lý nên `remote-context.txt` được tạo trong thư mục làm việc cục bộ:\n\n```bash\ncat remote-context.txt\n```\n\nTệp phải nhận diện `remoteuser` và `/home/remoteuser`.",
       "task_vi": "Thực hiện hướng dẫn: Chạy một lệnh từ xa",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-4-v3",
@@ -99,13 +264,69 @@
       "task": "Thực hiện hướng dẫn: Transfer a File with SCP",
       "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:scp\\s+)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ tải lên một tệp cục bộ, kiểm tra nó từ xa và tải xuống dưới tên cục bộ mới.\n\nTạo cấu hình mẫu cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > app.conf\n```\n\nSCP dùng `user@host:path` cho đường dẫn từ xa. Tải tệp lên thư mục `incoming` từ xa đã chuẩn bị:\n\n```bash\nscp app.conf remoteuser@localhost:/home/remoteuser/incoming/app.conf\n```\n\nNhập `RemoteLab123!` khi được hỏi. Xác nhận nội dung từ xa qua SSH:\n\n```bash\nssh remoteuser@localhost 'cat /home/remoteuser/incoming/app.conf'\n```\n\nNhập lại mật khẩu. Bây giờ đảo nguồn và đích để tải tệp xuống:\n\n```bash\nscp remoteuser@localhost:/home/remoteuser/incoming/app.conf downloaded-app.conf\n```\n\nNhập mật khẩu, rồi so sánh bản gốc cục bộ và bản tải xuống:\n\n```bash\ncmp app.conf downloaded-app.conf && echo \"The files match\"\n```",
       "task_vi": "Thực hiện hướng dẫn: Truyền tệp bằng SCP",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-5-v3",
@@ -120,13 +341,69 @@
       "task": "Thực hiện hướng dẫn: Transfer a Directory Recursively",
       "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:scp\\s+-r)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ dùng chế độ đệ quy của SCP để sao chép cây thư mục sang tài khoản từ xa.\n\nTạo cây dự án cục bộ nhỏ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nmkdir -p site/assets\n```\n\n```bash\nprintf '<h1>SSH transfer practice</h1>\\n' > site/index.html\n```\n\n```bash\nprintf 'body { color: navy; }\\n' > site/assets/style.css\n```\n\nTùy chọn `-r` sao chép thư mục và nội dung của chúng theo cách đệ quy:\n\n```bash\nscp -r site remoteuser@localhost:/home/remoteuser/incoming/\n```\n\nNhập `RemoteLab123!` khi được hỏi. Liệt kê cây từ xa bằng một lệnh SSH chạy một lần:\n\n```bash\nssh remoteuser@localhost 'find /home/remoteuser/incoming/site -type f -printf \"%P\\n\" | sort'\n```\n\nNhập lại mật khẩu. Bạn sẽ thấy `assets/style.css` và `index.html`.",
       "task_vi": "Thực hiện hướng dẫn: Truyền thư mục đệ quy",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp\\s+-r)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp\\s+-r)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-6-v3",
@@ -141,13 +418,66 @@
       "task": "Thực hiện hướng dẫn: Generate a Personal SSH Key",
       "hint": "Chạy lệnh: mkdir -p ~/.ssh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh-keygen)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ tạo một cặp khóa ED25519 chuyên dùng và kiểm tra quyền cùng dấu vân tay của nó.\n\nCặp khóa gồm khóa riêng được giữ bên bạn và khóa công khai có thể cài trên tài khoản từ xa. Tạo khóa thực hành riêng không có mật khẩu bảo vệ để kiểm tra tự động có thể dùng:\n\n```bash\nmkdir -p ~/.ssh\n```\n\n```bash\nchmod 700 ~/.ssh\n```\n\n```bash\nssh-keygen -t ed25519 -f ~/.ssh/labex_remote_ed25519 -N '' -C 'labex-remote-practice'\n```\n\nTùy chọn `-t` chọn thuật toán, `-f` chọn tệp, `-N ''` đặt mật khẩu bảo vệ thực hành rỗng và `-C` thêm nhãn. Khóa dùng trong sản xuất thông thường nên có mật khẩu bảo vệ mạnh nếu ràng buộc tự động hóa không ngăn cản.\n\nKiểm tra hai tệp và quyền của chúng:\n\n```bash\nls -l ~/.ssh/labex_remote_ed25519 ~/.ssh/labex_remote_ed25519.pub\n```\n\nChỉ `labex` được đọc khóa riêng. Tệp `.pub` được thiết kế để chia sẻ. Hiển thị dấu vân tay khóa công khai:\n\n```bash\nssh-keygen -lf ~/.ssh/labex_remote_ed25519.pub\n```\n\nKhông bao giờ sao chép hoặc tiết lộ khóa riêng.",
       "task_vi": "Thực hiện hướng dẫn: Tạo khóa SSH cá nhân",
-      "hint_vi": "Chạy lệnh: mkdir -p ~/.ssh"
+      "hint_vi": "Chạy lệnh: mkdir -p ~/.ssh",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh-keygen)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh-keygen)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-7-v3",
@@ -162,13 +492,69 @@
       "task": "Thực hiện hướng dẫn: Install and Use the Public Key",
       "hint": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh-copy-id|ssh)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ cài khóa công khai cho `remoteuser`, kết nối không có lời nhắc mật khẩu và xác minh truyền tệp bằng khóa.\n\n`ssh-copy-id` nối khóa công khai vào `~/.ssh/authorized_keys` của tài khoản từ xa với quyền thích hợp:\n\n```bash\nssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost\n```\n\nNhập `RemoteLab123!` cho thao tác xác thực bằng mật khẩu cuối cùng này. Thử khóa riêng chuyên dùng bằng `-i`:\n\n```bash\nssh -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost 'printf \"key authentication works\\n\" > ~/ssh-lab/key-authenticated.txt; cat ~/ssh-lab/key-authenticated.txt'\n```\n\nLệnh này không được hỏi mật khẩu tài khoản từ xa. Dùng cùng khóa nhận diện cho SCP:\n\n```bash\nscp -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost:~/ssh-lab/key-authenticated.txt key-authenticated.txt\n```\n\n```bash\ncat key-authenticated.txt\n```\n\nTệp tải xuống phải chứa `key authentication works`. Khóa máy chủ xác thực máy chủ; khóa riêng của bạn xác thực bạn với tài khoản từ xa. Chúng giải quyết hai vấn đề tin cậy khác nhau.",
       "task_vi": "Thực hiện hướng dẫn: Cài và sử dụng khóa công khai",
-      "hint_vi": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost"
+      "hint_vi": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh-copy-id|ssh)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh-copy-id|ssh)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "section-8",
@@ -197,13 +583,66 @@
       "task": "Thực hiện hướng dẫn: Inspect the SSH Target",
       "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh|cat|cd)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ nhận diện SSH client, phân giải tên đích, xác nhận máy chủ đang lắng nghe và xem trước khóa máy chủ công khai của nó.\n\nVào thư mục làm việc cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nHiển thị phiên bản OpenSSH client. Chương trình này ghi phiên bản vào lỗi chuẩn nên `2>&1` gộp nó với đầu ra chuẩn:\n\n```bash\nssh -V 2>&1\n```\n\nPhân giải đích cục bộ qua cấu hình dịch vụ tên của hệ thống:\n\n```bash\ngetent hosts localhost\n```\n\nXác nhận máy chủ SSH lắng nghe trên cổng TCP 22:\n\n```bash\nsudo ss -ltnp | grep ':22'\n```\n\n`ssh-keyscan` lấy khóa máy chủ công khai mà không đăng nhập. Chuyển khóa ED25519 qua đường ống tới `ssh-keygen -lf -` để hiển thị dấu vân tay:\n\n```bash\nssh-keyscan -t ed25519 localhost 2>/dev/null | ssh-keygen -lf -\n```\n\nTrong môi trường thực, so sánh dấu vân tay này với giá trị đáng tin do quản trị viên cung cấp trước khi chấp nhận. Lưu tóm tắt đích ngắn gọn:\n\n```bash\nprintf 'target=localhost\\nport=22\\nuser=remoteuser\\n' > ssh-target.txt\n```\n\n```bash\ncat ssh-target.txt\n```",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra đích SSH",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh|cat|cd)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh|cat|cd)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-2-v3",
@@ -218,13 +657,69 @@
       "task": "Thực hiện hướng dẫn: Open Your First Remote Shell",
       "hint": "Chạy lệnh: ssh remoteuser@localhost",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh\\s+)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ xác minh khóa máy chủ, xác thực bằng mật khẩu, kiểm tra tài khoản từ xa và đóng shell từ xa.\n\nKết nối với dạng `user@host`:\n\n```bash\nssh remoteuser@localhost\n```\n\nVì thiết lập ban đầu đã xóa mọi bản ghi khóa máy chủ `localhost` trước đó, SSH hỏi bạn có tin dấu vân tay được hiển thị không. Sau khi so sánh với Bước 1, nhập:\n\n```text\nyes\n```\n\nTại lời nhắc mật khẩu, nhập:\n\n```text\nRemoteLab123!\n```\n\nMật khẩu không hiển thị khi gõ. Sau khi đăng nhập, dấu nhắc thuộc về `remoteuser`, không phải `labex`. Xác nhận danh tính từ xa, máy và thư mục hiện tại:\n\n```bash\nwhoami\n```\n\n```bash\nhostname\n```\n\n```bash\npwd\n```\n\nTạo dấu mốc từ xa trong thư mục home của tài khoản từ xa:\n\n```bash\nmkdir -p ~/ssh-lab\n```\n\n```bash\nprintf 'connected as %s\\n' \"$(whoami)\" > ~/ssh-lab/connected.txt\n```\n\nĐóng shell từ xa và trở về dấu nhắc `labex` cục bộ:\n\n```bash\nexit\n```\n\nLệnh `exit` chỉ kết thúc shell từ xa; terminal cục bộ vẫn mở.",
       "task_vi": "Thực hiện hướng dẫn: Mở shell từ xa đầu tiên",
-      "hint_vi": "Chạy lệnh: ssh remoteuser@localhost"
+      "hint_vi": "Chạy lệnh: ssh remoteuser@localhost",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-3-v3",
@@ -239,13 +734,69 @@
       "task": "Thực hiện hướng dẫn: Run a Remote Command",
       "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh\\s+)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ chạy lệnh từ xa mà không mở shell tương tác kéo dài và lưu đầu ra của chúng ở cục bộ.\n\nTrở về thư mục làm việc cục bộ nếu cần:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\nĐặt lệnh trong dấu nháy sau tên máy. SSH chạy nó từ xa và trả đầu ra về terminal cục bộ:\n\n```bash\nssh remoteuser@localhost 'whoami; uname -srm; uptime'\n```\n\nNhập `RemoteLab123!` khi được hỏi. Dấu chấm phẩy phân tách các lệnh được shell từ xa diễn giải.\n\nChạy lệnh từ xa thứ hai và chuyển hướng đầu ra trả về vào một tệp cục bộ:\n\n```bash\nssh remoteuser@localhost 'printf \"remote_user=%s\\nremote_home=%s\\n\" \"$(whoami)\" \"$HOME\"' > remote-context.txt\n```\n\nNhập lại mật khẩu. Chuyển hướng `>` do shell cục bộ xử lý nên `remote-context.txt` được tạo trong thư mục làm việc cục bộ:\n\n```bash\ncat remote-context.txt\n```\n\nTệp phải nhận diện `remoteuser` và `/home/remoteuser`.",
       "task_vi": "Thực hiện hướng dẫn: Chạy một lệnh từ xa",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-4-v3",
@@ -260,13 +811,69 @@
       "task": "Thực hiện hướng dẫn: Transfer a File with SCP",
       "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:scp\\s+)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ tải lên một tệp cục bộ, kiểm tra nó từ xa và tải xuống dưới tên cục bộ mới.\n\nTạo cấu hình mẫu cục bộ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > app.conf\n```\n\nSCP dùng `user@host:path` cho đường dẫn từ xa. Tải tệp lên thư mục `incoming` từ xa đã chuẩn bị:\n\n```bash\nscp app.conf remoteuser@localhost:/home/remoteuser/incoming/app.conf\n```\n\nNhập `RemoteLab123!` khi được hỏi. Xác nhận nội dung từ xa qua SSH:\n\n```bash\nssh remoteuser@localhost 'cat /home/remoteuser/incoming/app.conf'\n```\n\nNhập lại mật khẩu. Bây giờ đảo nguồn và đích để tải tệp xuống:\n\n```bash\nscp remoteuser@localhost:/home/remoteuser/incoming/app.conf downloaded-app.conf\n```\n\nNhập mật khẩu, rồi so sánh bản gốc cục bộ và bản tải xuống:\n\n```bash\ncmp app.conf downloaded-app.conf && echo \"The files match\"\n```",
       "task_vi": "Thực hiện hướng dẫn: Truyền tệp bằng SCP",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp\\s+)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-5-v3",
@@ -281,13 +888,69 @@
       "task": "Thực hiện hướng dẫn: Transfer a Directory Recursively",
       "hint": "Chạy lệnh: cd /home/labex/project/ssh-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:scp\\s+-r)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ dùng chế độ đệ quy của SCP để sao chép cây thư mục sang tài khoản từ xa.\n\nTạo cây dự án cục bộ nhỏ:\n\n```bash\ncd /home/labex/project/ssh-lab\n```\n\n```bash\nmkdir -p site/assets\n```\n\n```bash\nprintf '<h1>SSH transfer practice</h1>\\n' > site/index.html\n```\n\n```bash\nprintf 'body { color: navy; }\\n' > site/assets/style.css\n```\n\nTùy chọn `-r` sao chép thư mục và nội dung của chúng theo cách đệ quy:\n\n```bash\nscp -r site remoteuser@localhost:/home/remoteuser/incoming/\n```\n\nNhập `RemoteLab123!` khi được hỏi. Liệt kê cây từ xa bằng một lệnh SSH chạy một lần:\n\n```bash\nssh remoteuser@localhost 'find /home/remoteuser/incoming/site -type f -printf \"%P\\n\" | sort'\n```\n\nNhập lại mật khẩu. Bạn sẽ thấy `assets/style.css` và `index.html`.",
       "task_vi": "Thực hiện hướng dẫn: Truyền thư mục đệ quy",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/ssh-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp\\s+-r)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp\\s+-r)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-6-v3",
@@ -302,13 +965,66 @@
       "task": "Thực hiện hướng dẫn: Generate a Personal SSH Key",
       "hint": "Chạy lệnh: mkdir -p ~/.ssh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh-keygen)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ tạo một cặp khóa ED25519 chuyên dùng và kiểm tra quyền cùng dấu vân tay của nó.\n\nCặp khóa gồm khóa riêng được giữ bên bạn và khóa công khai có thể cài trên tài khoản từ xa. Tạo khóa thực hành riêng không có mật khẩu bảo vệ để kiểm tra tự động có thể dùng:\n\n```bash\nmkdir -p ~/.ssh\n```\n\n```bash\nchmod 700 ~/.ssh\n```\n\n```bash\nssh-keygen -t ed25519 -f ~/.ssh/labex_remote_ed25519 -N '' -C 'labex-remote-practice'\n```\n\nTùy chọn `-t` chọn thuật toán, `-f` chọn tệp, `-N ''` đặt mật khẩu bảo vệ thực hành rỗng và `-C` thêm nhãn. Khóa dùng trong sản xuất thông thường nên có mật khẩu bảo vệ mạnh nếu ràng buộc tự động hóa không ngăn cản.\n\nKiểm tra hai tệp và quyền của chúng:\n\n```bash\nls -l ~/.ssh/labex_remote_ed25519 ~/.ssh/labex_remote_ed25519.pub\n```\n\nChỉ `labex` được đọc khóa riêng. Tệp `.pub` được thiết kế để chia sẻ. Hiển thị dấu vân tay khóa công khai:\n\n```bash\nssh-keygen -lf ~/.ssh/labex_remote_ed25519.pub\n```\n\nKhông bao giờ sao chép hoặc tiết lộ khóa riêng.",
       "task_vi": "Thực hiện hướng dẫn: Tạo khóa SSH cá nhân",
-      "hint_vi": "Chạy lệnh: mkdir -p ~/.ssh"
+      "hint_vi": "Chạy lệnh: mkdir -p ~/.ssh",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh-keygen)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh-keygen)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725416-section-7-v3",
@@ -323,13 +1039,69 @@
       "task": "Thực hiện hướng dẫn: Install and Use the Public Key",
       "hint": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ssh-copy-id|ssh)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ cài khóa công khai cho `remoteuser`, kết nối không có lời nhắc mật khẩu và xác minh truyền tệp bằng khóa.\n\n`ssh-copy-id` nối khóa công khai vào `~/.ssh/authorized_keys` của tài khoản từ xa với quyền thích hợp:\n\n```bash\nssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost\n```\n\nNhập `RemoteLab123!` cho thao tác xác thực bằng mật khẩu cuối cùng này. Thử khóa riêng chuyên dùng bằng `-i`:\n\n```bash\nssh -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost 'printf \"key authentication works\\n\" > ~/ssh-lab/key-authenticated.txt; cat ~/ssh-lab/key-authenticated.txt'\n```\n\nLệnh này không được hỏi mật khẩu tài khoản từ xa. Dùng cùng khóa nhận diện cho SCP:\n\n```bash\nscp -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost:~/ssh-lab/key-authenticated.txt key-authenticated.txt\n```\n\n```bash\ncat key-authenticated.txt\n```\n\nTệp tải xuống phải chứa `key authentication works`. Khóa máy chủ xác thực máy chủ; khóa riêng của bạn xác thực bạn với tài khoản từ xa. Chúng giải quyết hai vấn đề tin cậy khác nhau.",
       "task_vi": "Thực hiện hướng dẫn: Cài và sử dụng khóa công khai",
-      "hint_vi": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost"
+      "hint_vi": "Chạy lệnh: ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh-copy-id|ssh)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ssh-copy-id|ssh)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
   ],
   "curriculum_version": 3,

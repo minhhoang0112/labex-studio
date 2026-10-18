@@ -1,0 +1,129 @@
+{
+  "id": "win-troubleshoot-failed-services",
+  "course_id": "windows-troubleshooting-and-incident-response",
+  "order": 2,
+  "title": "Diagnosing & Recovering Failed Windows Services",
+  "title_vi": "Chẩn Đoán & Khôi Phục Dịch Vụ Windows Bị Lỗi",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "Khắc phục lỗi Logon Failure của Service Account, sửa đường dẫn nhị phân bị hỏng trong ImagePath Registry, và cấu hình Service Recovery Actions.",
+  "sections": [
+    {
+      "id": "win-tr-02-sec-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Why Do Services Fail to Start?\n\nIn real production environments, 90% of service startup failures stem from:\n1. **Logon Failure**: The service account password expired or lost the 'Log on as a service' right.\n2. **Dependency Failure**: A prerequisite service is disabled or failed to start.\n3. **Port Conflict**: Another program is already listening on the required TCP port.\n4. **Corrupt Configuration**: Faulty settings in the registry or app config file.\n",
+      "content_vi": "## Tại Sao Dịch Vụ Không Thể Khởi Động?\n\nTrong thực tế doanh nghiệp, 90% lỗi khởi động dịch vụ bắt nguồn từ:\n1. **Lỗi Đăng nhập (Logon Failure)**: Mật khẩu của tài khoản dịch vụ bị hết hạn hoặc mất quyền 'Log on as a service'.\n2. **Lỗi Phụ thuộc (Dependency Failure)**: Dịch vụ tiền đề (prerequisite) bị tắt hoặc không chạy.\n3. **Xung đột Cổng mạng**: Một ứng dụng khác đang chiếm dụng cổng TCP mà dịch vụ cần.\n4. **Cấu hình Sai**: Thông số trong Registry hoặc tệp cấu hình bị hỏng."
+    },
+    {
+      "id": "win-tr-02-sec-1",
+      "title": "Inspecting Service Startup Type & Dependencies",
+      "title_vi": "Kiểm Tra Kiểu Khởi Động & Phụ Thuộc Của Dịch Vụ",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Query Spooler or Winmgmt service configuration, its start type and dependent services.",
+      "task_vi": "Truy vấn cấu hình dịch vụ Spooler hoặc Winmgmt, kiểu khởi động (StartType) và các dịch vụ phụ thuộc.",
+      "hint": "Run: Get-Service Spooler -DependentServices",
+      "hint_vi": "Chạy lệnh: Get-Service Spooler -DependentServices",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Service|DependentServices|RequiredServices)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Service Deep Dive\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```\n",
+      "content_vi": "### Phân tích Dịch Vụ\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-tr-02-sec-1",
+      "title": "Inspecting Service Startup Type & Dependencies",
+      "title_vi": "Kiểm Tra Kiểu Khởi Động & Phụ Thuộc Của Dịch Vụ",
+      "content": "### Service Deep Dive\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```\n",
+      "content_vi": "### Phân tích Dịch Vụ\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```",
+      "task": "Query Spooler or Winmgmt service configuration, its start type and dependent services.",
+      "task_vi": "Truy vấn cấu hình dịch vụ Spooler hoặc Winmgmt, kiểu khởi động (StartType) và các dịch vụ phụ thuộc.",
+      "hint": "Run: Get-Service Spooler -DependentServices",
+      "hint_vi": "Chạy lệnh: Get-Service Spooler -DependentServices",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Service|DependentServices|RequiredServices)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Service|DependentServices|RequiredServices)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Service|DependentServices|RequiredServices)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

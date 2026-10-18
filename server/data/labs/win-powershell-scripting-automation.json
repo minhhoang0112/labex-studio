@@ -1,0 +1,129 @@
+{
+  "id": "win-powershell-scripting-automation",
+  "course_id": "windows-powershell-for-sysadmins",
+  "order": 5,
+  "title": "PowerShell Scripting for Daily Automation",
+  "title_vi": "Viết Kịch Bản Tự Động Hóa Quản Trị Hàng Ngày",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "Tạo kịch bản script .ps1 tự động thu thập báo cáo hệ thống: dung lượng ổ đĩa, trạng thái dịch vụ quan trọng và gửi cảnh báo.",
+  "sections": [
+    {
+      "id": "win-sc-05-sec-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Automating Repetitive SysAdmin Tasks\n\nWriting clean PowerShell scripts with functions, error handling (`try/catch`), and parameter blocks turns hours of manual work into scheduled single-second tasks.\n",
+      "content_vi": "## Tự động hóa các Tác vụ Quản trị Lặp lại\n\nViết kịch bản PowerShell với hàm (functions), xử lý lỗi (`try/catch`) và tham số (parameters) giúp biến hàng giờ làm việc thủ công thành các tác vụ chạy tự động trong tích tắc."
+    },
+    {
+      "id": "win-sc-05-sec-1",
+      "title": "Generate a Server Health Summary Report",
+      "title_vi": "Tạo Báo Cáo Tổng Hợp Sức Khỏe Máy Chủ",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Write a PowerShell one-liner or script to output disk space and save to health_report.txt.",
+      "task_vi": "Chạy lệnh trích xuất thông tin dung lượng ổ đĩa và xuất ra tệp health_report.txt.",
+      "hint": "Run: Get-CimInstance Win32_LogicalDisk | Out-File health_report.txt",
+      "hint_vi": "Chạy lệnh: Get-CimInstance Win32_LogicalDisk | Out-File health_report.txt",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:health_report|Get-CimInstance|Get-WmiObject|Get-PSDrive)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Generating Report\n\n```powershell\nGet-CimInstance Win32_LogicalDisk | Select-Object DeviceID, FreeSpace, Size | Out-File health_report.txt\nGet-Content health_report.txt\n```\n",
+      "content_vi": "### Tạo Báo Cáo\n\n```powershell\nGet-CimInstance Win32_LogicalDisk | Select-Object DeviceID, FreeSpace, Size | Out-File health_report.txt\nGet-Content health_report.txt\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-sc-05-sec-1",
+      "title": "Generate a Server Health Summary Report",
+      "title_vi": "Tạo Báo Cáo Tổng Hợp Sức Khỏe Máy Chủ",
+      "content": "### Generating Report\n\n```powershell\nGet-CimInstance Win32_LogicalDisk | Select-Object DeviceID, FreeSpace, Size | Out-File health_report.txt\nGet-Content health_report.txt\n```\n",
+      "content_vi": "### Tạo Báo Cáo\n\n```powershell\nGet-CimInstance Win32_LogicalDisk | Select-Object DeviceID, FreeSpace, Size | Out-File health_report.txt\nGet-Content health_report.txt\n```",
+      "task": "Write a PowerShell one-liner or script to output disk space and save to health_report.txt.",
+      "task_vi": "Chạy lệnh trích xuất thông tin dung lượng ổ đĩa và xuất ra tệp health_report.txt.",
+      "hint": "Run: Get-CimInstance Win32_LogicalDisk | Out-File health_report.txt",
+      "hint_vi": "Chạy lệnh: Get-CimInstance Win32_LogicalDisk | Out-File health_report.txt",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:health_report|Get-CimInstance|Get-WmiObject|Get-PSDrive)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:health_report|Get-CimInstance|Get-WmiObject|Get-PSDrive)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:health_report|Get-CimInstance|Get-WmiObject|Get-PSDrive)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

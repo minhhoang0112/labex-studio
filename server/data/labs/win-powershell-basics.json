@@ -1,0 +1,231 @@
+{
+  "id": "win-powershell-basics",
+  "course_id": "windows-powershell-for-sysadmins",
+  "order": 1,
+  "title": "PowerShell Fundamentals & Cmdlet Architecture",
+  "title_vi": "Làm Quen Với PowerShell & Kiến Trúc Cmdlet",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "20 mins",
+  "overview": "Khám phá kiến trúc Verb-Noun độc đáo của PowerShell, sử dụng Get-Command, Get-Help và làm việc với đối tượng thay vì chuỗi văn bản thuần túy.",
+  "sections": [
+    {
+      "id": "win-ps-01-sec-0",
+      "title": "Introduction to PowerShell",
+      "title_vi": "Giới thiệu về PowerShell",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Welcome to PowerShell for System Administrators\n\nPowerShell is an object-oriented automation engine and scripting language designed specifically for system administrators. Unlike traditional Linux shells or Windows Command Prompt (cmd.exe) that pass plain text, PowerShell passes rich .NET objects through the pipeline.\n\nIn this lab, you will learn:\n- The Verb-Noun cmdlet naming convention (e.g. `Get-Process`, `Set-Service`).\n- How to discover commands with `Get-Command`.\n- How to read built-in documentation with `Get-Help`.\n- How to inspect object properties with `Get-Member`.\n",
+      "content_vi": "## Chào mừng bạn đến với PowerShell dành cho Quản trị viên Hệ thống\n\nPowerShell là một engine tự động hóa và ngôn ngữ kịch bản hướng đối tượng được thiết kế riêng cho các kỹ sư quản trị hệ thống. Khác với shell Linux truyền thống hay cmd.exe vốn chỉ truyền các dòng text phẳng, PowerShell truyền toàn bộ đối tượng .NET qua đường ống (pipeline).\n\nTrong bài lab này, bạn sẽ học:\n- Quy ước đặt tên cmdlet Động từ - Danh từ (Verb-Noun) như `Get-Process`, `Set-Service`.\n- Cách tìm kiếm lệnh nhanh chóng với `Get-Command`.\n- Cách tra cứu tài liệu và ví dụ mẫu với `Get-Help`.\n- Cách xem các thuộc tính và phương thức của đối tượng với `Get-Member`."
+    },
+    {
+      "id": "win-ps-01-sec-1",
+      "title": "Discovering Cmdlets with Get-Command",
+      "title_vi": "Khám phá Lệnh với Get-Command",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Use Get-Command to discover cmdlets matching the Service noun, then find the PowerShell version.",
+      "task_vi": "Sử dụng lệnh Get-Command để tìm các cmdlet liên quan đến Service, sau đó kiểm tra phiên bản PowerShell hiện tại.",
+      "hint": "Run: Get-Command *-Service and inspect $PSVersionTable",
+      "hint_vi": "Chạy lệnh: Get-Command *-Service và kiểm tra biến $PSVersionTable",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Command|PSVersionTable|get-command)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Discovering Cmdlets\n\nRun the following command to find all cmdlets that manage Windows Services:\n\n```powershell\nGet-Command *-Service\n```\n\nNext, inspect your current PowerShell environment:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n",
+      "content_vi": "### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```"
+    },
+    {
+      "id": "win-ps-01-sec-2",
+      "title": "Inspecting Objects with Get-Member",
+      "title_vi": "Kiểm tra Thuộc tính Đối tượng với Get-Member",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Pipe Get-Process to Get-Member to see available properties and methods.",
+      "task_vi": "Chuyển tiếp kết quả Get-Process sang Get-Member để xem các thuộc tính (Properties) và phương thức (Methods) của tiến trình.",
+      "hint": "Run: Get-Process | Get-Member",
+      "hint_vi": "Chạy lệnh: Get-Process | Get-Member",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Member|get-member|Get-Process)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Working with Objects\n\nPass processes to `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nNotice that the output shows `TypeName: System.Diagnostics.Process` with properties like `CPU`, `Id`, `ProcessName`, and methods like `Kill()`.\n",
+      "content_vi": "### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`."
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-ps-01-sec-1",
+      "title": "Discovering Cmdlets with Get-Command",
+      "title_vi": "Khám phá Lệnh với Get-Command",
+      "content": "### Discovering Cmdlets\n\nRun the following command to find all cmdlets that manage Windows Services:\n\n```powershell\nGet-Command *-Service\n```\n\nNext, inspect your current PowerShell environment:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n",
+      "content_vi": "### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```",
+      "task": "Use Get-Command to discover cmdlets matching the Service noun, then find the PowerShell version.",
+      "task_vi": "Sử dụng lệnh Get-Command để tìm các cmdlet liên quan đến Service, sau đó kiểm tra phiên bản PowerShell hiện tại.",
+      "hint": "Run: Get-Command *-Service and inspect $PSVersionTable",
+      "hint_vi": "Chạy lệnh: Get-Command *-Service và kiểm tra biến $PSVersionTable",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Command|PSVersionTable|get-command)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Command|PSVersionTable|get-command)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Command|PSVersionTable|get-command)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    },
+    {
+      "id": "win-ps-01-sec-2",
+      "title": "Inspecting Objects with Get-Member",
+      "title_vi": "Kiểm tra Thuộc tính Đối tượng với Get-Member",
+      "content": "### Working with Objects\n\nPass processes to `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nNotice that the output shows `TypeName: System.Diagnostics.Process` with properties like `CPU`, `Id`, `ProcessName`, and methods like `Kill()`.\n",
+      "content_vi": "### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.",
+      "task": "Pipe Get-Process to Get-Member to see available properties and methods.",
+      "task_vi": "Chuyển tiếp kết quả Get-Process sang Get-Member để xem các thuộc tính (Properties) và phương thức (Methods) của tiến trình.",
+      "hint": "Run: Get-Process | Get-Member",
+      "hint_vi": "Chạy lệnh: Get-Process | Get-Member",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Member|get-member|Get-Process)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Member|get-member|Get-Process)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Member|get-member|Get-Process)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

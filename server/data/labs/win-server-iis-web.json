@@ -1,0 +1,129 @@
+{
+  "id": "win-server-iis-web",
+  "course_id": "windows-server-administration-essentials",
+  "order": 5,
+  "title": "IIS Web Server Hosting & SSL Certificate Configuration",
+  "title_vi": "Triển Khai Máy Chủ Web IIS & Cấu Hình Chứng Chỉ SSL",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "35 mins",
+  "overview": "Triển khai dịch vụ Internet Information Services (IIS), tạo Website mới, cấu hình Application Pool và thiết lập HTTPS binding bảo mật.",
+  "sections": [
+    {
+      "id": "win-iis-05-sec-0",
+      "title": "Introduction to IIS",
+      "title_vi": "Giới thiệu về IIS",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Microsoft Internet Information Services (IIS)\n\nIIS is Microsoft's production web server, powering enterprise ASP.NET, PHP, and static web portals with robust Application Pools and worker process isolation.\n",
+      "content_vi": "## Dịch Vụ Máy Chủ Web IIS\n\nIIS là máy chủ web tiêu chuẩn của Microsoft, phục vụ các ứng dụng doanh nghiệp ASP.NET, website nội bộ và dịch vụ API với cơ chế cô lập tiến trình Application Pool mạnh mẽ."
+    },
+    {
+      "id": "win-iis-05-sec-1",
+      "title": "Inspecting Web Administration Cmdlets",
+      "title_vi": "Khám Phá Các Lệnh Quản Trị Web IIS",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Explore WebAdministration cmdlets for managing IIS sites and app pools.",
+      "task_vi": "Kiểm tra các lệnh quản trị IIS và xem cổng lắng nghe mạng của máy chủ web.",
+      "hint": "Run: Get-Command *IIS* or Get-NetTCPConnection -LocalPort 80, 443",
+      "hint_vi": "Chạy lệnh: Get-Command *IIS* hoặc Get-NetTCPConnection -LocalPort 80, 443",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Command|Get-NetTCPConnection|netstat)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Checking IIS Commands\n\n```powershell\nGet-Command *Website*\nGet-NetTCPConnection -LocalPort 80, 443 -ErrorAction SilentlyContinue\n```\n",
+      "content_vi": "### Kiểm tra Lệnh IIS\n\n```powershell\nGet-Command *Website*\nGet-NetTCPConnection -LocalPort 80, 443 -ErrorAction SilentlyContinue\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-iis-05-sec-1",
+      "title": "Inspecting Web Administration Cmdlets",
+      "title_vi": "Khám Phá Các Lệnh Quản Trị Web IIS",
+      "content": "### Checking IIS Commands\n\n```powershell\nGet-Command *Website*\nGet-NetTCPConnection -LocalPort 80, 443 -ErrorAction SilentlyContinue\n```\n",
+      "content_vi": "### Kiểm tra Lệnh IIS\n\n```powershell\nGet-Command *Website*\nGet-NetTCPConnection -LocalPort 80, 443 -ErrorAction SilentlyContinue\n```",
+      "task": "Explore WebAdministration cmdlets for managing IIS sites and app pools.",
+      "task_vi": "Kiểm tra các lệnh quản trị IIS và xem cổng lắng nghe mạng của máy chủ web.",
+      "hint": "Run: Get-Command *IIS* or Get-NetTCPConnection -LocalPort 80, 443",
+      "hint_vi": "Chạy lệnh: Get-Command *IIS* hoặc Get-NetTCPConnection -LocalPort 80, 443",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Command|Get-NetTCPConnection|netstat)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Command|Get-NetTCPConnection|netstat)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Command|Get-NetTCPConnection|netstat)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

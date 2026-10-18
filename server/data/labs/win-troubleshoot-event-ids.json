@@ -1,0 +1,129 @@
+{
+  "id": "win-troubleshoot-event-ids",
+  "course_id": "windows-troubleshooting-and-incident-response",
+  "order": 1,
+  "title": "Mastering Event Viewer & Critical SysAdmin Event IDs",
+  "title_vi": "Làm Chủ Event Viewer & Các Mã Lỗi Event ID Quan Trọng",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "Kỹ năng phân tích nguyên nhân gốc rễ (RCA): Giải mã các mã Event ID 4625 (Đăng nhập thất bại), 7000/7001 (Lỗi dịch vụ), 1000/1002 (Ứng dụng sập), 41 (Kernel-Power tắt đột ngột).",
+  "sections": [
+    {
+      "id": "win-tr-01-sec-0",
+      "title": "Introduction to Event ID Triage",
+      "title_vi": "Giới thiệu về Phân Loại Mã Lỗi Event ID",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## The Essential Event IDs Every Windows Admin Must Know\n\nWhen a server misbehaves, the senior admin doesn't guess—they open Event Viewer. Here are the universal Event IDs:\n- **Event ID 4625**: An account failed to log on (potential brute-force attack or expired service account password).\n- **Event ID 7000 / 7034**: A service failed to start or terminated unexpectedly.\n- **Event ID 1000 / 1002**: Application crash or hang.\n- **Event ID 41**: The system has rebooted without cleanly shutting down first (unexpected power loss or BSOD).\n",
+      "content_vi": "## Các Mã Lỗi Event ID Mà Mọi Quản Trị Viên Phải Nắm\n\nKhi máy chủ gặp sự cố, kỹ sư quản trị không phỏng đoán mò mẫm—họ mở ngay Event Viewer. Dưới đây là các Event ID kinh điển:\n- **Event ID 4625**: Đăng nhập thất bại (dấu hiệu tấn công dò mật khẩu hoặc tài khoản dịch vụ bị đổi pass).\n- **Event ID 7000 / 7034**: Dịch vụ hệ thống không thể khởi động hoặc bị crash đột ngột.\n- **Event ID 1000 / 1002**: Ứng dụng bị sập (crash) hoặc bị treo không phản hồi (hang).\n- **Event ID 41**: Máy chủ bị mất nguồn đột ngột hoặc màn hình xanh (BSOD) tự khởi động lại."
+    },
+    {
+      "id": "win-tr-01-sec-1",
+      "title": "Investigating Service Failures (Event 7000 Series)",
+      "title_vi": "Điều Tra Sự Cố Dịch Vụ (Dãy Event 7000)",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Search System event log for Service Control Manager events (Event ID 7000/7001/7034).",
+      "task_vi": "Tìm kiếm trong System log các sự kiện do Service Control Manager ghi nhận (Event ID 7000, 7001, 7034).",
+      "hint": "Run: Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue",
+      "hint_vi": "Chạy lệnh: Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-WinEvent|Get-EventLog|Service Control Manager)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Investigating Service Crashes\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\n```\n",
+      "content_vi": "### Điều tra Sự cố Dịch vụ\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-tr-01-sec-1",
+      "title": "Investigating Service Failures (Event 7000 Series)",
+      "title_vi": "Điều Tra Sự Cố Dịch Vụ (Dãy Event 7000)",
+      "content": "### Investigating Service Crashes\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\n```\n",
+      "content_vi": "### Điều tra Sự cố Dịch vụ\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\n```",
+      "task": "Search System event log for Service Control Manager events (Event ID 7000/7001/7034).",
+      "task_vi": "Tìm kiếm trong System log các sự kiện do Service Control Manager ghi nhận (Event ID 7000, 7001, 7034).",
+      "hint": "Run: Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue",
+      "hint_vi": "Chạy lệnh: Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-WinEvent|Get-EventLog|Service Control Manager)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-WinEvent|Get-EventLog|Service Control Manager)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-WinEvent|Get-EventLog|Service Control Manager)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

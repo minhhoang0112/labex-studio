@@ -1,0 +1,129 @@
+{
+  "id": "win-event-log-analysis",
+  "course_id": "windows-powershell-for-sysadmins",
+  "order": 4,
+  "title": "Windows Event Log Querying & Analysis",
+  "title_vi": "Truy Vấn và Phân Tích Windows Event Logs",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "Sử dụng Get-WinEvent và Get-EventLog để điều tra nhật ký sự kiện Application, System và Security.",
+  "sections": [
+    {
+      "id": "win-el-04-sec-0",
+      "title": "Introduction to Windows Event Logs",
+      "title_vi": "Giới thiệu về Windows Event Logs",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## The Heart of Windows Troubleshooting\n\nWindows records all critical operating system, driver, security and application activities in structured Event Logs. Cmdlet `Get-WinEvent` is the modern standard to query these logs with high performance using XPath or FilterHashtables.\n",
+      "content_vi": "## Trái tim của việc Chẩn đoán Sự cố Windows\n\nWindows ghi nhận toàn bộ hoạt động của hệ điều hành, driver, bảo mật và ứng dụng vào các tệp Event Log có cấu trúc. Lệnh `Get-WinEvent` là chuẩn hiện đại giúp truy vấn log tốc độ cao với FilterHashtable."
+    },
+    {
+      "id": "win-el-04-sec-1",
+      "title": "Filtering Error Events in the System Log",
+      "title_vi": "Lọc Sự Kiện Lỗi (Error) Trong System Log",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Query the latest 5 Error-level events from the System log.",
+      "task_vi": "Truy vấn 5 sự kiện cấp độ Lỗi (Error) gần nhất từ nhật ký System.",
+      "hint": "Run: Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5",
+      "hint_vi": "Chạy lệnh: Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-WinEvent|Get-EventLog|FilterHashtable)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Querying System Errors\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message\n```\n",
+      "content_vi": "### Lọc Lỗi Hệ Thống\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-el-04-sec-1",
+      "title": "Filtering Error Events in the System Log",
+      "title_vi": "Lọc Sự Kiện Lỗi (Error) Trong System Log",
+      "content": "### Querying System Errors\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message\n```\n",
+      "content_vi": "### Lọc Lỗi Hệ Thống\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message\n```",
+      "task": "Query the latest 5 Error-level events from the System log.",
+      "task_vi": "Truy vấn 5 sự kiện cấp độ Lỗi (Error) gần nhất từ nhật ký System.",
+      "hint": "Run: Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5",
+      "hint_vi": "Chạy lệnh: Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-WinEvent|Get-EventLog|FilterHashtable)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-WinEvent|Get-EventLog|FilterHashtable)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-WinEvent|Get-EventLog|FilterHashtable)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

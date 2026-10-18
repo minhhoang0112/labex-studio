@@ -3,7 +3,9 @@ import LabGuide from '../components/LabGuide';
 import Terminal from '../components/Terminal';
 import AiTutor from '../components/AiTutor';
 import Dialog from '../components/Dialog';
+import WindowsConsole from '../components/WindowsConsole';
 import { 
+  Server,
   ArrowLeft, 
   Bot, 
   TerminalSquare, 
@@ -205,6 +207,9 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
         }
         setCurrentSectionIndex(targetIndex);
         setLab(data);
+        if (data.id?.startsWith('win-') || data.course_id?.includes('win')) {
+          setActiveEnvTab('windows');
+        }
 
         // Fetch sibling course labs
         try {
@@ -226,6 +231,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
     : lab?.steps || [];
   const currentSection = sections[currentSectionIndex] || sections[0];
   const isDocFullscreen = currentSection?.layout === 'doc-fullscreen';
+  const isWindowsLab = Boolean(lab?.id?.startsWith('win-') || lab?.course_id?.includes('win'));
   const terminalAllowed = lab?.availability?.can_start_terminal === true &&
     environment?.available === true && environment?.capabilities?.terminal === true;
   useEffect(() => {
@@ -372,6 +378,21 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
 
         {/* Center: Environment Tabs (Desktop / WebIDE / Terminal / Web 8080) */}
         <div className="hidden xl:flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs">
+                    {/* Windows Console Tab */}
+          {isWindowsLab && (
+            <button
+              onClick={() => setActiveEnvTab('windows')}
+              className={`px-3 py-1 rounded-md flex items-center gap-1.5 transition ${
+                activeEnvTab === 'windows'
+                  ? 'bg-blue-600 text-white font-medium shadow-sm'
+                  : 'text-slate-300 hover:text-white'
+              }`}>
+              <Server className="w-3.5 h-3.5 text-blue-400" />
+              <span>Windows Console</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+            </button>
+          )}
+
           {/* Desktop Tab */}
           <button
             onClick={() => caps.desktop && setActiveEnvTab('desktop')}
@@ -622,6 +643,16 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
         <div data-testid="terminal-pane" className={`flex-1 min-h-0 h-full flex-col p-2 bg-slate-950 overflow-hidden min-w-0 ${
           isDocFullscreen || (!desktopLayout && mobilePane !== 'terminal') ? 'hidden' : 'flex'
         }`}>
+                    {/* Windows Server Console Simulator */}
+          {activeEnvTab === 'windows' && isWindowsLab && (
+            <div className="flex-1 min-h-0 min-w-0 relative flex flex-col">
+              <WindowsConsole 
+                labId={lab.id} 
+                onActionComplete={() => setVerificationEpoch(v => v + 1)} 
+              />
+            </div>
+          )}
+
           {/* Terminal Session - ALWAYS kept mounted so PTY shell does not disconnect */}
           <div className={`flex-1 min-h-0 min-w-0 relative ${activeEnvTab === 'terminal' ? 'flex flex-col' : 'hidden'}`}>
             {terminalStarted && lab.availability?.can_start_terminal === true ? <Terminal

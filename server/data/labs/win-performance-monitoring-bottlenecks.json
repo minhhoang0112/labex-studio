@@ -1,0 +1,129 @@
+{
+  "id": "win-performance-monitoring-bottlenecks",
+  "course_id": "windows-troubleshooting-and-incident-response",
+  "order": 5,
+  "title": "Performance Monitoring: Isolating CPU, RAM & Disk Bottlenecks",
+  "title_vi": "Giám Sát Hiệu Năng: Cách Ly Điểm Nghẽn CPU, RAM & Ổ Đĩa",
+  "type": "challenge",
+  "difficulty": "Advanced",
+  "estimated_time": "35 mins",
+  "overview": "Sử dụng Performance Counters (`Get-Counter`), phân tích hàng đợi Disk Queue Length, tỷ lệ Page Faults/sec và phát hiện rò rỉ bộ nhớ (Memory Leak).",
+  "sections": [
+    {
+      "id": "win-tr-05-sec-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Identifying System Bottlenecks\n\nWhen users report 'the server is slow', a sysadmin measures four pillars:\n1. **Processor**: % Processor Time (sustained >85% indicates CPU bottleneck).\n2. **Memory**: Available MBytes (<10% indicates memory starvation) and Pages/sec.\n3. **Disk**: Avg. Disk Queue Length (>2 per physical spindle indicates disk saturation).\n4. **Network**: Bytes Total/sec.\n",
+      "content_vi": "## Nhận Diện Điểm Nghẽn Hệ Thống\n\nKhi người dùng phàn nàn 'máy chủ bị chậm', quản trị viên đo đạc 4 trụ cột tài nguyên:\n1. **Bộ vi xử lý (CPU)**: % Processor Time (liên tục >85% là nghẽn CPU).\n2. **Bộ nhớ (RAM)**: Available MBytes (<10% là cạn kiệt RAM) và Pages/sec.\n3. **Ổ đĩa (Disk)**: Avg. Disk Queue Length (>2 là ổ đĩa bị quá tải đọc/ghi).\n4. **Mạng (Network)**: Bytes Total/sec đo lượng băng thông truyền tải."
+    },
+    {
+      "id": "win-tr-05-sec-1",
+      "title": "Querying Live Performance Counters",
+      "title_vi": "Đo Đạc Bộ Đếm Hiệu Năng Thực Tế (Performance Counters)",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Query the current processor performance counter using Get-Counter.",
+      "task_vi": "Sử dụng Get-Counter để lấy chỉ số % sử dụng CPU tức thì của máy chủ.",
+      "hint": "Run: Get-Counter '\\Processor(_Total)\\% Processor Time'",
+      "hint_vi": "Chạy lệnh: Get-Counter '\\Processor(_Total)\\% Processor Time'",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Counter|Processor Time|Get-Process)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Live Performance Counter\n\n```powershell\nGet-Counter '\\Processor(_Total)\\% Processor Time'\n```\n",
+      "content_vi": "### Lấy Chỉ Số Hiệu Năng Tức Thì\n\n```powershell\nGet-Counter '\\Processor(_Total)\\% Processor Time'\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-tr-05-sec-1",
+      "title": "Querying Live Performance Counters",
+      "title_vi": "Đo Đạc Bộ Đếm Hiệu Năng Thực Tế (Performance Counters)",
+      "content": "### Live Performance Counter\n\n```powershell\nGet-Counter '\\Processor(_Total)\\% Processor Time'\n```\n",
+      "content_vi": "### Lấy Chỉ Số Hiệu Năng Tức Thì\n\n```powershell\nGet-Counter '\\Processor(_Total)\\% Processor Time'\n```",
+      "task": "Query the current processor performance counter using Get-Counter.",
+      "task_vi": "Sử dụng Get-Counter để lấy chỉ số % sử dụng CPU tức thì của máy chủ.",
+      "hint": "Run: Get-Counter '\\Processor(_Total)\\% Processor Time'",
+      "hint_vi": "Chạy lệnh: Get-Counter '\\Processor(_Total)\\% Processor Time'",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Counter|Processor Time|Get-Process)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Counter|Processor Time|Get-Process)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Counter|Processor Time|Get-Process)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

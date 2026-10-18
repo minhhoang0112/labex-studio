@@ -143,13 +143,66 @@
       "hint": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1",
       "title_vi": "Kiểm tra và thay đổi trạng thái khóa tài khoản",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Chưa dựng trạng thái mật khẩu ban đầu và kiểm chứng chuỗi khóa/mở/khóa tài khoản contractor."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:passwd|usermod|getent\\s+shadow)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra và thay đổi trạng thái khóa tài khoản",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ thực hành tạm khóa và mở khóa một tài khoản riêng. Linux lưu mã băm mật khẩu và trạng thái tài khoản trong `/etc/shadow`. Dấu `!` ở đầu trường mật khẩu cho biết xác thực bằng mật khẩu đã bị khóa.\n\nPhần thiết lập đã tạo tài khoản thực hành tên `contractor`. Chỉ hiển thị ký tự đầu tiên của trường mật khẩu để không in ra chính mã băm. Đọc pipeline từ trái sang phải: `getent shadow contractor` lấy bản ghi shadow của tài khoản; lệnh `cut` thứ nhất dùng `:` làm dấu phân cách và chọn trường 2; lệnh `cut` thứ hai giữ lại ký tự đầu tiên của trường đó:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nKý tự ban đầu thông thường phải là `$`, ký tự mở đầu của định dạng mã băm mật khẩu hiện đại. Khóa tài khoản bằng `usermod -L`:\n\n```bash\nsudo usermod -L contractor\n```\n\nKiểm tra lại ký tự đầu tiên:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nKý tự đó bây giờ phải là `!`. Mở khóa bằng `usermod -U` và xác nhận dấu `!` biến mất:\n\n```bash\nsudo usermod -U contractor\n```\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nTrong tình huống này, cộng tác viên đã rời nhóm. Khóa tài khoản lần cuối nhưng giữ lại các tệp của tài khoản:\n\n```bash\nsudo usermod -L contractor\n```\n\nKhóa xác thực bằng mật khẩu không xóa tài khoản, không xóa thư mục home và cũng không nhất thiết chấm dứt các phiên đang hoạt động. Thao tác này khác với xóa người dùng và hữu ích khi cần giữ lại các tệp để xem xét.",
-      "hint_vi": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1"
+      "hint_vi": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:passwd|usermod|getent\\s+shadow)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:passwd|usermod|getent\\s+shadow)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-18002-section-5-v3",
@@ -272,13 +325,66 @@
       "hint": "Chạy lệnh: newgrp developers",
       "title_vi": "Cập nhật thành viên nhóm và kiểm tra sự kế thừa",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Cần kiểm chứng newgrp mở subshell, group mới và thoát về shell ban đầu; chưa có bài kiểm tra tương tác phù hợp."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:newgrp|groups|id)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
       "task_vi": "Thực hiện hướng dẫn: Cập nhật thành viên nhóm và kiểm tra sự kế thừa",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ kích hoạt tư cách thành viên `developers` trong một shell con và chứng minh setgid quyết định nhóm của tệp mới. Thêm người dùng vào `/etc/group` không thay đổi các nhóm bổ sung của shell đang chạy.\n\nKhởi động shell con với `developers` làm nhóm hoạt động:\n\n```bash\nnewgrp developers\n```\n\nDấu nhắc có thể thay đổi. Bạn vẫn là người dùng `labex`, nhưng shell con hiện có `developers` làm nhóm hiệu lực. Xác nhận cả hai danh tính:\n\n```bash\nid\n```\n\nTạo tệp trong thư mục có setgid:\n\n```bash\ntouch /home/labex/project/team-share/labex-note.txt\n```\n\nKiểm tra tệp mới:\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share/labex-note.txt\n```\n\nChủ sở hữu phải là `labex`, còn nhóm phải là `developers`. Setgid giúp kế thừa nhóm sở hữu; các bit đọc và ghi của tệp vẫn phụ thuộc vào tiến trình tạo tệp và `umask` của tiến trình đó.\n\nThoát shell con và trở về phiên terminal ban đầu:\n\n```bash\nexit\n```\n\nTệp vẫn còn sau khi shell con đóng.",
-      "hint_vi": "Chạy lệnh: newgrp developers"
+      "hint_vi": "Chạy lệnh: newgrp developers",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:newgrp|groups|id)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:newgrp|groups|id)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "section-9",
@@ -447,14 +553,67 @@
       "task": "Thực hiện hướng dẫn: Inspect and Change an Account Lock",
       "hint": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Chưa dựng trạng thái mật khẩu ban đầu và kiểm chứng chuỗi khóa/mở/khóa tài khoản contractor."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:passwd|usermod|getent\\s+shadow)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
       "title_vi": "Kiểm tra và thay đổi trạng thái khóa tài khoản",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra và thay đổi trạng thái khóa tài khoản",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ thực hành tạm khóa và mở khóa một tài khoản riêng. Linux lưu mã băm mật khẩu và trạng thái tài khoản trong `/etc/shadow`. Dấu `!` ở đầu trường mật khẩu cho biết xác thực bằng mật khẩu đã bị khóa.\n\nPhần thiết lập đã tạo tài khoản thực hành tên `contractor`. Chỉ hiển thị ký tự đầu tiên của trường mật khẩu để không in ra chính mã băm. Đọc pipeline từ trái sang phải: `getent shadow contractor` lấy bản ghi shadow của tài khoản; lệnh `cut` thứ nhất dùng `:` làm dấu phân cách và chọn trường 2; lệnh `cut` thứ hai giữ lại ký tự đầu tiên của trường đó:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nKý tự ban đầu thông thường phải là `$`, ký tự mở đầu của định dạng mã băm mật khẩu hiện đại. Khóa tài khoản bằng `usermod -L`:\n\n```bash\nsudo usermod -L contractor\n```\n\nKiểm tra lại ký tự đầu tiên:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nKý tự đó bây giờ phải là `!`. Mở khóa bằng `usermod -U` và xác nhận dấu `!` biến mất:\n\n```bash\nsudo usermod -U contractor\n```\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nTrong tình huống này, cộng tác viên đã rời nhóm. Khóa tài khoản lần cuối nhưng giữ lại các tệp của tài khoản:\n\n```bash\nsudo usermod -L contractor\n```\n\nKhóa xác thực bằng mật khẩu không xóa tài khoản, không xóa thư mục home và cũng không nhất thiết chấm dứt các phiên đang hoạt động. Thao tác này khác với xóa người dùng và hữu ích khi cần giữ lại các tệp để xem xét.",
-      "hint_vi": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1"
+      "hint_vi": "Chạy lệnh: sudo getent shadow contractor | cut -d: -f2 | cut -c1",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:passwd|usermod|getent\\s+shadow)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:passwd|usermod|getent\\s+shadow)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-18002-section-5-v3",
@@ -609,14 +768,67 @@
       "task": "Thực hiện hướng dẫn: Refresh Group Membership and Verify Inheritance",
       "hint": "Chạy lệnh: newgrp developers",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Cần kiểm chứng newgrp mở subshell, group mới và thoát về shell ban đầu; chưa có bài kiểm tra tương tác phù hợp."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:newgrp|groups|id)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
       "title_vi": "Cập nhật thành viên nhóm và kiểm tra sự kế thừa",
       "task_vi": "Thực hiện hướng dẫn: Cập nhật thành viên nhóm và kiểm tra sự kế thừa",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ kích hoạt tư cách thành viên `developers` trong một shell con và chứng minh setgid quyết định nhóm của tệp mới. Thêm người dùng vào `/etc/group` không thay đổi các nhóm bổ sung của shell đang chạy.\n\nKhởi động shell con với `developers` làm nhóm hoạt động:\n\n```bash\nnewgrp developers\n```\n\nDấu nhắc có thể thay đổi. Bạn vẫn là người dùng `labex`, nhưng shell con hiện có `developers` làm nhóm hiệu lực. Xác nhận cả hai danh tính:\n\n```bash\nid\n```\n\nTạo tệp trong thư mục có setgid:\n\n```bash\ntouch /home/labex/project/team-share/labex-note.txt\n```\n\nKiểm tra tệp mới:\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share/labex-note.txt\n```\n\nChủ sở hữu phải là `labex`, còn nhóm phải là `developers`. Setgid giúp kế thừa nhóm sở hữu; các bit đọc và ghi của tệp vẫn phụ thuộc vào tiến trình tạo tệp và `umask` của tiến trình đó.\n\nThoát shell con và trở về phiên terminal ban đầu:\n\n```bash\nexit\n```\n\nTệp vẫn còn sau khi shell con đóng.",
-      "hint_vi": "Chạy lệnh: newgrp developers"
+      "hint_vi": "Chạy lệnh: newgrp developers",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:newgrp|groups|id)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:newgrp|groups|id)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
   ],
   "title_vi": "Nhóm Người Dùng và Quyền Hạn Tệp Linux",

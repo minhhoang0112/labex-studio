@@ -69,13 +69,90 @@
       "hint": "Chạy lệnh: date",
       "title_vi": "Xem Ngày Giờ và Lịch Hệ Thống",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu lệnh cal; image hiện chưa xác nhận ncal/cal. Không tự báo đạt chỉ từ lệnh date."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "(?:today\\.txt|date|cal)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
       },
       "task_vi": "Thực hiện hướng dẫn: Xem Ngày Giờ và Lịch Hệ Thống",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ yêu cầu Linux cung cấp thông tin thời gian và tìm hiểu rằng đầu ra của lệnh có thể thay đổi theo môi trường.\n\nChạy `date` không có tùy chọn nào:\n\n```bash\ndate\n```\n\nLinux in ra ngày trong tuần, ngày tháng, thời gian, múi giờ và năm hiện tại. Giá trị chính xác thay đổi theo từng giây, vì vậy đầu ra của bạn sẽ khác với các ví dụ bạn có thể thấy ở nơi khác.\n\nCác lệnh thường chấp nhận các tùy chọn làm thay đổi đầu ra của chúng. Định dạng `date` bắt đầu bằng `+` cho phép bạn chọn các trường ổn định. `%F` nghĩa là định dạng ngày ISO `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nLưu ngày ISO của hôm nay. Giống như trong bước trước, `>` chuyển hướng đầu ra vào một tệp và ghi đè tệp đó nếu nó đã tồn tại:\n\n```bash\ndate +%F > today.txt\n```\n\nLệnh `cal` hiển thị tháng hiện tại dưới dạng lịch:\n\n```bash\ncal\n```\n\nBố cục tháng và ngày trong tuần phụ thuộc vào ngày hiện tại và locale (vùng). Hãy lưu đầu ra đó lại:\n\n```bash\ncal > calendar.txt\n```\n\nKý hiệu `>` gửi đầu ra đến một tệp thay vì màn hình. Hiển thị lịch đã lưu để xác nhận nó đã được ghi:\n\n```bash\ncat calendar.txt\n```\n\nBạn sẽ tìm hiểu kỹ lưỡng về việc chuyển hướng sau. Hiện tại, hãy nhớ rằng đầu ra của terminal có thể được xem ngay lập tức hoặc được lưu lại để sử dụng sau.",
-      "hint_vi": "Chạy lệnh: date"
+      "hint_vi": "Chạy lệnh: date",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "(?:today\\.txt|date|cal)"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "(?:today\\.txt|date|cal)"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-446315-section-3-v3",
@@ -239,14 +316,91 @@
       "task": "Thực hiện hướng dẫn: Read Dates and Calendars",
       "hint": "Chạy lệnh: date",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu lệnh cal; image hiện chưa xác nhận ncal/cal. Không tự báo đạt chỉ từ lệnh date."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "(?:today\\.txt|date|cal)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
       },
       "title_vi": "Xem Ngày Giờ và Lịch Hệ Thống",
       "task_vi": "Thực hiện hướng dẫn: Xem Ngày Giờ và Lịch Hệ Thống",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ yêu cầu Linux cung cấp thông tin thời gian và tìm hiểu rằng đầu ra của lệnh có thể thay đổi theo môi trường.\n\nChạy `date` không có tùy chọn nào:\n\n```bash\ndate\n```\n\nLinux in ra ngày trong tuần, ngày tháng, thời gian, múi giờ và năm hiện tại. Giá trị chính xác thay đổi theo từng giây, vì vậy đầu ra của bạn sẽ khác với các ví dụ bạn có thể thấy ở nơi khác.\n\nCác lệnh thường chấp nhận các tùy chọn làm thay đổi đầu ra của chúng. Định dạng `date` bắt đầu bằng `+` cho phép bạn chọn các trường ổn định. `%F` nghĩa là định dạng ngày ISO `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nLưu ngày ISO của hôm nay. Giống như trong bước trước, `>` chuyển hướng đầu ra vào một tệp và ghi đè tệp đó nếu nó đã tồn tại:\n\n```bash\ndate +%F > today.txt\n```\n\nLệnh `cal` hiển thị tháng hiện tại dưới dạng lịch:\n\n```bash\ncal\n```\n\nBố cục tháng và ngày trong tuần phụ thuộc vào ngày hiện tại và locale (vùng). Hãy lưu đầu ra đó lại:\n\n```bash\ncal > calendar.txt\n```\n\nKý hiệu `>` gửi đầu ra đến một tệp thay vì màn hình. Hiển thị lịch đã lưu để xác nhận nó đã được ghi:\n\n```bash\ncat calendar.txt\n```\n\nBạn sẽ tìm hiểu kỹ lưỡng về việc chuyển hướng sau. Hiện tại, hãy nhớ rằng đầu ra của terminal có thể được xem ngay lập tức hoặc được lưu lại để sử dụng sau.",
-      "hint_vi": "Chạy lệnh: date"
+      "hint_vi": "Chạy lệnh: date",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "(?:today\\.txt|date|cal)"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "(?:today\\.txt|date|cal)"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-446315-section-3-v3",

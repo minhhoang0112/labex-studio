@@ -1,0 +1,129 @@
+{
+  "id": "win-server-file-storage-share",
+  "course_id": "windows-server-administration-essentials",
+  "order": 4,
+  "title": "File Server Management, SMB Shares & Storage Spaces",
+  "title_vi": "Quản Trị File Server, Chia Sẻ SMB & Storage Spaces",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "25 mins",
+  "overview": "Cấu hình thư mục chia sẻ SMB (`New-SmbShare`), cấp quyền Share Permissions kết hợp phân quyền NTFS, thiết lập hạn ngạch dung lượng Quota.",
+  "sections": [
+    {
+      "id": "win-fs-04-sec-0",
+      "title": "Introduction",
+      "title_vi": "Giới thiệu",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Enterprise File Services\n\nFile Server is one of the most critical server roles in any enterprise, hosting financial documents, team shares, and department data stores with SMB 3.0 encryption.\n",
+      "content_vi": "## Dịch Vụ Tệp Doanh Nghiệp\n\nMáy chủ File Server là dịch vụ thiết yếu nhất trong mọi công ty, lưu trữ dữ liệu phòng ban, tài liệu kế toán và chia sẻ tệp qua giao thức SMB 3.0 an toàn."
+    },
+    {
+      "id": "win-fs-04-sec-1",
+      "title": "Inspecting SMB Shares with Get-SmbShare",
+      "title_vi": "Kiểm Tra Các Thư Mục Chia Sẻ SMB",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Query all active SMB shares on the server using Get-SmbShare.",
+      "task_vi": "Truy vấn danh sách tất cả các thư mục đang được chia sẻ mạng bằng Get-SmbShare.",
+      "hint": "Run: Get-SmbShare",
+      "hint_vi": "Chạy lệnh: Get-SmbShare",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-SmbShare|net\\s+share|get-smbshare)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### SMB Shares\n\n```powershell\nGet-SmbShare\n```\n",
+      "content_vi": "### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-fs-04-sec-1",
+      "title": "Inspecting SMB Shares with Get-SmbShare",
+      "title_vi": "Kiểm Tra Các Thư Mục Chia Sẻ SMB",
+      "content": "### SMB Shares\n\n```powershell\nGet-SmbShare\n```\n",
+      "content_vi": "### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```",
+      "task": "Query all active SMB shares on the server using Get-SmbShare.",
+      "task_vi": "Truy vấn danh sách tất cả các thư mục đang được chia sẻ mạng bằng Get-SmbShare.",
+      "hint": "Run: Get-SmbShare",
+      "hint_vi": "Chạy lệnh: Get-SmbShare",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-SmbShare|net\\s+share|get-smbshare)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-SmbShare|net\\s+share|get-smbshare)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-SmbShare|net\\s+share|get-smbshare)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

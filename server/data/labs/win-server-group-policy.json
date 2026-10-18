@@ -1,0 +1,129 @@
+{
+  "id": "win-server-group-policy",
+  "course_id": "windows-server-administration-essentials",
+  "order": 2,
+  "title": "Group Policy Objects (GPO) Deployment & Troubleshooting",
+  "title_vi": "Triển Khai & Xử Lý Sự Cố Group Policy (GPO)",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "Cấu hình chính sách bảo mật máy tính, khóa màn hình, vô hiệu hóa USB, ép buộc cập nhật chính sách với gpupdate /force và kiểm tra với gpresult.",
+  "sections": [
+    {
+      "id": "win-gpo-02-sec-0",
+      "title": "Introduction to Group Policy",
+      "title_vi": "Giới thiệu về Group Policy",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Centralized Management with Group Policy\n\nGroup Policy allows administrators to define security configurations and user environments once, enforcing them automatically across thousands of domain-joined PCs and servers.\n",
+      "content_vi": "## Quản Trị Tập Trung Với Group Policy\n\nGroup Policy cho phép quản trị viên định nghĩa cấu hình bảo mật một lần và tự động áp dụng bắt buộc lên hàng nghìn máy tính thành viên trong Domain."
+    },
+    {
+      "id": "win-gpo-02-sec-1",
+      "title": "Refreshing and Inspecting Applied Policies",
+      "title_vi": "Làm Mới & Kiểm Tra Chính Sách Đã Áp Dụng",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Use gpresult to inspect the Resultant Set of Policy (RSoP) on the system.",
+      "task_vi": "Sử dụng công cụ gpresult để kiểm tra các chính sách thực tế đang có hiệu lực trên máy tính.",
+      "hint": "Run: gpresult /r or gpresult /?",
+      "hint_vi": "Chạy lệnh: gpresult /r hoặc gpresult /?",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:gpresult|gpupdate)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "content": "### Checking GPO Status\n\n```powershell\ngpresult /r\n```\n",
+      "content_vi": "### Kiểm tra Trạng thái GPO\n\n```powershell\ngpresult /r\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-gpo-02-sec-1",
+      "title": "Refreshing and Inspecting Applied Policies",
+      "title_vi": "Làm Mới & Kiểm Tra Chính Sách Đã Áp Dụng",
+      "content": "### Checking GPO Status\n\n```powershell\ngpresult /r\n```\n",
+      "content_vi": "### Kiểm tra Trạng thái GPO\n\n```powershell\ngpresult /r\n```",
+      "task": "Use gpresult to inspect the Resultant Set of Policy (RSoP) on the system.",
+      "task_vi": "Sử dụng công cụ gpresult để kiểm tra các chính sách thực tế đang có hiệu lực trên máy tính.",
+      "hint": "Run: gpresult /r or gpresult /?",
+      "hint_vi": "Chạy lệnh: gpresult /r hoặc gpresult /?",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:gpresult|gpupdate)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:gpresult|gpupdate)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:gpresult|gpupdate)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
+    }
+  ]
+}

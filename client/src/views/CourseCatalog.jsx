@@ -135,7 +135,7 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5 gap-6">
           {[
             { 
               alias: 'linux',
@@ -147,6 +147,17 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
               badge: 'Chuyên ngành nổi bật',
               color: 'from-amber-500/20 to-orange-500/10 border-amber-500/30 text-amber-500',
               btnColor: 'bg-amber-600 hover:bg-amber-500 text-white'
+            },
+                        { 
+              alias: 'windows',
+              name: 'Windows Server', 
+              subtitle: 'Active Directory & PowerShell',
+              desc: 'Quản trị hệ thống Windows Server, AD DS, Group Policy (GPO), PowerShell automation và xử lý sự cố Event Viewer.', 
+              icon: Server, 
+              hours: '3 khóa · 15 bài thực hành',
+              badge: 'Doanh nghiệp & Thực tập',
+              color: 'from-blue-600/20 to-sky-500/10 border-blue-500/30 text-blue-500',
+              btnColor: 'bg-blue-600 hover:bg-blue-500 text-white'
             },
             { 
               alias: 'devops',
