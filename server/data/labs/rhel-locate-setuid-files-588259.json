@@ -1,11 +1,14 @@
 {
   "id": "rhel-locate-setuid-files-588259",
-  "source_lab_id": 588259,
   "course_id": "linux-practice-challenges",
+  "order": 14,
   "title": "Locate Setuid Files",
-  "title_vi": "Introduction",
+  "title_vi": "Locate Setuid Files",
   "difficulty": "Beginner",
-  "estimated_time": "5 mins",
+  "estimated_time": "15 mins",
+  "type": "challenge",
+  "source_url": "https://labex.io/tutorials/rhel-locate-setuid-files-588259",
+  "overview": "Practical challenge: rhel-locate-setuid-files-588259",
   "sections": [
     {
       "id": "rhel-locate-setuid-files-588259-step-0",
@@ -23,8 +26,7 @@
       "content": "## Locate and List Setuid Files\n\nIn this step, you'll use the `find` command to search the entire filesystem for setuid files and save the results to a file.\n\n### Tasks\n\n- Search the entire filesystem for files with the setuid permission set.\n- Save the list of setuid files to a file named `setuid_list` in your home directory.\n\n### Requirements\n\n- Execute all commands as the `labex` user in the `/home/labex` directory.\n- Use the `find` command to search for setuid files.\n- Save the output to a file named `setuid_list` in the `/home/labex` directory.\n\n### Example\n\nAfter completing this task, the `setuid_list` file might contain entries similar to the following:\n\n```\n/usr/bin/sudo\n/usr/bin/passwd\n/usr/bin/chage\n/usr/bin/gpasswd\n/usr/bin/newgrp\n/usr/bin/su\n/usr/bin/mount\n/usr/bin/umount\n/usr/bin/crontab\n/usr/bin/pkexec\n```\n\nNote that the actual list may vary depending on the system configuration.\n",
       "content_vi": "## Locate and List Setuid Files\n\nIn this step, you'll use the `find` command to search the entire filesystem for setuid files and save the results to a file.\n\n### Tasks\n\n- Search the entire filesystem for files with the setuid permission set.\n- Save the list of setuid files to a file named `setuid_list` in your home directory.\n\n### Requirements\n\n- Execute all commands as the `labex` user in the `/home/labex` directory.\n- Use the `find` command to search for setuid files.\n- Save the output to a file named `setuid_list` in the `/home/labex` directory.\n\n### Example\n\nAfter completing this task, the `setuid_list` file might contain entries similar to the following:\n\n```\n/usr/bin/sudo\n/usr/bin/passwd\n/usr/bin/chage\n/usr/bin/gpasswd\n/usr/bin/newgrp\n/usr/bin/su\n/usr/bin/mount\n/usr/bin/umount\n/usr/bin/crontab\n/usr/bin/pkexec\n```\n\nNote that the actual list may vary depending on the system configuration.\n",
       "layout": "doc-workbench-split",
-      "need_verify": true,
-      "kind": "task"
+      "need_verify": true
     },
     {
       "id": "rhel-locate-setuid-files-588259-step-2",
@@ -43,21 +45,67 @@
       "title_vi": "Locate and List Setuid Files",
       "content": "## Locate and List Setuid Files\n\nIn this step, you'll use the `find` command to search the entire filesystem for setuid files and save the results to a file.\n\n### Tasks\n\n- Search the entire filesystem for files with the setuid permission set.\n- Save the list of setuid files to a file named `setuid_list` in your home directory.\n\n### Requirements\n\n- Execute all commands as the `labex` user in the `/home/labex` directory.\n- Use the `find` command to search for setuid files.\n- Save the output to a file named `setuid_list` in the `/home/labex` directory.\n\n### Example\n\nAfter completing this task, the `setuid_list` file might contain entries similar to the following:\n\n```\n/usr/bin/sudo\n/usr/bin/passwd\n/usr/bin/chage\n/usr/bin/gpasswd\n/usr/bin/newgrp\n/usr/bin/su\n/usr/bin/mount\n/usr/bin/umount\n/usr/bin/crontab\n/usr/bin/pkexec\n```\n\nNote that the actual list may vary depending on the system configuration.\n",
       "content_vi": "## Locate and List Setuid Files\n\nIn this step, you'll use the `find` command to search the entire filesystem for setuid files and save the results to a file.\n\n### Tasks\n\n- Search the entire filesystem for files with the setuid permission set.\n- Save the list of setuid files to a file named `setuid_list` in your home directory.\n\n### Requirements\n\n- Execute all commands as the `labex` user in the `/home/labex` directory.\n- Use the `find` command to search for setuid files.\n- Save the output to a file named `setuid_list` in the `/home/labex` directory.\n\n### Example\n\nAfter completing this task, the `setuid_list` file might contain entries similar to the following:\n\n```\n/usr/bin/sudo\n/usr/bin/passwd\n/usr/bin/chage\n/usr/bin/gpasswd\n/usr/bin/newgrp\n/usr/bin/su\n/usr/bin/mount\n/usr/bin/umount\n/usr/bin/crontab\n/usr/bin/pkexec\n```\n\nNote that the actual list may vary depending on the system configuration.\n",
-      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
-      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+            "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
           ]
         ],
         "allowed_status": [
-          0
+          0,
+          1
         ]
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
-  ]
+  ],
+  "curriculum_version": 1
 }

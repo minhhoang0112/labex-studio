@@ -1,11 +1,14 @@
 {
   "id": "rhel-create-and-manipulate-symbolic-links-588242",
-  "source_lab_id": 588242,
   "course_id": "linux-practice-challenges",
+  "order": 11,
   "title": "Create and Manipulate Symbolic Links",
-  "title_vi": "Introduction",
+  "title_vi": "Create and Manipulate Symbolic Links",
   "difficulty": "Intermediate",
-  "estimated_time": "5 mins",
+  "estimated_time": "15 mins",
+  "type": "challenge",
+  "source_url": "https://labex.io/tutorials/rhel-create-and-manipulate-symbolic-links-588242",
+  "overview": "Practical challenge: rhel-create-and-manipulate-symbolic-links-588242",
   "sections": [
     {
       "id": "rhel-create-and-manipulate-symbolic-links-588242-step-0",
@@ -23,8 +26,7 @@
       "content": "## Create and Manipulate a Symbolic Link\n\nThis step involves creating a symbolic link, editing its content, and observing its behavior when the target file is removed.\n\n### Tasks\n\n1. Create a symbolic link named `soft1` in `/home/labex` pointing to `/tmp/hard2`.\n2. Edit the content of `soft1`.\n3. List the attributes of `soft1`.\n4. Remove the target file `hard2`.\n5. List the attributes of `soft1` again.\n\n### Requirements\n\n- Perform all operations as the `labex` user.\n- Create the symbolic link `soft1` in `/home/labex` directory.\n- The target file `hard2` should be in the `/tmp` directory.\n- Use `ln -s` to create the symbolic link.\n- Use `echo` to add content to the symbolic link.\n- Use `ls -l` to list file attributes.\n- Use `rm` to remove the target file.\n\n### Example\n\nAfter creating the symbolic link and editing its content, you might see output similar to this:\n\n```\n$ ls -l /home/labex/soft1\nlrwxrwxrwx 1 labex labex 10 Aug 28 10:00 /home/labex/soft1 -> /tmp/hard2\n```\n",
       "content_vi": "## Create and Manipulate a Symbolic Link\n\nThis step involves creating a symbolic link, editing its content, and observing its behavior when the target file is removed.\n\n### Tasks\n\n1. Create a symbolic link named `soft1` in `/home/labex` pointing to `/tmp/hard2`.\n2. Edit the content of `soft1`.\n3. List the attributes of `soft1`.\n4. Remove the target file `hard2`.\n5. List the attributes of `soft1` again.\n\n### Requirements\n\n- Perform all operations as the `labex` user.\n- Create the symbolic link `soft1` in `/home/labex` directory.\n- The target file `hard2` should be in the `/tmp` directory.\n- Use `ln -s` to create the symbolic link.\n- Use `echo` to add content to the symbolic link.\n- Use `ls -l` to list file attributes.\n- Use `rm` to remove the target file.\n\n### Example\n\nAfter creating the symbolic link and editing its content, you might see output similar to this:\n\n```\n$ ls -l /home/labex/soft1\nlrwxrwxrwx 1 labex labex 10 Aug 28 10:00 /home/labex/soft1 -> /tmp/hard2\n```\n",
       "layout": "doc-workbench-split",
-      "need_verify": true,
-      "kind": "task"
+      "need_verify": true
     },
     {
       "id": "rhel-create-and-manipulate-symbolic-links-588242-step-2",
@@ -43,21 +45,67 @@
       "title_vi": "Create and Manipulate a Symbolic Link",
       "content": "## Create and Manipulate a Symbolic Link\n\nThis step involves creating a symbolic link, editing its content, and observing its behavior when the target file is removed.\n\n### Tasks\n\n1. Create a symbolic link named `soft1` in `/home/labex` pointing to `/tmp/hard2`.\n2. Edit the content of `soft1`.\n3. List the attributes of `soft1`.\n4. Remove the target file `hard2`.\n5. List the attributes of `soft1` again.\n\n### Requirements\n\n- Perform all operations as the `labex` user.\n- Create the symbolic link `soft1` in `/home/labex` directory.\n- The target file `hard2` should be in the `/tmp` directory.\n- Use `ln -s` to create the symbolic link.\n- Use `echo` to add content to the symbolic link.\n- Use `ls -l` to list file attributes.\n- Use `rm` to remove the target file.\n\n### Example\n\nAfter creating the symbolic link and editing its content, you might see output similar to this:\n\n```\n$ ls -l /home/labex/soft1\nlrwxrwxrwx 1 labex labex 10 Aug 28 10:00 /home/labex/soft1 -> /tmp/hard2\n```\n",
       "content_vi": "## Create and Manipulate a Symbolic Link\n\nThis step involves creating a symbolic link, editing its content, and observing its behavior when the target file is removed.\n\n### Tasks\n\n1. Create a symbolic link named `soft1` in `/home/labex` pointing to `/tmp/hard2`.\n2. Edit the content of `soft1`.\n3. List the attributes of `soft1`.\n4. Remove the target file `hard2`.\n5. List the attributes of `soft1` again.\n\n### Requirements\n\n- Perform all operations as the `labex` user.\n- Create the symbolic link `soft1` in `/home/labex` directory.\n- The target file `hard2` should be in the `/tmp` directory.\n- Use `ln -s` to create the symbolic link.\n- Use `echo` to add content to the symbolic link.\n- Use `ls -l` to list file attributes.\n- Use `rm` to remove the target file.\n\n### Example\n\nAfter creating the symbolic link and editing its content, you might see output similar to this:\n\n```\n$ ls -l /home/labex/soft1\nlrwxrwxrwx 1 labex labex 10 Aug 28 10:00 /home/labex/soft1 -> /tmp/hard2\n```\n",
-      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
-      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+            "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
           ]
         ],
         "allowed_status": [
-          0
+          0,
+          1
         ]
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
-  ]
+  ],
+  "curriculum_version": 1
 }

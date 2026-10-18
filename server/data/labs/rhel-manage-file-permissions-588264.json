@@ -1,11 +1,14 @@
 {
   "id": "rhel-manage-file-permissions-588264",
-  "source_lab_id": 588264,
   "course_id": "linux-practice-challenges",
+  "order": 3,
   "title": "Manage File Permissions",
-  "title_vi": "Introduction",
+  "title_vi": "Manage File Permissions",
   "difficulty": "Beginner",
-  "estimated_time": "5 mins",
+  "estimated_time": "15 mins",
+  "type": "challenge",
+  "source_url": "https://labex.io/tutorials/rhel-manage-file-permissions-588264",
+  "overview": "Practical challenge: rhel-manage-file-permissions-588264",
   "sections": [
     {
       "id": "rhel-manage-file-permissions-588264-step-0",
@@ -23,8 +26,7 @@
       "content": "## Create and Modify File Permissions\n\n### Tasks\n\n1. Create a new file named `perm_file1` in the `/home/labex` directory.\n2. Set initial read permissions for owner, group, and other.\n3. Add execute permission for the owner and write permissions for group and other.\n4. Revoke the write bit from other (public).\n5. Assign read, write, and execute bits to all three user categories simultaneously.\n6. Revoke write permission from the owning group and revoke both write and execute bits from other (public).\n\n### Requirements\n\n- All operations must be performed in the `/home/labex` directory.\n- Use the `touch` command to create the file.\n- Use the `chmod` command with both symbolic and octal notation to modify permissions as follows:\n  1. Initially set permissions to read-only (444) for all user categories.\n  2. Use symbolic notation for all subsequent permission changes.\n  3. The final permissions for `perm_file1` should be:\n     - Owner: read, write, and execute (rwx)\n     - Group: read and execute (r-x)\n     - Other: read only (r--)\n\n### Example\n\nAfter completing all tasks, when you run `ls -l perm_file1`, the output should look like this:\n\n```\n-rwxr-xr-- 1 labex labex 0 Aug 28 07:14 perm_file1\n```\n",
       "content_vi": "## Create and Modify File Permissions\n\n### Tasks\n\n1. Create a new file named `perm_file1` in the `/home/labex` directory.\n2. Set initial read permissions for owner, group, and other.\n3. Add execute permission for the owner and write permissions for group and other.\n4. Revoke the write bit from other (public).\n5. Assign read, write, and execute bits to all three user categories simultaneously.\n6. Revoke write permission from the owning group and revoke both write and execute bits from other (public).\n\n### Requirements\n\n- All operations must be performed in the `/home/labex` directory.\n- Use the `touch` command to create the file.\n- Use the `chmod` command with both symbolic and octal notation to modify permissions as follows:\n  1. Initially set permissions to read-only (444) for all user categories.\n  2. Use symbolic notation for all subsequent permission changes.\n  3. The final permissions for `perm_file1` should be:\n     - Owner: read, write, and execute (rwx)\n     - Group: read and execute (r-x)\n     - Other: read only (r--)\n\n### Example\n\nAfter completing all tasks, when you run `ls -l perm_file1`, the output should look like this:\n\n```\n-rwxr-xr-- 1 labex labex 0 Aug 28 07:14 perm_file1\n```\n",
       "layout": "doc-workbench-split",
-      "need_verify": true,
-      "kind": "task"
+      "need_verify": true
     },
     {
       "id": "rhel-manage-file-permissions-588264-step-2",
@@ -43,21 +45,67 @@
       "title_vi": "Create and Modify File Permissions",
       "content": "## Create and Modify File Permissions\n\n### Tasks\n\n1. Create a new file named `perm_file1` in the `/home/labex` directory.\n2. Set initial read permissions for owner, group, and other.\n3. Add execute permission for the owner and write permissions for group and other.\n4. Revoke the write bit from other (public).\n5. Assign read, write, and execute bits to all three user categories simultaneously.\n6. Revoke write permission from the owning group and revoke both write and execute bits from other (public).\n\n### Requirements\n\n- All operations must be performed in the `/home/labex` directory.\n- Use the `touch` command to create the file.\n- Use the `chmod` command with both symbolic and octal notation to modify permissions as follows:\n  1. Initially set permissions to read-only (444) for all user categories.\n  2. Use symbolic notation for all subsequent permission changes.\n  3. The final permissions for `perm_file1` should be:\n     - Owner: read, write, and execute (rwx)\n     - Group: read and execute (r-x)\n     - Other: read only (r--)\n\n### Example\n\nAfter completing all tasks, when you run `ls -l perm_file1`, the output should look like this:\n\n```\n-rwxr-xr-- 1 labex labex 0 Aug 28 07:14 perm_file1\n```\n",
       "content_vi": "## Create and Modify File Permissions\n\n### Tasks\n\n1. Create a new file named `perm_file1` in the `/home/labex` directory.\n2. Set initial read permissions for owner, group, and other.\n3. Add execute permission for the owner and write permissions for group and other.\n4. Revoke the write bit from other (public).\n5. Assign read, write, and execute bits to all three user categories simultaneously.\n6. Revoke write permission from the owning group and revoke both write and execute bits from other (public).\n\n### Requirements\n\n- All operations must be performed in the `/home/labex` directory.\n- Use the `touch` command to create the file.\n- Use the `chmod` command with both symbolic and octal notation to modify permissions as follows:\n  1. Initially set permissions to read-only (444) for all user categories.\n  2. Use symbolic notation for all subsequent permission changes.\n  3. The final permissions for `perm_file1` should be:\n     - Owner: read, write, and execute (rwx)\n     - Group: read and execute (r-x)\n     - Other: read only (r--)\n\n### Example\n\nAfter completing all tasks, when you run `ls -l perm_file1`, the output should look like this:\n\n```\n-rwxr-xr-- 1 labex labex 0 Aug 28 07:14 perm_file1\n```\n",
-      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
-      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+            "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
           ]
         ],
         "allowed_status": [
-          0
+          0,
+          1
         ]
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
-  ]
+  ],
+  "curriculum_version": 1
 }

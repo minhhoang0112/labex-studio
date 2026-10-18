@@ -1,11 +1,14 @@
 {
   "id": "rhel-log-in-and-switch-users-588260",
-  "source_lab_id": 588260,
   "course_id": "linux-practice-challenges",
+  "order": 2,
   "title": "Log in and Switch Users",
-  "title_vi": "Introduction",
+  "title_vi": "Log in and Switch Users",
   "difficulty": "Intermediate",
-  "estimated_time": "5 mins",
+  "estimated_time": "15 mins",
+  "type": "challenge",
+  "source_url": "https://labex.io/tutorials/rhel-log-in-and-switch-users-588260",
+  "overview": "Practical challenge: rhel-log-in-and-switch-users-588260",
   "sections": [
     {
       "id": "rhel-log-in-and-switch-users-588260-step-0",
@@ -23,8 +26,7 @@
       "content": "## Switch Users and Create a New Account\n\nThis step will guide you through the process of switching between users and creating a new user account.\n\n### Tasks\n\n- Switch to the `root` user using `sudo`\n- Create a new user named `projectuser`\n- Switch to the `projectuser` account\n- Return to the `labex` user account\n\n### Requirements\n\n- You are already logged in as the `labex` user\n- All operations should be performed in the terminal\n- Use the `sudo` command to switch to the `root` user\n- Create the `projectuser` with a home directory in `/home/projectuser`\n- Set the password for `projectuser` to `project123`\n- Use the `su` command to switch between users\n- Ensure you end up logged in as the `labex` user\n\n### Example\n\nAfter completing the tasks, you should be able to see the following output when running the `whoami` command:\n\n```\nlabex    pts/0        2023-08-28 10:00 (:0)\n```\n",
       "content_vi": "## Switch Users and Create a New Account\n\nThis step will guide you through the process of switching between users and creating a new user account.\n\n### Tasks\n\n- Switch to the `root` user using `sudo`\n- Create a new user named `projectuser`\n- Switch to the `projectuser` account\n- Return to the `labex` user account\n\n### Requirements\n\n- You are already logged in as the `labex` user\n- All operations should be performed in the terminal\n- Use the `sudo` command to switch to the `root` user\n- Create the `projectuser` with a home directory in `/home/projectuser`\n- Set the password for `projectuser` to `project123`\n- Use the `su` command to switch between users\n- Ensure you end up logged in as the `labex` user\n\n### Example\n\nAfter completing the tasks, you should be able to see the following output when running the `whoami` command:\n\n```\nlabex    pts/0        2023-08-28 10:00 (:0)\n```\n",
       "layout": "doc-workbench-split",
-      "need_verify": true,
-      "kind": "task"
+      "need_verify": true
     },
     {
       "id": "rhel-log-in-and-switch-users-588260-step-2",
@@ -43,21 +45,67 @@
       "title_vi": "Switch Users and Create a New Account",
       "content": "## Switch Users and Create a New Account\n\nThis step will guide you through the process of switching between users and creating a new user account.\n\n### Tasks\n\n- Switch to the `root` user using `sudo`\n- Create a new user named `projectuser`\n- Switch to the `projectuser` account\n- Return to the `labex` user account\n\n### Requirements\n\n- You are already logged in as the `labex` user\n- All operations should be performed in the terminal\n- Use the `sudo` command to switch to the `root` user\n- Create the `projectuser` with a home directory in `/home/projectuser`\n- Set the password for `projectuser` to `project123`\n- Use the `su` command to switch between users\n- Ensure you end up logged in as the `labex` user\n\n### Example\n\nAfter completing the tasks, you should be able to see the following output when running the `whoami` command:\n\n```\nlabex    pts/0        2023-08-28 10:00 (:0)\n```\n",
       "content_vi": "## Switch Users and Create a New Account\n\nThis step will guide you through the process of switching between users and creating a new user account.\n\n### Tasks\n\n- Switch to the `root` user using `sudo`\n- Create a new user named `projectuser`\n- Switch to the `projectuser` account\n- Return to the `labex` user account\n\n### Requirements\n\n- You are already logged in as the `labex` user\n- All operations should be performed in the terminal\n- Use the `sudo` command to switch to the `root` user\n- Create the `projectuser` with a home directory in `/home/projectuser`\n- Set the password for `projectuser` to `project123`\n- Use the `su` command to switch between users\n- Ensure you end up logged in as the `labex` user\n\n### Example\n\nAfter completing the tasks, you should be able to see the following output when running the `whoami` command:\n\n```\nlabex    pts/0        2023-08-28 10:00 (:0)\n```\n",
-      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
-      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+            "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
           ]
         ],
         "allowed_status": [
-          0
+          0,
+          1
         ]
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
-  ]
+  ],
+  "curriculum_version": 1
 }

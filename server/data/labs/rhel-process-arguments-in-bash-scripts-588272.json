@@ -1,11 +1,14 @@
 {
   "id": "rhel-process-arguments-in-bash-scripts-588272",
-  "source_lab_id": 588272,
   "course_id": "linux-practice-challenges",
+  "order": 12,
   "title": "Process Arguments in Bash Scripts",
-  "title_vi": "Introduction",
+  "title_vi": "Process Arguments in Bash Scripts",
   "difficulty": "Beginner",
-  "estimated_time": "5 mins",
+  "estimated_time": "15 mins",
+  "type": "challenge",
+  "source_url": "https://labex.io/tutorials/rhel-process-arguments-in-bash-scripts-588272",
+  "overview": "Practical challenge: rhel-process-arguments-in-bash-scripts-588272",
   "sections": [
     {
       "id": "rhel-process-arguments-in-bash-scripts-588272-step-0",
@@ -23,8 +26,7 @@
       "content": "## Create and Configure the Bash Script\n\nLet's create a bash script that processes and displays information about the arguments passed to it.\n\n### Tasks\n\n- Create a bash script named `argts.sh` in the `/home/labex/` directory\n- Make the script executable\n- Implement the script to display the following information:\n  - Total count of supplied arguments\n  - Value of the first argument\n  - PID of the script\n  - All supplied arguments\n\n### Requirements\n\n- The script must be created at `/home/labex/argts.sh`\n- The script must have the correct shebang line: `#!/bin/bash`\n- The script must be executable\n- The script must use appropriate bash special variables to display the required information\n- The output should be formatted clearly with a header line of equal signs\n\n### Example\n\nWhen the script is run with arguments, it should produce output similar to this:\n\n```\n$ /home/labex/argts.sh one two three\n===========================\nThe total count of the supp argts: 3\nThe value of the first arg is: one\nThe PID of the script is : 12345\nAll the argts: one two three\n```\n",
       "content_vi": "## Create and Configure the Bash Script\n\nLet's create a bash script that processes and displays information about the arguments passed to it.\n\n### Tasks\n\n- Create a bash script named `argts.sh` in the `/home/labex/` directory\n- Make the script executable\n- Implement the script to display the following information:\n  - Total count of supplied arguments\n  - Value of the first argument\n  - PID of the script\n  - All supplied arguments\n\n### Requirements\n\n- The script must be created at `/home/labex/argts.sh`\n- The script must have the correct shebang line: `#!/bin/bash`\n- The script must be executable\n- The script must use appropriate bash special variables to display the required information\n- The output should be formatted clearly with a header line of equal signs\n\n### Example\n\nWhen the script is run with arguments, it should produce output similar to this:\n\n```\n$ /home/labex/argts.sh one two three\n===========================\nThe total count of the supp argts: 3\nThe value of the first arg is: one\nThe PID of the script is : 12345\nAll the argts: one two three\n```\n",
       "layout": "doc-workbench-split",
-      "need_verify": true,
-      "kind": "task"
+      "need_verify": true
     },
     {
       "id": "rhel-process-arguments-in-bash-scripts-588272-step-2",
@@ -43,21 +45,67 @@
       "title_vi": "Create and Configure the Bash Script",
       "content": "## Create and Configure the Bash Script\n\nLet's create a bash script that processes and displays information about the arguments passed to it.\n\n### Tasks\n\n- Create a bash script named `argts.sh` in the `/home/labex/` directory\n- Make the script executable\n- Implement the script to display the following information:\n  - Total count of supplied arguments\n  - Value of the first argument\n  - PID of the script\n  - All supplied arguments\n\n### Requirements\n\n- The script must be created at `/home/labex/argts.sh`\n- The script must have the correct shebang line: `#!/bin/bash`\n- The script must be executable\n- The script must use appropriate bash special variables to display the required information\n- The output should be formatted clearly with a header line of equal signs\n\n### Example\n\nWhen the script is run with arguments, it should produce output similar to this:\n\n```\n$ /home/labex/argts.sh one two three\n===========================\nThe total count of the supp argts: 3\nThe value of the first arg is: one\nThe PID of the script is : 12345\nAll the argts: one two three\n```\n",
       "content_vi": "## Create and Configure the Bash Script\n\nLet's create a bash script that processes and displays information about the arguments passed to it.\n\n### Tasks\n\n- Create a bash script named `argts.sh` in the `/home/labex/` directory\n- Make the script executable\n- Implement the script to display the following information:\n  - Total count of supplied arguments\n  - Value of the first argument\n  - PID of the script\n  - All supplied arguments\n\n### Requirements\n\n- The script must be created at `/home/labex/argts.sh`\n- The script must have the correct shebang line: `#!/bin/bash`\n- The script must be executable\n- The script must use appropriate bash special variables to display the required information\n- The output should be formatted clearly with a header line of equal signs\n\n### Example\n\nWhen the script is run with arguments, it should produce output similar to this:\n\n```\n$ /home/labex/argts.sh one two three\n===========================\nThe total count of the supp argts: 3\nThe value of the first arg is: one\nThe PID of the script is : 12345\nAll the argts: one two three\n```\n",
-      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
-      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+            "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
           ]
         ],
         "allowed_status": [
-          0
+          0,
+          1
         ]
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
-  ]
+  ],
+  "curriculum_version": 1
 }
