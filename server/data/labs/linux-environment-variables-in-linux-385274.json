@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "Programs often need small pieces of configuration: a home directory, a language, a search path, or an application setting. Linux processes receive many of these values through an **environment**, a collection of named strings.\n\nThis lab builds the idea in layers. You will first create a variable that belongs only to the current shell, then export a variable to child processes, inspect standard variables, extend `PATH`, and make settings appear in future Zsh sessions. Each step leaves an observable file or command result so you can verify what the shell actually did.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Các chương trình thường cần những mẩu cấu hình nhỏ: thư mục chính (home directory), ngôn ngữ, đường dẫn tìm kiếm (search path) hoặc cài đặt ứng dụng. Các tiến trình Linux nhận nhiều giá trị trong số này thông qua một **môi trường** (environment), đây là một tập hợp các chuỗi có tên.\n\nBài thực hành này xây dựng ý tưởng theo từng lớp. Trước tiên, bạn sẽ tạo một biến chỉ thuộc về shell hiện tại, sau đó xuất (export) một biến sang các tiến trình con, kiểm tra các biến tiêu chuẩn, mở rộng `PATH` và làm cho các cài đặt xuất hiện trong các phiên Zsh tương lai. Mỗi bước đều để lại một tệp có thể quan sát được hoặc kết quả lệnh để bạn có thể xác minh những gì shell thực sự đã làm."
+      "content_vi": "Các chương trình thường cần những mẩu cấu hình nhỏ: thư mục chính (home directory), ngôn ngữ, đường dẫn tìm kiếm (search path) hoặc cài đặt ứng dụng. Các tiến trình Linux nhận nhiều giá trị trong số này thông qua một **môi trường** (environment), đây là một tập hợp các chuỗi có tên.\n\nBài thực hành này xây dựng ý tưởng theo từng lớp. Trước tiên, bạn sẽ tạo một biến chỉ thuộc về shell hiện tại, sau đó xuất (export) một biến sang các tiến trình con, kiểm tra các biến tiêu chuẩn, mở rộng `PATH` và làm cho các cài đặt xuất hiện trong các phiên Zsh tương lai. Mỗi bước đều để lại một tệp có thể quan sát được hoặc kết quả lệnh để bạn có thể xác minh những gì shell thực sự đã làm.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-385274-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Create and Expand a Shell Variable",
       "hint": "Chạy lệnh: echo \"$course_name\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -69,18 +81,29 @@
       "task": "Thực hiện hướng dẫn: Observe Child-Process Inheritance",
       "hint": "Chạy lệnh: env | grep '^SHARED_MESSAGE='",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -102,18 +125,29 @@
       "task": "Thực hiện hướng dẫn: Inspect Standard Environment Variables",
       "hint": "Chạy lệnh: printenv HOME USER SHELL PWD TERM",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -135,18 +169,29 @@
       "task": "Thực hiện hướng dẫn: Extend PATH with a Personal Command",
       "hint": "Chạy lệnh: export PATH=\"$PATH:$HOME/bin\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -212,7 +257,8 @@
       "has_solution": false,
       "content": "You observed the three mechanisms that are often confused: a shell variable belongs to one shell, `export` passes a value to child processes, and a startup file recreates settings in future shells. You also inspected standard environment variables, extended `PATH` without losing existing entries, verified command lookup, and removed temporary state with `unset`.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã quan sát ba cơ chế thường bị nhầm lẫn: một biến shell thuộc về một shell duy nhất, `export` truyền giá trị cho các tiến trình con, và tệp khởi động tái tạo các cài đặt trong các shell tương lai. Bạn cũng đã kiểm tra các biến môi trường tiêu chuẩn, mở rộng `PATH` mà không làm mất các mục hiện có, xác minh việc tra cứu lệnh, và xóa trạng thái tạm thời bằng `unset`."
+      "content_vi": "Bạn đã quan sát ba cơ chế thường bị nhầm lẫn: một biến shell thuộc về một shell duy nhất, `export` truyền giá trị cho các tiến trình con, và tệp khởi động tái tạo các cài đặt trong các shell tương lai. Bạn cũng đã kiểm tra các biến môi trường tiêu chuẩn, mở rộng `PATH` mà không làm mất các mục hiện có, xác minh việc tra cứu lệnh, và xóa trạng thái tạm thời bằng `unset`.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -229,10 +275,13 @@
       "task": "Thực hiện hướng dẫn: Create and Expand a Shell Variable",
       "hint": "Chạy lệnh: echo \"$course_name\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -270,10 +319,13 @@
       "task": "Thực hiện hướng dẫn: Observe Child-Process Inheritance",
       "hint": "Chạy lệnh: env | grep '^SHARED_MESSAGE='",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -311,10 +363,13 @@
       "task": "Thực hiện hướng dẫn: Inspect Standard Environment Variables",
       "hint": "Chạy lệnh: printenv HOME USER SHELL PWD TERM",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -352,10 +407,13 @@
       "task": "Thực hiện hướng dẫn: Extend PATH with a Personal Command",
       "hint": "Chạy lệnh: export PATH=\"$PATH:$HOME/bin\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

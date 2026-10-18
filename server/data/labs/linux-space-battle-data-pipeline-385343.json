@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "A sensor export mixes normal, warning, and alert records. An operator needs a smaller file containing every alert and nothing else.\n\nThe preceding guided lab practiced filtering delimited records with `grep` and saving the result. This challenge has that single outcome.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một bản xuất dữ liệu cảm biến chứa lẫn các bản ghi bình thường, cảnh báo và báo động. Người vận hành cần một tệp nhỏ hơn chứa tất cả bản ghi báo động và không có bản ghi nào khác.\n\nBài thực hành có hướng dẫn trước đó đã luyện cách lọc bản ghi phân cách bằng `grep` rồi lưu kết quả. Thử thách này chỉ có một mục tiêu đó."
+      "content_vi": "Một bản xuất dữ liệu cảm biến chứa lẫn các bản ghi bình thường, cảnh báo và báo động. Người vận hành cần một tệp nhỏ hơn chứa tất cả bản ghi báo động và không có bản ghi nào khác.\n\nBài thực hành có hướng dẫn trước đó đã luyện cách lọc bản ghi phân cách bằng `grep` rồi lưu kết quả. Thử thách này chỉ có một mục tiêu đó.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-385343-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Create the Alert-Only File",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/sensor-pipeline/sensor-events.csv <(printf %s '01,alpha,INFO,ready\n02,beta,ALERT,heat\n03,gamma,INFO,ready\n04,alpha,ALERT,power\n05,beta,OK,done\n06,gamma,ALERT,fan\n') && cmp -s /home/labex/project/sensor-pipeline/alert-events.csv <(grep \",ALERT,\" /home/labex/project/sensor-pipeline/sensor-events.csv)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/sensor-pipeline/sensor-events.csv <(printf %s '01,alpha,INFO,ready\n02,beta,ALERT,heat\n03,gamma,INFO,ready\n04,alpha,ALERT,power\n05,beta,OK,done\n06,gamma,ALERT,fan\n') && cmp -s /home/labex/project/sensor-pipeline/alert-events.csv <(grep \",ALERT,\" /home/labex/project/sensor-pipeline/sensor-events.csv)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/sensor-pipeline/sensor-events.csv <(printf %s '01,alpha,INFO,ready\n02,beta,ALERT,heat\n03,gamma,INFO,ready\n04,alpha,ALERT,power\n05,beta,OK,done\n06,gamma,ALERT,fan\n') && cmp -s /home/labex/project/sensor-pipeline/alert-events.csv <(grep \",ALERT,\" /home/labex/project/sensor-pipeline/sensor-events.csv)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -66,7 +78,8 @@
       "has_solution": false,
       "content": "You used a familiar text filter and redirection to produce one complete alert-only data file.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã dùng bộ lọc văn bản quen thuộc và chuyển hướng để tạo một tệp dữ liệu đầy đủ chỉ chứa các bản ghi báo động."
+      "content_vi": "Bạn đã dùng bộ lọc văn bản quen thuộc và chuyển hướng để tạo một tệp dữ liệu đầy đủ chỉ chứa các bản ghi báo động.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -83,10 +96,13 @@
       "task": "Thực hiện hướng dẫn: Create the Alert-Only File",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/sensor-pipeline/sensor-events.csv <(printf %s '01,alpha,INFO,ready\n02,beta,ALERT,heat\n03,gamma,INFO,ready\n04,alpha,ALERT,power\n05,beta,OK,done\n06,gamma,ALERT,fan\n') && cmp -s /home/labex/project/sensor-pipeline/alert-events.csv <(grep \",ALERT,\" /home/labex/project/sensor-pipeline/sensor-events.csv)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

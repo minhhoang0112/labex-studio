@@ -1,5 +1,7 @@
 # Linux backend — 16/10/2026
 
+> Cập nhật 18/10: [Commands đã có 41 bài / 181 nhiệm vụ thực hành đạt](COMMANDS_COURSE_IMPORT_2026-10-17.md). Hiện có 116 bài nguồn duy nhất; các con số nhập và phần reference-only ở snapshot cũ bên dưới đã thay đổi.
+
 > Snapshot 16/10. Trạng thái mới ngày 17/10 nằm ở [FIDELITY_REPAIRS_2026-10-17.md](FIDELITY_REPAIRS_2026-10-17.md): 75 bài nguồn duy nhất thuộc 4 khóa; Shell 73 đạt/1 bị chặn, Noobs 100 đạt/34 bị chặn trên Docker. Những đoạn “năm khóa còn lại” hoặc “đang kiểm chứng Noobs” bên dưới là trạng thái lịch sử.
 
 Đã quét lại mã sau thay đổi của Anti, gồm 37 bài Noobs mới. Các phần FE sections, progress v2, VI/EN, roadmap và reset đã có; không thay lại bố cục của Anti trong đợt này. Server tại http://127.0.0.1:5000/learn đã chuyển sang Docker rootless Ubuntu 22.04.5; `run.bat` giữ server chạy nền và khởi động engine riêng khi cần.

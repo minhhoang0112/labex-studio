@@ -1,5 +1,7 @@
 # Đã tự xử lý phần bàn giao FE — 17/10/2026
 
+> Cập nhật 18/10: khóa Commands đã triển khai đủ 41 bài/181 nhiệm vụ; xem [báo cáo nhập khóa](COMMANDS_COURSE_IMPORT_2026-10-17.md). Những đoạn mô tả Commands còn reference-only bên dưới là trạng thái trước đợt nhập.
+
 Theo yêu cầu mới, Codex đã sửa trực tiếp các mục chức năng còn lại trong bản bàn giao Anti. Desktop/WebIDE không thuộc phạm vi đợt này; người học tiếp tục thực hành bằng terminal Linux thật.
 
 ## Những lỗi đã sửa

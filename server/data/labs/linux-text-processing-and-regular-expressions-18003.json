@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "A regular expression describes text by structure rather than one exact string. The same pattern language appears in many Linux tools, but each tool uses it differently: `grep` selects or extracts matches, `sed` transforms a stream, and `awk` combines patterns with field-aware actions.\n\nYou will start with anchors and character classes, move to extended repetition and extraction, preview transformations before saving them, and finish with field selection and aggregation. Patterns are quoted so the shell passes special characters to the text tool instead of interpreting them itself.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Biểu thức chính quy mô tả văn bản theo cấu trúc thay vì một chuỗi chính xác duy nhất. Cùng một ngôn ngữ mẫu xuất hiện trong nhiều công cụ Linux, nhưng mỗi công cụ sử dụng nó khác nhau: `grep` chọn hoặc trích xuất phần khớp, `sed` biến đổi luồng và `awk` kết hợp mẫu với thao tác hiểu cấu trúc trường.\n\nBạn sẽ bắt đầu với ký hiệu neo và lớp ký tự, chuyển sang phép lặp mở rộng và trích xuất, xem trước các phép biến đổi trước khi lưu, rồi kết thúc bằng chọn trường và tổng hợp. Mẫu được đặt trong dấu nháy để shell chuyển ký tự đặc biệt cho công cụ văn bản thay vì tự diễn giải chúng."
+      "content_vi": "Biểu thức chính quy mô tả văn bản theo cấu trúc thay vì một chuỗi chính xác duy nhất. Cùng một ngôn ngữ mẫu xuất hiện trong nhiều công cụ Linux, nhưng mỗi công cụ sử dụng nó khác nhau: `grep` chọn hoặc trích xuất phần khớp, `sed` biến đổi luồng và `awk` kết hợp mẫu với thao tác hiểu cấu trúc trường.\n\nBạn sẽ bắt đầu với ký hiệu neo và lớp ký tự, chuyển sang phép lặp mở rộng và trích xuất, xem trước các phép biến đổi trước khi lưu, rồi kết thúc bằng chọn trường và tổng hợp. Mẫu được đặt trong dấu nháy để shell chuyển ký tự đặc biệt cho công cụ văn bản thay vì tự diễn giải chúng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-18003-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Match Lines with Basic Regex Structure",
       "hint": "Chạy lệnh: grep 'active' contacts.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/abc-contacts.txt <(grep \"^[ABC]\" /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/two-digit-values.txt <(grep \"[0-9][0-9]$\" /home/labex/project/regex-lab/contacts.txt)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/abc-contacts.txt <(grep \"^[ABC]\" /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/two-digit-values.txt <(grep \"[0-9][0-9]$\" /home/labex/project/regex-lab/contacts.txt)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/regex-lab/abc-contacts.txt <(grep \"^[ABC]\" /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/two-digit-values.txt <(grep \"[0-9][0-9]$\" /home/labex/project/regex-lab/contacts.txt)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -69,18 +81,29 @@
       "task": "Thực hiện hướng dẫn: Use Extended Regex and Extract Matches",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/emails.txt <(grep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/email-count.txt <(printf %s '4\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/emails.txt <(grep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/email-count.txt <(printf %s '4\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/regex-lab/emails.txt <(grep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/email-count.txt <(printf %s '4\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -102,18 +125,29 @@
       "task": "Thực hiện hướng dẫn: Preview Transformations with Sed",
       "hint": "Chạy lệnh: sed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/contacts-preview.txt <(sed '/|inactive|/s/|inactive|/|disabled|/' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/contacts.txt <(printf %s 'Alice|alice@example.com|active|25\nBob|bob@example.net|pending|32\nCarol|carol@example.org|inactive|41\nDavid|david@example.com|active|103\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/contacts-preview.txt <(sed '/|inactive|/s/|inactive|/|disabled|/' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/contacts.txt <(printf %s 'Alice|alice@example.com|active|25\nBob|bob@example.net|pending|32\nCarol|carol@example.org|inactive|41\nDavid|david@example.com|active|103\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/regex-lab/contacts-preview.txt <(sed '/|inactive|/s/|inactive|/|disabled|/' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/contacts.txt <(printf %s 'Alice|alice@example.com|active|25\nBob|bob@example.net|pending|32\nCarol|carol@example.org|inactive|41\nDavid|david@example.com|active|103\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -135,18 +169,29 @@
       "task": "Thực hiện hướng dẫn: Create a Cleaned File with Sed",
       "hint": "Chạy lệnh: diff -u services.csv services-clean.csv || true",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/services-clean.csv <(printf %s 'service,state,latency\napi,warning,250ms\nworker,ok,150ms\nweb,warning,300ms\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/services-clean.csv <(printf %s 'service,state,latency\napi,warning,250ms\nworker,ok,150ms\nweb,warning,300ms\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/regex-lab/services-clean.csv <(printf %s 'service,state,latency\napi,warning,250ms\nworker,ok,150ms\nweb,warning,300ms\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -168,18 +213,29 @@
       "task": "Thực hiện hướng dẫn: Select Fields and Aggregate with Awk",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/slow-services.txt <(printf %s 'api 250\nweb 300\n') && cmp -s /home/labex/project/regex-lab/latency-summary.txt <(printf %s 'average_latency=233.3\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/regex-lab/slow-services.txt <(printf %s 'api 250\nweb 300\n') && cmp -s /home/labex/project/regex-lab/latency-summary.txt <(printf %s 'average_latency=233.3\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/regex-lab/slow-services.txt <(printf %s 'api 250\nweb 300\n') && cmp -s /home/labex/project/regex-lab/latency-summary.txt <(printf %s 'average_latency=233.3\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -198,7 +254,8 @@
       "has_solution": false,
       "content": "You built regex patterns from anchors, classes, alternatives, and repetition; used grep to select and extract; used sed to preview and save transformations; and used awk for field-aware selection and aggregation. The next Challenge asks you to apply these ideas without being given a full command sequence.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã xây dựng mẫu regex từ ký hiệu neo, lớp ký tự, lựa chọn và phép lặp; dùng grep để chọn và trích xuất; dùng sed để xem trước và lưu phép biến đổi; dùng awk để chọn và tổng hợp theo trường. Thử thách tiếp theo yêu cầu áp dụng các ý tưởng này mà không được cung cấp toàn bộ chuỗi lệnh."
+      "content_vi": "Bạn đã xây dựng mẫu regex từ ký hiệu neo, lớp ký tự, lựa chọn và phép lặp; dùng grep để chọn và trích xuất; dùng sed để xem trước và lưu phép biến đổi; dùng awk để chọn và tổng hợp theo trường. Thử thách tiếp theo yêu cầu áp dụng các ý tưởng này mà không được cung cấp toàn bộ chuỗi lệnh.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -215,10 +272,13 @@
       "task": "Thực hiện hướng dẫn: Match Lines with Basic Regex Structure",
       "hint": "Chạy lệnh: grep 'active' contacts.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/abc-contacts.txt <(grep \"^[ABC]\" /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/two-digit-values.txt <(grep \"[0-9][0-9]$\" /home/labex/project/regex-lab/contacts.txt)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -256,10 +316,13 @@
       "task": "Thực hiện hướng dẫn: Use Extended Regex and Extract Matches",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/emails.txt <(grep -Eo '[[:alnum:]._-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/email-count.txt <(printf %s '4\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -297,10 +360,13 @@
       "task": "Thực hiện hướng dẫn: Preview Transformations with Sed",
       "hint": "Chạy lệnh: sed -E 's#@[[:alnum:].-]+\\.[[:alpha:]]{2,}#@redacted.invalid#g' contacts.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/contacts-preview.txt <(sed '/|inactive|/s/|inactive|/|disabled|/' /home/labex/project/regex-lab/contacts.txt) && cmp -s /home/labex/project/regex-lab/contacts.txt <(printf %s 'Alice|alice@example.com|active|25\nBob|bob@example.net|pending|32\nCarol|carol@example.org|inactive|41\nDavid|david@example.com|active|103\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -338,10 +404,13 @@
       "task": "Thực hiện hướng dẫn: Create a Cleaned File with Sed",
       "hint": "Chạy lệnh: diff -u services.csv services-clean.csv || true",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/services-clean.csv <(printf %s 'service,state,latency\napi,warning,250ms\nworker,ok,150ms\nweb,warning,300ms\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -379,10 +448,13 @@
       "task": "Thực hiện hướng dẫn: Select Fields and Aggregate with Awk",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/regex-lab/slow-services.txt <(printf %s 'api 250\nweb 300\n') && cmp -s /home/labex/project/regex-lab/latency-summary.txt <(printf %s 'average_latency=233.3\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

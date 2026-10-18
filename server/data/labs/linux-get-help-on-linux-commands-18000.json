@@ -20,7 +20,8 @@
       "has_solution": false,
       "content": "Experienced Linux users do not memorize every command and option. They know how to ask the system what a name means, find a short usage summary, open complete documentation, and search manuals by topic.\n\nThis lab follows directly from basic file operations. You will investigate familiar commands such as `cd`, `ls`, and `cp`, then save small evidence files under `/home/labex/project/command-help`. By the end, unfamiliar syntax will be a documentation question rather than a roadblock.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Người dùng Linux có kinh nghiệm không ghi nhớ mọi lệnh và tùy chọn. Họ biết cách hỏi hệ thống ý nghĩa của một tên, tìm tóm tắt cách sử dụng ngắn gọn, mở tài liệu đầy đủ và tìm kiếm tài liệu hướng dẫn theo chủ đề.\n\nPhòng thực hành này nối tiếp trực tiếp các thao tác tệp cơ bản. Bạn sẽ tìm hiểu các lệnh quen thuộc như `cd`, `ls`, và `cp`, sau đó lưu các tệp bằng chứng nhỏ dưới `/home/labex/project/command-help`. Cuối cùng, cú pháp lạ sẽ chỉ là một câu hỏi về tài liệu thay vì một vật cản đường."
+      "content_vi": "Người dùng Linux có kinh nghiệm không ghi nhớ mọi lệnh và tùy chọn. Họ biết cách hỏi hệ thống ý nghĩa của một tên, tìm tóm tắt cách sử dụng ngắn gọn, mở tài liệu đầy đủ và tìm kiếm tài liệu hướng dẫn theo chủ đề.\n\nPhòng thực hành này nối tiếp trực tiếp các thao tác tệp cơ bản. Bạn sẽ tìm hiểu các lệnh quen thuộc như `cd`, `ls`, và `cp`, sau đó lưu các tệp bằng chứng nhỏ dưới `/home/labex/project/command-help`. Cuối cùng, cú pháp lạ sẽ chỉ là một câu hỏi về tài liệu thay vì một vật cản đường.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-18000-section-1-v3",
@@ -35,19 +36,30 @@
       "hint": "Chạy lệnh: cd /home/labex/project/command-help",
       "title_vi": "Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
       },
       "task_vi": "Thực hiện hướng dẫn: Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
+        },
+        "namespace": {
           "kind": "state",
           "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -68,19 +80,30 @@
       "hint": "Chạy lệnh: bash -c 'help cd'",
       "title_vi": "Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
       },
       "task_vi": "Thực hiện hướng dẫn: Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
+        },
+        "namespace": {
           "kind": "state",
           "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -246,7 +269,8 @@
       "has_solution": false,
       "content": "You learned a repeatable help strategy: use `type` or `command -V` to identify a name, shell-specific help such as Bash's `help` or a program's `--help` for quick syntax, `man` for complete documentation, and `apropos` when you know the topic but not the command. These tools remove the need to memorize every option and prepare you to investigate unfamiliar commands throughout the rest of the course.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã học được một chiến lược trợ giúp có thể lặp lại: sử dụng `type` hoặc `command -V` để xác định một tên, trợ giúp đặc trưng cho shell như `help` của Bash hoặc `--help` của một chương trình để biết cú pháp nhanh, `man` để có tài liệu hoàn chỉnh, và `apropos` khi bạn biết chủ đề nhưng chưa rõ lệnh. Các công cụ này loại bỏ nhu cầu phải ghi nhớ mọi tùy chọn và chuẩn bị cho bạn khả năng tìm hiểu các lệnh chưa quen thuộc trong phần còn lại của khóa học."
+      "content_vi": "Bạn đã học được một chiến lược trợ giúp có thể lặp lại: sử dụng `type` hoặc `command -V` để xác định một tên, trợ giúp đặc trưng cho shell như `help` của Bash hoặc `--help` của một chương trình để biết cú pháp nhanh, `man` để có tài liệu hoàn chỉnh, và `apropos` khi bạn biết chủ đề nhưng chưa rõ lệnh. Các công cụ này loại bỏ nhu cầu phải ghi nhớ mọi tùy chọn và chuẩn bị cho bạn khả năng tìm hiểu các lệnh chưa quen thuộc trong phần còn lại của khóa học.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -262,12 +286,15 @@
       "task": "Thực hiện hướng dẫn: Identify What a Command Name Means",
       "hint": "Chạy lệnh: cd /home/labex/project/command-help",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
       },
       "title_vi": "Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
       "task_vi": "Thực hiện hướng dẫn: Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -303,12 +330,15 @@
       "task": "Thực hiện hướng dẫn: Read Quick Help and Usage Syntax",
       "hint": "Chạy lệnh: bash -c 'help cd'",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
       },
       "title_vi": "Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
       "task_vi": "Thực hiện hướng dẫn: Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

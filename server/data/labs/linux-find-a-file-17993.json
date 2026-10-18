@@ -20,7 +20,8 @@
       "has_solution": false,
       "content": "A project tree contains one active configuration file and one similarly named backup. The active file is writable by everyone and must be made private without changing its content.\n\nThis challenge combines the exact-name search from the preceding file lab with the numeric permission mode introduced earlier.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Cây dự án chứa một tệp cấu hình đang hoạt động và một tệp sao lưu có tên tương tự. Tệp đang hoạt động có thể ghi bởi mọi người và phải được chuyển thành chế độ riêng tư mà không làm thay đổi nội dung của nó.\n\nThử thách này kết hợp việc tìm kiếm theo tên chính xác từ phòng thí nghiệm tệp trước đó với chế độ quyền truy cập dạng số đã được giới thiệu trước đó."
+      "content_vi": "Cây dự án chứa một tệp cấu hình đang hoạt động và một tệp sao lưu có tên tương tự. Tệp đang hoạt động có thể ghi bởi mọi người và phải được chuyển thành chế độ riêng tư mà không làm thay đổi nội dung của nó.\n\nThử thách này kết hợp việc tìm kiếm theo tên chính xác từ phòng thí nghiệm tệp trước đó với chế độ quyền truy cập dạng số đã được giới thiệu trước đó.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-17993-section-1-v3",
@@ -35,19 +36,30 @@
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "title_vi": "Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -65,7 +77,8 @@
       "has_solution": false,
       "content": "You found one exact file in a directory tree and protected it with a permission mode already practiced earlier in the course.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã tìm thấy chính xác một tệp trong cây thư mục và bảo vệ nó bằng một chế độ quyền đã được thực hành trước đó trong khóa học."
+      "content_vi": "Bạn đã tìm thấy chính xác một tệp trong cây thư mục và bảo vệ nó bằng một chế độ quyền đã được thực hành trước đó trong khóa học.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -81,12 +94,15 @@
       "task": "Thực hiện hướng dẫn: Protect the Active Configuration",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
       },
       "title_vi": "Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
       "task_vi": "Thực hiện hướng dẫn: Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

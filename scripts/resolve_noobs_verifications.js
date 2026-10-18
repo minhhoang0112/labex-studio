@@ -296,3 +296,4 @@ for (const [labId, stepRules] of Object.entries(LAB_UPDATES)) {
 }
 
 console.log(`Successfully updated ${updatedCount} labs in linux-for-noobs.`);
+

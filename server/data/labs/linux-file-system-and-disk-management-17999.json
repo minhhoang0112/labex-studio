@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "Linux storage has several connected layers. A device can contain partitions, a partition or image can contain a filesystem, and a filesystem becomes accessible when it is attached to the directory tree at a mount point. Keeping these terms separate makes disk commands much easier to understand.\n\nIn this lab, you will inspect storage safely, analyze space usage, create an ext4 filesystem inside a regular file, mount and unmount it, read partition information, and build a practice fstab file. All write operations target disposable files created for the lab; you will not repartition a real disk or modify the system's `/etc/fstab`.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Lưu trữ trong Linux có nhiều lớp được kết nối với nhau. Một thiết bị có thể chứa các phân vùng (partition), một phân vùng hoặc tệp ảnh (image) có thể chứa một hệ thống tệp (filesystem), và một hệ thống tệp sẽ trở thành khả truy cập khi nó được gắn kết (attach) vào cây thư mục tại một điểm gắn kết (mount point). Việc phân biệt rõ các thuật ngữ này sẽ giúp các lệnh về đĩa trở nên dễ hiểu hơn rất nhiều.\n\nTrong phòng thí nghiệm này, bạn sẽ kiểm tra dung lượng lưu trữ một cách an toàn, phân tích mức sử dụng không gian, tạo một hệ thống tệp ext4 bên trong một tệp thông thường, gắn kết (mount) và gỡ gắn kết (unmount) nó, đọc thông tin phân vùng, và xây dựng một tệp `fstab` thực hành. Tất cả các thao tác ghi đều nhắm đến các tệp dùng một lần được tạo cho phòng thí nghiệm; bạn sẽ không phân vùng lại ổ đĩa thực hoặc sửa đổi tệp `/etc/fstab` của hệ thống."
+      "content_vi": "Lưu trữ trong Linux có nhiều lớp được kết nối với nhau. Một thiết bị có thể chứa các phân vùng (partition), một phân vùng hoặc tệp ảnh (image) có thể chứa một hệ thống tệp (filesystem), và một hệ thống tệp sẽ trở thành khả truy cập khi nó được gắn kết (attach) vào cây thư mục tại một điểm gắn kết (mount point). Việc phân biệt rõ các thuật ngữ này sẽ giúp các lệnh về đĩa trở nên dễ hiểu hơn rất nhiều.\n\nTrong phòng thí nghiệm này, bạn sẽ kiểm tra dung lượng lưu trữ một cách an toàn, phân tích mức sử dụng không gian, tạo một hệ thống tệp ext4 bên trong một tệp thông thường, gắn kết (mount) và gỡ gắn kết (unmount) nó, đọc thông tin phân vùng, và xây dựng một tệp `fstab` thực hành. Tất cả các thao tác ghi đều nhắm đến các tệp dùng một lần được tạo cho phòng thí nghiệm; bạn sẽ không phân vùng lại ổ đĩa thực hoặc sửa đổi tệp `/etc/fstab` của hệ thống.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-17999-section-1-v3",
@@ -110,12 +111,59 @@
       "task": "Thực hiện hướng dẫn: Analyze Filesystem and Directory Usage",
       "hint": "Chạy lệnh: cd /home/labex/project/storage-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(stat -c %s /home/labex/project/storage-lab/usage/reports/weekly.log)\" = 2097152 && test \"$(stat -c %s /home/labex/project/storage-lab/usage/archive/records.bin)\" = 5242880"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*df\\s+-h\\s+/home/labex/project/storage-lab\\s*$"
+              ],
+              [
+                "^\\s*du\\s+-h\\s+--apparent-size\\s+--max-depth=1\\s+usage\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(stat -c %s /home/labex/project/storage-lab/usage/reports/weekly.log)\" = 2097152 && test \"$(stat -c %s /home/labex/project/storage-lab/usage/archive/records.bin)\" = 5242880"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*df\\s+-h\\s+/home/labex/project/storage-lab\\s*$"
+                ],
+                [
+                  "^\\s*du\\s+-h\\s+--apparent-size\\s+--max-depth=1\\s+usage\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -142,6 +190,10 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -456,7 +508,8 @@
       "has_solution": false,
       "content": "You connected the main Linux storage layers: devices, partitions, filesystems, and mount points. You used `lsblk`, `blkid`, and `findmnt` to inspect them, then compared filesystem-wide usage from `df` with file and directory usage from `du`.\n\nYou created and labeled an ext4 filesystem inside a disposable image, mounted it through a loop device, preserved data across an unmount, and inspected partition information without altering real disks. Finally, you learned the six fstab fields, why stable UUIDs matter, and how to validate a separate practice fstab before using it.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã kết nối các tầng lưu trữ chính của Linux: thiết bị, phân vùng, hệ thống tệp và điểm gắn kết. Bạn đã sử dụng `lsblk`, `blkid` và `findmnt` để kiểm tra chúng, sau đó so sánh mức sử dụng trên toàn hệ thống tệp từ `df` với mức sử dụng của tệp và thư mục từ `du`.\n\nBạn đã tạo và dán nhãn một hệ thống tệp ext4 bên trong một tệp ảnh dùng một lần, gắn kết nó thông qua một thiết bị vòng lặp (loop device), bảo toàn dữ liệu sau khi ngắt kết nối (unmount) và kiểm tra thông tin phân vùng mà không làm thay đổi các ổ đĩa thực. Cuối cùng, bạn đã học về sáu trường trong tệp fstab, lý do tại sao các UUID ổn định lại quan trọng, và cách xác thực một tệp fstab thực hành riêng biệt trước khi sử dụng nó."
+      "content_vi": "Bạn đã kết nối các tầng lưu trữ chính của Linux: thiết bị, phân vùng, hệ thống tệp và điểm gắn kết. Bạn đã sử dụng `lsblk`, `blkid` và `findmnt` để kiểm tra chúng, sau đó so sánh mức sử dụng trên toàn hệ thống tệp từ `df` với mức sử dụng của tệp và thư mục từ `du`.\n\nBạn đã tạo và dán nhãn một hệ thống tệp ext4 bên trong một tệp ảnh dùng một lần, gắn kết nó thông qua một thiết bị vòng lặp (loop device), bảo toàn dữ liệu sau khi ngắt kết nối (unmount) và kiểm tra thông tin phân vùng mà không làm thay đổi các ổ đĩa thực. Cuối cùng, bạn đã học về sáu trường trong tệp fstab, lý do tại sao các UUID ổn định lại quan trọng, và cách xác thực một tệp fstab thực hành riêng biệt trước khi sử dụng nó.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -547,10 +600,33 @@
       "task": "Thực hiện hướng dẫn: Analyze Filesystem and Directory Usage",
       "hint": "Chạy lệnh: cd /home/labex/project/storage-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(stat -c %s /home/labex/project/storage-lab/usage/reports/weekly.log)\" = 2097152 && test \"$(stat -c %s /home/labex/project/storage-lab/usage/archive/records.bin)\" = 5242880"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*df\\s+-h\\s+/home/labex/project/storage-lab\\s*$"
+              ],
+              [
+                "^\\s*du\\s+-h\\s+--apparent-size\\s+--max-depth=1\\s+usage\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "all",

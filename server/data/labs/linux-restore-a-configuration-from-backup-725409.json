@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "An application configuration was accidentally removed, but a readable compressed backup is available. The archive also contains a runbook that is not part of this recovery.\n\nThe preceding guided lab practiced listing an archive and extracting one selected path. This final challenge focuses only on that recovery decision.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một cấu hình ứng dụng vô tình bị xóa, nhưng có sẵn bản sao lưu nén đọc được. Tệp lưu trữ cũng chứa một tài liệu quy trình vận hành không thuộc lần khôi phục này.\n\nBài hướng dẫn trước đã luyện liệt kê tệp lưu trữ và giải nén một đường dẫn được chọn. Thử thách cuối này chỉ tập trung vào quyết định khôi phục đó."
+      "content_vi": "Một cấu hình ứng dụng vô tình bị xóa, nhưng có sẵn bản sao lưu nén đọc được. Tệp lưu trữ cũng chứa một tài liệu quy trình vận hành không thuộc lần khôi phục này.\n\nBài hướng dẫn trước đã luyện liệt kê tệp lưu trữ và giải nén một đường dẫn được chọn. Thử thách cuối này chỉ tập trung vào quyết định khôi phục đó.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-725409-section-1-v3",
@@ -36,18 +37,31 @@
       "task": "Thực hiện hướng dẫn: Restore the Missing Configuration",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-automation')\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/documents/runbook.txt').read_text() == 'Current runbook: keep this file unchanged.\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-automation')\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/documents/runbook.txt').read_text() == 'Current runbook: keep this file unchanged.\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-automation')\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/documents/runbook.txt').read_text() == 'Current runbook: keep this file unchanged.\\n'\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "archives"
@@ -67,7 +81,8 @@
       "has_solution": false,
       "content": "You inspected a backup and selectively restored one missing configuration file without extracting unrelated content.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã kiểm tra một bản sao lưu và khôi phục có chọn lọc một tệp cấu hình bị thiếu mà không giải nén nội dung không liên quan."
+      "content_vi": "Bạn đã kiểm tra một bản sao lưu và khôi phục có chọn lọc một tệp cấu hình bị thiếu mà không giải nén nội dung không liên quan.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -84,10 +99,14 @@
       "task": "Thực hiện hướng dẫn: Restore the Missing Configuration",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-automation')\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/documents/runbook.txt').read_text() == 'Current runbook: keep this file unchanged.\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

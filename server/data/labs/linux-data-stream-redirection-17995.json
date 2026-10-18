@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "Linux commands normally read input from the terminal and write results back to it. The shell can reconnect those data streams to files or other commands. This is called redirection, and it is the foundation of logging, pipelines, background jobs, and shell scripts.\n\nIn this lab, you will work with standard input, standard output, and standard error. You will learn when `>` overwrites, when `>>` appends, how `2>` and `2>&1` handle errors, how a pipe passes data, how `tee` displays and saves the same output, and when `/dev/null` is useful.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Lệnh Linux thường đọc đầu vào từ terminal và ghi kết quả trở lại đó. Shell có thể nối lại các luồng dữ liệu này với tệp hoặc lệnh khác. Đây được gọi là chuyển hướng và là nền tảng của ghi log, pipeline, tác vụ nền và script shell.\n\nTrong bài này, bạn sẽ làm việc với đầu vào chuẩn, đầu ra chuẩn và lỗi chuẩn. Bạn sẽ học khi nào `>` ghi đè, khi nào `>>` nối thêm, cách `2>` và `2>&1` xử lý lỗi, cách đường ống truyền dữ liệu, cách `tee` vừa hiển thị vừa lưu cùng một đầu ra và khi nào `/dev/null` hữu ích."
+      "content_vi": "Lệnh Linux thường đọc đầu vào từ terminal và ghi kết quả trở lại đó. Shell có thể nối lại các luồng dữ liệu này với tệp hoặc lệnh khác. Đây được gọi là chuyển hướng và là nền tảng của ghi log, pipeline, tác vụ nền và script shell.\n\nTrong bài này, bạn sẽ làm việc với đầu vào chuẩn, đầu ra chuẩn và lỗi chuẩn. Bạn sẽ học khi nào `>` ghi đè, khi nào `>>` nối thêm, cách `2>` và `2>&1` xử lý lỗi, cách đường ống truyền dữ liệu, cách `tee` vừa hiển thị vừa lưu cùng một đầu ra và khi nào `/dev/null` hữu ích.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-17995-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Understand Standard Input, Output, and Error",
       "hint": "Chạy lệnh: mkdir -p /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/streams-lab/input.txt <(printf %s 'alpha\nbeta\ngamma\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/streams-lab/input.txt <(printf %s 'alpha\nbeta\ngamma\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/streams-lab/input.txt <(printf %s 'alpha\nbeta\ngamma\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -69,18 +81,29 @@
       "task": "Thực hiện hướng dẫn: Redirect and Append Standard Output",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/streams-lab/report.txt <(printf %s 'Input lines: 3\nStatus: complete\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/streams-lab/report.txt <(printf %s 'Input lines: 3\nStatus: complete\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/streams-lab/report.txt <(printf %s 'Input lines: 3\nStatus: complete\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -102,18 +125,29 @@
       "task": "Thực hiện hướng dẫn: Separate Standard Output and Standard Error",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fq input.txt /home/labex/project/streams-lab/listing.log && ! grep -Fq missing.txt /home/labex/project/streams-lab/listing.log && grep -Fq missing.txt /home/labex/project/streams-lab/errors.log"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "grep -Fq input.txt /home/labex/project/streams-lab/listing.log && ! grep -Fq missing.txt /home/labex/project/streams-lab/listing.log && grep -Fq missing.txt /home/labex/project/streams-lab/errors.log"
+        },
+        "namespace": {
           "kind": "state",
           "command": "grep -Fq input.txt /home/labex/project/streams-lab/listing.log && ! grep -Fq missing.txt /home/labex/project/streams-lab/listing.log && grep -Fq missing.txt /home/labex/project/streams-lab/errors.log"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -135,18 +169,29 @@
       "task": "Thực hiện hướng dẫn: Combine Standard Output and Standard Error",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fq input.txt /home/labex/project/streams-lab/combined.log && grep -Fq missing.txt /home/labex/project/streams-lab/combined.log && grep -Fq report.txt /home/labex/project/streams-lab/shorthand.log && grep -Fq absent.txt /home/labex/project/streams-lab/shorthand.log"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "grep -Fq input.txt /home/labex/project/streams-lab/combined.log && grep -Fq missing.txt /home/labex/project/streams-lab/combined.log && grep -Fq report.txt /home/labex/project/streams-lab/shorthand.log && grep -Fq absent.txt /home/labex/project/streams-lab/shorthand.log"
+        },
+        "namespace": {
           "kind": "state",
           "command": "grep -Fq input.txt /home/labex/project/streams-lab/combined.log && grep -Fq missing.txt /home/labex/project/streams-lab/combined.log && grep -Fq report.txt /home/labex/project/streams-lab/shorthand.log && grep -Fq absent.txt /home/labex/project/streams-lab/shorthand.log"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -168,18 +213,29 @@
       "task": "Thực hiện hướng dẫn: View and Save Pipeline Output with Tee",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/streams-lab/sorted.txt <(printf %s 'gamma\nbeta\nalpha\ndelta\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/streams-lab/sorted.txt <(printf %s 'gamma\nbeta\nalpha\ndelta\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/streams-lab/sorted.txt <(printf %s 'gamma\nbeta\nalpha\ndelta\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -201,18 +257,29 @@
       "task": "Thực hiện hướng dẫn: Discard Unneeded Data with Dev Null",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -f /home/labex/project/streams-lab/scratch.log && test ! -s /home/labex/project/streams-lab/scratch.log && test -s /home/labex/project/streams-lab/visible-listing.log && ! grep -Fq missing-directory /home/labex/project/streams-lab/visible-listing.log"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/streams-lab/scratch.log && test ! -s /home/labex/project/streams-lab/scratch.log && test -s /home/labex/project/streams-lab/visible-listing.log && ! grep -Fq missing-directory /home/labex/project/streams-lab/visible-listing.log"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -f /home/labex/project/streams-lab/scratch.log && test ! -s /home/labex/project/streams-lab/scratch.log && test -s /home/labex/project/streams-lab/visible-listing.log && ! grep -Fq missing-directory /home/labex/project/streams-lab/visible-listing.log"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -231,7 +298,8 @@
       "has_solution": false,
       "content": "You practiced the three standard streams and their file descriptors, connected files to stdin with `<`, and redirected stdout with `>` and `>>`. You separated stderr with `2>`, combined it with stdout using `2>&1` and `&>`, and learned why operator order matters.\n\nYou also compared ordinary file redirection with pipelines and `tee`, used `tee -a` to append while displaying output, and discarded unneeded data with `/dev/null`. These patterns prepare you to understand logging, background commands, and shell scripts later in the course.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã thực hành ba luồng chuẩn và bộ mô tả tệp của chúng, nối tệp với stdin bằng `<`, chuyển hướng stdout bằng `>` và `>>`. Bạn đã tách stderr bằng `2>`, gộp nó với stdout bằng `2>&1` và `&>`, đồng thời hiểu vì sao thứ tự toán tử quan trọng.\n\nBạn cũng so sánh chuyển hướng tệp thông thường với pipeline và `tee`, dùng `tee -a` để nối thêm đồng thời hiển thị đầu ra, và loại bỏ dữ liệu không cần bằng `/dev/null`. Những mẫu này chuẩn bị cho bạn hiểu việc ghi log, lệnh nền và script shell ở phần sau của khóa học."
+      "content_vi": "Bạn đã thực hành ba luồng chuẩn và bộ mô tả tệp của chúng, nối tệp với stdin bằng `<`, chuyển hướng stdout bằng `>` và `>>`. Bạn đã tách stderr bằng `2>`, gộp nó với stdout bằng `2>&1` và `&>`, đồng thời hiểu vì sao thứ tự toán tử quan trọng.\n\nBạn cũng so sánh chuyển hướng tệp thông thường với pipeline và `tee`, dùng `tee -a` để nối thêm đồng thời hiển thị đầu ra, và loại bỏ dữ liệu không cần bằng `/dev/null`. Những mẫu này chuẩn bị cho bạn hiểu việc ghi log, lệnh nền và script shell ở phần sau của khóa học.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -248,10 +316,13 @@
       "task": "Thực hiện hướng dẫn: Understand Standard Input, Output, and Error",
       "hint": "Chạy lệnh: mkdir -p /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/streams-lab/input.txt <(printf %s 'alpha\nbeta\ngamma\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -289,10 +360,13 @@
       "task": "Thực hiện hướng dẫn: Redirect and Append Standard Output",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/streams-lab/report.txt <(printf %s 'Input lines: 3\nStatus: complete\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -330,10 +404,13 @@
       "task": "Thực hiện hướng dẫn: Separate Standard Output and Standard Error",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fq input.txt /home/labex/project/streams-lab/listing.log && ! grep -Fq missing.txt /home/labex/project/streams-lab/listing.log && grep -Fq missing.txt /home/labex/project/streams-lab/errors.log"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -371,10 +448,13 @@
       "task": "Thực hiện hướng dẫn: Combine Standard Output and Standard Error",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fq input.txt /home/labex/project/streams-lab/combined.log && grep -Fq missing.txt /home/labex/project/streams-lab/combined.log && grep -Fq report.txt /home/labex/project/streams-lab/shorthand.log && grep -Fq absent.txt /home/labex/project/streams-lab/shorthand.log"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -412,10 +492,13 @@
       "task": "Thực hiện hướng dẫn: View and Save Pipeline Output with Tee",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/streams-lab/sorted.txt <(printf %s 'gamma\nbeta\nalpha\ndelta\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -453,10 +536,13 @@
       "task": "Thực hiện hướng dẫn: Discard Unneeded Data with Dev Null",
       "hint": "Chạy lệnh: cd /home/labex/project/streams-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -f /home/labex/project/streams-lab/scratch.log && test ! -s /home/labex/project/streams-lab/scratch.log && test -s /home/labex/project/streams-lab/visible-listing.log && ! grep -Fq missing-directory /home/labex/project/streams-lab/visible-listing.log"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

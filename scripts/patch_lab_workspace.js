@@ -80,3 +80,4 @@ if (!content.includes("Windows Server Console Simulator")) {
 
 fs.writeFileSync(filePath, content, "utf8");
 console.log("Successfully patched LabWorkspace.jsx with Windows Console integration!");
+

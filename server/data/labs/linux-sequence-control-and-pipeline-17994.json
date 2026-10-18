@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "Small Linux commands become much more useful when the shell coordinates them. A command reports success or failure through an exit status; sequence operators decide what runs next; a pipe connects one command's standard output to another command's standard input.\n\nYou will build these ideas one layer at a time, then use `grep`, `cut`, `wc`, `sort`, and `uniq` to transform a small service-event dataset. Later text-processing labs will deepen these filters, so the focus here is how data and decisions move between commands.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Các lệnh Linux nhỏ trở nên hữu ích hơn nhiều khi được shell phối hợp. Một lệnh báo thành công hoặc thất bại qua trạng thái thoát; các toán tử tuần tự quyết định lệnh tiếp theo được chạy; đường ống kết nối đầu ra chuẩn của một lệnh với đầu vào chuẩn của lệnh khác.\n\nBạn sẽ xây dựng từng lớp khái niệm này, rồi dùng `grep`, `cut`, `wc`, `sort` và `uniq` để biến đổi một tập dữ liệu nhỏ về sự kiện dịch vụ. Các bài xử lý văn bản sau sẽ đào sâu những bộ lọc này; ở đây, trọng tâm là cách dữ liệu và quyết định được truyền giữa các lệnh."
+      "content_vi": "Các lệnh Linux nhỏ trở nên hữu ích hơn nhiều khi được shell phối hợp. Một lệnh báo thành công hoặc thất bại qua trạng thái thoát; các toán tử tuần tự quyết định lệnh tiếp theo được chạy; đường ống kết nối đầu ra chuẩn của một lệnh với đầu vào chuẩn của lệnh khác.\n\nBạn sẽ xây dựng từng lớp khái niệm này, rồi dùng `grep`, `cut`, `wc`, `sort` và `uniq` để biến đổi một tập dữ liệu nhỏ về sự kiện dịch vụ. Các bài xử lý văn bản sau sẽ đào sâu những bộ lọc này; ở đây, trọng tâm là cách dữ liệu và quyết định được truyền giữa các lệnh.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-17994-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Observe Command Exit Status",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/status-result.txt <(printf %s 'events.csv is ready\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/status-result.txt <(printf %s 'events.csv is ready\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/pipeline-lab/status-result.txt <(printf %s 'events.csv is ready\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -69,18 +81,29 @@
       "task": "Thực hiện hướng dẫn: Control Which Command Runs Next",
       "hint": "Chạy lệnh: false; echo \"semicolon continues\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/events.csv /home/labex/project/pipeline-lab/working.csv && cmp -s /home/labex/project/pipeline-lab/sequence-result.txt <(printf %s 'guarded copy matches\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/events.csv /home/labex/project/pipeline-lab/working.csv && cmp -s /home/labex/project/pipeline-lab/sequence-result.txt <(printf %s 'guarded copy matches\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/pipeline-lab/events.csv /home/labex/project/pipeline-lab/working.csv && cmp -s /home/labex/project/pipeline-lab/sequence-result.txt <(printf %s 'guarded copy matches\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -102,18 +125,29 @@
       "task": "Thực hiện hướng dẫn: Send Output Through a Pipeline",
       "hint": "Chạy lệnh: grep ',ERROR,' events.csv",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/error-events.csv <(grep \",ERROR,\" /home/labex/project/pipeline-lab/events.csv) && cmp -s /home/labex/project/pipeline-lab/error-count.txt <(printf %s '3\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/error-events.csv <(grep \",ERROR,\" /home/labex/project/pipeline-lab/events.csv) && cmp -s /home/labex/project/pipeline-lab/error-count.txt <(printf %s '3\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/pipeline-lab/error-events.csv <(grep \",ERROR,\" /home/labex/project/pipeline-lab/events.csv) && cmp -s /home/labex/project/pipeline-lab/error-count.txt <(printf %s '3\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -135,18 +169,29 @@
       "task": "Thực hiện hướng dẫn: Extract Fields with Cut",
       "hint": "Chạy lệnh: cut -d, -f1,2 events.csv",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/warning-services.txt <(grep \",WARN,\" /home/labex/project/pipeline-lab/events.csv | cut -d, -f1)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/warning-services.txt <(grep \",WARN,\" /home/labex/project/pipeline-lab/events.csv | cut -d, -f1)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/pipeline-lab/warning-services.txt <(grep \",WARN,\" /home/labex/project/pipeline-lab/events.csv | cut -d, -f1)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -168,18 +213,29 @@
       "task": "Thực hiện hướng dẫn: Sort and Count Repeated Values",
       "hint": "Chạy lệnh: cut -d, -f1 events.csv | sort | uniq -c",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/service-frequency.txt <(cut -d, -f1 /home/labex/project/pipeline-lab/events.csv | sort | uniq -c | sort -k1,1nr)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/pipeline-lab/service-frequency.txt <(cut -d, -f1 /home/labex/project/pipeline-lab/events.csv | sort | uniq -c | sort -k1,1nr)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/pipeline-lab/service-frequency.txt <(cut -d, -f1 /home/labex/project/pipeline-lab/events.csv | sort | uniq -c | sort -k1,1nr)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -198,7 +254,8 @@
       "has_solution": false,
       "content": "You used exit status as the shell's success signal, controlled execution with `;`, `&&`, and `||`, and built pipelines with clear stages. You then filtered records, extracted fields, counted lines, sorted values, and counted duplicates—exactly the vocabulary needed for the next data-pipeline Challenge.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã dùng trạng thái thoát làm tín hiệu thành công của shell, điều khiển thực thi bằng `;`, `&&` và `||`, đồng thời xây dựng đường ống với các giai đoạn rõ ràng. Sau đó, bạn lọc bản ghi, trích xuất trường, đếm dòng, sắp xếp giá trị và đếm các giá trị trùng — chính là những khái niệm cần cho thử thách đường ống dữ liệu tiếp theo."
+      "content_vi": "Bạn đã dùng trạng thái thoát làm tín hiệu thành công của shell, điều khiển thực thi bằng `;`, `&&` và `||`, đồng thời xây dựng đường ống với các giai đoạn rõ ràng. Sau đó, bạn lọc bản ghi, trích xuất trường, đếm dòng, sắp xếp giá trị và đếm các giá trị trùng — chính là những khái niệm cần cho thử thách đường ống dữ liệu tiếp theo.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -215,10 +272,13 @@
       "task": "Thực hiện hướng dẫn: Observe Command Exit Status",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/status-result.txt <(printf %s 'events.csv is ready\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -256,10 +316,13 @@
       "task": "Thực hiện hướng dẫn: Control Which Command Runs Next",
       "hint": "Chạy lệnh: false; echo \"semicolon continues\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/events.csv /home/labex/project/pipeline-lab/working.csv && cmp -s /home/labex/project/pipeline-lab/sequence-result.txt <(printf %s 'guarded copy matches\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -297,10 +360,13 @@
       "task": "Thực hiện hướng dẫn: Send Output Through a Pipeline",
       "hint": "Chạy lệnh: grep ',ERROR,' events.csv",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/error-events.csv <(grep \",ERROR,\" /home/labex/project/pipeline-lab/events.csv) && cmp -s /home/labex/project/pipeline-lab/error-count.txt <(printf %s '3\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -338,10 +404,13 @@
       "task": "Thực hiện hướng dẫn: Extract Fields with Cut",
       "hint": "Chạy lệnh: cut -d, -f1,2 events.csv",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/warning-services.txt <(grep \",WARN,\" /home/labex/project/pipeline-lab/events.csv | cut -d, -f1)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -379,10 +448,13 @@
       "task": "Thực hiện hướng dẫn: Sort and Count Repeated Values",
       "hint": "Chạy lệnh: cut -d, -f1 events.csv | sort | uniq -c",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/pipeline-lab/service-frequency.txt <(cut -d, -f1 /home/labex/project/pipeline-lab/events.csv | sort | uniq -c | sort -k1,1nr)"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

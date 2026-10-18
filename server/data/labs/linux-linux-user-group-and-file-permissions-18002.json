@@ -20,7 +20,8 @@
       "has_solution": false,
       "content": "Linux is a multi-user operating system. Every process and file belongs to a user, and every user has a primary group plus optional supplementary groups. Together, identity, ownership, and permission bits determine who can read, change, execute, or enter a resource.\n\nIn this lab, you will build a small team environment using dedicated practice accounts. You will create a user, manage group membership, secure a file, inspect an account lock, control default permissions with `umask`, and configure sticky-bit and setgid directories. All work stays inside the lab environment and leaves the default `labex` login path unchanged.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Linux là hệ điều hành nhiều người dùng. Mỗi tiến trình và tệp đều thuộc về một người dùng; mỗi người dùng có một nhóm chính và có thể có thêm các nhóm bổ sung. Danh tính, quyền sở hữu và các bit phân quyền cùng quyết định ai có thể đọc, sửa, thực thi hoặc truy cập một tài nguyên.\n\nTrong bài thực hành này, bạn sẽ xây dựng môi trường nhóm nhỏ bằng các tài khoản thực hành riêng. Bạn sẽ tạo người dùng, quản lý thành viên nhóm, bảo vệ tệp, kiểm tra trạng thái khóa tài khoản, kiểm soát quyền mặc định bằng `umask` và cấu hình thư mục có sticky bit và setgid. Mọi thao tác đều diễn ra trong môi trường bài lab và giữ nguyên cách đăng nhập mặc định bằng tài khoản `labex`."
+      "content_vi": "Linux là hệ điều hành nhiều người dùng. Mỗi tiến trình và tệp đều thuộc về một người dùng; mỗi người dùng có một nhóm chính và có thể có thêm các nhóm bổ sung. Danh tính, quyền sở hữu và các bit phân quyền cùng quyết định ai có thể đọc, sửa, thực thi hoặc truy cập một tài nguyên.\n\nTrong bài thực hành này, bạn sẽ xây dựng môi trường nhóm nhỏ bằng các tài khoản thực hành riêng. Bạn sẽ tạo người dùng, quản lý thành viên nhóm, bảo vệ tệp, kiểm tra trạng thái khóa tài khoản, kiểm soát quyền mặc định bằng `umask` và cấu hình thư mục có sticky bit và setgid. Mọi thao tác đều diễn ra trong môi trường bài lab và giữ nguyên cách đăng nhập mặc định bằng tài khoản `labex`.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-18002-section-1-v3",
@@ -35,19 +36,36 @@
       "hint": "Chạy lệnh: whoami",
       "title_vi": "Kiểm tra danh tính và tạo người dùng thực hành",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(id -gn jack)\" = jack && test \"$(getent passwd jack | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/jack)\" = jack:jack"
       },
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra danh tính và tạo người dùng thực hành",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test \"$(id -gn jack)\" = jack && test \"$(getent passwd jack | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/jack)\" = jack:jack"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test \"$(id -gn jack)\" = jack && test \"$(getent passwd jack | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/jack)\" = jack:jack"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "users",
@@ -71,19 +89,36 @@
       "hint": "Chạy lệnh: sudo groupadd developers",
       "title_vi": "Quản lý các nhóm bổ sung",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "id -nG jack | tr \" \" \"\\n\" | grep -Fxq developers && id -nG jack | tr \" \" \"\\n\" | grep -Fxq sudo && id -nG labex | tr \" \" \"\\n\" | grep -Fxq developers"
       },
       "task_vi": "Thực hiện hướng dẫn: Quản lý các nhóm bổ sung",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "id -nG jack | tr \" \" \"\\n\" | grep -Fxq developers && id -nG jack | tr \" \" \"\\n\" | grep -Fxq sudo && id -nG labex | tr \" \" \"\\n\" | grep -Fxq developers"
+        },
+        "namespace": {
           "kind": "state",
           "command": "id -nG jack | tr \" \" \"\\n\" | grep -Fxq developers && id -nG jack | tr \" \" \"\\n\" | grep -Fxq sudo && id -nG labex | tr \" \" \"\\n\" | grep -Fxq developers"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "users",
@@ -107,19 +142,36 @@
       "hint": "Chạy lệnh: touch /home/labex/project/secure-report.txt",
       "title_vi": "Kiểm soát quyền sở hữu và quyền truy cập tệp",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(stat -c %U:%G:%a /home/labex/project/secure-report.txt)\" = jack:developers:640"
       },
       "task_vi": "Thực hiện hướng dẫn: Kiểm soát quyền sở hữu và quyền truy cập tệp",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %U:%G:%a /home/labex/project/secure-report.txt)\" = jack:developers:640"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test \"$(stat -c %U:%G:%a /home/labex/project/secure-report.txt)\" = jack:developers:640"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "users",
@@ -217,19 +269,36 @@
       "hint": "Chạy lệnh: mkdir -p /home/labex/project/umask-demo",
       "title_vi": "Kiểm soát quyền mặc định bằng Umask",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(stat -c %a /home/labex/project/umask-demo/private-note.txt)\" = 640 && test \"$(stat -c %a /home/labex/project/umask-demo/private-dir)\" = 750"
       },
       "task_vi": "Thực hiện hướng dẫn: Kiểm soát quyền mặc định bằng Umask",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %a /home/labex/project/umask-demo/private-note.txt)\" = 640 && test \"$(stat -c %a /home/labex/project/umask-demo/private-dir)\" = 750"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test \"$(stat -c %a /home/labex/project/umask-demo/private-note.txt)\" = 640 && test \"$(stat -c %a /home/labex/project/umask-demo/private-dir)\" = 750"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "users",
@@ -253,19 +322,36 @@
       "hint": "Chạy lệnh: mkdir /tmp/shared-dropbox",
       "title_vi": "Bảo vệ thư mục dùng chung bằng Sticky Bit",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(stat -c %a /tmp/shared-dropbox)\" = 1777 && test \"$(stat -c %U /tmp/shared-dropbox/jack-note.txt)\" = jack && test \"$(stat -c %U /tmp/shared-dropbox/contractor-note.txt)\" = contractor"
       },
       "task_vi": "Thực hiện hướng dẫn: Bảo vệ thư mục dùng chung bằng Sticky Bit",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %a /tmp/shared-dropbox)\" = 1777 && test \"$(stat -c %U /tmp/shared-dropbox/jack-note.txt)\" = jack && test \"$(stat -c %U /tmp/shared-dropbox/contractor-note.txt)\" = contractor"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test \"$(stat -c %a /tmp/shared-dropbox)\" = 1777 && test \"$(stat -c %U /tmp/shared-dropbox/jack-note.txt)\" = jack && test \"$(stat -c %U /tmp/shared-dropbox/contractor-note.txt)\" = contractor"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "users",
@@ -289,19 +375,36 @@
       "hint": "Chạy lệnh: mkdir /home/labex/project/team-share",
       "title_vi": "Cấu hình thư mục làm việc nhóm với Setgid",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(stat -c %U:%G:%a /home/labex/project/team-share)\" = jack:developers:2770"
       },
       "task_vi": "Thực hiện hướng dẫn: Cấu hình thư mục làm việc nhóm với Setgid",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %U:%G:%a /home/labex/project/team-share)\" = jack:developers:2770"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test \"$(stat -c %U:%G:%a /home/labex/project/team-share)\" = jack:developers:2770"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "users",
+          "sudo",
+          "permissions"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "users",
@@ -396,7 +499,8 @@
       "has_solution": false,
       "content": "You practiced the core identity and access model used by Linux systems. You created a user and team group, managed supplementary memberships, assigned ownership, and translated numeric permission modes into practical access rules. You also inspected an account lock without exposing its password hash.\n\nYou then moved beyond ordinary permissions: `umask` controlled defaults, the sticky bit protected files in a public directory, and setgid preserved team group ownership in a private collaboration directory. Finally, you used `newgrp` to refresh group membership and verified the inherited group on a real file.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã thực hành mô hình danh tính và quyền truy cập cốt lõi của hệ thống Linux. Bạn đã tạo người dùng và nhóm làm việc, quản lý thành viên nhóm bổ sung, gán quyền sở hữu và chuyển các chế độ phân quyền dạng số thành quy tắc truy cập thực tế. Bạn cũng đã kiểm tra trạng thái khóa tài khoản mà không để lộ mã băm mật khẩu.\n\nTiếp đó, bạn đã tìm hiểu các cơ chế ngoài quyền thông thường: `umask` kiểm soát quyền mặc định, sticky bit bảo vệ tệp trong thư mục công cộng, còn setgid duy trì nhóm sở hữu trong thư mục cộng tác riêng. Cuối cùng, bạn dùng `newgrp` để cập nhật tư cách thành viên nhóm và kiểm chứng nhóm được kế thừa trên một tệp thực."
+      "content_vi": "Bạn đã thực hành mô hình danh tính và quyền truy cập cốt lõi của hệ thống Linux. Bạn đã tạo người dùng và nhóm làm việc, quản lý thành viên nhóm bổ sung, gán quyền sở hữu và chuyển các chế độ phân quyền dạng số thành quy tắc truy cập thực tế. Bạn cũng đã kiểm tra trạng thái khóa tài khoản mà không để lộ mã băm mật khẩu.\n\nTiếp đó, bạn đã tìm hiểu các cơ chế ngoài quyền thông thường: `umask` kiểm soát quyền mặc định, sticky bit bảo vệ tệp trong thư mục công cộng, còn setgid duy trì nhóm sở hữu trong thư mục cộng tác riêng. Cuối cùng, bạn dùng `newgrp` để cập nhật tư cách thành viên nhóm và kiểm chứng nhóm được kế thừa trên một tệp thực.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -412,12 +516,18 @@
       "task": "Thực hiện hướng dẫn: Inspect Identities and Create a Practice User",
       "hint": "Chạy lệnh: whoami",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(id -gn jack)\" = jack && test \"$(getent passwd jack | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/jack)\" = jack:jack"
       },
       "title_vi": "Kiểm tra danh tính và tạo người dùng thực hành",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra danh tính và tạo người dùng thực hành",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -459,12 +569,18 @@
       "task": "Thực hiện hướng dẫn: Manage Supplementary Groups",
       "hint": "Chạy lệnh: sudo groupadd developers",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "id -nG jack | tr \" \" \"\\n\" | grep -Fxq developers && id -nG jack | tr \" \" \"\\n\" | grep -Fxq sudo && id -nG labex | tr \" \" \"\\n\" | grep -Fxq developers"
       },
       "title_vi": "Quản lý các nhóm bổ sung",
       "task_vi": "Thực hiện hướng dẫn: Quản lý các nhóm bổ sung",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -506,12 +622,18 @@
       "task": "Thực hiện hướng dẫn: Control File Ownership and Permissions",
       "hint": "Chạy lệnh: touch /home/labex/project/secure-report.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(stat -c %U:%G:%a /home/labex/project/secure-report.txt)\" = jack:developers:640"
       },
       "title_vi": "Kiểm soát quyền sở hữu và quyền truy cập tệp",
       "task_vi": "Thực hiện hướng dẫn: Kiểm soát quyền sở hữu và quyền truy cập tệp",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -627,12 +749,18 @@
       "task": "Thực hiện hướng dẫn: Control Default Permissions with Umask",
       "hint": "Chạy lệnh: mkdir -p /home/labex/project/umask-demo",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(stat -c %a /home/labex/project/umask-demo/private-note.txt)\" = 640 && test \"$(stat -c %a /home/labex/project/umask-demo/private-dir)\" = 750"
       },
       "title_vi": "Kiểm soát quyền mặc định bằng Umask",
       "task_vi": "Thực hiện hướng dẫn: Kiểm soát quyền mặc định bằng Umask",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -674,12 +802,18 @@
       "task": "Thực hiện hướng dẫn: Protect a Shared Directory with the Sticky Bit",
       "hint": "Chạy lệnh: mkdir /tmp/shared-dropbox",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(stat -c %a /tmp/shared-dropbox)\" = 1777 && test \"$(stat -c %U /tmp/shared-dropbox/jack-note.txt)\" = jack && test \"$(stat -c %U /tmp/shared-dropbox/contractor-note.txt)\" = contractor"
       },
       "title_vi": "Bảo vệ thư mục dùng chung bằng Sticky Bit",
       "task_vi": "Thực hiện hướng dẫn: Bảo vệ thư mục dùng chung bằng Sticky Bit",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -721,12 +855,18 @@
       "task": "Thực hiện hướng dẫn: Configure a Setgid Team Directory",
       "hint": "Chạy lệnh: mkdir /home/labex/project/team-share",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(stat -c %U:%G:%a /home/labex/project/team-share)\" = jack:developers:2770"
       },
       "title_vi": "Cấu hình thư mục làm việc nhóm với Setgid",
       "task_vi": "Thực hiện hướng dẫn: Cấu hình thư mục làm việc nhóm với Setgid",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "users",
+        "sudo",
+        "permissions"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

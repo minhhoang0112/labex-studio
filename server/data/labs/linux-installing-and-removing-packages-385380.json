@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "An approved monitoring command has been delivered as a local Debian package. It must be installed through the package manager so the system records its version and files.\n\nThe preceding guided lab practiced inspecting and installing a local `.deb` archive. This challenge repeats that one package workflow.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một lệnh giám sát được phê duyệt đã được cung cấp dưới dạng gói Debian cục bộ. Nó phải được cài qua trình quản lý gói để hệ thống ghi nhận phiên bản và các tệp.\n\nBài hướng dẫn trước đã luyện kiểm tra và cài một tệp `.deb` cục bộ. Thử thách này lặp lại riêng quy trình gói đó."
+      "content_vi": "Một lệnh giám sát được phê duyệt đã được cung cấp dưới dạng gói Debian cục bộ. Nó phải được cài qua trình quản lý gói để hệ thống ghi nhận phiên bản và các tệp.\n\nBài hướng dẫn trước đã luyện kiểm tra và cài một tệp `.deb` cục bộ. Thử thách này lặp lại riêng quy trình gói đó.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-385380-section-1-v3",
@@ -36,12 +37,54 @@
       "task": "Thực hiện hướng dẫn: Install the Monitoring Package",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(dpkg-query -W -f='${Version} ${db:Status-Status}' labex-monitor 2>/dev/null)\" = '2.0 installed' && test -s /home/labex/project/software-inventory/labex-monitor_2.0_all.deb && cmp -s <(labex-monitor) <(printf \"monitor status: ready\\n\")"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-monitor_2\\.0_all\\.deb\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(dpkg-query -W -f='${Version} ${db:Status-Status}' labex-monitor 2>/dev/null)\" = '2.0 installed' && test -s /home/labex/project/software-inventory/labex-monitor_2.0_all.deb && cmp -s <(labex-monitor) <(printf \"monitor status: ready\\n\")"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-monitor_2\\.0_all\\.deb\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -68,6 +111,11 @@
           "terminal",
           "files",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "package_management"
         ]
       },
       "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/software-inventory/labex-monitor_2.0_all.deb` được cung cấp và `labex-monitor` chưa được cài.\n\n### Phạm vi\n\n- Cài gói cục bộ được cung cấp bằng APT.\n- Giữ tệp gói trong thư mục làm việc.\n- Không cài hoặc gỡ bất kỳ gói không liên quan nào.\n\n### Mục tiêu của bạn\n\nĐể `labex-monitor` phiên bản `2.0` được cài và sử dụng được dưới dạng lệnh.\n\n### Tiêu chí đạt\n\n- Cơ sở dữ liệu gói báo `labex-monitor` phiên bản `2.0` đã cài.\n- Chạy `labex-monitor` in ra `monitor status: ready`.\n- Tệp `.deb` được cung cấp vẫn còn.\n\n### Gợi ý\n\nPhân biệt đường dẫn gói cục bộ với tên trong kho như thế nào?\n\nBài hướng dẫn đã truyền đường dẫn tương đối bắt đầu bằng `./` cho `apt install`.",
@@ -84,7 +132,8 @@
       "has_solution": false,
       "content": "You inspected and installed one local Debian package, then checked its recorded version and command.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã kiểm tra và cài một gói Debian cục bộ, rồi kiểm tra phiên bản được ghi nhận và lệnh của nó."
+      "content_vi": "Bạn đã kiểm tra và cài một gói Debian cục bộ, rồi kiểm tra phiên bản được ghi nhận và lệnh của nó.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -101,12 +150,54 @@
       "task": "Thực hiện hướng dẫn: Install the Monitoring Package",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(dpkg-query -W -f='${Version} ${db:Status-Status}' labex-monitor 2>/dev/null)\" = '2.0 installed' && test -s /home/labex/project/software-inventory/labex-monitor_2.0_all.deb && cmp -s <(labex-monitor) <(printf \"monitor status: ready\\n\")"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-monitor_2\\.0_all\\.deb\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(dpkg-query -W -f='${Version} ${db:Status-Status}' labex-monitor 2>/dev/null)\" = '2.0 installed' && test -s /home/labex/project/software-inventory/labex-monitor_2.0_all.deb && cmp -s <(labex-monitor) <(printf \"monitor status: ready\\n\")"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-monitor_2\\.0_all\\.deb\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -130,6 +221,11 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"

@@ -20,7 +20,8 @@
       "has_solution": false,
       "content": "Linux organizes files in one directory tree that begins at `/`, the root directory. Every file and directory has a path that describes its location in that tree. Learning to read and use paths makes nearly every later Linux task easier.\n\nIn this lab, you will build a small workspace while learning the operations used in everyday terminal work. You will navigate directories, create and edit files, copy and move data, find files, inspect metadata and inodes, experiment with hard and symbolic links, and compare files and directory trees with `diff`.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Linux tổ chức các tệp trong một cấu trúc cây thư mục bắt đầu từ `/`, thư mục gốc. Mọi tệp và thư mục đều có một đường dẫn mô tả vị trí của chúng trong cây đó. Việc học cách đọc và sử dụng các đường dẫn sẽ làm cho hầu hết mọi tác vụ Linux sau này trở nên dễ dàng hơn.\n\nTrong phòng thực hành này, bạn sẽ xây dựng một không gian làm việc nhỏ trong khi tìm hiểu các thao tác được sử dụng trong công việc terminal hàng ngày. Bạn sẽ điều hướng các thư mục, tạo và chỉnh sửa tệp, sao chép và di chuyển dữ liệu, tìm kiếm tệp, kiểm tra siêu dữ liệu (metadata) và inode, thử nghiệm các liên kết cứng (hard link) và liên kết tượng trưng (symbolic link), đồng thời so sánh các tệp và cây thư mục bằng lệnh `diff`."
+      "content_vi": "Linux tổ chức các tệp trong một cấu trúc cây thư mục bắt đầu từ `/`, thư mục gốc. Mọi tệp và thư mục đều có một đường dẫn mô tả vị trí của chúng trong cây đó. Việc học cách đọc và sử dụng các đường dẫn sẽ làm cho hầu hết mọi tác vụ Linux sau này trở nên dễ dàng hơn.\n\nTrong phòng thực hành này, bạn sẽ xây dựng một không gian làm việc nhỏ trong khi tìm hiểu các thao tác được sử dụng trong công việc terminal hàng ngày. Bạn sẽ điều hướng các thư mục, tạo và chỉnh sửa tệp, sao chép và di chuyển dữ liệu, tìm kiếm tệp, kiểm tra siêu dữ liệu (metadata) và inode, thử nghiệm các liên kết cứng (hard link) và liên kết tượng trưng (symbolic link), đồng thời so sánh các tệp và cây thư mục bằng lệnh `diff`.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-17997-section-1-v3",
@@ -35,13 +36,42 @@
       "hint": "Chạy lệnh: mkdir -p /home/labex/project/file-ops-lab",
       "title_vi": "Khám Phá Cây Thư Mục Linux",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*ls\\s+/\\s*$"
+          ],
+          [
+            "^\\s*ls\\s+\\-ld\\s+/etc\\s+/home\\s+/tmp\\s+/usr\\s+/var\\s*$"
+          ]
+        ]
       },
       "task_vi": "Thực hiện hướng dẫn: Khám Phá Cây Thư Mục Linux",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ls\\s+/\\s*$"
+            ],
+            [
+              "^\\s*ls\\s+\\-ld\\s+/etc\\s+/home\\s+/tmp\\s+/usr\\s+/var\\s*$"
+            ]
+          ]
+        },
+        "namespace": {
           "kind": "commands",
           "user": "labex",
           "allowed_status": [
@@ -59,6 +89,10 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -79,19 +113,30 @@
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "title_vi": "Điều Hướng với Đường Dẫn Tuyệt Đối và Tương Đối",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -d /home/labex/project/file-ops-lab/navigation/alpha/beta"
       },
       "task_vi": "Thực hiện hướng dẫn: Điều Hướng với Đường Dẫn Tuyệt Đối và Tương Đối",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -d /home/labex/project/file-ops-lab/navigation/alpha/beta"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -d /home/labex/project/file-ops-lab/navigation/alpha/beta"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -112,19 +157,30 @@
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "title_vi": "Tạo Thư Mục và Ghi Nội Dung Tệp",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt <(printf %s 'Linux file practice\nPaths identify each filesystem object\n') && test -f /home/labex/project/file-ops-lab/documents/empty.txt"
       },
       "task_vi": "Thực hiện hướng dẫn: Tạo Thư Mục và Ghi Nội Dung Tệp",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt <(printf %s 'Linux file practice\nPaths identify each filesystem object\n') && test -f /home/labex/project/file-ops-lab/documents/empty.txt"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt <(printf %s 'Linux file practice\nPaths identify each filesystem object\n') && test -f /home/labex/project/file-ops-lab/documents/empty.txt"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -145,19 +201,30 @@
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "title_vi": "Sao Chép, Di Chuyển, Đổi Tên và Xóa Tệp",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/notes-backup.txt && cmp -s /home/labex/project/file-ops-lab/archive/final-draft.txt <(printf %s 'draft\n') && test ! -e /home/labex/project/file-ops-lab/documents/draft.txt && test ! -e /home/labex/project/file-ops-lab/disposable.tmp && cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/documents-copy/notes.txt"
       },
       "task_vi": "Thực hiện hướng dẫn: Sao Chép, Di Chuyển, Đổi Tên và Xóa Tệp",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/notes-backup.txt && cmp -s /home/labex/project/file-ops-lab/archive/final-draft.txt <(printf %s 'draft\n') && test ! -e /home/labex/project/file-ops-lab/documents/draft.txt && test ! -e /home/labex/project/file-ops-lab/disposable.tmp && cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/documents-copy/notes.txt"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/notes-backup.txt && cmp -s /home/labex/project/file-ops-lab/archive/final-draft.txt <(printf %s 'draft\n') && test ! -e /home/labex/project/file-ops-lab/documents/draft.txt && test ! -e /home/labex/project/file-ops-lab/disposable.tmp && cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/documents-copy/notes.txt"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -178,19 +245,30 @@
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "title_vi": "Xem, Cập Nhật và Tìm Kiếm Tệp",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-ops-lab/documents/journal.txt <(printf %s 'First entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nFourth entry: reviewed the results\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Xem, Cập Nhật và Tìm Kiếm Tệp",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/documents/journal.txt <(printf %s 'First entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nFourth entry: reviewed the results\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/file-ops-lab/documents/journal.txt <(printf %s 'First entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nFourth entry: reviewed the results\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -211,19 +289,30 @@
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "title_vi": "Kiểm Tra Loại Tệp, Siêu Dữ Liệu và Inode",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-ops-lab/metadata-sample.txt <(printf %s 'inode practice\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Kiểm Tra Loại Tệp, Siêu Dữ Liệu và Inode",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/file-ops-lab/metadata-sample.txt <(printf %s 'inode practice\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/file-ops-lab/metadata-sample.txt <(printf %s 'inode practice\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -244,19 +333,30 @@
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "title_vi": "Làm Việc với Hard Link và Soft Link (Symlink)",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test ! -e /home/labex/project/file-ops-lab/links/source.txt && test -L /home/labex/project/file-ops-lab/links/symbolic-link.txt && test \"$(readlink /home/labex/project/file-ops-lab/links/symbolic-link.txt)\" = source.txt && cmp -s /home/labex/project/file-ops-lab/links/hard-link.txt <(printf %s 'shared inode data\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Làm Việc với Hard Link và Soft Link (Symlink)",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test ! -e /home/labex/project/file-ops-lab/links/source.txt && test -L /home/labex/project/file-ops-lab/links/symbolic-link.txt && test \"$(readlink /home/labex/project/file-ops-lab/links/symbolic-link.txt)\" = source.txt && cmp -s /home/labex/project/file-ops-lab/links/hard-link.txt <(printf %s 'shared inode data\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test ! -e /home/labex/project/file-ops-lab/links/source.txt && test -L /home/labex/project/file-ops-lab/links/symbolic-link.txt && test \"$(readlink /home/labex/project/file-ops-lab/links/symbolic-link.txt)\" = source.txt && cmp -s /home/labex/project/file-ops-lab/links/hard-link.txt <(printf %s 'shared inode data\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -277,19 +377,30 @@
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "title_vi": "So Sánh Tệp và Thư Mục Bằng Lệnh Diff",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "diff -r /home/labex/project/file-ops-lab/comparison/version-a /home/labex/project/file-ops-lab/comparison/version-b >/dev/null && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/app.conf <(printf %s 'mode=production\nport=8080\n') && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/README.txt <(printf %s 'release notes\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: So Sánh Tệp và Thư Mục Bằng Lệnh Diff",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "diff -r /home/labex/project/file-ops-lab/comparison/version-a /home/labex/project/file-ops-lab/comparison/version-b >/dev/null && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/app.conf <(printf %s 'mode=production\nport=8080\n') && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/README.txt <(printf %s 'release notes\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "diff -r /home/labex/project/file-ops-lab/comparison/version-a /home/labex/project/file-ops-lab/comparison/version-b >/dev/null && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/app.conf <(printf %s 'mode=production\nport=8080\n') && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/README.txt <(printf %s 'release notes\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -307,7 +418,8 @@
       "has_solution": false,
       "content": "You practiced the core file and directory operations used in Linux terminal work. You navigated with absolute and relative paths, created and edited files, copied and moved data, removed a disposable file safely, and searched by filename.\n\nYou also inspected file types and metadata, learned how filenames relate to inodes, compared hard links with symbolic links, and used `diff` to compare both individual files and complete directory trees. These concepts prepare you to reason about Linux files instead of treating commands as isolated recipes.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã thực hành các thao tác tệp và thư mục cốt lõi được sử dụng trong công việc trên terminal Linux. Bạn đã điều hướng bằng đường dẫn tuyệt đối và tương đối, tạo và chỉnh sửa tệp, sao chép và di chuyển dữ liệu, xóa một tệp tạm thời một cách an toàn, và tìm kiếm theo tên tệp.\n\nBạn cũng đã kiểm tra các loại tệp và siêu dữ liệu (metadata), tìm hiểu cách tên tệp liên quan đến inode, so sánh liên kết cứng (hard link) với liên kết tượng trưng (symbolic link), và sử dụng `diff` để so sánh cả tệp đơn lẻ lẫn toàn bộ cây thư mục. Các khái niệm này chuẩn bị cho bạn tư duy về các tệp Linux thay vì coi các lệnh như những công thức cô lập."
+      "content_vi": "Bạn đã thực hành các thao tác tệp và thư mục cốt lõi được sử dụng trong công việc trên terminal Linux. Bạn đã điều hướng bằng đường dẫn tuyệt đối và tương đối, tạo và chỉnh sửa tệp, sao chép và di chuyển dữ liệu, xóa một tệp tạm thời một cách an toàn, và tìm kiếm theo tên tệp.\n\nBạn cũng đã kiểm tra các loại tệp và siêu dữ liệu (metadata), tìm hiểu cách tên tệp liên quan đến inode, so sánh liên kết cứng (hard link) với liên kết tượng trưng (symbolic link), và sử dụng `diff` để so sánh cả tệp đơn lẻ lẫn toàn bộ cây thư mục. Các khái niệm này chuẩn bị cho bạn tư duy về các tệp Linux thay vì coi các lệnh như những công thức cô lập.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -323,12 +435,26 @@
       "task": "Thực hiện hướng dẫn: Explore the Linux Directory Tree",
       "hint": "Chạy lệnh: mkdir -p /home/labex/project/file-ops-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "commands",
+        "user": "labex",
+        "allowed_status": [
+          0
+        ],
+        "groups": [
+          [
+            "^\\s*ls\\s+/\\s*$"
+          ],
+          [
+            "^\\s*ls\\s+\\-ld\\s+/etc\\s+/home\\s+/tmp\\s+/usr\\s+/var\\s*$"
+          ]
+        ]
       },
       "title_vi": "Khám Phá Cây Thư Mục Linux",
       "task_vi": "Thực hiện hướng dẫn: Khám Phá Cây Thư Mục Linux",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "commands",
@@ -386,12 +512,15 @@
       "task": "Thực hiện hướng dẫn: Navigate with Absolute and Relative Paths",
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -d /home/labex/project/file-ops-lab/navigation/alpha/beta"
       },
       "title_vi": "Điều Hướng với Đường Dẫn Tuyệt Đối và Tương Đối",
       "task_vi": "Thực hiện hướng dẫn: Điều Hướng với Đường Dẫn Tuyệt Đối và Tương Đối",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -427,12 +556,15 @@
       "task": "Thực hiện hướng dẫn: Create Directories and Write Files",
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt <(printf %s 'Linux file practice\nPaths identify each filesystem object\n') && test -f /home/labex/project/file-ops-lab/documents/empty.txt"
       },
       "title_vi": "Tạo Thư Mục và Ghi Nội Dung Tệp",
       "task_vi": "Thực hiện hướng dẫn: Tạo Thư Mục và Ghi Nội Dung Tệp",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -468,12 +600,15 @@
       "task": "Thực hiện hướng dẫn: Copy, Move, Rename, and Remove Files",
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/notes-backup.txt && cmp -s /home/labex/project/file-ops-lab/archive/final-draft.txt <(printf %s 'draft\n') && test ! -e /home/labex/project/file-ops-lab/documents/draft.txt && test ! -e /home/labex/project/file-ops-lab/disposable.tmp && cmp -s /home/labex/project/file-ops-lab/documents/notes.txt /home/labex/project/file-ops-lab/archive/documents-copy/notes.txt"
       },
       "title_vi": "Sao Chép, Di Chuyển, Đổi Tên và Xóa Tệp",
       "task_vi": "Thực hiện hướng dẫn: Sao Chép, Di Chuyển, Đổi Tên và Xóa Tệp",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -509,12 +644,15 @@
       "task": "Thực hiện hướng dẫn: View, Update, and Find Files",
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-ops-lab/documents/journal.txt <(printf %s 'First entry: created a workspace\nSecond entry: practiced paths\nThird entry: copied files\nFourth entry: reviewed the results\n')"
       },
       "title_vi": "Xem, Cập Nhật và Tìm Kiếm Tệp",
       "task_vi": "Thực hiện hướng dẫn: Xem, Cập Nhật và Tìm Kiếm Tệp",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -550,12 +688,15 @@
       "task": "Thực hiện hướng dẫn: Inspect File Types, Metadata, and Inodes",
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-ops-lab/metadata-sample.txt <(printf %s 'inode practice\n')"
       },
       "title_vi": "Kiểm Tra Loại Tệp, Siêu Dữ Liệu và Inode",
       "task_vi": "Thực hiện hướng dẫn: Kiểm Tra Loại Tệp, Siêu Dữ Liệu và Inode",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -591,12 +732,15 @@
       "task": "Thực hiện hướng dẫn: Work with Hard Links and Symbolic Links",
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test ! -e /home/labex/project/file-ops-lab/links/source.txt && test -L /home/labex/project/file-ops-lab/links/symbolic-link.txt && test \"$(readlink /home/labex/project/file-ops-lab/links/symbolic-link.txt)\" = source.txt && cmp -s /home/labex/project/file-ops-lab/links/hard-link.txt <(printf %s 'shared inode data\n')"
       },
       "title_vi": "Làm Việc với Hard Link và Soft Link (Symlink)",
       "task_vi": "Thực hiện hướng dẫn: Làm Việc với Hard Link và Soft Link (Symlink)",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -632,12 +776,15 @@
       "task": "Thực hiện hướng dẫn: Compare Files and Directories with Diff",
       "hint": "Chạy lệnh: cd /home/labex/project/file-ops-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "diff -r /home/labex/project/file-ops-lab/comparison/version-a /home/labex/project/file-ops-lab/comparison/version-b >/dev/null && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/app.conf <(printf %s 'mode=production\nport=8080\n') && cmp -s /home/labex/project/file-ops-lab/comparison/version-a/README.txt <(printf %s 'release notes\n')"
       },
       "title_vi": "So Sánh Tệp và Thư Mục Bằng Lệnh Diff",
       "task_vi": "Thực hiện hướng dẫn: So Sánh Tệp và Thư Mục Bằng Lệnh Diff",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

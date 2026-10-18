@@ -20,7 +20,8 @@
       "has_solution": false,
       "content": "The preceding guided lab showed that terminal output can be saved in a file instead of disappearing into the scrollback. It also introduced `figlet`, which renders ordinary text as large terminal characters.\n\nIn this first challenge, you will combine only those two familiar ideas. Success is one small, reusable banner file.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Bài thực hành có hướng dẫn trước đó cho thấy đầu ra của terminal có thể được lưu vào một tệp thay vì biến mất trong vùng cuộn ngược (scrollback). Bài học cũng giới thiệu lệnh `figlet`, dùng để hiển thị văn bản thông thường thành các ký tự terminal lớn.\n\nTrong thử thách đầu tiên này, bạn sẽ kết hợp đúng hai ý quen thuộc đó. Thành công là một tệp banner nhỏ gọn, có thể tái sử dụng."
+      "content_vi": "Bài thực hành có hướng dẫn trước đó cho thấy đầu ra của terminal có thể được lưu vào một tệp thay vì biến mất trong vùng cuộn ngược (scrollback). Bài học cũng giới thiệu lệnh `figlet`, dùng để hiển thị văn bản thông thường thành các ký tự terminal lớn.\n\nTrong thử thách đầu tiên này, bạn sẽ kết hợp đúng hai ý quen thuộc đó. Thành công là một tệp banner nhỏ gọn, có thể tái sử dụng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-446322-section-1-v3",
@@ -35,19 +36,32 @@
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "title_vi": "Lưu Banner Chữ Nghệ Thuật ASCII",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/terminal-greeting/welcome-banner.txt && cmp -s /home/labex/project/terminal-greeting/welcome-banner.txt <(figlet Welcome)"
       },
       "task_vi": "Thực hiện hướng dẫn: Lưu Banner Chữ Nghệ Thuật ASCII",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/terminal-greeting/welcome-banner.txt && cmp -s /home/labex/project/terminal-greeting/welcome-banner.txt <(figlet Welcome)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/terminal-greeting/welcome-banner.txt && cmp -s /home/labex/project/terminal-greeting/welcome-banner.txt <(figlet Welcome)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -66,7 +80,8 @@
       "has_solution": false,
       "content": "You used two commands and one redirection operator from the guided lab to save a reusable ASCII-art banner.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã sử dụng hai câu lệnh và một toán tử chuyển hướng từ phòng thực hành có hướng dẫn để lưu một banner nghệ thuật ASCII có thể tái sử dụng."
+      "content_vi": "Bạn đã sử dụng hai câu lệnh và một toán tử chuyển hướng từ phòng thực hành có hướng dẫn để lưu một banner nghệ thuật ASCII có thể tái sử dụng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -82,20 +97,33 @@
       "task": "Thực hiện hướng dẫn: Save the ASCII-Art Banner",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/terminal-greeting/welcome-banner.txt && cmp -s /home/labex/project/terminal-greeting/welcome-banner.txt <(figlet Welcome)"
       },
       "title_vi": "Lưu Banner Chữ Nghệ Thuật ASCII",
       "task_vi": "Thực hiện hướng dẫn: Lưu Banner Chữ Nghệ Thuật ASCII",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/terminal-greeting/welcome-banner.txt && cmp -s /home/labex/project/terminal-greeting/welcome-banner.txt <(figlet Welcome)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/terminal-greeting/welcome-banner.txt && cmp -s /home/labex/project/terminal-greeting/welcome-banner.txt <(figlet Welcome)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"

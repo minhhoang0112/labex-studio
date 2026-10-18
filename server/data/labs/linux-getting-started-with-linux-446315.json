@@ -20,7 +20,8 @@
       "has_solution": false,
       "content": "The terminal is a text-based way to communicate with Linux. You type a command at the prompt, press Enter, and Linux prints output or changes something in the system. At first, the prompt may look unfamiliar, but every interaction follows this same simple pattern.\n\nIn this first lab, you will run safe commands that print text, show the date, display a calendar, calculate numbers, and create text art. You will also save a few results under `/home/labex/project/first-commands` so you can distinguish temporary terminal output from information stored in a file.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Terminal là một cách dựa trên văn bản để giao tiếp với Linux. Bạn gõ một lệnh tại dấu nhắc lệnh (prompt), nhấn Enter, và Linux sẽ in ra kết quả đầu ra hoặc thay đổi một cái gì đó trong hệ thống. Thoạt đầu, dấu nhắc lệnh có vẻ xa lạ, nhưng mọi tương tác đều tuân theo cùng một mẫu đơn giản này.\n\nTrong phòng thực hành đầu tiên này, bạn sẽ chạy các lệnh an toàn để in văn bản, hiển thị ngày tháng, hiển thị lịch, tính toán các con số và tạo nghệ thuật văn bản (text art). Bạn cũng sẽ lưu một vài kết quả vào thư mục `/home/labex/project/first-commands` để có thể phân biệt giữa kết quả đầu ra tạm thời của terminal với thông tin được lưu trữ trong một tệp."
+      "content_vi": "Terminal là một cách dựa trên văn bản để giao tiếp với Linux. Bạn gõ một lệnh tại dấu nhắc lệnh (prompt), nhấn Enter, và Linux sẽ in ra kết quả đầu ra hoặc thay đổi một cái gì đó trong hệ thống. Thoạt đầu, dấu nhắc lệnh có vẻ xa lạ, nhưng mọi tương tác đều tuân theo cùng một mẫu đơn giản này.\n\nTrong phòng thực hành đầu tiên này, bạn sẽ chạy các lệnh an toàn để in văn bản, hiển thị ngày tháng, hiển thị lịch, tính toán các con số và tạo nghệ thuật văn bản (text art). Bạn cũng sẽ lưu một vài kết quả vào thư mục `/home/labex/project/first-commands` để có thể phân biệt giữa kết quả đầu ra tạm thời của terminal với thông tin được lưu trữ trong một tệp.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-446315-section-1-v3",
@@ -35,19 +36,32 @@
       "hint": "Chạy lệnh: cd /home/labex/project/first-commands",
       "title_vi": "Chạy Câu Lệnh Đầu Tiên Của Bạn",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Chạy Câu Lệnh Đầu Tiên Của Bạn",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -167,19 +181,32 @@
       "hint": "Chạy lệnh: expr 5 + 3",
       "title_vi": "Tính Toán Số Học với Expr",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Tính Toán Số Học với Expr",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -201,19 +228,32 @@
       "hint": "Chạy lệnh: figlet \"LabEx\"",
       "title_vi": "Tạo Chữ Nghệ Thuật ASCII",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
       },
       "task_vi": "Thực hiện hướng dẫn: Tạo Chữ Nghệ Thuật ASCII",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -235,19 +275,32 @@
       "hint": "Chạy lệnh: clear",
       "title_vi": "Khôi Phục và Dọn Sạch Terminal",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Khôi Phục và Dọn Sạch Terminal",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -266,7 +319,8 @@
       "has_solution": false,
       "content": "You learned the terminal's basic interaction pattern: type a command, press Enter, and interpret the result. You practiced `pwd`, `echo`, `date`, `cal`, `expr`, `figlet`, and `clear`; used simple options; and saved output in files. You are now ready to apply these basics in a small terminal challenge before learning broader file operations.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã học được mẫu tương tác cơ bản của terminal: gõ một lệnh, nhấn Enter và diễn giải kết quả. Bạn đã thực hành các lệnh `pwd`, `echo`, `date`, `cal`, `expr`, `figlet` và `clear`; sử dụng các tùy chọn đơn giản; và lưu đầu ra vào các tệp. Giờ đây, bạn đã sẵn sàng áp dụng những kiến thức cơ bản này vào một thử thách terminal nhỏ trước khi tìm hiểu các thao tác tệp rộng hơn."
+      "content_vi": "Bạn đã học được mẫu tương tác cơ bản của terminal: gõ một lệnh, nhấn Enter và diễn giải kết quả. Bạn đã thực hành các lệnh `pwd`, `echo`, `date`, `cal`, `expr`, `figlet` và `clear`; sử dụng các tùy chọn đơn giản; và lưu đầu ra vào các tệp. Giờ đây, bạn đã sẵn sàng áp dụng những kiến thức cơ bản này vào một thử thách terminal nhỏ trước khi tìm hiểu các thao tác tệp rộng hơn.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -282,20 +336,33 @@
       "task": "Thực hiện hướng dẫn: Run Your First Command",
       "hint": "Chạy lệnh: cd /home/labex/project/first-commands",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
       },
       "title_vi": "Chạy Câu Lệnh Đầu Tiên Của Bạn",
       "task_vi": "Thực hiện hướng dẫn: Chạy Câu Lệnh Đầu Tiên Của Bạn",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -414,20 +481,33 @@
       "task": "Thực hiện hướng dẫn: Calculate with Expr",
       "hint": "Chạy lệnh: expr 5 + 3",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
       },
       "title_vi": "Tính Toán Số Học với Expr",
       "task_vi": "Thực hiện hướng dẫn: Tính Toán Số Học với Expr",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -448,20 +528,33 @@
       "task": "Thực hiện hướng dẫn: Turn Text into ASCII Art",
       "hint": "Chạy lệnh: figlet \"LabEx\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
       },
       "title_vi": "Tạo Chữ Nghệ Thuật ASCII",
       "task_vi": "Thực hiện hướng dẫn: Tạo Chữ Nghệ Thuật ASCII",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -482,20 +575,33 @@
       "task": "Thực hiện hướng dẫn: Reset a Busy Terminal",
       "hint": "Chạy lệnh: clear",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
       },
       "title_vi": "Khôi Phục và Dọn Sạch Terminal",
       "task_vi": "Thực hiện hướng dẫn: Khôi Phục và Dọn Sạch Terminal",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"

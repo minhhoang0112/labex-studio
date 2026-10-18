@@ -20,7 +20,8 @@
       "has_solution": false,
       "content": "A new team member needs a normal local account before using a shared development area. The account should have a home directory, a Bash login shell, and membership in the existing `developers` group.\n\nThe preceding guided lab practiced this exact account-creation and supplementary-group workflow. This challenge applies it to one user only.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một thành viên mới trong nhóm cần một tài khoản cục bộ thông thường trước khi sử dụng khu vực phát triển chung. Tài khoản này nên có thư mục chính (home directory), một shell đăng nhập Bash, và thuộc về nhóm `developers` đã tồn tại.\n\nPhòng thực hành có hướng dẫn trước đó đã luyện tập chính xác quy trình tạo tài khoản và thêm nhóm bổ sung này. Thử thách này áp dụng nó cho chỉ một người dùng."
+      "content_vi": "Một thành viên mới trong nhóm cần một tài khoản cục bộ thông thường trước khi sử dụng khu vực phát triển chung. Tài khoản này nên có thư mục chính (home directory), một shell đăng nhập Bash, và thuộc về nhóm `developers` đã tồn tại.\n\nPhòng thực hành có hướng dẫn trước đó đã luyện tập chính xác quy trình tạo tài khoản và thêm nhóm bổ sung này. Thử thách này áp dụng nó cho chỉ một người dùng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-17987-section-1-v3",
@@ -35,19 +36,32 @@
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "title_vi": "Tiếp Nhận và Cấp Tài Khoản Người Dùng",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
       },
       "task_vi": "Thực hiện hướng dẫn: Tiếp Nhận và Cấp Tài Khoản Người Dùng",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "users",
+          "sudo"
+        ],
+        "namespace": [
           "terminal",
           "users",
           "sudo"
@@ -66,7 +80,8 @@
       "has_solution": false,
       "content": "You onboarded one Linux user with the same account and group-management commands introduced in the guided lab.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã thêm một người dùng Linux với các lệnh quản lý tài khoản và nhóm tương tự đã được giới thiệu trong phòng thí nghiệm có hướng dẫn."
+      "content_vi": "Bạn đã thêm một người dùng Linux với các lệnh quản lý tài khoản và nhóm tương tự đã được giới thiệu trong phòng thí nghiệm có hướng dẫn.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -82,12 +97,16 @@
       "task": "Thực hiện hướng dẫn: Onboard the User",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
       },
       "title_vi": "Tiếp Nhận và Cấp Tài Khoản Người Dùng",
       "task_vi": "Thực hiện hướng dẫn: Tiếp Nhận và Cấp Tài Khoản Người Dùng",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

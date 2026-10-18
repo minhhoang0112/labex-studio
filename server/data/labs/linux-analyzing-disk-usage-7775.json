@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "A workspace contains three directories with different amounts of data. Before cleanup, an administrator needs a small report ordered from the least-used directory to the most-used directory.\n\nThis challenge uses the `du`, `sort`, pipeline, and redirection patterns already practiced in preceding guided labs.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một không gian làm việc chứa ba thư mục với lượng dữ liệu khác nhau. Trước khi dọn dẹp, một quản trị viên cần một báo cáo nhỏ được sắp xếp từ thư mục chiếm ít dung lượng nhất đến thư mục chiếm nhiều dung lượng nhất.\n\nThử thách này sử dụng các mẫu lệnh `du`, `sort`, pipeline (đường ống) và chuyển hướng (redirection) đã được thực hành trong các phòng thực hành có hướng dẫn trước đó."
+      "content_vi": "Một không gian làm việc chứa ba thư mục với lượng dữ liệu khác nhau. Trước khi dọn dẹp, một quản trị viên cần một báo cáo nhỏ được sắp xếp từ thư mục chiếm ít dung lượng nhất đến thư mục chiếm nhiều dung lượng nhất.\n\nThử thách này sử dụng các mẫu lệnh `du`, `sort`, pipeline (đường ống) và chuyển hướng (redirection) đã được thực hành trong các phòng thực hành có hướng dẫn trước đó.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-7775-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Create the Usage Ranking",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/disk-audit/reports/directory-usage.txt <(cd /home/labex/project/disk-audit/; du -sh workspace/* | sort -h) && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/cache/cache.bin)\" = 1024 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/logs/application.log)\" = 8192 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/releases/release.bin)\" = 32768"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/disk-audit/reports/directory-usage.txt <(cd /home/labex/project/disk-audit/; du -sh workspace/* | sort -h) && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/cache/cache.bin)\" = 1024 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/logs/application.log)\" = 8192 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/releases/release.bin)\" = 32768"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/disk-audit/reports/directory-usage.txt <(cd /home/labex/project/disk-audit/; du -sh workspace/* | sort -h) && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/cache/cache.bin)\" = 1024 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/logs/application.log)\" = 8192 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/releases/release.bin)\" = 32768"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -66,7 +78,8 @@
       "has_solution": false,
       "content": "You combined directory measurement, a pipeline, sorting, and redirection to create one useful storage report.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã kết hợp việc đo lường thư mục, một đường ống (pipeline), việc sắp xếp và chuyển hướng để tạo ra một báo cáo lưu trữ hữu ích."
+      "content_vi": "Bạn đã kết hợp việc đo lường thư mục, một đường ống (pipeline), việc sắp xếp và chuyển hướng để tạo ra một báo cáo lưu trữ hữu ích.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -83,10 +96,13 @@
       "task": "Thực hiện hướng dẫn: Create the Usage Ranking",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/disk-audit/reports/directory-usage.txt <(cd /home/labex/project/disk-audit/; du -sh workspace/* | sort -h) && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/cache/cache.bin)\" = 1024 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/logs/application.log)\" = 8192 && test \"$(stat -c %s /home/labex/project/disk-audit/workspace/releases/release.bin)\" = 32768"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

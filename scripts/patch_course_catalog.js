@@ -26,3 +26,4 @@ if (!content.includes("alias: 'windows'")) {
 
 fs.writeFileSync(filePath, content, "utf8");
 console.log("Successfully patched CourseCatalog.jsx with Windows Server!");
+

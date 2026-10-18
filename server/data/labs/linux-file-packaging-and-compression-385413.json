@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "Packaging and compression solve related but different problems. An **archive** combines a directory tree into one data stream while preserving names and structure. **Compression** represents data more compactly. A `.tar` file is an archive; a `.gz` file is gzip-compressed data; a `.tar.gz` file is a tar archive compressed with gzip.\n\nYou will build a small project, create each format, inspect an archive before extraction, restore into a separate directory, and compare restored data with the source. This inspect–extract–verify workflow avoids overwriting originals blindly.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Đóng gói (packaging) và nén (compression) giải quyết các vấn đề có liên quan nhưng khác nhau. Một **kho lưu trữ (archive)** kết hợp một cây thư mục thành một luồng dữ liệu duy nhất trong khi vẫn giữ nguyên tên và cấu trúc. **Nén (Compression)** biểu diễn dữ liệu một cách gọn gàng hơn. Tệp `.tar` là một kho lưu trữ; tệp `.gz` là dữ liệu được nén bằng gzip; tệp `.tar.gz` là một kho lưu trữ tar được nén bằng gzip.\n\nBạn sẽ xây dựng một dự án nhỏ, tạo từng định dạng, kiểm tra một kho lưu trữ trước khi giải nén, khôi phục vào một thư mục riêng biệt, và so sánh dữ liệu đã khôi phục với nguồn. Quy trình làm việc kiểm tra - giải nén - xác minh này giúp tránh việc ghi đè lên các tệp gốc một cách mù quáng."
+      "content_vi": "Đóng gói (packaging) và nén (compression) giải quyết các vấn đề có liên quan nhưng khác nhau. Một **kho lưu trữ (archive)** kết hợp một cây thư mục thành một luồng dữ liệu duy nhất trong khi vẫn giữ nguyên tên và cấu trúc. **Nén (Compression)** biểu diễn dữ liệu một cách gọn gàng hơn. Tệp `.tar` là một kho lưu trữ; tệp `.gz` là dữ liệu được nén bằng gzip; tệp `.tar.gz` là một kho lưu trữ tar được nén bằng gzip.\n\nBạn sẽ xây dựng một dự án nhỏ, tạo từng định dạng, kiểm tra một kho lưu trữ trước khi giải nén, khôi phục vào một thư mục riêng biệt, và so sánh dữ liệu đã khôi phục với nguồn. Quy trình làm việc kiểm tra - giải nén - xác minh này giúp tránh việc ghi đè lên các tệp gốc một cách mù quáng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-385413-section-1-v3",
@@ -36,18 +37,31 @@
       "task": "Thực hiện hướng dẫn: Build a Directory Tree to Preserve",
       "hint": "Chạy lệnh: find source -type f -printf '%P\\n' | sort",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/archive-lab/source/config/app.conf <(printf %s 'mode=training\nport=8080\n') && cmp -s /home/labex/project/archive-lab/source/notes/README.txt <(printf %s 'Archive the complete project tree.\n') && cmp -s /home/labex/project/archive-lab/source/data/sample.csv <(printf %s 'alpha,beta,gamma\n1,2,3\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/archive-lab/source/config/app.conf <(printf %s 'mode=training\nport=8080\n') && cmp -s /home/labex/project/archive-lab/source/notes/README.txt <(printf %s 'Archive the complete project tree.\n') && cmp -s /home/labex/project/archive-lab/source/data/sample.csv <(printf %s 'alpha,beta,gamma\n1,2,3\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/archive-lab/source/config/app.conf <(printf %s 'mode=training\nport=8080\n') && cmp -s /home/labex/project/archive-lab/source/notes/README.txt <(printf %s 'Archive the complete project tree.\n') && cmp -s /home/labex/project/archive-lab/source/data/sample.csv <(printf %s 'alpha,beta,gamma\n1,2,3\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "archives"
@@ -70,18 +84,31 @@
       "task": "Thực hiện hướng dẫn: Create and Inspect a Tar Archive",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "tar -tf /home/labex/project/archive-lab/project.tar >/dev/null && cmp -s /home/labex/project/archive-lab/tar-members.txt <(tar -tf /home/labex/project/archive-lab/project.tar) && cmp -s <(tar -xOf /home/labex/project/archive-lab/project.tar source/config/app.conf) /home/labex/project/archive-lab/source/config/app.conf"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "tar -tf /home/labex/project/archive-lab/project.tar >/dev/null && cmp -s /home/labex/project/archive-lab/tar-members.txt <(tar -tf /home/labex/project/archive-lab/project.tar) && cmp -s <(tar -xOf /home/labex/project/archive-lab/project.tar source/config/app.conf) /home/labex/project/archive-lab/source/config/app.conf"
+        },
+        "namespace": {
           "kind": "state",
           "command": "tar -tf /home/labex/project/archive-lab/project.tar >/dev/null && cmp -s /home/labex/project/archive-lab/tar-members.txt <(tar -tf /home/labex/project/archive-lab/project.tar) && cmp -s <(tar -xOf /home/labex/project/archive-lab/project.tar source/config/app.conf) /home/labex/project/archive-lab/source/config/app.conf"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "archives"
@@ -104,18 +131,31 @@
       "task": "Thực hiện hướng dẫn: Extract Safely and Compare the Result",
       "hint": "Chạy lệnh: find tar-restore -type f -printf '%P\\n' | sort",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -f /home/labex/project/archive-lab/tar-restore-ok.txt && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/tar-restore/source >/dev/null"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -f /home/labex/project/archive-lab/tar-restore-ok.txt && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/tar-restore/source >/dev/null"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -f /home/labex/project/archive-lab/tar-restore-ok.txt && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/tar-restore/source >/dev/null"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "archives"
@@ -138,18 +178,31 @@
       "task": "Thực hiện hướng dẫn: Compress and Decompress One File with Gzip",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test ! -e /home/labex/project/archive-lab/sample-copy.csv.gz && cmp -s /home/labex/project/archive-lab/sample-copy.csv /home/labex/project/archive-lab/source/data/sample.csv && cmp -s /home/labex/project/archive-lab/gzip-round-trip-ok.txt <(printf %s 'gzip round trip matches\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test ! -e /home/labex/project/archive-lab/sample-copy.csv.gz && cmp -s /home/labex/project/archive-lab/sample-copy.csv /home/labex/project/archive-lab/source/data/sample.csv && cmp -s /home/labex/project/archive-lab/gzip-round-trip-ok.txt <(printf %s 'gzip round trip matches\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test ! -e /home/labex/project/archive-lab/sample-copy.csv.gz && cmp -s /home/labex/project/archive-lab/sample-copy.csv /home/labex/project/archive-lab/source/data/sample.csv && cmp -s /home/labex/project/archive-lab/gzip-round-trip-ok.txt <(printf %s 'gzip round trip matches\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "archives"
@@ -172,18 +225,31 @@
       "task": "Thực hiện hướng dẫn: Create and Restore a Compressed Tar Archive",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "gzip -t /home/labex/project/archive-lab/project.tar.gz && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/targz-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/targz-restore-ok.txt <(printf %s 'tar.gz restore matches source\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "gzip -t /home/labex/project/archive-lab/project.tar.gz && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/targz-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/targz-restore-ok.txt <(printf %s 'tar.gz restore matches source\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "gzip -t /home/labex/project/archive-lab/project.tar.gz && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/targz-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/targz-restore-ok.txt <(printf %s 'tar.gz restore matches source\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "archives"
@@ -206,18 +272,31 @@
       "task": "Thực hiện hướng dẫn: Exchange the Project as a Zip Archive",
       "hint": "Chạy lệnh: unzip -l project.zip",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "unzip -t /home/labex/project/archive-lab/project.zip >/dev/null && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/zip-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/zip-restore-ok.txt <(printf %s 'zip restore matches source\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "unzip -t /home/labex/project/archive-lab/project.zip >/dev/null && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/zip-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/zip-restore-ok.txt <(printf %s 'zip restore matches source\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "unzip -t /home/labex/project/archive-lab/project.zip >/dev/null && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/zip-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/zip-restore-ok.txt <(printf %s 'zip restore matches source\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "archives"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "archives"
@@ -237,7 +316,8 @@
       "has_solution": false,
       "content": "You separated packaging from compression, created and listed tar archives, completed a gzip round trip, combined both operations in `.tar.gz`, and exchanged the same tree through Zip. Most importantly, you restored into separate directories and compared content rather than assuming that archive creation was enough.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã tách biệt việc đóng gói khỏi việc nén, tạo và liệt kê danh sách các tệp nén tar, hoàn thành một chu trình gzip, kết hợp cả hai thao tác trong tệp `.tar.gz`, và trao đổi cùng một cây thư mục thông через Zip. Quan trọng nhất, bạn đã khôi phục vào các thư mục riêng biệt và so sánh nội dung thay vì giả định rằng việc tạo tệp nén là đủ."
+      "content_vi": "Bạn đã tách biệt việc đóng gói khỏi việc nén, tạo và liệt kê danh sách các tệp nén tar, hoàn thành một chu trình gzip, kết hợp cả hai thao tác trong tệp `.tar.gz`, và trao đổi cùng một cây thư mục thông через Zip. Quan trọng nhất, bạn đã khôi phục vào các thư mục riêng biệt và so sánh nội dung thay vì giả định rằng việc tạo tệp nén là đủ.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -254,10 +334,14 @@
       "task": "Thực hiện hướng dẫn: Build a Directory Tree to Preserve",
       "hint": "Chạy lệnh: find source -type f -printf '%P\\n' | sort",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/archive-lab/source/config/app.conf <(printf %s 'mode=training\nport=8080\n') && cmp -s /home/labex/project/archive-lab/source/notes/README.txt <(printf %s 'Archive the complete project tree.\n') && cmp -s /home/labex/project/archive-lab/source/data/sample.csv <(printf %s 'alpha,beta,gamma\n1,2,3\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -297,10 +381,14 @@
       "task": "Thực hiện hướng dẫn: Create and Inspect a Tar Archive",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "tar -tf /home/labex/project/archive-lab/project.tar >/dev/null && cmp -s /home/labex/project/archive-lab/tar-members.txt <(tar -tf /home/labex/project/archive-lab/project.tar) && cmp -s <(tar -xOf /home/labex/project/archive-lab/project.tar source/config/app.conf) /home/labex/project/archive-lab/source/config/app.conf"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -340,10 +428,14 @@
       "task": "Thực hiện hướng dẫn: Extract Safely and Compare the Result",
       "hint": "Chạy lệnh: find tar-restore -type f -printf '%P\\n' | sort",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -f /home/labex/project/archive-lab/tar-restore-ok.txt && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/tar-restore/source >/dev/null"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -383,10 +475,14 @@
       "task": "Thực hiện hướng dẫn: Compress and Decompress One File with Gzip",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test ! -e /home/labex/project/archive-lab/sample-copy.csv.gz && cmp -s /home/labex/project/archive-lab/sample-copy.csv /home/labex/project/archive-lab/source/data/sample.csv && cmp -s /home/labex/project/archive-lab/gzip-round-trip-ok.txt <(printf %s 'gzip round trip matches\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -426,10 +522,14 @@
       "task": "Thực hiện hướng dẫn: Create and Restore a Compressed Tar Archive",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "gzip -t /home/labex/project/archive-lab/project.tar.gz && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/targz-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/targz-restore-ok.txt <(printf %s 'tar.gz restore matches source\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -469,10 +569,14 @@
       "task": "Thực hiện hướng dẫn: Exchange the Project as a Zip Archive",
       "hint": "Chạy lệnh: unzip -l project.zip",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "unzip -t /home/labex/project/archive-lab/project.zip >/dev/null && diff -r /home/labex/project/archive-lab/source /home/labex/project/archive-lab/zip-restore/source >/dev/null && cmp -s /home/labex/project/archive-lab/zip-restore-ok.txt <(printf %s 'zip restore matches source\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "archives"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

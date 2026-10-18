@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "An incident handover note mentions several contact addresses, including a repeated address and malformed lookalikes. The next shift needs one clean contact list.\n\nThe preceding regular-expression lab practiced the email pattern and match-only output. Earlier labs introduced sorting and duplicate removal.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Ghi chú bàn giao sự cố nhắc đến một số địa chỉ liên hệ, trong đó có địa chỉ lặp lại và các chuỗi gần giống nhưng sai định dạng. Ca trực tiếp theo cần một danh sách liên hệ sạch.\n\nBài thực hành biểu thức chính quy trước đó đã luyện mẫu email và cách chỉ xuất phần khớp. Các bài trước đã giới thiệu sắp xếp và loại bỏ bản trùng."
+      "content_vi": "Ghi chú bàn giao sự cố nhắc đến một số địa chỉ liên hệ, trong đó có địa chỉ lặp lại và các chuỗi gần giống nhưng sai định dạng. Ca trực tiếp theo cần một danh sách liên hệ sạch.\n\nBài thực hành biểu thức chính quy trước đó đã luyện mẫu email và cách chỉ xuất phần khớp. Các bài trước đã giới thiệu sắp xếp và loại bỏ bản trùng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-17991-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Build the Contact List",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/extraction-challenge/emails.txt <(printf %s 'alice@example.com\nbob@example.net\ncarol@example.org\n') && cmp -s /home/labex/project/extraction-challenge/handover.txt <(printf %s 'Email alice@example.com then bob@example.net. Duplicate alice@example.com. Owner carol@example.org. Bad user@ and @invalid.\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/extraction-challenge/emails.txt <(printf %s 'alice@example.com\nbob@example.net\ncarol@example.org\n') && cmp -s /home/labex/project/extraction-challenge/handover.txt <(printf %s 'Email alice@example.com then bob@example.net. Duplicate alice@example.com. Owner carol@example.org. Bad user@ and @invalid.\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/extraction-challenge/emails.txt <(printf %s 'alice@example.com\nbob@example.net\ncarol@example.org\n') && cmp -s /home/labex/project/extraction-challenge/handover.txt <(printf %s 'Email alice@example.com then bob@example.net. Duplicate alice@example.com. Owner carol@example.org. Bad user@ and @invalid.\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -66,7 +78,8 @@
       "has_solution": false,
       "content": "You extracted one kind of value with a taught regular expression and normalized the result with familiar pipeline commands.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã trích xuất một loại giá trị bằng biểu thức chính quy đã học và chuẩn hóa kết quả bằng những lệnh pipeline quen thuộc."
+      "content_vi": "Bạn đã trích xuất một loại giá trị bằng biểu thức chính quy đã học và chuẩn hóa kết quả bằng những lệnh pipeline quen thuộc.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -83,10 +96,13 @@
       "task": "Thực hiện hướng dẫn: Build the Contact List",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/extraction-challenge/emails.txt <(printf %s 'alice@example.com\nbob@example.net\ncarol@example.org\n') && cmp -s /home/labex/project/extraction-challenge/handover.txt <(printf %s 'Email alice@example.com then bob@example.net. Duplicate alice@example.com. Owner carol@example.org. Bad user@ and @invalid.\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

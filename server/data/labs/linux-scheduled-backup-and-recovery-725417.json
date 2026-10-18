@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "A useful backup is more than an archive command. You must know what it contains, verify that it can be read, restore the file you need, and make unattended runs observable.\n\nIn this lab, you will back up a small application workspace from a manifest, restore one selected file, turn the workflow into a timestamped script, and install a Cron schedule. Every automated path is absolute so the job does not depend on an interactive shell's current directory.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một bản sao lưu hữu ích không chỉ là lệnh tạo tệp lưu trữ. Bạn phải biết nó chứa gì, xác minh có thể đọc, khôi phục tệp cần thiết và làm cho những lần chạy không giám sát có thể quan sát được.\n\nTrong bài này, bạn sẽ sao lưu một thư mục ứng dụng nhỏ theo manifest, khôi phục một tệp được chọn, biến quy trình thành script có dấu thời gian và cài lịch Cron. Mọi đường dẫn tự động đều là tuyệt đối để tác vụ không phụ thuộc thư mục hiện tại của shell tương tác."
+      "content_vi": "Một bản sao lưu hữu ích không chỉ là lệnh tạo tệp lưu trữ. Bạn phải biết nó chứa gì, xác minh có thể đọc, khôi phục tệp cần thiết và làm cho những lần chạy không giám sát có thể quan sát được.\n\nTrong bài này, bạn sẽ sao lưu một thư mục ứng dụng nhỏ theo manifest, khôi phục một tệp được chọn, biến quy trình thành script có dấu thời gian và cài lịch Cron. Mọi đường dẫn tự động đều là tuyệt đối để tác vụ không phụ thuộc thư mục hiện tại của shell tương tác.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-725417-section-1-v3",
@@ -36,18 +37,35 @@
       "task": "Thực hiện hướng dẫn: Define the Backup Scope with a Manifest",
       "hint": "Chạy lệnh: cd /home/labex/project/backup-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project/backup-lab')\nassert (p/'backup-manifest.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nassert all((p/'data'/name).is_file() for name in ['config/app.conf', 'documents/runbook.txt'])\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project/backup-lab')\nassert (p/'backup-manifest.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nassert all((p/'data'/name).is_file() for name in ['config/app.conf', 'documents/runbook.txt'])\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project/backup-lab')\nassert (p/'backup-manifest.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nassert all((p/'data'/name).is_file() for name in ['config/app.conf', 'documents/runbook.txt'])\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -72,18 +90,35 @@
       "task": "Thực hiện hướng dẫn: Create an Archive from the Manifest",
       "hint": "Chạy lệnh: tar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -108,18 +143,35 @@
       "task": "Thực hiện hướng dẫn: Verify the Archive without Extracting It",
       "hint": "Chạy lệnh: gzip -t backups/manual-backup.tar.gz",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nassert (root/'archive-contents.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nassert (root/'archive-contents.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nassert (root/'archive-contents.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -144,18 +196,35 @@
       "task": "Thực hiện hướng dẫn: Restore One Selected File",
       "hint": "Chạy lệnh: rm data/config/app.conf",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-lab')\nassert (root/'restore/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert sorted(str(p.relative_to(root/'restore')) for p in (root/'restore').rglob('*') if p.is_file()) == ['config/app.conf']\nassert (root/'data/documents/runbook.txt').read_text() == 'Production runbook: inspect logs before restarting a service.\\n'\nassert (root/'data/documents/scratch.txt').read_text() == 'Unmanaged scratch notes\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-lab')\nassert (root/'restore/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert sorted(str(p.relative_to(root/'restore')) for p in (root/'restore').rglob('*') if p.is_file()) == ['config/app.conf']\nassert (root/'data/documents/runbook.txt').read_text() == 'Production runbook: inspect logs before restarting a service.\\n'\nassert (root/'data/documents/scratch.txt').read_text() == 'Unmanaged scratch notes\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-lab')\nassert (root/'restore/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert sorted(str(p.relative_to(root/'restore')) for p in (root/'restore').rglob('*') if p.is_file()) == ['config/app.conf']\nassert (root/'data/documents/runbook.txt').read_text() == 'Production runbook: inspect logs before restarting a service.\\n'\nassert (root/'data/documents/scratch.txt').read_text() == 'Unmanaged scratch notes\\n'\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -180,18 +249,35 @@
       "task": "Thực hiện hướng dẫn: Build a Timestamped Backup Script",
       "hint": "Chạy lệnh: chmod u+x backup.sh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nimport os, re\nassert os.access(root/'backup.sh', os.X_OK)\narchives=[p for p in (root/'backups').glob('backup-*.tar.gz') if re.fullmatch(r'backup-\\d{8}-\\d{6}\\.tar\\.gz',p.name)]\nassert archives\nfor path in archives:\n    inspect(path)\n    assert pathlib.Path(str(path)+'.contents').read_text() == (root/'backup-manifest.txt').read_text()\nassert 'Created ' in (root/'last-backup.txt').read_text()\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nimport os, re\nassert os.access(root/'backup.sh', os.X_OK)\narchives=[p for p in (root/'backups').glob('backup-*.tar.gz') if re.fullmatch(r'backup-\\d{8}-\\d{6}\\.tar\\.gz',p.name)]\nassert archives\nfor path in archives:\n    inspect(path)\n    assert pathlib.Path(str(path)+'.contents').read_text() == (root/'backup-manifest.txt').read_text()\nassert 'Created ' in (root/'last-backup.txt').read_text()\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nimport os, re\nassert os.access(root/'backup.sh', os.X_OK)\narchives=[p for p in (root/'backups').glob('backup-*.tar.gz') if re.fullmatch(r'backup-\\d{8}-\\d{6}\\.tar\\.gz',p.name)]\nassert archives\nfor path in archives:\n    inspect(path)\n    assert pathlib.Path(str(path)+'.contents').read_text() == (root/'backup-manifest.txt').read_text()\nassert 'Created ' in (root/'last-backup.txt').read_text()\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -216,12 +302,56 @@
       "task": "Thực hiện hướng dẫn: Install and Inspect a Cron Schedule",
       "hint": "Chạy lệnh: minute hour day-of-month month day-of-week command",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess\nroot=pathlib.Path('/home/labex/project/backup-lab')\np=subprocess.run(['crontab','-l'],text=True,capture_output=True,timeout=2)\nassert p.returncode==0\nlines=[line for line in p.stdout.splitlines() if line.strip()]\nassert lines == ['## LabEx managed backup schedule', '*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1']\nassert (root/'installed-crontab.txt').read_text()==p.stdout\nLOCAL_CHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess\nroot=pathlib.Path('/home/labex/project/backup-lab')\np=subprocess.run(['crontab','-l'],text=True,capture_output=True,timeout=2)\nassert p.returncode==0\nlines=[line for line in p.stdout.splitlines() if line.strip()]\nassert lines == ['## LabEx managed backup schedule', '*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1']\nassert (root/'installed-crontab.txt').read_text()==p.stdout\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -250,6 +380,13 @@
           "shell",
           "archives",
           "cron_scheduler"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
         ]
       },
       "content_vi": "Trong bước này, bạn sẽ cài và kiểm tra lịch Cron cá nhân. Một dòng crontab bắt đầu bằng năm trường lịch, tiếp theo là lệnh:\n\nVị trí\nTrường\nPhạm vi thường dùng\n\n1\nphút\n`0`–`59`\n\n2\ngiờ\n`0`–`23`\n\n3\nngày trong tháng\n`1`–`31`\n\n4\ntháng\n`1`–`12`\n\n5\nngày trong tuần\n`0`–`7`, trong đó Chủ nhật là `0` hoặc `7`\n\nDấu sao `*` nghĩa là mọi giá trị được phép. Bước như `*/5` nghĩa là mỗi năm đơn vị trong trường đó.\n\n```text\nminute hour day-of-month month day-of-week command\n```\n\nVí dụ, `*/5 * * * *` nghĩa là mỗi năm phút. `0 2 * * *` nghĩa là 02:00 hằng ngày.\n\n`crontab -e` mở crontab cá nhân trong trình soạn thảo. Quy trình đáng tin cậy là chuẩn bị và cài một mục tốt đã biết trước, rồi chỉnh sửa tương tác nhỏ. Tạo một mục dùng đường dẫn tuyệt đối và ghi lại cả đầu ra chuẩn lẫn lỗi chuẩn:\n\n```bash\ncat > backup.crontab <<'EOF'\n*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\nEOF\n```\n\nXem lại và cài nó:\n\n```bash\ncat backup.crontab\n```\n\n```bash\ncrontab backup.crontab\n```\n\nBây giờ mở crontab đã cài trong Nano:\n\n```bash\nEDITOR=nano crontab -e\n```\n\nThêm chú thích này vào dòng trên lịch:\n\n```text\n## LabEx managed backup schedule\n```\n\nNhấn `Ctrl+O`, rồi `Enter` để lưu. Nhấn `Ctrl+X` để rời Nano và trở lại shell. Dùng `crontab -l` để xác nhận chính xác những gì Cron sẽ đọc và lưu đầu ra đó:\n\n```bash\ncrontab -l | tee installed-crontab.txt\n```\n\nĐầu ra phải chứa chú thích rồi đến mục mỗi năm phút. Kiểm tra kết quả đã cài giúp phát hiện lỗi soạn thảo trước khi bạn phụ thuộc lịch đó.",
@@ -269,18 +406,35 @@
       "task": "Thực hiện hướng dẫn: Test Logging and Understand Percent Escaping",
       "hint": "Chạy lệnh: tail -n 5 logs/backup.log",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nassert 'Created /home/labex/project/backup-lab/backups/backup-' in (root/'logs/backup.log').read_text()\nexpected_example = '0 2 * * * /bin/echo \"backup-$(/bin/date +\\\\%Y\\\\%m\\\\%d-\\\\%H\\\\%M\\\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\\n'\nassert (root/'cron-date-example.txt').read_text()==expected_example\nfor archive in (root/'backups').glob('backup-*.tar.gz'): inspect(archive)\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nassert 'Created /home/labex/project/backup-lab/backups/backup-' in (root/'logs/backup.log').read_text()\nexpected_example = '0 2 * * * /bin/echo \"backup-$(/bin/date +\\\\%Y\\\\%m\\\\%d-\\\\%H\\\\%M\\\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\\n'\nassert (root/'cron-date-example.txt').read_text()==expected_example\nfor archive in (root/'backups').glob('backup-*.tar.gz'): inspect(archive)\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nassert 'Created /home/labex/project/backup-lab/backups/backup-' in (root/'logs/backup.log').read_text()\nexpected_example = '0 2 * * * /bin/echo \"backup-$(/bin/date +\\\\%Y\\\\%m\\\\%d-\\\\%H\\\\%M\\\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\\n'\nassert (root/'cron-date-example.txt').read_text()==expected_example\nfor archive in (root/'backups').glob('backup-*.tar.gz'): inspect(archive)\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -302,7 +456,8 @@
       "has_solution": false,
       "content": "You defined a backup scope in a manifest, created an archive with `tar -T`, verified it without extraction, and recovered one selected file. You then wrote a timestamped backup script with absolute paths, installed and inspected a Cron schedule, redirected unattended output to a log, and learned why percent signs must be escaped when `date` appears directly in a crontab command.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã định nghĩa phạm vi sao lưu trong manifest, tạo tệp lưu trữ bằng `tar -T`, xác minh mà không giải nén và khôi phục một tệp được chọn. Sau đó bạn viết script sao lưu có dấu thời gian với đường dẫn tuyệt đối, cài và kiểm tra lịch Cron, chuyển hướng đầu ra không giám sát vào log, đồng thời hiểu vì sao phải escape dấu phần trăm khi `date` xuất hiện trực tiếp trong lệnh crontab."
+      "content_vi": "Bạn đã định nghĩa phạm vi sao lưu trong manifest, tạo tệp lưu trữ bằng `tar -T`, xác minh mà không giải nén và khôi phục một tệp được chọn. Sau đó bạn viết script sao lưu có dấu thời gian với đường dẫn tuyệt đối, cài và kiểm tra lịch Cron, chuyển hướng đầu ra không giám sát vào log, đồng thời hiểu vì sao phải escape dấu phần trăm khi `date` xuất hiện trực tiếp trong lệnh crontab.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -319,18 +474,35 @@
       "task": "Thực hiện hướng dẫn: Define the Backup Scope with a Manifest",
       "hint": "Chạy lệnh: cd /home/labex/project/backup-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project/backup-lab')\nassert (p/'backup-manifest.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nassert all((p/'data'/name).is_file() for name in ['config/app.conf', 'documents/runbook.txt'])\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project/backup-lab')\nassert (p/'backup-manifest.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nassert all((p/'data'/name).is_file() for name in ['config/app.conf', 'documents/runbook.txt'])\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\np=Path('/home/labex/project/backup-lab')\nassert (p/'backup-manifest.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nassert all((p/'data'/name).is_file() for name in ['config/app.conf', 'documents/runbook.txt'])\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -355,18 +527,35 @@
       "task": "Thực hiện hướng dẫn: Create an Archive from the Manifest",
       "hint": "Chạy lệnh: tar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -391,18 +580,35 @@
       "task": "Thực hiện hướng dẫn: Verify the Archive without Extracting It",
       "hint": "Chạy lệnh: gzip -t backups/manual-backup.tar.gz",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nassert (root/'archive-contents.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nassert (root/'archive-contents.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\ninspect(root/'backups/manual-backup.tar.gz')\nassert (root/'archive-contents.txt').read_text() == 'config/app.conf\\ndocuments/runbook.txt\\n'\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -427,18 +633,35 @@
       "task": "Thực hiện hướng dẫn: Restore One Selected File",
       "hint": "Chạy lệnh: rm data/config/app.conf",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-lab')\nassert (root/'restore/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert sorted(str(p.relative_to(root/'restore')) for p in (root/'restore').rglob('*') if p.is_file()) == ['config/app.conf']\nassert (root/'data/documents/runbook.txt').read_text() == 'Production runbook: inspect logs before restarting a service.\\n'\nassert (root/'data/documents/scratch.txt').read_text() == 'Unmanaged scratch notes\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-lab')\nassert (root/'restore/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert sorted(str(p.relative_to(root/'restore')) for p in (root/'restore').rglob('*') if p.is_file()) == ['config/app.conf']\nassert (root/'data/documents/runbook.txt').read_text() == 'Production runbook: inspect logs before restarting a service.\\n'\nassert (root/'data/documents/scratch.txt').read_text() == 'Unmanaged scratch notes\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nfrom pathlib import Path\nroot=Path('/home/labex/project/backup-lab')\nassert (root/'restore/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert (root/'data/config/app.conf').read_text() == 'mode=production\\nport=8080\\n'\nassert sorted(str(p.relative_to(root/'restore')) for p in (root/'restore').rglob('*') if p.is_file()) == ['config/app.conf']\nassert (root/'data/documents/runbook.txt').read_text() == 'Production runbook: inspect logs before restarting a service.\\n'\nassert (root/'data/documents/scratch.txt').read_text() == 'Unmanaged scratch notes\\n'\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -463,18 +686,35 @@
       "task": "Thực hiện hướng dẫn: Build a Timestamped Backup Script",
       "hint": "Chạy lệnh: chmod u+x backup.sh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nimport os, re\nassert os.access(root/'backup.sh', os.X_OK)\narchives=[p for p in (root/'backups').glob('backup-*.tar.gz') if re.fullmatch(r'backup-\\d{8}-\\d{6}\\.tar\\.gz',p.name)]\nassert archives\nfor path in archives:\n    inspect(path)\n    assert pathlib.Path(str(path)+'.contents').read_text() == (root/'backup-manifest.txt').read_text()\nassert 'Created ' in (root/'last-backup.txt').read_text()\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nimport os, re\nassert os.access(root/'backup.sh', os.X_OK)\narchives=[p for p in (root/'backups').glob('backup-*.tar.gz') if re.fullmatch(r'backup-\\d{8}-\\d{6}\\.tar\\.gz',p.name)]\nassert archives\nfor path in archives:\n    inspect(path)\n    assert pathlib.Path(str(path)+'.contents').read_text() == (root/'backup-manifest.txt').read_text()\nassert 'Created ' in (root/'last-backup.txt').read_text()\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nimport os, re\nassert os.access(root/'backup.sh', os.X_OK)\narchives=[p for p in (root/'backups').glob('backup-*.tar.gz') if re.fullmatch(r'backup-\\d{8}-\\d{6}\\.tar\\.gz',p.name)]\nassert archives\nfor path in archives:\n    inspect(path)\n    assert pathlib.Path(str(path)+'.contents').read_text() == (root/'backup-manifest.txt').read_text()\nassert 'Created ' in (root/'last-backup.txt').read_text()\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",
@@ -499,12 +739,56 @@
       "task": "Thực hiện hướng dẫn: Install and Inspect a Cron Schedule",
       "hint": "Chạy lệnh: minute hour day-of-month month day-of-week command",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess\nroot=pathlib.Path('/home/labex/project/backup-lab')\np=subprocess.run(['crontab','-l'],text=True,capture_output=True,timeout=2)\nassert p.returncode==0\nlines=[line for line in p.stdout.splitlines() if line.strip()]\nassert lines == ['## LabEx managed backup schedule', '*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1']\nassert (root/'installed-crontab.txt').read_text()==p.stdout\nLOCAL_CHECK"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, subprocess\nroot=pathlib.Path('/home/labex/project/backup-lab')\np=subprocess.run(['crontab','-l'],text=True,capture_output=True,timeout=2)\nassert p.returncode==0\nlines=[line for line in p.stdout.splitlines() if line.strip()]\nassert lines == ['## LabEx managed backup schedule', '*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1']\nassert (root/'installed-crontab.txt').read_text()==p.stdout\nLOCAL_CHECK"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -533,6 +817,13 @@
           "shell",
           "archives",
           "cron_scheduler"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
         ]
       },
       "content_vi": "Trong bước này, bạn sẽ cài và kiểm tra lịch Cron cá nhân. Một dòng crontab bắt đầu bằng năm trường lịch, tiếp theo là lệnh:\n\nVị trí\nTrường\nPhạm vi thường dùng\n\n1\nphút\n`0`–`59`\n\n2\ngiờ\n`0`–`23`\n\n3\nngày trong tháng\n`1`–`31`\n\n4\ntháng\n`1`–`12`\n\n5\nngày trong tuần\n`0`–`7`, trong đó Chủ nhật là `0` hoặc `7`\n\nDấu sao `*` nghĩa là mọi giá trị được phép. Bước như `*/5` nghĩa là mỗi năm đơn vị trong trường đó.\n\n```text\nminute hour day-of-month month day-of-week command\n```\n\nVí dụ, `*/5 * * * *` nghĩa là mỗi năm phút. `0 2 * * *` nghĩa là 02:00 hằng ngày.\n\n`crontab -e` mở crontab cá nhân trong trình soạn thảo. Quy trình đáng tin cậy là chuẩn bị và cài một mục tốt đã biết trước, rồi chỉnh sửa tương tác nhỏ. Tạo một mục dùng đường dẫn tuyệt đối và ghi lại cả đầu ra chuẩn lẫn lỗi chuẩn:\n\n```bash\ncat > backup.crontab <<'EOF'\n*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\nEOF\n```\n\nXem lại và cài nó:\n\n```bash\ncat backup.crontab\n```\n\n```bash\ncrontab backup.crontab\n```\n\nBây giờ mở crontab đã cài trong Nano:\n\n```bash\nEDITOR=nano crontab -e\n```\n\nThêm chú thích này vào dòng trên lịch:\n\n```text\n## LabEx managed backup schedule\n```\n\nNhấn `Ctrl+O`, rồi `Enter` để lưu. Nhấn `Ctrl+X` để rời Nano và trở lại shell. Dùng `crontab -l` để xác nhận chính xác những gì Cron sẽ đọc và lưu đầu ra đó:\n\n```bash\ncrontab -l | tee installed-crontab.txt\n```\n\nĐầu ra phải chứa chú thích rồi đến mục mỗi năm phút. Kiểm tra kết quả đã cài giúp phát hiện lỗi soạn thảo trước khi bạn phụ thuộc lịch đó.",
@@ -552,18 +843,35 @@
       "task": "Thực hiện hướng dẫn: Test Logging and Understand Percent Escaping",
       "hint": "Chạy lệnh: tail -n 5 logs/backup.log",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nassert 'Created /home/labex/project/backup-lab/backups/backup-' in (root/'logs/backup.log').read_text()\nexpected_example = '0 2 * * * /bin/echo \"backup-$(/bin/date +\\\\%Y\\\\%m\\\\%d-\\\\%H\\\\%M\\\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\\n'\nassert (root/'cron-date-example.txt').read_text()==expected_example\nfor archive in (root/'backups').glob('backup-*.tar.gz'): inspect(archive)\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell",
+        "archives",
+        "cron_scheduler"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nassert 'Created /home/labex/project/backup-lab/backups/backup-' in (root/'logs/backup.log').read_text()\nexpected_example = '0 2 * * * /bin/echo \"backup-$(/bin/date +\\\\%Y\\\\%m\\\\%d-\\\\%H\\\\%M\\\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\\n'\nassert (root/'cron-date-example.txt').read_text()==expected_example\nfor archive in (root/'backups').glob('backup-*.tar.gz'): inspect(archive)\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport pathlib, tarfile\nroot = pathlib.Path('/home/labex/project/backup-lab')\nexpected = {'config/app.conf': b'mode=production\\nport=8080\\n', 'documents/runbook.txt': b'Production runbook: inspect logs before restarting a service.\\n'}\ndef inspect(archive):\n    with tarfile.open(archive, 'r:gz') as source:\n        assert set(source.getnames()) == set(expected)\n        for name, content in expected.items():\n            assert source.extractfile(name).read() == content\n\nassert 'Created /home/labex/project/backup-lab/backups/backup-' in (root/'logs/backup.log').read_text()\nexpected_example = '0 2 * * * /bin/echo \"backup-$(/bin/date +\\\\%Y\\\\%m\\\\%d-\\\\%H\\\\%M\\\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\\n'\nassert (root/'cron-date-example.txt').read_text()==expected_example\nfor archive in (root/'backups').glob('backup-*.tar.gz'): inspect(archive)\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell",
+          "archives",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell",

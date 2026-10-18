@@ -1,11 +1,14 @@
 {
   "id": "shell-check-mounted-file-system-usage-18275",
-  "source_lab_id": 18275,
   "course_id": "linux-practice-challenges",
+  "order": 154,
   "title": "Check Mounted File System Usage",
-  "title_vi": "Introduction",
+  "title_vi": "Check Mounted File System Usage",
   "difficulty": "Intermediate",
-  "estimated_time": "7 mins",
+  "estimated_time": "15 mins",
+  "type": "challenge",
+  "source_url": "https://labex.io/tutorials/shell-check-mounted-file-system-usage-18275",
+  "overview": "Practical challenge: shell-check-mounted-file-system-usage-18275",
   "sections": [
     {
       "id": "shell-check-mounted-file-system-usage-18275-step-0",
@@ -14,7 +17,9 @@
       "content": "## Introduction\n\nIn this challenge, you will write a shell script to check if a specific file system is mounted. Your script will take a file system name (e.g., `/dev/vda1`) as an argument. Using the `df` command, it will determine if the file system is currently mounted. If it is, the script will report its usage percentage and the amount of free space available. If it is not mounted, it will display an appropriate error message.\n",
       "content_vi": "## Introduction\n\nIn this challenge, you will write a shell script to check if a specific file system is mounted. Your script will take a file system name (e.g., `/dev/vda1`) as an argument. Using the `df` command, it will determine if the file system is currently mounted. If it is, the script will report its usage percentage and the amount of free space available. If it is not mounted, it will display an appropriate error message.\n",
       "layout": "doc-fullscreen",
-      "need_verify": false
+      "need_verify": false,
+      "kind": "introduction",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "shell-check-mounted-file-system-usage-18275-step-1",
@@ -24,7 +29,8 @@
       "content_vi": "## Check Mounted File System Usage\n\nIn this challenge, your goal is to create a script that reports the status of a given file system. The script will accept a single command-line argument, which is the name of the file system to check.\n\n### Tasks\n\nYour script must perform the following actions:\n\n1. Accept a single command-line argument representing a file system (e.g., a source listed by `df --output=source`).\n2. Check if the provided file system is currently mounted on the system.\n3. If the file system is mounted, print a message showing its usage percentage and the available free space in kilobytes (KB).\n4. If the file system is not mounted, or if an incorrect number of arguments is provided, print a clear error message.\n\n### Requirements\n\nYou must adhere to the following requirements:\n\n- The script must be named `mount.sh` and located in the `~/project` directory.\n- You must use the `df` command to gather file system information.\n- Your script should utilize shell arrays and a `for` loop to process the file system data.\n- The script should handle cases where an incorrect number of arguments is provided.\n\n### Example\n\nHere is an example of how your script should work when executed with a valid, mounted file system.\n\n```bash\nlabex:project/ $ bash mount.sh <mounted-filesystem>\nFilesystem <mounted-filesystem> is 19% used with 85748032 KB free.\n```\n\nAnd here is an example for a file system that is not mounted:\n\n```bash\nlabex:project/ $ bash mount.sh /nonexistent\nError: Filesystem /nonexistent is not mounted.\n```\n\n**Note:** The usage percentage and free space values in the example are for illustration only. Your output will reflect the actual state of the mounted file system you choose in your environment.\n\n### Hints\n\n- You can use `df --output=source` to get a list of all mounted file system sources.\n- To populate an array with the output of a command, you can use the syntax `my_array=($(command))`.\n- Remember to check the number of arguments passed to the script using `$#`.\n",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "kind": "task"
+      "kind": "task",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "shell-check-mounted-file-system-usage-18275-step-2",
@@ -33,7 +39,9 @@
       "content": "## Summary\n\nIn this challenge, you have successfully created a shell script to monitor file system usage. You learned how to process command-line arguments, use the `df` command with specific output options, and populate arrays with command output. You also practiced iterating through arrays using a `for` loop to find and display information about a specific file system. This challenge has strengthened your skills in shell scripting, text processing, and system information retrieval.\n",
       "content_vi": "## Summary\n\nIn this challenge, you have successfully created a shell script to monitor file system usage. You learned how to process command-line arguments, use the `df` command with specific output options, and populate arrays with command output. You also practiced iterating through arrays using a `for` loop to find and display information about a specific file system. This challenge has strengthened your skills in shell scripting, text processing, and system information retrieval.\n",
       "layout": "doc-fullscreen",
-      "need_verify": false
+      "need_verify": false,
+      "kind": "summary",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -43,21 +51,69 @@
       "title_vi": "Check Mounted File System Usage",
       "content": "## Check Mounted File System Usage\n\nIn this challenge, your goal is to create a script that reports the status of a given file system. The script will accept a single command-line argument, which is the name of the file system to check.\n\n### Tasks\n\nYour script must perform the following actions:\n\n1. Accept a single command-line argument representing a file system (e.g., a source listed by `df --output=source`).\n2. Check if the provided file system is currently mounted on the system.\n3. If the file system is mounted, print a message showing its usage percentage and the available free space in kilobytes (KB).\n4. If the file system is not mounted, or if an incorrect number of arguments is provided, print a clear error message.\n\n### Requirements\n\nYou must adhere to the following requirements:\n\n- The script must be named `mount.sh` and located in the `~/project` directory.\n- You must use the `df` command to gather file system information.\n- Your script should utilize shell arrays and a `for` loop to process the file system data.\n- The script should handle cases where an incorrect number of arguments is provided.\n\n### Example\n\nHere is an example of how your script should work when executed with a valid, mounted file system.\n\n```bash\nlabex:project/ $ bash mount.sh <mounted-filesystem>\nFilesystem <mounted-filesystem> is 19% used with 85748032 KB free.\n```\n\nAnd here is an example for a file system that is not mounted:\n\n```bash\nlabex:project/ $ bash mount.sh /nonexistent\nError: Filesystem /nonexistent is not mounted.\n```\n\n**Note:** The usage percentage and free space values in the example are for illustration only. Your output will reflect the actual state of the mounted file system you choose in your environment.\n\n### Hints\n\n- You can use `df --output=source` to get a list of all mounted file system sources.\n- To populate an array with the output of a command, you can use the syntax `my_array=($(command))`.\n- Remember to check the number of arguments passed to the script using `$#`.\n",
       "content_vi": "## Check Mounted File System Usage\n\nIn this challenge, your goal is to create a script that reports the status of a given file system. The script will accept a single command-line argument, which is the name of the file system to check.\n\n### Tasks\n\nYour script must perform the following actions:\n\n1. Accept a single command-line argument representing a file system (e.g., a source listed by `df --output=source`).\n2. Check if the provided file system is currently mounted on the system.\n3. If the file system is mounted, print a message showing its usage percentage and the available free space in kilobytes (KB).\n4. If the file system is not mounted, or if an incorrect number of arguments is provided, print a clear error message.\n\n### Requirements\n\nYou must adhere to the following requirements:\n\n- The script must be named `mount.sh` and located in the `~/project` directory.\n- You must use the `df` command to gather file system information.\n- Your script should utilize shell arrays and a `for` loop to process the file system data.\n- The script should handle cases where an incorrect number of arguments is provided.\n\n### Example\n\nHere is an example of how your script should work when executed with a valid, mounted file system.\n\n```bash\nlabex:project/ $ bash mount.sh <mounted-filesystem>\nFilesystem <mounted-filesystem> is 19% used with 85748032 KB free.\n```\n\nAnd here is an example for a file system that is not mounted:\n\n```bash\nlabex:project/ $ bash mount.sh /nonexistent\nError: Filesystem /nonexistent is not mounted.\n```\n\n**Note:** The usage percentage and free space values in the example are for illustration only. Your output will reflect the actual state of the mounted file system you choose in your environment.\n\n### Hints\n\n- You can use `df --output=source` to get a list of all mounted file system sources.\n- To populate an array with the output of a command, you can use the syntax `my_array=($(command))`.\n- Remember to check the number of arguments passed to the script using `$#`.\n",
-      "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
-      "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
+      "task": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
+      "task_vi": "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
+            "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
           ]
         ],
         "allowed_status": [
-          0
+          0,
+          1
         ]
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
-  ]
+  ],
+  "curriculum_version": 1,
+  "source_lab_id": 18275
 }

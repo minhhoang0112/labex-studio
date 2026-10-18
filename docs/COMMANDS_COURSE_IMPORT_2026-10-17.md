@@ -35,6 +35,13 @@ Lịch sử hoàn tất chứng minh đã mở/thoát pager hoặc top và dùng
 
 ## Kiểm chứng
 
-Kết quả PTY đầy đủ đang được hoàn tất và sẽ cập nhật bên dưới trước khi kết thúc công việc. Kiểm tra tĩnh hiện khớp đủ 41 outline, 263 mục dịch, 181 task ID; cú pháp Bash toàn bộ catalog đã đạt.
+Chốt kết quả ngày **18/10/2026**:
+
+- **41/41 bài, 181/181 nhiệm vụ đạt** sau thao tác PTY thực; cả 181 đều chưa đạt trước khi làm, không có bước bị chặn trong khóa này. Báo cáo: `.artifacts/docker-commands-coverage.json`.
+- Báo cáo tổng hợp chỉ nhận những bài có đủ mọi nhiệm vụ từ từng lượt chạy. Đây không phải một lượt liên tục: hai lượt dừng ở challenge tìm /etc và time/find vì test runner chưa cho phép mã thoát 1 do thiếu quyền; các bài trước đã thực hành trọn vẹn được giữ, còn hai bài đó có lượt chạy mới đầy đủ. Hai lượt dừng không được nhận là đã có kiểm tra tài khoản host cuối lượt.
+- Các báo cáo API-context cuối dùng: files `mvcjgry0` (45), cat/more `mvcjj861` (10), phần đọc/tìm `mvcjd14h` (38 nhiệm vụ thuộc chín bài hoàn chỉnh), challenge cuối `mvcjpfqj` (1), text/system `mvcjgo2y` (84 thuộc 18 bài hoàn chỉnh; hai task của bài time dở dang không được lấy), time `mvcju886` (3).
+- **29/29 test Node đạt** trong cấu hình Docker; khớp 41 outline, 263 mục dịch và 181 task ID; cú pháp Bash toàn bộ catalog đạt.
+- **15/15 nhóm kiểm tra Chrome đạt**, gồm 41 nút mở bài local, outline, điều hướng, responsive và giữ shell. Ảnh: `.artifacts/commands-course-imported-ui.png`; báo cáo: `.artifacts/workspace-ui-regression.json`. Các ca lỗi/reset FE dùng HTTP fixture riêng như mô tả trong mã kiểm thử.
+- Hồi quy hai khóa cũ: Quick Start bài đầu **5/5**, Noobs APT **5/5**, đều có kiểm tra trước khi làm; dữ liệu package đầu bài Noobs không bị image Commands làm thay đổi.
 
 Tái tạo dữ liệu: `python scripts/generate_commands_course.py`. Kịch bản đầy đủ: `tests/scenarios/linux-commands-course.json`, ba nhóm files/content/text. Các bài thử dùng ID `source-smoke-...` và container riêng; không dùng công việc của người học làm bằng chứng.

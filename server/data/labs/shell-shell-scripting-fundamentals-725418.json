@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "A shell script stores commands in a file so a task can be repeated consistently. Reliable beginner scripts make their interpreter explicit, quote variable expansions, validate input before acting, and return an exit status that other commands can understand.\n\nIn this lab, you will build small Bash scripts incrementally. You will run scripts through Bash and as executable files, use variables and positional arguments, read interactive input, branch with `if` and file tests, choose exit codes, iterate with `for`, and combine the ideas in a simple log summarizer.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Script shell lưu các lệnh trong một tệp để lặp lại nhiệm vụ một cách nhất quán. Script đáng tin cậy cho người mới chỉ rõ trình thông dịch, đặt phần mở rộng biến trong dấu nháy, kiểm tra đầu vào trước khi hành động và trả trạng thái thoát mà lệnh khác có thể hiểu.\n\nTrong bài này, bạn sẽ xây dựng từng bước các script Bash nhỏ. Bạn sẽ chạy script qua Bash và dưới dạng tệp thực thi, dùng biến và đối số vị trí, đọc đầu vào tương tác, rẽ nhánh bằng `if` và phép kiểm tra tệp, chọn mã thoát, lặp bằng `for` và kết hợp các ý tưởng thành bộ tóm tắt log đơn giản."
+      "content_vi": "Script shell lưu các lệnh trong một tệp để lặp lại nhiệm vụ một cách nhất quán. Script đáng tin cậy cho người mới chỉ rõ trình thông dịch, đặt phần mở rộng biến trong dấu nháy, kiểm tra đầu vào trước khi hành động và trả trạng thái thoát mà lệnh khác có thể hiểu.\n\nTrong bài này, bạn sẽ xây dựng từng bước các script Bash nhỏ. Bạn sẽ chạy script qua Bash và dưới dạng tệp thực thi, dùng biến và đối số vị trí, đọc đầu vào tương tác, rẽ nhánh bằng `if` và phép kiểm tra tệp, chọn mã thoát, lặp bằng `for` và kết hợp các ý tưởng thành bộ tóm tắt log đơn giản.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-725418-section-1-v3",
@@ -36,18 +37,31 @@
       "task": "Thực hiện hướng dẫn: Create and Run Your First Script",
       "hint": "Chạy lệnh: cd /home/labex/project/shell-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'hello.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash'\nassert os.access(path, os.X_OK)\nwanted = f'Hello from a Bash script\\n{root}\\n'\np = run('hello.sh')\nassert p.returncode == 0 and p.stdout == wanted\np = subprocess.run([str(path)], cwd=root, text=True, capture_output=True, timeout=2)\nassert p.returncode == 0 and p.stdout == wanted\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'hello.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash'\nassert os.access(path, os.X_OK)\nwanted = f'Hello from a Bash script\\n{root}\\n'\np = run('hello.sh')\nassert p.returncode == 0 and p.stdout == wanted\np = subprocess.run([str(path)], cwd=root, text=True, capture_output=True, timeout=2)\nassert p.returncode == 0 and p.stdout == wanted\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'hello.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash'\nassert os.access(path, os.X_OK)\nwanted = f'Hello from a Bash script\\n{root}\\n'\np = run('hello.sh')\nassert p.returncode == 0 and p.stdout == wanted\np = subprocess.run([str(path)], cwd=root, text=True, capture_output=True, timeout=2)\nassert p.returncode == 0 and p.stdout == wanted\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell"
@@ -70,18 +84,31 @@
       "task": "Thực hiện hướng dẫn: Use Variables and Safe Quoting",
       "hint": "Chạy lệnh: bash variables.sh \"beginner learner\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nprefix = f'Course: Linux for Noobs\\nWorkspace: {root}\\n'\nexpected = prefix + 'Quoted argument count: 1\\nFirst argument: beginner learner\\n'\nassert (root/'variable-output.txt').read_text() == expected\np = run('variables.sh', 'another learner')\nassert p.returncode == 0 and p.stdout == prefix + 'Quoted argument count: 1\\nFirst argument: another learner\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nprefix = f'Course: Linux for Noobs\\nWorkspace: {root}\\n'\nexpected = prefix + 'Quoted argument count: 1\\nFirst argument: beginner learner\\n'\nassert (root/'variable-output.txt').read_text() == expected\np = run('variables.sh', 'another learner')\nassert p.returncode == 0 and p.stdout == prefix + 'Quoted argument count: 1\\nFirst argument: another learner\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nprefix = f'Course: Linux for Noobs\\nWorkspace: {root}\\n'\nexpected = prefix + 'Quoted argument count: 1\\nFirst argument: beginner learner\\n'\nassert (root/'variable-output.txt').read_text() == expected\np = run('variables.sh', 'another learner')\nassert p.returncode == 0 and p.stdout == prefix + 'Quoted argument count: 1\\nFirst argument: another learner\\n'\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell"
@@ -104,18 +131,31 @@
       "task": "Thực hiện hướng dẫn: Validate Positional Arguments",
       "hint": "Chạy lệnh: bash greet-argument.sh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('greet-argument.sh')\nassert p.returncode == 2 and 'Usage:' in p.stderr\np = run('greet-argument.sh', 'Ada Lovelace')\nassert p.returncode == 0 and p.stdout == 'Hello, Ada Lovelace\\n'\nassert (root/'argument-greeting.txt').read_text() == p.stdout\nassert run('greet-argument.sh', 'one', 'two').returncode == 2\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('greet-argument.sh')\nassert p.returncode == 2 and 'Usage:' in p.stderr\np = run('greet-argument.sh', 'Ada Lovelace')\nassert p.returncode == 0 and p.stdout == 'Hello, Ada Lovelace\\n'\nassert (root/'argument-greeting.txt').read_text() == p.stdout\nassert run('greet-argument.sh', 'one', 'two').returncode == 2\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('greet-argument.sh')\nassert p.returncode == 2 and 'Usage:' in p.stderr\np = run('greet-argument.sh', 'Ada Lovelace')\nassert p.returncode == 0 and p.stdout == 'Hello, Ada Lovelace\\n'\nassert (root/'argument-greeting.txt').read_text() == p.stdout\nassert run('greet-argument.sh', 'one', 'two').returncode == 2\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell"
@@ -138,18 +178,31 @@
       "task": "Thực hiện hướng dẫn: Read Interactive Input",
       "hint": "Chạy lệnh: bash ask-name.sh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('ask-name.sh', input='Grace Hopper\\n')\nassert p.returncode == 0 and p.stdout == 'Welcome, Grace Hopper\\n'\nassert (root/'interactive-greeting.txt').read_text() == p.stdout\np = run('ask-name.sh', input='\\n')\nassert p.returncode == 1 and 'A name is required' in p.stderr\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('ask-name.sh', input='Grace Hopper\\n')\nassert p.returncode == 0 and p.stdout == 'Welcome, Grace Hopper\\n'\nassert (root/'interactive-greeting.txt').read_text() == p.stdout\np = run('ask-name.sh', input='\\n')\nassert p.returncode == 1 and 'A name is required' in p.stderr\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('ask-name.sh', input='Grace Hopper\\n')\nassert p.returncode == 0 and p.stdout == 'Welcome, Grace Hopper\\n'\nassert (root/'interactive-greeting.txt').read_text() == p.stdout\np = run('ask-name.sh', input='\\n')\nassert p.returncode == 1 and 'A name is required' in p.stderr\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell"
@@ -172,18 +225,31 @@
       "task": "Thực hiện hướng dẫn: Branch with File Tests",
       "hint": "Chạy lệnh: bash classify-path.sh logs",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert run('classify-path.sh', 'logs').stdout == 'directory: logs\\n'\nassert run('classify-path.sh', 'notes.txt').stdout == 'file: notes.txt\\n'\nassert run('classify-path.sh', 'missing.txt').returncode == 1\nassert run('classify-path.sh').returncode == 2\nassert (root/'path-results.txt').read_text() == 'directory: logs\\nfile: notes.txt\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert run('classify-path.sh', 'logs').stdout == 'directory: logs\\n'\nassert run('classify-path.sh', 'notes.txt').stdout == 'file: notes.txt\\n'\nassert run('classify-path.sh', 'missing.txt').returncode == 1\nassert run('classify-path.sh').returncode == 2\nassert (root/'path-results.txt').read_text() == 'directory: logs\\nfile: notes.txt\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert run('classify-path.sh', 'logs').stdout == 'directory: logs\\n'\nassert run('classify-path.sh', 'notes.txt').stdout == 'file: notes.txt\\n'\nassert run('classify-path.sh', 'missing.txt').returncode == 1\nassert run('classify-path.sh').returncode == 2\nassert (root/'path-results.txt').read_text() == 'directory: logs\\nfile: notes.txt\\n'\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell"
@@ -206,18 +272,31 @@
       "task": "Thực hiện hướng dẫn: Process Multiple Files with a For Loop",
       "hint": "Chạy lệnh: bash count-errors.sh logs | tee error-counts.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('count-errors.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nassert (root/'error-counts.txt').read_text() == p.stdout\nassert run('count-errors.sh', 'missing').returncode == 1\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('count-errors.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nassert (root/'error-counts.txt').read_text() == p.stdout\nassert run('count-errors.sh', 'missing').returncode == 1\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('count-errors.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nassert (root/'error-counts.txt').read_text() == p.stdout\nassert run('count-errors.sh', 'missing').returncode == 1\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell"
@@ -240,18 +319,31 @@
       "task": "Thực hiện hướng dẫn: Combine Validation, Loops, and Exit Status",
       "hint": "Chạy lệnh: chmod u+x summarize-logs.sh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert os.access(root/'summarize-logs.sh', os.X_OK)\nassert (root/'log-summary.txt').read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-script-check-') as directory:\n    output = str(pathlib.Path(directory)/'summary.txt')\n    p = run('summarize-logs.sh', 'logs', output)\n    assert p.returncode == 0 and pathlib.Path(output).read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\n    assert run('summarize-logs.sh', 'missing', output).returncode == 1\n    assert run('summarize-logs.sh').returncode == 2\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert os.access(root/'summarize-logs.sh', os.X_OK)\nassert (root/'log-summary.txt').read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-script-check-') as directory:\n    output = str(pathlib.Path(directory)/'summary.txt')\n    p = run('summarize-logs.sh', 'logs', output)\n    assert p.returncode == 0 and pathlib.Path(output).read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\n    assert run('summarize-logs.sh', 'missing', output).returncode == 1\n    assert run('summarize-logs.sh').returncode == 2\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert os.access(root/'summarize-logs.sh', os.X_OK)\nassert (root/'log-summary.txt').read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-script-check-') as directory:\n    output = str(pathlib.Path(directory)/'summary.txt')\n    p = run('summarize-logs.sh', 'logs', output)\n    assert p.returncode == 0 and pathlib.Path(output).read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\n    assert run('summarize-logs.sh', 'missing', output).returncode == 1\n    assert run('summarize-logs.sh').returncode == 2\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell"
@@ -271,7 +363,8 @@
       "has_solution": false,
       "content": "You created and executed Bash scripts, used shebangs and permissions, expanded quoted variables, read positional and interactive input, and returned meaningful exit statuses. You also branched with `if/elif/else`, tested files and directories, iterated over logs with `for`, and combined the ideas in a reusable summarizer.\n\nThese fundamentals make later automation easier to read, safer to rerun, and easier for other commands or scheduled jobs to evaluate.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã tạo và thực thi script Bash, dùng shebang và quyền, mở rộng biến có dấu nháy, đọc đầu vào vị trí và tương tác, trả trạng thái thoát có ý nghĩa. Bạn cũng rẽ nhánh bằng `if/elif/else`, kiểm tra tệp và thư mục, lặp qua log bằng `for` và kết hợp các ý tưởng trong bộ tóm tắt tái sử dụng.\n\nNhững nền tảng này giúp tự động hóa về sau dễ đọc hơn, an toàn hơn khi chạy lại và dễ được lệnh khác hoặc tác vụ theo lịch đánh giá."
+      "content_vi": "Bạn đã tạo và thực thi script Bash, dùng shebang và quyền, mở rộng biến có dấu nháy, đọc đầu vào vị trí và tương tác, trả trạng thái thoát có ý nghĩa. Bạn cũng rẽ nhánh bằng `if/elif/else`, kiểm tra tệp và thư mục, lặp qua log bằng `for` và kết hợp các ý tưởng trong bộ tóm tắt tái sử dụng.\n\nNhững nền tảng này giúp tự động hóa về sau dễ đọc hơn, an toàn hơn khi chạy lại và dễ được lệnh khác hoặc tác vụ theo lịch đánh giá.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -288,10 +381,14 @@
       "task": "Thực hiện hướng dẫn: Create and Run Your First Script",
       "hint": "Chạy lệnh: cd /home/labex/project/shell-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'hello.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash'\nassert os.access(path, os.X_OK)\nwanted = f'Hello from a Bash script\\n{root}\\n'\np = run('hello.sh')\nassert p.returncode == 0 and p.stdout == wanted\np = subprocess.run([str(path)], cwd=root, text=True, capture_output=True, timeout=2)\nassert p.returncode == 0 and p.stdout == wanted\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -331,10 +428,14 @@
       "task": "Thực hiện hướng dẫn: Use Variables and Safe Quoting",
       "hint": "Chạy lệnh: bash variables.sh \"beginner learner\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nprefix = f'Course: Linux for Noobs\\nWorkspace: {root}\\n'\nexpected = prefix + 'Quoted argument count: 1\\nFirst argument: beginner learner\\n'\nassert (root/'variable-output.txt').read_text() == expected\np = run('variables.sh', 'another learner')\nassert p.returncode == 0 and p.stdout == prefix + 'Quoted argument count: 1\\nFirst argument: another learner\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -374,10 +475,14 @@
       "task": "Thực hiện hướng dẫn: Validate Positional Arguments",
       "hint": "Chạy lệnh: bash greet-argument.sh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('greet-argument.sh')\nassert p.returncode == 2 and 'Usage:' in p.stderr\np = run('greet-argument.sh', 'Ada Lovelace')\nassert p.returncode == 0 and p.stdout == 'Hello, Ada Lovelace\\n'\nassert (root/'argument-greeting.txt').read_text() == p.stdout\nassert run('greet-argument.sh', 'one', 'two').returncode == 2\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -417,10 +522,14 @@
       "task": "Thực hiện hướng dẫn: Read Interactive Input",
       "hint": "Chạy lệnh: bash ask-name.sh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('ask-name.sh', input='Grace Hopper\\n')\nassert p.returncode == 0 and p.stdout == 'Welcome, Grace Hopper\\n'\nassert (root/'interactive-greeting.txt').read_text() == p.stdout\np = run('ask-name.sh', input='\\n')\nassert p.returncode == 1 and 'A name is required' in p.stderr\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -460,10 +569,14 @@
       "task": "Thực hiện hướng dẫn: Branch with File Tests",
       "hint": "Chạy lệnh: bash classify-path.sh logs",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert run('classify-path.sh', 'logs').stdout == 'directory: logs\\n'\nassert run('classify-path.sh', 'notes.txt').stdout == 'file: notes.txt\\n'\nassert run('classify-path.sh', 'missing.txt').returncode == 1\nassert run('classify-path.sh').returncode == 2\nassert (root/'path-results.txt').read_text() == 'directory: logs\\nfile: notes.txt\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -503,10 +616,14 @@
       "task": "Thực hiện hướng dẫn: Process Multiple Files with a For Loop",
       "hint": "Chạy lệnh: bash count-errors.sh logs | tee error-counts.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\np = run('count-errors.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nassert (root/'error-counts.txt').read_text() == p.stdout\nassert run('count-errors.sh', 'missing').returncode == 1\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -546,10 +663,14 @@
       "task": "Thực hiện hướng dẫn: Combine Validation, Loops, and Exit Status",
       "hint": "Chạy lệnh: chmod u+x summarize-logs.sh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/shell-lab')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\nassert os.access(root/'summarize-logs.sh', os.X_OK)\nassert (root/'log-summary.txt').read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-script-check-') as directory:\n    output = str(pathlib.Path(directory)/'summary.txt')\n    p = run('summarize-logs.sh', 'logs', output)\n    assert p.returncode == 0 and pathlib.Path(output).read_text() == 'api.log lines=3 errors=1\\nhealthy.log lines=2 errors=0\\nworker.log lines=3 errors=2\\n'\n    assert run('summarize-logs.sh', 'missing', output).returncode == 1\n    assert run('summarize-logs.sh').returncode == 2\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

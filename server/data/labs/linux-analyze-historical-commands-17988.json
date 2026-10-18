@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "A small history export stores a record number and a program name on each pipe-delimited line. An analyst needs only the program field for a later report.\n\nThis challenge applies field extraction from the pipeline lab and file redirection from the stream lab to one simple artifact.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một bản xuất lịch sử nhỏ lưu số thứ tự bản ghi và tên chương trình trên mỗi dòng được phân cách bằng dấu gạch đứng. Một người phân tích chỉ cần trường tên chương trình cho báo cáo sau này.\n\nThử thách này áp dụng cách trích xuất trường từ bài pipeline và chuyển hướng tệp từ bài luồng vào một sản phẩm đầu ra đơn giản."
+      "content_vi": "Một bản xuất lịch sử nhỏ lưu số thứ tự bản ghi và tên chương trình trên mỗi dòng được phân cách bằng dấu gạch đứng. Một người phân tích chỉ cần trường tên chương trình cho báo cáo sau này.\n\nThử thách này áp dụng cách trích xuất trường từ bài pipeline và chuyển hướng tệp từ bài luồng vào một sản phẩm đầu ra đơn giản.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-17988-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Extract the Program Field",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/history-analysis/programs.txt <(printf %s 'ls\npwd\ncat\nls\ngrep\n') && cmp -s /home/labex/project/history-analysis/command-history.txt <(printf %s '1|ls|/home/labex\n2|pwd|/home/labex\n3|cat|notes.txt\n4|ls|-la\n5|grep|ERROR app.log\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/history-analysis/programs.txt <(printf %s 'ls\npwd\ncat\nls\ngrep\n') && cmp -s /home/labex/project/history-analysis/command-history.txt <(printf %s '1|ls|/home/labex\n2|pwd|/home/labex\n3|cat|notes.txt\n4|ls|-la\n5|grep|ERROR app.log\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/history-analysis/programs.txt <(printf %s 'ls\npwd\ncat\nls\ngrep\n') && cmp -s /home/labex/project/history-analysis/command-history.txt <(printf %s '1|ls|/home/labex\n2|pwd|/home/labex\n3|cat|notes.txt\n4|ls|-la\n5|grep|ERROR app.log\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -66,7 +78,8 @@
       "has_solution": false,
       "content": "You extracted one delimited field and saved it with standard-output redirection.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã trích xuất một trường có phân cách và lưu nó bằng chuyển hướng đầu ra chuẩn."
+      "content_vi": "Bạn đã trích xuất một trường có phân cách và lưu nó bằng chuyển hướng đầu ra chuẩn.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -83,10 +96,13 @@
       "task": "Thực hiện hướng dẫn: Extract the Program Field",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/history-analysis/programs.txt <(printf %s 'ls\npwd\ncat\nls\ngrep\n') && cmp -s /home/labex/project/history-analysis/command-history.txt <(printf %s '1|ls|/home/labex\n2|pwd|/home/labex\n3|cat|notes.txt\n4|ls|-la\n5|grep|ERROR app.log\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

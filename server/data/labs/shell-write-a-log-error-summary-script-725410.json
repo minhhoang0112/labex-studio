@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "Three application logs need the same simple check: count lines that begin with `ERROR` and print one result per file. Repeating the commands manually is unnecessary when a short loop can handle every `.log` file.\n\nThe preceding guided lab built this exact kind of loop step by step. This challenge asks for one small reusable script, without extra copying, report directories, or error-handling requirements.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Ba log ứng dụng cần cùng một phép kiểm tra đơn giản: đếm các dòng bắt đầu bằng `ERROR` và in một kết quả cho mỗi tệp. Không cần lặp lại lệnh thủ công khi một vòng lặp ngắn có thể xử lý mọi tệp `.log`.\n\nBài hướng dẫn trước đã xây dựng chính loại vòng lặp này từng bước. Thử thách yêu cầu một script tái sử dụng nhỏ, không thêm yêu cầu sao chép, thư mục báo cáo hoặc xử lý lỗi."
+      "content_vi": "Ba log ứng dụng cần cùng một phép kiểm tra đơn giản: đếm các dòng bắt đầu bằng `ERROR` và in một kết quả cho mỗi tệp. Không cần lặp lại lệnh thủ công khi một vòng lặp ngắn có thể xử lý mọi tệp `.log`.\n\nBài hướng dẫn trước đã xây dựng chính loại vòng lặp này từng bước. Thử thách yêu cầu một script tái sử dụng nhỏ, không thêm yêu cầu sao chép, thư mục báo cáo hoặc xử lý lỗi.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-725410-section-1-v3",
@@ -36,18 +37,31 @@
       "task": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
       "hint": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
+        },
+        "namespace": {
           "kind": "state",
           "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "shell"
@@ -67,7 +81,8 @@
       "has_solution": false,
       "content": "You turned a familiar log-counting loop into one short reusable Bash script.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã biến một vòng lặp đếm log quen thuộc thành một script Bash ngắn có thể tái sử dụng."
+      "content_vi": "Bạn đã biến một vòng lặp đếm log quen thuộc thành một script Bash ngắn có thể tái sử dụng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -84,10 +99,14 @@
       "task": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
       "hint": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

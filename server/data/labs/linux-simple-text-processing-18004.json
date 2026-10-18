@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "Text files can relate in different ways. Sometimes characters need normalization; sometimes two files correspond by line position; sometimes records share a key. Choosing the matching tool is more important than memorizing options.\n\nThis lab introduces three focused tools: `tr` transforms a character stream, `paste` combines lines by position, and `join` combines sorted records by a shared field. You will observe each input and verify the resulting file before building a small report.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Các tệp văn bản có thể liên hệ với nhau theo nhiều cách. Đôi khi cần chuẩn hóa ký tự; đôi khi hai tệp tương ứng theo vị trí dòng; đôi khi các bản ghi có chung một khóa. Chọn công cụ phù hợp quan trọng hơn ghi nhớ tùy chọn.\n\nBài này giới thiệu ba công cụ chuyên biệt: `tr` biến đổi luồng ký tự, `paste` ghép dòng theo vị trí, còn `join` ghép các bản ghi đã sắp xếp dựa trên trường chung. Bạn sẽ quan sát từng đầu vào và kiểm tra tệp kết quả trước khi xây dựng báo cáo nhỏ."
+      "content_vi": "Các tệp văn bản có thể liên hệ với nhau theo nhiều cách. Đôi khi cần chuẩn hóa ký tự; đôi khi hai tệp tương ứng theo vị trí dòng; đôi khi các bản ghi có chung một khóa. Chọn công cụ phù hợp quan trọng hơn ghi nhớ tùy chọn.\n\nBài này giới thiệu ba công cụ chuyên biệt: `tr` biến đổi luồng ký tự, `paste` ghép dòng theo vị trí, còn `join` ghép các bản ghi đã sắp xếp dựa trên trường chung. Bạn sẽ quan sát từng đầu vào và kiểm tra tệp kết quả trước khi xây dựng báo cáo nhỏ.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-18004-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Translate and Clean a Character Stream",
       "hint": "Chạy lệnh: tr '[:upper:]' '[:lower:]' < raw-services.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/text-combine-lab/clean-services.txt <(printf %s 'api,worker,web\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/clean-services.txt <(printf %s 'api,worker,web\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/text-combine-lab/clean-services.txt <(printf %s 'api,worker,web\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -69,18 +81,29 @@
       "task": "Thực hiện hướng dẫn: Merge Corresponding Lines with Paste",
       "hint": "Chạy lệnh: paste services.txt owners.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/text-combine-lab/service-owners.csv <(printf %s 'api,team-blue\nworker,team-green\nweb,team-blue\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-owners.csv <(printf %s 'api,team-blue\nworker,team-green\nweb,team-blue\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/text-combine-lab/service-owners.csv <(printf %s 'api,team-blue\nworker,team-green\nweb,team-blue\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -102,18 +125,29 @@
       "task": "Thực hiện hướng dẫn: Join Records by a Shared Key",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/text-combine-lab/service-details.txt <(printf %s 'api 9000 maintenance\nweb 8080 active\nworker 9100 active\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-details.txt <(printf %s 'api 9000 maintenance\nweb 8080 active\nworker 9100 active\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/text-combine-lab/service-details.txt <(printf %s 'api 9000 maintenance\nweb 8080 active\nworker 9100 active\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -135,18 +169,29 @@
       "task": "Thực hiện hướng dẫn: Build a Readable Service Report",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/text-combine-lab/service-report-with-header.csv <(printf %s 'service,port,state\napi,9000,maintenance\nweb,8080,active\nworker,9100,active\n') && cmp -s /home/labex/project/text-combine-lab/service-count.txt <(printf %s '3\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/text-combine-lab/service-report-with-header.csv <(printf %s 'service,port,state\napi,9000,maintenance\nweb,8080,active\nworker,9100,active\n') && cmp -s /home/labex/project/text-combine-lab/service-count.txt <(printf %s '3\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/text-combine-lab/service-report-with-header.csv <(printf %s 'service,port,state\napi,9000,maintenance\nweb,8080,active\nworker,9100,active\n') && cmp -s /home/labex/project/text-combine-lab/service-count.txt <(printf %s '3\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -165,7 +210,8 @@
       "has_solution": false,
       "content": "You used `tr` for character-level normalization, `paste` for positional columns, and `join` for sorted key relationships. You then combined small stages into a readable CSV report while keeping the original inputs intact.",
       "title_vi": "Tổng kết",
-      "content_vi": "Bạn đã dùng `tr` để chuẩn hóa ở cấp ký tự, `paste` để ghép cột theo vị trí và `join` để kết hợp các quan hệ theo khóa đã sắp xếp. Sau đó, bạn kết hợp các giai đoạn nhỏ thành báo cáo CSV dễ đọc trong khi vẫn giữ nguyên các đầu vào ban đầu."
+      "content_vi": "Bạn đã dùng `tr` để chuẩn hóa ở cấp ký tự, `paste` để ghép cột theo vị trí và `join` để kết hợp các quan hệ theo khóa đã sắp xếp. Sau đó, bạn kết hợp các giai đoạn nhỏ thành báo cáo CSV dễ đọc trong khi vẫn giữ nguyên các đầu vào ban đầu.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -182,10 +228,13 @@
       "task": "Thực hiện hướng dẫn: Translate and Clean a Character Stream",
       "hint": "Chạy lệnh: tr '[:upper:]' '[:lower:]' < raw-services.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/text-combine-lab/clean-services.txt <(printf %s 'api,worker,web\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -223,10 +272,13 @@
       "task": "Thực hiện hướng dẫn: Merge Corresponding Lines with Paste",
       "hint": "Chạy lệnh: paste services.txt owners.txt",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/text-combine-lab/service-owners.csv <(printf %s 'api,team-blue\nworker,team-green\nweb,team-blue\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -264,10 +316,13 @@
       "task": "Thực hiện hướng dẫn: Join Records by a Shared Key",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/text-combine-lab/service-details.txt <(printf %s 'api 9000 maintenance\nweb 8080 active\nworker 9100 active\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -305,10 +360,13 @@
       "task": "Thực hiện hướng dẫn: Build a Readable Service Report",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/text-combine-lab/service-report-with-header.csv <(printf %s 'service,port,state\napi,9000,maintenance\nweb,8080,active\nworker,9100,active\n') && cmp -s /home/labex/project/text-combine-lab/service-count.txt <(printf %s '3\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

@@ -14,7 +14,9 @@
       "content": "## Introduction\n\nIn this lab, you will learn the practical application of the `chown` command to modify directory ownership in Linux. Mastering file and directory ownership is a fundamental aspect of Linux system administration, crucial for managing permissions and securing access to shared resources. This hands-on exercise will guide you through the process of changing a directory's group ownership, a common task for organizing collaborative projects.\n\nYou will start by setting up the necessary environment, which includes creating a new group named `research` and adding your user to it. Following the setup, you will create a directory and examine its initial ownership details. The central part of this lab involves using the `chown` command to reassign the directory to the `research` group. To conclude, you will use the `ls -l` command to verify that the ownership has been successfully updated, confirming your changes.\n",
       "content_vi": "## Giới thiệu\n\nTrong phòng thí nghiệm này, bạn sẽ tìm hiểu ứng dụng thực tế của lệnh `chown` để sửa đổi quyền sở hữu thư mục trong Linux. Việc làm chủ quyền sở hữu tệp và thư mục là một khía cạnh cơ bản trong quản trị hệ thống Linux, rất quan trọng để quản lý quyền hạn và bảo mật quyền truy cập vào các tài nguyên chia sẻ. Bài tập thực hành này sẽ hướng dẫn bạn qua quy trình thay đổi quyền sở hữu nhóm của một thư mục, một tác vụ phổ biến để tổ chức các dự án cộng tác.\n\nBạn sẽ bắt đầu bằng cách thiết lập môi trường cần thiết, bao gồm việc tạo một nhóm mới có tên là `research` và thêm người dùng của bạn vào nhóm đó. Sau phần thiết lập, bạn sẽ tạo một thư mục và kiểm tra các chi tiết sở hữu ban đầu của nó. Phần trung tâm của phòng thí nghiệm này liên quan đến việc sử dụng lệnh `chown` để chỉ định lại thư mục cho nhóm `research`. Để kết thúc, bạn sẽ sử dụng lệnh `ls -l` để xác minh rằng quyền sở hữu đã được cập nhật thành công, qua đó xác nhận các thay đổi của bạn.",
       "layout": "doc-fullscreen",
-      "need_verify": false
+      "need_verify": false,
+      "kind": "introduction",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "comptia-modify-directory-ownership-with-chown-in-linux-590847-step-1",
@@ -24,7 +26,8 @@
       "content_vi": "## Chuẩn bị Môi trường và Xác minh Thành viên Nhóm\n\nTrong bước này, bạn sẽ chuẩn bị nhóm người dùng cần thiết cho các bài tập tiếp theo. Trong Linux, quyền sở hữu tệp được xác định bởi một người dùng và một nhóm. Điều này cho phép quản lý quyền linh hoạt. Chúng ta sẽ tạo một nhóm mới có tên là `research` và thêm người dùng hiện tại của chúng ta, `labex`, vào nhóm này. Điều này sẽ cho phép chúng ta gán quyền sở hữu các tệp và thư mục cho nhóm cụ thể này sau đó.\n\nĐầu tiên, hãy tạo nhóm `research`. Chúng ta sẽ sử dụng lệnh `groupadd`. Vì việc tạo một nhóm làm thay đổi các tệp cấu hình hệ thống, chúng ta cần sử dụng `sudo` để thực thi lệnh với quyền quản trị.\n\nThực thi lệnh sau trong terminal của bạn:\n\n```bash\nsudo groupadd research\n```\n\nLệnh này không tạo ra bất kỳ đầu ra nào khi thành công. Để xác minh rằng nhóm đã được tạo, chúng ta có thể tìm kiếm nó trong tệp `/etc/group`. Tệp này chứa thông tin về tất cả các nhóm trên hệ thống. Chúng ta sẽ sử dụng lệnh `grep` để tìm dòng tương ứng với nhóm mới của chúng ta.\n\n```bash\ngrep 'research' /etc/group\n```\n\nBạn sẽ thấy một đầu ra tương tự như thế này, mặc dù ID nhóm (số) có thể khác:\n\n```plaintext\nresearch:x:5003:\n```\n\nBây giờ nhóm đã tồn tại, bước tiếp theo là thêm người dùng `labex` vào nhóm đó. Chúng ta sẽ sử dụng lệnh `usermod`, là viết tắt của \"user modify\" (chỉnh sửa người dùng). Các tùy chọn `-aG` rất quan trọng: `-a` có nghĩa là nối thêm (append), và `-G` chỉ định (các) nhóm bổ sung. Nếu không có `-a`, bạn sẽ xóa người dùng khỏi tất cả các nhóm khác.\n\nChạy lệnh này để thêm `labex` vào nhóm `research`:\n\n```bash\nsudo usermod -aG research labex\n```\n\nMột lần nữa, lệnh này sẽ không tạo ra bất kỳ đầu ra nào nếu thành công. Hãy xác minh sự thay đổi bằng cách kiểm tra tệp `/etc/group` thêm một lần nữa.\n\n```bash\ngrep 'research' /etc/group\n```\n\nĐầu ra bây giờ sẽ hiển thị `labex` ở cuối dòng, cho biết rằng người dùng là thành viên của nhóm.\n\n```plaintext\nresearch:x:5003:labex\n```\n\nVới nhóm `research` đã được tạo và người dùng `labex` được gán vào nhóm đó, môi trường của chúng ta bây giờ đã được thiết lập đúng cách cho các bước tiếp theo trong việc quản lý quyền sở hữu tệp và thư mục.",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "kind": "task"
+      "kind": "task",
+      "hint": "Xem huong dan va kiem tra ket qua."
     },
     {
       "id": "comptia-modify-directory-ownership-with-chown-in-linux-590847-step-2",
@@ -34,7 +37,8 @@
       "content_vi": "## Tạo Thư mục và Kiểm tra Quyền sở hữu Ban đầu của nó\n\nTrong bước này, bạn sẽ tạo một thư mục mới bên trong thư mục dự án của mình và sau đó kiểm tra các thiết lập quyền sở hữu mặc định của nó. Bất cứ khi nào một tệp hoặc thư mục mới được tạo trong Linux, hệ thống sẽ tự động gán quyền sở hữu. Thông thường, chủ sở hữu là người dùng đã tạo ra nó và nhóm sở hữu là nhóm chính của người dùng đó.\n\nThư mục làm việc hiện tại của bạn là `/home/labex/project`. Chúng ta sẽ tạo một thư mục mới ở đây có tên là `RandD`. Lệnh `mkdir` được sử dụng cho mục đích này, viết tắt của \"make directory\" (tạo thư mục).\n\nThực thi lệnh sau để tạo thư mục:\n\n```bash\nmkdir RandD\n```\n\nBây giờ thư mục `RandD` đã được tạo, hãy kiểm tra các thuộc tính của nó, cụ thể là quyền sở hữu của nó. Chúng ta có thể làm điều này bằng cách sử dụng lệnh `ls -l`. Tùy chọn `-l` bảo `ls` sử dụng định dạng \"liêm yết chi tiết\" (long listing), cung cấp thông tin chi tiết về các tệp và thư mục.\n\nChạy lệnh này trong thiết bị đầu cuối của bạn:\n\n```bash\nls -l\n```\n\nBạn sẽ thấy danh sách các tệp và thư mục ở vị trí hiện tại của mình. Hãy tìm dòng tương ứng với `RandD`. Đầu ra sẽ trông tương tự như thế này:\n\n```plaintext\ndrwxrwxr-x 2 labex labex 6 Jun 26 10:28 RandD\n```\n\nHãy phân tích phần quyền sở hữu của dòng này. Cột thứ ba hiển thị người dùng sở hữu, đó là `labex`. Cột thứ tư hiển thị nhóm sở hữu, cũng là `labex`. Điều này xác nhận rằng theo mặc định, thư mục mới thuộc sở hữu của người dùng đã tạo ra nó (`labex`) và nhóm chính của họ (`labex`).\n\nTrong bước tiếp theo, bạn sẽ học cách thay đổi các thiết lập quyền sở hữu mặc định này.",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "kind": "task"
+      "kind": "task",
+      "hint": "Xem huong dan va kiem tra ket qua."
     },
     {
       "id": "comptia-modify-directory-ownership-with-chown-in-linux-590847-step-3",
@@ -44,7 +48,8 @@
       "content_vi": "## Thay Đổi Quyền Sở Hữu Thư Mục Bằng Lệnh chown\n\nTrong bước này, bạn sẽ sử dụng lệnh `chown` để thay đổi quyền sở hữu của thư mục `RandD`. Đây là một tác vụ phổ biến đối với quản trị viên hệ thống khi quản lý các thư mục dự án được chia sẻ. Mục tiêu của chúng ta là giữ nguyên người dùng sở hữu là `labex` nhưng thay đổi nhóm sở hữu thành nhóm `research` mà chúng ta đã tạo ở bước đầu tiên. Điều này sẽ cho phép bất kỳ thành viên nào trong nhóm `research` có thể cộng tác trong thư mục này, dựa trên các quyền được thiết lập cho nhóm.\n\nLệnh dùng để thay đổi quyền sở hữu là `chown`, viết tắt của \"change owner\" (thay đổi chủ sở hữu). Cú pháp chung là `chown [user]:[group] [file/directory]`.\n\nĐể thay đổi quyền sở hữu của thư mục `RandD` thành người dùng `labex` và nhóm `research`, bạn sẽ chạy lệnh sau. Chúng ta sử dụng `sudo` vì việc sửa đổi quyền sở hữu theo nhóm, ngay cả đối với một thư mục do bạn sở hữu, thường yêu cầu quyền特权 (đặc quyền) nâng cao.\n\nThực thi lệnh này trong terminal của bạn, hiện đang ở thư mục `~/project`:\n\n```bash\nsudo chown labex:research RandD\n```\n\nNếu lệnh thành công, nó sẽ không tạo ra bất kỳ đầu ra nào. Thay đổi được áp dụng một cách âm thầm.\n\nBây giờ bạn đã thay đổi thành công quyền sở hữu của thư mục `RandD`. Trong bước cuối cùng, bạn sẽ xác minh sự thay đổi này một cách trực quan.",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "kind": "task"
+      "kind": "task",
+      "hint": "Xem huong dan va kiem tra ket qua."
     },
     {
       "id": "comptia-modify-directory-ownership-with-chown-in-linux-590847-step-4",
@@ -54,7 +59,8 @@
       "content_vi": "## Xác minh Quyền sở hữu Thư mục mới bằng ls -l\n\nTrong bước này, bạn sẽ xác nhận rằng việc thay đổi quyền sở hữu mà bạn đã thực hiện ở bước trước đã thành công. Đây là một thực hành quan trọng trong quản trị hệ thống nhằm luôn kiểm tra xem các lệnh của bạn đã đạt được hiệu quả như mong muốn hay chưa. Chúng ta sẽ sử dụng lại lệnh `ls -l` giống như trước để kiểm tra các thuộc tính của thư mục.\n\nTerminal của bạn vẫn đang ở trong thư mục `~/project`. Để xem chi tiết quyền sở hữu đã được cập nhật cho thư mục `RandD`, hãy chạy lại lệnh `ls -l`.\n\n```bash\nls -l\n```\n\nKiểm tra dòng kết quả đầu ra cho thư mục `RandD`. Bây giờ nó sẽ phản ánh nhóm sở hữu mới. Kết quả đầu ra sẽ trông tương tự như thế này:\n\n```plaintext\ndrwxrwxr-x 2 labex research 6 Jun 26 10:28 RandD\n```\n\nSo sánh điều này với kết quả đầu ra bạn đã thấy ở Bước 2. Cột thứ ba, chủ sở hữu là người dùng, vẫn là `labex`. Tuy nhiên, cột thứ tư, nhóm sở hữu, giờ đây đã thay đổi từ `labex` thành `research`. Điều này xác nhận rằng lệnh `chown` của bạn đã hoạt động chính xác.\n\nBạn đã tạo thành công một thư mục, thay đổi nhóm sở hữu của nó để tạo điều kiện thuận lợi cho việc cộng tác và xác minh sự thay đổi đó.",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "kind": "task"
+      "kind": "task",
+      "hint": "Xem huong dan va kiem tra ket qua."
     },
     {
       "id": "comptia-modify-directory-ownership-with-chown-in-linux-590847-step-5",
@@ -63,7 +69,9 @@
       "content": "## Summary\n\nIn this lab, you learned the essential steps for managing directory ownership in a Linux environment. You began by preparing the necessary user and group settings, which involved creating a new group called `research` with the `sudo groupadd` command. You then added the current user, `labex`, to this new group using `sudo usermod -aG`, and verified these changes by inspecting the `/etc/group` file.\n\nAfter setting up the environment, you created a new directory and inspected its default ownership using the `ls -l` command. The core skill practiced was using the `chown` command to modify the directory's group ownership to the newly created `research` group. Finally, you confirmed the successful change by running `ls -l` again, which showed the updated group owner for the directory.\n",
       "content_vi": "## Summary\n\nTrong phòng thực hành này, bạn đã học các bước thiết yếu để quản lý quyền sở hữu thư mục trong môi trường Linux. Bạn bắt đầu bằng cách chuẩn bị các cài đặt người dùng và nhóm cần thiết, bao gồm việc tạo một nhóm mới có tên là `research` bằng lệnh `sudo groupadd`. Sau đó, bạn đã thêm người dùng hiện tại, `labex`, vào nhóm mới này bằng lệnh `sudo usermod -aG`, và xác minh các thay đổi này bằng cách kiểm tra tệp `/etc/group`.\n\nSau khi thiết lập môi trường, bạn đã tạo một thư mục mới và kiểm tra quyền sở hữu mặc định của nó bằng lệnh `ls -l`. Kỹ năng cốt lõi được thực hành là sử dụng lệnh `chown` để sửa đổi quyền sở hữu nhóm của thư mục thành nhóm `research` vừa được tạo. Cuối cùng, bạn đã xác nhận sự thay đổi thành công bằng cách chạy lại lệnh `ls -l`, hiển thị chủ sở hữu nhóm đã được cập nhật cho thư mục.",
       "layout": "doc-fullscreen",
-      "need_verify": false
+      "need_verify": false,
+      "kind": "summary",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [

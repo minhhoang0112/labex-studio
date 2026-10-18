@@ -45,8 +45,8 @@ export function getCourses() {
       ...(course.id === "linux-commands-practice-online" ? { name: "Linux Commands Practice — Local Exercises", source_equivalent: false } : {}),
       has_cert: false, source_statistics: { user_count, rating, has_cert },
       source_url: source?.source_url, source_labs_count: source?.source_labs_count ?? null, ...readiness,
-      readiness: source ? (readiness.runnable_labs_count === source.source_labs_count ? "ready" : available.length ? "partial" : "reference-only")
-        : readiness.runnable_labs_count === available.length && available.length ? "ready" : available.length ? "partial" : "reference-only",
+      readiness: available.length && readiness.runnable_labs_count === available.length ? "ready"
+        : available.length ? "partial" : "reference-only",
       labs_count: available.length, available: readiness.practice_labs_count > 0,
       lab_ids: available.map((lab) => lab.id),
       steps_count: available.reduce((sum, lab) => sum + lab.steps.length, 0) };

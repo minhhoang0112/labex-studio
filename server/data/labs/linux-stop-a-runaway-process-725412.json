@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "A test process named `labex-runaway` was left running after an experiment. Its PID was recorded so an operator can target it without affecting unrelated processes.\n\nThe preceding guided lab practiced reading a PID file, inspecting that PID, sending `SIGTERM`, and confirming that the process stopped.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một tiến trình thử nghiệm tên `labex-runaway` bị để chạy sau một thí nghiệm. PID của nó đã được ghi lại để người vận hành nhắm tới mà không ảnh hưởng tiến trình không liên quan.\n\nBài hướng dẫn trước đã luyện đọc tệp PID, kiểm tra PID đó, gửi `SIGTERM` và xác nhận tiến trình đã dừng."
+      "content_vi": "Một tiến trình thử nghiệm tên `labex-runaway` bị để chạy sau một thí nghiệm. PID của nó đã được ghi lại để người vận hành nhắm tới mà không ảnh hưởng tiến trình không liên quan.\n\nBài hướng dẫn trước đã luyện đọc tệp PID, kiểm tra PID đó, gửi `SIGTERM` và xác nhận tiến trình đã dừng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-725412-section-1-v3",
@@ -36,12 +37,54 @@
       "task": "Thực hiện hướng dẫn: Stop the Recorded Process",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "pid=$(cat /home/labex/project/system-recovery/runaway.pid) && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*kill\\s+\"\\$pid\"\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "persistent_processes"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pid=$(cat /home/labex/project/system-recovery/runaway.pid) && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*kill\\s+\"\\$pid\"\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -68,6 +111,11 @@
           "terminal",
           "files",
           "persistent_processes"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "persistent_processes"
         ]
       },
       "content_vi": "### Tình huống hiện tại\n\n`/home/labex/project/system-recovery/runaway.pid` chứa PID của một tiến trình `labex-runaway` đang chạy, thuộc sở hữu `labex`.\n\n### Phạm vi\n\n- Sử dụng PID trong `runaway.pid`.\n- Dừng tiến trình đó bằng tín hiệu kết thúc thông thường.\n- Không gửi tín hiệu tới tiến trình nào khác.\n\n### Mục tiêu của bạn\n\nĐể tiến trình `labex-runaway` đã ghi nhận ở trạng thái dừng.\n\n### Tiêu chí đạt\n\n- PID ghi trong `runaway.pid` không còn chạy.\n- Không có tiến trình không liên quan nào bị thay đổi.\n\n### Gợi ý\n\nBài hướng dẫn đã dùng trình tự an toàn nào?\n\nĐọc PID, kiểm tra đúng PID đó bằng `ps`, truyền nó cho `kill`, chờ ngắn rồi kiểm tra lại cùng PID.",
@@ -84,7 +132,8 @@
       "has_solution": false,
       "content": "You safely stopped one known process by inspecting and signaling its recorded PID.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã dừng an toàn một tiến trình đã biết bằng cách kiểm tra và gửi tín hiệu tới PID đã ghi của nó."
+      "content_vi": "Bạn đã dừng an toàn một tiến trình đã biết bằng cách kiểm tra và gửi tín hiệu tới PID đã ghi của nó.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -101,12 +150,54 @@
       "task": "Thực hiện hướng dẫn: Stop the Recorded Process",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "pid=$(cat /home/labex/project/system-recovery/runaway.pid) && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*kill\\s+\"\\$pid\"\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "persistent_processes"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "pid=$(cat /home/labex/project/system-recovery/runaway.pid) && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*kill\\s+\"\\$pid\"\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -130,6 +221,11 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "persistent_processes"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "persistent_processes"

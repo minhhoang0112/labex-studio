@@ -21,7 +21,8 @@
       "has_solution": false,
       "content": "A configuration export stores directory names on one colon-separated line and repeats some entries. A normalized list is easier to inspect and compare.\n\nThis challenge combines only text-processing commands already introduced: translate a delimiter, sort lines, remove adjacent duplicates, and save the result.",
       "title_vi": "Giới thiệu",
-      "content_vi": "Một bản xuất cấu hình lưu trữ tên thư mục trên một dòng phân cách bằng dấu hai chấm và lặp lại một số mục. Danh sách đã chuẩn hóa sẽ dễ kiểm tra và so sánh hơn.\n\nThử thách này chỉ kết hợp các lệnh xử lý văn bản đã được giới thiệu: dịch dấu phân cách, sắp xếp các dòng, xóa các dòng trùng lặp liền kề và lưu kết quả."
+      "content_vi": "Một bản xuất cấu hình lưu trữ tên thư mục trên một dòng phân cách bằng dấu hai chấm và lặp lại một số mục. Danh sách đã chuẩn hóa sẽ dễ kiểm tra và so sánh hơn.\n\nThử thách này chỉ kết hợp các lệnh xử lý văn bản đã được giới thiệu: dịch dấu phân cách, sắp xếp các dòng, xóa các dòng trùng lặp liền kề và lưu kết quả.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "source-385344-section-1-v3",
@@ -36,18 +37,29 @@
       "task": "Thực hiện hướng dẫn: Create the Normalized Directory List",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/path-audit/configured-path.txt <(printf %s '/usr/bin:/home/labex/bin:/bin:/usr/local/bin:/usr/bin:/bin\n') && cmp -s /home/labex/project/path-audit/path-directories.txt <(printf %s '/bin\n/home/labex/bin\n/usr/bin\n/usr/local/bin\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/path-audit/configured-path.txt <(printf %s '/usr/bin:/home/labex/bin:/bin:/usr/local/bin:/usr/bin:/bin\n') && cmp -s /home/labex/project/path-audit/path-directories.txt <(printf %s '/bin\n/home/labex/bin\n/usr/bin\n/usr/local/bin\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/path-audit/configured-path.txt <(printf %s '/usr/bin:/home/labex/bin:/bin:/usr/local/bin:/usr/bin:/bin\n') && cmp -s /home/labex/project/path-audit/path-directories.txt <(printf %s '/bin\n/home/labex/bin\n/usr/bin\n/usr/local/bin\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files"
+        ],
+        "namespace": [
           "terminal",
           "files"
         ]
@@ -66,7 +78,8 @@
       "has_solution": false,
       "content": "You built one normalized list by combining delimiter translation, sorting, duplicate removal, and redirection.",
       "title_vi": "Tổng kết bài học",
-      "content_vi": "Bạn đã xây dựng một danh sách chuẩn hóa bằng cách kết hợp việc chuyển đổi dấu phân cách, sắp xếp, loại bỏ các mục trùng lặp và chuyển hướng."
+      "content_vi": "Bạn đã xây dựng một danh sách chuẩn hóa bằng cách kết hợp việc chuyển đổi dấu phân cách, sắp xếp, loại bỏ các mục trùng lặp và chuyển hướng.",
+      "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     }
   ],
   "steps": [
@@ -83,10 +96,13 @@
       "task": "Thực hiện hướng dẫn: Create the Normalized Directory List",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/path-audit/configured-path.txt <(printf %s '/usr/bin:/home/labex/bin:/bin:/usr/local/bin:/usr/bin:/bin\n') && cmp -s /home/labex/project/path-audit/path-directories.txt <(printf %s '/bin\n/home/labex/bin\n/usr/bin\n/usr/local/bin\n')"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
