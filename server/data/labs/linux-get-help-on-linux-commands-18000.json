@@ -36,11 +36,14 @@
       "hint": "Chạy lệnh: cd /home/labex/project/command-help",
       "title_vi": "Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
       },
       "task_vi": "Thực hiện hướng dẫn: Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -77,11 +80,14 @@
       "hint": "Chạy lệnh: bash -c 'help cd'",
       "title_vi": "Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
       },
       "task_vi": "Thực hiện hướng dẫn: Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -118,13 +124,66 @@
       "hint": "Chạy lệnh: man ls",
       "title_vi": "Tra Cứu Sách Hướng Dẫn Chi Tiết (Man Page)",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:man\\s+ls|help|info)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
       "task_vi": "Thực hiện hướng dẫn: Tra Cứu Sách Hướng Dẫn Chi Tiết (Man Page)",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ sử dụng trình xem tương tác `man` và tìm hiểu ý nghĩa của các phần tài liệu hướng dẫn (manual sections).\n\nMở trang hướng dẫn cho lệnh `ls`:\n\n```bash\nman ls\n```\n\nTrang hướng dẫn mở ra trong một trình phân trang (pager), thường là `less`. Hãy thực hành các phím sau bên trong trình xem:\n\n- **Down Arrow**: di chuyển xuống một dòng;\n- **Space**: di chuyển tới trước một màn hình;\n- **b**: di chuyển lùi lại một màn hình;\n- gõ `/sort` và nhấn Enter: tìm kiếm tới trước chuỗi `sort`;\n- **n**: chuyển đến kết quả khớp tiếp theo;\n- **q**: thoát và quay lại dấu nhắc lệnh shell.\n\nPhần đầu đề thường hiển thị `LS(1)`. Số đó là một phần tài liệu hướng dẫn. Phần 1 chứa các lệnh người dùng thông thường; các phần khác bao gồm các lệnh gọi hệ thống, hàm thư viện, định dạng cấu hình và lệnh quản trị.\n\nSử dụng `man -f` để xem mô tả một dòng, còn được gọi là tra cứu “whatis”:\n\n```bash\nman -f ls\n```\n\nLưu một đoạn trích xuất không tương tác của chính trang hướng dẫn đó. Đọc đường ống (pipeline) này từ trái sang phải: `-P cat` khiến `man` in ra thay vì mở trình phân trang, `col -b` loại bỏ các ký tự điều khiển định dạng đầu cuối, `head -n 20` giữ lại hai mươi dòng, và `>` lưu trữ luồng dữ liệu cuối cùng:\n\n```bash\nman -P cat ls | col -b | head -n 20 > ls-man-excerpt.txt\n```\n\n```bash\ncat ls-man-excerpt.txt\n```\n\nBạn sẽ thấy phần đầu đề, tên, cú pháp và phần mở đầu của mô tả trong trang hướng dẫn. Điều này xác nhận rằng các góc nhìn tương tác và không tương tác đều đến từ cùng một tài liệu.",
-      "hint_vi": "Chạy lệnh: man ls"
+      "hint_vi": "Chạy lệnh: man ls",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:man\\s+ls|help|info)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:man\\s+ls|help|info)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-18000-section-4-v3",
@@ -139,13 +198,66 @@
       "hint": "Chạy lệnh: apropos password | head -n 15",
       "title_vi": "Tìm Kiếm Lệnh Theo Chủ Đề với Apropos",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:apropos|whatis|man\\s+-k)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
       "task_vi": "Thực hiện hướng dẫn: Tìm Kiếm Lệnh Theo Chủ Đề với Apropos",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ sử dụng `apropos` khi bạn biết tác vụ nhưng không biết tên lệnh.\n\n`apropos` tìm kiếm các mô tả ngắn được lưu trữ trong cơ sở dữ liệu hướng dẫn sử dụng (manual database). Tìm kiếm tài liệu liên quan đến mật khẩu:\n\n```bash\napropos password | head -n 15\n```\n\nMỗi kết quả bao gồm tên tài liệu hướng dẫn, phần của nó trong ngoặc đơn và một mô tả ngắn. Một trong các kết quả sẽ mô tả `passwd`.\n\nTìm kiếm các chủ đề liên quan đến tệp:\n\n```bash\napropos file | head -n 20\n```\n\nCác từ khóa chung chung trả về rất nhiều kết quả. Một cụm từ cụ thể hơn có thể hữu ích hơn:\n\n```bash\napropos \"copy files\"\n```\n\nBạn cũng có thể lọc một kết quả chung chung. Tùy chọn `-i` làm cho `grep` bỏ qua phân biệt chữ hoa chữ thường, trong khi `-m 5` dừng lại sau năm dòng khớp:\n\n```bash\napropos file | grep -i -m 5 'copy'\n```\n\nLưu toàn bộ kết quả tìm kiếm mật khẩu để có thể xem lại sau:\n\n```bash\napropos password > password-topics.txt\n```\n\n```bash\ngrep -E '^passwd|change.*password' password-topics.txt | head\n```\n\nKhi `apropos` không tìm thấy gì trên một hệ thống mới cài đặt, cơ sở dữ liệu hướng dẫn có thể cần lệnh `sudo mandb`. Lab này đã chuẩn bị sẵn cơ sở dữ liệu một cách tự động, nhưng ghi nhớ mối quan hệ đó sẽ giúp công cụ này dễ khắc phục sự cố hơn ở các môi trường khác.",
-      "hint_vi": "Chạy lệnh: apropos password | head -n 15"
+      "hint_vi": "Chạy lệnh: apropos password | head -n 15",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:apropos|whatis|man\\s+-k)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:apropos|whatis|man\\s+-k)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "section-5",
@@ -174,12 +286,15 @@
       "task": "Thực hiện hướng dẫn: Identify What a Command Name Means",
       "hint": "Chạy lệnh: cd /home/labex/project/command-help",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fq \"cd is a shell builtin\" /home/labex/project/command-help/command-types.txt && grep -Fq \"ls is\" /home/labex/project/command-help/command-types.txt && grep -Fq \"cp is\" /home/labex/project/command-help/command-types.txt"
       },
       "title_vi": "Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
       "task_vi": "Thực hiện hướng dẫn: Tìm Hiểu Ý Nghĩa Tên Câu Lệnh",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -215,12 +330,15 @@
       "task": "Thực hiện hướng dẫn: Read Quick Help and Usage Syntax",
       "hint": "Chạy lệnh: bash -c 'help cd'",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Fxq \"=== ls ===\" /home/labex/project/command-help/quick-help.txt && grep -Fxq \"=== cp ===\" /home/labex/project/command-help/quick-help.txt && grep -Fq \"Usage:\" /home/labex/project/command-help/quick-help.txt"
       },
       "title_vi": "Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
       "task_vi": "Thực hiện hướng dẫn: Đọc Trợ Giúp Nhanh và Cú Pháp Sử Dụng",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -256,14 +374,67 @@
       "task": "Thực hiện hướng dẫn: Navigate a Manual Page",
       "hint": "Chạy lệnh: man ls",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:man\\s+ls|help|info)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
       "title_vi": "Tra Cứu Sách Hướng Dẫn Chi Tiết (Man Page)",
       "task_vi": "Thực hiện hướng dẫn: Tra Cứu Sách Hướng Dẫn Chi Tiết (Man Page)",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ sử dụng trình xem tương tác `man` và tìm hiểu ý nghĩa của các phần tài liệu hướng dẫn (manual sections).\n\nMở trang hướng dẫn cho lệnh `ls`:\n\n```bash\nman ls\n```\n\nTrang hướng dẫn mở ra trong một trình phân trang (pager), thường là `less`. Hãy thực hành các phím sau bên trong trình xem:\n\n- **Down Arrow**: di chuyển xuống một dòng;\n- **Space**: di chuyển tới trước một màn hình;\n- **b**: di chuyển lùi lại một màn hình;\n- gõ `/sort` và nhấn Enter: tìm kiếm tới trước chuỗi `sort`;\n- **n**: chuyển đến kết quả khớp tiếp theo;\n- **q**: thoát và quay lại dấu nhắc lệnh shell.\n\nPhần đầu đề thường hiển thị `LS(1)`. Số đó là một phần tài liệu hướng dẫn. Phần 1 chứa các lệnh người dùng thông thường; các phần khác bao gồm các lệnh gọi hệ thống, hàm thư viện, định dạng cấu hình và lệnh quản trị.\n\nSử dụng `man -f` để xem mô tả một dòng, còn được gọi là tra cứu “whatis”:\n\n```bash\nman -f ls\n```\n\nLưu một đoạn trích xuất không tương tác của chính trang hướng dẫn đó. Đọc đường ống (pipeline) này từ trái sang phải: `-P cat` khiến `man` in ra thay vì mở trình phân trang, `col -b` loại bỏ các ký tự điều khiển định dạng đầu cuối, `head -n 20` giữ lại hai mươi dòng, và `>` lưu trữ luồng dữ liệu cuối cùng:\n\n```bash\nman -P cat ls | col -b | head -n 20 > ls-man-excerpt.txt\n```\n\n```bash\ncat ls-man-excerpt.txt\n```\n\nBạn sẽ thấy phần đầu đề, tên, cú pháp và phần mở đầu của mô tả trong trang hướng dẫn. Điều này xác nhận rằng các góc nhìn tương tác và không tương tác đều đến từ cùng một tài liệu.",
-      "hint_vi": "Chạy lệnh: man ls"
+      "hint_vi": "Chạy lệnh: man ls",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:man\\s+ls|help|info)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:man\\s+ls|help|info)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-18000-section-4-v3",
@@ -277,14 +448,67 @@
       "task": "Thực hiện hướng dẫn: Discover Commands by Topic",
       "hint": "Chạy lệnh: apropos password | head -n 15",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:apropos|whatis|man\\s+-k)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
       "title_vi": "Tìm Kiếm Lệnh Theo Chủ Đề với Apropos",
       "task_vi": "Thực hiện hướng dẫn: Tìm Kiếm Lệnh Theo Chủ Đề với Apropos",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ sử dụng `apropos` khi bạn biết tác vụ nhưng không biết tên lệnh.\n\n`apropos` tìm kiếm các mô tả ngắn được lưu trữ trong cơ sở dữ liệu hướng dẫn sử dụng (manual database). Tìm kiếm tài liệu liên quan đến mật khẩu:\n\n```bash\napropos password | head -n 15\n```\n\nMỗi kết quả bao gồm tên tài liệu hướng dẫn, phần của nó trong ngoặc đơn và một mô tả ngắn. Một trong các kết quả sẽ mô tả `passwd`.\n\nTìm kiếm các chủ đề liên quan đến tệp:\n\n```bash\napropos file | head -n 20\n```\n\nCác từ khóa chung chung trả về rất nhiều kết quả. Một cụm từ cụ thể hơn có thể hữu ích hơn:\n\n```bash\napropos \"copy files\"\n```\n\nBạn cũng có thể lọc một kết quả chung chung. Tùy chọn `-i` làm cho `grep` bỏ qua phân biệt chữ hoa chữ thường, trong khi `-m 5` dừng lại sau năm dòng khớp:\n\n```bash\napropos file | grep -i -m 5 'copy'\n```\n\nLưu toàn bộ kết quả tìm kiếm mật khẩu để có thể xem lại sau:\n\n```bash\napropos password > password-topics.txt\n```\n\n```bash\ngrep -E '^passwd|change.*password' password-topics.txt | head\n```\n\nKhi `apropos` không tìm thấy gì trên một hệ thống mới cài đặt, cơ sở dữ liệu hướng dẫn có thể cần lệnh `sudo mandb`. Lab này đã chuẩn bị sẵn cơ sở dữ liệu một cách tự động, nhưng ghi nhớ mối quan hệ đó sẽ giúp công cụ này dễ khắc phục sự cố hơn ở các môi trường khác.",
-      "hint_vi": "Chạy lệnh: apropos password | head -n 15"
+      "hint_vi": "Chạy lệnh: apropos password | head -n 15",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:apropos|whatis|man\\s+-k)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:apropos|whatis|man\\s+-k)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
   ],
   "title_vi": "Tra Cứu Trợ Giúp Câu Lệnh Linux",

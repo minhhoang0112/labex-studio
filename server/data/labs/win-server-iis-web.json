@@ -3,131 +3,74 @@
   "course_id": "windows-server-administration-essentials",
   "order": 5,
   "title": "IIS Web Server Hosting & SSL Certificate Configuration",
-  "title_vi": "Triển Khai Máy Chủ Web IIS & Cấu Hình Chứng Chỉ SSL",
+  "title_vi": "Triển Khai Máy Chủ Web IIS & Cấu Hình Website Doanh Nghiệp",
   "type": "challenge",
   "difficulty": "Intermediate",
   "estimated_time": "35 mins",
-  "overview": "Triển khai dịch vụ Internet Information Services (IIS), tạo Website mới, cấu hình Application Pool và thiết lập HTTPS binding bảo mật.",
+  "overview": "Thực hành triển khai và quản trị máy chủ web Internet Information Services (IIS) trên giao diện đồ họa: Mở IIS Manager (inetmgr), tạo Application Pool riêng biệt, thêm Website doanh nghiệp mới và kiểm tra cổng dịch vụ mạng.",
   "sections": [
     {
       "id": "win-iis-05-sec-0",
-      "title": "Introduction to IIS",
-      "title_vi": "Giới thiệu về IIS",
+      "title": "Introduction to IIS & Application Pools",
+      "title_vi": "Giới thiệu về IIS & Kiến Trúc Application Pool",
       "position": 0,
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## Microsoft Internet Information Services (IIS)\n\nIIS is Microsoft's production web server, powering enterprise ASP.NET, PHP, and static web portals with robust Application Pools and worker process isolation.\n",
-      "content_vi": "## Dịch Vụ Máy Chủ Web IIS\n\nIIS là máy chủ web tiêu chuẩn của Microsoft, phục vụ các ứng dụng doanh nghiệp ASP.NET, website nội bộ và dịch vụ API với cơ chế cô lập tiến trình Application Pool mạnh mẽ.",
+      "content": "## Microsoft Internet Information Services (IIS)\n\nIIS is Microsoft's production web server, powering enterprise ASP.NET, PHP, and static web portals with robust Application Pools and worker process isolation.\n\n### Enterprise Web Architecture:\n```\n[IIS Server Root]\n ├── [Application Pools]\n │    └── AppPool_PortalCorp (Isolated w3wp.exe process)\n └── [Sites]\n      ├── Default Web Site (Port 80)\n      └── PortalCorp (Port 8080 -> C:\\inetpub\\wwwroot\\portal)\n```\n",
+      "content_vi": "## Dịch Vụ Máy Chủ Web IIS & Kiến Trúc Doanh Nghiệp\n\nInternet Information Services (IIS) là dịch vụ máy chủ web chính thống trên Windows Server, đóng vai trò nền tảng cho các cổng thông tin nội bộ (Intranet), dịch vụ API và ứng dụng web doanh nghiệp.\n\n### Mô hình triển khai chuẩn trong thực tế:\n```text\n+-------------------------------------------------------------+\n| IIS Web Server (inetmgr)                                    |\n|  ├── [Application Pool] PortalCorp_Pool (Tiến trình cô lập) |\n|  └── [Sites]                                                |\n|       ├── Default Web Site (Cổng 80 - C:\\inetpub\\wwwroot)    |\n|       └── PortalCorp (Cổng 8080 - C:\\inetpub\\wwwroot\\portal)|\n+-------------------------------------------------------------+\n```\n\nTrong bài thực hành này, bạn sẽ học cách thao tác trên giao diện đồ họa **IIS Manager** để cấu hình và phát hành website hoàn chỉnh.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
       "id": "win-iis-05-sec-1",
-      "title": "Inspecting Web Administration Cmdlets",
-      "title_vi": "Khám Phá Các Lệnh Quản Trị Web IIS",
+      "title": "Opening IIS Manager & Creating a Dedicated Website",
+      "title_vi": "Thao Tác Giao Diện: Mở IIS Manager & Tạo Website Doanh Nghiệp Mới",
       "position": 1,
       "kind": "task",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "task": "Explore WebAdministration cmdlets for managing IIS sites and app pools.",
-      "task_vi": "Kiểm tra các lệnh quản trị IIS và xem cổng lắng nghe mạng của máy chủ web.",
-      "hint": "Run: Get-Command *IIS* or Get-NetTCPConnection -LocalPort 80, 443",
-      "hint_vi": "Chạy lệnh: Get-Command *IIS* hoặc Get-NetTCPConnection -LocalPort 80, 443",
+      "task": "Mở IIS Manager trên giao diện hoặc kiểm tra cổng web bằng PowerShell.",
+      "task_vi": "Mở IIS Manager trên giao diện hoặc kiểm tra cổng web bằng PowerShell.",
+      "hint": "Gõ Win+R -> inetmgr. Hoặc chạy lệnh: Get-Command *Website* hoặc netstat -ano",
+      "hint_vi": "Gõ Win+R -> inetmgr. Hoặc chạy lệnh: Get-Command *Website* hoặc netstat -ano",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "(?:Get-Command|Get-NetTCPConnection|netstat)"
+            "(?:Get-Command|Website|inetmgr|netstat|Get-NetTCPConnection)"
           ]
         ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "allowed_status": [0, 1]
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
-      "content": "### Checking IIS Commands\n\n```powershell\nGet-Command *Website*\nGet-NetTCPConnection -LocalPort 80, 443 -ErrorAction SilentlyContinue\n```\n",
-      "content_vi": "### Kiểm tra Lệnh IIS\n\n```powershell\nGet-Command *Website*\nGet-NetTCPConnection -LocalPort 80, 443 -ErrorAction SilentlyContinue\n```"
+      "required_capabilities": ["terminal", "files", "shell"],
+      "content": "### Step 1: Open IIS Manager and Add New Website\n\n1. Press **Win + R**, type `inetmgr` and press **Enter**.\n2. Or from **Server Manager**, click **Tools** -> **Internet Information Services (IIS) Manager**.\n3. Right-click **Sites** -> select **Add Website**.\n4. Fill in:\n   - Site name: `PortalCorp`\n   - Physical path: `C:\\inetpub\\wwwroot`\n   - Port: `8080`\n\n```powershell\n# PowerShell command:\nGet-Command *Website*\n```\n",
+      "content_vi": "### Bước 1: Mở Trình Quản Lý IIS Manager & Tạo Website Mới\n\n#### 🖥️ Các bước thao tác giao diện đồ họa Windows Server:\n1. Bấm **Windows + R**, gõ lệnh `inetmgr` rồi nhấn **Enter**.\n2. Hoặc từ cửa sổ **Server Manager**, góc trên bên phải bấm **Tools** $\\rightarrow$ chọn **Internet Information Services (IIS) Manager**.\n\n```text\n+-------------------------------------------------------------+\n| Internet Information Services (IIS) Manager                 |\n+-------------------------------------------------------------+\n| Connections Tree:                                           |\n| ├── WIN-SERVER-2022                                         |\n| │    ├── Application Pools                                  |\n| │    └── Sites                                              |\n| │         └── Default Web Site                              |\n+-------------------------------------------------------------+\n```\n\n3. **Thao tác thêm Website mới:**\n   - Trong cây thư mục bên trái, mở rộng tên máy chủ $\\rightarrow$ nhấp chuột phải vào mục **Sites** $\\rightarrow$ chọn **Add Website...**.\n   - Cửa sổ *Add Website* hiện ra, điền các thông số:\n     - **Site name**: `PortalCorp`\n     - **Application pool**: Tự động tạo cùng tên (hoặc chọn DefaultAppPool).\n     - **Physical path**: Bấm nút `...` duyệt đến thư mục `C:\\inetpub\\wwwroot`.\n     - **Binding**: Type chọn `http`, IP address chọn `All Unassigned`, Port điền `8080` (tránh xung đột với cổng 80 mặc định).\n   - Bấm **OK** để khởi tạo Website.\n\n*(Chạy lệnh bên dưới trên console để xác thực bước này):*\n```powershell\nGet-Command *Website*\n```"
     }
   ],
   "curriculum_version": 1,
   "steps": [
     {
       "id": "win-iis-05-sec-1",
-      "title": "Inspecting Web Administration Cmdlets",
-      "title_vi": "Khám Phá Các Lệnh Quản Trị Web IIS",
-      "content": "### Checking IIS Commands\n\n```powershell\nGet-Command *Website*\nGet-NetTCPConnection -LocalPort 80, 443 -ErrorAction SilentlyContinue\n```\n",
-      "content_vi": "### Kiểm tra Lệnh IIS\n\n```powershell\nGet-Command *Website*\nGet-NetTCPConnection -LocalPort 80, 443 -ErrorAction SilentlyContinue\n```",
-      "task": "Explore WebAdministration cmdlets for managing IIS sites and app pools.",
-      "task_vi": "Kiểm tra các lệnh quản trị IIS và xem cổng lắng nghe mạng của máy chủ web.",
-      "hint": "Run: Get-Command *IIS* or Get-NetTCPConnection -LocalPort 80, 443",
-      "hint_vi": "Chạy lệnh: Get-Command *IIS* hoặc Get-NetTCPConnection -LocalPort 80, 443",
+      "title": "Opening IIS Manager & Creating a Dedicated Website",
+      "title_vi": "Thao Tác Giao Diện: Mở IIS Manager & Tạo Website Doanh Nghiệp Mới",
+      "content": "### Step 1: Open IIS Manager and Add New Website\n\n1. Press **Win + R**, type `inetmgr` and press **Enter**.\n2. Or from **Server Manager**, click **Tools** -> **Internet Information Services (IIS) Manager**.\n3. Right-click **Sites** -> select **Add Website**.\n4. Fill in:\n   - Site name: `PortalCorp`\n   - Physical path: `C:\\inetpub\\wwwroot`\n   - Port: `8080`\n\n```powershell\n# PowerShell command:\nGet-Command *Website*\n```\n",
+      "content_vi": "### Bước 1: Mở Trình Quản Lý IIS Manager & Tạo Website Mới\n\n#### 🖥️ Các bước thao tác giao diện đồ họa Windows Server:\n1. Bấm **Windows + R**, gõ lệnh `inetmgr` rồi nhấn **Enter**.\n2. Hoặc từ cửa sổ **Server Manager**, góc trên bên phải bấm **Tools** $\\rightarrow$ chọn **Internet Information Services (IIS) Manager**.\n\n```text\n+-------------------------------------------------------------+\n| Internet Information Services (IIS) Manager                 |\n+-------------------------------------------------------------+\n| Connections Tree:                                           |\n| ├── WIN-SERVER-2022                                         |\n| │    ├── Application Pools                                  |\n| │    └── Sites                                              |\n| │         └── Default Web Site                              |\n+-------------------------------------------------------------+\n```\n\n3. **Thao tác thêm Website mới:**\n   - Trong cây thư mục bên trái, mở rộng tên máy chủ $\\rightarrow$ nhấp chuột phải vào mục **Sites** $\\rightarrow$ chọn **Add Website...**.\n   - Cửa sổ *Add Website* hiện ra, điền các thông số:\n     - **Site name**: `PortalCorp`\n     - **Application pool**: Tự động tạo cùng tên (hoặc chọn DefaultAppPool).\n     - **Physical path**: Bấm nút `...` duyệt đến thư mục `C:\\inetpub\\wwwroot`.\n     - **Binding**: Type chọn `http`, IP address chọn `All Unassigned`, Port điền `8080` (tránh xung đột với cổng 80 mặc định).\n   - Bấm **OK** để khởi tạo Website.\n\n*(Chạy lệnh bên dưới trên console để xác thực bước này):*\n```powershell\nGet-Command *Website*\n```",
+      "task": "Mở IIS Manager trên giao diện hoặc kiểm tra cổng web bằng PowerShell.",
+      "task_vi": "Mở IIS Manager trên giao diện hoặc kiểm tra cổng web bằng PowerShell.",
+      "hint": "Gõ Win+R -> inetmgr. Hoặc chạy lệnh: Get-Command *Website* hoặc netstat -ano",
+      "hint_vi": "Gõ Win+R -> inetmgr. Hoặc chạy lệnh: Get-Command *Website* hoặc netstat -ano",
       "verification": {
         "kind": "commands",
         "user": "labex",
         "groups": [
           [
-            "(?:Get-Command|Get-NetTCPConnection|netstat)"
+            "(?:Get-Command|Website|inetmgr|netstat|Get-NetTCPConnection)"
           ]
         ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "allowed_status": [0, 1]
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
-      "verification_by_provider": {
-        "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:Get-Command|Get-NetTCPConnection|netstat)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        },
-        "namespace": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:Get-Command|Get-NetTCPConnection|netstat)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "required_capabilities": ["terminal", "files", "shell"]
     }
-  ],
-  "required_capabilities": [
-    "windows"
   ]
 }

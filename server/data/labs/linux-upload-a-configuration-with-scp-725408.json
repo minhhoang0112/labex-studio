@@ -37,13 +37,69 @@
       "task": "Thực hiện hướng dẫn: Deliver the Configuration File",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:scp|ssh|rsync)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "### Tình huống hiện tại\n\nThư mục làm việc cục bộ `/home/labex/project/remote-admin` chứa:\n\n- `service.conf`, tệp cần chuyển giao;\n- `id_ed25519`, khóa riêng cho `opsuser@localhost`.\n\nThư mục từ xa `/home/opsuser/incoming` đã tồn tại.\n\n### Phạm vi\n\n- Dùng tệp khóa nhận diện được cung cấp.\n- Tải `service.conf` lên `/home/opsuser/incoming/service.conf`.\n- Giữ nguyên tệp nguồn cục bộ.\n- Không thay thiết lập máy chủ SSH hoặc thông tin xác thực tài khoản.\n\n### Mục tiêu của bạn\n\nĐể một bản sao nguyên vẹn của `service.conf` trong thư mục incoming từ xa.\n\n### Tiêu chí đạt\n\n- `/home/opsuser/incoming/service.conf` tồn tại và thuộc sở hữu `opsuser`.\n- Nội dung của nó giống từng byte với `service.conf` cục bộ.\n- Tệp nguồn cục bộ và khóa nhận diện được cung cấp vẫn còn.\n\n### Gợi ý\n\nLàm thế nào chọn khóa đã được cung cấp?\n\nBài hướng dẫn đã dùng tùy chọn `-i` với cả `ssh` và `scp`. Trong lần tải lên, nguồn cục bộ đứng trước đích từ xa.",
       "task_vi": "Thực hiện hướng dẫn: Chuyển giao tệp cấu hình",
-      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp|ssh|rsync)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp|ssh|rsync)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "section-2",
@@ -73,13 +129,69 @@
       "task": "Thực hiện hướng dẫn: Deliver the Configuration File",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:scp|ssh|rsync)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          255
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "### Tình huống hiện tại\n\nThư mục làm việc cục bộ `/home/labex/project/remote-admin` chứa:\n\n- `service.conf`, tệp cần chuyển giao;\n- `id_ed25519`, khóa riêng cho `opsuser@localhost`.\n\nThư mục từ xa `/home/opsuser/incoming` đã tồn tại.\n\n### Phạm vi\n\n- Dùng tệp khóa nhận diện được cung cấp.\n- Tải `service.conf` lên `/home/opsuser/incoming/service.conf`.\n- Giữ nguyên tệp nguồn cục bộ.\n- Không thay thiết lập máy chủ SSH hoặc thông tin xác thực tài khoản.\n\n### Mục tiêu của bạn\n\nĐể một bản sao nguyên vẹn của `service.conf` trong thư mục incoming từ xa.\n\n### Tiêu chí đạt\n\n- `/home/opsuser/incoming/service.conf` tồn tại và thuộc sở hữu `opsuser`.\n- Nội dung của nó giống từng byte với `service.conf` cục bộ.\n- Tệp nguồn cục bộ và khóa nhận diện được cung cấp vẫn còn.\n\n### Gợi ý\n\nLàm thế nào chọn khóa đã được cung cấp?\n\nBài hướng dẫn đã dùng tùy chọn `-i` với cả `ssh` và `scp`. Trong lần tải lên, nguồn cục bộ đứng trước đích từ xa.",
       "task_vi": "Thực hiện hướng dẫn: Chuyển giao tệp cấu hình",
-      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp|ssh|rsync)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:scp|ssh|rsync)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            255
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
   ],
   "curriculum_version": 3,

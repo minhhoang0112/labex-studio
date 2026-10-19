@@ -11,10 +11,11 @@ if ($listeners.Count -gt 0) {
     foreach ($ownerId in $ownerIds) {
         $owner = Get-CimInstance Win32_Process -Filter ('ProcessId=' + $ownerId)
         if (-not $Restart) { Write-Output ('Already listening on port 5000, PID ' + $ownerId); exit 0 }
-        if ($owner.Name -ne 'node.exe' -or -not $owner.CommandLine.Contains($entry)) {
+        $cmdLine = if ($owner.CommandLine) { $owner.CommandLine } else { '' }
+        if ($owner.Name -ne 'node.exe' -or (-not $cmdLine.Contains('server.js') -and -not $cmdLine.Contains('server-daemon.mjs') -and -not $cmdLine.Contains($entry))) {
             throw ('Port 5000 belongs to another process; inspect PID ' + $ownerId + ' before restarting.')
         }
-        Stop-Process -Id $ownerId
+        Stop-Process -Id $ownerId -Force
     }
 }
 $node = (Get-Command node.exe).Source

@@ -36,11 +36,14 @@
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "title_vi": "Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -91,12 +94,15 @@
       "task": "Thực hiện hướng dẫn: Protect the Active Configuration",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/file-search/application/config/app.conf <(printf %s 'mode=training\nport=8080\n') && test \"$(stat -c %a /home/labex/project/file-search/application/config/app.conf)\" = 600 && cmp -s /home/labex/project/file-search/application/config/app.conf.backup <(printf %s 'mode=training\nport=8080\n')"
       },
       "title_vi": "Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
       "task_vi": "Thực hiện hướng dẫn: Bảo Vệ Tệp Cấu Hình Đang Hoạt Động",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

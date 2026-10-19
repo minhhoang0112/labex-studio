@@ -12,15 +12,15 @@ if errorlevel 1 (
   exit /b 1
 )
 if not exist node_modules (
-  call npm ci
+  call npm.cmd ci
   if errorlevel 1 goto failed
 )
 if not exist client\node_modules (
-  call npm ci --prefix client
+  call npm.cmd ci --prefix client
   if errorlevel 1 goto failed
 )
 echo Building the current frontend...
-call npm run build:client
+call npm.cmd run build:client
 if errorlevel 1 goto failed
 echo Starting the local runtime and server...
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\start-local.ps1 -Restart

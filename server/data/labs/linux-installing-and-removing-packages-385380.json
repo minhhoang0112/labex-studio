@@ -37,12 +37,54 @@
       "task": "Thực hiện hướng dẫn: Install the Monitoring Package",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(dpkg-query -W -f='${Version} ${db:Status-Status}' labex-monitor 2>/dev/null)\" = '2.0 installed' && test -s /home/labex/project/software-inventory/labex-monitor_2.0_all.deb && cmp -s <(labex-monitor) <(printf \"monitor status: ready\\n\")"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-monitor_2\\.0_all\\.deb\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(dpkg-query -W -f='${Version} ${db:Status-Status}' labex-monitor 2>/dev/null)\" = '2.0 installed' && test -s /home/labex/project/software-inventory/labex-monitor_2.0_all.deb && cmp -s <(labex-monitor) <(printf \"monitor status: ready\\n\")"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-monitor_2\\.0_all\\.deb\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -66,6 +108,11 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -103,12 +150,54 @@
       "task": "Thực hiện hướng dẫn: Install the Monitoring Package",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test \"$(dpkg-query -W -f='${Version} ${db:Status-Status}' labex-monitor 2>/dev/null)\" = '2.0 installed' && test -s /home/labex/project/software-inventory/labex-monitor_2.0_all.deb && cmp -s <(labex-monitor) <(printf \"monitor status: ready\\n\")"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-monitor_2\\.0_all\\.deb\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(dpkg-query -W -f='${Version} ${db:Status-Status}' labex-monitor 2>/dev/null)\" = '2.0 installed' && test -s /home/labex/project/software-inventory/labex-monitor_2.0_all.deb && cmp -s <(labex-monitor) <(printf \"monitor status: ready\\n\")"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-monitor_2\\.0_all\\.deb\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -132,6 +221,11 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"

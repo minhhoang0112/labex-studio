@@ -37,13 +37,69 @@
       "task": "Thực hiện hướng dẫn: Make the Status Page Listen on All IPv4 Interfaces",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:systemctl|service|netstat|ss|curl|sed|nano|vim)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          3
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "### Tình huống hiện tại\n\n`labex-status-page.service` đang hoạt động trên cổng TCP `8090`, nhưng chỉ lắng nghe trên `127.0.0.1`. Cấu hình của nó là `/etc/labex-status-page.conf`.\n\n### Phạm vi\n\n- Chỉ thay `BIND_ADDRESS`.\n- Giữ cổng `8090` và nội dung trang hiện có.\n- Chỉ khởi động lại `labex-status-page.service`.\n\n### Mục tiêu của bạn\n\nĐể trang trạng thái lắng nghe trên `0.0.0.0:8090` và vẫn trả về `internal status ready`.\n\n### Tiêu chí đạt\n\n- `labex-status-page.service` đang hoạt động.\n- `ss` cho thấy nơi lắng nghe IPv4 trên `0.0.0.0:8090`.\n- `curl http://127.0.0.1:8090/` trả nội dung chứa `internal status ready`.\n\n### Gợi ý\n\nTôi có thể so sánh trạng thái hiện tại và yêu cầu như thế nào?\n\nKiểm tra cổng `8090` bằng `ss`, đọc tệp cấu hình được nêu, rồi khởi động lại dịch vụ sau khi đổi giá trị bind.",
       "task_vi": "Thực hiện hướng dẫn: Cho trang trạng thái lắng nghe trên mọi giao diện IPv4",
-      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:systemctl|service|netstat|ss|curl|sed|nano|vim)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            3
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:systemctl|service|netstat|ss|curl|sed|nano|vim)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            3
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "section-2",
@@ -73,13 +129,69 @@
       "task": "Thực hiện hướng dẫn: Make the Status Page Listen on All IPv4 Interfaces",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:systemctl|service|netstat|ss|curl|sed|nano|vim)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1,
+          3
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "### Tình huống hiện tại\n\n`labex-status-page.service` đang hoạt động trên cổng TCP `8090`, nhưng chỉ lắng nghe trên `127.0.0.1`. Cấu hình của nó là `/etc/labex-status-page.conf`.\n\n### Phạm vi\n\n- Chỉ thay `BIND_ADDRESS`.\n- Giữ cổng `8090` và nội dung trang hiện có.\n- Chỉ khởi động lại `labex-status-page.service`.\n\n### Mục tiêu của bạn\n\nĐể trang trạng thái lắng nghe trên `0.0.0.0:8090` và vẫn trả về `internal status ready`.\n\n### Tiêu chí đạt\n\n- `labex-status-page.service` đang hoạt động.\n- `ss` cho thấy nơi lắng nghe IPv4 trên `0.0.0.0:8090`.\n- `curl http://127.0.0.1:8090/` trả nội dung chứa `internal status ready`.\n\n### Gợi ý\n\nTôi có thể so sánh trạng thái hiện tại và yêu cầu như thế nào?\n\nKiểm tra cổng `8090` bằng `ss`, đọc tệp cấu hình được nêu, rồi khởi động lại dịch vụ sau khi đổi giá trị bind.",
       "task_vi": "Thực hiện hướng dẫn: Cho trang trạng thái lắng nghe trên mọi giao diện IPv4",
-      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:systemctl|service|netstat|ss|curl|sed|nano|vim)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            3
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:systemctl|service|netstat|ss|curl|sed|nano|vim)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1,
+            3
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
   ],
   "curriculum_version": 3,

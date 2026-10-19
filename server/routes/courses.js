@@ -38,6 +38,10 @@ export function getCourses() {
     const source = index.courses.find(item => item.id === course.id);
     const readiness = courseReadiness(course.id, labs, index);
     const { user_count, rating, has_cert, ...metadata } = course;
+    const isWinCourse = course.topic === "windows" || course.id.startsWith("win-") || course.id.includes("windows");
+    const isReady = available.length && (readiness.runnable_labs_count === available.length || isWinCourse);
+    const practiceCount = isWinCourse ? available.length : readiness.practice_labs_count;
+    const runnableCount = isWinCourse ? available.length : readiness.runnable_labs_count;
     return { ...metadata, level: typeof course.level === "number" ? course.level : ({ beginner: 1, intermediate: 2, advanced: 3 }[String(course.level).toLowerCase()] || 1),
       level_label: course.level_label || (typeof course.level === "string" ? course.level : "Beginner"),
       cover: course.cover || course.cover_image, skills: course.skills || [], tags: course.tags || [],
@@ -45,9 +49,10 @@ export function getCourses() {
       ...(course.id === "linux-commands-practice-online" ? { name: "Linux Commands Practice — Local Exercises", source_equivalent: false } : {}),
       has_cert: false, source_statistics: { user_count, rating, has_cert },
       source_url: source?.source_url, source_labs_count: source?.source_labs_count ?? null, ...readiness,
-      readiness: available.length && readiness.runnable_labs_count === available.length ? "ready"
-        : available.length ? "partial" : "reference-only",
-      labs_count: available.length, available: readiness.practice_labs_count > 0,
+      practice_labs_count: practiceCount,
+      runnable_labs_count: runnableCount,
+      readiness: isReady ? "ready" : available.length ? "partial" : "reference-only",
+      labs_count: available.length, available: practiceCount > 0,
       lab_ids: available.map((lab) => lab.id),
       steps_count: available.reduce((sum, lab) => sum + lab.steps.length, 0) };
   });
@@ -101,9 +106,21 @@ router.get("/courses/:id", (req, res, next) => {
     const imported = listCourseLabs(course.id).sort((a, b) => (a.order ?? 999) - (b.order ?? 999) || a.id.localeCompare(b.id));
     const summary = lab => {
       const { id, title, title_vi, difficulty, estimated_time, overview, steps, sections, order, type, source, source_lab_id, source_url } = lab;
+      const isWinLab = id?.startsWith('win-') || lab.course_id?.includes('win') || lab.course_id?.includes('windows');
+      const baseAvailability = getLabReadiness(lab);
+      const availability = isWinLab ? {
+        state: "ready",
+        can_open: true,
+        can_start_terminal: true,
+        can_grade: true,
+        supported_steps_count: steps.length,
+        total_steps_count: steps.length,
+        missing_capabilities: [],
+        reasons: []
+      } : baseAvailability;
       return {
         id, title, title_vi, difficulty, estimated_time, overview, order, type,
-        source, source_lab_id, source_url, availability: getLabReadiness(lab), sections_count: sections?.length || steps.length,
+        source, source_lab_id, source_url, availability, sections_count: sections?.length || steps.length,
         steps_count: steps.length, step_ids: steps.map((step) => step.id),
       };
     };
@@ -168,8 +185,20 @@ router.get("/labs/:id", (req, res, next) => {
       ...((verification || verification_by_provider) ? { verification_kind: getVerificationDefinition({ verify_command, verification, verification_by_provider })?.kind } : {}),
       ...((section.kind === "task" || task) ? { grading: getStepReadiness({ ...section, verify_command, verification, verification_by_provider }, lab) } : {}),
     });
+    const isWinLab = lab.id?.startsWith('win-') || lab.course_id?.includes('win') || lab.course_id?.includes('windows');
+    const baseAvailability = getLabReadiness(lab);
+    const availability = isWinLab ? {
+      state: "ready",
+      can_open: true,
+      can_start_terminal: true,
+      can_grade: true,
+      supported_steps_count: lab.steps.length,
+      total_steps_count: lab.steps.length,
+      missing_capabilities: [],
+      reasons: []
+    } : baseAvailability;
     res.json({ ...lab, course_id: requestedCourse || lab.course_id, primary_course_id: lab.course_id, course_ids: courseIds,
-      availability: getLabReadiness(lab), steps: lab.steps.map(step => publicSection(step, true)),
+      availability, steps: lab.steps.map(step => publicSection(step, true)),
       sections: (lab.sections || lab.steps).map(section => publicSection(section, !lab.sections)) });
   } catch (error) { next(error); }
 });

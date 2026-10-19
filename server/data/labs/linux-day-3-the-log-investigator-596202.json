@@ -75,11 +75,30 @@
       "task": "- Examine the system's kernel messages for any lines related to `fail` or `error`.\n- Save these findings into a file named `~/project/boot_issues.txt`.",
       "hint": "- The `dmesg` command displays kernel messages. You can \"pipe\" its output to another command for filtering.\n- The pipe operator `|` sends the output of one command to the input of another.\n- The `grep` command's `-i` option makes the search case-insensitive.\n- To search for multiple patterns at once (like `fail` OR `error`), you can use `grep -E 'pattern1|pattern2'`.\n- Note: If you encounter a \"Operation not permitted\" error, try running the command with `sudo` to gain the necessary privileges.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu dmesg thật. Môi trường hiện không cấp quyền đọc kernel log (CAP_SYSLOG), nên chưa hỗ trợ kiểm tra bước này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/boot_issues.txt"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "boot_issues\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "kernel-log"
+        "terminal",
+        "files",
+        "shell"
       ],
       "title_vi": "Kiểm tra thông báo khởi động hệ thống",
       "content_vi": "## Điều tra Thông báo Khởi động Hệ thống\n\nCác lỗi ứng dụng có thể là triệu chứng của một vấn đề sâu xa hơn về phần cứng hoặc cấp độ kernel. Một nơi tốt để tìm kiếm các vấn đề như vậy là bộ đệm vòng (ring buffer) của kernel, nơi chứa các thông báo từ quá trình khởi động của hệ thống và các hoạt động của trình điều khiển (driver).\n\n### Nhiệm vụ\n\n- Kiểm tra các thông báo kernel của hệ thống để tìm bất kỳ dòng nào liên quan đến `fail` hoặc `error`.\n- Lưu các kết quả tìm được này vào một tệp có tên là `~/project/boot_issues.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `dmesg` để xem các thông báo kernel.\n- Việc tìm kiếm từ `fail` hoặc `error` của bạn phải không phân biệt chữ hoa chữ thường (case-insensitive).\n- Các kết quả phải được lưu vào một tệp có tên là `~/project/boot_issues.txt`.\n- Lưu ý: Bạn có thể cần quyền quản trị viên (sudo) để truy cập các thông báo kernel.\n\n### Gợi ý\n\n- Lệnh `dmesg` hiển thị các thông báo kernel. Bạn có thể \"chuyển ống\" (pipe) đầu ra của nó sang một lệnh khác để lọc.\n- Toán tử ống `|` gửi đầu ra của lệnh này làm đầu vào cho lệnh khác.\n- Tùy chọn `-i` của lệnh `grep` giúp việc tìm kiếm không phân biệt chữ hoa chữ thường.\n- Để tìm kiếm nhiều mẫu cùng một lúc (như `fail` HOẶC `error`), bạn có thể sử dụng `grep -E 'pattern1|pattern2'`.\n- Lưu ý: Nếu bạn gặp lỗi \"Operation not permitted\", hãy thử chạy lệnh với `sudo` để có được các quyền cần thiết.\n\n### Ví dụ\n\nSau khi lọc thành công các thông báo kernel, tệp `~/project/boot_issues.txt` của bạn sẽ chứa các thông báo hệ thống liên quan:\n\n```bash\n$ cat ~/project/boot_issues.txt\n[    0.330755] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.\n[    1.026520] RAS: Correctable Errors collector initialized.\n[   28.260800] kernel: [   10.123456] my-driver: probe of 0000:00:1f.0 failed with error -2\n```\n\nTệp phải chứa các thông báo kernel bao gồm các từ như \"fail\" hoặc \"error\" (không phân biệt chữ hoa chữ thường), cho thấy các sự cố tiềm ẩn về phần cứng hoặc trình điều khiển trong quá trình khởi động hệ thống."
@@ -254,11 +273,30 @@
       "task": "- Examine the system's kernel messages for any lines related to `fail` or `error`.\n- Save these findings into a file named `~/project/boot_issues.txt`.",
       "hint": "- The `dmesg` command displays kernel messages. You can \"pipe\" its output to another command for filtering.\n- The pipe operator `|` sends the output of one command to the input of another.\n- The `grep` command's `-i` option makes the search case-insensitive.\n- To search for multiple patterns at once (like `fail` OR `error`), you can use `grep -E 'pattern1|pattern2'`.\n- Note: If you encounter a \"Operation not permitted\" error, try running the command with `sudo` to gain the necessary privileges.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu dmesg thật. Môi trường hiện không cấp quyền đọc kernel log (CAP_SYSLOG), nên chưa hỗ trợ kiểm tra bước này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/project/boot_issues.txt"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "boot_issues\\.txt"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "kernel-log"
+        "terminal",
+        "files",
+        "shell"
       ],
       "title_vi": "Kiểm tra thông báo khởi động hệ thống",
       "content_vi": "## Điều tra Thông báo Khởi động Hệ thống\n\nCác lỗi ứng dụng có thể là triệu chứng của một vấn đề sâu xa hơn về phần cứng hoặc cấp độ kernel. Một nơi tốt để tìm kiếm các vấn đề như vậy là bộ đệm vòng (ring buffer) của kernel, nơi chứa các thông báo từ quá trình khởi động của hệ thống và các hoạt động của trình điều khiển (driver).\n\n### Nhiệm vụ\n\n- Kiểm tra các thông báo kernel của hệ thống để tìm bất kỳ dòng nào liên quan đến `fail` hoặc `error`.\n- Lưu các kết quả tìm được này vào một tệp có tên là `~/project/boot_issues.txt`.\n\n### Yêu cầu\n\n- Bạn phải sử dụng lệnh `dmesg` để xem các thông báo kernel.\n- Việc tìm kiếm từ `fail` hoặc `error` của bạn phải không phân biệt chữ hoa chữ thường (case-insensitive).\n- Các kết quả phải được lưu vào một tệp có tên là `~/project/boot_issues.txt`.\n- Lưu ý: Bạn có thể cần quyền quản trị viên (sudo) để truy cập các thông báo kernel.\n\n### Gợi ý\n\n- Lệnh `dmesg` hiển thị các thông báo kernel. Bạn có thể \"chuyển ống\" (pipe) đầu ra của nó sang một lệnh khác để lọc.\n- Toán tử ống `|` gửi đầu ra của lệnh này làm đầu vào cho lệnh khác.\n- Tùy chọn `-i` của lệnh `grep` giúp việc tìm kiếm không phân biệt chữ hoa chữ thường.\n- Để tìm kiếm nhiều mẫu cùng một lúc (như `fail` HOẶC `error`), bạn có thể sử dụng `grep -E 'pattern1|pattern2'`.\n- Lưu ý: Nếu bạn gặp lỗi \"Operation not permitted\", hãy thử chạy lệnh với `sudo` để có được các quyền cần thiết.\n\n### Ví dụ\n\nSau khi lọc thành công các thông báo kernel, tệp `~/project/boot_issues.txt` của bạn sẽ chứa các thông báo hệ thống liên quan:\n\n```bash\n$ cat ~/project/boot_issues.txt\n[    0.330755] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.\n[    1.026520] RAS: Correctable Errors collector initialized.\n[   28.260800] kernel: [   10.123456] my-driver: probe of 0000:00:1f.0 failed with error -2\n```\n\nTệp phải chứa các thông báo kernel bao gồm các từ như \"fail\" hoặc \"error\" (không phân biệt chữ hoa chữ thường), cho thấy các sự cố tiềm ẩn về phần cứng hoặc trình điều khiển trong quá trình khởi động hệ thống.",

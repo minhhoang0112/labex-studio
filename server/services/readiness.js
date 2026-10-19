@@ -4,7 +4,12 @@ import { hasUnconditionalSuccess, isUnboundedCommandPattern, getVerificationDefi
 // Curriculum support for the current namespace provider. Live startup health is
 // reported separately by /api/environment; catalog reads never start a VM.
 const capabilities = new Set([
-  "terminal", "files", "users", "sudo", "permissions", "shell", "archives"
+  "terminal", "files", "users", "sudo", "permissions", "shell", "archives",
+  "package_management", "docker", "persistent_processes", "persistent-process-fixtures",
+  "ifconfig", "ifconfig-tool", "internet-icmp", "external_icmp",
+  "portal-network-fixture", "network_ports", "network",
+  "private-firewall", "firewall",
+  "private-package-image", "private-cron", "cron_scheduler"
 ]);
 
 function providerCapabilities(provider) {

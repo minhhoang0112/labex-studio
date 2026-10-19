@@ -36,11 +36,15 @@
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "title_vi": "Tiếp Nhận và Cấp Tài Khoản Người Dùng",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
       },
       "task_vi": "Thực hiện hướng dẫn: Tiếp Nhận và Cấp Tài Khoản Người Dùng",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -93,12 +97,16 @@
       "task": "Thực hiện hướng dẫn: Onboard the User",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test \"$(id -gn trainee)\" = trainee && test \"$(getent passwd trainee | cut -d: -f7)\" = /bin/bash && test \"$(stat -c %U:%G /home/trainee)\" = trainee:trainee && id -nG trainee | tr \" \" \"\\n\" | grep -Fxq developers"
       },
       "title_vi": "Tiếp Nhận và Cấp Tài Khoản Người Dùng",
       "task_vi": "Thực hiện hướng dẫn: Tiếp Nhận và Cấp Tài Khoản Người Dùng",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "users",
+        "sudo"
+      ],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

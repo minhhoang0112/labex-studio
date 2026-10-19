@@ -198,14 +198,53 @@
       "task": "- Create a cron job that automatically runs a backup command.\n- The job should run **every minute** (for the purpose of this challenge).\n- The command should create a new, compressed `tar` archive inside the `~/project/backups/` directory.\n- To prevent overwriting, each new backup file must have a unique name that includes a timestamp (e.g., `backup-2023-10-27_15-30-00.tar.gz`).",
       "hint": "- Run `crontab -e` to open the cron job editor. You may be asked to select an editor; `nano` is a good choice.\n- The format for a cron job is: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` means every minute of every hour of every day.\n- You can use the `date` command to generate a timestamp. For example, `date +%Y-%m-%d_%H-%M-%S` will produce a format like `2023-10-27_15-30-00`.\n- To use the output of a command within another command, use `$(command)`.\n- **Important:** In a crontab, the percent sign (`%`) has a special meaning (it's treated as a newline). You must escape it with a backslash (`\\%`) when using it with the `date` command.\n- Your final command in the crontab might look like: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Chưa xác nhận private crontab và daemon tồn tại xuyên phiên để chạy backup mỗi phút. Không dùng một lệnh tar thay cho tác vụ cron."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "entry=$(crontab -l) && printf '%s\\n' \"$entry\" | grep -Eq '^\\* \\* \\* \\* \\* .*tar .* /home/labex/project/backups/[^ ]*\\$\\(date ' && printf '%s\\n' \"$entry\" | grep -Fq -- '-C /home/labex/project' && printf '%s\\n' \"$entry\" | grep -Eq '(data config logs|-T /home/labex/project/backup-list\\.txt)' && latest=$(find /home/labex/project/backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%T@ %p\\n' | sort -nr | head -n1 | cut -d' ' -f2-) && test -n \"$latest\" && gzip -t \"$latest\" && tar -tzf \"$latest\" | grep -Fxq data/transactions.csv && tar -tzf \"$latest\" | grep -Fxq config/app.conf && tar -tzf \"$latest\" | grep -Fxq logs/app.log"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-cron"
+        "terminal",
+        "cron_scheduler"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "entry=$(crontab -l) && printf '%s\\n' \"$entry\" | grep -Eq '^\\* \\* \\* \\* \\* .*tar .* /home/labex/project/backups/[^ ]*\\$\\(date ' && printf '%s\\n' \"$entry\" | grep -Fq -- '-C /home/labex/project' && printf '%s\\n' \"$entry\" | grep -Eq '(data config logs|-T /home/labex/project/backup-list\\.txt)' && latest=$(find /home/labex/project/backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%T@ %p\\n' | sort -nr | head -n1 | cut -d' ' -f2-) && test -n \"$latest\" && gzip -t \"$latest\" && tar -tzf \"$latest\" | grep -Fxq data/transactions.csv && tar -tzf \"$latest\" | grep -Fxq config/app.conf && tar -tzf \"$latest\" | grep -Fxq logs/app.log"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -229,6 +268,10 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "cron_scheduler"
         ]
@@ -416,14 +459,53 @@
       "task": "- Create a cron job that automatically runs a backup command.\n- The job should run **every minute** (for the purpose of this challenge).\n- The command should create a new, compressed `tar` archive inside the `~/project/backups/` directory.\n- To prevent overwriting, each new backup file must have a unique name that includes a timestamp (e.g., `backup-2023-10-27_15-30-00.tar.gz`).",
       "hint": "- Run `crontab -e` to open the cron job editor. You may be asked to select an editor; `nano` is a good choice.\n- The format for a cron job is: `[minute] [hour] [day_of_month] [month] [day_of_week] [command]`. `* * * * *` means every minute of every hour of every day.\n- You can use the `date` command to generate a timestamp. For example, `date +%Y-%m-%d_%H-%M-%S` will produce a format like `2023-10-27_15-30-00`.\n- To use the output of a command within another command, use `$(command)`.\n- **Important:** In a crontab, the percent sign (`%`) has a special meaning (it's treated as a newline). You must escape it with a backslash (`\\%`) when using it with the `date` command.\n- Your final command in the crontab might look like: `* * * * * tar -czf /path/to/backup-$(date +\\%F_\\%T).tar.gz -C /path/to/source dir1 dir2`",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Chưa xác nhận private crontab và daemon tồn tại xuyên phiên để chạy backup mỗi phút. Không dùng một lệnh tar thay cho tác vụ cron."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "entry=$(crontab -l) && printf '%s\\n' \"$entry\" | grep -Eq '^\\* \\* \\* \\* \\* .*tar .* /home/labex/project/backups/[^ ]*\\$\\(date ' && printf '%s\\n' \"$entry\" | grep -Fq -- '-C /home/labex/project' && printf '%s\\n' \"$entry\" | grep -Eq '(data config logs|-T /home/labex/project/backup-list\\.txt)' && latest=$(find /home/labex/project/backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%T@ %p\\n' | sort -nr | head -n1 | cut -d' ' -f2-) && test -n \"$latest\" && gzip -t \"$latest\" && tar -tzf \"$latest\" | grep -Fxq data/transactions.csv && tar -tzf \"$latest\" | grep -Fxq config/app.conf && tar -tzf \"$latest\" | grep -Fxq logs/app.log"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-cron"
+        "terminal",
+        "cron_scheduler"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "entry=$(crontab -l) && printf '%s\\n' \"$entry\" | grep -Eq '^\\* \\* \\* \\* \\* .*tar .* /home/labex/project/backups/[^ ]*\\$\\(date ' && printf '%s\\n' \"$entry\" | grep -Fq -- '-C /home/labex/project' && printf '%s\\n' \"$entry\" | grep -Eq '(data config logs|-T /home/labex/project/backup-list\\.txt)' && latest=$(find /home/labex/project/backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%T@ %p\\n' | sort -nr | head -n1 | cut -d' ' -f2-) && test -n \"$latest\" && gzip -t \"$latest\" && tar -tzf \"$latest\" | grep -Fxq data/transactions.csv && tar -tzf \"$latest\" | grep -Fxq config/app.conf && tar -tzf \"$latest\" | grep -Fxq logs/app.log"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*(?:EDITOR=\\S+\\s+)?crontab\\s+-e\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -447,6 +529,10 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "cron_scheduler"
+        ],
+        "namespace": [
           "terminal",
           "cron_scheduler"
         ]

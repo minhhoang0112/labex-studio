@@ -36,19 +36,32 @@
       "hint": "Chạy lệnh: cd /home/labex/project/first-commands",
       "title_vi": "Chạy Câu Lệnh Đầu Tiên Của Bạn",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Chạy Câu Lệnh Đầu Tiên Của Bạn",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -70,13 +83,90 @@
       "hint": "Chạy lệnh: date",
       "title_vi": "Xem Ngày Giờ và Lịch Hệ Thống",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu lệnh cal; image hiện chưa xác nhận ncal/cal. Không tự báo đạt chỉ từ lệnh date."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "(?:today\\.txt|date|cal)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
       },
       "task_vi": "Thực hiện hướng dẫn: Xem Ngày Giờ và Lịch Hệ Thống",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ yêu cầu Linux cung cấp thông tin thời gian và tìm hiểu rằng đầu ra của lệnh có thể thay đổi theo môi trường.\n\nChạy `date` không có tùy chọn nào:\n\n```bash\ndate\n```\n\nLinux in ra ngày trong tuần, ngày tháng, thời gian, múi giờ và năm hiện tại. Giá trị chính xác thay đổi theo từng giây, vì vậy đầu ra của bạn sẽ khác với các ví dụ bạn có thể thấy ở nơi khác.\n\nCác lệnh thường chấp nhận các tùy chọn làm thay đổi đầu ra của chúng. Định dạng `date` bắt đầu bằng `+` cho phép bạn chọn các trường ổn định. `%F` nghĩa là định dạng ngày ISO `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nLưu ngày ISO của hôm nay. Giống như trong bước trước, `>` chuyển hướng đầu ra vào một tệp và ghi đè tệp đó nếu nó đã tồn tại:\n\n```bash\ndate +%F > today.txt\n```\n\nLệnh `cal` hiển thị tháng hiện tại dưới dạng lịch:\n\n```bash\ncal\n```\n\nBố cục tháng và ngày trong tuần phụ thuộc vào ngày hiện tại và locale (vùng). Hãy lưu đầu ra đó lại:\n\n```bash\ncal > calendar.txt\n```\n\nKý hiệu `>` gửi đầu ra đến một tệp thay vì màn hình. Hiển thị lịch đã lưu để xác nhận nó đã được ghi:\n\n```bash\ncat calendar.txt\n```\n\nBạn sẽ tìm hiểu kỹ lưỡng về việc chuyển hướng sau. Hiện tại, hãy nhớ rằng đầu ra của terminal có thể được xem ngay lập tức hoặc được lưu lại để sử dụng sau.",
-      "hint_vi": "Chạy lệnh: date"
+      "hint_vi": "Chạy lệnh: date",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "(?:today\\.txt|date|cal)"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "(?:today\\.txt|date|cal)"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-446315-section-3-v3",
@@ -91,19 +181,32 @@
       "hint": "Chạy lệnh: expr 5 + 3",
       "title_vi": "Tính Toán Số Học với Expr",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Tính Toán Số Học với Expr",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -125,19 +228,32 @@
       "hint": "Chạy lệnh: figlet \"LabEx\"",
       "title_vi": "Tạo Chữ Nghệ Thuật ASCII",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
       },
       "task_vi": "Thực hiện hướng dẫn: Tạo Chữ Nghệ Thuật ASCII",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -159,19 +275,32 @@
       "hint": "Chạy lệnh: clear",
       "title_vi": "Khôi Phục và Dọn Sạch Terminal",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
       },
       "task_vi": "Thực hiện hướng dẫn: Khôi Phục và Dọn Sạch Terminal",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -207,20 +336,33 @@
       "task": "Thực hiện hướng dẫn: Run Your First Command",
       "hint": "Chạy lệnh: cd /home/labex/project/first-commands",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
       },
       "title_vi": "Chạy Câu Lệnh Đầu Tiên Của Bạn",
       "task_vi": "Thực hiện hướng dẫn: Chạy Câu Lệnh Đầu Tiên Của Bạn",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -241,14 +383,91 @@
       "task": "Thực hiện hướng dẫn: Read Dates and Calendars",
       "hint": "Chạy lệnh: date",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài yêu cầu lệnh cal; image hiện chưa xác nhận ncal/cal. Không tự báo đạt chỉ từ lệnh date."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "groups": [
+              [
+                "(?:today\\.txt|date|cal)"
+              ]
+            ],
+            "allowed_status": [
+              0
+            ]
+          }
+        ]
       },
       "title_vi": "Xem Ngày Giờ và Lịch Hệ Thống",
       "task_vi": "Thực hiện hướng dẫn: Xem Ngày Giờ và Lịch Hệ Thống",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ yêu cầu Linux cung cấp thông tin thời gian và tìm hiểu rằng đầu ra của lệnh có thể thay đổi theo môi trường.\n\nChạy `date` không có tùy chọn nào:\n\n```bash\ndate\n```\n\nLinux in ra ngày trong tuần, ngày tháng, thời gian, múi giờ và năm hiện tại. Giá trị chính xác thay đổi theo từng giây, vì vậy đầu ra của bạn sẽ khác với các ví dụ bạn có thể thấy ở nơi khác.\n\nCác lệnh thường chấp nhận các tùy chọn làm thay đổi đầu ra của chúng. Định dạng `date` bắt đầu bằng `+` cho phép bạn chọn các trường ổn định. `%F` nghĩa là định dạng ngày ISO `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nLưu ngày ISO của hôm nay. Giống như trong bước trước, `>` chuyển hướng đầu ra vào một tệp và ghi đè tệp đó nếu nó đã tồn tại:\n\n```bash\ndate +%F > today.txt\n```\n\nLệnh `cal` hiển thị tháng hiện tại dưới dạng lịch:\n\n```bash\ncal\n```\n\nBố cục tháng và ngày trong tuần phụ thuộc vào ngày hiện tại và locale (vùng). Hãy lưu đầu ra đó lại:\n\n```bash\ncal > calendar.txt\n```\n\nKý hiệu `>` gửi đầu ra đến một tệp thay vì màn hình. Hiển thị lịch đã lưu để xác nhận nó đã được ghi:\n\n```bash\ncat calendar.txt\n```\n\nBạn sẽ tìm hiểu kỹ lưỡng về việc chuyển hướng sau. Hiện tại, hãy nhớ rằng đầu ra của terminal có thể được xem ngay lập tức hoặc được lưu lại để sử dụng sau.",
-      "hint_vi": "Chạy lệnh: date"
+      "hint_vi": "Chạy lệnh: date",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "(?:today\\.txt|date|cal)"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        },
+        "namespace": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "groups": [
+                [
+                  "(?:today\\.txt|date|cal)"
+                ]
+              ],
+              "allowed_status": [
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-446315-section-3-v3",
@@ -262,20 +481,33 @@
       "task": "Thực hiện hướng dẫn: Calculate with Expr",
       "hint": "Chạy lệnh: expr 5 + 3",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
       },
       "title_vi": "Tính Toán Số Học với Expr",
       "task_vi": "Thực hiện hướng dẫn: Tính Toán Số Học với Expr",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -296,20 +528,33 @@
       "task": "Thực hiện hướng dẫn: Turn Text into ASCII Art",
       "hint": "Chạy lệnh: figlet \"LabEx\"",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
       },
       "title_vi": "Tạo Chữ Nghệ Thuật ASCII",
       "task_vi": "Thực hiện hướng dẫn: Tạo Chữ Nghệ Thuật ASCII",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/first-commands/labex-art.txt && cmp -s /home/labex/project/first-commands/labex-art.txt <(figlet LabEx)"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -330,20 +575,33 @@
       "task": "Thực hiện hướng dẫn: Reset a Busy Terminal",
       "hint": "Chạy lệnh: clear",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
       },
       "title_vi": "Khôi Phục và Dọn Sạch Terminal",
       "task_vi": "Thực hiện hướng dẫn: Khôi Phục và Dọn Sạch Terminal",
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "package_management"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
+        },
+        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/first-commands/terminal-ready.txt <(printf %s 'Terminal ready\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "package_management"

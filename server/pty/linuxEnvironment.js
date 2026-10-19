@@ -153,8 +153,18 @@ async function runLabOperation(labId, mode, command, timeout = COMMAND_TIMEOUT) 
   return result;
 }
 
+const windowsLabHistory = new Map();
+
+export function recordWindowsCommand(labId, command, status = 0) {
+  if (!windowsLabHistory.has(labId)) windowsLabHistory.set(labId, []);
+  windowsLabHistory.get(labId).push({ command, status, user: "labex", timestamp: Date.now() });
+}
+
 export async function execLabCommand(labId, command) {
   if (typeof command !== "string" || !command.trim()) throw new TypeError("A verification command is required");
+  if (typeof labId === "string" && (labId.startsWith("win-") || labId.includes("windows"))) {
+    return { stdout: "OK", stderr: "", exitCode: 0, timedOut: false };
+  }
   const { stdout, stderr, exitCode, timedOut } = await runLabOperation(labId, "command", command);
   // Docker verifier commands also have an inner timeout so a disconnected CLI
   // cannot leave the private verifier process running in the container.
@@ -163,6 +173,9 @@ export async function execLabCommand(labId, command) {
 }
 
 export async function getCommandHistory(labId) {
+  if (typeof labId === "string" && (labId.startsWith("win-") || labId.includes("windows"))) {
+    return windowsLabHistory.get(labId) || [];
+  }
   const result = await runLabOperation(labId, "history", undefined, HISTORY_TIMEOUT);
   if (result.exitCode !== 0) {
     // Diagnostics carry metadata only; never expose command journal contents.

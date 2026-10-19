@@ -37,13 +37,66 @@
       "task": "Thực hiện hướng dẫn: Identify the Host",
       "hint": "Chạy lệnh: cd /home/labex/project/network-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:hostname|uname|ip|ifconfig)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ kiểm tra tên máy và bản ghi tên cục bộ giúp chương trình nhận diện máy này.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\nIn tên máy hiện tại:\n\n```bash\nhostname\n```\n\nHiển thị danh tính tĩnh, tạm thời và hệ điều hành mà systemd biết:\n\n```bash\nhostnamectl\n```\n\n`Static hostname` là tên được cấu hình. Trong máy đào tạo đám mây, tên tạm thời có thể được gán khi khởi động.\n\nKiểm tra ánh xạ máy cục bộ:\n\n```bash\ncat /etc/hosts\n```\n\nCác tên loopback `localhost`, `127.0.0.1` và `::1` nhận diện chính máy này mà không cần mạng ngoài. Hiển thị ngắn gọn các địa chỉ IP đã gán cho máy:\n\n```bash\nhostname -I\n```\n\nLưu tên máy và danh sách địa chỉ:\n\n```bash\nprintf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt\n```\n\n```bash\ncat host-identity.txt\n```",
       "task_vi": "Thực hiện hướng dẫn: Nhận diện máy",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:hostname|uname|ip|ifconfig)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:hostname|uname|ip|ifconfig)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725414-section-2-v3",
@@ -58,18 +111,37 @@
       "task": "Thực hiện hướng dẫn: Inspect Interfaces and IP Addresses",
       "hint": "Chạy lệnh: ip -brief link",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/network-lab/interface-addresses.txt && grep -Eq \"^lo[[:space:]]\" /home/labex/project/network-lab/interface-addresses.txt && test -s /home/labex/project/network-lab/ifconfig-addresses.txt"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/interface-addresses.txt && grep -Eq \"^lo[[:space:]]\" /home/labex/project/network-lab/interface-addresses.txt && test -s /home/labex/project/network-lab/ifconfig-addresses.txt"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/network-lab/interface-addresses.txt && grep -Eq \"^lo[[:space:]]\" /home/labex/project/network-lab/interface-addresses.txt && test -s /home/labex/project/network-lab/ifconfig-addresses.txt"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -95,18 +167,37 @@
       "task": "Thực hiện hướng dẫn: Read the Routing Table",
       "hint": "Chạy lệnh: ip route",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/network-lab/route-summary.txt && gateway=$(ip route show default | awk 'NR==1 {print $3}') && interface=$(ip route show default | awk 'NR==1 {print $5}') && test -n \"$gateway\" && cmp -s /home/labex/project/network-lab/route-summary.txt <(printf \"gateway=%s\\ninterface=%s\\n\" \"$gateway\" \"$interface\")"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/route-summary.txt && gateway=$(ip route show default | awk 'NR==1 {print $3}') && interface=$(ip route show default | awk 'NR==1 {print $5}') && test -n \"$gateway\" && cmp -s /home/labex/project/network-lab/route-summary.txt <(printf \"gateway=%s\\ninterface=%s\\n\" \"$gateway\" \"$interface\")"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/network-lab/route-summary.txt && gateway=$(ip route show default | awk 'NR==1 {print $3}') && interface=$(ip route show default | awk 'NR==1 {print $5}') && test -n \"$gateway\" && cmp -s /home/labex/project/network-lab/route-summary.txt <(printf \"gateway=%s\\ninterface=%s\\n\" \"$gateway\" \"$interface\")"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -132,18 +223,37 @@
       "task": "Thực hiện hướng dẫn: Test Network Reachability",
       "hint": "Chạy lệnh: ping -c 2 -W 2 127.0.0.1",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Eq \"1 packets transmitted, 1 received\" /home/labex/project/network-lab/loopback-ping.txt"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "grep -Eq \"1 packets transmitted, 1 received\" /home/labex/project/network-lab/loopback-ping.txt"
+        },
+        "namespace": {
           "kind": "state",
           "command": "grep -Eq \"1 packets transmitted, 1 received\" /home/labex/project/network-lab/loopback-ping.txt"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -169,18 +279,37 @@
       "task": "Thực hiện hướng dẫn: Test Host Name Resolution",
       "hint": "Chạy lệnh: getent hosts localhost",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/network-lab/dns-result.txt && awk '{print $1}' /home/labex/project/network-lab/dns-result.txt | grep -Eq \"^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$\""
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/dns-result.txt && awk '{print $1}' /home/labex/project/network-lab/dns-result.txt | grep -Eq \"^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$\""
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/network-lab/dns-result.txt && awk '{print $1}' /home/labex/project/network-lab/dns-result.txt | grep -Eq \"^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$\""
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -206,13 +335,66 @@
       "task": "Thực hiện hướng dẫn: Inspect a Listening Port and HTTP Response",
       "hint": "Chạy lệnh: sudo ss -ltnp | grep ':8088'",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ss|netstat|lsof|curl)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ liên hệ socket TCP lắng nghe với tiến trình sở hữu và kiểm tra giao thức ứng dụng.\n\nDịch vụ mẫu đã chuẩn bị lắng nghe trên cổng loopback `8088`. Dùng `ss` kiểm tra socket TCP lắng nghe. Các tùy chọn `-l`, `-t`, `-n` và `-p` nghĩa là lắng nghe, TCP, địa chỉ số và thông tin tiến trình:\n\n```bash\nsudo ss -ltnp | grep ':8088'\n```\n\nTìm `127.0.0.1:8088`. Bind vào loopback nghĩa là chỉ có thể truy cập dịch vụ từ máy này.\n\nKiểm tra tiến trình dịch vụ phía sau socket:\n\n```bash\nsystemctl status labex-network-demo.service --no-pager\n```\n\nDùng `curl -i` để hiển thị header và nội dung phản hồi HTTP:\n\n```bash\ncurl -i http://127.0.0.1:8088/\n```\n\nTrạng thái HTTP `200 OK` chứng minh nhiều hơn một cổng mở: ứng dụng đã chấp nhận yêu cầu HTTP và trả nội dung. Chỉ lưu nội dung phản hồi bằng chế độ im lặng `-s`:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\ncurl -s http://127.0.0.1:8088/ > http-response.html\n```\n\n```bash\ngrep 'network demo ready' http-response.html\n```",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra cổng lắng nghe và phản hồi HTTP",
-      "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'"
+      "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ss|netstat|lsof|curl)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ss|netstat|lsof|curl)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725414-section-7-v3",
@@ -227,12 +409,69 @@
       "task": "Thực hiện hướng dẫn: Preserve Access and Enable UFW",
       "hint": "Chạy lệnh: sudo ufw status verbose",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "sudo -n ufw status | grep -q \"^Status: active\" && sudo -n ufw status | grep -Eq \"^22/tcp[[:space:]].*ALLOW\" && sudo -n ufw status | grep -Eq \"^8088/tcp[[:space:]].*ALLOW\" && grep -q \"^Status: active\" /home/labex/project/network-lab/firewall-status.txt && curl -fsS http://127.0.0.1:8088/ | grep -Fq \"network demo ready\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+ufw\\s+allow\\s+22/tcp\\s*$"
+              ],
+              [
+                "^\\s*sudo\\s+ufw\\s+allow\\s+8088/tcp\\s*$"
+              ],
+              [
+                "^\\s*sudo\\s+ufw\\s+--force\\s+enable\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "sudo -n ufw status | grep -q \"^Status: active\" && sudo -n ufw status | grep -Eq \"^22/tcp[[:space:]].*ALLOW\" && sudo -n ufw status | grep -Eq \"^8088/tcp[[:space:]].*ALLOW\" && grep -q \"^Status: active\" /home/labex/project/network-lab/firewall-status.txt && curl -fsS http://127.0.0.1:8088/ | grep -Fq \"network demo ready\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+22/tcp\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+8088/tcp\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+--force\\s+enable\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -262,6 +501,14 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -302,13 +549,66 @@
       "task": "Thực hiện hướng dẫn: Identify the Host",
       "hint": "Chạy lệnh: cd /home/labex/project/network-lab",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:hostname|uname|ip|ifconfig)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ kiểm tra tên máy và bản ghi tên cục bộ giúp chương trình nhận diện máy này.\n\nVào thư mục làm việc của bài:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\nIn tên máy hiện tại:\n\n```bash\nhostname\n```\n\nHiển thị danh tính tĩnh, tạm thời và hệ điều hành mà systemd biết:\n\n```bash\nhostnamectl\n```\n\n`Static hostname` là tên được cấu hình. Trong máy đào tạo đám mây, tên tạm thời có thể được gán khi khởi động.\n\nKiểm tra ánh xạ máy cục bộ:\n\n```bash\ncat /etc/hosts\n```\n\nCác tên loopback `localhost`, `127.0.0.1` và `::1` nhận diện chính máy này mà không cần mạng ngoài. Hiển thị ngắn gọn các địa chỉ IP đã gán cho máy:\n\n```bash\nhostname -I\n```\n\nLưu tên máy và danh sách địa chỉ:\n\n```bash\nprintf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt\n```\n\n```bash\ncat host-identity.txt\n```",
       "task_vi": "Thực hiện hướng dẫn: Nhận diện máy",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:hostname|uname|ip|ifconfig)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:hostname|uname|ip|ifconfig)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725414-section-2-v3",
@@ -323,18 +623,37 @@
       "task": "Thực hiện hướng dẫn: Inspect Interfaces and IP Addresses",
       "hint": "Chạy lệnh: ip -brief link",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/network-lab/interface-addresses.txt && grep -Eq \"^lo[[:space:]]\" /home/labex/project/network-lab/interface-addresses.txt && test -s /home/labex/project/network-lab/ifconfig-addresses.txt"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/interface-addresses.txt && grep -Eq \"^lo[[:space:]]\" /home/labex/project/network-lab/interface-addresses.txt && test -s /home/labex/project/network-lab/ifconfig-addresses.txt"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/network-lab/interface-addresses.txt && grep -Eq \"^lo[[:space:]]\" /home/labex/project/network-lab/interface-addresses.txt && test -s /home/labex/project/network-lab/ifconfig-addresses.txt"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -360,18 +679,37 @@
       "task": "Thực hiện hướng dẫn: Read the Routing Table",
       "hint": "Chạy lệnh: ip route",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/network-lab/route-summary.txt && gateway=$(ip route show default | awk 'NR==1 {print $3}') && interface=$(ip route show default | awk 'NR==1 {print $5}') && test -n \"$gateway\" && cmp -s /home/labex/project/network-lab/route-summary.txt <(printf \"gateway=%s\\ninterface=%s\\n\" \"$gateway\" \"$interface\")"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/route-summary.txt && gateway=$(ip route show default | awk 'NR==1 {print $3}') && interface=$(ip route show default | awk 'NR==1 {print $5}') && test -n \"$gateway\" && cmp -s /home/labex/project/network-lab/route-summary.txt <(printf \"gateway=%s\\ninterface=%s\\n\" \"$gateway\" \"$interface\")"
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/network-lab/route-summary.txt && gateway=$(ip route show default | awk 'NR==1 {print $3}') && interface=$(ip route show default | awk 'NR==1 {print $5}') && test -n \"$gateway\" && cmp -s /home/labex/project/network-lab/route-summary.txt <(printf \"gateway=%s\\ninterface=%s\\n\" \"$gateway\" \"$interface\")"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -397,18 +735,37 @@
       "task": "Thực hiện hướng dẫn: Test Network Reachability",
       "hint": "Chạy lệnh: ping -c 2 -W 2 127.0.0.1",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "grep -Eq \"1 packets transmitted, 1 received\" /home/labex/project/network-lab/loopback-ping.txt"
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "grep -Eq \"1 packets transmitted, 1 received\" /home/labex/project/network-lab/loopback-ping.txt"
+        },
+        "namespace": {
           "kind": "state",
           "command": "grep -Eq \"1 packets transmitted, 1 received\" /home/labex/project/network-lab/loopback-ping.txt"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -434,18 +791,37 @@
       "task": "Thực hiện hướng dẫn: Test Host Name Resolution",
       "hint": "Chạy lệnh: getent hosts localhost",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+        "kind": "state",
+        "command": "test -s /home/labex/project/network-lab/dns-result.txt && awk '{print $1}' /home/labex/project/network-lab/dns-result.txt | grep -Eq \"^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$\""
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "state",
+          "command": "test -s /home/labex/project/network-lab/dns-result.txt && awk '{print $1}' /home/labex/project/network-lab/dns-result.txt | grep -Eq \"^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$\""
+        },
+        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/network-lab/dns-result.txt && awk '{print $1}' /home/labex/project/network-lab/dns-result.txt | grep -Eq \"^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$\""
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",
@@ -471,13 +847,66 @@
       "task": "Thực hiện hướng dẫn: Inspect a Listening Port and HTTP Response",
       "hint": "Chạy lệnh: sudo ss -ltnp | grep ':8088'",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:ss|netstat|lsof|curl)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "shell"
+      ],
       "content_vi": "Trong bước này, bạn sẽ liên hệ socket TCP lắng nghe với tiến trình sở hữu và kiểm tra giao thức ứng dụng.\n\nDịch vụ mẫu đã chuẩn bị lắng nghe trên cổng loopback `8088`. Dùng `ss` kiểm tra socket TCP lắng nghe. Các tùy chọn `-l`, `-t`, `-n` và `-p` nghĩa là lắng nghe, TCP, địa chỉ số và thông tin tiến trình:\n\n```bash\nsudo ss -ltnp | grep ':8088'\n```\n\nTìm `127.0.0.1:8088`. Bind vào loopback nghĩa là chỉ có thể truy cập dịch vụ từ máy này.\n\nKiểm tra tiến trình dịch vụ phía sau socket:\n\n```bash\nsystemctl status labex-network-demo.service --no-pager\n```\n\nDùng `curl -i` để hiển thị header và nội dung phản hồi HTTP:\n\n```bash\ncurl -i http://127.0.0.1:8088/\n```\n\nTrạng thái HTTP `200 OK` chứng minh nhiều hơn một cổng mở: ứng dụng đã chấp nhận yêu cầu HTTP và trả nội dung. Chỉ lưu nội dung phản hồi bằng chế độ im lặng `-s`:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\ncurl -s http://127.0.0.1:8088/ > http-response.html\n```\n\n```bash\ngrep 'network demo ready' http-response.html\n```",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra cổng lắng nghe và phản hồi HTTP",
-      "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'"
+      "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ss|netstat|lsof|curl)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:ss|netstat|lsof|curl)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "source-725414-section-7-v3",
@@ -492,12 +921,69 @@
       "task": "Thực hiện hướng dẫn: Preserve Access and Enable UFW",
       "hint": "Chạy lệnh: sudo ufw status verbose",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "sudo -n ufw status | grep -q \"^Status: active\" && sudo -n ufw status | grep -Eq \"^22/tcp[[:space:]].*ALLOW\" && sudo -n ufw status | grep -Eq \"^8088/tcp[[:space:]].*ALLOW\" && grep -q \"^Status: active\" /home/labex/project/network-lab/firewall-status.txt && curl -fsS http://127.0.0.1:8088/ | grep -Fq \"network demo ready\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+ufw\\s+allow\\s+22/tcp\\s*$"
+              ],
+              [
+                "^\\s*sudo\\s+ufw\\s+allow\\s+8088/tcp\\s*$"
+              ],
+              [
+                "^\\s*sudo\\s+ufw\\s+--force\\s+enable\\s*$"
+              ]
+            ]
+          }
+        ]
       },
-      "required_capabilities": [],
+      "required_capabilities": [
+        "terminal",
+        "files",
+        "network",
+        "ifconfig",
+        "network_ports",
+        "firewall"
+      ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "sudo -n ufw status | grep -q \"^Status: active\" && sudo -n ufw status | grep -Eq \"^22/tcp[[:space:]].*ALLOW\" && sudo -n ufw status | grep -Eq \"^8088/tcp[[:space:]].*ALLOW\" && grep -q \"^Status: active\" /home/labex/project/network-lab/firewall-status.txt && curl -fsS http://127.0.0.1:8088/ | grep -Fq \"network demo ready\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+22/tcp\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+allow\\s+8088/tcp\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+ufw\\s+--force\\s+enable\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -527,6 +1013,14 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "files",
+          "network",
+          "ifconfig",
+          "network_ports",
+          "firewall"
+        ],
+        "namespace": [
           "terminal",
           "files",
           "network",

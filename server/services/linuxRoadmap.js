@@ -84,7 +84,7 @@ export function getLinuxRoadmap() {
   const courses = ORDER.map((id, order) => {
     const source = index.courses.find(course => course.id === id);
     const readiness = courseReadiness(id, labs, index);
-    const status = readiness.runnable_labs_count === source.source_labs_count ? "ready" : readiness.imported_labs_count ? "partial" : "reference-only";
+    const status = readiness.imported_labs_count && readiness.runnable_labs_count === readiness.imported_labs_count ? "ready" : readiness.imported_labs_count ? "partial" : "reference-only";
     const sections = source.stages.flatMap(stage => stage.labs).flatMap(lab => outlines.lessons.find(item => item.source_lab_id === lab.source_lab_id)?.sections || []);
     return { id, alias: id, name: NAMES[id], order: order + 1, prerequisites: PREREQUISITES[order], ...GUIDANCE[id], ...readiness,
       source_sections_count: sections.length, source_tasks_count: sections.filter(section => section.need_verify).length,

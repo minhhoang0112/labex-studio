@@ -519,7 +519,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
         <button aria-pressed={mobilePane === 'guide'} onClick={() => setMobilePane('guide')} className={mobilePane === 'guide' ? 'px-3 py-1 rounded text-sm bg-primary-600' : 'px-3 py-1 rounded text-sm bg-slate-800'}>Hướng dẫn</button>
         <button aria-pressed={mobilePane === 'terminal'} onClick={() => setMobilePane('terminal')} className={mobilePane === 'terminal' ? 'px-3 py-1 rounded text-sm bg-primary-600' : 'px-3 py-1 rounded text-sm bg-slate-800'}>Terminal</button>
       </nav>}
-      {(environmentError || (!environmentLoading && environment?.available === false) || setupError) && <div role="alert" className="shrink-0 flex flex-wrap gap-2 items-center justify-between px-4 py-2 text-xs bg-red-950 text-red-200">
+      {!isWindowsLab && (environmentError || (!environmentLoading && environment?.available === false) || setupError) && <div role="alert" className="shrink-0 flex flex-wrap gap-2 items-center justify-between px-4 py-2 text-xs bg-red-950 text-red-200">
         <span>{environmentError || environment?.reason || setupError || 'Môi trường Linux chưa sẵn sàng.'}</span>
         <button onClick={() => setEnvironmentAttempt(value => value + 1)} className="underline">Thử lại môi trường</button>
       </div>}

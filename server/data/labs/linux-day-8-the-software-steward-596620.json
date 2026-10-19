@@ -53,14 +53,53 @@
       "task": "- Update the list of available packages from all configured sources.",
       "hint": "- Remember that system-wide changes, like updating package sources, require elevated permissions.\n- The `apt` command has a specific subcommand for refreshing the local package index.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name '*Packages*' -print -quit)\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+update\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name '*Packages*' -print -quit)\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+update\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -86,6 +125,10 @@
         "docker": [
           "terminal",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "package_management"
         ]
       },
       "title_vi": "Cập nhật kho gói phần mềm hệ thống",
@@ -103,14 +146,53 @@
       "task": "- Install the `neofetch` software package.",
       "hint": "- The `apt` command for installing packages is very common. Think of the action you want to perform: \"install\".\n- Don't forget to use `sudo`.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?install\\s+(?:-y\\s+)?neofetch(?:\\s+-y)?\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?install\\s+(?:-y\\s+)?neofetch(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -136,6 +218,10 @@
         "docker": [
           "terminal",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "package_management"
         ]
       },
       "title_vi": "Cài đặt các gói phần mềm thiết yếu",
@@ -153,14 +239,55 @@
       "task": "- Display detailed information for the `neofetch` package, including its version number.",
       "hint": "- The `apt` tool has a subcommand to `show` information about a package.\n- Alternatively, the `dpkg` command with the `-s` flag can also be used to check the status of a package.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*apt\\s+show\\s+neofetch\\s*$",
+                "^\\s*dpkg\\s+-s\\s+neofetch\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*apt\\s+show\\s+neofetch\\s*$",
+                  "^\\s*dpkg\\s+-s\\s+neofetch\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -187,6 +314,10 @@
         "docker": [
           "terminal",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "package_management"
         ]
       },
       "title_vi": "Kiểm tra phiên bản gói đã cài đặt",
@@ -204,14 +335,53 @@
       "task": "- Uninstall the `figlet` package from the system.",
       "hint": "- The `apt` subcommand for removing a package is quite intuitive. Think of the opposite of \"install\".\n- Remember to use `sudo`.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "! dpkg-query -W -f='${Status}' figlet 2>/dev/null | grep -Fxq 'install ok installed'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?remove\\s+(?:-y\\s+)?figlet(?:\\s+-y)?\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! dpkg-query -W -f='${Status}' figlet 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?remove\\s+(?:-y\\s+)?figlet(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -237,6 +407,10 @@
         "docker": [
           "terminal",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "package_management"
         ]
       },
       "title_vi": "Gỡ bỏ các gói phần mềm không cần thiết",
@@ -254,14 +428,53 @@
       "task": "- Remove all automatically installed dependencies that are no longer required by any package on the system.",
       "hint": "- `apt` has a helpful command that \"automatically removes\" unused packages.\n- As always, this system-wide change requires `sudo`.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "! dpkg-query -W -f='${Status}' libtext-charwidth-perl 2>/dev/null | grep -Fxq 'install ok installed'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?autoremove(?:\\s+-y)?\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! dpkg-query -W -f='${Status}' libtext-charwidth-perl 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?autoremove(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -285,6 +498,10 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "package_management"
         ]
@@ -319,14 +536,53 @@
       "task": "- Update the list of available packages from all configured sources.",
       "hint": "- Remember that system-wide changes, like updating package sources, require elevated permissions.\n- The `apt` command has a specific subcommand for refreshing the local package index.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name '*Packages*' -print -quit)\""
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+update\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name '*Packages*' -print -quit)\""
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+update\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -352,6 +608,10 @@
         "docker": [
           "terminal",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "package_management"
         ]
       },
       "title_vi": "Cập nhật kho gói phần mềm hệ thống",
@@ -371,14 +631,53 @@
       "task": "- Install the `neofetch` software package.",
       "hint": "- The `apt` command for installing packages is very common. Think of the action you want to perform: \"install\".\n- Don't forget to use `sudo`.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?install\\s+(?:-y\\s+)?neofetch(?:\\s+-y)?\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?install\\s+(?:-y\\s+)?neofetch(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -404,6 +703,10 @@
         "docker": [
           "terminal",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "package_management"
         ]
       },
       "title_vi": "Cài đặt các gói phần mềm thiết yếu",
@@ -423,14 +726,55 @@
       "task": "- Display detailed information for the `neofetch` package, including its version number.",
       "hint": "- The `apt` tool has a subcommand to `show` information about a package.\n- Alternatively, the `dpkg` command with the `-s` flag can also be used to check the status of a package.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*apt\\s+show\\s+neofetch\\s*$",
+                "^\\s*dpkg\\s+-s\\s+neofetch\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "dpkg-query -W -f='${Status}' neofetch 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*apt\\s+show\\s+neofetch\\s*$",
+                  "^\\s*dpkg\\s+-s\\s+neofetch\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -457,6 +801,10 @@
         "docker": [
           "terminal",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "package_management"
         ]
       },
       "title_vi": "Kiểm tra phiên bản gói đã cài đặt",
@@ -476,14 +824,53 @@
       "task": "- Uninstall the `figlet` package from the system.",
       "hint": "- The `apt` subcommand for removing a package is quite intuitive. Think of the opposite of \"install\".\n- Remember to use `sudo`.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "! dpkg-query -W -f='${Status}' figlet 2>/dev/null | grep -Fxq 'install ok installed'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?remove\\s+(?:-y\\s+)?figlet(?:\\s+-y)?\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! dpkg-query -W -f='${Status}' figlet 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?remove\\s+(?:-y\\s+)?figlet(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -509,6 +896,10 @@
         "docker": [
           "terminal",
           "package_management"
+        ],
+        "namespace": [
+          "terminal",
+          "package_management"
         ]
       },
       "title_vi": "Gỡ bỏ các gói phần mềm không cần thiết",
@@ -528,14 +919,53 @@
       "task": "- Remove all automatically installed dependencies that are no longer required by any package on the system.",
       "hint": "- `apt` has a helpful command that \"automatically removes\" unused packages.\n- As always, this system-wide change requires `sudo`.",
       "verification": {
-        "kind": "unsupported",
-        "reason": "Bài cần apt/dpkg và /usr ghi được trong image riêng, repository/network cùng trạng thái package mẫu. Runtime hiện bind /usr chỉ đọc, nên chưa hỗ trợ thao tác package thật."
+        "kind": "all",
+        "checks": [
+          {
+            "kind": "state",
+            "command": "! dpkg-query -W -f='${Status}' libtext-charwidth-perl 2>/dev/null | grep -Fxq 'install ok installed'"
+          },
+          {
+            "kind": "commands",
+            "user": "labex",
+            "allowed_status": [
+              0
+            ],
+            "groups": [
+              [
+                "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?autoremove(?:\\s+-y)?\\s*$"
+              ]
+            ]
+          }
+        ]
       },
       "required_capabilities": [
-        "private-package-image"
+        "terminal",
+        "package_management"
       ],
       "verification_by_provider": {
         "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "! dpkg-query -W -f='${Status}' libtext-charwidth-perl 2>/dev/null | grep -Fxq 'install ok installed'"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+apt\\s+(?:-y\\s+)?autoremove(?:\\s+-y)?\\s*$"
+                ]
+              ]
+            }
+          ]
+        },
+        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -559,6 +989,10 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
+          "terminal",
+          "package_management"
+        ],
+        "namespace": [
           "terminal",
           "package_management"
         ]

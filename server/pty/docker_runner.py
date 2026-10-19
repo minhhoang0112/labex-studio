@@ -31,10 +31,22 @@ def docker_args(*args):
     return [DOCKER, '--host', f'unix://{SOCKET}', *args]
 
 
+def ensure_daemon():
+    bootstrap_script = Path(__file__).resolve().parents[2] / 'scripts/bootstrap-rootless-docker.py'
+    if bootstrap_script.is_file():
+        subprocess.run([sys.executable, str(bootstrap_script), 'start'], capture_output=True, timeout=35)
+
+
 def docker(*args, input=None, check=True, timeout=15):
+    if not Path(SOCKET).exists():
+        ensure_daemon()
     result = subprocess.run(docker_args(*args), input=input, text=True, capture_output=True, timeout=timeout)
     if check and result.returncode:
-        raise RuntimeError('Docker operation failed: ' + result.stderr.strip()[:300])
+        if 'dial unix' in result.stderr or 'connect: no such file or directory' in result.stderr:
+            ensure_daemon()
+            result = subprocess.run(docker_args(*args), input=input, text=True, capture_output=True, timeout=timeout)
+        if check and result.returncode:
+            raise RuntimeError('Docker operation failed: ' + result.stderr.strip()[:300])
     return result
 
 
