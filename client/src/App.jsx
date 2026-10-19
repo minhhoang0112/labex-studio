@@ -5,6 +5,8 @@ import CourseCatalog from './views/CourseCatalog';
 import CourseDetail from './views/CourseDetail';
 import LabWorkspace from './views/LabWorkspace';
 import LearningPath from './views/LearningPath';
+import Footer from './components/Footer';
+import BackToTop from './components/BackToTop';
 
 function routeFromPath() {
   const parts = window.location.pathname.split('/').filter(Boolean);
@@ -103,6 +105,17 @@ export default function App() {
           />
         )}
       </main>
+
+      {route.view !== 'lab' && (
+        <Footer
+          onSelectPath={selectPath}
+          onSelectTopic={(topic) => {
+            selectPath(topic);
+          }}
+        />
+      )}
+
+      {route.view !== 'lab' && <BackToTop />}
 
       <SearchModal
         isOpen={isSearchOpen}

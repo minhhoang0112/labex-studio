@@ -1,71 +1,42 @@
 import { Router } from 'express';
-import { execFile } from 'node:child_process';
 import { getAzureVmStatus, startAzureVm, stopAzureVm, generateRdpConfigFile } from '../services/azureVmService.js';
+import { executeWindowsRemote } from '../services/windowsRemoteExecutor.js';
+import { publicCloudError } from '../services/cloudConfig.js';
 import { recordWindowsCommand } from '../pty/linuxEnvironment.js';
+import { isValidId, loadLab } from '../data/catalog.js';
 
-const router = Router();
-
-// Get live Azure VM status
-router.get('/cloud-vm/status', async (req, res, next) => {
-  try {
-    const status = await getAzureVmStatus();
-    res.json(status);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Start Azure VM
-router.post('/cloud-vm/start', async (req, res, next) => {
-  try {
-    const result = await startAzureVm();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Stop / Deallocate Azure VM
-router.post('/cloud-vm/stop', async (req, res, next) => {
-  try {
-    const result = await stopAzureVm();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Download .RDP file for 1-click native Remote Desktop
-router.get('/cloud-vm/connect.rdp', (req, res) => {
-  const content = generateRdpConfigFile();
-  res.setHeader('Content-Type', 'application/x-rdp');
-  res.setHeader('Content-Disposition', 'attachment; filename="LabEx-WinServer.rdp"');
-  res.send(content);
-});
-
-// Execute PowerShell command in browser web terminal and record history
-router.post('/cloud-vm/powershell', (req, res) => {
-  const { labId, command } = req.body || {};
-  if (!command || typeof command !== 'string') {
-    return res.status(400).json({ error: 'Command is required' });
-  }
-  const cleanCmd = command.trim();
-  const isWin = process.platform === 'win32';
-  const bin = isWin ? 'powershell.exe' : 'pwsh';
-  const args = ['-NoProfile', '-NonInteractive', '-Command', cleanCmd];
-
-  execFile(bin, args, { timeout: 12000, maxBuffer: 1024 * 512, windowsHide: true }, (err, stdout, stderr) => {
-    const exitCode = err ? (typeof err.code === 'number' ? err.code : 1) : 0;
-    if (labId) {
-      recordWindowsCommand(labId, cleanCmd, exitCode);
-    }
-    res.json({
-      stdout: stdout || '',
-      stderr: stderr || (err && !stderr ? err.message : ''),
-      exitCode
-    });
+export function createCloudVmRouter({ desktop, status = getAzureVmStatus, start = startAzureVm,
+  stop = stopAzureVm, execute = executeWindowsRemote, findLab = loadLab } = {}) {
+  const router = Router();
+  const endpoint = fn => async (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    try { await fn(req, res); }
+    catch (error) { const safe = publicCloudError(error); res.status(safe.status).json({ error: safe.message, code: safe.code }); }
+  };
+  const windowsLab = id => isValidId(id) && id.startsWith('win-') && findLab(id);
+  router.get('/cloud-vm/status', endpoint(async (_req, res) => res.json({ ...await status(),
+    desktop: desktop ? await desktop.status() : { configured: false } })));
+  router.post('/cloud-vm/start', endpoint(async (_req, res) => res.status(202).json(await start())));
+  router.post('/cloud-vm/stop', endpoint(async (_req, res) => res.status(202).json(await stop())));
+  router.get('/cloud-vm/connect.rdp', (_req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.type('application/x-rdp').attachment('LabEx-WinServer.rdp').send(generateRdpConfigFile());
   });
-});
-
-export default router;
-
+  router.post('/cloud-vm/desktop-session', endpoint(async (req, res) => {
+    const { labId, width, height, dpi } = req.body || {};
+    if (!windowsLab(labId)) return res.status(400).json({ error: 'Chọn một bài thực hành Windows hợp lệ.' });
+    if (!desktop) return res.status(503).json({ error: 'Desktop gateway chưa được khởi tạo.' });
+    res.json(await desktop.issue(labId, { width, height, dpi }));
+  }));
+  router.post('/cloud-vm/powershell', endpoint(async (req, res) => {
+    const { labId, command } = req.body || {};
+    if (!windowsLab(labId)) return res.status(400).json({ error: 'Chọn một bài thực hành Windows hợp lệ.' });
+    if (typeof command !== 'string' || !command.trim() || command.length > 16000) {
+      return res.status(400).json({ error: 'Lệnh PowerShell trống hoặc quá dài.' });
+    }
+    const result = await execute(command, { labId });
+    recordWindowsCommand(labId, command, result.exitCode, { target: result.target, computerName: result.computerName });
+    res.json(result);
+  }));
+  return router;
+}

@@ -682,83 +682,22 @@
       "task": "Thực hiện hướng dẫn: Work Faster with Terminal Shortcuts",
       "hint": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/docs",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "test -f /home/labex/project/file-basics/shortcuts-complete.txt || test -f /home/labex/project/file-basics/workspace/docs/guide.txt"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "groups": [
-              [
-                "(?:shortcuts-complete|cat|tail|cd)"
-              ]
-            ],
-            "allowed_status": [
-              0,
-              1,
-              130
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Chưa kiểm chứng được các tương tác Up/Tab/Ctrl+C/Ctrl+L theo yêu cầu; marker file đơn lẻ không chứng minh các thao tác này."
       },
       "title_vi": "Tăng Tốc Làm Việc với Phím Tắt Terminal",
       "task_vi": "Thực hiện hướng dẫn: Tăng Tốc Làm Việc với Phím Tắt Terminal",
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ thực hành bốn phím điều khiển terminal giúp giảm bớt việc gõ phím và giúp khôi phục từ một lệnh đang chạy liên tục.\n\nĐầu tiên, hãy đi vào thư mục documents:\n\n```bash\ncd /home/labex/project/file-basics/workspace/docs\n```\n\nChạy một lệnh mà bạn sẽ sử dụng lại:\n\n```bash\ncat guide.txt\n```\n\nNhấn phím **Mũi tên lên** (Up Arrow) một lần. Lệnh `cat guide.txt` trước đó sẽ xuất hiện trở lại tại dấu nhắc lệnh (prompt). Nhấn Enter để chạy lại lệnh đó. Việc gọi lại lệnh giúp tránh phải gõ lại và vẫn cho phép bạn chỉnh sửa dòng được gọi lại trước khi thực thi.\n\nTiếp theo, hãy gõ `cat g` nhưng không nhấn Enter, sau đó nhấn **Tab**. Do chỉ có `guide.txt` khớp với chuỗi này, shell sẽ tự động hoàn thành tên tệp. Nhấn Enter để chạy lệnh đã được hoàn thành.\n\nBây giờ, hãy khởi Chạy một lệnh chờ đợi liên tục:\n\n```bash\ntail -f /dev/null\n```\n\n`tail -f` theo dõi một tệp và chờ dữ liệu mới. `/dev/null` không bao giờ cung cấp các dòng hữu ích, vì vậy lệnh này có vẻ đứng im lặng. Nhấn **Ctrl+C** để gửi tín hiệu ngắt (interrupt) và quay lại dấu nhắc lệnh. Đây là phản ứng tiêu chuẩn đầu tiên khi một lệnh chạy ở foreground (chạy nổi) cần phải dừng lại.\n\nNhấn **Ctrl+L** để xóa các đầu ra cũ khỏi màn hình hiển thị. Giống như lệnh `clear`, thao tác này không xóa tệp hoặc lịch sử lệnh.\n\nTạo một tệp đánh dấu hoàn thành sau khi quay lại dấu nhắc lệnh:\n\n```bash\necho \"Shortcuts practiced\" > /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\n```bash\ncat /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\nTệp đánh dấu này xác nhận rằng bạn đã lấy lại thành công dấu nhắc lệnh sau phần thực hành tương tác.",
       "hint_vi": "Chạy lệnh: cd /home/labex/project/file-basics/workspace/docs",
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "test -f /home/labex/project/file-basics/shortcuts-complete.txt || test -f /home/labex/project/file-basics/workspace/docs/guide.txt"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "groups": [
-                [
-                  "(?:shortcuts-complete|cat|tail|cd)"
-                ]
-              ],
-              "allowed_status": [
-                0,
-                1,
-                130
-              ]
-            }
-          ]
+          "kind": "unsupported",
+          "reason": "Chưa kiểm chứng được các tương tác Up/Tab/Ctrl+C/Ctrl+L theo yêu cầu; marker file đơn lẻ không chứng minh các thao tác này."
         },
         "namespace": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "test -f /home/labex/project/file-basics/shortcuts-complete.txt || test -f /home/labex/project/file-basics/workspace/docs/guide.txt"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "groups": [
-                [
-                  "(?:shortcuts-complete|cat|tail|cd)"
-                ]
-              ],
-              "allowed_status": [
-                0,
-                1,
-                130
-              ]
-            }
-          ]
+          "kind": "unsupported",
+          "reason": "Chưa kiểm chứng được các tương tác Up/Tab/Ctrl+C/Ctrl+L theo yêu cầu; marker file đơn lẻ không chứng minh các thao tác này."
         }
       },
       "required_capabilities_by_provider": {

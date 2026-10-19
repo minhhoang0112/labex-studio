@@ -9,7 +9,8 @@ import { spawn } from "node:child_process";
 import coursesRouter from "./routes/courses.js";
 import verifyRouter from "./routes/verify.js";
 import aiRouter from "./routes/ai.js";
-import cloudVmRouter from "./routes/cloudVm.js";
+import { createCloudVmRouter } from "./routes/cloudVm.js";
+import { createDesktopGateway } from "./services/desktopGateway.js";
 import { createEnvironmentRouter } from "./routes/environment.js";
 import { createTerminalSession } from "./pty/terminalManager.js";
 import { getEnvironment } from "./pty/linuxEnvironment.js";
@@ -22,6 +23,7 @@ const server = http.createServer(app);
 const wss = new WebSocketServer({ noServer: true });
 const port = Number(process.env.PORT || 5000);
 const host = process.env.HOST || "127.0.0.1";
+const desktopGateway = createDesktopGateway();
 
 process.on("uncaughtException", (error) => {
   if (error?.code === "EPIPE" || error?.code === "ECONNRESET") {
@@ -60,7 +62,7 @@ app.use("/api", createEnvironmentRouter({ disconnect: async (labId) => {
   })));
 } }));
 app.use("/api", verifyRouter);
-app.use("/api", cloudVmRouter);
+app.use("/api", createCloudVmRouter({ desktop: desktopGateway }));
 app.use("/api/ai", aiRouter);
 app.use("/api", (_req, res) => res.status(404).json({ error: "API không tồn tại." }));
 
@@ -82,6 +84,10 @@ app.use((error, _req, res, _next) => {
 });
 server.on("upgrade", (req, socket, head) => {
   const url = new URL(req.url, "http://localhost");
+  if (url.pathname === '/ws/desktop' && allowedOrigin(req.headers.origin)) {
+    desktopGateway.upgrade(req, socket, head);
+    return;
+  }
   if (url.pathname !== "/ws/terminal" || !allowedOrigin(req.headers.origin)) {
     socket.end("HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n");
     return;

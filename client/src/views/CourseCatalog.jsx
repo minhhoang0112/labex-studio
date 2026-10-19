@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import CourseCard from '../components/CourseCard';
 import { 
   Terminal, Shield, Cloud, Server, Sparkles, Filter,
-  BookOpen, Award, CheckCircle, Search, ArrowRight, Layers 
+  BookOpen, Award, CheckCircle, Search, ArrowRight, Layers,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -14,6 +15,8 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
   const [onlyReady, setOnlyReady] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [topicSearch, setTopicSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 9;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [attempt, setAttempt] = useState(0);
@@ -67,6 +70,10 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
     return () => controller.abort();
   }, [selectedTopic, selectedLevel, searchTerm, attempt]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedTopic, selectedLevel, searchTerm, onlyReady]);
+
   const handleSelectTopic = (alias) => {
     setSelectedTopic(alias);
     window.scrollTo({ top: document.getElementById('catalog-content')?.offsetTop - 80 || 600, behavior: 'smooth' });
@@ -81,40 +88,114 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
     ? courses.filter(c => ['ready', 'partial'].includes(c.readiness) && c.practice_labs_count > 0)
     : courses;
 
+  const totalPages = Math.ceil(displayedCourses.length / PAGE_SIZE) || 1;
+  const paginatedCourses = displayedCourses.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    const el = document.getElementById('catalog-content');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-950 transition-colors">
-      {/* 1. Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-blue-900 via-indigo-950 to-gray-950 text-white pt-20 pb-24 border-b border-gray-800">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      {/* 1. Hero Section - Multi-Platform (Linux & Windows Cloud) */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-indigo-950 to-gray-950 text-white pt-20 pb-20 border-b border-gray-800">
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]"></div>
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute -top-32 -right-32 w-96 h-96 bg-sky-500/15 rounded-full blur-3xl pointer-events-none"></div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold border border-blue-400/30 shadow-inner">
-            <Sparkles className="w-4 h-4 text-blue-400" />
-            Nền tảng thực hành Linux, DevOps & Cloud trực tiếp trên máy của bạn
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center space-y-7">
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/15 text-blue-300 text-xs font-semibold border border-blue-400/30 shadow-inner">
+            <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              LabEx Studio Hub
+            </span>
+            <span className="text-slate-500">•</span>
+            <span className="flex items-center gap-1"><Terminal className="w-3.5 h-3.5 text-amber-400" /> Linux Enterprise Sandbox</span>
+            <span className="text-slate-500">•</span>
+            <span className="flex items-center gap-1"><Server className="w-3.5 h-3.5 text-sky-400" /> Windows Server Azure Cloud</span>
           </div>
           
           <h1 className="text-4xl sm:text-6xl font-black tracking-tight max-w-4xl mx-auto leading-tight">
-            Start Learning with <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">Hands-On Courses</span>
+            Master Infrastructure with <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-amber-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
+              Hands-On Production Labs
+            </span>
           </h1>
           
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-300 leading-relaxed">
-            Thực hành với terminal Linux riêng cho từng bài. Hệ thống kiểm tra kết quả thao tác thực và trợ lý <strong>Labby</strong> cung cấp gợi ý theo nhiệm vụ.
+          <p className="max-w-3xl mx-auto text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
+            Trải nghiệm thực chiến song song: Máy ảo Linux cô lập tức thì trên WSL2 / Docker và hạ tầng Windows Server Datacenter trên Azure Cloud. Chấm điểm tự động từng lệnh và hướng dẫn trực quan từng bước.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-3.5 pt-1">
             <button
               onClick={() => onSelectPath ? onSelectPath('linux') : handleSelectTopic('linux')}
-              className="px-6 py-3 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold shadow-lg shadow-primary-500/25 flex items-center gap-2 transition-all">
-              <Terminal className="w-4 h-4" /> Khám phá Lộ trình Linux (Roadmap)
+              className="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-lg shadow-amber-500/20 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]">
+              <Terminal className="w-4 h-4 text-slate-900" /> Lộ trình Linux Enterprise
+            </button>
+            <button
+              onClick={() => handleSelectTopic('windows')}
+              className="px-5 py-3 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-bold shadow-lg shadow-primary-500/25 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]">
+              <Server className="w-4 h-4 text-white" /> Windows Server Cloud Labs
             </button>
             <button
               onClick={() => {
                 const el = document.getElementById('catalog-content');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur border border-white/15 flex items-center gap-2 transition-all">
-              Xem tất cả khóa học <ArrowRight className="w-4 h-4" />
+              className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur border border-white/15 flex items-center gap-2 transition-all">
+              Tất cả khóa học <ArrowRight className="w-4 h-4" />
             </button>
+          </div>
+
+          {/* Quick Metrics Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto pt-4 text-left">
+            <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                <Terminal className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-slate-200">Linux Rootless</div>
+                <div className="text-[11px] text-slate-400 truncate">Sandbox cô lập 100%</div>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
+                <Server className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-slate-200">Azure Datacenter</div>
+                <div className="text-[11px] text-slate-400 truncate">AD DS, IIS, PowerShell</div>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                <CheckCircle className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-slate-200">Auto Verification</div>
+                <div className="text-[11px] text-slate-400 truncate">Chấm điểm thao tác thực</div>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-slate-200">Labby AI Assistant</div>
+                <div className="text-[11px] text-slate-400 truncate">Gợi ý & sửa lỗi thông minh</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -409,14 +490,64 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
                   ))}
                 </div>
               ) : displayedCourses.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {displayedCourses.map((course) => (
-                    <CourseCard
-                      key={course.id}
-                      course={course}
-                      onSelectCourse={onSelectCourse}
-                    />
-                  ))}
+                <div className="space-y-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {paginatedCourses.map((course) => (
+                      <CourseCard
+                        key={course.id}
+                        course={course}
+                        onSelectCourse={onSelectCourse}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Pagination Controls */}
+                  {totalPages > 1 && (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        Hiển thị <span className="font-semibold text-gray-800 dark:text-gray-200">{(currentPage - 1) * PAGE_SIZE + 1}</span> - <span className="font-semibold text-gray-800 dark:text-gray-200">{Math.min(currentPage * PAGE_SIZE, displayedCourses.length)}</span> trên tổng số <span className="font-semibold text-gray-800 dark:text-gray-200">{displayedCourses.length}</span> khóa học
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-white dark:disabled:hover:bg-gray-800 transition flex items-center gap-1">
+                          <ChevronLeft className="w-3.5 h-3.5" /> Trước
+                        </button>
+
+                        <div className="flex items-center gap-1">
+                          {Array.from({ length: totalPages }, (_, idx) => idx + 1)
+                            .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
+                            .map((p, idx, arr) => {
+                              const prev = arr[idx - 1];
+                              const showEllipsis = prev && p - prev > 1;
+                              return (
+                                <React.Fragment key={p}>
+                                  {showEllipsis && <span className="px-1 text-xs text-gray-400">…</span>}
+                                  <button
+                                    onClick={() => handlePageChange(p)}
+                                    className={`w-8 h-8 rounded-lg text-xs font-bold transition ${
+                                      currentPage === p
+                                        ? 'bg-primary-600 text-white shadow-sm shadow-primary-500/20'
+                                        : 'border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                    }`}>
+                                    {p}
+                                  </button>
+                                </React.Fragment>
+                              );
+                            })}
+                        </div>
+
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-white dark:disabled:hover:bg-gray-800 transition flex items-center gap-1">
+                          Sau <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="text-center py-16 px-4 bg-white dark:bg-gray-900 rounded-2xl border border-dashed dark:border-gray-800">

@@ -39,6 +39,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
   const [environmentLoading, setEnvironmentLoading] = useState(true);
   const [setupError, setSetupError] = useState('');
   const [terminalStarted, setTerminalStarted] = useState(false);
+  const [desktopExpanded, setDesktopExpanded] = useState(false);
   const [mobilePane, setMobilePane] = useState('guide');
   const [desktopLayout, setDesktopLayout] = useState(() => window.matchMedia('(min-width: 768px)').matches);
   const [inlineAi, setInlineAi] = useState(() => window.matchMedia('(min-width: 1280px)').matches);
@@ -230,6 +231,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
   const currentSection = sections[currentSectionIndex] || sections[0];
   const isDocFullscreen = currentSection?.layout === 'doc-fullscreen';
   const isWindowsLab = Boolean(lab?.id?.startsWith('win-') || lab?.course_id?.includes('win'));
+  const wideWindowsDesktop = isWindowsLab && desktopExpanded && !isDocFullscreen;
   const terminalAllowed = lab?.availability?.can_start_terminal === true &&
     environment?.available === true && environment?.capabilities?.terminal === true;
   useEffect(() => {
@@ -327,17 +329,19 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
   return (
     <div className="h-dvh w-full flex flex-col bg-slate-950 overflow-hidden text-slate-100 select-none">
       {/* Top Navbar matching authentic LabEx Workbench */}
-      <header className="min-h-12 bg-slate-950 border-b border-slate-800 px-2 sm:px-4 py-2 flex flex-wrap gap-2 items-center justify-between shrink-0 z-20">
+      <header className={`${isWindowsLab ? 'min-h-10 py-1' : 'min-h-12 py-2'} bg-slate-950 border-b border-slate-800 px-2 sm:px-4 flex flex-wrap gap-2 items-center justify-between shrink-0 z-20`}>
         {/* Left: Breadcrumb, Prev/Next & Title */}
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
           <button 
             onClick={() => onBackToCourse(lab.course_id)} 
             aria-label="Về khóa học"
-            className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Khóa học</span>
+            title="Thoát bài thực hành và quay về danh sách khóa học"
+            className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 shadow-xs flex items-center gap-2 text-xs font-bold transition-all group">
+            <ArrowLeft className="w-4 h-4 text-primary-400 group-hover:-translate-x-0.5 transition-transform" />
+            <span className="hidden sm:inline">Trở về Khóa học</span>
+            <span className="sm:hidden">Trở về</span>
           </button>
-          <span className="text-slate-600">|</span>
+          <span className="text-slate-700">|</span>
 
           {/* Quick Prev / Next Navigation */}
           {siblings.length > 0 && (
@@ -369,13 +373,13 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
           }`}>
             {lab.type === 'challenge' ? 'Thử thách' : 'Bài Lab'}
           </span>
-          <h1 className="font-semibold text-sm text-slate-200 truncate max-w-[45vw] sm:max-w-xs">
+          <h1 className="font-semibold text-sm text-slate-200 truncate max-w-[45vw] sm:max-w-md">
             {(lang === 'vi' && lab.title_vi) ? lab.title_vi : lab.title}
           </h1>
         </div>
 
         {/* Center: Environment Tabs (Desktop / WebIDE / Terminal / Web 8080) */}
-        <div className="hidden xl:flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs">
+        <div className={`${isWindowsLab ? 'hidden' : 'hidden xl:flex'} items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs`}>
                     {/* Windows Console Tab */}
           {isWindowsLab && (
             <button
@@ -490,14 +494,15 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
           </button>
 
           {/* Reset Environment Button */}
-          <button
+          {!isWindowsLab && <button
             onClick={() => setResetConfirmOpen(true)}
+            disabled={isWindowsLab}
             aria-label="Khởi động lại Lab"
-            title="Khởi tạo lại môi trường bài thực hành này"
+            title={isWindowsLab ? 'VM Windows dùng chung; chưa hỗ trợ hoàn nguyên tự động từng bài.' : 'Khởi tạo lại môi trường bài thực hành này'}
             className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg transition">
             <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
             <span className="hidden sm:inline">Khởi động lại Lab</span>
-          </button>
+          </button>}
 
           {/* Labby AI Tutor Trigger Button */}
           <button
@@ -585,7 +590,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
         <div 
           data-testid="guide-pane"
           style={{ 
-            display: guideVisible ? 'flex' : 'none',
+            display: guideVisible && !wideWindowsDesktop ? 'flex' : 'none',
             width: isDocFullscreen || !desktopLayout ? '100%' : `clamp(280px, calc(${leftWidthPercent}% - ${(isAiOpen && inlineAi ? 410 : 10) * leftWidthPercent / 100}px), calc(100% - ${isAiOpen && inlineAi ? 730 : 330}px))`,
             transition: 'none'
           }}
@@ -612,7 +617,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
         </div>
 
         {/* Draggable Divider Bar (Hidden if doc-fullscreen) */}
-        {!isDocFullscreen && (
+        {!isDocFullscreen && !wideWindowsDesktop && (
           <div
             onPointerDown={startResizing}
             role="separator"
@@ -638,7 +643,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
         )}
 
         {/* Center/Right Pane: Terminal Environment & Web 8080 Preview */}
-        <div data-testid="terminal-pane" className={`flex-1 min-h-0 h-full flex-col p-2 bg-slate-950 overflow-hidden min-w-0 ${
+        <div data-testid="terminal-pane" className={`flex-1 min-h-0 h-full flex-col ${isWindowsLab ? 'px-2 py-1' : 'p-2'} bg-slate-950 overflow-hidden min-w-0 ${
           isDocFullscreen || (!desktopLayout && mobilePane !== 'terminal') ? 'hidden' : 'flex'
         }`}>
                     {/* Windows Server Console Simulator */}
@@ -647,6 +652,9 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
               <WindowsConsole 
                 key={lab.id}
                 labId={lab.id} 
+                expanded={desktopExpanded}
+                onOutput={chunk => setLastTerminalOutput(previous => (previous + chunk).slice(-4000))}
+                onToggleExpanded={() => setDesktopExpanded(value => !value)}
                 onActionComplete={() => setVerificationEpoch(v => v + 1)} 
               />
             </div>

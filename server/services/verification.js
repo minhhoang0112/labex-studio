@@ -7,7 +7,11 @@ export function hasUnconditionalSuccess(command) {
 }
 
 export function isUnboundedCommandPattern(pattern) {
-  return typeof pattern !== "string" || ["", ".", ".*", ".+", "^", "$", "^.*$", "^.+$", "^\\s*.*$"].includes(pattern.trim());
+  return typeof pattern !== "string" || ["", ".", ".*", ".+", "^", "$", "^.*$", "^.+$", "^\\s*.*$",
+    // Importers must not turn unknown practical graders into "any command".
+    "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$",
+    "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)",
+  ].includes(pattern.trim());
 }
 
 export function getVerificationDefinition(step, provider = process.env.LABEX_RUNTIME_PROVIDER || "namespace") {

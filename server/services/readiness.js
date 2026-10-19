@@ -1,15 +1,11 @@
 import fs from "node:fs";
+import { windowsStepReadiness } from './windowsRemoteVerifier.js';
 import { hasUnconditionalSuccess, isUnboundedCommandPattern, getVerificationDefinition } from "./verification.js";
 
 // Curriculum support for the current namespace provider. Live startup health is
 // reported separately by /api/environment; catalog reads never start a VM.
 const capabilities = new Set([
-  "terminal", "files", "users", "sudo", "permissions", "shell", "archives",
-  "package_management", "docker", "persistent_processes", "persistent-process-fixtures",
-  "ifconfig", "ifconfig-tool", "internet-icmp", "external_icmp",
-  "portal-network-fixture", "network_ports", "network",
-  "private-firewall", "firewall",
-  "private-package-image", "private-cron", "cron_scheduler"
+  "terminal", "files", "users", "sudo", "permissions", "shell", "archives"
 ]);
 
 function providerCapabilities(provider) {
@@ -46,6 +42,15 @@ export function getStepReadiness(step, lab = {}) {
     ...(lab.required_capabilities_by_provider?.[provider] || lab.required_capabilities || []),
     ...(step.required_capabilities_by_provider?.[provider] || step.required_capabilities || [])])];
   const missing = requirements.filter(capability => !available.has(capability));
+  if (lab.id?.startsWith('win-')) {
+    const win = windowsStepReadiness(step);
+    const allMissing = [...new Set([...missing, ...win.missing_capabilities])];
+    return {
+      ready: win.ready && !missing.length,
+      missing_capabilities: allMissing,
+      reasons: [...win.reasons, ...(missing.length ? [`Môi trường hiện tại thiếu: ${missing.join(", ")}.`] : [])]
+    };
+  }
   const reason = unsupportedRule(getVerificationDefinition(step, provider));
   return { ready: !reason && !missing.length, missing_capabilities: missing,
     reasons: [...(reason ? [reason] : []), ...(missing.length ? [`Môi trường hiện tại thiếu: ${missing.join(", ")}.`] : [])] };
@@ -56,7 +61,7 @@ export function getLabReadiness(lab) {
   const results = steps.map(step => getStepReadiness(step, lab));
   const supported = results.filter(result => result.ready).length;
   return { state: !steps.length ? "reference-only" : supported === steps.length ? "ready" : supported ? "partial" : "blocked",
-    can_open: Boolean(steps.length), can_start_terminal: supported > 0, can_grade: supported === steps.length && supported > 0,
+    can_open: Boolean(steps.length), can_start_terminal: !lab.id?.startsWith('win-') && supported > 0, can_grade: supported === steps.length && supported > 0,
     supported_steps_count: supported, total_steps_count: steps.length,
     missing_capabilities: [...new Set(results.flatMap(result => result.missing_capabilities))],
     reasons: [...new Set(results.flatMap(result => result.reasons))] };

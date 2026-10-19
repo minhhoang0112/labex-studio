@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { api } from '../lib/api';
 import ReactMarkdown from 'react-markdown';
+import GuideImage from './GuideImage';
 import remarkGfm from 'remark-gfm';
 import { 
   CheckCircle2, 
@@ -304,6 +305,9 @@ export default function LabGuide({
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
                   components={{
+                    img({ src, alt, title }) {
+                      return <GuideImage src={src} alt={alt} title={title} isVi={isVi} />;
+                    },
                     pre({ children }) {
                       const codeString = children?.props?.children || '';
                       return (

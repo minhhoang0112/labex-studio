@@ -1,4 +1,5 @@
 # TÀI LIỆU YÊU CẦU KỸ THUẬT VÀ BÀN GIAO BACKEND CHO CODEX
+
 ## HỆ THỐNG LABEX - TỰ ĐỘNG HÓA AZURE CLOUD VM & IN-BROWSER REMOTE DESKTOP
 
 > **Người lập:** Antigravity (Frontend & Content Specialist)  
@@ -10,16 +11,17 @@
 
 ## 1. TỔNG QUAN PHÂN CHIA TRÁCH NHIỆM (DIVISION OF RESPONSIBILITIES)
 
-| Phân hệ | Bên phụ trách | Phạm vi công việc |
-|:---|:---|:---|
-| **Frontend (FE) & Lab Content** | **Antigravity** | - Thiết kế & hoàn thiện giao diện người dùng: `LabWorkspace`, `WindowsConsole`, `Terminal`, `CourseCatalog`.<br>- Soạn thảo nội dung bài lab hướng dẫn thao tác giao diện đồ họa GUI (Server Manager, ADUC, MMC, IIS, DNS, Group Policy...).<br>- Tích hợp PowerShell Web Console, hiển thị trạng thái máy ảo và bộ nút điều khiển. |
-| **Backend (BE) & Cloud Integration** | **Codex** | - Tự động hóa gọi Azure API (`@azure/arm-compute`) để Start/Stop/Deallocate máy ảo thật mà không cần người dùng vào Azure Portal.<br>- Triển khai luồng Stream Màn hình Desktop trực tiếp trong trình duyệt (Web RDP / Guacamole WebSocket) thay vì chỉ tải file `.rdp`.<br>- Xây dựng bộ chấm điểm từ xa (Remote Verifier) cho Windows Server qua WinRM/SSH. |
+| Phân hệ                              | Bên phụ trách   | Phạm vi công việc                                                                                                                                                                                                                                                                                                                                             |
+| :----------------------------------- | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Frontend (FE) & Lab Content**      | **Antigravity** | - Thiết kế & hoàn thiện giao diện người dùng: `LabWorkspace`, `WindowsConsole`, `Terminal`, `CourseCatalog`.<br>- Soạn thảo nội dung bài lab hướng dẫn thao tác giao diện đồ họa GUI (Server Manager, ADUC, MMC, IIS, DNS, Group Policy...).<br>- Tích hợp PowerShell Web Console, hiển thị trạng thái máy ảo và bộ nút điều khiển.                           |
+| **Backend (BE) & Cloud Integration** | **Codex**       | - Tự động hóa gọi Azure API (`@azure/arm-compute`) để Start/Stop/Deallocate máy ảo thật mà không cần người dùng vào Azure Portal.<br>- Triển khai luồng Stream Màn hình Desktop trực tiếp trong trình duyệt (Web RDP / Guacamole WebSocket) thay vì chỉ tải file `.rdp`.<br>- Xây dựng bộ chấm điểm từ xa (Remote Verifier) cho Windows Server qua WinRM/SSH. |
 
 ---
 
 ## 2. HIỆN TRẠNG KỸ THUẬT HIỆN TẠI (CURRENT SYSTEM ARCHITECTURE)
 
 ### 2.1. Hạ tầng Azure VM hiện có:
+
 - **Tài khoản:** Azure for Students
 - **Resource Group:** `LabEx-India-RG` (Khu vực: `centralindia`, Zone 1)
 - **Virtual Machine:** `LabEx-WinServer`
@@ -30,6 +32,7 @@
 - **Các cổng đã mở:** Port 3389 (RDP), Port 80 (HTTP), Port 443 (HTTPS), Port 5985 (WinRM)
 
 ### 2.2. Trạng thái Backend hiện tại (`server/`):
+
 1. **Linux Runtime (Đã hoàn thiện 100%):**
    - Chạy trên WSL2 Ubuntu qua Docker Rootless (`minh` user).
    - Đã có cơ chế Self-Healing trong [`server/pty/docker_runner.py`](file:///D:/Project/LabEx/server/pty/docker_runner.py): Nếu socket daemon bị ngắt, tự động khởi động lại sau 1-2 giây.
@@ -56,6 +59,7 @@ flowchart TD
 ```
 
 ### Nhiệm vụ 1: Tự động hóa điều khiển Azure VM (Azure API Integration)
+
 - **Mục tiêu:** Khi người dùng bấm nút "Bật Máy Ảo" trên web, máy ảo trên Azure thật sự khởi động. Khi bấm "Tắt Máy", máy ảo tự Deallocate để dừng tính phí.
 - **Giải pháp đề xuất:**
   - Cài đặt thư viện: `npm install @azure/identity @azure/arm-compute` trong `server/`.
@@ -69,25 +73,36 @@ flowchart TD
       AZURE_SUBSCRIPTION_ID=...
       ```
   - Triển khai trong `server/services/azureVmService.js`:
+
     ```javascript
     import { ComputeManagementClient } from "@azure/arm-compute";
     import { DefaultAzureCredential } from "@azure/identity";
 
-    const client = new ComputeManagementClient(new DefaultAzureCredential(), subscriptionId);
+    const client = new ComputeManagementClient(
+      new DefaultAzureCredential(),
+      subscriptionId,
+    );
 
     export async function startAzureVmReal() {
-      return await client.virtualMachines.beginStartAndWait("LabEx-India-RG", "LabEx-WinServer");
+      return await client.virtualMachines.beginStartAndWait(
+        "LabEx-India-RG",
+        "LabEx-WinServer",
+      );
     }
 
     export async function stopAzureVmReal() {
-      return await client.virtualMachines.beginDeallocateAndWait("LabEx-India-RG", "LabEx-WinServer");
+      return await client.virtualMachines.beginDeallocateAndWait(
+        "LabEx-India-RG",
+        "LabEx-WinServer",
+      );
     }
     ```
 
 ---
 
 ### Nhiệm vụ 2: Màn hình Windows Server Desktop TRỰC TIẾP trong trình duyệt (In-Browser Web RDP)
-- **Vấn đề người dùng phản ánh:** *"tôi thấy nút mở màn hình bấm vào nhưng mà nó cho tải một cái file remode về chứ ko hề thấy mở màn hình... tôi muốn hệ thống tập trung nâng cấp cái máy ảo chứ mở remote cũng thấy sao sao..."*
+
+- **Vấn đề người dùng phản ánh:** _"tôi thấy nút mở màn hình bấm vào nhưng mà nó cho tải một cái file remode về chứ ko hề thấy mở màn hình... tôi muốn hệ thống tập trung nâng cấp cái máy ảo chứ mở remote cũng thấy sao sao..."_
 - **Mục tiêu:** Thay vì bắt người dùng tải file `.rdp` về máy tính, hãy nhúng trực tiếp luồng hiển thị màn hình Windows Server 2022 vào thẻ tab trên Web LabEx.
 - **Giải pháp đề xuất:**
   1. **Phương án 1 (Chuẩn công nghiệp - Apache Guacamole / Guacamole-Lite):**
@@ -100,6 +115,7 @@ flowchart TD
 ---
 
 ### Nhiệm vụ 3: Bộ chấm điểm từ xa cho Windows Server (Remote Verifier Engine)
+
 - **Vấn đề:** Hiện tại lệnh chấm điểm của các bài lab Windows (`verification.js`) đang kiểm tra lịch sử lệnh giả lập local.
 - **Mục tiêu:** Khi học viên thực hành trên máy ảo Azure thật (ví dụ: tạo OU `Company_HQ`, tạo User `david.miller`, cấu hình IIS Website cổng `8080`), khi bấm nút "Kiểm tra kết quả" (Verify), backend phải truy vấn sang máy ảo Azure để xác nhận cấu hình đã thực sự được tạo!
 - **Giải pháp:**
@@ -121,5 +137,6 @@ flowchart TD
 ---
 
 ## 5. KẾT LUẬN & ĐỀ NGHỊ PHỐI HỢP
+
 - **Antigravity** đã hoàn thiện toàn bộ Frontend, giao diện điều khiển, thiết kế tab và nội dung hướng dẫn thao tác GUI chi tiết cho các bài lab Active Directory và IIS.
 - **Codex** vui lòng tiếp nhận phần Backend Cloud Orchestration theo tài liệu này để hoàn thiện hệ sinh thái Windows Server thực thụ cho dự án!

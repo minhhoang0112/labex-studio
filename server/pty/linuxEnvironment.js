@@ -155,15 +155,17 @@ async function runLabOperation(labId, mode, command, timeout = COMMAND_TIMEOUT) 
 
 const windowsLabHistory = new Map();
 
-export function recordWindowsCommand(labId, command, status = 0) {
+export function recordWindowsCommand(labId, command, status = 0, evidence = {}) {
   if (!windowsLabHistory.has(labId)) windowsLabHistory.set(labId, []);
-  windowsLabHistory.get(labId).push({ command, status, user: "labex", timestamp: Date.now() });
+  const history = windowsLabHistory.get(labId);
+  history.push({ command, status, user: "labex", timestamp: Date.now(), ...evidence });
+  if (history.length > 500) history.splice(0, history.length - 500);
 }
 
 export async function execLabCommand(labId, command) {
   if (typeof command !== "string" || !command.trim()) throw new TypeError("A verification command is required");
   if (typeof labId === "string" && (labId.startsWith("win-") || labId.includes("windows"))) {
-    return { stdout: "OK", stderr: "", exitCode: 0, timedOut: false };
+    throw unavailable('Bài Windows phải được kiểm tra trên Windows VM qua remote verifier.');
   }
   const { stdout, stderr, exitCode, timedOut } = await runLabOperation(labId, "command", command);
   // Docker verifier commands also have an inner timeout so a disconnected CLI

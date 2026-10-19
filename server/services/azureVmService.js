@@ -1,149 +1,63 @@
-import net from 'node:net';
+import { azureClient } from './azureComputeClient.js';
+import { cloudConfig, cloudError, publicCloudError } from './cloudConfig.js';
 
-/**
- * Azure VM Control Service
- * Manages the status and configuration for Azure Virtual Machines in LabEx labs
- */
-
-const VM_CONFIG = {
-  resourceGroup: process.env.AZURE_VM_RG || 'LabEx-India-RG',
-  vmName: process.env.AZURE_VM_NAME || 'LabEx-WinServer',
-  publicIp: process.env.AZURE_VM_IP || '20.40.49.168',
-  location: 'centralindia',
-  adminUsername: 'adminlab'
-};
-
-// Probe live TCP port to know if Azure VM is actually Running or Stopped (deallocated)
-function checkVmPort(host, port = 3389, timeout = 2500) {
-  return new Promise((resolve) => {
-    const socket = net.createConnection({ host, port, timeout });
-    socket.once('connect', () => {
-      socket.destroy();
-      resolve(true);
-    });
-    socket.once('timeout', () => {
-      socket.destroy();
-      resolve(false);
-    });
-    socket.once('error', () => {
-      socket.destroy();
-      resolve(false);
-    });
-  });
-}
-
-let cachedStatus = {
-  powerState: 'VM deallocated',
-  lastChecked: 0,
-  isBusy: false
-};
-
-/**
- * Get current Azure VM live status via port probing
- */
-export async function getAzureVmStatus() {
-  const now = Date.now();
-  // Cache for 4 seconds to avoid flood
-  if (now - cachedStatus.lastChecked < 4000 && !cachedStatus.isBusy) {
-    return {
-      ...VM_CONFIG,
-      powerState: cachedStatus.powerState,
-      isBusy: cachedStatus.isBusy,
-      rdpPort: 3389,
-      webPort: 80
-    };
+export function createAzureVmService({ client = azureClient, config = cloudConfig, now = Date.now } = {}) {
+  let pending = null, cached = null, lastError = null;
+  function publicConfig() {
+    const { resourceGroup, vmName, publicIp, adminUsername, rdpPort } = config();
+    return { resourceGroup, vmName, publicIp, adminUsername, rdpPort, statusSource: 'azure-arm',
+      controlConfigured: Boolean(config().subscriptionId) };
   }
-
-  const isPortOpen = await checkVmPort(VM_CONFIG.publicIp, 3389, 2500);
-  cachedStatus.powerState = isPortOpen ? 'VM running' : 'VM deallocated';
-  cachedStatus.lastChecked = now;
-
-  return {
-    ...VM_CONFIG,
-    powerState: cachedStatus.powerState,
-    isBusy: cachedStatus.isBusy,
-    rdpPort: 3389,
-    webPort: 80,
-    isPortOpen
-  };
+  async function status({ force = false } = {}) {
+    if (!force && cached && now() - cached.lastChecked < 4000) return { ...cached.value, isBusy: Boolean(pending) };
+    const base = publicConfig();
+    if (!base.controlConfigured) return { ...base, powerState: 'unknown', isBusy: false,
+      error: 'Chưa đăng nhập/cấu hình Azure. Chạy scripts/azure-login.ps1.' };
+    try {
+      const { resourceGroup, vmName } = config();
+      const view = await client().virtualMachines.instanceView(resourceGroup, vmName);
+      const power = view.statuses?.find(item => item.code?.startsWith('PowerState/'));
+      const value = { ...base, powerState: power?.displayStatus || 'unknown',
+        powerStateCode: power?.code || null, isBusy: Boolean(pending),
+        operation: pending, operationError: lastError, lastChecked: new Date(now()).toISOString() };
+      cached = { lastChecked: now(), value };
+      return value;
+    } catch (error) {
+      return { ...base, powerState: 'unknown', isBusy: Boolean(pending), error: publicCloudError(error).message };
+    }
+  }
+  async function operate(action) {
+    if (pending) throw cloudError('VM đang thực hiện một thao tác. Chờ thao tác hoàn tất.', 409, 'CLOUD_BUSY');
+    pending = action; lastError = null; cached = null;
+    try {
+      const { resourceGroup, vmName } = config();
+      const machines = client().virtualMachines;
+      const poller = action === 'start' ? machines.start(resourceGroup, vmName)
+        : machines.deallocate(resourceGroup, vmName);
+      // Confirm ARM accepted the request before reporting success to the UI.
+      await poller.poll();
+      const completion = poller.pollUntilDone();
+      completion.catch(error => { lastError = publicCloudError(error).message; })
+        .finally(() => { pending = null; cached = null; });
+      return { accepted: true, success: true, operation: action,
+        powerState: action === 'start' ? 'starting' : 'deallocating',
+        message: 'Azure đã nhận yêu cầu. Trạng thái cuối cùng sẽ cập nhật từ Azure ARM.' };
+    } catch (error) {
+      pending = null;
+      throw publicCloudError(error);
+    }
+  }
+  return { status, start: () => operate('start'), stop: () => operate('deallocate') };
 }
 
-/**
- * Start Azure VM
- */
-export async function startAzureVm() {
-  cachedStatus.isBusy = true;
-  cachedStatus.powerState = 'starting';
-
-  // Attempt to probe in the background
-  setTimeout(async () => {
-    const isPortOpen = await checkVmPort(VM_CONFIG.publicIp, 3389, 2500);
-    cachedStatus.powerState = isPortOpen ? 'VM running' : 'VM deallocated';
-    cachedStatus.isBusy = false;
-  }, 10000);
-
-  return { 
-    success: true, 
-    message: 'Đang kiểm tra kết nối với Azure VM. Bạn cũng có thể bấm "Start" trực tiếp trên Azure Portal để bật máy.',
-    powerState: 'starting' 
-  };
-}
-
-/**
- * Stop (Deallocate) Azure VM
- */
-export async function stopAzureVm() {
-  cachedStatus.isBusy = true;
-  cachedStatus.powerState = 'stopping';
-
-  setTimeout(async () => {
-    const isPortOpen = await checkVmPort(VM_CONFIG.publicIp, 3389, 2500);
-    cachedStatus.powerState = isPortOpen ? 'VM running' : 'VM deallocated';
-    cachedStatus.isBusy = false;
-  }, 10000);
-
-  return { 
-    success: true, 
-    message: 'Đã cập nhật trạng thái dừng. Để bảo đảm dừng tính phí hoàn toàn, hãy bấm "Stop" trên Azure Portal.',
-    powerState: 'stopping' 
-  };
-}
-
-/**
- * Generate standard .rdp connection file content for 1-click login
- */
+const vm = createAzureVmService();
+export const getAzureVmStatus = options => vm.status(options);
+export const startAzureVm = () => vm.start();
+export const stopAzureVm = () => vm.stop();
 export function generateRdpConfigFile() {
-  return [
-    `full address:s:${VM_CONFIG.publicIp}:3389`,
-    `username:s:${VM_CONFIG.adminUsername}`,
-    'prompt for credentials:i:1',
-    'administrative session:i:1',
-    'screen mode id:i:2',
-    'use multimon:i:0',
-    'desktopwidth:i:1280',
-    'desktopheight:i:800',
-    'session bpp:i:24',
-    'compression:i:1',
-    'keyboardhook:i:2',
-    'audiomode:i:0',
-    'redirectclipboard:i:1',
-    'redirectprinters:i:0',
-    'redirectcomports:i:0',
-    'redirectsmartcards:i:0',
-    'redirectposdevices:i:0',
-    'drivestoredirect:s:',
-    'connection type:i:6',
-    'networkautodetect:i:0',
-    'bandwidthautodetect:i:1',
-    'displayconnectionbar:i:1',
-    'enableworkspacereconnect:i:0',
-    'disable wallpaper:i:1',
-    'allow font smoothing:i:1',
-    'allow desktop composition:i:0',
-    'disable full window drag:i:1',
-    'disable menu anims:i:1',
-    'disable themes:i:0',
-    'disable cursor setting:i:0',
-    'bitmapcachepersistenable:i:1'
-  ].join('\r\n');
+  const config = cloudConfig();
+  // No password is embedded in downloads.
+  return [`full address:s:${config.publicIp}:${config.rdpPort}`, `username:s:${config.adminUsername}`,
+    'prompt for credentials:i:1', 'administrative session:i:1', 'screen mode id:i:2',
+    'redirectclipboard:i:1', 'redirectprinters:i:0', 'drivestoredirect:s:'].join('\r\n');
 }

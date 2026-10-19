@@ -44,14 +44,19 @@ export default function Navbar({ currentView, setView, onOpenSearch, isDarkMode,
         <div className="flex items-center gap-4">
           <div 
             onClick={() => setView('catalog')}
-            className="flex items-center gap-2.5 cursor-pointer select-none">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-blue-500/25 font-black text-lg">
-              L
+            className="flex items-center gap-2.5 cursor-pointer select-none group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 p-0.5 shadow-md shadow-indigo-500/25 group-hover:shadow-indigo-500/40 group-hover:scale-105 transition-all duration-300">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                <svg className="w-5 h-5 text-indigo-400 group-hover:text-pink-300 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 17l6-6-6-6" />
+                  <path d="M12 19h8" />
+                </svg>
+              </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-xl text-gray-900 dark:text-white tracking-tight">LabEx</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300 uppercase tracking-wider">
-                Local
+              <span className="font-extrabold text-xl text-gray-900 dark:text-white tracking-tight group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">LabEx</span>
+              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white uppercase tracking-wider shadow-xs">
+                Studio
               </span>
             </div>
           </div>

@@ -3,8 +3,9 @@ import { isValidId, loadLab } from "../data/catalog.js";
 import { execLabCommand } from "../pty/linuxEnvironment.js";
 import { verifyDefinition, getVerificationDefinition } from "../services/verification.js";
 import { getStepReadiness } from "../services/readiness.js";
+import { verifyWindowsRemote } from '../services/windowsRemoteVerifier.js';
 
-export function createVerifyRouter({ findLab = loadLab, runCommand = execLabCommand, readHistory } = {}) {
+export function createVerifyRouter({ findLab = loadLab, runCommand = execLabCommand, readHistory, verifyWindows = verifyWindowsRemote } = {}) {
   const router = express.Router();
   router.post("/verify", async (req, res) => {
     const { labId, stepId } = req.body || {};
@@ -24,7 +25,7 @@ export function createVerifyRouter({ findLab = loadLab, runCommand = execLabComm
       const definition = getVerificationDefinition(step);
       // All rules come from the local curriculum. Browser-supplied commands,
       // history, success flags and output never contribute to a grade.
-      const result = await verifyDefinition(labId, definition, {
+      const result = labId.startsWith('win-') ? await verifyWindows(labId, step) : await verifyDefinition(labId, definition, {
         runCommand,
         acknowledged: req.body.acknowledge === true,
         stepIndex,

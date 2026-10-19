@@ -10,16 +10,19 @@
     "build:client": "npm run build --prefix client",
     "start": "node server/server.js",
     "dev": "node scripts/dev.mjs",
-    "test": "node --test",
+    "test": "node --test tests/*.test.js",
     "test:docker": "node scripts/run-docker-checks.mjs",
     "runtime:docker": "node scripts/select-runtime.mjs docker",
     "runtime:namespace": "node scripts/select-runtime.mjs namespace",
     "check:labs": "python server/data/generate_labs.py"
   },
   "dependencies": {
+    "@azure/arm-compute": "^25.3.0",
+    "@azure/identity": "^4.14.0",
     "cors": "^2.8.6",
     "dotenv": "^18.0.8",
     "express": "^5.3.0",
+    "guacamole-lite": "^1.2.0",
     "node-pty": "^1.1.0",
     "ws": "^8.22.0"
   }
