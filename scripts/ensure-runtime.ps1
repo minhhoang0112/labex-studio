@@ -18,5 +18,18 @@ if (-not $distro) { $distro = 'Ubuntu' }
 $helper = Join-Path $workspace 'scripts\bootstrap-rootless-docker.py'
 $linuxHelper = & wsl.exe --distribution $distro --exec wslpath -u $helper
 if ($LASTEXITCODE -ne 0) { throw 'Cannot locate the runtime startup helper inside WSL.' }
-& wsl.exe --distribution $distro --exec /usr/bin/python3 $linuxHelper.Trim() start
-if ($LASTEXITCODE -ne 0) { throw 'Rootless Docker did not start. Review the message above; the current server was not stopped.' }
+$retries = 3
+$started = $false
+for ($i = 1; $i -le $retries; $i++) {
+    & wsl.exe --distribution $distro --exec /usr/bin/python3 $linuxHelper.Trim() start
+    if ($LASTEXITCODE -eq 0) {
+        $started = $true
+        break
+    }
+    if ($i -lt $retries) {
+        Write-Warning "Rootless Docker cold-start delay (attempt $i/$retries), retrying in 2 seconds..."
+        Start-Sleep -Seconds 2
+    }
+}
+if (-not $started) { throw 'Rootless Docker did not start. Review the message above; the current server was not stopped.' }
+
