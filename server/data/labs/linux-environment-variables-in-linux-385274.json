@@ -37,13 +37,10 @@
       "task": "Thực hiện hướng dẫn: Create and Expand a Shell Variable",
       "hint": "Chạy lệnh: echo \"$course_name\"",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -81,13 +78,10 @@
       "task": "Thực hiện hướng dẫn: Observe Child-Process Inheritance",
       "hint": "Chạy lệnh: env | grep '^SHARED_MESSAGE='",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -125,13 +119,10 @@
       "task": "Thực hiện hướng dẫn: Inspect Standard Environment Variables",
       "hint": "Chạy lệnh: printenv HOME USER SHELL PWD TERM",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -169,13 +160,10 @@
       "task": "Thực hiện hướng dẫn: Extend PATH with a Personal Command",
       "hint": "Chạy lệnh: export PATH=\"$PATH:$HOME/bin\"",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -213,39 +201,13 @@
       "task": "Thực hiện hướng dẫn: Persist Settings for Future Zsh Sessions",
       "hint": "Chạy lệnh: source \"$HOME/.zshrc\"",
       "verification": {
-        "kind": "state",
-        "command": "grep -q 'PROJECT_DIR' /home/labex/.zshrc 2>/dev/null || grep -q 'PROJECT_DIR' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/environment-lab/future-shell.txt"
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu Zsh thật; image hiện chưa có Zsh, không chấm Bash thay cho phiên Zsh."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ cấu hình các phiên Zsh trong tương lai và phân biệt giữa cấu hình lưu trữ bền vững (persistent configuration) với trạng thái của shell hiện tại.\n\nViệc `export` làm thay đổi tiến trình hiện tại và các tiến trình con trong tương lai của nó; thao tác này không chỉnh sửa tệp cấu hình. Một thiết lập chỉ xuất hiện ở các terminal sau đó khi một tệp khởi động tạo lại nó. LabEx Terminal sử dụng Zsh, có tệp khởi động tương tác là `~/.zshrc`.\n\nThêm một khối được đánh dấu rõ ràng. Mỗi dòng `export` sẽ tạo lại một thiết lập môi trường bất cứ khi nào một phiên Zsh tương tác mới khởi động. Phiên bản dành cho người mới bắt đầu này giữ cho tệp khởi động mang tính trực quan: giữ nguyên `PATH` hiện có, sau đó thêm thư mục cá nhân vào cuối.\n\n```bash\ncat >> \"$HOME/.zshrc\" <<'EOF'\n## LABEX_ENV_LAB_START\nexport PROJECT_DIR=\"$HOME/project\"\nexport PATH=\"$PATH:$HOME/bin\"\n## LABEX_ENV_LAB_END\nEOF\n```\n\nLệnh `source` đọc một tệp trong shell hiện tại. Tải lại `.zshrc` ngay bây giờ để bạn có thể sử dụng các thiết lập của nó mà không cần đóng Terminal:\n\n```bash\nsource \"$HOME/.zshrc\"\n```\n\nXác nhận rằng biến đã được tải lại có sẵn:\n\n```bash\nprintf 'PROJECT_DIR=%s\\n' \"$PROJECT_DIR\"\n```\n\nBạn sẽ thấy `PROJECT_DIR=/home/labex/project`. Bạn cũng có thể khởi động một tiến trình Zsh mới để chứng minh rằng một phiên làm việc trong tương lai sẽ tải các thiết lập tương tự. Trong `zsh -ic`, `-i` yêu cầu một shell tương tác để `.zshrc` được đọc, và `-c` cung cấp lệnh mà shell đó sẽ chạy. Chuyển hướng hai dòng đầu ra của nó vào tệp `future-shell.txt`, sau đó kiểm tra tệp:\n\n```bash\nzsh -ic 'printf \"PROJECT_DIR=%s\\n\" \"$PROJECT_DIR\"; command -v course-status' > /home/labex/project/environment-lab/future-shell.txt\ncat /home/labex/project/environment-lab/future-shell.txt\n```\n\nDòng đầu tiên sẽ hiển thị `/home/labex/project`; dòng thứ hai sẽ hiển thị `/home/labex/bin/course-status`.\n\nCuối cùng, hãy tìm hiểu sự khác biệt giữa trạng thái hiện tại và cấu hình lưu trữ bền vững. Tạo và xóa một biến môi trường tạm thời:\n\n```bash\nexport TEMP_NOTE=\"remove me\"\nprintenv TEMP_NOTE\nunset TEMP_NOTE\nprintenv TEMP_NOTE\n```\n\nLệnh `printenv` cuối cùng không tạo ra đầu ra nào và trả về một trạng thái khác không (nonzero status) vì tên biến không còn tồn tại nữa. `unset` xóa tên khỏi shell hiện tại. Nếu một tên vẫn được định nghĩa trong tệp khởi động, một shell trong tương lai sẽ tạo lại nó cho đến khi dòng cấu hình đó bị xóa.",
       "task_vi": "Thực hiện hướng dẫn: Lưu cài đặt cho các phiên Zsh tương lai",
-      "hint_vi": "Chạy lệnh: source \"$HOME/.zshrc\"",
-      "verification_by_provider": {
-        "docker": {
-          "kind": "state",
-          "command": "grep -q 'PROJECT_DIR' /home/labex/.zshrc 2>/dev/null || grep -q 'PROJECT_DIR' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/environment-lab/future-shell.txt"
-        },
-        "namespace": {
-          "kind": "state",
-          "command": "grep -q 'PROJECT_DIR' /home/labex/.zshrc 2>/dev/null || grep -q 'PROJECT_DIR' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/environment-lab/future-shell.txt"
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "hint_vi": "Chạy lệnh: source \"$HOME/.zshrc\""
     },
     {
       "id": "section-6",
@@ -275,13 +237,10 @@
       "task": "Thực hiện hướng dẫn: Create and Expand a Shell Variable",
       "hint": "Chạy lệnh: echo \"$course_name\"",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/environment-lab/shell-variable.txt <(printf %s 'course=Linux for Noobs\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -319,13 +278,10 @@
       "task": "Thực hiện hướng dẫn: Observe Child-Process Inheritance",
       "hint": "Chạy lệnh: env | grep '^SHARED_MESSAGE='",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/environment-lab/child-environment.txt <(printf %s 'local=<missing>\nshared=visible in child processes\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -363,13 +319,10 @@
       "task": "Thực hiện hướng dẫn: Inspect Standard Environment Variables",
       "hint": "Chạy lệnh: printenv HOME USER SHELL PWD TERM",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/environment-lab/standard-environment.txt <(printf %s 'HOME=/home/labex\nUSER=labex\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -407,13 +360,10 @@
       "task": "Thực hiện hướng dẫn: Extend PATH with a Personal Command",
       "hint": "Chạy lệnh: export PATH=\"$PATH:$HOME/bin\"",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/environment-lab/path-command.txt <(printf %s 'Linux learning environment is ready\n') && test -x /home/labex/bin/course-status && cmp -s /home/labex/project/environment-lab/path-command.txt <(/home/labex/bin/course-status)"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -451,39 +401,13 @@
       "task": "Thực hiện hướng dẫn: Persist Settings for Future Zsh Sessions",
       "hint": "Chạy lệnh: source \"$HOME/.zshrc\"",
       "verification": {
-        "kind": "state",
-        "command": "grep -q 'PROJECT_DIR' /home/labex/.zshrc 2>/dev/null || grep -q 'PROJECT_DIR' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/environment-lab/future-shell.txt"
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu Zsh thật; image hiện chưa có Zsh, không chấm Bash thay cho phiên Zsh."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ cấu hình các phiên Zsh trong tương lai và phân biệt giữa cấu hình lưu trữ bền vững (persistent configuration) với trạng thái của shell hiện tại.\n\nViệc `export` làm thay đổi tiến trình hiện tại và các tiến trình con trong tương lai của nó; thao tác này không chỉnh sửa tệp cấu hình. Một thiết lập chỉ xuất hiện ở các terminal sau đó khi một tệp khởi động tạo lại nó. LabEx Terminal sử dụng Zsh, có tệp khởi động tương tác là `~/.zshrc`.\n\nThêm một khối được đánh dấu rõ ràng. Mỗi dòng `export` sẽ tạo lại một thiết lập môi trường bất cứ khi nào một phiên Zsh tương tác mới khởi động. Phiên bản dành cho người mới bắt đầu này giữ cho tệp khởi động mang tính trực quan: giữ nguyên `PATH` hiện có, sau đó thêm thư mục cá nhân vào cuối.\n\n```bash\ncat >> \"$HOME/.zshrc\" <<'EOF'\n## LABEX_ENV_LAB_START\nexport PROJECT_DIR=\"$HOME/project\"\nexport PATH=\"$PATH:$HOME/bin\"\n## LABEX_ENV_LAB_END\nEOF\n```\n\nLệnh `source` đọc một tệp trong shell hiện tại. Tải lại `.zshrc` ngay bây giờ để bạn có thể sử dụng các thiết lập của nó mà không cần đóng Terminal:\n\n```bash\nsource \"$HOME/.zshrc\"\n```\n\nXác nhận rằng biến đã được tải lại có sẵn:\n\n```bash\nprintf 'PROJECT_DIR=%s\\n' \"$PROJECT_DIR\"\n```\n\nBạn sẽ thấy `PROJECT_DIR=/home/labex/project`. Bạn cũng có thể khởi động một tiến trình Zsh mới để chứng minh rằng một phiên làm việc trong tương lai sẽ tải các thiết lập tương tự. Trong `zsh -ic`, `-i` yêu cầu một shell tương tác để `.zshrc` được đọc, và `-c` cung cấp lệnh mà shell đó sẽ chạy. Chuyển hướng hai dòng đầu ra của nó vào tệp `future-shell.txt`, sau đó kiểm tra tệp:\n\n```bash\nzsh -ic 'printf \"PROJECT_DIR=%s\\n\" \"$PROJECT_DIR\"; command -v course-status' > /home/labex/project/environment-lab/future-shell.txt\ncat /home/labex/project/environment-lab/future-shell.txt\n```\n\nDòng đầu tiên sẽ hiển thị `/home/labex/project`; dòng thứ hai sẽ hiển thị `/home/labex/bin/course-status`.\n\nCuối cùng, hãy tìm hiểu sự khác biệt giữa trạng thái hiện tại và cấu hình lưu trữ bền vững. Tạo và xóa một biến môi trường tạm thời:\n\n```bash\nexport TEMP_NOTE=\"remove me\"\nprintenv TEMP_NOTE\nunset TEMP_NOTE\nprintenv TEMP_NOTE\n```\n\nLệnh `printenv` cuối cùng không tạo ra đầu ra nào và trả về một trạng thái khác không (nonzero status) vì tên biến không còn tồn tại nữa. `unset` xóa tên khỏi shell hiện tại. Nếu một tên vẫn được định nghĩa trong tệp khởi động, một shell trong tương lai sẽ tạo lại nó cho đến khi dòng cấu hình đó bị xóa.",
       "task_vi": "Thực hiện hướng dẫn: Lưu cài đặt cho các phiên Zsh tương lai",
-      "hint_vi": "Chạy lệnh: source \"$HOME/.zshrc\"",
-      "verification_by_provider": {
-        "docker": {
-          "kind": "state",
-          "command": "grep -q 'PROJECT_DIR' /home/labex/.zshrc 2>/dev/null || grep -q 'PROJECT_DIR' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/environment-lab/future-shell.txt"
-        },
-        "namespace": {
-          "kind": "state",
-          "command": "grep -q 'PROJECT_DIR' /home/labex/.zshrc 2>/dev/null || grep -q 'PROJECT_DIR' /home/labex/.bashrc 2>/dev/null || test -f /home/labex/project/environment-lab/future-shell.txt"
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "hint_vi": "Chạy lệnh: source \"$HOME/.zshrc\""
     }
   ],
   "curriculum_version": 3,

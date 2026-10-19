@@ -95,7 +95,9 @@ test("unconditional legacy success is rejected before executing Linux", async ()
 });
 
 test("generic command-history fallbacks never mark an unrelated task complete", async () => {
-  for (const pattern of [".", ".*", "^.*$", "^.+$"]) {
+  for (const pattern of [".", ".*", "^.*$", "^.+$",
+    "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$",
+    "(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"]) {
     const result = await verifyDefinition("unimplemented", { kind: "commands", groups: [[pattern]] }, {
       readHistory: () => assert.fail("A generic pattern must be rejected before reading history"),
     });

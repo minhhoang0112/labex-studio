@@ -256,6 +256,21 @@ try {
     assert.equal(await page.evaluate(() => document.body.style.userSelect), '');
     await page.mouse.up();
   });
+  await check('Windows simulation cannot grade Linux work and Linux terminal reappears after SPA navigation', async () => {
+    await page.goto(base + '/labs/win-powershell-basics');
+    await page.getByRole('combobox').selectOption('1');
+    await page.getByText('Mô phỏng Windows Server — chưa có máy Windows thực', { exact: true }).waitFor();
+    const windows = await page.request.get(base + '/api/labs/win-powershell-basics');
+    const data = await windows.json();
+    assert.equal(data.availability.can_start_terminal, false);
+    assert.equal(data.availability.can_grade, false);
+    await page.evaluate(url => {
+      history.pushState({}, '', url);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }, '/labs/' + id);
+    await page.getByRole('combobox').selectOption('2');
+    await page.getByTestId('terminal-pane').locator('.xterm').waitFor({ state: 'visible', timeout: 30000 });
+  });
   assert.deepEqual(errors, [], 'Unexpected browser page errors');
   report.complete = true;
 } catch (error) {

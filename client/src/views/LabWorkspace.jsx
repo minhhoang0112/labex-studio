@@ -207,9 +207,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
         }
         setCurrentSectionIndex(targetIndex);
         setLab(data);
-        if (data.id?.startsWith('win-') || data.course_id?.includes('win')) {
-          setActiveEnvTab('windows');
-        }
+        setActiveEnvTab(data.id?.startsWith('win-') || data.course_id?.includes('win') ? 'windows' : 'terminal');
 
         // Fetch sibling course labs
         try {
@@ -647,6 +645,7 @@ export default function LabWorkspace({ labId, courseId, onBackToCourse, onStartL
           {activeEnvTab === 'windows' && isWindowsLab && (
             <div className="flex-1 min-h-0 min-w-0 relative flex flex-col">
               <WindowsConsole 
+                key={lab.id}
                 labId={lab.id} 
                 onActionComplete={() => setVerificationEpoch(v => v + 1)} 
               />

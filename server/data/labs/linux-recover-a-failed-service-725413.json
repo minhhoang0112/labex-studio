@@ -37,69 +37,13 @@
       "task": "Thực hiện hướng dẫn: Return the Service to Active",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:systemctl|service|journalctl)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1,
-          3
-        ]
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "### Tình huống hiện tại\n\n`labex-report-export.service` bị lỗi. Nó đọc một phép gán `PORT` từ `/etc/labex-report-export.conf`.\n\n### Phạm vi\n\n- Dùng trạng thái dịch vụ và bằng chứng journal để hiểu lỗi.\n- Chỉ thay giá trị `PORT` không hợp lệ.\n- Chọn cổng dạng số từ `1024` đến `65535`.\n- Không sửa tệp unit hoặc dịch vụ không liên quan.\n\n### Mục tiêu của bạn\n\nĐể `labex-report-export.service` hoạt động với cổng được cấu hình hợp lệ.\n\n### Tiêu chí đạt\n\n- `systemctl is-active labex-report-export.service` báo `active`.\n- `/etc/labex-report-export.conf` chứa một giá trị `PORT` dạng số trong phạm vi.\n\n### Gợi ý\n\nNên bắt đầu chẩn đoán từ đâu?\n\nDùng cùng lệnh `systemctl status` và `journalctl` dành riêng cho unit đã luyện trong bài hướng dẫn. Thông báo lỗi cho biết điều gì không hợp lệ.",
       "task_vi": "Thực hiện hướng dẫn: Đưa dịch vụ trở lại trạng thái hoạt động",
-      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
-      "verification_by_provider": {
-        "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:systemctl|service|journalctl)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1,
-            3
-          ]
-        },
-        "namespace": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:systemctl|service|journalctl)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1,
-            3
-          ]
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
     },
     {
       "id": "section-2",
@@ -129,69 +73,13 @@
       "task": "Thực hiện hướng dẫn: Return the Service to Active",
       "hint": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:systemctl|service|journalctl)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1,
-          3
-        ]
+        "kind": "unsupported",
+        "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "### Tình huống hiện tại\n\n`labex-report-export.service` bị lỗi. Nó đọc một phép gán `PORT` từ `/etc/labex-report-export.conf`.\n\n### Phạm vi\n\n- Dùng trạng thái dịch vụ và bằng chứng journal để hiểu lỗi.\n- Chỉ thay giá trị `PORT` không hợp lệ.\n- Chọn cổng dạng số từ `1024` đến `65535`.\n- Không sửa tệp unit hoặc dịch vụ không liên quan.\n\n### Mục tiêu của bạn\n\nĐể `labex-report-export.service` hoạt động với cổng được cấu hình hợp lệ.\n\n### Tiêu chí đạt\n\n- `systemctl is-active labex-report-export.service` báo `active`.\n- `/etc/labex-report-export.conf` chứa một giá trị `PORT` dạng số trong phạm vi.\n\n### Gợi ý\n\nNên bắt đầu chẩn đoán từ đâu?\n\nDùng cùng lệnh `systemctl status` và `journalctl` dành riêng cho unit đã luyện trong bài hướng dẫn. Thông báo lỗi cho biết điều gì không hợp lệ.",
       "task_vi": "Thực hiện hướng dẫn: Đưa dịch vụ trở lại trạng thái hoạt động",
-      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
-      "verification_by_provider": {
-        "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:systemctl|service|journalctl)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1,
-            3
-          ]
-        },
-        "namespace": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:systemctl|service|journalctl)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1,
-            3
-          ]
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "hint_vi": "Đọc hướng dẫn và thực hành trên terminal."
     }
   ],
   "curriculum_version": 3,

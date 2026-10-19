@@ -776,6 +776,7 @@ for (const lab of WINDOWS_LABS) {
 
   const fullLab = {
     ...lab,
+    required_capabilities: ['windows'],
     curriculum_version: 1,
     steps
   };

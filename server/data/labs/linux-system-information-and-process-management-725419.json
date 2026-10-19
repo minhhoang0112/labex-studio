@@ -37,31 +37,18 @@
       "task": "Thực hiện hướng dẫn: Identify the System and Interpret Load",
       "hint": "Chạy lệnh: mkdir -p /home/labex/project/process-lab",
       "verification": {
-        "kind": "state",
-        "command": "test -s /home/labex/project/process-lab/system-summary.txt && test \"$(head -n1 /home/labex/project/process-lab/system-summary.txt)\" = \"$(uname -srm)\" && sed -n 2p /home/labex/project/process-lab/system-summary.txt | grep -Eq \"up .*load average\""
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "state",
-          "command": "test -s /home/labex/project/process-lab/system-summary.txt && test \"$(head -n1 /home/labex/project/process-lab/system-summary.txt)\" = \"$(uname -srm)\" && sed -n 2p /home/labex/project/process-lab/system-summary.txt | grep -Eq \"up .*load average\""
-        },
-        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/process-lab/system-summary.txt && test \"$(head -n1 /home/labex/project/process-lab/system-summary.txt)\" = \"$(uname -srm)\" && sed -n 2p /home/labex/project/process-lab/system-summary.txt | grep -Eq \"up .*load average\""
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -84,31 +71,18 @@
       "task": "Thực hiện hướng dẫn: Inspect Processes and Resource Activity",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "state",
-        "command": "test -s /home/labex/project/process-lab/process-snapshot.txt && head -n1 /home/labex/project/process-lab/process-snapshot.txt | grep -Eq \"PID.*PPID.*USER.*STAT.*COMMAND\""
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "state",
-          "command": "test -s /home/labex/project/process-lab/process-snapshot.txt && head -n1 /home/labex/project/process-lab/process-snapshot.txt | grep -Eq \"PID.*PPID.*USER.*STAT.*COMMAND\""
-        },
-        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/process-lab/process-snapshot.txt && head -n1 /home/labex/project/process-lab/process-snapshot.txt | grep -Eq \"PID.*PPID.*USER.*STAT.*COMMAND\""
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -131,54 +105,12 @@
       "task": "Thực hiện hướng dẫn: Start and Locate a Practice Process",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "pid=$(cat /home/labex/project/process-lab/worker.pid) && test \"$pid\" -gt 1 && ps -o args= -p \"$pid\" | grep -Fxq \"labex-worker 300\""
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*bash\\s+-c\\s+'exec -a labex-worker sleep 300'\\s*&\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "pid=$(cat /home/labex/project/process-lab/worker.pid) && test \"$pid\" -gt 1 && ps -o args= -p \"$pid\" | grep -Fxq \"labex-worker 300\""
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*bash\\s+-c\\s+'exec -a labex-worker sleep 300'\\s*&\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -202,11 +134,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -229,66 +156,12 @@
       "task": "Thực hiện hướng dẫn: Stop Processes with Signals",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "for name in worker stubborn helper; do pid=$(cat /home/labex/project/process-lab/\"$name.pid\") && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null || exit 1; done"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*kill\\s+\"\\$worker_pid\"\\s*$"
-              ],
-              [
-                "^\\s*kill\\s+-KILL\\s+\"\\$stubborn_pid\"\\s*$"
-              ],
-              [
-                "^\\s*pkill\\s+-TERM\\s+-f\\s+'\\^labex-helper 300\\$'\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "for name in worker stubborn helper; do pid=$(cat /home/labex/project/process-lab/\"$name.pid\") && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null || exit 1; done"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*kill\\s+\"\\$worker_pid\"\\s*$"
-                ],
-                [
-                  "^\\s*kill\\s+-KILL\\s+\"\\$stubborn_pid\"\\s*$"
-                ],
-                [
-                  "^\\s*pkill\\s+-TERM\\s+-f\\s+'\\^labex-helper 300\\$'\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -318,11 +191,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -345,66 +213,13 @@
       "task": "Thực hiện hướng dẫn: Control Foreground and Background Jobs",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:jobs|bg|fg|sleep|ps)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ tạm dừng một lệnh tiền cảnh, tiếp tục nó trong nền, đưa nó về tiền cảnh rồi ngắt nó.\n\nĐiều khiển tác vụ thuộc về shell tương tác hiện tại. Khởi chạy tiến trình ngủ ở tiền cảnh với tên dễ nhận biết:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nTerminal hiện bị tiến trình tiền cảnh chiếm dụng. Nhấn `Ctrl+Z`. Shell gửi tín hiệu dừng và trả lại dấu nhắc.\n\nLiệt kê các tác vụ mà shell này biết. Tùy chọn `-l` bao gồm mã tiến trình:\n\n```bash\njobs -l\n```\n\nBạn sẽ thấy một tác vụ `Stopped`. Tiếp tục tác vụ số 1 trong nền:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nTrạng thái giờ phải là `Running` và dấu nhắc vẫn dùng được. Đưa tác vụ trở lại tiền cảnh:\n\n```bash\nfg %1\n```\n\nNhấn `Ctrl+C` để gửi tín hiệu ngắt tới tác vụ tiền cảnh. Dấu nhắc phải trở lại. Xác nhận không còn tác vụ thực hành:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nTạo dấu mốc hoàn thành sau khi kết thúc chuỗi tương tác:\n\n```bash\ntouch job-control.done\n```\n\nDùng điều khiển tác vụ cho các lệnh gắn với terminal hiện tại. Sau này bạn sẽ dùng `nohup` cho công việc không nên phụ thuộc phiên terminal.",
       "task_vi": "Thực hiện hướng dẫn: Điều khiển tác vụ tiền cảnh và nền",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab",
-      "verification_by_provider": {
-        "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:jobs|bg|fg|sleep|ps)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        },
-        "namespace": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:jobs|bg|fg|sleep|ps)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
     },
     {
       "id": "source-725419-section-6-v3",
@@ -419,31 +234,18 @@
       "task": "Thực hiện hướng dẫn: Read Exit Status and Run Detached Work",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/process-lab/exit-status.txt <(printf %s 'success=0\nfailure=2\n') && cmp -s /home/labex/project/process-lab/nohup.log <(printf %s 'background: one\nbackground: two\nbackground: three\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "state",
-          "command": "cmp -s /home/labex/project/process-lab/exit-status.txt <(printf %s 'success=0\nfailure=2\n') && cmp -s /home/labex/project/process-lab/nohup.log <(printf %s 'background: one\nbackground: two\nbackground: three\n')"
-        },
-        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/process-lab/exit-status.txt <(printf %s 'success=0\nfailure=2\n') && cmp -s /home/labex/project/process-lab/nohup.log <(printf %s 'background: one\nbackground: two\nbackground: three\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -466,66 +268,13 @@
       "task": "Thực hiện hướng dẫn: Inspect Recent Kernel Messages",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:dmesg|uname|uptime|hostname)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu đọc kernel log dmesg; runtime chưa cấp CAP_SYSLOG."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ kiểm tra bộ đệm thông báo kernel và lưu phiên bản kernel đang chạy làm tham chiếu ổn định.\n\nKernel ghi thông báo về khởi động, phần cứng, trình điều khiển và sự kiện khi chạy vào một bộ đệm vòng. `dmesg` đọc bộ đệm đó. Thông thường cần quyền quản trị:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThông báo cụ thể thay đổi theo máy và thời điểm. Chú ý trường giống dấu thời gian và thành phần hoặc hệ thống con đã tạo mỗi thông báo.\n\nTùy chọn `--level` lọc theo mức nghiêm trọng. Hiển thị cảnh báo và lỗi gần đây:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nKhông có đầu ra không có nghĩa lệnh thất bại; có thể bộ đệm hiện tại không có thông báo ở các mức đó. Tìm thông báo gần đây chứa thuật ngữ lưu trữ và mạng thường gặp:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nMột lần nữa, kết quả phụ thuộc hệ thống hiện tại. Lưu phiên bản kernel do `uname -r` báo:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nThông báo kernel là bằng chứng, không phải chẩn đoán tự động. Kết hợp chúng với trạng thái tiến trình, log dịch vụ và triệu chứng quan sát được trước khi quyết định hành động.",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra thông báo kernel gần đây",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab",
-      "verification_by_provider": {
-        "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:dmesg|uname|uptime|hostname)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        },
-        "namespace": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:dmesg|uname|uptime|hostname)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
     },
     {
       "id": "section-8",
@@ -555,31 +304,18 @@
       "task": "Thực hiện hướng dẫn: Identify the System and Interpret Load",
       "hint": "Chạy lệnh: mkdir -p /home/labex/project/process-lab",
       "verification": {
-        "kind": "state",
-        "command": "test -s /home/labex/project/process-lab/system-summary.txt && test \"$(head -n1 /home/labex/project/process-lab/system-summary.txt)\" = \"$(uname -srm)\" && sed -n 2p /home/labex/project/process-lab/system-summary.txt | grep -Eq \"up .*load average\""
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "state",
-          "command": "test -s /home/labex/project/process-lab/system-summary.txt && test \"$(head -n1 /home/labex/project/process-lab/system-summary.txt)\" = \"$(uname -srm)\" && sed -n 2p /home/labex/project/process-lab/system-summary.txt | grep -Eq \"up .*load average\""
-        },
-        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/process-lab/system-summary.txt && test \"$(head -n1 /home/labex/project/process-lab/system-summary.txt)\" = \"$(uname -srm)\" && sed -n 2p /home/labex/project/process-lab/system-summary.txt | grep -Eq \"up .*load average\""
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -602,31 +338,18 @@
       "task": "Thực hiện hướng dẫn: Inspect Processes and Resource Activity",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "state",
-        "command": "test -s /home/labex/project/process-lab/process-snapshot.txt && head -n1 /home/labex/project/process-lab/process-snapshot.txt | grep -Eq \"PID.*PPID.*USER.*STAT.*COMMAND\""
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "state",
-          "command": "test -s /home/labex/project/process-lab/process-snapshot.txt && head -n1 /home/labex/project/process-lab/process-snapshot.txt | grep -Eq \"PID.*PPID.*USER.*STAT.*COMMAND\""
-        },
-        "namespace": {
           "kind": "state",
           "command": "test -s /home/labex/project/process-lab/process-snapshot.txt && head -n1 /home/labex/project/process-lab/process-snapshot.txt | grep -Eq \"PID.*PPID.*USER.*STAT.*COMMAND\""
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -649,54 +372,12 @@
       "task": "Thực hiện hướng dẫn: Start and Locate a Practice Process",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "pid=$(cat /home/labex/project/process-lab/worker.pid) && test \"$pid\" -gt 1 && ps -o args= -p \"$pid\" | grep -Fxq \"labex-worker 300\""
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*bash\\s+-c\\s+'exec -a labex-worker sleep 300'\\s*&\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "pid=$(cat /home/labex/project/process-lab/worker.pid) && test \"$pid\" -gt 1 && ps -o args= -p \"$pid\" | grep -Fxq \"labex-worker 300\""
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*bash\\s+-c\\s+'exec -a labex-worker sleep 300'\\s*&\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -720,11 +401,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -747,66 +423,12 @@
       "task": "Thực hiện hướng dẫn: Stop Processes with Signals",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "for name in worker stubborn helper; do pid=$(cat /home/labex/project/process-lab/\"$name.pid\") && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null || exit 1; done"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*kill\\s+\"\\$worker_pid\"\\s*$"
-              ],
-              [
-                "^\\s*kill\\s+-KILL\\s+\"\\$stubborn_pid\"\\s*$"
-              ],
-              [
-                "^\\s*pkill\\s+-TERM\\s+-f\\s+'\\^labex-helper 300\\$'\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "for name in worker stubborn helper; do pid=$(cat /home/labex/project/process-lab/\"$name.pid\") && test \"$pid\" -gt 1 && ! kill -0 \"$pid\" 2>/dev/null || exit 1; done"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*kill\\s+\"\\$worker_pid\"\\s*$"
-                ],
-                [
-                  "^\\s*kill\\s+-KILL\\s+\"\\$stubborn_pid\"\\s*$"
-                ],
-                [
-                  "^\\s*pkill\\s+-TERM\\s+-f\\s+'\\^labex-helper 300\\$'\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -836,11 +458,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -863,66 +480,13 @@
       "task": "Thực hiện hướng dẫn: Control Foreground and Background Jobs",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:jobs|bg|fg|sleep|ps)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ tạm dừng một lệnh tiền cảnh, tiếp tục nó trong nền, đưa nó về tiền cảnh rồi ngắt nó.\n\nĐiều khiển tác vụ thuộc về shell tương tác hiện tại. Khởi chạy tiến trình ngủ ở tiền cảnh với tên dễ nhận biết:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nbash -c 'exec -a labex-job sleep 300'\n```\n\nTerminal hiện bị tiến trình tiền cảnh chiếm dụng. Nhấn `Ctrl+Z`. Shell gửi tín hiệu dừng và trả lại dấu nhắc.\n\nLiệt kê các tác vụ mà shell này biết. Tùy chọn `-l` bao gồm mã tiến trình:\n\n```bash\njobs -l\n```\n\nBạn sẽ thấy một tác vụ `Stopped`. Tiếp tục tác vụ số 1 trong nền:\n\n```bash\nbg %1\n```\n\n```bash\njobs -l\n```\n\nTrạng thái giờ phải là `Running` và dấu nhắc vẫn dùng được. Đưa tác vụ trở lại tiền cảnh:\n\n```bash\nfg %1\n```\n\nNhấn `Ctrl+C` để gửi tín hiệu ngắt tới tác vụ tiền cảnh. Dấu nhắc phải trở lại. Xác nhận không còn tác vụ thực hành:\n\n```bash\npgrep -af labex-job || echo \"No labex-job process remains\"\n```\n\nTạo dấu mốc hoàn thành sau khi kết thúc chuỗi tương tác:\n\n```bash\ntouch job-control.done\n```\n\nDùng điều khiển tác vụ cho các lệnh gắn với terminal hiện tại. Sau này bạn sẽ dùng `nohup` cho công việc không nên phụ thuộc phiên terminal.",
       "task_vi": "Thực hiện hướng dẫn: Điều khiển tác vụ tiền cảnh và nền",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab",
-      "verification_by_provider": {
-        "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:jobs|bg|fg|sleep|ps)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        },
-        "namespace": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:jobs|bg|fg|sleep|ps)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
     },
     {
       "id": "source-725419-section-6-v3",
@@ -937,31 +501,18 @@
       "task": "Thực hiện hướng dẫn: Read Exit Status and Run Detached Work",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/process-lab/exit-status.txt <(printf %s 'success=0\nfailure=2\n') && cmp -s /home/labex/project/process-lab/nohup.log <(printf %s 'background: one\nbackground: two\nbackground: three\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "persistent_processes"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "state",
-          "command": "cmp -s /home/labex/project/process-lab/exit-status.txt <(printf %s 'success=0\nfailure=2\n') && cmp -s /home/labex/project/process-lab/nohup.log <(printf %s 'background: one\nbackground: two\nbackground: three\n')"
-        },
-        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/process-lab/exit-status.txt <(printf %s 'success=0\nfailure=2\n') && cmp -s /home/labex/project/process-lab/nohup.log <(printf %s 'background: one\nbackground: two\nbackground: three\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "persistent_processes"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "persistent_processes"
@@ -984,66 +535,13 @@
       "task": "Thực hiện hướng dẫn: Inspect Recent Kernel Messages",
       "hint": "Chạy lệnh: cd /home/labex/project/process-lab",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:dmesg|uname|uptime|hostname)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "unsupported",
+        "reason": "Bài yêu cầu đọc kernel log dmesg; runtime chưa cấp CAP_SYSLOG."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ kiểm tra bộ đệm thông báo kernel và lưu phiên bản kernel đang chạy làm tham chiếu ổn định.\n\nKernel ghi thông báo về khởi động, phần cứng, trình điều khiển và sự kiện khi chạy vào một bộ đệm vòng. `dmesg` đọc bộ đệm đó. Thông thường cần quyền quản trị:\n\n```bash\ncd /home/labex/project/process-lab\n```\n\n```bash\nsudo dmesg | tail -n 10\n```\n\nThông báo cụ thể thay đổi theo máy và thời điểm. Chú ý trường giống dấu thời gian và thành phần hoặc hệ thống con đã tạo mỗi thông báo.\n\nTùy chọn `--level` lọc theo mức nghiêm trọng. Hiển thị cảnh báo và lỗi gần đây:\n\n```bash\nsudo dmesg --level=err,warn | tail -n 10\n```\n\nKhông có đầu ra không có nghĩa lệnh thất bại; có thể bộ đệm hiện tại không có thông báo ở các mức đó. Tìm thông báo gần đây chứa thuật ngữ lưu trữ và mạng thường gặp:\n\n```bash\nsudo dmesg | grep -Ei 'disk|filesystem|network|eth' | tail -n 10\n```\n\nMột lần nữa, kết quả phụ thuộc hệ thống hiện tại. Lưu phiên bản kernel do `uname -r` báo:\n\n```bash\nuname -r > kernel-version.txt\n```\n\n```bash\ncat kernel-version.txt\n```\n\nThông báo kernel là bằng chứng, không phải chẩn đoán tự động. Kết hợp chúng với trạng thái tiến trình, log dịch vụ và triệu chứng quan sát được trước khi quyết định hành động.",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra thông báo kernel gần đây",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab",
-      "verification_by_provider": {
-        "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:dmesg|uname|uptime|hostname)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        },
-        "namespace": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:dmesg|uname|uptime|hostname)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
-        }
-      },
-      "required_capabilities_by_provider": {
-        "docker": [
-          "terminal",
-          "files",
-          "shell"
-        ],
-        "namespace": [
-          "terminal",
-          "files",
-          "shell"
-        ]
-      }
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/process-lab"
     }
   ],
   "curriculum_version": 3,

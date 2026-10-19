@@ -37,14 +37,10 @@
       "task": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
       "hint": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR",
       "verification": {
-        "kind": "state",
-        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",
@@ -99,14 +95,10 @@
       "task": "Tạo script process-logs.sh đếm số dòng bắt đầu bằng ERROR và in định dạng filename errors=count",
       "hint": "Viết script bash nhận thư mục làm tham số, duyệt qua *.log và đếm dòng ERROR bằng grep -c ^ERROR",
       "verification": {
-        "kind": "state",
-        "command": "python3 - <<'LOCAL_CHECK'\nimport os, pathlib, subprocess, tempfile\nroot = pathlib.Path('/home/labex/project/log-automation')\ndef run(name, *args, input=None):\n    return subprocess.run(['/bin/bash', str(root/name), *args], cwd=root, input=input, text=True, capture_output=True, timeout=2)\n\npath = root/'process-logs.sh'\nassert path.read_text().splitlines()[0] == '#!/bin/bash' and os.access(path, os.X_OK)\np = run('process-logs.sh', 'logs')\nassert p.returncode == 0 and p.stdout == 'api.log errors=1\\nhealthy.log errors=0\\nworker.log errors=2\\n'\nwith tempfile.TemporaryDirectory(prefix='noobs-input-') as directory:\n    sample = pathlib.Path(directory)/'other.log'\n    sample.write_text('ERROR first\\nINFO okay\\nERROR second\\nERROR third\\n')\n    p = run('process-logs.sh', directory)\n    assert p.returncode == 0 and p.stdout == 'other.log errors=3\\n'\nLOCAL_CHECK"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "shell"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
           "kind": "state",

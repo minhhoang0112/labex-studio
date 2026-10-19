@@ -28,7 +28,9 @@ def validate_rule(rule, label, errors):
             errors.append(f"{label}: missing/unconditional verifier")
     if kind == "commands" and (not rule.get("groups") or any(not group for group in rule["groups"])):
         errors.append(f"{label}: missing command groups")
-    if kind == "commands" and any(pattern.strip() in ('', '.', '.*', '.+', '^', '$', '^.*$', '^.+$', '^\\s*.*$')
+    if kind == "commands" and any(pattern.strip() in ('', '.', '.*', '.+', '^', '$', '^.*$', '^.+$', '^\\s*.*$',
+                                  r'^\s*[a-zA-Z0-9_\-\./]+\s*.*$',
+                                  '(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)')
                                   for group in rule.get("groups", []) for pattern in group):
         errors.append(f"{label}: unbounded command-history pattern")
     if kind == "acknowledgement" and rule.get("scope") != "informational":

@@ -9,6 +9,7 @@ import { spawn } from "node:child_process";
 import coursesRouter from "./routes/courses.js";
 import verifyRouter from "./routes/verify.js";
 import aiRouter from "./routes/ai.js";
+import cloudVmRouter from "./routes/cloudVm.js";
 import { createEnvironmentRouter } from "./routes/environment.js";
 import { createTerminalSession } from "./pty/terminalManager.js";
 import { getEnvironment } from "./pty/linuxEnvironment.js";
@@ -59,6 +60,7 @@ app.use("/api", createEnvironmentRouter({ disconnect: async (labId) => {
   })));
 } }));
 app.use("/api", verifyRouter);
+app.use("/api", cloudVmRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api", (_req, res) => res.status(404).json({ error: "API không tồn tại." }));
 

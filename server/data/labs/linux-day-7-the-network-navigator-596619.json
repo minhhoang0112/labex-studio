@@ -82,35 +82,14 @@
       "task": "- Use the `ifconfig` command to verify the IP address configuration.",
       "hint": "- The `ifconfig` command is part of the `net-tools` package, which we've already installed for you.\n- Running `ifconfig` without any arguments will display all active interfaces.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "allowed_status": [
-          0
-        ],
-        "groups": [
-          [
-            "^\\s*ifconfig(?:\\s+-a)?\\s*$"
-          ]
-        ]
+        "kind": "unsupported",
+        "reason": "Bước yêu cầu ifconfig nhưng runtime hiện chưa có net-tools/ifconfig. Không dùng ip addr để tự động chấm thay yêu cầu này."
       },
       "required_capabilities": [
-        "terminal",
-        "ifconfig"
+        "ifconfig-tool"
       ],
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "allowed_status": [
-            0
-          ],
-          "groups": [
-            [
-              "^\\s*ifconfig(?:\\s+-a)?\\s*$"
-            ]
-          ]
-        },
-        "namespace": {
           "kind": "commands",
           "user": "labex",
           "allowed_status": [
@@ -125,10 +104,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "ifconfig"
-        ],
-        "namespace": [
           "terminal",
           "ifconfig"
         ]
@@ -148,35 +123,14 @@
       "task": "- Test the server's connectivity to the internet by sending exactly **3** ICMP packets to Google's public DNS server at `8.8.8.8`.",
       "hint": "- The `ping` command will run indefinitely unless you tell it to stop.\n- Use the `-c` option to specify the `c`ount of packets to send.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "allowed_status": [
-          0
-        ],
-        "groups": [
-          [
-            "^\\s*ping\\s+-c\\s*3\\s+8\\.8\\.8\\.8\\s*$"
-          ]
-        ]
+        "kind": "unsupported",
+        "reason": "Bước yêu cầu ping -c 3 8.8.8.8. Network namespace hiện không có đường ra Internet hoặc quyền ICMP cần thiết."
       },
       "required_capabilities": [
-        "terminal",
-        "external_icmp"
+        "internet-icmp"
       ],
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "allowed_status": [
-            0
-          ],
-          "groups": [
-            [
-              "^\\s*ping\\s+-c\\s*3\\s+8\\.8\\.8\\.8\\s*$"
-            ]
-          ]
-        },
-        "namespace": {
           "kind": "commands",
           "user": "labex",
           "allowed_status": [
@@ -191,10 +145,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "external_icmp"
-        ],
-        "namespace": [
           "terminal",
           "external_icmp"
         ]
@@ -214,53 +164,14 @@
       "task": "- The internal portal is supposed to be running on port `8000`. Use the `ss` command to check if any process is listening for TCP connections on port `8000`.",
       "hint": "- The `ss` command has several useful flags:\n  - `-t`: Show `T`CP sockets.\n  - `-l`: Show `l`istening sockets.\n  - `-n`: Show `n`umeric port numbers instead of service names.\n  - `-p`: Show the `p`rocess using the socket.\n- You can combine these flags, like `ss -tlnp`.\n- To find a specific port, you can pipe the output of `ss` to the `grep` command. For example: `ss -tlnp | grep 8000`.",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "ss -tln | grep -Eq 'LISTEN[[:space:]].*[:.]8000[[:space:]]'"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*ss\\s+-(?=[a-zA-Z]*t)(?=[a-zA-Z]*l)[a-zA-Z]+(?:\\s*\\|\\s*grep\\s+['\\\"]?8000['\\\"]?)?\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Chưa có portal TCP8000 trong namespace dùng chung để quan sát và kiểm tra đúng kịch bản bằng ss."
       },
       "required_capabilities": [
-        "terminal",
-        "network_ports"
+        "portal-network-fixture"
       ],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "ss -tln | grep -Eq 'LISTEN[[:space:]].*[:.]8000[[:space:]]'"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*ss\\s+-(?=[a-zA-Z]*t)(?=[a-zA-Z]*l)[a-zA-Z]+(?:\\s*\\|\\s*grep\\s+['\\\"]?8000['\\\"]?)?\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -284,10 +195,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "network_ports"
-        ],
-        "namespace": [
           "terminal",
           "network_ports"
         ]
@@ -307,65 +214,14 @@
       "task": "1. Add a firewall rule to allow incoming traffic on port `8000`.\n2. Add a firewall rule to allow incoming SSH traffic (port 22).\n3. Enable the firewall to apply the new rules.",
       "hint": "- The syntax for `ufw` is very straightforward. To allow traffic on a port, use `ufw allow <port>`.\n- You can allow traffic on port 8000 using `ufw allow 8000`.\n- You can allow SSH traffic specifically using `ufw allow ssh` or `ufw allow 22`.\n- **Critical Warning:** If you do not properly open the SSH port (22), verification will fail because verification depends on this port for SSH connectivity.\n- **Important Warning:** Do not modify firewall rules for other ports arbitrarily, as this may cause online VM failures.\n- After adding your rules, you must enable the firewall with `ufw enable`.",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "sudo -n ufw status | grep -q '^Status: active' && sudo -n ufw status | grep -Eq '^8000([[:space:]]|/tcp).*ALLOW' && sudo -n ufw status | grep -Eq '^22([[:space:]]|/tcp).*ALLOW'"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+ufw\\s+allow\\s+8000(?:/tcp)?\\s*$"
-              ],
-              [
-                "^\\s*sudo\\s+ufw\\s+allow\\s+(?:22(?:/tcp)?|ssh)\\s*$"
-              ],
-              [
-                "^\\s*sudo\\s+ufw\\s+(?:--force\\s+)?enable\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Chưa hỗ trợ UFW thực trong network namespace riêng có NET_ADMIN và cấu hình firewall riêng."
       },
       "required_capabilities": [
-        "terminal",
-        "firewall"
+        "private-firewall"
       ],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "sudo -n ufw status | grep -q '^Status: active' && sudo -n ufw status | grep -Eq '^8000([[:space:]]|/tcp).*ALLOW' && sudo -n ufw status | grep -Eq '^22([[:space:]]|/tcp).*ALLOW'"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+ufw\\s+allow\\s+8000(?:/tcp)?\\s*$"
-                ],
-                [
-                  "^\\s*sudo\\s+ufw\\s+allow\\s+(?:22(?:/tcp)?|ssh)\\s*$"
-                ],
-                [
-                  "^\\s*sudo\\s+ufw\\s+(?:--force\\s+)?enable\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -395,10 +251,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "firewall"
-        ],
-        "namespace": [
           "terminal",
           "firewall"
         ]
@@ -464,35 +316,14 @@
       "task": "- Use the `ifconfig` command to verify the IP address configuration.",
       "hint": "- The `ifconfig` command is part of the `net-tools` package, which we've already installed for you.\n- Running `ifconfig` without any arguments will display all active interfaces.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "allowed_status": [
-          0
-        ],
-        "groups": [
-          [
-            "^\\s*ifconfig(?:\\s+-a)?\\s*$"
-          ]
-        ]
+        "kind": "unsupported",
+        "reason": "Bước yêu cầu ifconfig nhưng runtime hiện chưa có net-tools/ifconfig. Không dùng ip addr để tự động chấm thay yêu cầu này."
       },
       "required_capabilities": [
-        "terminal",
-        "ifconfig"
+        "ifconfig-tool"
       ],
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "allowed_status": [
-            0
-          ],
-          "groups": [
-            [
-              "^\\s*ifconfig(?:\\s+-a)?\\s*$"
-            ]
-          ]
-        },
-        "namespace": {
           "kind": "commands",
           "user": "labex",
           "allowed_status": [
@@ -507,10 +338,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "ifconfig"
-        ],
-        "namespace": [
           "terminal",
           "ifconfig"
         ]
@@ -532,35 +359,14 @@
       "task": "- Test the server's connectivity to the internet by sending exactly **3** ICMP packets to Google's public DNS server at `8.8.8.8`.",
       "hint": "- The `ping` command will run indefinitely unless you tell it to stop.\n- Use the `-c` option to specify the `c`ount of packets to send.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "allowed_status": [
-          0
-        ],
-        "groups": [
-          [
-            "^\\s*ping\\s+-c\\s*3\\s+8\\.8\\.8\\.8\\s*$"
-          ]
-        ]
+        "kind": "unsupported",
+        "reason": "Bước yêu cầu ping -c 3 8.8.8.8. Network namespace hiện không có đường ra Internet hoặc quyền ICMP cần thiết."
       },
       "required_capabilities": [
-        "terminal",
-        "external_icmp"
+        "internet-icmp"
       ],
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "allowed_status": [
-            0
-          ],
-          "groups": [
-            [
-              "^\\s*ping\\s+-c\\s*3\\s+8\\.8\\.8\\.8\\s*$"
-            ]
-          ]
-        },
-        "namespace": {
           "kind": "commands",
           "user": "labex",
           "allowed_status": [
@@ -575,10 +381,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "external_icmp"
-        ],
-        "namespace": [
           "terminal",
           "external_icmp"
         ]
@@ -600,53 +402,14 @@
       "task": "- The internal portal is supposed to be running on port `8000`. Use the `ss` command to check if any process is listening for TCP connections on port `8000`.",
       "hint": "- The `ss` command has several useful flags:\n  - `-t`: Show `T`CP sockets.\n  - `-l`: Show `l`istening sockets.\n  - `-n`: Show `n`umeric port numbers instead of service names.\n  - `-p`: Show the `p`rocess using the socket.\n- You can combine these flags, like `ss -tlnp`.\n- To find a specific port, you can pipe the output of `ss` to the `grep` command. For example: `ss -tlnp | grep 8000`.",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "ss -tln | grep -Eq 'LISTEN[[:space:]].*[:.]8000[[:space:]]'"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*ss\\s+-(?=[a-zA-Z]*t)(?=[a-zA-Z]*l)[a-zA-Z]+(?:\\s*\\|\\s*grep\\s+['\\\"]?8000['\\\"]?)?\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Chưa có portal TCP8000 trong namespace dùng chung để quan sát và kiểm tra đúng kịch bản bằng ss."
       },
       "required_capabilities": [
-        "terminal",
-        "network_ports"
+        "portal-network-fixture"
       ],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "ss -tln | grep -Eq 'LISTEN[[:space:]].*[:.]8000[[:space:]]'"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*ss\\s+-(?=[a-zA-Z]*t)(?=[a-zA-Z]*l)[a-zA-Z]+(?:\\s*\\|\\s*grep\\s+['\\\"]?8000['\\\"]?)?\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -670,10 +433,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "network_ports"
-        ],
-        "namespace": [
           "terminal",
           "network_ports"
         ]
@@ -695,65 +454,14 @@
       "task": "1. Add a firewall rule to allow incoming traffic on port `8000`.\n2. Add a firewall rule to allow incoming SSH traffic (port 22).\n3. Enable the firewall to apply the new rules.",
       "hint": "- The syntax for `ufw` is very straightforward. To allow traffic on a port, use `ufw allow <port>`.\n- You can allow traffic on port 8000 using `ufw allow 8000`.\n- You can allow SSH traffic specifically using `ufw allow ssh` or `ufw allow 22`.\n- **Critical Warning:** If you do not properly open the SSH port (22), verification will fail because verification depends on this port for SSH connectivity.\n- **Important Warning:** Do not modify firewall rules for other ports arbitrarily, as this may cause online VM failures.\n- After adding your rules, you must enable the firewall with `ufw enable`.",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "sudo -n ufw status | grep -q '^Status: active' && sudo -n ufw status | grep -Eq '^8000([[:space:]]|/tcp).*ALLOW' && sudo -n ufw status | grep -Eq '^22([[:space:]]|/tcp).*ALLOW'"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+ufw\\s+allow\\s+8000(?:/tcp)?\\s*$"
-              ],
-              [
-                "^\\s*sudo\\s+ufw\\s+allow\\s+(?:22(?:/tcp)?|ssh)\\s*$"
-              ],
-              [
-                "^\\s*sudo\\s+ufw\\s+(?:--force\\s+)?enable\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Chưa hỗ trợ UFW thực trong network namespace riêng có NET_ADMIN và cấu hình firewall riêng."
       },
       "required_capabilities": [
-        "terminal",
-        "firewall"
+        "private-firewall"
       ],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "sudo -n ufw status | grep -q '^Status: active' && sudo -n ufw status | grep -Eq '^8000([[:space:]]|/tcp).*ALLOW' && sudo -n ufw status | grep -Eq '^22([[:space:]]|/tcp).*ALLOW'"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+ufw\\s+allow\\s+8000(?:/tcp)?\\s*$"
-                ],
-                [
-                  "^\\s*sudo\\s+ufw\\s+allow\\s+(?:22(?:/tcp)?|ssh)\\s*$"
-                ],
-                [
-                  "^\\s*sudo\\s+ufw\\s+(?:--force\\s+)?enable\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -783,10 +491,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "firewall"
-        ],
-        "namespace": [
           "terminal",
           "firewall"
         ]

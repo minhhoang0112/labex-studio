@@ -37,31 +37,18 @@
       "task": "Thực hiện hướng dẫn: Read Package State and Sources",
       "hint": "Chạy lệnh: apt-cache policy bash",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/package-lab/bash-state.txt <(printf %s 'bash installed\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "state",
-          "command": "cmp -s /home/labex/project/package-lab/bash-state.txt <(printf %s 'bash installed\n')"
-        },
-        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/package-lab/bash-state.txt <(printf %s 'bash installed\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -84,54 +71,12 @@
       "task": "Thực hiện hướng dẫn: Refresh Repository Metadata",
       "hint": "Chạy lệnh: sudo apt update",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "count=$(cat /home/labex/project/package-lab/index-file-count.txt) && test \"$count\" -gt 0 && test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name \"*Packages*\" -print -quit)\""
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+apt\\s+update\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "count=$(cat /home/labex/project/package-lab/index-file-count.txt) && test \"$count\" -gt 0 && test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name \"*Packages*\" -print -quit)\""
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+apt\\s+update\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -155,11 +100,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -182,54 +122,12 @@
       "task": "Thực hiện hướng dẫn: Search, Inspect, and Install a Repository Package",
       "hint": "Chạy lệnh: apt search '^tree$'",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -Fxq installed && test -s /home/labex/project/package-lab/tree-installed.txt && grep -Eq \"^tree .* installed$\" /home/labex/project/package-lab/tree-installed.txt"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+tree\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -Fxq installed && test -s /home/labex/project/package-lab/tree-installed.txt && grep -Eq \"^tree .* installed$\" /home/labex/project/package-lab/tree-installed.txt"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+tree\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -253,11 +151,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -280,54 +173,12 @@
       "task": "Thực hiện hướng dẫn: Remove a Package and Verify the Result",
       "hint": "Chạy lệnh: sudo apt remove -y tree",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "! dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -Fxq installed && cmp -s /home/labex/project/package-lab/tree-removed.txt <(printf %s 'not-installed\n') && test -s /home/labex/project/package-lab/autoremove-preview.txt"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+apt\\s+remove\\s+-y\\s+tree\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "! dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -Fxq installed && cmp -s /home/labex/project/package-lab/tree-removed.txt <(printf %s 'not-installed\n') && test -s /home/labex/project/package-lab/autoremove-preview.txt"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+apt\\s+remove\\s+-y\\s+tree\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -351,11 +202,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -378,60 +224,12 @@
       "task": "Thực hiện hướng dẫn: Inspect and Install a Local Deb Package",
       "hint": "Chạy lệnh: sudo apt install -y ./labex-greeter_1.0_all.deb",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "test -s /home/labex/project/package-lab/labex-greeter_1.0_all.deb && cmp -s /home/labex/project/package-lab/local-package-output.txt <(printf %s 'hello from a local package\n') && cmp -s /home/labex/project/package-lab/local-package-state.txt <(printf %s 'local-package-removed\n') && ! dpkg-query -W -f='${db:Status-Status}' labex-greeter 2>/dev/null | grep -Fxq installed"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-greeter_1\\.0_all\\.deb\\s*$"
-              ],
-              [
-                "^\\s*sudo\\s+apt\\s+remove\\s+-y\\s+labex-greeter\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "test -s /home/labex/project/package-lab/labex-greeter_1.0_all.deb && cmp -s /home/labex/project/package-lab/local-package-output.txt <(printf %s 'hello from a local package\n') && cmp -s /home/labex/project/package-lab/local-package-state.txt <(printf %s 'local-package-removed\n') && ! dpkg-query -W -f='${db:Status-Status}' labex-greeter 2>/dev/null | grep -Fxq installed"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-greeter_1\\.0_all\\.deb\\s*$"
-                ],
-                [
-                  "^\\s*sudo\\s+apt\\s+remove\\s+-y\\s+labex-greeter\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -458,11 +256,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -500,31 +293,18 @@
       "task": "Thực hiện hướng dẫn: Read Package State and Sources",
       "hint": "Chạy lệnh: apt-cache policy bash",
       "verification": {
-        "kind": "state",
-        "command": "cmp -s /home/labex/project/package-lab/bash-state.txt <(printf %s 'bash installed\n')"
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "state",
-          "command": "cmp -s /home/labex/project/package-lab/bash-state.txt <(printf %s 'bash installed\n')"
-        },
-        "namespace": {
           "kind": "state",
           "command": "cmp -s /home/labex/project/package-lab/bash-state.txt <(printf %s 'bash installed\n')"
         }
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -547,54 +327,12 @@
       "task": "Thực hiện hướng dẫn: Refresh Repository Metadata",
       "hint": "Chạy lệnh: sudo apt update",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "count=$(cat /home/labex/project/package-lab/index-file-count.txt) && test \"$count\" -gt 0 && test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name \"*Packages*\" -print -quit)\""
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+apt\\s+update\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "count=$(cat /home/labex/project/package-lab/index-file-count.txt) && test \"$count\" -gt 0 && test -n \"$(find /var/lib/apt/lists -maxdepth 1 -type f -name \"*Packages*\" -print -quit)\""
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+apt\\s+update\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -618,11 +356,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -645,54 +378,12 @@
       "task": "Thực hiện hướng dẫn: Search, Inspect, and Install a Repository Package",
       "hint": "Chạy lệnh: apt search '^tree$'",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -Fxq installed && test -s /home/labex/project/package-lab/tree-installed.txt && grep -Eq \"^tree .* installed$\" /home/labex/project/package-lab/tree-installed.txt"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+tree\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -Fxq installed && test -s /home/labex/project/package-lab/tree-installed.txt && grep -Eq \"^tree .* installed$\" /home/labex/project/package-lab/tree-installed.txt"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+tree\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -716,11 +407,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -743,54 +429,12 @@
       "task": "Thực hiện hướng dẫn: Remove a Package and Verify the Result",
       "hint": "Chạy lệnh: sudo apt remove -y tree",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "! dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -Fxq installed && cmp -s /home/labex/project/package-lab/tree-removed.txt <(printf %s 'not-installed\n') && test -s /home/labex/project/package-lab/autoremove-preview.txt"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+apt\\s+remove\\s+-y\\s+tree\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "! dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -Fxq installed && cmp -s /home/labex/project/package-lab/tree-removed.txt <(printf %s 'not-installed\n') && test -s /home/labex/project/package-lab/autoremove-preview.txt"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+apt\\s+remove\\s+-y\\s+tree\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -814,11 +458,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"
@@ -841,60 +480,12 @@
       "task": "Thực hiện hướng dẫn: Inspect and Install a Local Deb Package",
       "hint": "Chạy lệnh: sudo apt install -y ./labex-greeter_1.0_all.deb",
       "verification": {
-        "kind": "all",
-        "checks": [
-          {
-            "kind": "state",
-            "command": "test -s /home/labex/project/package-lab/labex-greeter_1.0_all.deb && cmp -s /home/labex/project/package-lab/local-package-output.txt <(printf %s 'hello from a local package\n') && cmp -s /home/labex/project/package-lab/local-package-state.txt <(printf %s 'local-package-removed\n') && ! dpkg-query -W -f='${db:Status-Status}' labex-greeter 2>/dev/null | grep -Fxq installed"
-          },
-          {
-            "kind": "commands",
-            "user": "labex",
-            "allowed_status": [
-              0
-            ],
-            "groups": [
-              [
-                "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-greeter_1\\.0_all\\.deb\\s*$"
-              ],
-              [
-                "^\\s*sudo\\s+apt\\s+remove\\s+-y\\s+labex-greeter\\s*$"
-              ]
-            ]
-          }
-        ]
+        "kind": "unsupported",
+        "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
       },
-      "required_capabilities": [
-        "terminal",
-        "files",
-        "package_management"
-      ],
+      "required_capabilities": [],
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "test -s /home/labex/project/package-lab/labex-greeter_1.0_all.deb && cmp -s /home/labex/project/package-lab/local-package-output.txt <(printf %s 'hello from a local package\n') && cmp -s /home/labex/project/package-lab/local-package-state.txt <(printf %s 'local-package-removed\n') && ! dpkg-query -W -f='${db:Status-Status}' labex-greeter 2>/dev/null | grep -Fxq installed"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "allowed_status": [
-                0
-              ],
-              "groups": [
-                [
-                  "^\\s*sudo\\s+apt\\s+install\\s+-y\\s+\\./labex-greeter_1\\.0_all\\.deb\\s*$"
-                ],
-                [
-                  "^\\s*sudo\\s+apt\\s+remove\\s+-y\\s+labex-greeter\\s*$"
-                ]
-              ]
-            }
-          ]
-        },
-        "namespace": {
           "kind": "all",
           "checks": [
             {
@@ -921,11 +512,6 @@
       },
       "required_capabilities_by_provider": {
         "docker": [
-          "terminal",
-          "files",
-          "package_management"
-        ],
-        "namespace": [
           "terminal",
           "files",
           "package_management"

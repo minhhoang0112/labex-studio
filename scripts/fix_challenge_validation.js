@@ -62,3 +62,4 @@ for (const file of files) {
 }
 
 console.log(`Successfully sanitized ${fixedCount} labs.`);
+

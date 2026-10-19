@@ -14,7 +14,7 @@ export default function WindowsConsole({ labId, onActionComplete }) {
   const [activeWindow, setActiveWindow] = useState('server-manager'); 
   const [openWindows, setOpenWindows] = useState(['server-manager']);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  const [currentTime, setCurrentTime] = useState(() => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 
   // Live Clock updater
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function WindowsConsole({ labId, onActionComplete }) {
 
   // 8. PowerShell History
   const [psHistory, setPsHistory] = useState([
-    { type: 'output', text: 'Windows PowerShell v7.4.2 — Microsoft Corporation. All rights reserved.\nType "help" or run Windows Server management cmdlets.' }
+    { type: 'output', text: 'Windows PowerShell 5.1 (Build 20348 - Windows Server 2022 Datacenter)\nConnected to Host: LabEx-WinServer (Cloud VM: 20.40.49.168 - Central India)\nRun commands directly or connect via 1-Click RDP file above.\nType "help" for a list of common administration cmdlets.\n' }
   ]);
   const [psInput, setPsInput] = useState('');
 
@@ -116,21 +116,22 @@ export default function WindowsConsole({ labId, onActionComplete }) {
   };
 
   // Actions
-  const toggleService = (name) => {
+  const toggleService = (name, desiredStatus) => {
     setServices(prev => prev.map(s => {
       if (s.name === name) {
-        const nextStatus = s.status === 'Running' ? 'Stopped' : 'Running';
+        const nextStatus = desiredStatus || (s.status === 'Running' ? 'Stopped' : 'Running');
         return { ...s, status: nextStatus };
       }
       return s;
     }));
+    const running = (desiredStatus || (services.find(s => s.name === name)?.status === 'Running' ? 'Stopped' : 'Running')) === 'Running';
     if (name === 'Spooler') {
-      setEventLogs(prev => prev.map(e => e.eventId === 7034 ? { ...e, fixed: true } : e));
-      if (onActionComplete) onActionComplete('service_spooler_started');
+      setEventLogs(prev => prev.map(e => e.eventId === 7034 ? { ...e, fixed: running } : e));
+      if (running && onActionComplete) onActionComplete('service_spooler_started');
     }
     if (name === 'W3SVC') {
-      setEventLogs(prev => prev.map(e => e.eventId === 7000 ? { ...e, fixed: true } : e));
-      if (onActionComplete) onActionComplete('service_w3svc_started');
+      setEventLogs(prev => prev.map(e => e.eventId === 7000 ? { ...e, fixed: running } : e));
+      if (running && onActionComplete) onActionComplete('service_w3svc_started');
     }
   };
 
@@ -185,13 +186,13 @@ export default function WindowsConsole({ labId, onActionComplete }) {
       } else if (lower.startsWith('start-service')) {
         const target = cmd.split(' ')[1];
         if (target) {
-          toggleService(target);
+          toggleService(target, 'Running');
           newEntries.push({ type: 'output', text: `[+] Service '${target}' started successfully.` });
         }
       } else if (lower.startsWith('stop-service')) {
         const target = cmd.split(' ')[1];
         if (target) {
-          toggleService(target);
+          toggleService(target, 'Stopped');
           newEntries.push({ type: 'output', text: `[-] Service '${target}' stopped.` });
         }
       } else if (lower === 'get-process') {
@@ -250,20 +251,35 @@ export default function WindowsConsole({ labId, onActionComplete }) {
     <div className="flex-1 min-h-0 h-full flex flex-col bg-slate-950 text-slate-100 rounded-xl border border-slate-800 overflow-hidden shadow-2xl font-sans select-none relative">
       
       {/* 1. TOP VM CONTROL BAR */}
-      <div className="h-10 bg-slate-900/95 border-b border-slate-800 px-3 flex items-center justify-between shrink-0 text-xs">
+      <div className="h-11 bg-slate-900/95 border-b border-slate-800 px-3 flex items-center justify-between shrink-0 text-xs">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="font-bold text-slate-200">VM: DC01-PROD (Windows Server 2022)</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"></span>
+            <span className="font-bold text-emerald-300">Cloud VM Azure: Đang chạy</span>
           </div>
-          <span className="text-[11px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded border border-slate-700">
-            IP: 192.168.10.10 / Domain: CORP.LOCAL
+          <span className="text-[11px] bg-slate-800 text-blue-300 px-2.5 py-0.5 rounded border border-blue-900/50 font-mono font-medium">
+            IP: 20.40.49.168 (Port 3389)
           </span>
-          <div className={`text-[11px] px-2 py-0.5 rounded font-mono font-bold flex items-center gap-1.5 ${
-            isHighCpuAlert ? 'bg-red-950 text-red-300 border border-red-800 animate-pulse' : 'bg-slate-800 text-slate-300'
-          }`}>
-            <Cpu className="w-3.5 h-3.5" /> CPU: {totalCpuUsage}%
-          </div>
+          <a
+            href="/api/cloud-vm/connect.rdp"
+            download="LabEx-WinServer.rdp"
+            className="text-[11px] bg-emerald-700/80 hover:bg-emerald-600 text-white font-semibold px-2.5 py-1 rounded transition flex items-center gap-1.5 shadow-sm border border-emerald-500/30"
+            title="Tải file cấu hình RDP để mở trực tiếp máy ảo Windows Server bằng 1 cú nhấp chuột">
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>Mở RDP thật (1-Click)</span>
+          </a>
+          <button
+            onClick={async () => {
+              if (confirm('Bạn có chắc muốn tắt máy ảo trên Azure để dừng tính phí?')) {
+                await fetch('/api/cloud-vm/stop', { method: 'POST' });
+                alert('Đã gửi lệnh tắt máy ảo Azure thành công!');
+              }
+            }}
+            className="text-[11px] bg-rose-900/50 hover:bg-rose-800/80 text-rose-200 px-2 py-0.5 rounded transition border border-rose-700/50 flex items-center gap-1"
+            title="Tắt máy ảo để bảo lưu 100$ credit">
+            <Square className="w-3 h-3 text-rose-400" />
+            <span>Tắt VM tiết kiệm</span>
+          </button>
         </div>
 
         {/* View mode switcher */}

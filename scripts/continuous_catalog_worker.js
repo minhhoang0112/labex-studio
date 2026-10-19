@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
 import { callGeminiWithFallback, sysPromptContent, sysPromptShort } from '../server/data/gemini_translate_util.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -89,6 +88,7 @@ async function main() {
         content: step.text || "",
         content_vi: viText || step.text || "",
         layout: step.layout || "doc-workbench-split",
+        kind: step.need_verify ? 'task' : sIdx === 0 ? 'introduction' : 'summary',
         need_verify: Boolean(step.need_verify)
       });
 
@@ -102,24 +102,18 @@ async function main() {
           task: "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
           task_vi: "Thực hiện các thao tác theo yêu cầu và kiểm tra kết quả.",
           verification: {
-            kind: "commands",
-            user: "labex",
-            groups: [["(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"]],
-            allowed_status: [0, 1]
+            kind: "unsupported",
+            reason: "Imported instructions require an independently reviewed practical grader."
           },
           required_capabilities: ["terminal", "files", "shell"],
           verification_by_provider: {
             docker: {
-              kind: "commands",
-              user: "labex",
-              groups: [["(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"]],
-              allowed_status: [0, 1]
+              kind: "unsupported",
+              reason: "Imported instructions require an independently reviewed practical grader."
             },
             namespace: {
-              kind: "commands",
-              user: "labex",
-              groups: [["(?:cat|ls|pwd|cd|mkdir|touch|grep|test|echo|bash|sh|python|sed|awk)"]],
-              allowed_status: [0, 1]
+              kind: "unsupported",
+              reason: "Imported instructions require an independently reviewed practical grader."
             }
           },
           required_capabilities_by_provider: {
@@ -154,14 +148,7 @@ async function main() {
     // Checkpoint & git commit every 10 labs
     if (importedInSession % 10 === 0) {
       console.log(`\n[Checkpoint] Đã nạp ${importedInSession} bài trong phiên này. Đồng bộ catalog & git...`);
-      try {
-        execSync('git add server/data/labs/', { cwd: rootDir });
-        execSync(`git commit -m "feat(catalog): imported ${importedInSession} authentic challenge labs"`, { cwd: rootDir });
-        execSync('git push origin main', { cwd: rootDir });
-        console.log(`[Checkpoint] Đã push thành công lên GitHub!`);
-      } catch (err) {
-        console.warn(`[Checkpoint] Commit/Push warning: ${err.message}`);
-      }
+      console.log('[Checkpoint] Saved locally; review content, fixtures and graders before publishing.');
     }
 
     // Delay 1 second to stay respectful of API limits
