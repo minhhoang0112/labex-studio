@@ -26,12 +26,21 @@ echo Starting the local runtime and server...
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\start-local.ps1 -Restart
 if errorlevel 1 goto failed
 start "" "http://127.0.0.1:5000/learn"
-echo LabEx Local is running at http://127.0.0.1:5000/learn
+echo.
+echo ========================================================
+echo  LabEx Local is READY and running!
+echo  URL: http://127.0.0.1:5000/learn
+echo ========================================================
+echo.
+echo You can keep this window open or press any key to close it.
+pause
 exit /b 0
 
 :failed
 echo.
-echo Startup failed. Review the error above.
+echo ========================================================
+echo  Startup failed. Review the error above.
+echo ========================================================
 pause
 exit /b 1
 
