@@ -73,7 +73,7 @@ export default function AiTutor({
             stepTitle: currentStep?.title_vi || currentStep?.title,
             task: currentStep?.task_vi || currentStep?.task,
             hint: currentStep?.hint_vi || currentStep?.hint,
-            content: (currentStep?.content_vi || currentStep?.content || '').slice(0, 5000),
+            content: (currentStep?.translation_needs_review ? currentStep.content : currentStep?.content_vi || currentStep?.content || '').slice(0, 5000),
             terminalOutput: lastTerminalOutput?.slice(-4000),
           },
           history: messages.filter(item => !item.error && ['user', 'assistant'].includes(item.role))

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_lab_id": 725417,
+  "source_url": "https://labex.io/tutorials/linux-scheduled-backup-and-recovery-725417",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nA useful backup is more than an archive command. You must know what it contains, verify that it can be read, restore the file you need, and make unattended runs observable.\n\nIn this lab, you will back up a small application workspace from a manifest, restore one selected file, turn the workflow into a timestamped script, and install a Cron schedule. Every automated path is absolute so the job does not depend on an interactive shell's current directory.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Define the Backup Scope with a Manifest",
+      "content": "## Define the Backup Scope with a Manifest\n\nIn this step, you will create a manifest: a plain-text list of paths that makes the backup scope visible and reviewable.\n\nEnter the workspace:\n\n```bash\ncd /home/labex/project/backup-lab\n```\n\nCreate a manifest containing paths relative to the `data` directory:\n\n```bash\ncat > backup-manifest.txt <<'EOF'\nconfig/app.conf\ndocuments/runbook.txt\nEOF\n```\n\nNumber the entries so they are easy to review:\n\n```bash\nnl -ba backup-manifest.txt\n```\n\nConfirm that every listed source exists with a `while` loop. Read its structure before running it:\n\n- `IFS=` prevents the shell from trimming whitespace at the start or end of a line;\n- `read -r item` reads one complete line into `item` without treating backslashes specially;\n- `do ... done` encloses the command repeated for each line;\n- `< backup-manifest.txt` supplies the manifest as the loop's input;\n- `test -f` checks that the corresponding path is a regular file, and `&&` prints `ready` only when that check succeeds.\n\n```bash\nwhile IFS= read -r item; do\n  test -f \"data/$item\" && echo \"ready: $item\"\ndone < backup-manifest.txt\n```\n\nThe unlisted `documents/scratch.txt` file is intentionally outside this managed backup.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Create an Archive from the Manifest",
+      "content": "## Create an Archive from the Manifest\n\nIn this step, you will use `tar -T` to read filenames from the manifest. The `-C data` option makes the archive use short relative paths.\n\n```bash\ntar -czf backups/manual-backup.tar.gz -C data -T backup-manifest.txt\n```\n\nThe options mean:\n\n- `-c`: create an archive;\n- `-z`: compress it with gzip;\n- `-f`: use the following archive filename;\n- `-C data`: operate relative to `data`;\n- `-T backup-manifest.txt`: read the backup members from the manifest.\n\nInspect the resulting file:\n\n```bash\nls -lh backups/manual-backup.tar.gz\n```\n\nCompare its timestamp and size with the source files:\n\n```bash\nstat -c '%n size=%s modified=%y' backups/manual-backup.tar.gz data/config/app.conf data/documents/runbook.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Verify the Archive without Extracting It",
+      "content": "## Verify the Archive without Extracting It\n\nIn this step, you will test the archive before relying on it. First test the gzip stream:\n\n```bash\ngzip -t backups/manual-backup.tar.gz\n```\n\nNo output means the compressed stream passed its integrity check. Now list the tar members without extracting them:\n\n```bash\ntar -tzf backups/manual-backup.tar.gz | tee archive-contents.txt\n```\n\nCompare the saved listing with the manifest:\n\n```bash\ndiff -u backup-manifest.txt archive-contents.txt\n```\n\nThe command should show no differences. Confirm that the unmanaged scratch file is absent:\n\n```bash\nif tar -tzf backups/manual-backup.tar.gz | grep -qx 'documents/scratch.txt'; then\n  echo \"Unexpected scratch file found\"\nelse\n  echo \"Archive scope is correct\"\nfi\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Restore One Selected File",
+      "content": "## Restore One Selected File\n\nIn this step, you will restore only one selected file so unrelated data is not overwritten. Simulate accidental deletion of the configuration:\n\n```bash\nrm data/config/app.conf\n```\n\n```bash\ntest -e data/config/app.conf || echo \"app.conf is missing\"\n```\n\nExtract only `config/app.conf` into the separate restore directory:\n\n```bash\nrm -rf restore/*\n```\n\n```bash\ntar -xzf backups/manual-backup.tar.gz -C restore config/app.conf\n```\n\nInspect the recovered file, then copy it back to its working location:\n\n```bash\ncat restore/config/app.conf\n```\n\n```bash\ncp restore/config/app.conf data/config/app.conf\n```\n\n```bash\ncmp -s restore/config/app.conf data/config/app.conf && echo \"Configuration restored\"\n```\n\nOnly the requested archive member was extracted.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Build a Timestamped Backup Script",
+      "content": "## Build a Timestamped Backup Script\n\nIn this step, you will build a timestamped backup script. Cron starts jobs with a limited environment, so use absolute paths inside unattended scripts.\n\nCreate `backup.sh`:\n\n```bash\ncat > backup.sh <<'EOF'\n#!/bin/bash\n\nsource_dir=/home/labex/project/backup-lab/data\nmanifest=/home/labex/project/backup-lab/backup-manifest.txt\nbackup_dir=/home/labex/project/backup-lab/backups\ntimestamp=$(date +%Y%m%d-%H%M%S)\narchive=\"$backup_dir/backup-$timestamp.tar.gz\"\n\nmkdir -p \"$backup_dir\"\n\nif [ ! -d \"$source_dir\" ] || [ ! -f \"$manifest\" ]; then\n  echo \"Backup source or manifest is missing\" >&2\n  exit 1\nfi\n\n/bin/tar -czf \"$archive\" -C \"$source_dir\" -T \"$manifest\" || exit 1\n/bin/tar -tzf \"$archive\" > \"$archive.contents\" || exit 1\n\necho \"Created $archive\"\nexit 0\nEOF\n```\n\nMake the script executable and test it now instead of waiting for Cron:\n\n```bash\nchmod u+x backup.sh\n```\n\n```bash\n./backup.sh | tee last-backup.txt\n```\n\n```bash\nls -1 backups\n```\n\nThe timestamp gives each run a unique filename. The companion `.contents` file records exactly what the archive contains.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Install and Inspect a Cron Schedule",
+      "content": "## Install and Inspect a Cron Schedule\n\nIn this step, you will install and inspect a personal Cron schedule. A crontab line begins with five scheduling fields, followed by the command:\n\n| Position | Field | Usual range |\n| --- | --- | --- |\n| 1 | minute | `0`–`59` |\n| 2 | hour | `0`–`23` |\n| 3 | day of month | `1`–`31` |\n| 4 | month | `1`–`12` |\n| 5 | day of week | `0`–`7`, where Sunday is `0` or `7` |\n\nAn asterisk `*` means every allowed value. A step such as `*/5` means every five units in that field.\n\n```text\nminute hour day-of-month month day-of-week command\n```\n\nFor example, `*/5 * * * *` means every five minutes. `0 2 * * *` means 02:00 every day.\n\n`crontab -e` opens your personal crontab in an editor. A reliable workflow is to prepare and install a known-good entry first, then make a small interactive edit. Create one entry that uses absolute paths and captures both standard output and standard error:\n\n```bash\ncat > backup.crontab <<'EOF'\n*/5 * * * * /home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\nEOF\n```\n\nReview and install it:\n\n```bash\ncat backup.crontab\n```\n\n```bash\ncrontab backup.crontab\n```\n\nNow open the installed crontab in Nano:\n\n```bash\nEDITOR=nano crontab -e\n```\n\nAdd this comment on the line above the schedule:\n\n```text\n## LabEx managed backup schedule\n```\n\nPress `Ctrl+O`, then `Enter` to save. Press `Ctrl+X` to leave Nano and return to the shell. Use `crontab -l` to confirm exactly what Cron will read and save that output:\n\n```bash\ncrontab -l | tee installed-crontab.txt\n```\n\nThe output should contain the comment followed by the every-five-minutes entry. Inspecting the installed result catches editor mistakes before you depend on the schedule.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Test Logging and Understand Percent Escaping",
+      "content": "## Test Logging and Understand Percent Escaping\n\nIn this step, you will test backup logging and learn Cron's special handling of percent signs. First run the scheduled command manually:\n\n```bash\n/home/labex/project/backup-lab/backup.sh >> /home/labex/project/backup-lab/logs/backup.log 2>&1\n```\n\n```bash\ntail -n 5 logs/backup.log\n```\n\n```bash\nfind backups -maxdepth 1 -type f -name 'backup-*.tar.gz' -printf '%f\\n' | sort\n```\n\nThe timestamp is created inside `backup.sh`, where ordinary `%` characters are safe. Cron treats an unescaped `%` in a crontab command specially, however. If you place `date` directly in a crontab line, escape each percent sign with a backslash.\n\nSave a correctly escaped example for reference:\n\n```bash\ncat > cron-date-example.txt <<'EOF'\n0 2 * * * /bin/echo \"backup-$(/bin/date +\\%Y\\%m\\%d-\\%H\\%M\\%S)\" >> /home/labex/project/backup-lab/logs/date-example.log 2>&1\nEOF\n```\n\n```bash\ncat cron-date-example.txt\n```\n\nYour installed job remains the simpler script-based entry. It uses absolute paths, gives every archive a timestamp, and leaves a log that can be inspected after unattended runs.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "content": "## Summary\n\nYou defined a backup scope in a manifest, created an archive with `tar -T`, verified it without extraction, and recovered one selected file. You then wrote a timestamped backup script with absolute paths, installed and inspected a Cron schedule, redirected unattended output to a log, and learned why percent signs must be escaped when `date` appears directly in a crontab command.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "4a0354ade87e84e7f7717a28040e1dfde0bbd30ca8ee4ced724a1210398f1117"
+}

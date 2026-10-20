@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "source_lab_id": 388109,
+  "source_url": "https://labex.io/labs/linux-needle-in-the-haystack-388109",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nIn the realm of system administration and log analysis, the `grep` command is an indispensable tool. It allows for efficient searching and filtering of large text files, which is crucial when dealing with extensive log data. In this challenge, you'll tackle a more realistic scenario by searching through substantial log files to extract specific information. This challenge will test your ability to use `grep` effectively in situations that more closely resemble real-world tasks.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Needle in the Haystack",
+      "content": "# Needle in the Haystack\n\n## Tasks\n\n1. Find all ERROR messages in the file `/home/labex/project/system.log` and count how many there are.\n2. Find all lines containing POST requests in the file `/home/labex/project/access.log`.\n3. Find all lines in `/home/labex/project/application.log` that contain both \"WARNING\" and \"query\" (case-insensitive).\n4. Search for all user authentications (containing \"User authenticated\") across all log files.\n\n## Requirements\n\n1. All operations must be performed in the `/home/labex/project/` directory.\n2. Use the `grep` command for all search operations. You may use other commands in combination with `grep` if necessary (e.g., `wc`).\n3. For each task, create a file with the output of your command(s). Name the files `task1_output.txt`, `task2_output.txt`, `task3_output.txt`, and `task4_output.txt` respectively.\n4. Do not modify the original log files.\n\n## Example\n\nHere's an example of how your command and output might look:\n\n```bash\n$ cat task1_output.txt\n123\n```\n\n```bash\n$ head -n 2 task2_output.txt\n192.168.1.105 - - [13/Aug/2023:10:55:36 +0000] \"POST /api/v1/order HTTP/1.1\" 201 354\n192.168.1.106 - - [13/Aug/2023:10:56:12 +0000] \"POST /api/v1/user HTTP/1.1\" 200 128\n```\n\n```bash\n$ head -n 2 task3_output.txt\n2024-05-22 09:55:35 WARNING Database query timeout: SELECT * FROM users WHERE id = 906\n2023-09-26 09:55:35 WARNING Slow query detected. Execution time: 2116ms\n```\n\n```bash\n$ head -n 2 task4_output.txt\nsystem.log:2024-03-27 09:55:32 INFO User authenticated: user67\nsystem.log:2024-03-10 09:55:32 INFO User authenticated: user60\n```\n\nNote: The actual content may be different in your log files.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Summary",
+      "content": "# Summary\n\nIn this challenge, you've applied various `grep` techniques to analyze log files:\n\n1. Counting occurrences of a specific pattern\n2. Searching for exact matches\n3. Performing case-insensitive searches\n4. Combining multiple grep commands\n5. Searching across multiple files using wildcards\n\nThese skills are essential for effective log analysis and troubleshooting in Linux environments. The ability to quickly and efficiently extract specific information from large volumes of text is a crucial skill in many technical roles, and mastering `grep` is a significant step towards becoming proficient in log analysis and system troubleshooting.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "ec1b5d8515f152ffa4bf881d749b59abe25a18493fef250651696c771b8e7716"
+}

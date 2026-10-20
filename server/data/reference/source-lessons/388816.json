@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 388816,
+  "source_url": "https://labex.io/tutorials/shell-bash-scripting-loops-388816",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn how to use loops in Bash scripting. Loops are powerful tools that allow you to repeat a set of instructions multiple times, making your scripts more efficient and flexible. We will cover three types of loops: `for`, `while`, and `until`. Additionally, you will explore the `break` and `continue` statements, which provide control over loop execution. This lab is designed for beginners and will guide you through each concept step-by-step.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Setting Up the Environment",
+      "content": "## Setting Up the Environment\n\nLet's start by setting up our working environment. We'll create a new directory to store all our loop experiments.\n\nOpen a terminal in the WebIDE. You should be in the `/home/labex/project` directory by default. If you're not sure, you can always navigate there using this command:\n\n```bash\ncd /home/labex/project\n```\n\nNow, let's create a new directory for our loop experiments:\n\n```bash\nmkdir bash_loops\ncd bash_loops\n```\n\nThis creates a new directory called `bash_loops` and changes into it. We'll use this directory for all our loop experiments.\n\nWhy are we doing this? Organizing your scripts into directories is a good practice. It keeps your work tidy and makes it easier to find and manage your files.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "The for Loop",
+      "content": "## The for Loop\n\nThe `for` loop is used to iterate over a list of values. It's like saying, \"For each item in this list, do something.\" Let's create a script that demonstrates how to use a `for` loop.\n\nCreate a new file called `for_loop.sh` in the `bash_loops` directory:\n\n```bash\ntouch for_loop.sh\n```\n\nNow, open the `for_loop.sh` file in the WebIDE and add the following content:\n\n```bash\n#!/bin/bash\n\n## Loop through an array of names\necho \"Looping through an array:\"\nNAMES=(\"Alice\" \"Bob\" \"Charlie\" \"David\")\nfor name in \"${NAMES[@]}\"; do\n  echo \"Hello, $name!\"\ndone\n\necho ## Print an empty line for readability\n\n## Loop through a range of numbers\necho \"Looping through a range of numbers:\"\nfor i in {1..5}; do\n  echo \"Number: $i\"\ndone\n```\n\nLet's break down what this script does:\n\n1. The first loop goes through an array of names. For each name in the array, it prints a greeting.\n2. The second loop uses a range `{1..5}` to count from 1 to 5.\n\nThe `\"${NAMES[@]}\"` syntax might look strange. The `@` means \"all elements of the array,\" and the quotes and curly braces ensure that each element is treated as a separate item, even if it contains spaces.\n\nSave the file and make it executable with this command:\n\n```bash\nchmod +x for_loop.sh\n```\n\nThe `chmod +x` command makes the file executable, which means you can run it as a program.\n\nNow, run the script:\n\n```bash\n./for_loop.sh\n```\n\nYou should see output like this:\n\n```\nLooping through an array:\nHello, Alice!\nHello, Bob!\nHello, Charlie!\nHello, David!\n\nLooping through a range of numbers:\nNumber: 1\nNumber: 2\nNumber: 3\nNumber: 4\nNumber: 5\n```\n\nThis demonstrates how `for` loops can iterate over both arrays and ranges of numbers.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "The while Loop",
+      "content": "## The while Loop\n\nThe `while` loop executes a block of code as long as a specified condition is true. It's like saying, \"While this condition is true, keep doing this.\"\n\nCreate a new file called `while_loop.sh`:\n\n```bash\ntouch while_loop.sh\n```\n\nOpen the `while_loop.sh` file in the WebIDE and add the following content:\n\n```bash\n#!/bin/bash\n\n## Simple countdown using a while loop\ncount=5\necho \"Countdown:\"\nwhile [ $count -gt 0 ]; do\n  echo $count\n  count=$((count - 1))\n  sleep 1 ## Wait for 1 second\ndone\necho \"Blast off!\"\n```\n\nLet's break down this script:\n\n1. We start with `count=5` to set our initial countdown value.\n2. The condition `[ $count -gt 0 ]` means \"while count is greater than 0\".\n3. Inside the loop, we print the current count, decrease it by 1, and wait for a second.\n4. This continues until count reaches 0, at which point the loop ends.\n\nThe `sleep 1` command pauses the script for 1 second, creating a real-time countdown effect.\n\nSave the file and make it executable:\n\n```bash\nchmod +x while_loop.sh\n```\n\nNow, run the script:\n\n```bash\n./while_loop.sh\n```\n\nYou'll see a countdown from 5 to 1, with a one-second pause between each number:\n\n```\nCountdown:\n5\n4\n3\n2\n1\nBlast off!\n```\n\nThis demonstrates how a `while` loop can repeat an action until a condition is no longer true.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "The until Loop",
+      "content": "## The until Loop\n\nThe `until` loop is similar to the `while` loop, but with an important difference: it continues executing until a specified condition becomes true. It's like saying, \"Keep doing this until this condition is true.\"\n\nCreate a new file called `until_loop.sh`:\n\n```bash\ntouch until_loop.sh\n```\n\nOpen the `until_loop.sh` file in the WebIDE and add the following content:\n\n```bash\n#!/bin/bash\n\n## Count up to 5 using an until loop\ncount=1\necho \"Counting up to 5:\"\nuntil [ $count -gt 5 ]; do\n  echo $count\n  count=$((count + 1))\n  sleep 1 ## Wait for 1 second\ndone\n```\n\nLet's break down this script:\n\n1. We start with `count=1` as our initial value.\n2. The condition `[ $count -gt 5 ]` means \"until count is greater than 5\".\n3. Inside the loop, we print the current count, increase it by 1, and wait for a second.\n4. This continues until count becomes greater than 5, at which point the loop ends.\n\nSave the file and make it executable:\n\n```bash\nchmod +x until_loop.sh\n```\n\nNow, run the script:\n\n```bash\n./until_loop.sh\n```\n\nYou'll see the numbers 1 through 5 printed, with a one-second pause between each:\n\n```\nCounting up to 5:\n1\n2\n3\n4\n5\n```\n\nThis demonstrates how an `until` loop can repeat an action until a condition becomes true.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Using break and continue Statements",
+      "content": "## Using break and continue Statements\n\nThe `break` and `continue` statements are used to control the flow of loops. `break` exits a loop early, while `continue` skips the rest of the current iteration and moves to the next one.\n\nCreate a new file called `break_continue.sh`:\n\n```bash\ntouch break_continue.sh\n```\n\nOpen the `break_continue.sh` file in the WebIDE and add the following content:\n\n```bash\n#!/bin/bash\n\n## Using break to exit a loop early\necho \"Demonstration of break:\"\nfor i in {1..10}; do\n  if [ $i -eq 6 ]; then\n    echo \"Breaking the loop at $i\"\n    break\n  fi\n  echo $i\ndone\n\necho ## Print an empty line for readability\n\n## Using continue to skip iterations\necho \"Demonstration of continue (printing odd numbers):\"\nfor i in {1..10}; do\n  if [ $((i % 2)) -eq 0 ]; then\n    continue\n  fi\n  echo $i\ndone\n```\n\nLet's break down this script:\n\n1. In the first loop, we use `break` to exit the loop when `i` equals 6.\n2. In the second loop, we use `continue` to skip even numbers. The condition `$((i % 2)) -eq 0` checks if a number is even (divisible by 2 with no remainder).\n\nThe `%` operator calculates the remainder after division. So `i % 2` will be 0 for even numbers and 1 for odd numbers.\n\nSave the file and make it executable:\n\n```bash\nchmod +x break_continue.sh\n```\n\nNow, run the script:\n\n```bash\n./break_continue.sh\n```\n\nYou should see output like this:\n\n```\nDemonstration of break:\n1\n2\n3\n4\n5\nBreaking the loop at 6\n\nDemonstration of continue (printing odd numbers):\n1\n3\n5\n7\n9\n```\n\nThis demonstrates how `break` can exit a loop early, and how `continue` can skip certain iterations based on a condition.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you've learned about three types of loops in Bash scripting:\n\n1. `for` loops, which iterate over a list of items or a range of numbers.\n2. `while` loops, which continue as long as a condition is true.\n3. `until` loops, which continue until a condition becomes true.\n\nYou've also learned about `break` and `continue` statements, which give you more control over your loops.\n\nThese loop structures are fundamental to many scripts and will allow you to automate repetitive tasks efficiently. Practice using these loops in your own scripts to become more familiar with their behavior and use cases.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "bb1f9a919f7994f585503120a6e43c5fb8501acec9508cd5626932cbe9f292c9"
+}

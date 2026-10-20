@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_lab_id": 209739,
+  "source_url": "https://labex.io/tutorials/linux-linux-mkdir-command-directory-creating-209739",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, we'll explore the `mkdir` command in Linux, a fundamental tool for creating and organizing directories. We'll simulate the process of setting up a digital garden - a personal knowledge management system - to learn how to effectively use `mkdir` in various scenarios. This hands-on experience will help you understand directory creation, nested structures, and permission settings in Linux, even if you're completely new to the command line.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Creating Your Digital Garden Root",
+      "content": "## Creating Your Digital Garden Root\n\nLet's start by creating the root directory for your digital garden.\n\nFirst, open your terminal. You'll see a prompt that looks something like this:\n\n```\nlabex:project/$\n```\n\nThis indicates that you're in the `/home/labex/project` directory, which is perfect for our lab.\n\nNow, let's create a directory named `digital_garden`:\n\n```bash\nmkdir digital_garden\n```\n\nHere, `mkdir` stands for \"make directory\". This command creates a new folder named `digital_garden` in your current location.\n\nTo verify the directory has been created, we'll use the `ls` command, which lists the contents of a directory:\n\n```bash\nls\n```\n\nYou should see `digital_garden` in the output. If you don't see it, don't worry! Just try the `mkdir` command again.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Adding Main Sections",
+      "content": "## Adding Main Sections\n\nIn a digital garden, you might want to organize your thoughts into main categories. Let's create directories for different types of content.\n\nWe'll create three directories inside our `digital_garden`: 'notes', 'projects', and 'resources'. You can do this with three separate commands:\n\n```bash\nmkdir ~/project/digital_garden/notes\nmkdir ~/project/digital_garden/projects\nmkdir ~/project/digital_garden/resources\n```\n\nHere, `~/project/digital_garden/` is the full path to our digital garden. The `~` is a shortcut that means \"home directory\".\n\nTo see the new structure, use the `ls` command with the path to your digital garden:\n\n```bash\nls ~/project/digital_garden\n```\n\nYou should see the three new directories listed: `notes`, `projects`, and `resources`.\n\nIf you're curious about what these directories might be used for:\n\n- `notes` could store quick thoughts or daily reflections\n- `projects` might contain longer-term work or studies\n- `resources` could be for storing reference materials\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Creating Nested Directories",
+      "content": "## Creating Nested Directories\n\nOften, you'll want to create directories inside other directories, creating a nested structure. The `-p` option allows you to create parent directories as needed, which is very handy for deep structures.\n\nLet's create a nested structure for a hypothetical web app project:\n\n```bash\nmkdir -p ~/project/digital_garden/projects/web_app/src/components\n```\n\nThis command does a lot at once:\n\n- It creates a `web_app` folder inside `projects`\n- Inside `web_app`, it creates an `src` folder\n- Finally, inside `src`, it creates a `components` folder\n\nThe `-p` option (think \"parents\") tells `mkdir` to create any missing parent directories along the way. Without `-p`, you'd get an error if any part of the path didn't exist yet.\n\nTo see this new structure, use the `ls` command with the `-R` option, which shows the contents recursively:\n\n```bash\nls -R ~/project/digital_garden/projects/web_app\n```\n\nYou should see the nested directory structure displayed.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Setting Directory Permissions",
+      "content": "## Setting Directory Permissions\n\nWhen creating directories, you can set specific permissions. This is useful for controlling who can access, modify, or execute files within the directory.\n\nLet's create a directory named 'private' with restricted permissions:\n\n```bash\nmkdir -m 700 ~/project/digital_garden/private\n```\n\nHere's what this does:\n\n- `mkdir` creates the directory\n- `-m 700` sets the permissions\n  - 7: Read, write, and execute for the owner\n  - 0: No permissions for group\n  - 0: No permissions for others\n\nIn other words, only you (the owner) can access this directory.\n\nTo check the permissions, use:\n\n```bash\nls -ld ~/project/digital_garden/private\n```\n\nThe output should look like this:\n\n```\ndrwx------ 2 labex labex 6 Aug  7 18:40 /home/labex/project/digital_garden/private\n```\n\nHere, `drwx------` means:\n\n- `d`: It's a directory\n- `rwx`: You (the owner) have read, write, and execute permissions\n- `------`: Neither your group nor others have any permissions\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Using Verbose Mode",
+      "content": "## Using Verbose Mode\n\nThe verbose mode can be helpful when creating multiple directories, as it provides feedback on each creation. This is especially useful when you're creating many directories at once and want to ensure they're all created correctly.\n\nLet's create several directories in verbose mode:\n\n```bash\nmkdir -v ~/project/digital_garden/resources/books ~/project/digital_garden/resources/articles ~/project/digital_garden/resources/videos\n```\n\nThe `-v` option stands for \"verbose\". It tells `mkdir` to print a message for each directory it creates.\n\nYou should see output similar to this:\n\n```\nmkdir: created directory '/home/labex/project/digital_garden/resources/books'\nmkdir: created directory '/home/labex/project/digital_garden/resources/articles'\nmkdir: created directory '/home/labex/project/digital_garden/resources/videos'\n```\n\nThis feedback can be very helpful in complex scripts or when troubleshooting.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Combining Options",
+      "content": "## Combining Options\n\nYou can combine multiple options with `mkdir`. This allows you to create complex structures with specific permissions and verbose output all in one command.\n\nLet's create a nested structure for a hypothetical research project with restricted permissions:\n\n```bash\nmkdir -pvm 750 ~/project/digital_garden/projects/research_paper/drafts ~/project/digital_garden/projects/research_paper/references\n```\n\nLet's break this down:\n\n- `-p`: Create parent directories as needed\n- `-v`: Verbose mode, print a message for each created directory\n- `-m 750`: Set permissions (owner: full access, group: read and execute, others: no access)\n\nThis command creates two directories (`drafts` and `references`) inside `research_paper`, which itself is created inside `projects` if it doesn't already exist.\n\nTo check the structure and permissions:\n\n```bash\nls -lR ~/project/digital_garden/projects/research_paper\n```\n\nYou should see the nested directories with the specified permissions (drwxr-x---).\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Visualizing Your Digital Garden with the tree Command",
+      "content": "## Visualizing Your Digital Garden with the tree Command\n\nNow that we've created our digital garden structure, let's use the `tree` command to visualize it. The `tree` command displays the directory structure in a tree-like format, which is both informative and visually appealing.\n\nNow, let's use `tree` to view our digital garden structure:\n\n```bash\ntree ~/project/digital_garden\n```\n\nYou should see output similar to this:\n\n```\n/home/labex/project/digital_garden\n|-- notes\n|-- private\n|-- projects\n|   |-- research_paper\n|   |   |-- drafts\n|   |   `-- references\n|   `-- web_app\n|       `-- src\n|           `-- components\n`-- resources\n    |-- articles\n    |-- books\n    `-- videos\n\n13 directories, 0 files\n```\n\nThis tree structure gives us a clear overview of our digital garden. We can see all the directories we've created, including the nested structures.\n\nIf you want to see more details, including the permissions we set, you can use the `-p` option with `tree`:\n\n```bash\ntree -p ~/project/digital_garden\n```\n\nThis will show the permissions for each directory, like this:\n\n```\n[drwxrwxr-x]  /home/labex/project/digital_garden\n|-- [drwxrwxr-x]  notes\n|-- [drwx------]  private\n|-- [drwxrwxr-x]  projects\n|   |-- [drwxrwxr-x]  research_paper\n|   |   |-- [drwxr-x---]  drafts\n|   |   `-- [drwxr-x---]  references\n|   `-- [drwxrwxr-x]  web_app\n|       `-- [drwxrwxr-x]  src\n|           `-- [drwxrwxr-x]  components\n`-- [drwxrwxr-x]  resources\n    |-- [drwxrwxr-x]  articles\n    |-- [drwxrwxr-x]  books\n    `-- [drwxrwxr-x]  videos\n\n13 directories, 0 files\n```\n\nThis visual representation is a great way to verify that we've created all the directories we intended, with the correct structure and permissions.\n\nThis step provides a satisfying conclusion to our lab, allowing us to see the entire structure we've built. The `tree` command is not only useful for this exercise but is a valuable tool for navigating and understanding directory structures in your future Linux endeavors.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, we explored the versatility of the `mkdir` command in Linux by simulating the creation of a digital garden. We learned how to:\n\n1. Create single directories\n2. Create multiple directories at once\n3. Create nested directory structures using the `-p` option\n4. Set specific permissions when creating directories with the `-m` option\n5. Use verbose mode `-v` for detailed feedback\n\nWe also saw how these options can be combined for more complex operations.\n\nWhile not covered in our exercises, `mkdir` has a few additional parameters that can be useful in specific situations:\n\n- `-Z`: Set SELinux security context of each created directory to the default type\n- `--context[=CTX]`: Like -Z, or if CTX is specified, set the SELinux or SMACK security context to CTX\n- `--help`: Display help message and exit\n- `--version`: Output version information and exit\n\nThese skills are fundamental for efficient file system organization in Linux environments. Remember, while we focused on a digital garden scenario, these techniques apply to any situation where you need to create and manage directory structures in Linux. As you continue your Linux journey, you'll find `mkdir` to be an indispensable tool for organizing your files and projects.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "a84e4a4dc5c47f17455bc344e4f428aca431914c3982b00a4ebb28a44e2da60a"
+}

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 388496,
+  "source_url": "https://labex.io/tutorials/linux-linux-free-command-monitoring-system-memory-388496",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nWelcome to the lab on the Linux `free` command. In this lab, you will learn how to use the `free` command to monitor and analyze system memory usage. This skill is crucial for system administrators and developers who need to optimize system performance and troubleshoot memory-related issues.\n\nImagine you are a junior system administrator tasked with monitoring the memory usage of a busy web server. The `free` command will be your primary tool for this task, allowing you to quickly assess the current memory status and identify potential issues before they impact system performance.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Basic Usage of the free Command",
+      "content": "## Basic Usage of the free Command\n\nLet's start by using the `free` command in its simplest form. This will give us an overview of the system's memory usage.\n\nFirst, open a terminal if you haven't already. Then, run the following command:\n\n```bash\nfree\n```\n\nYou should see output similar to this:\n\n```\n              total        used        free      shared  buff/cache   available\nMem:        8167004     2524956     3300280      658636     2341768     4657560\nSwap:       2097152           0     2097152\n```\n\nThis output provides a snapshot of your system's memory usage. Let's break down what each column means:\n\n- `total`: The total amount of physical RAM and swap space.\n- `used`: The amount of RAM currently in use.\n- `free`: The amount of RAM that is completely unused.\n- `shared`: The amount of RAM used by tmpfs.\n- `buff/cache`: The amount of RAM used for buffer and cache.\n- `available`: An estimate of how much memory is available for starting new applications.\n\nThe output is divided into two rows:\n\n- `Mem`: Shows information about physical RAM.\n- `Swap`: Shows information about swap space (virtual memory).\n\nAll values are displayed in bytes by default.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Displaying Memory Information in Human-Readable Format",
+      "content": "## Displaying Memory Information in Human-Readable Format\n\nWhile the default output of `free` is precise, it can be hard to read quickly. Let's use the `-h` option to display the information in a more human-readable format.\n\nRun the following command:\n\n```bash\nfree -h\n```\n\nYou should now see output similar to this:\n\n```\n              total        used        free      shared  buff/cache   available\nMem:          7.8Gi       2.4Gi       3.1Gi       642Mi       2.2Gi       4.4Gi\nSwap:         2.0Gi          0B       2.0Gi\n```\n\nThe `-h` option (which stands for \"human-readable\") automatically scales the numbers and adds appropriate unit suffixes (G for gigabytes, M for megabytes, etc.). This makes it much easier to quickly understand your system's memory usage at a glance.\n\nNotice how the values are now displayed with units like Gi (gibibytes) and Mi (mebibytes). These are binary units, where 1 Gi = 1024 Mi, which is the standard way computers measure memory.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Displaying Memory Information in Megabytes",
+      "content": "## Displaying Memory Information in Megabytes\n\nSometimes, you might want to see the memory information in a specific unit. Let's use the `-m` option to display the information in megabytes.\n\nRun the following command:\n\n```bash\nfree -m\n```\n\nYour output should look something like this:\n\n```\n              total        used        free      shared  buff/cache   available\nMem:           7975        2466        3222         642        2286        4548\nSwap:          2047           0        2047\n```\n\nThe `-m` option forces `free` to display all values in megabytes. This can be useful when you need more precision than the `-h` option provides, but still want easily readable numbers.\n\nNote that these are mebibytes (MiB), where 1 MiB = 1,048,576 bytes, not megabytes (MB) where 1 MB = 1,000,000 bytes. In practice, the difference is small enough that they're often used interchangeably.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Continuous Monitoring with the free Command",
+      "content": "## Continuous Monitoring with the free Command\n\nIn real-world scenarios, you often need to monitor memory usage over time. The `free` command allows you to do this with the `-s` (seconds) option, which updates the display at regular intervals.\n\nLet's monitor the memory usage every 3 seconds for a total of 5 updates:\n\n```bash\nfree -h -s 3 -c 5\n```\n\nThis command uses several options:\n\n- `-h`: Display in human-readable format\n- `-s 3`: Update every 3 seconds\n- `-c 5`: Stop after 5 updates\n\nYou should see output that updates every 3 seconds, similar to this:\n\n```\n              total        used        free      shared  buff/cache   available\nMem:          7.8Gi       2.4Gi       3.1Gi       642Mi       2.2Gi       4.4Gi\nSwap:         2.0Gi          0B       2.0Gi\n\n              total        used        free      shared  buff/cache   available\nMem:          7.8Gi       2.4Gi       3.1Gi       642Mi       2.2Gi       4.4Gi\nSwap:         2.0Gi          0B       2.0Gi\n\n...\n```\n\nThis continuous monitoring can help you observe how memory usage changes over time, which is particularly useful when trying to identify memory leaks or understand the memory usage patterns of specific applications.\n\nPress Ctrl+C if you want to stop the command before it completes all 5 updates.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Displaying Total Memory Usage",
+      "content": "## Displaying Total Memory Usage\n\nBy default, the `free` command shows memory usage with buffers and cache separated. However, sometimes you might want to see the total memory usage including buffers and cache. For this, we can use the `-t` option.\n\nRun the following command:\n\n```bash\nfree -h -t\n```\n\nYour output should look something like this:\n\n```\n              total        used        free      shared  buff/cache   available\nMem:          7.8Gi       2.4Gi       3.1Gi       642Mi       2.2Gi       4.4Gi\nSwap:         2.0Gi          0B       2.0Gi\nTotal:        9.8Gi       2.4Gi       5.1Gi\n```\n\nThe `-t` option adds a \"Total\" line at the bottom, which sums up the memory and swap usage. This can give you a quick overview of your total system memory, including both physical RAM and swap space.\n\nIn this output:\n\n- The \"Mem:\" line shows the physical RAM usage.\n- The \"Swap:\" line shows the swap space usage.\n- The \"Total:\" line shows the sum of physical RAM and swap space.\n\nThis total view can be particularly useful when you want to understand your system's overall memory capacity and usage at a glance.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nCongratulations! You've completed this lab on using the `free` command to monitor system memory. Let's recap what you've learned:\n\n1. Basic usage of the `free` command to display memory information.\n2. Using the `-h` option to display memory in a human-readable format.\n3. Using the `-m` option to display memory information in megabytes.\n4. Continuous monitoring of memory usage with the `-s` and `-c` options.\n5. Displaying total memory usage including swap with the `-t` option.\n\nThese skills will be invaluable for monitoring and managing system resources, particularly in scenarios where you need to optimize performance or troubleshoot memory-related issues.\n\nHere are some additional `free` command options we didn't cover in this lab:\n\n- `-b`: Display the amount of memory in bytes\n- `-k`: Display the amount of memory in kilobytes\n- `-g`: Display the amount of memory in gigabytes\n- `-w`: Use wide output format\n- `-s`: Update the display every [SEC] seconds\n- `--si`: Use powers of 1000 instead of 1024\n\nRemember, effective memory management is crucial for maintaining system performance and stability. Regular monitoring with the `free` command can help you detect and prevent memory-related issues before they impact your system's performance.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "280afb9ffb369aed42a6a7bcc5580d8bfc78aa214e6c0fdd5844a997191f55a7"
+}

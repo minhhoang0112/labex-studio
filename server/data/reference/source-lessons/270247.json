@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "source_lab_id": 270247,
+  "source_url": "https://labex.io/labs/linux-the-joker-s-trick-270247",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nIn this challenge, you will apply your knowledge of Linux user account management. You'll create new user accounts, modify existing ones, and delete users. This challenge will test your understanding of the concepts learned in the \"User Account Management\" lab.\n\n## Achievements\n\nYou'll demonstrate your ability to use:\n\n- `useradd` - to create new users\n- `passwd` - to change user passwords\n- `usermod` - to modify user accounts\n- `userdel` - to delete user accounts\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Creating User Accounts",
+      "content": "# Creating User Accounts\n\nIn this step, you'll create several user accounts with different specifications.\n\n## Tasks\n\nComplete the following tasks in order:\n\n1. Create a user named `joker`.\n2. Create a user named `batman` with a home directory at `/home/gotham`.\n\n## Requirements\n\n- Use the `useradd` command for all user creations.\n- Ensure both users have home directories created during account creation.\n- `batman` has a different home directory than the default.\n\n## Example\n\nAfter completing these tasks, you can verify the user information like this:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nSample output:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/sh\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Managing User Passwords",
+      "content": "# Managing User Passwords\n\nIn this step, you'll set and change passwords for users.\n\n## Tasks\n\nComplete the following tasks:\n\n1. Set a password for the `joker` user.\n2. Set a password for the `batman` user.\n\n## Requirements\n\n- Use the `passwd` command for all password operations.\n- For this challenge, use simple passwords like `password123`.\n\n## Example\n\nAfter setting the passwords, you can check the password status:\n\n```bash\nsudo passwd -S joker\nsudo passwd -S batman\n```\n\nSample output:\n\n```plaintext\njoker P 01/19/2024 0 99999 7 -1\nbatman P 01/19/2024 0 99999 7 -1\n```\n\nIn this output, `P` means the account has a usable password.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Modifying User Accounts",
+      "content": "# Modifying User Accounts\n\nIn this step, you'll modify existing user accounts.\n\n## Tasks\n\nComplete the following tasks:\n\n1. Change the `joker` user's home directory to `/home/arkham`.\n2. Change the `batman` user's shell to `/bin/bash`.\n\n## Requirements\n\n- Use the `usermod` command for all modifications.\n\n## Example\n\nAfter making these changes, you can verify them:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nSample output:\n\n```plaintext\njoker:x:5001:5001::/home/arkham:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/bash\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Deleting User Accounts",
+      "content": "# Deleting User Accounts\n\nIn this final step, you'll delete user accounts.\n\n## Tasks\n\nComplete the following tasks:\n\n1. Delete the `joker` user without removing their home directory.\n2. Delete the `batman` user and their home directory `/home/gotham`.\n\n## Requirements\n\n- Use the `userdel` command for all deletions.\n\n## Example\n\nAfter deleting these users, you can verify:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\nls -ld /home/gotham\n```\n\nThe two `grep` commands should return no results. For `ls -ld /home/gotham`, a \"No such file or directory\" message confirms the directory was removed.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Summary",
+      "content": "# Summary\n\nCongratulations! You've completed the \"Joker's Trick\" user account management challenge. You've demonstrated your ability to:\n\n1. Create user accounts with various specifications\n2. Set and change user passwords\n3. Modify user account properties\n4. Delete user accounts with and without removing home directories\n\nThese skills are fundamental for Linux system administration. Keep practicing and exploring to become a Linux user management expert!\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "27e6c1dae8cd03a78c2120217e6f6b0f06256be996a0fc98d9ea21cfb9180852"
+}

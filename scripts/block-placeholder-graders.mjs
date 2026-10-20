@@ -19,6 +19,11 @@ for (const file of fs.readdirSync(labs).filter(name => name.endsWith('.json'))) 
   const lab = JSON.parse(original);
   for (const item of [...(lab.steps || []), ...(lab.sections || [])]) {
     const previous = JSON.stringify(item);
+    if(lab.id==='linux-day-3-the-log-investigator-596202' && item.id==='source-596202-section-2-v2') {
+      const definition={kind:'unsupported',reason:'Bài yêu cầu dmesg và kernel log thật; container chưa cấp kernel log riêng. Chỉ tạo boot_issues.txt không chứng minh đã đọc log.'};
+      item.verification=definition;
+      for(const provider of Object.keys(item.verification_by_provider||{}))item.verification_by_provider[provider]=definition;
+    }
     if (item.verification) item.verification = repair(item.verification);
     for (const provider of Object.keys(item.verification_by_provider || {})) {
       item.verification_by_provider[provider] = repair(item.verification_by_provider[provider]);

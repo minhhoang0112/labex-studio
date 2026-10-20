@@ -5,6 +5,26 @@ import { getStepReadiness, getLabReadiness } from '../server/services/readiness.
 import { getVerificationDefinition, verifyDefinition } from '../server/services/verification.js';
 
 const load = id => JSON.parse(fs.readFileSync(new URL(`../server/data/labs/${id}.json`, import.meta.url), 'utf8'));
+
+test('a missing grader does not lock the private Linux terminal or certify the task', () => {
+  const lab={id:'linux-reading-practice',steps:[{id:'task',verification:{kind:'unsupported',reason:'A reviewed grader is still needed'}}]};
+  const state=getLabReadiness(lab);
+  assert.equal(state.can_open,true);
+  assert.equal(state.can_start_terminal,true);
+  assert.equal(state.can_grade,false);
+  assert.equal(getStepReadiness(lab.steps[0],lab).ready,false);
+  assert.equal(getLabReadiness({...lab,id:'win-reading-practice'}).can_start_terminal,false);
+});
+
+test('Junior kernel-log work cannot be completed by touching its expected filename', async()=>{
+  const lab=load('linux-day-3-the-log-investigator-596202');
+  const step=lab.steps.find(s=>s.id==='source-596202-section-2-v2');
+  const result=await verifyDefinition(lab.id,getVerificationDefinition(step,'docker'),{
+    runCommand:async()=>({exitCode:0}),
+    readHistory:async()=>[{command:'touch boot_issues.txt',user:'labex',status:0}],
+  });
+  assert.equal(result.passed,false);
+});
 function withProvider(provider, action) {
   const previous = process.env.LABEX_RUNTIME_PROVIDER;
   process.env.LABEX_RUNTIME_PROVIDER = provider;

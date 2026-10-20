@@ -3,6 +3,7 @@ import { api } from '../lib/api';
 import ReactMarkdown from 'react-markdown';
 import GuideImage from './GuideImage';
 import remarkGfm from 'remark-gfm';
+import { sourceMarkdown } from '../lib/sourceMarkdown';
 import { 
   CheckCircle2, 
   XCircle, 
@@ -36,6 +37,7 @@ export default function LabGuide({
   const [copiedCode, setCopiedCode] = useState(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState(null);
+  const [readingChoice, setReadingChoice] = useState(null);
   const request = useRef(null);
   const latestEpoch = useRef(verificationEpoch);
   useLayoutEffect(() => {
@@ -91,8 +93,10 @@ export default function LabGuide({
 
   // Multilingual content and title resolution
   const isVi = lang === 'vi';
-  const activeTitle = (isVi && currentSection?.title_vi) ? currentSection.title_vi : currentSection?.title;
-  const content = (isVi && currentSection?.content_vi) ? currentSection.content_vi : (currentSection?.content || '');
+  const choice=readingChoice?.id===currentSection?.id ? readingChoice.source : undefined;
+  const useSource=currentSection?.source_text_verified && (choice ?? (!isVi || !currentSection.content_vi || currentSection.translation_needs_review));
+  const activeTitle = (!useSource && isVi && currentSection?.title_vi) ? currentSection.title_vi : currentSection?.title;
+  const content = (!useSource && isVi && currentSection?.content_vi) ? currentSection.content_vi : (currentSection?.content || '');
   const activeTask = (isVi && matchingStep?.task_vi) ? matchingStep.task_vi : (matchingStep?.task || '');
   const activeHint = (isVi && matchingStep?.hint_vi) ? matchingStep.hint_vi : (matchingStep?.hint || '');
 
@@ -301,6 +305,14 @@ export default function LabGuide({
               </h3>
 
               {/* Rendered Markdown */}
+              {currentSection?.source_text_verified && <div className="mb-4 rounded-lg border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/40 p-3 text-xs text-blue-900 dark:text-blue-200">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button type="button" aria-pressed={Boolean(useSource)} onClick={()=>setReadingChoice({id:currentSection.id,source:true})} className={`rounded-md px-3 py-1.5 ${useSource ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800'}`}>Bản gốc EN</button>
+                  {currentSection.content_vi && <button type="button" aria-pressed={!useSource} onClick={()=>setReadingChoice({id:currentSection.id,source:false})} className={`rounded-md px-3 py-1.5 ${!useSource ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800'}`}>Bản dịch VI</button>}
+                  <a href={currentSection.source_url} target="_blank" rel="noreferrer" className="underline">Đối chiếu LabEx ↗</a>
+                </div>
+                <p className="mt-2">{useSource ? 'Đang đọc tài liệu tiếng Anh đã đối chiếu trực tiếp với nguồn.' : 'Bản dịch local; dùng Bản gốc EN để đối chiếu đầy đủ.'}{currentSection.translation_needs_review && ' Bản dịch cần cập nhật theo tài liệu gốc vừa bổ sung.'}</p>
+              </div>}
               <div className="prose-lab text-slate-800 dark:text-slate-200">
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
@@ -335,7 +347,7 @@ export default function LabGuide({
                       );
                     }
                   }}>
-                  {guideContent}
+                  {sourceMarkdown(guideContent)}
                 </ReactMarkdown>
               </div>
             </div>

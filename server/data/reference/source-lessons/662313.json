@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "source_lab_id": 662313,
+  "source_url": "https://labex.io/labs/linux-remove-exposed-backup-archive-662313",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nYou are reviewing a Linux static site host after a troubleshooting session. The site itself must stay online, but a backup archive was left inside the served web root and is now downloadable over HTTP.\n\nBefore the host can be handed back to routine service, you need to confirm the exposure, identify why the file is public, move it into private storage, and verify that the site still works. This is a common cleanup task after emergency copies, snapshots, or one-off maintenance work.\n\nThe boundary is the document root: files inside it are public web content, while private backups should live outside that served tree.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Remove the Exposed Backup Archive",
+      "content": "# Remove the Exposed Backup Archive\n\nYou are reviewing a public web root after a rushed backup handoff. The site still needs to serve normal pages, but a backup archive was left inside the served tree and can be downloaded by anyone who knows the URL.\n\nThis is a data exposure cleanup, not a service replacement. Confirm the archive is exposed, move it out of the document root into the prepared private area, and verify that the site still works after the file is no longer public.\n\nPreserve the backup data. A good fix changes where the archive lives relative to the web server, not whether the backup exists at all.\n\n## Current Situation\n\nThe project lives at `/home/labex/project`.\n\nThe public site is already running on the exercise port. The project contains a served `webroot/` and a `private-backups/` directory intended for files that should not be mapped by the web server.\n\n## Scope\n\nFocus on `site-backup.tar.gz`, the project `webroot/`, the existing `private-backups/` directory, and HTTP URLs on port `18380`.\n\nIgnore unrelated host services. Do not delete the backup data.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Confirm the backup is currently reachable at the obvious URL on port `18380`.\n- Decide where it lives relative to the active document root.\n- Relocate it into `private-backups/` without deleting the data.\n- Confirm the public URL no longer serves the archive and the site root still works.\n\n## Acceptance Criteria\n\n- The public site remains available on port `18380`.\n- The backup archive is no longer present under the served web root.\n- The backup archive exists under `private-backups/`.\n- The old public archive URL no longer serves the file.\n\n## Hints\n\n<details>\n<summary>How do I prove the exposure?</summary>\n\nUse `curl -i` against `http://127.0.0.1:18380/site-backup.tar.gz` and note a successful download before you move anything.\n\n</details>\n\n<details>\n<summary>Where should the file end up?</summary>\n\nThe project already has `webroot/` for published content and `private-backups/` that the static server does not map. Move the archive between those directories on disk; you do not need to restart the server for a pure file move.\n\n</details>\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Summary",
+      "content": "# Summary\n\nIn this challenge, you cleaned up a realistic post-troubleshooting exposure on a Linux web host. You identified a sensitive backup archive inside the public web root, moved it into private storage, and verified that the public site still worked. This is a common hardening task: remove accidental file exposure without disrupting normal content delivery.\n\nThe backup data is preserved, but it no longer sits inside the web server's published document boundary.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "6df22292c88d8a277b00588a264547af64e337e04bfe0a9fa350105f9312f7ad"
+}

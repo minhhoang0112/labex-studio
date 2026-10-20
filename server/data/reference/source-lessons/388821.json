@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "source_lab_id": 388821,
+  "source_url": "https://labex.io/tutorials/shell-file-system-operations-in-shell-388821",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn how to perform various file tests in the shell. File tests are essential tools for checking the properties of files and directories in the file system. By the end of this lab, you will be familiar with common file test commands and their usage, which are fundamental skills for working with files in Linux environments.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Creating a Test File",
+      "content": "## Creating a Test File\n\nBefore we begin with file operations, it's important to understand our working environment. In Linux, you're always working within a specific directory, and it's crucial to know where you are in the file system.\n\n1. Open a terminal in the WebIDE. This is where you'll type your commands.\n\n2. Create a new file named `test_file.txt`:\n\n   ```bash\n   touch test_file.txt\n   ```\n\n   The `touch` command is used to create an empty file. If the file already exists, it updates the file's timestamp without changing its content.\n\n3. Add some content to the file:\n\n   ```bash\n   echo \"This is a test file for our lab.\" > test_file.txt\n   ```\n\n   This command uses `echo` to output the text, and `>` to redirect that output into the file. Be careful with `>`, as it will overwrite any existing content in the file.\n\n4. Verify the file contents:\n\n   ```bash\n   cat test_file.txt\n   ```\n\n   `cat` is short for \"concatenate\", but it's often used to display the contents of a file. You should see the message \"This is a test file for our lab.\"\n\nIf you make a mistake or want to start over, you can always remove the file with `rm test_file.txt` and start again from step 1.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Testing File Existence",
+      "content": "## Testing File Existence\n\nNow that we have created a file, let's learn how to check if a file exists. This is a common task in shell scripts, especially when you need to perform operations on files.\n\n1. Create a new script file named `file_exists.sh`:\n\n   ```bash\n   touch file_exists.sh\n   ```\n\n2. Add the following content to the file:\n\n   ```bash\n   #!/bin/bash\n   \n   filename=\"test_file.txt\"\n   if [ -e \"$filename\" ]; then\n     echo \"$filename exists\"\n   else\n     echo \"$filename does not exist\"\n   fi\n   ```\n\n   Let's break this down:\n\n   - `#!/bin/bash` is called a shebang. It tells the system this is a bash script.\n   - We set a variable `filename` to \"test_file.txt\".\n   - The `if` statement checks if the file exists. `-e` is a test that returns true if the file exists.\n   - We use `echo` to print a message based on whether the file exists or not.\n\n3. Save the file and exit the editor.\n\n4. Make the script executable:\n\n   ```bash\n   chmod +x file_exists.sh\n   ```\n\n5. Run the script:\n\n   ```bash\n   ./file_exists.sh\n   ```\n\n   You should see the output: \"test_file.txt exists\"\n\n6. Now, let's test with a non-existent file. First, we'll rename our test file:\n\n   ```bash\n   mv test_file.txt non_existent.txt\n   ```\n\n   This command renames `test_file.txt` to `non_existent.txt`.\n\n7. Modify the script to check for the original file name \"test_file.txt\":\n\n   ```bash\n   nano file_exists.sh\n   ```\n\n   Change the `filename` variable to \"test_file.txt\" if it's not already set to that.\n\n8. Run the script again:\n\n   ```bash\n   ./file_exists.sh\n   ```\n\n   You should see the output: \"test_file.txt does not exist\"\n\nThis script demonstrates how to check for file existence, which is crucial when your script needs to work with files that may or may not be present.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Testing Directory Existence",
+      "content": "## Testing Directory Existence\n\nSimilar to testing file existence, we can also check if a directory exists. This is useful when your script needs to work with directories that may or may not be present.\n\n1. Create a new script file named `dir_exists.sh`:\n\n   ```bash\n   touch dir_exists.sh\n   ```\n\n2. Add the following content to the file:\n\n   ```bash\n   #!/bin/bash\n   \n   dirname=\"test_directory\"\n   if [ -d \"$dirname\" ]; then\n     echo \"$dirname exists\"\n   else\n     echo \"$dirname does not exist\"\n   fi\n   ```\n\n   This script is very similar to our file existence script, but it uses `-d` instead of `-e`. The `-d` test checks specifically for directory existence.\n\n3. Save the file and exit the editor.\n\n4. Make the script executable:\n\n   ```bash\n   chmod +x dir_exists.sh\n   ```\n\n5. Run the script:\n\n   ```bash\n   ./dir_exists.sh\n   ```\n\n   You should see the output: \"test_directory does not exist\"\n\n6. Now, let's create the directory and run the script again:\n\n   ```bash\n   mkdir test_directory\n   ./dir_exists.sh\n   ```\n\n   You should now see the output: \"test_directory exists\"\n\n   `mkdir` is the command to create a new directory.\n\nThis script demonstrates how to check for directory existence. This can be particularly useful in scripts that need to create, modify, or delete directories.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Testing File Permissions",
+      "content": "## Testing File Permissions\n\nIn Linux, every file and directory has associated permissions that determine who can read, write, or execute them. In this step, we'll learn how to check file permissions, specifically if a file is readable.\n\n1. First, let's rename our file back to its original name:\n\n   ```bash\n   mv non_existent.txt test_file.txt\n   ```\n\n2. Create a new script file named `file_readable.sh`:\n\n   ```bash\n   touch file_readable.sh\n   ```\n\n3. Add the following content to the file:\n\n   ```bash\n   #!/bin/bash\n   \n   filename=\"test_file.txt\"\n   if [ -r \"$filename\" ]; then\n     echo \"You have read permission for $filename\"\n   else\n     echo \"You do not have read permission for $filename\"\n   fi\n   ```\n\n   This script uses the `-r` test, which checks if the file is readable by the current user.\n\n4. Save the file and exit the editor.\n\n5. Make the script executable:\n\n   ```bash\n   chmod +x file_readable.sh\n   ```\n\n6. Run the script:\n\n   ```bash\n   ./file_readable.sh\n   ```\n\n   You should see the output: \"You have read permission for test_file.txt\"\n\n7. Now, let's remove the read permission and run the script again:\n\n   ```bash\n   chmod -r test_file.txt\n   ./file_readable.sh\n   ```\n\n   You should now see the output: \"You do not have read permission for test_file.txt\"\n\n   `chmod -r` removes read permissions from the file.\n\n8. Restore the read permission:\n\n   ```bash\n   chmod +r test_file.txt\n   ```\n\n   It's important to restore the permissions so we don't accidentally leave our file unreadable.\n\nThis script demonstrates how to check file permissions. Understanding and managing file permissions is crucial for system security and proper functioning of scripts.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you learned how to perform essential file system operations in the shell. You created scripts to test for file and directory existence, as well as file permissions. These skills are fundamental for working with files and directories in Linux environments and form the basis for more complex shell scripting tasks.\n\nYou practiced:\n\n1. Understanding your working environment\n2. Creating and manipulating files\n3. Writing and executing shell scripts\n4. Testing for file and directory existence\n5. Checking file permissions\n\nThese skills will be valuable as you continue to work with Linux systems and develop more advanced shell scripts. Remember to always check file and directory existence before performing operations on them to avoid errors in your scripts. Also, be mindful of file permissions when working with sensitive data or system files.\n\nAs you progress, you might want to explore more advanced file tests, learn about other shell scripting constructs like loops and functions, and practice combining these concepts to create more complex and powerful scripts.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "41b59b0cb7dc8eb79a0c1e6802f9982452ad5aae9b01b11540a9412bb2aff00b"
+}

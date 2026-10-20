@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 219191,
+  "source_url": "https://labex.io/tutorials/linux-linux-find-command-file-searching-219191",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will embark on a journey as a digital detective, learning to use the powerful `find` command in Linux. The `find` command is an essential tool for locating files and directories based on various criteria. By the end of this adventure, you'll be equipped with the skills to search through even the most complex file systems with ease. This lab is designed for beginners, so don't worry if you're new to Linux – we'll guide you through each step carefully.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Getting Started with find",
+      "content": "## Getting Started with find\n\nLet's begin our detective work by understanding the basic usage of the `find` command. Imagine you're searching for a crucial piece of evidence in a digital crime scene.\n\nFirst, let's navigate to our investigation headquarters. In Linux, we use the `cd` command to change directories. Type the following command and press Enter:\n\n```bash\ncd /home/labex/project\n```\n\nThis command moves you to the `/home/labex/project` directory, which will be our working directory for this lab. If you're curious about where you are at any time, you can use the `pwd` command to print your current working directory.\n\nNow, let's use the `find` command to locate a file named \"clue.txt\":\n\n```bash\nfind . -name \"clue.txt\"\n```\n\nLet's break down this command:\n\n- `find` is the command we're using\n- `.` tells `find` to start searching from the current directory\n- `-name \"clue.txt\"` tells `find` to look for a file exactly named \"clue.txt\"\n\nAfter running this command, you should see output like this:\n\n```\n./evidence/clue.txt\n```\n\nThis output tells us that a file named \"clue.txt\" was found in the \"evidence\" subdirectory of our current location. The `./` at the beginning of the path means \"starting from the current directory\".\n\nIf you don't see any output, don't worry! It just means the file wasn't found in the current directory or its subdirectories. In a real investigation, this might mean you need to look elsewhere for your clue. You could try searching from a different directory or check if you typed the filename correctly.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Searching for Multiple File Types",
+      "content": "## Searching for Multiple File Types\n\nAs our investigation deepens, we need to locate multiple types of evidence files. In this step, we'll learn how to use the `find` command with wildcards to search for files with different extensions.\n\nLet's use the `find` command to search for files with both .txt and .log extensions:\n\n```bash\nfind . -name \"*.txt\" -o -name \"*.log\"\n```\n\nLet's break down this new, more complex command:\n\n- `find .` is the same as before, telling `find` to start from the current directory\n- `-name \"*.txt\"` looks for any file ending with .txt\n- `-o` means \"or\" in find command syntax\n- `-name \"*.log\"` looks for any file ending with .log\n\nThe `*` is a wildcard character that matches any number of characters. So `*.txt` matches any file ending with .txt, regardless of what comes before it. This is very useful when you're not sure of the exact filename but know its extension.\n\nAfter running this command, you should see output similar to this:\n\n```\n./evidence/clue.txt\n./evidence/new_lead.txt\n./logs/system.log\n./logs/recent_activity.log\n./notes/interview.txt\n```\n\nThis output shows us all the .txt and .log files in our current directory and its subdirectories. Each line is the path to a file that matches our search criteria.\n\nIf you see different files or fewer files, don't be concerned. The important thing is that you see both .txt and .log files in the output. The actual files might vary depending on your specific setup.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Finding Files by Size",
+      "content": "## Finding Files by Size\n\nIn our next step, we'll search for large files that might contain important data. Large files could be databases, archives, or other substantial pieces of evidence in our investigation.\n\nLet's find all files larger than 1 megabyte:\n\n```bash\nfind . -type f -size +1M\n```\n\nLet's break down this command:\n\n- `find .` is our familiar starting point\n- `-type f` tells `find` to look only for regular files (not directories or other special types)\n- `-size +1M` specifies that we want files larger than 1 megabyte\n\nThe `+` before `1M` means \"greater than\". If we wanted files exactly 1 megabyte, we'd use `1M`, and for files less than 1 megabyte, we'd use `-1M`. You can also use other size units like `k` for kilobytes or `G` for gigabytes.\n\nAfter running this command, you should see output like:\n\n```\n./evidence/large_file.dat\n```\n\nThis output shows us that there's one file larger than 1 megabyte in our investigation directory. The `.dat` extension often indicates a data file, which could be significant in our investigation.\n\nIf you don't see any output, don't worry! It just means there are no files larger than 1 megabyte in the current directory and its subdirectories. In a real-world scenario, you might need to adjust the size parameter or look in different directories.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Finding Recently Modified Files",
+      "content": "## Finding Recently Modified Files\n\nAs detectives, we're often interested in recent activity. In this step, we'll learn how to find files that have been modified recently, which could give us leads on the latest developments in our case.\n\nLet's find files that have been modified in the last 24 hours:\n\n```bash\nfind . -type f -mtime -1\n```\n\nBreaking down this command:\n\n- `find .` and `-type f` we've seen before\n- `-mtime -1` is new. It tells `find` to look for files modified less than 1 day ago\n\nThe `-mtime` option measures time in 24-hour increments. The `-1` means \"less than 1 day ago\". If we wanted files modified exactly 1 day ago, we'd use `-mtime 1`, and for files modified more than 1 day ago, we'd use `-mtime +1`.\n\nAfter running this command, you might see output similar to:\n\n```\n./evidence/clue.txt\n./evidence/large_file.dat\n./evidence/new_lead.txt\n./logs/system.log\n./logs/recent_activity.log\n./notes/interview.txt\n```\n\nThis output shows us the files that have been modified in the last 24 hours. These could be our hottest leads! Each of these files might contain recent information crucial to our investigation.\n\nIf you don't see any output, it means no files have been modified in the last 24 hours. In a real investigation, this might suggest a period of inactivity, or it could mean we need to widen our search parameters.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Executing Commands on Found Files",
+      "content": "## Executing Commands on Found Files\n\nNow, let's combine our detective skills with some forensic analysis. We'll use the `find` command to locate all .txt files and then use the `cat` command to display their contents. This is like quickly scanning through all the text documents we've found for clues.\n\nHere's the command:\n\n```bash\nfind . -name \"*.txt\" -exec cat {} \\;\n```\n\nThis command looks complex, so let's break it down:\n\n- `find . -name \"*.txt\"` we've seen before - it finds all .txt files\n- `-exec cat {} \\;` is new. It tells `find` to execute the `cat` command on each file it finds\n  - `cat` is a command that displays the contents of a file\n  - `{}` is a placeholder that `find` replaces with each filename it finds\n  - `\\;` marks the end of the `-exec` command\n\nAfter running this command, you should see the contents of all .txt files, something like this:\n\n```\nThe suspect was last seen wearing a red hat.\nNew lead: Check the security camera footage from the back alley.\nWitness reported hearing a loud noise at approximately 10 PM.\n```\n\nEach block of text you see is the content of a different .txt file. This command allows us to quickly review the contents of all text files without having to open each one individually.\n\nIf you're wondering why we use `\\;` at the end, it's to tell `find` where the command for `-exec` ends. Without it, `find` wouldn't know if we wanted to do more with the files.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nCongratulations, detective! In this lab, you've become proficient with the `find` command, a powerful tool in your Linux toolkit. You've learned how to:\n\n1. Search for files by name\n2. Find multiple file types using wildcards\n3. Locate files based on size\n4. Identify recently modified files\n5. Execute commands on found files\n\nThese skills will serve you well in managing files, troubleshooting systems, and yes, even solving digital mysteries!\n\nAdditional `find` command options not covered in this lab include:\n\n- `-user`: Find files owned by a specific user\n- `-group`: Find files belonging to a specific group\n- `-perm`: Find files with specific permissions\n- `-maxdepth`: Limit the depth of directory traversal\n- `-mindepth`: Start searching from a minimum depth\n- `-empty`: Find empty files or directories\n- `-newer`: Find files newer than a specified file\n\nRemember, practice makes perfect. Feel free to experiment with these commands in different directories to become more comfortable with them. The more you use `find`, the more you'll discover its power and flexibility in helping you locate exactly what you need in a complex file system.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "8eed144d8e7515b965ef49fc41763804a990bad0f47a7dbec4a83c1b0ff2cfee"
+}

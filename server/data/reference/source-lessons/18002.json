@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "source_lab_id": 18002,
+  "source_url": "https://labex.io/tutorials/linux-linux-user-group-and-file-permissions-18002",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nLinux is a multi-user operating system. Every process and file belongs to a user, and every user has a primary group plus optional supplementary groups. Together, identity, ownership, and permission bits determine who can read, change, execute, or enter a resource.\n\nIn this lab, you will build a small team environment using dedicated practice accounts. You will create a user, manage group membership, secure a file, inspect an account lock, control default permissions with `umask`, and configure sticky-bit and setgid directories. All work stays inside the lab environment and leaves the default `labex` login path unchanged.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Inspect Identities and Create a Practice User",
+      "content": "## Inspect Identities and Create a Practice User\n\nIn this step, you will inspect your current identity and create a separate account for permission exercises. Linux represents a user with a username and numeric user ID (UID). It also records a primary group ID (GID) and any supplementary groups.\n\nFirst, confirm the identity of the current shell:\n\n```bash\nwhoami\n```\n\nThe output should be `labex`. Now display the UID, primary group, and supplementary groups associated with this account:\n\n```bash\nid\n```\n\nThe exact numeric IDs can vary, but the output labels them as `uid`, `gid`, and `groups`.\n\nCreating an account changes system files, so it requires administrative privileges. `sudo` means “superuser do”: it runs the following command with elevated authority after checking that the current account is allowed to do so. Use it only for the command that needs administration, and read the complete command before pressing Enter.\n\nThe `useradd` command below uses three options:\n\n- `-m` creates the home directory.\n- `-U` creates a same-named primary group.\n- `-s /bin/bash` selects Bash as the account's login shell.\n\nCreate a practice user named `jack`:\n\n```bash\nsudo useradd -m -U -s /bin/bash jack\n```\n\nInspect the new account and its home directory:\n\n```bash\nid jack\n```\n\n```bash\nls -ld /home/jack\n```\n\nThe `id` output should show `jack` as both the user and primary group. The directory listing should show that `/home/jack` exists and belongs to `jack:jack`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Manage Supplementary Groups",
+      "content": "## Manage Supplementary Groups\n\nIn this step, you will create a team group and add users to supplementary groups. A user's primary group normally becomes the group owner of newly created files. Supplementary groups grant access to additional shared resources.\n\nCreate a group named `developers`:\n\n```bash\nsudo groupadd developers\n```\n\nThe `usermod -aG` options mean \"append to supplementary groups.\" The `-a` is important: without it, `-G` can replace existing supplementary memberships. Add `jack` to both `developers` and `sudo`:\n\n```bash\nsudo usermod -aG developers,sudo jack\n```\n\nAlso register `labex` as a member of `developers`. The current shell will not immediately gain the new group identity; you will refresh it safely in the final step.\n\n```bash\nsudo usermod -aG developers labex\n```\n\nInspect both accounts:\n\n```bash\ngroups jack\n```\n\n```bash\ngroups labex\n```\n\nThe first output should include `jack`, `developers`, and `sudo`. The second should include `developers`. Membership in `sudo` allows an authenticated account to request elevated privileges; it should be granted only to trusted administrators.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Control File Ownership and Permissions",
+      "content": "## Control File Ownership and Permissions\n\nIn this step, you will secure a team report with a specific owner, group, and permission mode. A long listing displays the file type first, followed by three permission triplets for the owner, group, and others.\n\nCreate an empty report in the project directory:\n\n```bash\ntouch /home/labex/project/secure-report.txt\n```\n\nChange both owners with the `user:group` form of `chown`:\n\n```bash\nsudo chown jack:developers /home/labex/project/secure-report.txt\n```\n\nSet mode `640`:\n\n```bash\nsudo chmod 640 /home/labex/project/secure-report.txt\n```\n\nIn numeric notation, read is `4`, write is `2`, and execute is `1`. Therefore:\n\n- Owner `6` means read and write (`4 + 2`).\n- Group `4` means read only.\n- Others `0` means no access.\n\nInspect the result:\n\n```bash\nls -l /home/labex/project/secure-report.txt\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/secure-report.txt\n```\n\nThe stable `stat` fields should report `owner=jack group=developers mode=640`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Inspect and Change an Account Lock",
+      "content": "## Inspect and Change an Account Lock\n\nIn this step, you will practice temporarily locking and unlocking a dedicated account. Linux stores password hashes and account status in `/etc/shadow`. A leading `!` in the password field marks password authentication as locked.\n\nThe setup created a practice account named `contractor`. Display only the first character of its password field so that the hash itself is never printed. Read the pipeline from left to right: `getent shadow contractor` retrieves the account's shadow record; the first `cut` uses `:` as a delimiter and selects field 2; the second `cut` keeps character 1 of that field:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nThe initial character should normally be `$`, which is the beginning of a modern password-hash format. Lock the account with `usermod -L`:\n\n```bash\nsudo usermod -L contractor\n```\n\nInspect the first character again:\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nIt should now be `!`. Unlock the account with `usermod -U` and confirm that the `!` disappears:\n\n```bash\nsudo usermod -U contractor\n```\n\n```bash\nsudo getent shadow contractor | cut -d: -f2 | cut -c1\n```\n\nFor this scenario, the contractor has now left the team. Lock the account one final time while preserving its files:\n\n```bash\nsudo usermod -L contractor\n```\n\nLocking password authentication does not delete the account, remove its home directory, or necessarily terminate existing sessions. It is different from deleting a user and is useful when files must be retained for review.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Control Default Permissions with Umask",
+      "content": "## Control Default Permissions with Umask\n\nIn this step, you will use `umask` to control the permission bits removed when the shell creates new files and directories. Programs usually start with a maximum mode of `666` for regular files and `777` for directories. A mask of `027` removes write permission from the group and all permissions from others.\n\nCreate a workspace for the experiment:\n\n```bash\nmkdir -p /home/labex/project/umask-demo\n```\n\nSave the current mask so that you can restore it later. The syntax `$(command)` is called **command substitution**: the shell runs the command inside the parentheses and replaces the entire expression with its output. The assignment stores that result in `original_umask`; as with other shell assignments, there are no spaces around `=`.\n\n```bash\noriginal_umask=$(umask)\n```\n\nApply mask `027`, then create a file and directory:\n\n```bash\numask 027\n```\n\n```bash\ntouch /home/labex/project/umask-demo/private-note.txt\n```\n\n```bash\nmkdir /home/labex/project/umask-demo/private-dir\n```\n\nInspect the resulting numeric modes:\n\n```bash\nstat -c '%a %n' /home/labex/project/umask-demo/private-note.txt /home/labex/project/umask-demo/private-dir\n```\n\nThe file should have mode `640`, while the directory should have mode `750`. Files do not receive execute bits automatically. Restore the shell's original mask:\n\n```bash\numask \"$original_umask\"\n```\n\nChanging `umask` affects objects created afterward; it does not rewrite permissions on existing objects.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Protect a Shared Directory with the Sticky Bit",
+      "content": "## Protect a Shared Directory with the Sticky Bit\n\nIn this step, you will configure a public drop box where everyone can create files but users cannot delete files owned by someone else. Ordinary mode `777` grants all users full directory access. Adding the sticky bit changes deletion rules inside the directory.\n\nCreate the shared directory and set mode `1777`. The leading `1` enables the sticky bit.\n\n```bash\nmkdir /tmp/shared-dropbox\n```\n\n```bash\nchmod 1777 /tmp/shared-dropbox\n```\n\nUse `sudo -u` to create one file as each practice account:\n\n```bash\nsudo -u jack touch /tmp/shared-dropbox/jack-note.txt\n```\n\n```bash\nsudo -u contractor touch /tmp/shared-dropbox/contractor-note.txt\n```\n\nNow let `jack` try to delete the contractor's file:\n\n```bash\nsudo -u jack rm /tmp/shared-dropbox/contractor-note.txt\n```\n\nThis failure is intentional. You should see `Operation not permitted`, and the contractor's file should remain. Inspect the directory:\n\n```bash\nls -ld /tmp/shared-dropbox\n```\n\nThe permissions should end in a lowercase `t`, such as `drwxrwxrwt`. Lowercase `t` means the sticky bit and execute permission for others are both set. Uppercase `T` would mean the sticky bit is set without the corresponding execute bit.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Configure a Setgid Team Directory",
+      "content": "## Configure a Setgid Team Directory\n\nIn this step, you will prepare a private collaboration directory. On a directory, setgid causes newly created children to inherit the directory's group instead of the creator's primary group. This keeps team files associated with one shared group.\n\nCreate the directory:\n\n```bash\nmkdir /home/labex/project/team-share\n```\n\nMake `jack` the owner and `developers` the group owner:\n\n```bash\nsudo chown jack:developers /home/labex/project/team-share\n```\n\nSet mode `2770`. The leading `2` enables setgid; `770` grants full access to the owner and group while denying access to others.\n\n```bash\nsudo chmod 2770 /home/labex/project/team-share\n```\n\nInspect the result:\n\n```bash\nls -ld /home/labex/project/team-share\n```\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share\n```\n\nThe long listing should show `s` in the group execute position, such as `drwxrws---`. Lowercase `s` means both setgid and group execute are active. Uppercase `S` would mean setgid is present but group execute is missing.\n\nSetuid, represented by an `s` in the owner execute position, is another special bit commonly found on carefully controlled system executables. Recognize it when reading permissions, but do not add it to arbitrary programs.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Refresh Group Membership and Verify Inheritance",
+      "content": "## Refresh Group Membership and Verify Inheritance\n\nIn this step, you will activate the `developers` membership in a child shell and prove that setgid controls the group of a new file. Adding a user to `/etc/group` does not rewrite the supplementary groups of an already running shell.\n\nStart a child shell with `developers` as its active group:\n\n```bash\nnewgrp developers\n```\n\nThe prompt may refresh. You are still the `labex` user, but the child shell now has `developers` as its effective group. Confirm both identities:\n\n```bash\nid\n```\n\nCreate a file in the setgid directory:\n\n```bash\ntouch /home/labex/project/team-share/labex-note.txt\n```\n\nInspect the new file:\n\n```bash\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share/labex-note.txt\n```\n\nThe owner should be `labex`, while the group should be `developers`. Setgid inherits the group owner; the file's read and write bits still depend on the creating process and its `umask`.\n\nExit the child shell and return to the original terminal session:\n\n```bash\nexit\n```\n\nThe file remains in place after the child shell closes.\n",
+      "need_verify": true
+    },
+    {
+      "position": 9,
+      "title": "Summary",
+      "content": "## Summary\n\nYou practiced the core identity and access model used by Linux systems. You created a user and team group, managed supplementary memberships, assigned ownership, and translated numeric permission modes into practical access rules. You also inspected an account lock without exposing its password hash.\n\nYou then moved beyond ordinary permissions: `umask` controlled defaults, the sticky bit protected files in a public directory, and setgid preserved team group ownership in a private collaboration directory. Finally, you used `newgrp` to refresh group membership and verified the inherited group on a real file.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "fb558b1d49a4589ee5b32b3a68411004f49a99b48b674c239eeceb41c4fad7f5"
+}

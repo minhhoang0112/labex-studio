@@ -27,7 +27,34 @@
       "layout": "doc-workbench-split",
       "need_verify": true,
       "kind": "task",
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*pwd\\s*$"
+            ],
+            [
+              "^\\s*cd\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+~/project\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-2",
@@ -38,7 +65,37 @@
       "layout": "doc-workbench-split",
       "need_verify": true,
       "kind": "task",
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*cd\\s+/etc\\s*$"
+            ],
+            [
+              "^\\s*pwd\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+~\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+~/project\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-3",
@@ -49,7 +106,46 @@
       "layout": "doc-workbench-split",
       "need_verify": true,
       "kind": "task",
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/sample.txt && test -f /home/labex/project/.hidden_file"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*touch\\s+sample\\.txt\\s*$"
+                ],
+                [
+                  "^\\s*touch\\s+\\.hidden_file\\s*$"
+                ],
+                [
+                  "^\\s*ls\\s*$"
+                ],
+                [
+                  "^\\s*ls\\s+-a\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-4",
@@ -60,7 +156,31 @@
       "layout": "doc-workbench-split",
       "need_verify": true,
       "kind": "task",
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ls\\s+-l\\s*$"
+            ],
+            [
+              "^\\s*ls\\s+-la\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-5",
@@ -71,7 +191,37 @@
       "layout": "doc-workbench-split",
       "need_verify": true,
       "kind": "task",
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*pwd\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+\\.\\.\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+/etc\\s*$"
+            ],
+            [
+              "^\\s*cd\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-6",
@@ -95,18 +245,37 @@
       "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
-          ]
-        ],
-        "allowed_status": [
-          0
-        ]
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu, nhưng chưa có bộ kiểm tra thực hành được kiểm chứng cho nhiệm vụ này. Không thể chấm đạt bằng lệnh bất kỳ."
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*pwd\\s*$"
+            ],
+            [
+              "^\\s*cd\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+~/project\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-2",
@@ -117,18 +286,40 @@
       "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
-          ]
-        ],
-        "allowed_status": [
-          0
-        ]
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu, nhưng chưa có bộ kiểm tra thực hành được kiểm chứng cho nhiệm vụ này. Không thể chấm đạt bằng lệnh bất kỳ."
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*cd\\s+/etc\\s*$"
+            ],
+            [
+              "^\\s*pwd\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+~\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+~/project\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-3",
@@ -139,18 +330,49 @@
       "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
-          ]
-        ],
-        "allowed_status": [
-          0
-        ]
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu, nhưng chưa có bộ kiểm tra thực hành được kiểm chứng cho nhiệm vụ này. Không thể chấm đạt bằng lệnh bất kỳ."
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test -f /home/labex/project/sample.txt && test -f /home/labex/project/.hidden_file"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*touch\\s+sample\\.txt\\s*$"
+                ],
+                [
+                  "^\\s*touch\\s+\\.hidden_file\\s*$"
+                ],
+                [
+                  "^\\s*ls\\s*$"
+                ],
+                [
+                  "^\\s*ls\\s+-a\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-4",
@@ -161,18 +383,34 @@
       "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
-          ]
-        ],
-        "allowed_status": [
-          0
-        ]
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu, nhưng chưa có bộ kiểm tra thực hành được kiểm chứng cho nhiệm vụ này. Không thể chấm đạt bằng lệnh bất kỳ."
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*ls\\s+-l\\s*$"
+            ],
+            [
+              "^\\s*ls\\s+-la\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     },
     {
       "id": "comptia-navigate-the-filesystem-in-linux-590971-step-5",
@@ -183,18 +421,41 @@
       "task": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "task_vi": "Thực hiện các thao tác theo hướng dẫn và kiểm tra kết quả.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "^\\s*[a-zA-Z0-9_\\-\\./]+\\s*.*$"
-          ]
-        ],
-        "allowed_status": [
-          0
-        ]
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu, nhưng chưa có bộ kiểm tra thực hành được kiểm chứng cho nhiệm vụ này. Không thể chấm đạt bằng lệnh bất kỳ."
       },
-      "hint": "Xem huong dan va kiem tra ket qua."
+      "hint": "Xem huong dan va kiem tra ket qua.",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "allowed_status": [
+            0
+          ],
+          "groups": [
+            [
+              "^\\s*pwd\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+\\.\\.\\s*$"
+            ],
+            [
+              "^\\s*cd\\s+/etc\\s*$"
+            ],
+            [
+              "^\\s*cd\\s*$"
+            ]
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      }
     }
-  ]
+  ],
+  "environment_setup": "server/data/environment-setups/comptia-navigate-the-filesystem-in-linux-590971.json"
 }

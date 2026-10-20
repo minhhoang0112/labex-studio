@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "source_lab_id": 662167,
+  "source_url": "https://labex.io/labs/linux-audit-listening-services-662167",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nYou are taking over a Linux host during an operations handoff after a small release rehearsal. Two temporary task listeners were started for the exercise, but the previous operator did not leave a trustworthy exposure note. Before the host can be handed back to the team, you need a clean baseline that shows what is actually reachable.\n\nIn this challenge, you will perform the kind of quick runtime audit that often happens during real support, platform, or security work. Instead of reading implementation details, you will inspect the live listening state, separate the task listeners from background host noise, and record the real exposure boundary for each one.\n\nThe goal is a trustworthy operational baseline: which listener is public, which listener is local-only, and what evidence proves that classification.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Classify the Listening Services",
+      "content": "# Classify the Listening Services\n\nYou are joining an operations handoff near the end of a release rehearsal. The previous operator left a short note saying two temporary task listeners were started for validation, but the note does not say which listener is reachable beyond the host and which one is intended for local use only.\n\nBefore the host is handed back, the team needs a small exposure baseline that can be trusted more than the handoff note. Your job is to inspect the running system, separate the rehearsal listeners from normal platform noise, and record the actual bind addresses as evidence.\n\nFocus on what the socket table says now. Service names and implementation files are less important than the concrete bind addresses that determine exposure.\n\n## Current Situation\n\nYou are working on the current LabEx Linux host. The host may also have normal platform services running in the background, so the full listener list can include entries that are unrelated to this audit.\n\nA baseline file is already prepared at `/home/labex/project/service-classification.txt`. It contains placeholders for the public and local-only listener bindings.\n\n## Scope\n\nOnly TCP ports `18080` and `18081` are in scope. Treat every other listener on the host as platform noise.\n\nDo not use hidden implementation files to decide the answer. Classify the listeners from the active bind addresses you observe on the running system.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Inspect the live TCP listening state for the two in-scope ports.\n- Decide which binding is public and which binding is local-only.\n- Replace the placeholders in `service-classification.txt` with the observed binding values.\n\n## Acceptance Criteria\n\n- The baseline file keeps exactly this two-line format:\n  `Public: <address>:<port>`\n  `Local-only: <address>:<port>`\n- The `Public:` line contains the in-scope listener that is bound to all host interfaces.\n- The `Local-only:` line contains the in-scope listener that is bound only to localhost.\n- No angle-bracket placeholders remain.\n\n## Hints\n\n<details>\n<summary>How do I read the bindings for the task ports?</summary>\n\nRun `ss -lntp` from the project directory and, if needed, narrow output with `grep -E '18080|18081'`. Use the local address values from those rows. `0.0.0.0:<port>` means listening on all interfaces; `127.0.0.1:<port>` means localhost-only. Classify from that runtime data only.\n\n</details>\n\n<details>\n<summary>How should `service-classification.txt` look when it is done?</summary>\n\nTwo lines only, in the order shown in the acceptance criteria: `Public:` then `Local-only:`, each followed by the `<address>:<port>` you observed (no leftover `<...>` placeholders).\n\n</details>\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Summary",
+      "content": "# Summary\n\nIn this challenge, you handled a small but realistic handoff audit on a running Linux host. You confirmed the real exposure state of the task listeners from live socket bindings, filtered out unrelated host noise, and produced a minimal baseline that another operator could trust during follow-up hardening or incident review.\n\nThe durable skill is to classify exposure from runtime evidence, not from assumptions about service names or stale notes.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "13f344a9247add9334ee3fc904dc83a4bc0b51699f7649fe6370fce56f6c25cf"
+}

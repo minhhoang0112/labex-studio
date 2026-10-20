@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "source_lab_id": 388125,
+  "source_url": "https://labex.io/labs/linux-word-count-and-sorting-388125",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nIn the realm of text processing and data analysis, the `wc` (word count) and `sort` commands are indispensable tools in a Linux user's toolkit. These commands enable efficient analysis and organization of text data, which is crucial when working with log files, datasets, or any text-based information. This challenge will test your ability to apply these commands to analyze and manipulate various text files, simulating real-world scenarios encountered by system administrators and data analysts.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Counting Lines with wc",
+      "content": "# Counting Lines with wc\n\nIn this step, you'll learn to use the `wc` (word count) command to count lines in a file. The `wc` command is one of the most fundamental text processing tools in Linux.\n\n## Objective\n\nCount the number of lines in the access log file and save the result to a text file.\n\n## Background\n\nThe `wc` command can count lines (`-l`), words (`-w`), and characters (`-c`) in files. When analyzing log files, counting lines is often the first step to understand the volume of data you're working with.\n\n## Task\n\nCount the number of lines in the file `/home/labex/project/access.log` and save the result to `task1_output.txt`.\n\n## Requirements\n\n1. Navigate to the `/home/labex/project/` directory\n2. Use the `wc` command with the appropriate option to count lines\n3. Save only the number (not the filename) to `task1_output.txt`\n4. Do not modify the original `access.log` file\n\n## Hints\n\n- The `wc -l` command counts lines in a file\n- Use input redirection (`<`) to avoid showing the filename in output\n- Use output redirection (`>`) to save the result to a file\n\n## Expected Output\n\nYour `task1_output.txt` should contain a single number:\n\n```bash\n$ cat task1_output.txt\n1562\n```\n\nNote: The actual number may differ due to random data generation.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Finding Frequent Patterns with sort and uniq",
+      "content": "# Finding Frequent Patterns with sort and uniq\n\nIn this step, you'll learn to combine multiple commands using pipes to analyze patterns in log data. This is a common task in system administration and data analysis.\n\n## Objective\n\nFind the top 5 most frequent IP addresses in the access log file.\n\n## Background\n\nLog analysis often involves finding patterns and frequencies. By combining `cut`, `sort`, `uniq`, and other commands, you can extract meaningful insights from text data. This technique is valuable for identifying traffic patterns, detecting anomalies, or understanding user behavior.\n\n## Task\n\nFind the top 5 most frequent IP addresses in `/home/labex/project/access.log` and save only the IP addresses (without counts) to `task2_output.txt`.\n\n## Requirements\n\n1. Work in the `/home/labex/project/` directory\n2. Extract IP addresses from the first field of the log file\n3. Count the frequency of each IP address\n4. Sort by frequency in descending order\n5. Take the top 5 results\n6. Save only the IP addresses (not the counts) to `task2_output.txt`\n\n## Hints\n\n- Use `cut -d' ' -f1` to extract the first field (IP addresses)\n- Use `sort` to group identical items together\n- Use `uniq -c` to count occurrences\n- Use `sort -rn` to sort numerically in reverse (descending) order\n- Use `head -n 5` to get the top 5 results\n- Use `awk '{print $2}'` to extract only the IP addresses from the count output\n\n## Expected Output\n\nYour `task2_output.txt` should contain 5 IP addresses:\n\n```bash\n$ cat task2_output.txt\n255.1.2.3\n255.4.2.9\n255.4.1.9\n255.4.1.1\n255.1.4.5\n```\n\nNote: The actual IP addresses may differ due to random data generation.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Counting Words Across Multiple Files",
+      "content": "# Counting Words Across Multiple Files\n\nIn this step, you'll learn to use the `wc` command with wildcards to process multiple files simultaneously.\n\n## Objective\n\nCount the total number of words in all text files within a directory.\n\n## Background\n\nWhen working with multiple files, you often need to aggregate data across all files. The `wc` command can process multiple files at once and provide totals, which is useful for analyzing document collections, code bases, or data sets.\n\n## Task\n\nCount the total number of words in all `.txt` files in the `/home/labex/project/documents/` directory and save only the total count to `task3_output.txt`.\n\n## Requirements\n\n1. Work in the `/home/labex/project/` directory\n2. Use the `wc` command to count words in all `.txt` files in the `documents/` subdirectory\n3. Extract only the total number (not the word \"total\")\n4. Save the result to `task3_output.txt`\n\n## Hints\n\n- Use `wc -w` to count words\n- Use `documents/*.txt` to target all `.txt` files in the documents directory\n- When `wc` processes multiple files, it shows a \"total\" line at the end\n- Use `tail -n 1` to get the last line (total)\n- Use `awk '{print $1}'` to extract only the number from the total line\n\n## Expected Output\n\nYour `task3_output.txt` should contain a single number:\n\n```bash\n$ cat task3_output.txt\n526\n```\n\nNote: The actual number may differ due to random data generation.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Sorting Numerical Data",
+      "content": "# Sorting Numerical Data\n\nIn this final step, you'll learn to sort numerical data and extract the top values, which is essential for data analysis and reporting.\n\n## Objective\n\nSort numerical data in descending order and extract the highest values.\n\n## Background\n\nSorting is a fundamental operation in data processing. When dealing with numerical data, you often need to find the highest or lowest values. The `sort` command with numerical sorting options makes this task straightforward.\n\n## Task\n\nSort the content of `/home/labex/project/numbers.txt` in descending order and save the top 10 numbers to `task4_output.txt`.\n\n## Requirements\n\n1. Work in the `/home/labex/project/` directory\n2. Sort the numbers in `numbers.txt` in descending (highest to lowest) order\n3. Take only the top 10 numbers\n4. Save the results to `task4_output.txt`\n\n## Hints\n\n- Use `sort -nr` for numerical sorting in reverse (descending) order\n  - `-n` treats the content as numbers (not text)\n  - `-r` reverses the order (descending instead of ascending)\n- Use `head -n 10` to get the first 10 lines (top 10 numbers)\n\n## Expected Output\n\nYour `task4_output.txt` should contain 10 numbers in descending order:\n\n```bash\n$ cat task4_output.txt\n997\n994\n994\n993\n992\n992\n990\n989\n989\n985\n```\n\nNote: The actual numbers may differ due to random data generation.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Summary",
+      "content": "# Summary\n\nIn this challenge, you have applied various `wc` and `sort` techniques to analyze and manipulate text files:\n\n1. Counting lines in a file\n2. Finding and sorting frequent occurrences\n3. Counting words across multiple files\n4. Sorting numerical data\n\nThese skills are essential for data analysis, log processing, and general text manipulation in Linux environments. The ability to quickly extract, count, and sort information from text files is crucial for system administrators, data analysts, and anyone working with large volumes of text-based data.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "cfced6d46985c1a8234e9ca21361ed18793bb632bf07e1708b52f85e65ba0afa"
+}

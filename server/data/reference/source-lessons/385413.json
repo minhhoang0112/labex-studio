@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "source_lab_id": 385413,
+  "source_url": "https://labex.io/tutorials/linux-file-packaging-and-compression-385413",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nPackaging and compression solve related but different problems. An **archive** combines a directory tree into one data stream while preserving names and structure. **Compression** represents data more compactly. A `.tar` file is an archive; a `.gz` file is gzip-compressed data; a `.tar.gz` file is a tar archive compressed with gzip.\n\nYou will build a small project, create each format, inspect an archive before extraction, restore into a separate directory, and compare restored data with the source. This inspect–extract–verify workflow avoids overwriting originals blindly.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Build a Directory Tree to Preserve",
+      "content": "## Build a Directory Tree to Preserve\n\nIn this step, you will create a small source tree and record what must survive packaging and extraction.\n\nCreate configuration, notes, and data directories:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir -p source/{config,notes,data}\n```\n\nWrite three files with distinct content:\n\n```bash\nprintf 'mode=training\\nport=8080\\n' > source/config/app.conf\nprintf 'Archive the complete project tree.\\n' > source/notes/README.txt\nprintf 'alpha,beta,gamma\\n1,2,3\\n' > source/data/sample.csv\n```\n\nUse `find` to inspect regular files relative to the source directory:\n\n```bash\nfind source -type f -printf '%P\\n' | sort\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Create and Inspect a Tar Archive",
+      "content": "## Create and Inspect a Tar Archive\n\nIn this step, you will package the source tree without compression and inspect its member names.\n\nThe main `tar` operation letters are `c` for create, `t` for list, `x` for extract, and `f` for the archive filename. Use `-C` to change tar's working directory before adding `source`; this avoids storing a long absolute path:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -cf project.tar -C /home/labex/project/archive-lab source\n```\n\nThe source tree still exists because archive creation reads rather than moves it. Inspect both the archive and one original file:\n\n```bash\nls -lh project.tar\nls -l source/config/app.conf\n```\n\nList members before extracting:\n\n```bash\ntar -tf project.tar > tar-members.txt\ncat tar-members.txt\n```\n\nEvery member should begin with `source/`, and there should be no leading `/`. Relative member names make restoration safer and portable.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Extract Safely and Compare the Result",
+      "content": "## Extract Safely and Compare the Result\n\nIn this step, you will extract into an empty destination instead of over the source, then compare both trees.\n\nCreate a restore directory and use `-C` as the extraction destination:\n\n```bash\ncd /home/labex/project/archive-lab\nmkdir tar-restore\ntar -xf project.tar -C tar-restore\n```\n\nInspect the restored paths:\n\n```bash\nfind tar-restore -type f -printf '%P\\n' | sort\n```\n\nCompare recursively. `diff -r` prints nothing and exits successfully when the trees match:\n\n```bash\ndiff -r source tar-restore/source\necho \"tar restore matches source\" > tar-restore-ok.txt\ncat tar-restore-ok.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Compress and Decompress One File with Gzip",
+      "content": "## Compress and Decompress One File with Gzip\n\nIn this step, you will see how gzip differs from an archive by operating on one regular file.\n\nCopy a file so the source tree remains untouched, then compress the copy:\n\n```bash\ncd /home/labex/project/archive-lab\ncp source/data/sample.csv sample-copy.csv\ngzip sample-copy.csv\n```\n\nBy default, gzip replaces the input with `sample-copy.csv.gz`:\n\n```bash\nls -lh sample-copy.csv.gz\nfile sample-copy.csv.gz\n```\n\nDecompress it and compare its content with the original:\n\n```bash\ngunzip sample-copy.csv.gz\ncmp source/data/sample.csv sample-copy.csv\necho \"gzip round trip matches\" > gzip-round-trip-ok.txt\ncat gzip-round-trip-ok.txt\n```\n\nGzip does not package a directory tree by itself; tar provides that structure.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Create and Restore a Compressed Tar Archive",
+      "content": "## Create and Restore a Compressed Tar Archive\n\nIn this step, you will combine tar packaging with gzip compression. The `z` option tells tar to pass archive data through gzip.\n\nCreate `project.tar.gz` and inspect it with the matching `-tzf` options:\n\n```bash\ncd /home/labex/project/archive-lab\ntar -czf project.tar.gz -C /home/labex/project/archive-lab source\ntar -tzf project.tar.gz > targz-members.txt\ncat targz-members.txt\n```\n\nExtract into a separate destination and verify the tree:\n\n```bash\nmkdir targz-restore\ntar -xzf project.tar.gz -C targz-restore\ndiff -r source targz-restore/source\necho \"tar.gz restore matches source\" > targz-restore-ok.txt\ncat targz-restore-ok.txt\n```\n\nExtensions communicate the format to people and tools: `.tar.gz` clearly indicates a gzip-compressed tar archive.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Exchange the Project as a Zip Archive",
+      "content": "## Exchange the Project as a Zip Archive\n\nIn this step, you will create and inspect a Zip archive, a common format on Linux, macOS, and Windows.\n\n`zip -r` recursively adds a directory tree. Run it from the lab root so stored paths begin with `source/`:\n\n```bash\ncd /home/labex/project/archive-lab\nzip -r project.zip source\n```\n\nList members without extracting:\n\n```bash\nunzip -l project.zip\n```\n\nUse `-d` to choose a separate destination, then compare the result:\n\n```bash\nunzip -q project.zip -d zip-restore\ndiff -r source zip-restore/source\necho \"zip restore matches source\" > zip-restore-ok.txt\ncat zip-restore-ok.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Summary",
+      "content": "## Summary\n\nYou separated packaging from compression, created and listed tar archives, completed a gzip round trip, combined both operations in `.tar.gz`, and exchanged the same tree through Zip. Most importantly, you restored into separate directories and compared content rather than assuming that archive creation was enough.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "f4b71d25907180b953d4c29d1251eb717097316d62b7f68dd73cf4ec833fea75"
+}

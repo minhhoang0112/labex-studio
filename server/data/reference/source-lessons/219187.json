@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "source_lab_id": 219187,
+  "source_url": "https://labex.io/tutorials/linux-linux-cut-command-text-cutting-219187",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn how to use the `cut` command in Linux to extract and analyze data from text files. We'll simulate a scenario where you're working at a local bookstore and need to process customer and book information. The `cut` command will help you extract specific columns or fields from your data files, enabling efficient data management and analysis.\n\n### Prerequisites\n\nBefore starting this lab, ensure you have:\n\n- Basic familiarity with the Linux command line\n- Access to a Linux terminal (this lab assumes you're using a terminal in the `/home/labex/project` directory)\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Bookstore Data",
+      "content": "## Understanding the Bookstore Data\n\nLet's begin by examining the bookstore data files. We have two files: `customers.txt` and `books.txt`.\n\nFirst, let's view the contents of the `customers.txt` file:\n\n```bash\ncat /home/labex/project/customers.txt\n```\n\nYou should see output similar to this:\n\n```\nID,Name,Age,Email\n1,John Doe,25,john.doe@email.com\n2,Jane Smith,35,jane.smith@email.com\n3,Lily Chen,30,lily.chen@email.com\n4,Andy Brown,22,andy.brown@email.com\n```\n\nNow, let's look at the `books.txt` file:\n\n```bash\ncat /home/labex/project/books.txt\n```\n\nThe output should resemble:\n\n```\nISBN,Title,Author,Price\n978-1234567890,The Great Adventure,Alice Writer,19.99\n978-2345678901,Mystery in the Woods,Bob Author,24.99\n978-3456789012,Cooking Basics,Carol Chef,15.99\n978-4567890123,Science Explained,David Scientist,29.99\n```\n\nThese files contain comma-separated values (CSV) with different fields for customers and books.\n\nIf you don't see the expected output or encounter an error, check the following:\n\n- Ensure you're in the correct directory (`/home/labex/project`)\n- Verify that the files exist by running `ls -l`\n- If the files are missing, you may need to create them manually or contact your lab administrator\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Extracting Customer Names",
+      "content": "## Extracting Customer Names\n\nNow that we've seen our data, let's use the `cut` command to extract specific information. We'll start by extracting customer names from the `customers.txt` file.\n\nThe `cut` command uses the `-d` option to specify a delimiter (in our case, a comma) and the `-f` option to select which field(s) to display.\n\nRun the following command:\n\n```bash\ncut -d ',' -f 2 /home/labex/project/customers.txt\n```\n\nLet's break down this command:\n\n- `cut`: The name of the command we're using\n- `-d ','`: Specifies that we're using a comma as the delimiter between fields\n- `-f 2`: Tells `cut` to extract the second field\n- `/home/labex/project/customers.txt`: The path to our input file\n\nYou should see output like this:\n\n```\nName\nJohn Doe\nJane Smith\nLily Chen\nAndy Brown\n```\n\nNotice that the header \"Name\" is also included. This is because `cut` treats the header line just like any other line in the file.\n\nIf you want to exclude the header, you can use the `tail` command in combination with `cut`:\n\n```bash\ncut -d ',' -f 2 /home/labex/project/customers.txt | tail -n +2\n```\n\nThis pipeline does two things:\n\n1. `cut` extracts the second field (names) from each line\n2. `tail -n +2` outputs starting from the second line, effectively skipping the header\n\nThe output should now be:\n\n```\nJohn Doe\nJane Smith\nLily Chen\nAndy Brown\n```\n\nIf you're not seeing the expected output:\n\n- Double-check that you've typed the command exactly as shown\n- Ensure that the `customers.txt` file hasn't been modified\n- Try running `cat /home/labex/project/customers.txt` again to verify the file contents\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Extracting Multiple Fields",
+      "content": "## Extracting Multiple Fields\n\nOften, we need to extract multiple fields from our data. Let's extract both the customer names and ages from the `customers.txt` file.\n\nUse the following command:\n\n```bash\ncut -d ',' -f 2,3 /home/labex/project/customers.txt\n```\n\nThis command is similar to the previous one, but now we're specifying two fields in the `-f` option:\n\n- `-f 2,3`: Extract the second and third fields (name and age)\n\nYour output should look like this:\n\n```\nName,Age\nJohn Doe,25\nJane Smith,35\nLily Chen,30\nAndy Brown,22\n```\n\nAs you can see, we can specify multiple fields by separating them with commas in the `-f` option. The output maintains the original delimiter (comma) between the extracted fields.\n\nIf your output doesn't match:\n\n- Ensure you've included the comma between 2 and 3 in the `-f` option\n- Check that the `customers.txt` file hasn't been altered\n- Try running the command without the `-d ','` option to see if the file uses a different delimiter\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Extracting a Range of Fields",
+      "content": "## Extracting a Range of Fields\n\nThe `cut` command also allows us to extract a range of fields. Let's extract all fields from the customer ID to the age (fields 1-3) from the `customers.txt` file.\n\nUse this command:\n\n```bash\ncut -d ',' -f 1-3 /home/labex/project/customers.txt\n```\n\nHere's what's new in this command:\n\n- `-f 1-3`: This specifies a range of fields from 1 to 3, inclusive\n\nYour output should resemble:\n\n```\nID,Name,Age\n1,John Doe,25\n2,Jane Smith,35\n3,Lily Chen,30\n4,Andy Brown,22\n```\n\nThis command extracts a range of fields from 1 to 3. You can also combine ranges and individual fields, like `-f 1-3,5` to extract fields 1, 2, 3, and 5.\n\nIf you're not seeing the expected output:\n\n- Verify that you've used a hyphen (-) between 1 and 3 in the `-f` option\n- Ensure the `customers.txt` file hasn't been modified\n- Try extracting each field individually (e.g., `-f 1`, `-f 2`, `-f 3`) to check if all fields are present in the file\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Working with Fixed-Width Fields",
+      "content": "## Working with Fixed-Width Fields\n\nSometimes, data isn't separated by delimiters but is instead arranged in fixed-width columns. The `cut` command can handle this too, using the `-c` option to specify character positions.\n\nLet's create a new file with fixed-width data:\n\n```bash\ncat << EOF > /home/labex/project/inventory.txt\nISBN     Title          Quantity\n1234567890The Great Adv      100\n2345678901Mystery in th       75\n3456789012Cooking Basi       50\n4567890123Science Exp        125\nEOF\n```\n\nThis command uses a here-document (<<EOF) to create a new file named `inventory.txt` with fixed-width data.\n\nNow, let's extract just the book titles using character positions:\n\n```bash\ncut -c 11-25 /home/labex/project/inventory.txt\n```\n\nHere's what's new:\n\n- `-c 11-25`: This tells `cut` to extract characters 11 through 25 from each line\n\nYou should see:\n\n```\nitle          Q\nThe Great Adv\nMystery in th\nCooking Basi\nScience Exp\n```\n\nThis command extracts characters 11 through 25 from each line, which corresponds to the title field in our fixed-width data.\n\nIf you're not getting the expected output:\n\n- Ensure the `inventory.txt` file was created correctly (you can check with `cat /home/labex/project/inventory.txt`)\n- Verify that you've used the correct character range (`11-25`)\n- Try adjusting the character range if the titles seem misaligned\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Combining cut with Other Commands",
+      "content": "## Combining cut with Other Commands\n\nThe `cut` command becomes even more powerful when combined with other Linux commands. Let's use `cut` along with `grep` to find all books priced over $20 and display their titles.\n\nRun this command:\n\n```bash\ngrep -E ',[2-9][0-9]\\.[0-9]{2}$' /home/labex/project/books.txt | cut -d ',' -f 2\n```\n\nThis command pipeline does two things:\n\n1. `grep -E ',[2-9][0-9]\\.[0-9]{2}$'`: This uses a regular expression to find lines where the price is $20 or more\n   - `,[2-9][0-9]\\.[0-9]{2}$`: Matches a comma, followed by a number from 20 to 99, a decimal point, and two more digits at the end of the line\n2. `cut -d ',' -f 2`: This extracts just the book title (second field) from the lines that `grep` found\n\nYou should see output similar to:\n\n```\nMystery in the Woods\nScience Explained\n```\n\nIf you're not seeing the expected output:\n\n- Verify that the `books.txt` file contains the correct data\n- Check that you've entered the `grep` regular expression correctly\n- Try running the `grep` command alone to see which lines it's selecting\n- Ensure that the `cut` command is correctly specifying the second field\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you've learned how to use the `cut` command in Linux to extract specific data from text files. You've practiced:\n\n- Extracting single fields from CSV files\n- Extracting multiple fields and ranges of fields\n- Working with fixed-width data\n- Combining `cut` with other commands like `grep`\n\nThese skills are invaluable for data processing and analysis in various scenarios, from managing bookstore inventory to handling any kind of structured text data.\n\nAdditional `cut` command parameters not covered in this lab:\n\n- `-s`: Suppress lines not containing delimiters\n- `--output-delimiter=STRING`: Use STRING as the output delimiter\n- `--complement`: Complement the set of selected bytes, characters or fields\n\nTo further your learning, try experimenting with these additional parameters and create your own data files to practice on. Remember, the `man cut` command provides a comprehensive manual for the `cut` command if you need more information.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "f4545a880f9059d83c058f9797e1ddae24c0edb09f14bcfc32eab373677a867a"
+}

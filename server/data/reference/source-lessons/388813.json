@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 388813,
+  "source_url": "https://labex.io/tutorials/shell-arithmetic-operations-in-shell-388813",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn how to perform basic arithmetic operations in Shell programming. You'll create a simple script to calculate the total cost of a fruit basket, demonstrating the use of variables and arithmetic expressions in Bash. This lab is designed for beginners, so we'll explain each step in detail.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Create a new Bash script",
+      "content": "## Create a new Bash script\n\nLet's start by creating a new Bash script file.\n\n1. Open your terminal in the WebIDE. You should see a command prompt, which might look something like this: `labex@ubuntu:~/project$`.\n\n2. We'll create our script in the `project` directory. You're already in this directory by default, but let's make sure by using the `cd` command:\n\n   ```bash\n   cd ~/project\n   ```\n\n   This command changes the current directory to `/home/labex/project`.\n\n3. Now, let's create a new file named `fruit_basket.sh`. We'll use the `touch` command, which creates an empty file:\n\n   ```bash\n   touch fruit_basket.sh\n   ```\n\n4. Open the `fruit_basket.sh` file in the WebIDE editor. You can do this by clicking on the file name in the file explorer on the left side of the WebIDE.\n\n5. Every Bash script should start with a \"shebang\" line. This line tells the system which interpreter to use to run the script. Add the following line at the beginning of the file:\n\n   ```bash\n   #!/bin/bash\n   ```\n\n   This line specifies that the script should be run with the Bash interpreter.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Define variables for fruit costs",
+      "content": "## Define variables for fruit costs\n\nNow that we have our script file, let's define some variables to store the costs of different fruits and the basket.\n\nAdd the following lines to your `fruit_basket.sh` file:\n\n```bash\n#!/bin/bash\n\n## Define costs\nCOST_PINEAPPLE=50\nCOST_BANANA=4\nCOST_WATERMELON=23\nCOST_BASKET=1\n```\n\nLet's break this down:\n\n- In Bash, we don't need to declare variables before using them. We simply assign a value to a variable name.\n- Variable names are case-sensitive. By convention, we often use uppercase for constants (values that won't change).\n- There should be no spaces around the `=` sign when assigning values.\n- These values represent the cost in cents. For example, `COST_PINEAPPLE=50` means a pineapple costs 50 cents.\n- We don't need to specify a data type. Bash treats these as strings by default, but will handle them as numbers when we perform arithmetic operations.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Calculate the total cost",
+      "content": "## Calculate the total cost\n\nNow that we have our costs defined, let's calculate the total cost of a fruit basket containing 1 pineapple, 2 bananas, and 3 watermelons.\n\nAdd the following line to your `fruit_basket.sh` file:\n\n```bash\n#!/bin/bash\n\n## Define costs\nCOST_PINEAPPLE=50\nCOST_BANANA=4\nCOST_WATERMELON=23\nCOST_BASKET=1\n\n## Calculate total cost\nTOTAL=$((COST_PINEAPPLE + (COST_BANANA * 2) + (COST_WATERMELON * 3) + COST_BASKET))\n```\n\nLet's examine this new line:\n\n- `$((  ))` is Bash's syntax for arithmetic operations. Anything inside these double parentheses is treated as an arithmetic expression.\n- Inside the arithmetic expression, we don't need to use `$` before variable names.\n- We're performing several operations:\n  - `COST_PINEAPPLE`: The cost of 1 pineapple\n  - `(COST_BANANA * 2)`: The cost of 2 bananas\n  - `(COST_WATERMELON * 3)`: The cost of 3 watermelons\n  - `COST_BASKET`: The cost of the basket itself\n- These values are all added together, and the result is stored in the `TOTAL` variable.\n\nNote: Bash only handles integer arithmetic. If we were dealing with dollars and cents, we'd need to use a tool like `bc` for floating-point arithmetic.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Display the total cost",
+      "content": "## Display the total cost\n\nTo see the result of our calculation, we need to print the total cost. Add the following line to your `fruit_basket.sh` file:\n\n```bash\n#!/bin/bash\n\n## Define costs\nCOST_PINEAPPLE=50\nCOST_BANANA=4\nCOST_WATERMELON=23\nCOST_BASKET=1\n\n## Calculate total cost\nTOTAL=$((COST_PINEAPPLE + (COST_BANANA * 2) + (COST_WATERMELON * 3) + COST_BASKET))\n\n## Display the total cost\necho \"Total Cost is $TOTAL cents\"\n```\n\nLet's break down this new line:\n\n- `echo` is a command that prints text to the terminal.\n- The text in quotes will be printed as-is, except for the `$TOTAL` part.\n- When a variable name is preceded by `$` inside a string, Bash replaces it with the variable's value. This is called variable expansion.\n- So if `TOTAL` is 128, the output will be \"Total Cost is 128 cents\".\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Make the script executable and run it",
+      "content": "## Make the script executable and run it\n\nNow that our script is complete, we need to make it executable and then run it.\n\n1. In the terminal, make the script executable with the `chmod` command:\n\n   ```bash\n   chmod +x ~/project/fruit_basket.sh\n   ```\n\n   This command changes the mode of the file, adding execute (`x`) permission for the user.\n\n2. Now, let's run the script:\n\n   ```bash\n   ~/project/fruit_basket.sh\n   ```\n\n   This command tells Bash to execute our script. The `~/project/` part specifies the path to our script.\n\nYou should see output similar to:\n\n```\nTotal Cost is 128 cents\n```\n\nThis output shows that the total cost of our fruit basket (1 pineapple, 2 bananas, 3 watermelons, and the basket itself) is 128 cents.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you learned how to perform arithmetic operations using basic operators in Shell programming. You created a Bash script that calculates the total cost of a fruit basket by defining variables for individual costs and using arithmetic expressions to compute the total. You also learned how to make a script executable and run it from the command line.\n\nKey points to remember:\n\n1. Bash scripts start with a shebang line (`#!/bin/bash`).\n2. Variables in Bash are assigned without spaces around the `=` sign.\n3. Arithmetic operations in Bash are performed inside `$((  ))`.\n4. The `echo` command is used to print output.\n5. Scripts need to be made executable with `chmod +x` before they can be run.\n\nThese skills form the foundation for more complex shell scripting tasks and can be applied to various scenarios where you need to perform calculations within your scripts.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "5f366be14a4706ab27f6a5cb78358ce580875169b75fecc770ce0d4c943a50c9"
+}

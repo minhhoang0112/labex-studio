@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 446315,
+  "source_url": "https://labex.io/tutorials/linux-getting-started-with-linux-446315",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nThe terminal is a text-based way to communicate with Linux. You type a command at the prompt, press Enter, and Linux prints output or changes something in the system. At first, the prompt may look unfamiliar, but every interaction follows this same simple pattern.\n\nIn this first lab, you will run safe commands that print text, show the date, display a calendar, calculate numbers, and create text art. You will also save a few results under `/home/labex/project/first-commands` so you can distinguish temporary terminal output from information stored in a file.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Run Your First Command",
+      "content": "## Run Your First Command\n\n> **Tip:** If you are new to LabEx, we recommend starting with the [Linux Learning Path](https://labex.io/learn/linux).\n\nIn this step, you will learn how to recognize the terminal prompt, run a command, and read its output.\n\nThe blinking cursor appears after a prompt. The prompt tells you that the shell is ready for a command; you do not type the prompt itself. Start by moving into the workspace prepared for this lab:\n\n```bash\ncd /home/labex/project/first-commands\n```\n\n![Type the command at the blinking cursor in the Terminal tab](https://file.labex.io/namespace/df87b950-1f37-4316-bc07-6537a1f2c481/linux/lab-getting-started-with-linux/en/../assets/step1-terminal-start.png)\n\n`cd` means “change directory.” A directory is Linux's name for a folder. Later labs explore directories in detail; for now, this command gives all your saved results one predictable home.\n\nRun `pwd`, which means “print working directory”:\n\n```bash\npwd\n```\n\nThe output should be the directory you just entered:\n\n```text\n/home/labex/project/first-commands\n```\n\nNow use `echo` to ask the shell to print text:\n\n```bash\necho \"Hello, Linux\"\n```\n\nYou should see:\n\n```text\nHello, Linux\n```\n\nThe quotation marks keep the words together as one text value. Now save the greeting in a file. The `>` symbol is called **output redirection**: the shell creates the file named on its right and sends the command's normal output there instead of displaying it. If the file already exists, `>` replaces its previous contents, so check the destination before using it with important data:\n\n```bash\necho \"Hello, Linux\" > greeting.txt\n```\n\nThis command prints nothing on screen because the output went to `greeting.txt`.\n\nRead the saved file with `cat`:\n\n```bash\ncat greeting.txt\n```\n\nSeeing `Hello, Linux` again proves that the text now exists in `greeting.txt`, not only on the terminal screen.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Read Dates and Calendars",
+      "content": "## Read Dates and Calendars\n\nIn this step, you will ask Linux for time information and learn that command output can change with the environment.\n\nRun `date` with no options:\n\n```bash\ndate\n```\n\nLinux prints the current weekday, date, time, time zone, and year. The exact value changes every second, so your output will differ from examples you may see elsewhere.\n\nCommands often accept options that change their output. A `date` format beginning with `+` lets you choose stable fields. `%F` means the ISO date format `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nSave today's ISO date. As in the previous step, `>` redirects the output into a file and replaces that file if it already exists:\n\n```bash\ndate +%F > today.txt\n```\n\nThe `cal` command displays the current month as a calendar:\n\n```bash\ncal\n```\n\nThe month and weekday layout depend on the current date and locale. Save that output too:\n\n```bash\ncal > calendar.txt\n```\n\nThe `>` symbol sends output to a file instead of the screen. Display the saved calendar to confirm it was written:\n\n```bash\ncat calendar.txt\n```\n\nYou will learn redirection thoroughly later. For now, remember that terminal output can either be viewed immediately or saved for later use.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Calculate with Expr",
+      "content": "## Calculate with Expr\n\nIn this step, you will use `expr` for integer arithmetic and observe why spaces matter in shell commands.\n\nThe shell separates a command line into words at spaces. `expr` expects the first number, operator, and second number as separate arguments. Add two numbers:\n\n```bash\nexpr 5 + 3\n```\n\nThe result is:\n\n```text\n8\n```\n\nTry subtraction and division:\n\n```bash\nexpr 20 - 7\n```\n\n```bash\nexpr 24 / 6\n```\n\nMultiplication needs one extra detail. The shell treats `*` as a filename wildcard, so escape it with a backslash to pass a literal multiplication operator to `expr`:\n\n```bash\nexpr 6 \\* 7\n```\n\nSave the multiplication result in a file. This uses the same output redirection you practiced earlier, so the terminal stays quiet while `calculation.txt` receives `42`:\n\n```bash\nexpr 6 \\* 7 > calculation.txt\n```\n\nDisplay the file:\n\n```bash\ncat calculation.txt\n```\n\nYou should see `42`. Keeping this first exercise simple lets you focus on the command structure: command name, space-separated arguments, and optional output destination.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Turn Text into ASCII Art",
+      "content": "## Turn Text into ASCII Art\n\nIn this step, you will use a command option to change how `figlet` formats text.\n\n`figlet` builds large letters from ordinary terminal characters. Run it with a short word:\n\n```bash\nfiglet \"LabEx\"\n```\n\nThe output spans several lines. This is called ASCII art because it uses text characters rather than image pixels.\n\nMany Linux options begin with `-`. For `figlet`, `-f` selects a font, and `slant` is the font name. Try it:\n\n```bash\nfiglet -f slant \"Linux\"\n```\n\nSave the first design to a file:\n\n```bash\nfiglet \"LabEx\" > labex-art.txt\n```\n\nInspect the beginning of the saved art:\n\n```bash\nhead labex-art.txt\n```\n\n`head` displays the first ten lines by default. You should see the same multi-line design that appeared in the terminal.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Reset a Busy Terminal",
+      "content": "## Reset a Busy Terminal\n\nIn this step, you will clear old output and distinguish screen cleanup from deleting files.\n\nAfter several commands, the terminal can become visually crowded. Run:\n\n```bash\nclear\n```\n\n`clear` moves the old terminal output out of view. It does not remove commands, files, or directories. Most terminals also support `Ctrl+L` as a keyboard shortcut for the same visual cleanup.\n\nProve that your earlier files still exist by listing the workspace:\n\n```bash\nls\n```\n\nYou should still see `greeting.txt`, `today.txt`, `calendar.txt`, `calculations.txt`, and `labex-art.txt`.\n\nCreate a final marker after cleaning the screen:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nDisplay the marker to check it:\n\n```bash\ncat terminal-ready.txt\n```\n\nThis final command reinforces an important idea: clearing the display changes only what you currently see, while files remain stored on disk.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nYou learned the terminal's basic interaction pattern: type a command, press Enter, and interpret the result. You practiced `pwd`, `echo`, `date`, `cal`, `expr`, `figlet`, and `clear`; used simple options; and saved output in files. You are now ready to apply these basics in a small terminal challenge before learning broader file operations.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "e5e0a97571533aed64382df487e219817a6b29d8762b665e07acc127c24fca69"
+}

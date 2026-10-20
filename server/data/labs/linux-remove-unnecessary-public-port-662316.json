@@ -1,0 +1,57 @@
+{
+  "id": "linux-remove-unnecessary-public-port-662316",
+  "course_id": "linux-security-for-devsecops",
+  "source_lab_id": 662316,
+  "source_url": "https://labex.io/labs/linux-remove-unnecessary-public-port-662316",
+  "order": 3,
+  "title": "Remove Unnecessary Public Port",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "# Introduction\n\nYou are reviewing a Linux web host after a compatibility check that temporarily enabled an extra listener. The primary site is still required, but the legacy port was never meant to stay exposed once the test window ended.\n\nBefore the host is handed back to routine service, you need to confirm which listener is still required, disable the leftover public port through the existing configuration, and make sure the main site remains available. This is a common cleanup task after temporary rollout or migration work.\n\nThe boundary is the host's listening surface: the primary port is required, the legacy compatibility port is not.\n",
+  "sections": [
+    {
+      "id": "source-662316-section-0",
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nYou are reviewing a Linux web host after a compatibility check that temporarily enabled an extra listener. The primary site is still required, but the legacy port was never meant to stay exposed once the test window ended.\n\nBefore the host is handed back to routine service, you need to confirm which listener is still required, disable the leftover public port through the existing configuration, and make sure the main site remains available. This is a common cleanup task after temporary rollout or migration work.\n\nThe boundary is the host's listening surface: the primary port is required, the legacy compatibility port is not.\n",
+      "kind": "introduction"
+    },
+    {
+      "id": "source-662316-section-1",
+      "position": 1,
+      "title": "Disable the Legacy Public Listener",
+      "content": "# Disable the Legacy Public Listener\n\nYou are reviewing a web service after a compatibility test. The main site is still needed, but an extra public listener from the test was never removed and is now unnecessary exposure.\n\nThe service is already running, so use the live socket table to confirm the current state before changing configuration. Your job is to remove only the legacy listener and leave the primary site working.\n\nUse the listener table as your before-and-after evidence. A correct fix removes the extra port without changing the service users still depend on.\n\n## Current Situation\n\nThe project lives at `/home/labex/project`.\n\nThe application stack is controlled by a project configuration file and a restart helper. One listener is the primary site; the other is the leftover compatibility endpoint that should disappear.\n\n## Scope\n\nOnly TCP ports `18180` and `18182` are in scope. Treat any other listeners on the host as unrelated platform noise.\n\nUse the existing `service.env` and `restart-service.sh`. Do not replace the stack with a new server invented for the exercise.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Inspect which of the in-scope ports are listening and how they are bound.\n- Change the project configuration so the legacy listener is no longer started.\n- Reload the stack using the project helper script so the change applies to the running process.\n- Confirm the primary site still responds and the legacy port no longer listens.\n\n## Acceptance Criteria\n\n- The primary public site remains available on port `18180`.\n- The unnecessary listener on port `18182` is no longer present.\n- The change is made through the provided project configuration and restart helper.\n\n## Hints\n\n<details>\n<summary>How do I focus on the right listeners?</summary>\n\nRun `ss -lntp` and, if the table is large, filter to this task with `grep -E '18180|18182'`. Compare the `18180` line with the `18182` line before you change configuration.\n\n</details>\n\n<details>\n<summary>I need the legacy port to disappear after editing.</summary>\n\nThe runnable service reads simple flags and ports from `service.env`. Turn off the legacy listener there, then run `./restart-service.sh` from the project directory and check `ss` again for `18182`.\n\n</details>\n",
+      "kind": "task",
+      "task": "Complete the requirements in Disable the Legacy Public Listener.",
+      "hint": "Follow the original instructions above. Automatic grading requires an independently reviewed verifier.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu gốc; chưa có fixture và bộ chấm local được kiểm chứng cho bước này."
+      }
+    },
+    {
+      "id": "source-662316-section-2",
+      "position": 2,
+      "title": "Summary",
+      "content": "# Summary\n\nIn this challenge, you cleaned up a realistic post-test exposure issue on a Linux host. You identified a leftover public listener, disabled it through the existing service configuration, and verified that the required public site still worked. This is a common hardening task: remove temporary exposure without disrupting the service users still need.\n\nThe required listener stays available, while the compatibility listener no longer expands the host's public surface.\n",
+      "kind": "summary"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-662316-section-1",
+      "position": 1,
+      "title": "Disable the Legacy Public Listener",
+      "content": "# Disable the Legacy Public Listener\n\nYou are reviewing a web service after a compatibility test. The main site is still needed, but an extra public listener from the test was never removed and is now unnecessary exposure.\n\nThe service is already running, so use the live socket table to confirm the current state before changing configuration. Your job is to remove only the legacy listener and leave the primary site working.\n\nUse the listener table as your before-and-after evidence. A correct fix removes the extra port without changing the service users still depend on.\n\n## Current Situation\n\nThe project lives at `/home/labex/project`.\n\nThe application stack is controlled by a project configuration file and a restart helper. One listener is the primary site; the other is the leftover compatibility endpoint that should disappear.\n\n## Scope\n\nOnly TCP ports `18180` and `18182` are in scope. Treat any other listeners on the host as unrelated platform noise.\n\nUse the existing `service.env` and `restart-service.sh`. Do not replace the stack with a new server invented for the exercise.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Inspect which of the in-scope ports are listening and how they are bound.\n- Change the project configuration so the legacy listener is no longer started.\n- Reload the stack using the project helper script so the change applies to the running process.\n- Confirm the primary site still responds and the legacy port no longer listens.\n\n## Acceptance Criteria\n\n- The primary public site remains available on port `18180`.\n- The unnecessary listener on port `18182` is no longer present.\n- The change is made through the provided project configuration and restart helper.\n\n## Hints\n\n<details>\n<summary>How do I focus on the right listeners?</summary>\n\nRun `ss -lntp` and, if the table is large, filter to this task with `grep -E '18180|18182'`. Compare the `18180` line with the `18182` line before you change configuration.\n\n</details>\n\n<details>\n<summary>I need the legacy port to disappear after editing.</summary>\n\nThe runnable service reads simple flags and ports from `service.env`. Turn off the legacy listener there, then run `./restart-service.sh` from the project directory and check `ss` again for `18182`.\n\n</details>\n",
+      "kind": "task",
+      "task": "Complete the requirements in Disable the Legacy Public Listener.",
+      "hint": "Follow the original instructions above. Automatic grading requires an independently reviewed verifier.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu gốc; chưa có fixture và bộ chấm local được kiểm chứng cho bước này."
+      }
+    }
+  ],
+  "curriculum_version": 1
+}

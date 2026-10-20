@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "source_lab_id": 270251,
+  "source_url": "https://labex.io/tutorials/linux-file-contents-and-comparing-270251",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nWelcome to this hands-on lab about working with files in Linux! If you're new to Linux, don't worry. We'll guide you through each step carefully. In this lab, you'll learn how to view the contents of files, look at specific parts of files, and compare files. These are fundamental skills that will help you navigate and understand the Linux file system.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Print File Contents",
+      "content": "## Print File Contents\n\nFirst, please open a terminal on the Desktop **OR** switch to the terminal tab in the lab environment.\n\n![Terminal window screenshot](https://file.labex.io/namespace/df87b950-1f37-4316-bc07-6537a1f2c481/linux/lab-file-contents-and-comparing/en/../assets/20240727-20-38-20-xoA2i66E@2x.png)\n\nOnce you have a terminal open, you should see a command prompt, typically ending with a `$` symbol. This is where we'll enter our commands.\n\nNow, let's use the `cat` command to display the contents of a file:\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ncat /tmp/hello\n```\n\nHere, `/tmp/hello` is the path to the file we want to view. `/tmp` is a directory (folder) on your system, and `hello` is the name of the file in that directory.\n\n4. After pressing Enter, you should see the contents of the file:\n\n```plaintext\nHi,\nI am Labby!\n```\n\nThis is everything that's in the `/tmp/hello` file. The `cat` command has displayed it for us in the terminal.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Display File Contents with Line Numbers",
+      "content": "## Display File Contents with Line Numbers\n\nNow, let's use the `cat` command again, but this time we'll add line numbers to the output.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ncat -n /tmp/hello\n```\n\nThe `-n` here is called an option or a flag. It tells `cat` to number all output lines.\n\n2. You should now see the contents of the file with line numbers:\n\n```plaintext\n     1 Hi,\n     2 I am Labby!\n```\n\nThis can be very helpful when you're dealing with longer files and need to refer to specific lines.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Print the Top Lines of a File",
+      "content": "## Print the Top Lines of a File\n\nNext, we'll use the `head` command. As its name suggests, `head` is used to view the beginning or \"head\" of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\nhead -n1 /tmp/hello\n```\n\nHere, `-n1` is an option that tells `head` to show only the first line. The `1` can be changed to any number to show that many lines.\n\n2. You should see this output:\n\n```plaintext\nHi,\n```\n\nThis is just the first line of the file. By default, without the `-n1` option, `head` would show the first 10 lines of the file.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "View the First Few Bytes of a File",
+      "content": "## View the First Few Bytes of a File\n\nNow we'll use the `head` command again, but this time to view a specific number of bytes from the beginning of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\nhead -c1 /tmp/hello\n```\n\nThe `-c1` option tells `head` to show only the first byte (character) of the file. Like with `-n`, you can change the `1` to any number to see that many bytes.\n\n2. You should see this output:\n\n```plaintext\nH\n```\n\nThis is just the first character of the file. In text files, each character is typically one byte.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Print the Last Lines of a File",
+      "content": "## Print the Last Lines of a File\n\nNow let's move on to the `tail` command. As you might guess, `tail` is the opposite of `head` - it shows the end of a file.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ntail -n1 /tmp/hello\n```\n\nJust like with `head`, the `-n1` option tells `tail` to show only one line, in this case the last line of the file.\n\n2. You should see this output:\n\n```plaintext\nI am Labby!\n```\n\nThis is the last line of our file. Without the `-n1` option, `tail` would show the last 10 lines by default.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "View the Last Few Bytes of a File",
+      "content": "## View the Last Few Bytes of a File\n\nSimilar to what we did with `head`, we can use `tail` to display a specific number of bytes from the end of a file.\n\n1. First, let's try viewing the last byte. In the terminal, type the following command and press Enter:\n\n```bash\ntail -c1 /tmp/hello\n```\n\nYou might not see any output. This is because the last character is likely a newline character, which is invisible.\n\n2. Let's try viewing the last two bytes instead. Type the following command and press Enter:\n\n```bash\ntail -c2 /tmp/hello\n```\n\n3. Now you should see:\n\n```plaintext\n!\n```\n\nThe `-c2` option tells `tail` to show the last 2 bytes (characters) of the file. In this case, it's showing the exclamation mark, which is the last visible character in our file.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Comparing Files",
+      "content": "## Comparing Files\n\nNow we'll learn how to use the `diff` command to compare two files and see the differences between them.\n\n1. First, let's make sure we're in the right directory (folder). Type the following command and press Enter:\n\n```bash\ncd ~/project\n```\n\nThis changes our current directory to the \"project\" folder in our home directory. The `~` symbol is a shortcut for your home directory.\n\n2. Now, let's compare two files. Type the following command and press Enter:\n\n```bash\ndiff file1 file2\n```\n\nThis tells `diff` to compare the contents of `file1` and `file2`.\n\n3. You should see output similar to this:\n\n```plaintext\n1c1\n< this is file1\n---\n> this is file2\n```\n\nLet's break down what this output means. The `diff` command produces output that describes what changes are needed to make the first file identical to the second file. It doesn't matter which file was created or modified first; `diff` only compares their contents at the time you run the command.\n\n- `1c1`: This indicates that line 1 in the first file needs to be **c**hanged to match line 1 in the second file.\n- `< this is file1`: The `<` symbol indicates a line from the first file (`file1`).\n- `---`: This is a separator between the lines from `file1` and `file2`.\n- `> this is file2`: The `>` symbol indicates a line from the second file (`file2`).\n\nIn simple terms, `diff` is showing us that the content of line 1 is different between the two files. To make `file1` match `file2`, the line \"this is file1\" would need to be replaced with \"this is file2\".\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Comparing Directories",
+      "content": "## Comparing Directories\n\nFinally, let's use the `diff` command to compare entire directories.\n\n1. In the terminal, type the following command and press Enter:\n\n```bash\ndiff -r ~/Desktop ~/Code\n```\n\nThe `-r` option tells `diff` to recursively compare subdirectories as well. `~/Desktop` and `~/Code` are the paths to the two directories we're comparing.\n\n2. You might see output similar to this:\n\n```plaintext\nOnly in /home/labex/Desktop: code.desktop\nOnly in /home/labex/Desktop: gedit.desktop\nOnly in /home/labex/Desktop: gvim.desktop\nOnly in /home/labex/Desktop: xfce4-terminal.desktop\n```\n\nThis output shows that the `Desktop` directory contains four files that are not in the `Code` directory.\n",
+      "need_verify": true
+    },
+    {
+      "position": 9,
+      "title": "Summary",
+      "content": "## Summary\n\nCongratulations! You've completed the File Contents and Comparing lab. Let's recap what you've learned:\n\n1. You used `cat` to view the entire contents of a file.\n2. You learned how to use `cat -n` to view file contents with line numbers.\n3. You used `head` to view the beginning of a file, both by lines and by bytes.\n4. You used `tail` to view the end of a file, both by lines and by bytes.\n5. You learned how to use `diff` to compare the contents of files.\n6. Finally, you used `diff -r` to compare entire directories.\n\nThese commands are fundamental tools in Linux. As you continue to work with Linux, you'll find yourself using these commands frequently to inspect and compare files and directories.\n\nRemember, if you ever forget how to use a command, you can always type `man` followed by the command name (e.g., `man cat`) to see the manual page for that command. This will give you detailed information about all the options available for each command.\n\nKeep practicing with these commands on different files and directories to become more comfortable with them. The more you use them, the more natural they'll become!\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "93ca01c6fb9b8a11c8392565e847edcfe66baabfdb7afdcaadc7048a3670617c"
+}

@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "source_lab_id": 18004,
+  "source_url": "https://labex.io/tutorials/linux-simple-text-processing-18004",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nText files can relate in different ways. Sometimes characters need normalization; sometimes two files correspond by line position; sometimes records share a key. Choosing the matching tool is more important than memorizing options.\n\nThis lab introduces three focused tools: `tr` transforms a character stream, `paste` combines lines by position, and `join` combines sorted records by a shared field. You will observe each input and verify the resulting file before building a small report.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Translate and Clean a Character Stream",
+      "content": "## Translate and Clean a Character Stream\n\nIn this step, you will use `tr` to translate characters, squeeze repeated separators, and delete unwanted characters.\n\nCreate a deliberately inconsistent line. `cat -A` then makes normally invisible details visible: spaces remain visible as gaps, and `$` marks the line ending. This helps you see exactly what needs cleaning:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '  API,,,Worker,,WEB  \\n' > raw-services.txt\ncat -A raw-services.txt\n```\n\n`tr SET1 SET2` replaces characters from the first set with corresponding characters from the second. The portable classes `[:upper:]` and `[:lower:]` represent uppercase and lowercase letters:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt\n```\n\nNow pipe three stages together. The first translates letter case; `tr -s ','` **squeezes** each run of repeated commas into one comma; `tr -d ' '` **deletes** space characters; and `tee` displays and saves the final stream:\n\n```bash\ntr '[:upper:]' '[:lower:]' < raw-services.txt | tr -s ',' | tr -d ' ' | tee clean-services.txt\n```\n\nThe result should be `api,worker,web`. `tr` reads a stream; it does not edit the input file in place.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Merge Corresponding Lines with Paste",
+      "content": "## Merge Corresponding Lines with Paste\n\nIn this step, you will combine files whose first lines correspond, whose second lines correspond, and so on.\n\nCreate one column of service names and one column of owners:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' api worker web > services.txt\nprintf '%s\\n' team-blue team-green team-blue > owners.txt\n```\n\n`paste` places corresponding lines side by side, using a tab by default:\n\n```bash\npaste services.txt owners.txt\n```\n\nChoose comma as the delimiter with `-d,` and use `tee` to display and save a CSV-like file:\n\n```bash\npaste -d, services.txt owners.txt | tee service-owners.csv\n```\n\n`paste` does not compare keys. If one file has missing or reordered lines, the pairing changes.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Join Records by a Shared Key",
+      "content": "## Join Records by a Shared Key\n\nIn this step, you will combine records by a matching first field rather than by line position.\n\nCreate two space-delimited tables in different orders:\n\n```bash\ncd /home/labex/project/text-combine-lab\nprintf '%s\\n' 'web 8080' 'api 9000' 'worker 9100' > ports-unsorted.txt\nprintf '%s\\n' 'worker active' 'web active' 'api maintenance' > states-unsorted.txt\n```\n\n`join` expects both inputs sorted by the join field. Prepare sorted copies. In `sort -k1,1`, `-k` selects a key and `1,1` means “start and end with field 1,” so only the service name controls ordering:\n\n```bash\nsort -k1,1 ports-unsorted.txt > ports.txt\nsort -k1,1 states-unsorted.txt > states.txt\n```\n\nInspect them, then join matching field 1 values:\n\n```bash\ncat ports.txt\ncat states.txt\njoin ports.txt states.txt | tee service-details.txt\n```\n\nEach result contains the shared service key once, followed by the port and state.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Build a Readable Service Report",
+      "content": "## Build a Readable Service Report\n\nIn this step, you will reshape the joined records without changing the source tables.\n\nConvert spaces to commas to produce a simple report:\n\n```bash\ncd /home/labex/project/text-combine-lab\ntr ' ' ',' < service-details.txt | tee service-report.csv\n```\n\nAdd a header by grouping two commands. Braces send both commands' output into one redirection:\n\n```bash\n{ echo 'service,port,state'; cat service-report.csv; } > service-report-with-header.csv\ncat service-report-with-header.csv\n```\n\nCount data records without counting the header:\n\n```bash\ntail -n +2 service-report-with-header.csv | wc -l | tr -d ' ' > service-count.txt\ncat service-count.txt\n```\n\nThis workflow preserves small, inspectable stages: normalized data, joined data, formatted data, then a final report.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Summary",
+      "content": "## Summary\n\nYou used `tr` for character-level normalization, `paste` for positional columns, and `join` for sorted key relationships. You then combined small stages into a readable CSV report while keeping the original inputs intact.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "58fca8598283df52535ad18873a2c4489e92eb18e032e2d80261a005622ba540"
+}

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_lab_id": 725414,
+  "source_url": "https://labex.io/tutorials/linux-linux-networking-and-firewall-basics-725414",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nNetwork troubleshooting is easier when you check one layer at a time. Start with the host's identity, then confirm its interfaces and addresses, route selection, basic reachability, name resolution, listening sockets, application response, and finally local firewall policy.\n\nIn this lab, you will follow that sequence on an Ubuntu host. A prepared HTTP service listens only on loopback port `8088`, giving you a safe target for `ss`, `curl`, and UFW rule practice. You will not change the host's interface configuration, default route, DNS settings, or SSH service. Before enabling UFW, you will explicitly preserve SSH access.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Identify the Host",
+      "content": "## Identify the Host\n\nIn this step, you will inspect the host name and the local name records that help programs identify this machine.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\nPrint the current host name:\n\n```bash\nhostname\n```\n\nDisplay the static, transient, and operating-system identity known to systemd:\n\n```bash\nhostnamectl\n```\n\n`Static hostname` is the configured name. In cloud training machines, the transient name may be assigned during boot.\n\nInspect local host mappings:\n\n```bash\ncat /etc/hosts\n```\n\nThe loopback names `localhost`, `127.0.0.1`, and `::1` identify this same host without external networking. Show the host's assigned IP addresses in compact form:\n\n```bash\nhostname -I\n```\n\nSave the host name and address list:\n\n```bash\nprintf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt\n```\n\n```bash\ncat host-identity.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Inspect Interfaces and IP Addresses",
+      "content": "## Inspect Interfaces and IP Addresses\n\nIn this step, you will identify network interfaces, link state, IPv4 addresses, prefixes, and address scope.\n\nUse the brief link view:\n\n```bash\nip -brief link\n```\n\n`lo` is the loopback interface. Another interface, commonly named `eth0` or `ens...`, connects the VM to its network. `UP` means the interface is administratively enabled.\n\nDisplay addresses in compact form:\n\n```bash\nip -brief address\n```\n\nAn address such as `192.0.2.10/24` combines an IPv4 address and prefix length. The prefix describes which leading bits identify the local network.\n\nInspect loopback in full detail:\n\n```bash\nip address show dev lo\n```\n\nThe IPv4 address `127.0.0.1/8` has `scope host`, so it is valid only inside this host. Find the interface used by the default route:\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Primary interface: $primary_if\"\n```\n\n```bash\nip address show dev \"$primary_if\"\n```\n\nThe `ifconfig` command is an older interface tool that still appears in existing runbooks and troubleshooting instructions. Compare its output with the modern `ip` output you just read:\n\n```bash\nifconfig\n```\n\nSave the legacy view as well:\n\n```bash\nifconfig > ifconfig-addresses.txt\n```\n\nSave a brief interface snapshot:\n\n```bash\nip -brief address > interface-addresses.txt\n```\n\n```bash\ncat interface-addresses.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Read the Routing Table",
+      "content": "## Read the Routing Table\n\nIn this step, you will identify the default gateway and ask Linux which route it would use for a destination.\n\nDisplay the main routing table:\n\n```bash\nip route\n```\n\nConnected routes describe directly attached networks. A line beginning with `default via` is used when no more specific route matches.\n\nAsk the kernel how it would reach a public destination. This command reports the selected gateway, interface, and source address without sending a packet:\n\n```bash\nip route get 1.1.1.1\n```\n\nExtract the default gateway and interface:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nprimary_if=$(ip route show default | awk 'NR==1 {print $5}')\n```\n\n```bash\necho \"Default gateway: $gateway via $primary_if\"\n```\n\nSave the route summary:\n\n```bash\nprintf 'gateway=%s\\ninterface=%s\\n' \"$gateway\" \"$primary_if\" > route-summary.txt\n```\n\n```bash\ncat route-summary.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Test Network Reachability",
+      "content": "## Test Network Reachability\n\nIn this step, you will use `ping` to test increasingly distant boundaries while recognizing that some networks block diagnostic packets.\n\nStart with loopback. The options `-c 2` send two requests and `-W 2` wait at most two seconds for each reply:\n\n```bash\nping -c 2 -W 2 127.0.0.1\n```\n\nA successful loopback test proves the local IP stack responds. Next, retrieve and test the default gateway:\n\n```bash\ngateway=$(ip route show default | awk 'NR==1 {print $3}')\n```\n\n```bash\nping -c 2 -W 2 \"$gateway\" || echo \"The gateway does not answer ICMP echo requests\"\n```\n\nThe fallback message matters because a router can forward traffic while refusing ping. Test a public IP address without relying on DNS:\n\n```bash\nping -c 2 -W 2 1.1.1.1 || echo \"Public ICMP is blocked or unavailable\"\n```\n\nSave a stable local connectivity result rather than depending on external policy:\n\n```bash\nping -c 1 -W 2 127.0.0.1 > loopback-ping.txt\n```\n\n```bash\ntail -n 2 loopback-ping.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Test Host Name Resolution",
+      "content": "## Test Host Name Resolution\n\nIn this step, you will inspect resolver configuration and translate host names into addresses.\n\nView the resolver file used by standard Linux applications:\n\n```bash\ncat /etc/resolv.conf\n```\n\nIt commonly contains one or more `nameserver` lines. On systemd-resolved hosts, the address can identify a local stub resolver rather than an external DNS server directly.\n\nResolve a local name through the system's complete name-service configuration:\n\n```bash\ngetent hosts localhost\n```\n\n`getent` follows `/etc/nsswitch.conf`, so it can combine `/etc/hosts`, DNS, and other configured sources. Resolve an external name and request IPv4 socket addresses:\n\n```bash\ngetent ahostsv4 example.com\n```\n\nIf IP ping succeeds but this lookup fails, focus on resolver configuration or DNS reachability. Save the first resolved IPv4 record:\n\n```bash\ngetent ahostsv4 example.com | head -n 1 > dns-result.txt\n```\n\n```bash\ncat dns-result.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Inspect a Listening Port and HTTP Response",
+      "content": "## Inspect a Listening Port and HTTP Response\n\nIn this step, you will connect a listening TCP socket to its owning process and test the application protocol.\n\nThe prepared demo service listens on loopback port `8088`. Use `ss` to inspect listening TCP sockets. The options `-l`, `-t`, `-n`, and `-p` mean listening, TCP, numeric addresses, and process information:\n\n```bash\nsudo ss -ltnp | grep ':8088'\n```\n\nLook for `127.0.0.1:8088`. Binding to loopback means the service is reachable only from this host.\n\nCheck the service process behind the socket:\n\n```bash\nsystemctl status labex-network-demo.service --no-pager\n```\n\nUse `curl -i` to display the HTTP response headers and body:\n\n```bash\ncurl -i http://127.0.0.1:8088/\n```\n\nAn HTTP `200 OK` status proves more than an open port: the application accepted an HTTP request and returned content. Save only the response body with silent mode `-s`:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\ncurl -s http://127.0.0.1:8088/ > http-response.html\n```\n\n```bash\ngrep 'network demo ready' http-response.html\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Preserve Access and Enable UFW",
+      "content": "## Preserve Access and Enable UFW\n\nIn this step, you will inspect UFW state, preserve remote administration access, allow the practice service port, and enable the firewall.\n\nUFW is a front end for Linux packet-filtering rules. Inspect its current state:\n\n```bash\nsudo ufw status verbose\n```\n\nThe setup leaves UFW inactive with a clean rule set. Before enabling any host firewall remotely, allow the management path you depend on. This VM uses TCP port `22` for SSH:\n\n```bash\nsudo ufw allow 22/tcp\n```\n\nNow allow inbound TCP traffic to the practice service port:\n\n```bash\nsudo ufw allow 8088/tcp\n```\n\nReview the prepared changes before activation:\n\n```bash\nsudo ufw show added\n```\n\nEnable UFW without an interactive confirmation prompt:\n\n```bash\nsudo ufw --force enable\n```\n\nConfirm that the firewall is active and both allowances are present:\n\n```bash\nsudo ufw status verbose\n```\n\nThe service is bound to loopback, so test it locally after the firewall change:\n\n```bash\ncurl -fsS http://127.0.0.1:8088/\n```\n\nSave the active status as an observable result:\n\n```bash\ncd /home/labex/project/network-lab\n```\n\n```bash\nsudo ufw status verbose > firewall-status.txt\n```\n\n```bash\ncat firewall-status.txt\n```\n\nThe order matters: preserve the administration path, add required service rules, enable the firewall, and immediately verify both policy and application reachability. Production hosts may use a different SSH port, so confirm the real management path instead of assuming port `22`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "content": "## Summary\n\nYou followed a structured Linux network diagnostic chain: host identity, interfaces and IP addresses, route selection, reachability, name resolution, listening sockets, and HTTP response. You learned that each layer answers a different question and that failure at one boundary narrows the next investigation.\n\nYou also preserved SSH access, allowed a practice service port, enabled UFW, and verified both the active policy and the application's response. These habits prepare you to diagnose and secure a network service without making broad, disruptive changes.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "ed2f2a7b272e23efa36efabf3d80886701eb81db818d5a82a744a2c6b15e8397"
+}

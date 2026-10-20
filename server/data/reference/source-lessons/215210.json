@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 215210,
+  "source_url": "https://labex.io/tutorials/linux-linux-which-command-command-locating-215210",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn how to use the `which` command to find the executable file that a shell will run for a command name. You will check installed commands, handle a command that is not available, list multiple matches, and see how the `PATH` variable affects the result.\n\nTo make the behavior of `which` easier to understand, this lab also uses a few supporting shell concepts such as simple scripts, executable permissions, and temporary `PATH` changes. Each new concept is explained in place so you can focus on learning why `which` returns a specific path.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basics of 'which'",
+      "content": "## Understanding the Basics of 'which'\n\nAs you settle into your new role at TechCorp, your team lead asks you to verify the installation of some key development tools. The `which` command will be your go-to utility for this task.\n\nThe `which` command is used to locate the executable file associated with a given command by searching through the directories listed in the PATH environment variable.\n\nLet's start by locating the `gcc` compiler:\n\n```bash\nwhich gcc\n```\n\nYou should see output similar to this:\n\n```\n/usr/bin/gcc\n```\n\nThis output tells you that the `gcc` executable is located in the `/usr/bin` directory. This means when you type `gcc` in the terminal, the system will execute the file located at `/usr/bin/gcc`.\n\nNow, let's try to locate another essential tool, `python`:\n\n```bash\nwhich python\n```\n\nYou might see something like:\n\n```\n/usr/local/bin/python\n```\n\nThe `which` command searches through the directories listed in your PATH environment variable and returns the first match it finds. If you see a different path, don't worry - it just means Python is installed in a different location on your system.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Handling Non-existent Commands",
+      "content": "## Handling Non-existent Commands\n\nYour team lead mentions that TechCorp used to use a custom build tool called `techbuild`. Let's check if it's still installed:\n\n```bash\nwhich techbuild\n```\n\nYou might not see any output (Bash Shell), or you might see an error message like `techbuild not found` (Zsh Shell).\n\nThis is because `which` doesn't return anything if it can't find the command in your PATH. Don't be alarmed by the lack of output - it's the command's way of telling you that `techbuild` isn't found in any of the directories in your PATH.\n\nTo make this behavior more explicit, we can use a simple shell script. We'll introduce two new concepts here:\n\n1. A shell script is a text file that stores commands and runs them in order.\n2. The `cat <<'EOF' ... EOF` pattern writes multiple lines into a file without making you manage several nested quotes.\n\nLet's create a script to check for `techbuild`:\n\n```bash\ncat > ~/check_techbuild.sh <<'EOF'\n#!/bin/bash\nif which techbuild >/dev/null 2>&1; then\n  echo \"techbuild is installed\"\nelse\n  echo \"techbuild is not installed\"\nfi\nEOF\n```\n\nThis command creates a file named `~/check_techbuild.sh` and fills it with a small Bash script.\n\nHere is what the important lines mean:\n\n- `#!/bin/bash` tells Linux to run the script with Bash.\n- `which techbuild` checks whether the command can be found in your `PATH`.\n- `>/dev/null 2>&1` hides normal output and error output so the script can print its own clear result message.\n\nNow give the file execute permission and run it:\n\n```bash\nchmod +x ~/check_techbuild.sh\n```\n\nThe `chmod +x` command adds execute permission, which allows Linux to run the file as a command.\n\n```bash\n~/check_techbuild.sh\n```\n\nThis script prints `techbuild is not installed` because `which` could not find that command.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Discovering Multiple Installations",
+      "content": "## Discovering Multiple Installations\n\nAs you continue setting up your environment, you realize that TechCorp uses multiple versions of Python for different projects. The `-a` option of `which` can help you discover all installations of a command:\n\n```bash\nwhich -a python\n```\n\nYou might see output like this:\n\n```\n/usr/local/bin/python\n/usr/bin/python\n/bin/python\n```\n\nThis output indicates that there are multiple Python installations on the system. The `-a` option tells `which` to print all matching executables in PATH, not just the first one.\n\nUnderstanding this is crucial because it shows you all the possible Python executables that could be run, depending on your PATH configuration. The first one listed is the one that will be executed when you type `python` in the terminal.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Understanding PATH Priority",
+      "content": "## Understanding PATH Priority\n\nYour team lead explains that the order of directories in the PATH variable determines which version of a command is used by default. Let's examine your PATH:\n\n```bash\necho $PATH\n```\n\nYou'll see a colon-separated list of directories. For example:\n\n```\n/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n```\n\nThe order matters: directories listed earlier have higher priority. This means if there are two executables with the same name in different directories, the one in the directory that appears first in PATH will be used.\n\nThe lab setup already created a custom `prioritydemo` command in `~/custom_bin`. Add that directory to the front of your `PATH` so it gets checked before the system directories:\n\n```bash\nexport PATH=$HOME/custom_bin:$PATH\n```\n\nNow check which `prioritydemo` will run by default:\n\n```bash\nwhich prioritydemo\n```\n\nYou should see output similar to this:\n\n```plaintext\n/home/labex/custom_bin/prioritydemo\n```\n\nTo see every matching `prioritydemo` command in your `PATH`, run:\n\n```bash\nwhich -a prioritydemo\n```\n\nYou should see your custom command first, followed by the copy that is already available in `/usr/local/bin`:\n\n```plaintext\n/home/labex/custom_bin/prioritydemo\n/usr/local/bin/prioritydemo\n```\n\nThis demonstrates PATH priority clearly: `which prioritydemo` returns the first matching executable, while `which -a prioritydemo` shows every matching executable in the current search order.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Creating a Custom Command",
+      "content": "## Creating a Custom Command\n\nYour team lead suggests creating a simple custom command to demonstrate how `which` interacts with the PATH. Let's create a script called `hello` in your home directory:\n\n```bash\ncat > ~/hello <<'EOF'\n#!/bin/bash\necho \"Hello from TechCorp!\"\nEOF\n```\n\n```bash\nchmod +x ~/hello\n```\n\nThis creates a new file named `hello` in your home directory and makes it executable. The script prints `Hello from TechCorp!` when it runs.\n\nNow, try to run it:\n\n```bash\nhello\n```\n\nYou'll get a \"command not found\" error because your home directory isn't in the PATH. The PATH is a list of directories where the shell looks for executable files.\n\nLet's add your home directory to the PATH temporarily:\n\n```bash\nexport PATH=\"$PATH:$HOME\"\n```\n\nThis command adds your home directory to the end of the PATH for the current terminal session. The `export` command makes the updated `PATH` available to commands you run afterward.\n\nNow you can run `hello`, and `which` will find it:\n\n```bash\nhello\nwhich hello\n```\n\nYou should see \"Hello from TechCorp!\" and the path to your script. This demonstrates how `which` finds executables in any directory listed in your PATH.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you've learned how to use the `which` command to locate executable files in your system's PATH. You've discovered how to:\n\n1. Find the location of installed programs\n2. Handle non-existent commands\n3. Discover multiple installations of the same command\n4. Understand PATH priority\n5. Create and locate custom commands\n\nYou've also practiced writing simple shell scripts, making files executable with `chmod +x`, and adjusting `PATH` to control which command runs.\n\nThese skills will be invaluable as you continue your journey as a developer at TechCorp and beyond.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "3b16ab9180d5a5a37a1a9199e194f2cec3a5d95a30b44b778f72170cecb4f307"
+}

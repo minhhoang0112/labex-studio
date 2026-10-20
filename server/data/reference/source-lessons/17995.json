@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "source_lab_id": 17995,
+  "source_url": "https://labex.io/tutorials/linux-data-stream-redirection-17995",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nLinux commands normally read input from the terminal and write results back to it. The shell can reconnect those data streams to files or other commands. This is called redirection, and it is the foundation of logging, pipelines, background jobs, and shell scripts.\n\nIn this lab, you will work with standard input, standard output, and standard error. You will learn when `>` overwrites, when `>>` appends, how `2>` and `2>&1` handle errors, how a pipe passes data, how `tee` displays and saves the same output, and when `/dev/null` is useful.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Understand Standard Input, Output, and Error",
+      "content": "## Understand Standard Input, Output, and Error\n\nIn this step, you will create a small input file and connect it to commands through standard input.\n\nEvery command starts with three standard streams:\n\n| Descriptor | Name | Default connection |\n| --- | --- | --- |\n| `0` | standard input, or stdin | keyboard |\n| `1` | standard output, or stdout | terminal |\n| `2` | standard error, or stderr | terminal |\n\nCreate and enter a workspace:\n\n```bash\nmkdir -p /home/labex/project/streams-lab\n```\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\nCreate a three-line input file with a here-document. The shell sends the lines between the two `EOF` markers into `cat`, while `>` stores `cat` output in `input.txt`:\n\n```bash\ncat > input.txt <<'EOF'\nalpha\nbeta\ngamma\nEOF\n```\n\nNormally, `cat input.txt` receives a filename as an argument. The `<` operator instead connects the file to descriptor `0`, standard input:\n\n```bash\ncat < input.txt\n```\n\nYou should see the three lines. Use the same input redirection with `wc -l`, which counts lines:\n\n```bash\nwc -l < input.txt\n```\n\nThe output should be `3`. Because the filename is not an argument to `wc`, only the number is printed.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Redirect and Append Standard Output",
+      "content": "## Redirect and Append Standard Output\n\nIn this step, you will redirect normal command output and observe the difference between overwrite and append behavior.\n\nMake sure you are in the stream workspace:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\nThe `>` operator connects descriptor `1`, standard output, to a file. It creates the file or truncates existing content before writing:\n\n```bash\necho \"Stream report\" > report.txt\n```\n\n```bash\ncat report.txt\n```\n\nRun another overwrite to see that the previous line disappears:\n\n```bash\necho \"Input lines: 3\" > report.txt\n```\n\n```bash\ncat report.txt\n```\n\nNow use `>>`, which opens the destination in append mode:\n\n```bash\necho \"Status: complete\" >> report.txt\n```\n\n```bash\ncat report.txt\n```\n\nThe file should contain exactly two lines: `Input lines: 3` followed by `Status: complete`. Redirection is performed by the shell before the command starts.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Separate Standard Output and Standard Error",
+      "content": "## Separate Standard Output and Standard Error\n\nIn this step, you will run one command that produces both normal output and an error, then store each stream in a different file.\n\nThe following `ls` command receives one existing path and one missing path:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\n```bash\nls -l input.txt missing.txt\n```\n\nThe line describing `input.txt` is stdout. The `No such file or directory` message is stderr. Both appear in the terminal by default, but they are separate streams.\n\nRedirect descriptor `1` with `>` and descriptor `2` with `2>`:\n\n```bash\nls -l input.txt missing.txt > listing.log 2> errors.log\n```\n\nThe command still returns a nonzero exit status because one path is missing, but the shell remains ready for the next command. Inspect the destinations:\n\n```bash\ncat listing.log\n```\n\n```bash\ncat errors.log\n```\n\n`listing.log` should mention `input.txt` without the error. `errors.log` should mention `missing.txt` and the error without the successful listing.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Combine Standard Output and Standard Error",
+      "content": "## Combine Standard Output and Standard Error\n\nIn this step, you will send stdout and stderr to one log and learn why redirection order matters.\n\nFirst redirect stdout to `combined.log`, then point descriptor `2` at the current destination of descriptor `1`:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\n```bash\nls -l input.txt missing.txt > combined.log 2>&1\n```\n\nThe expression `2>&1` means \"send descriptor 2 to the same destination currently used by descriptor 1.\" Because `> combined.log` appears first, both streams reach the file.\n\n```bash\ncat combined.log\n```\n\nThe file should contain both the `input.txt` listing and the `missing.txt` error.\n\nBash also supports `&>` as shorthand for redirecting both streams:\n\n```bash\nls -l report.txt absent.txt &> shorthand.log\n```\n\n```bash\ncat shorthand.log\n```\n\nThis second file should contain the successful `report.txt` listing and the error for `absent.txt`. The portable `> file 2>&1` form is especially common in scripts and service commands.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "View and Save Pipeline Output with Tee",
+      "content": "## View and Save Pipeline Output with Tee\n\nIn this step, you will use a pipeline and `tee` to display output while saving the same data to a file.\n\nA pipe, written as `|`, connects stdout from the command on its left to stdin of the command on its right. Sort the input file alphabetically in reverse order:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\n```bash\nsort -r input.txt\n```\n\nWith ordinary output redirection, the sorted lines go to a file and no longer appear in the terminal:\n\n```bash\nsort -r input.txt > sorted.txt\n```\n\n```bash\ncat sorted.txt\n```\n\nThe `tee` command copies its stdin to both stdout and a named file. Run the same sort through a pipe:\n\n```bash\nsort -r input.txt | tee sorted.txt\n```\n\nYou should see the sorted lines on screen, and `sorted.txt` receives the same content. By default, `tee` overwrites its destination just like `>`.\n\nThe `-a` option makes `tee` append. Add one more line while displaying it:\n\n```bash\necho \"delta\" | tee -a sorted.txt\n```\n\n```bash\ncat sorted.txt\n```\n\nThe file should now contain `gamma`, `beta`, `alpha`, and `delta`. `tee` is useful when you need live terminal feedback and a saved log at the same time.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Discard Unneeded Data with Dev Null",
+      "content": "## Discard Unneeded Data with Dev Null\n\nIn this step, you will intentionally discard a stream with `/dev/null`, preserve useful output with `tee`, and empty an existing log.\n\n`/dev/null` is a special device that accepts and discards anything written to it. List one real directory and one missing directory while discarding only stderr:\n\n```bash\ncd /home/labex/project/streams-lab\n```\n\n```bash\nls -l . missing-directory 2> /dev/null\n```\n\nYou should see the directory listing but no missing-directory error. Combine this with `tee` so the visible stdout is also saved:\n\n```bash\nls -l . missing-directory 2> /dev/null | tee visible-listing.log\n```\n\nThe pipe carries only stdout. Stderr was redirected separately to `/dev/null` before the pipe received data.\n\nInspect the saved listing:\n\n```bash\ncat visible-listing.log\n```\n\nFinally, create a disposable scratch log, then use `/dev/null` as an empty input source to clear its contents. A separate file preserves the combined-stream evidence from Step 4:\n\n```bash\necho \"outdated scratch data\" > scratch.log\ncat /dev/null > scratch.log\n```\n\nCheck its size:\n\n```bash\nls -l scratch.log\n```\n\nThe file should still exist with a size of `0` bytes. Use discarding deliberately: hidden errors can make troubleshooting harder when you actually need diagnostic information.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Summary",
+      "content": "## Summary\n\nYou practiced the three standard streams and their file descriptors, connected files to stdin with `<`, and redirected stdout with `>` and `>>`. You separated stderr with `2>`, combined it with stdout using `2>&1` and `&>`, and learned why operator order matters.\n\nYou also compared ordinary file redirection with pipelines and `tee`, used `tee -a` to append while displaying output, and discarded unneeded data with `/dev/null`. These patterns prepare you to understand logging, background commands, and shell scripts later in the course.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "408d642b93dccb7558e036eee546a306ceae183ee5468d85fba7cfd54cb4c536"
+}

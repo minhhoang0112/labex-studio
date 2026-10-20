@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "source_lab_id": 219188,
+  "source_url": "https://labex.io/tutorials/linux-linux-df-command-disk-space-reporting-219188",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will explore the `df` command, a crucial tool for monitoring disk space usage on Linux systems. You'll take on the role of a system administrator managing a busy web server, using `df` to analyze disk usage, identify potential storage issues, and ensure smooth operation of the server. This lab is designed for beginners, so don't worry if you're new to Linux - we'll guide you through each step carefully.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basic df Command",
+      "content": "## Understanding the Basic df Command\n\nAs a system administrator, your first task is to get an overview of the disk space usage on your web server. The `df` command without any options provides a quick snapshot of all mounted filesystems.\n\nFirst, let's navigate to the project directory:\n\n```bash\ncd ~/project\n```\n\nNow, let's run the basic `df` command:\n\n```bash\ndf\n```\n\n> Tips: Due to the dynamic changes in virtual machine storage, the output of the df command may be inconsistent, and this issue can be ignored.\n\nYou should see output similar to this:\n\n```\nFilesystem     1K-blocks     Used Available Use% Mounted on\noverlay         20971520  1314600  19656920   7% /\ntmpfs              65536        0     65536   0% /dev\ntmpfs            4068320        0   4068320   0% /sys/fs/cgroup\nshm                65536        0     65536   0% /dev/shm\n/dev/vdb       104806400 17442788  87363612  17% /etc/hosts\ntmpfs             102400    51200     51200  50% /mnt/ramdisk\n```\n\nLet's break down this output:\n\n- `Filesystem`: This column shows the name of the device or partition.\n- `1K-blocks`: This shows the total size of the filesystem in 1-kilobyte blocks.\n- `Used`: This indicates how many 1K-blocks are used.\n- `Available`: This shows how many 1K-blocks are available.\n- `Use%`: This shows the percentage of the filesystem that is used.\n- `Mounted on`: This shows where in the directory tree the filesystem is mounted.\n\nNotice the `overlay` filesystem, which is commonly used in containerized environments. The `/dev/vdb` device is likely a virtual disk, and we can see a `tmpfs` filesystem mounted at `/mnt/ramdisk`, which is a RAM-based filesystem.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Making df Output Human-Readable",
+      "content": "## Making df Output Human-Readable\n\nThe default output of `df` shows sizes in 1K blocks, which can be difficult to interpret quickly. Imagine trying to figure out how many gigabytes 20640796 1K-blocks is! Fortunately, we can use the `-h` option (which stands for \"human-readable\") to make the output easier to understand.\n\nRun the following command:\n\n```bash\ndf -h\n```\n\nYou should see output similar to this:\n\n```\nFilesystem      Size  Used Avail Use% Mounted on\noverlay          20G  1.3G   19G   7% /\ntmpfs            64M     0   64M   0% /dev\ntmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup\nshm              64M     0   64M   0% /dev/shm\n/dev/vdb        100G   17G   84G  17% /etc/hosts\ntmpfs           100M   50M   50M  50% /mnt/ramdisk\n```\n\nNotice how the sizes are now in GB and MB. This is much easier to understand at a glance. For example, we can quickly see that our main filesystem (`overlay`) is 20G in size, with only 1.3G used and 19G available.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Displaying Filesystem Types",
+      "content": "## Displaying Filesystem Types\n\nAs a system administrator, it's important to know the types of filesystems on your server. Different filesystem types have different features and performance characteristics. The `-T` option allows you to view this information.\n\nRun the following command:\n\n```bash\ndf -T\n```\n\nYou should see output similar to this:\n\n```\nFilesystem     Type    1K-blocks     Used Available Use% Mounted on\noverlay        overlay  20971520  1314600  19656920   7% /\ntmpfs          tmpfs       65536        0     65536   0% /dev\ntmpfs          tmpfs     4068320        0   4068320   0% /sys/fs/cgroup\nshm            tmpfs       65536        0     65536   0% /dev/shm\n/dev/vdb       xfs     104806400 17442728  87363672  17% /etc/hosts\ntmpfs          tmpfs      102400    51200     51200  50% /mnt/ramdisk\n```\n\nThis output includes a new column, `Type`, which shows the filesystem type for each mounted filesystem. Let's look at the types we see:\n\n- `overlay`: This is a type of union filesystem, often used in containerized environments.\n- `tmpfs`: This is a temporary filesystem that resides in memory and/or swap partition.\n- `xfs`: This is a high-performance journaling filesystem, used here for the `/etc/hosts` mount.\n\nUnderstanding filesystem types can help you troubleshoot issues and optimize your system's performance.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Analyzing Inode Usage",
+      "content": "## Analyzing Inode Usage\n\nIn Linux, inodes are data structures that store important information about files, such as their permissions, ownership, and location on the disk. Each file on your system uses one inode. Interestingly, it's possible to run out of inodes even if you have plenty of disk space available, which would prevent you from creating new files. This is why monitoring inode usage is crucial.\n\nLet's check inode usage using the `-i` option:\n\n```bash\ndf -i\n```\n\nYou should see output similar to this:\n\n```\nFilesystem       Inodes  IUsed    IFree IUse% Mounted on\noverlay        52428800 539001 51889799    2% /\ntmpfs           1017080    206  1016874    1% /dev\ntmpfs           1017080     17  1017063    1% /sys/fs/cgroup\nshm             1017080      1  1017079    1% /dev/shm\n/dev/vdb       52428800 539001 51889799    2% /etc/hosts\ntmpfs           1017080      2  1017078    1% /mnt/ramdisk\n```\n\nLet's break down this output:\n\n- `Inodes`: The total number of inodes for the filesystem\n- `IUsed`: The number of inodes currently in use\n- `IFree`: The number of free inodes\n- `IUse%`: The percentage of inodes used\n\nIn this example, we can see that our main filesystem (`overlay`) is using only 2% of its available inodes. This is good - it means we're nowhere near running out of inodes, which could prevent us from creating new files even if we had disk space available.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Combining Options for Comprehensive Analysis",
+      "content": "## Combining Options for Comprehensive Analysis\n\nNow that we've explored individual options, let's combine them for a more comprehensive view of our server's storage situation. We can use multiple options together to get all the information we need in one command.\n\nRun the following command:\n\n```bash\ndf -hT\n```\n\nThis command combines the human-readable (`-h`) and filesystem type (`-T`) options.\n\nYou should see output similar to this:\n\n```\nFilesystem     Type     Size  Used Avail Use% Mounted on\noverlay        overlay   20G  1.3G   19G   7% /\ntmpfs          tmpfs     64M     0   64M   0% /dev\ntmpfs          tmpfs    3.9G     0  3.9G   0% /sys/fs/cgroup\nshm            tmpfs     64M     0   64M   0% /dev/shm\n/dev/vdb       xfs      100G   17G   84G  17% /etc/hosts\ntmpfs          tmpfs    100M   50M   50M  50% /mnt/ramdisk\n```\n\nThis output provides a comprehensive overview of your filesystems, including their types and human-readable sizes. It's a great way to get a quick but detailed snapshot of your system's storage situation.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Focusing on a Specific Filesystem",
+      "content": "## Focusing on a Specific Filesystem\n\nAs a system administrator, you might often need to check the status of a specific filesystem. For example, you might want to quickly check the space on the root filesystem. We can do this by specifying the mount point after the `df` command.\n\nLet's focus on the root filesystem. Run the following command:\n\n```bash\ndf -h /\n```\n\nYou should see output similar to this:\n\n```\nFilesystem      Size  Used Avail Use% Mounted on\noverlay          20G  1.3G   19G   7% /\n```\n\nThis command gives you a quick view of the space usage on the root filesystem. It's particularly useful when you're only interested in one specific filesystem and don't need information about all the others.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Checking Available Space for User Home Directories",
+      "content": "## Checking Available Space for User Home Directories\n\nAs part of your server management duties, you need to ensure that users have enough space in their home directories. On many systems, user home directories are located in the `/home` directory. Let's check the available space in the `/home` directory.\n\nRun the following command:\n\n```bash\ndf -h /home\n```\n\nYou might see output similar to this:\n\n```\nFilesystem      Size  Used Avail Use% Mounted on\noverlay          20G  1.3G   19G   7% /\n```\n\nThis shows that the `/home` directory is on the same filesystem as the root directory (`/`). In this case, we can see that there's plenty of space available (19G) for user home directories.\n\nIf you see that the filesystem is getting full (a high Use% value), you might need to investigate which users are using the most space or consider increasing the storage capacity.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Excluding Certain Filesystem Types",
+      "content": "## Excluding Certain Filesystem Types\n\nSometimes, you might want to exclude certain filesystem types from the `df` output. For instance, you might want to exclude temporary filesystems, which are stored in memory and don't represent physical disk usage. We can do this using the `-x` option.\n\nRun the following command to exclude tmpfs filesystems:\n\n```bash\ndf -h -x tmpfs\n```\n\nYou should see output similar to this:\n\n```\nFilesystem      Size  Used Avail Use% Mounted on\noverlay          20G  1.3G   19G   7% /\n/dev/vdb        100G   17G   84G  17% /etc/hosts\n```\n\nNotice that the tmpfs filesystems are no longer listed in the output. This can be useful when you're only interested in physical disk usage and want to filter out virtual filesystems.\n",
+      "need_verify": true
+    },
+    {
+      "position": 9,
+      "title": "Displaying a Total Summary",
+      "content": "## Displaying a Total Summary\n\nAs a final overview, let's display a total summary of all filesystems. We can do this using the `--total` option. This is particularly useful when you want to see the overall disk usage across all filesystems.\n\nRun the following command:\n\n```bash\ndf -h --total\n```\n\nYou should see output similar to this:\n\n```\nFilesystem      Size  Used Avail Use% Mounted on\noverlay          20G  1.3G   19G   7% /\ntmpfs            64M     0   64M   0% /dev\ntmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup\nshm              64M     0   64M   0% /dev/shm\n/dev/vdb        100G   17G   84G  17% /etc/hosts\ntmpfs           100M   50M   50M  50% /mnt/ramdisk\ntotal           125G   18G  107G  15% -\n```\n\nThis provides a total summary of disk usage across all filesystems. The last line shows the total across all filesystems, indicating that overall, 18G out of 125G is used, which is about 15% of the total available space.\n",
+      "need_verify": true
+    },
+    {
+      "position": 10,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you've learned how to use the `df` command to monitor and analyze disk space usage on a Linux system. You've explored various options of the `df` command, including:\n\n- Basic usage of `df`\n- Making output human-readable with `-h`\n- Displaying filesystem types with `-T`\n- Analyzing inode usage with `-i`\n- Combining options for comprehensive analysis\n- Focusing on specific filesystems\n- Excluding certain filesystem types with `-x`\n- Displaying a total summary with `--total`\n\nThese skills are crucial for effective system administration and ensuring optimal performance of your Linux servers. As you continue your journey in system administration, you'll find the `df` command to be an invaluable tool in your toolkit.\n\nAdditional `df` options not covered in this lab include:\n\n- `-a`: Show all filesystems, including pseudo, duplicate, and inaccessible filesystems\n- `-k`: Display sizes in kilobytes (default)\n- `-m`: Display sizes in megabytes\n- `-P`: Use POSIX output format\n- `--sync`: Invoke sync before getting usage info\n- `-t`: Limit listing to filesystems of a specific type\n\nRemember, while `df` is powerful, it's just one of many tools available for monitoring disk usage. As you progress in your Linux journey, you might want to explore other commands like `du` (disk usage), `ncdu` (NCurses Disk Usage), and various system monitoring tools.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "b875c117d1d1a4d7c6b2942a909119ef5ccd320b92be7cb90c9301a6aa13e94d"
+}

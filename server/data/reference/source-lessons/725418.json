@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_lab_id": 725418,
+  "source_url": "https://labex.io/tutorials/shell-shell-scripting-fundamentals-725418",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nA shell script stores commands in a file so a task can be repeated consistently. Reliable beginner scripts make their interpreter explicit, quote variable expansions, validate input before acting, and return an exit status that other commands can understand.\n\nIn this lab, you will build small Bash scripts incrementally. You will run scripts through Bash and as executable files, use variables and positional arguments, read interactive input, branch with `if` and file tests, choose exit codes, iterate with `for`, and combine the ideas in a simple log summarizer.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Create and Run Your First Script",
+      "content": "## Create and Run Your First Script\n\nIn this step, you will create a Bash script, run it through an interpreter, and make it directly executable.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/shell-lab\n```\n\nCreate `hello.sh` with a here-document. The first line is a shebang that selects Bash when the file is executed directly:\n\n```bash\ncat > hello.sh <<'EOF'\n#!/bin/bash\n\necho \"Hello from a Bash script\"\npwd\nEOF\n```\n\nInspect the file before running it:\n\n```bash\ncat hello.sh\n```\n\nPass the file to Bash explicitly. This works even before the executable permission is added:\n\n```bash\nbash hello.sh\n```\n\nAdd executable permission and inspect the mode:\n\n```bash\nchmod u+x hello.sh\n```\n\n```bash\nls -l hello.sh\n```\n\nExecute the file from the current directory. `./` supplies a path; the shell does not normally search the current directory automatically:\n\n```bash\n./hello.sh\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Use Variables and Safe Quoting",
+      "content": "## Use Variables and Safe Quoting\n\nIn this step, you will assign variables, expand them, and see why double quotes protect values containing spaces.\n\nCreate a script with two variables:\n\n```bash\ncat > variables.sh <<'EOF'\n#!/bin/bash\n\ncourse=\"Linux for Noobs\"\nworkspace=\"/home/labex/project/shell-lab\"\n\necho \"Course: $course\"\necho \"Workspace: $workspace\"\nprintf 'Quoted argument count: %s\\n' \"$#\"\nprintf 'First argument: %s\\n' \"${1:-not provided}\"\nEOF\n```\n\nNo spaces surround `=` in a shell assignment. Double quotes allow `$course` to expand while keeping `Linux for Noobs` as one value.\n\nRun the script with one argument that contains spaces:\n\n```bash\nbash variables.sh \"beginner learner\"\n```\n\nThe special variable `$#` is the number of positional arguments, and `$1` is the first argument. `${1:-not provided}` supplies a fallback when it is absent.\n\nSave the output for inspection:\n\n```bash\nbash variables.sh \"beginner learner\" > variable-output.txt\n```\n\n```bash\ncat variable-output.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Validate Positional Arguments",
+      "content": "## Validate Positional Arguments\n\nIn this step, you will require an argument, print usage guidance, and return different exit statuses for failure and success.\n\nCreate `greet-argument.sh`:\n\n```bash\ncat > greet-argument.sh <<'EOF'\n#!/bin/bash\n\nif [ \"$#\" -ne 1 ]; then\n  echo \"Usage: $0 NAME\" >&2\n  exit 2\nfi\n\nname=$1\necho \"Hello, $name\"\nexit 0\nEOF\n```\n\nThe test command `[ ... ]` checks whether the argument count is not equal to one. `>&2` sends usage text to standard error, and `exit 2` reports invalid usage.\n\nRun it without an argument, then immediately display `$?`, the previous command's exit status:\n\n```bash\nbash greet-argument.sh\n```\n\n```bash\necho \"missing argument status: $?\"\n```\n\nThe expected status is `2`. Run it correctly:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\"\n```\n\n```bash\necho \"valid argument status: $?\"\n```\n\nSave the successful greeting:\n\n```bash\nbash greet-argument.sh \"Ada Lovelace\" > argument-greeting.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Read Interactive Input",
+      "content": "## Read Interactive Input\n\nIn this step, you will prompt a user, read one line safely, and handle empty input.\n\nCreate `ask-name.sh`:\n\n```bash\ncat > ask-name.sh <<'EOF'\n#!/bin/bash\n\nread -r -p \"Enter your name: \" name\n\nif [ -z \"$name\" ]; then\n  echo \"A name is required\" >&2\n  exit 1\nfi\n\necho \"Welcome, $name\"\nEOF\n```\n\n`read -r` reads a line without treating backslashes specially. `-p` displays a prompt, and `-z` tests whether the quoted value is empty.\n\nRun the script:\n\n```bash\nbash ask-name.sh\n```\n\nAt the prompt, type:\n\n```text\nGrace Hopper\n```\n\nYou should see `Welcome, Grace Hopper`. For a reproducible saved result, pipe one input line into the same script:\n\n```bash\nprintf 'Grace Hopper\\n' | bash ask-name.sh > interactive-greeting.txt\n```\n\n```bash\ncat interactive-greeting.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Branch with File Tests",
+      "content": "## Branch with File Tests\n\nIn this step, you will use `if`, `elif`, and `else` with file tests to classify a path.\n\nCreate `classify-path.sh`:\n\n```bash\ncat > classify-path.sh <<'EOF'\n#!/bin/bash\n\npath=${1:-}\n\nif [ -z \"$path\" ]; then\n  echo \"Usage: $0 PATH\" >&2\n  exit 2\nelif [ -d \"$path\" ]; then\n  echo \"directory: $path\"\nelif [ -f \"$path\" ]; then\n  echo \"file: $path\"\nelse\n  echo \"missing: $path\" >&2\n  exit 1\nfi\n\nexit 0\nEOF\n```\n\n`-d` tests for a directory and `-f` tests for a regular file. The order matters: invalid usage is handled before path type.\n\nTry all three path outcomes:\n\n```bash\nbash classify-path.sh logs\n```\n\n```bash\nbash classify-path.sh notes.txt\n```\n\n```bash\nbash classify-path.sh missing.txt\n```\n\n```bash\necho \"missing path status: $?\"\n```\n\nSave successful results together. `&&` runs the second command only if the first succeeds:\n\n```bash\nbash classify-path.sh logs > path-results.txt && bash classify-path.sh notes.txt >> path-results.txt\n```\n\n```bash\ncat path-results.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Process Multiple Files with a For Loop",
+      "content": "## Process Multiple Files with a For Loop\n\nIn this step, you will iterate over log files and count matching records in each one.\n\nCreate `count-errors.sh`:\n\n```bash\ncat > count-errors.sh <<'EOF'\n#!/bin/bash\n\nlog_dir=${1:-logs}\n\nif [ ! -d \"$log_dir\" ]; then\n  echo \"Log directory not found: $log_dir\" >&2\n  exit 1\nfi\n\nfor log_file in \"$log_dir\"/*.log; do\n  error_count=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$error_count\"\ndone\nEOF\n```\n\nThe loop assigns one matched path to `log_file` on each iteration. Quoting `\"$log_file\"` protects spaces, while `basename` removes the directory prefix. `grep -c` counts matching lines; `|| true` prevents zero matches from stopping a larger strict workflow.\n\nRun the loop and save its output:\n\n```bash\nbash count-errors.sh logs | tee error-counts.txt\n```\n\nYou should see one result for each `.log` file.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Combine Validation, Loops, and Exit Status",
+      "content": "## Combine Validation, Loops, and Exit Status\n\nIn this step, you will build one reusable script that validates a directory, summarizes its logs, and reports success or failure clearly.\n\nCreate `summarize-logs.sh`:\n\n```bash\ncat > summarize-logs.sh <<'EOF'\n#!/bin/bash\n\ninput_dir=${1:-}\noutput_file=${2:-}\n\nif [ -z \"$input_dir\" ] || [ -z \"$output_file\" ]; then\n  echo \"Usage: $0 INPUT_DIR OUTPUT_FILE\" >&2\n  exit 2\nfi\n\nif [ ! -d \"$input_dir\" ]; then\n  echo \"Input directory not found: $input_dir\" >&2\n  exit 1\nfi\n\n: > \"$output_file\"\n\nfor log_file in \"$input_dir\"/*.log; do\n  lines=$(wc -l < \"$log_file\")\n  errors=$(grep -c '^ERROR ' \"$log_file\" || true)\n  printf '%s lines=%s errors=%s\\n' \"$(basename \"$log_file\")\" \"$lines\" \"$errors\" >> \"$output_file\"\ndone\n\necho \"Wrote summary to $output_file\"\nexit 0\nEOF\n```\n\nThe command `: > \"$output_file\"` safely creates or empties the destination before the loop. Run the script with both required arguments:\n\n```bash\nchmod u+x summarize-logs.sh\n```\n\n```bash\n./summarize-logs.sh logs log-summary.txt\n```\n\n```bash\necho \"summary status: $?\"\n```\n\n```bash\ncat log-summary.txt\n```\n\nTest the failure path with a missing directory:\n\n```bash\n./summarize-logs.sh missing log-summary.txt\n```\n\n```bash\necho \"missing directory status: $?\"\n```\n\nThe success status should be `0`, while the missing-directory status should be `1`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "content": "## Summary\n\nYou created and executed Bash scripts, used shebangs and permissions, expanded quoted variables, read positional and interactive input, and returned meaningful exit statuses. You also branched with `if/elif/else`, tested files and directories, iterated over logs with `for`, and combined the ideas in a reusable summarizer.\n\nThese fundamentals make later automation easier to read, safer to rerun, and easier for other commands or scheduled jobs to evaluate.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "9ee893de4a0a6e643b223c31f952ba6e3b723db8a083c39aa1139b84d1f67697"
+}

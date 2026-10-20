@@ -5,6 +5,7 @@ import {
 import { api } from '../lib/api';
 import { labProgress, validPassedSteps, isLabCompleted } from '../lib/progress';
 import CourseSyllabus from '../components/CourseSyllabus';
+import CourseContentBadge from '../components/CourseContentBadge';
 
 export default function CourseDetail({ courseId, onBack, onStartLab }) {
   const [data, setData] = useState(null);
@@ -70,8 +71,6 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
 
   // Factual provenance information
   const readiness = course.readiness || 'unknown';
-  const isReady = readiness === 'ready';
-  const isPartial = readiness === 'partial';
   const isRefOnly = readiness === 'reference-only';
 
   return (
@@ -106,22 +105,15 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
               <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary-50 text-primary-600 dark:bg-primary-950 dark:text-primary-300">
                 {course.level_label || course.level || 'Beginner'}
               </span>
-              {isReady && (
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-                  Sẵn sàng thực hành local (Full Hands-on)
-                </span>
-              )}
-              {isPartial && (
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
-                  Thực hành một phần ({course.practice_labs_count ?? 0} bài mở terminal · {course.runnable_labs_count ?? 0} bài chấm đủ)
-                </span>
-              )}
+              <CourseContentBadge course={course} />
               {isRefOnly && (
                 <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                   Nội dung tham khảo nguồn
                 </span>
               )}
             </div>
+
+            <p className="text-xs text-slate-500 dark:text-slate-400">Thực hành local: {course.practice_labs_count ?? 0} bài mở môi trường · {course.runnable_labs_count ?? 0} bài có đủ bộ chấm. Đã đối chiếu tài liệu gốc EN: {course.source_verified_labs_count || 0} bài.</p>
 
             <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
               {course.name}

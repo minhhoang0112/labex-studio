@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 388810,
+  "source_url": "https://labex.io/tutorials/shell-working-with-shell-variables-388810",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn how to work with shell variables in Linux. Shell variables are essential for storing and manipulating data in shell scripts. They can hold various types of values such as numbers, characters, or strings. This lab will guide you through creating, referencing, and using shell variables, providing a solid foundation for shell scripting.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Create Shell Variables",
+      "content": "## Create Shell Variables\n\nShell variables are created by assigning a value to them using the `=` sign. Let's start by creating a simple shell script that defines some variables.\n\n1. Open a terminal in your WebIDE (VS Code).\n\n2. Create a new file named `variables.sh` in the `/home/labex/project` directory:\n\n   ```bash\n   touch /home/labex/project/variables.sh\n   ```\n\n3. Open the `variables.sh` file in the WebIDE and add the following content:\n\n   ```bash\n   #!/bin/bash\n   \n   PRICE_PER_APPLE=5\n   MyFirstLetters=ABC\n   greeting='Hello        world!'\n   \n   echo \"Price per apple: $PRICE_PER_APPLE\"\n   echo \"My first letters: $MyFirstLetters\"\n   echo \"Greeting: $greeting\"\n   ```\n\n   In this script, we've created three variables:\n\n   - `PRICE_PER_APPLE`: An integer variable\n   - `MyFirstLetters`: A string variable\n   - `greeting`: A string variable with multiple spaces\n\n4. Save the file.\n\n5. Make the script executable:\n\n   ```bash\n   chmod +x /home/labex/project/variables.sh\n   ```\n\n6. Run the script:\n\n   ```bash\n   ./variables.sh\n   ```\n\n   You should see the following output:\n\n   ```\n   Price per apple: 5\n   My first letters: ABC\n   Greeting: Hello        world!\n   ```\n\n   Notice that the extra spaces in the `greeting` variable are preserved in the output when using single quotes to define the variable and not using quotes in the echo statement.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Referencing Shell Variables",
+      "content": "## Referencing Shell Variables\n\nWhen referencing shell variables, there are a few scenarios where you need to use special syntax. Let's explore these cases.\n\n1. Open the `variables.sh` file in the WebIDE.\n\n2. Replace the content of the file with the following:\n\n   ```bash\n   #!/bin/bash\n   \n   PRICE_PER_APPLE=5\n   MyFirstLetters=ABC\n   greeting='Hello        world!'\n   \n   ## Escaping special characters\n   echo \"The price of an Apple today is: \\$HK $PRICE_PER_APPLE\"\n   \n   ## Avoiding ambiguity\n   echo \"The first 10 letters in the alphabet are: ${MyFirstLetters}DEFGHIJ\"\n   \n   ## Preserving whitespace\n   echo $greeting\n   echo \"$greeting\"\n   ```\n\n3. Save the file.\n\n4. Run the script:\n\n   ```bash\n   ./variables.sh\n   ```\n\n   You should see the following output:\n\n   ```\n   The price of an Apple today is: $HK 5\n   The first 10 letters in the alphabet are: ABCDEFGHIJ\n   Hello world!\n   Hello        world!\n   ```\n\n   Note the differences:\n\n   - The `$` sign is escaped in the first line to print it literally.\n   - Curly braces `{}` are used to clearly define the variable name in the second line.\n   - The last two lines show the difference between using quotes and not using quotes when referencing a variable with whitespace.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Command Substitution",
+      "content": "## Command Substitution\n\nCommand substitution allows you to use the output of a command as the value of a variable. This is done by enclosing the command with `$()` or backticks (``).\n\n1. Open the `variables.sh` file in the WebIDE.\n\n2. Add the following content to the end of the file:\n\n   ```bash\n   ## Command substitution\n   CURRENT_DATE=$(date +\"%Y-%m-%d\")\n   echo \"Today's date is: $CURRENT_DATE\"\n   \n   FILES_IN_DIR=$(ls)\n   echo \"Files in the current directory:\"\n   echo \"$FILES_IN_DIR\"\n   \n   UPTIME=$(uptime -p)\n   echo \"System uptime: $UPTIME\"\n   ```\n\n3. Save the file.\n\n4. Run the script:\n\n   ```bash\n   ./variables.sh\n   ```\n\n   You should see output similar to this (the actual values will depend on your system):\n\n   ```\n   Today's date is: 2023-08-16\n   Files in the current directory:\n   variables.sh\n   System uptime: up 2 hours, 15 minutes\n   ```\n\n   In this example:\n\n   - `$(date +\"%Y-%m-%d\")` runs the `date` command and captures its output.\n   - `$(ls)` runs the `ls` command and captures its output.\n   - `$(uptime -p)` runs the `uptime` command with the `-p` option and captures its output.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Arithmetic Operations",
+      "content": "## Arithmetic Operations\n\nShell variables can also be used in arithmetic operations. Bash provides the `$((expression))` syntax for performing arithmetic.\n\n1. Create a new file named `arithmetic.sh` in the `/home/labex/project` directory:\n\n   ```bash\n   touch /home/labex/project/arithmetic.sh\n   ```\n\n2. Open the `arithmetic.sh` file in the WebIDE and add the following content:\n\n   ```bash\n   #!/bin/bash\n   \n   X=10\n   Y=5\n   \n   ## Addition\n   SUM=$((X + Y))\n   echo \"Sum of $X and $Y is: $SUM\"\n   \n   ## Subtraction\n   DIFF=$((X - Y))\n   echo \"Difference between $X and $Y is: $DIFF\"\n   \n   ## Multiplication\n   PRODUCT=$((X * Y))\n   echo \"Product of $X and $Y is: $PRODUCT\"\n   \n   ## Division\n   QUOTIENT=$((X / Y))\n   echo \"Quotient of $X divided by $Y is: $QUOTIENT\"\n   \n   ## Modulus (remainder)\n   REMAINDER=$((X % Y))\n   echo \"Remainder of $X divided by $Y is: $REMAINDER\"\n   \n   ## Increment\n   X=$((X + 1))\n   echo \"After incrementing, X is now: $X\"\n   \n   ## Decrement\n   Y=$((Y - 1))\n   echo \"After decrementing, Y is now: $Y\"\n   ```\n\n3. Save the file.\n\n4. Make the script executable:\n\n   ```bash\n   chmod +x /home/labex/project/arithmetic.sh\n   ```\n\n5. Run the script:\n\n   ```bash\n   ./arithmetic.sh\n   ```\n\n   You should see the following output:\n\n   ```\n   Sum of 10 and 5 is: 15\n   Difference between 10 and 5 is: 5\n   Product of 10 and 5 is: 50\n   Quotient of 10 divided by 5 is: 2\n   Remainder of 10 divided by 5 is: 0\n   After incrementing, X is now: 11\n   After decrementing, Y is now: 4\n   ```\n\n   This script demonstrates various arithmetic operations using shell variables.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Using Environment Variables",
+      "content": "## Using Environment Variables\n\nEnvironment variables are a type of variable that is available to all processes running in the current shell session. Let's explore some common environment variables and how to create our own.\n\n1. Create a new file named `environment.sh` in the `/home/labex/project` directory:\n\n   ```bash\n   touch /home/labex/project/environment.sh\n   ```\n\n2. Open the `environment.sh` file in the WebIDE and add the following content:\n\n   ```bash\n   #!/bin/bash\n   \n   ## Displaying some common environment variables\n   echo \"Home directory: $HOME\"\n   echo \"Current user: $LOGNAME\"\n   echo \"Shell being used: $SHELL\"\n   echo \"Current PATH: $PATH\"\n   \n   ## Creating a new environment variable\n   export MY_VARIABLE=\"Hello from my variable\"\n   \n   ## Displaying the new variable\n   echo \"My new variable: $MY_VARIABLE\"\n   \n   ## Creating a child process to demonstrate variable scope\n   bash -c 'echo \"MY_VARIABLE in child process: $MY_VARIABLE\"'\n   \n   ## Removing the environment variable\n   unset MY_VARIABLE\n   \n   ## Verifying the variable is unset\n   echo \"MY_VARIABLE after unsetting: $MY_VARIABLE\"\n   ```\n\n3. Save the file.\n\n4. Make the script executable:\n\n   ```bash\n   chmod +x /home/labex/project/environment.sh\n   ```\n\n5. Run the script:\n\n   ```bash\n   ./environment.sh\n   ```\n\n   You should see output similar to this (the actual values will depend on your system):\n\n   ```\n   Home directory: /home/labex\n   Current user: labex\n   Shell being used: /bin/zsh\n   Current PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\n   My new variable: Hello from my variable\n   MY_VARIABLE in child process: Hello from my variable\n   MY_VARIABLE after unsetting:\n   ```\n\n   This script demonstrates how to access existing environment variables, create new ones, and remove them.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you learned how to work with shell variables in Linux. You explored creating and referencing variables, using command substitution to assign command outputs to variables, performing arithmetic operations with variables, and working with environment variables. These skills form a crucial foundation for shell scripting and will be invaluable as you continue to work with Linux systems.\n\nKey takeaways from this lab include:\n\n- Creating and referencing shell variables\n- Using special syntax for variable referencing in different scenarios\n- Utilizing command substitution to capture command outputs\n- Performing arithmetic operations with shell variables\n- Working with environment variables\n\nAs you continue your journey in Linux and shell scripting, remember that variables are powerful tools for storing and manipulating data. Practice using them in your scripts to make your code more flexible and reusable.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "71ffe9d7e0ed8d71b14503bacff1dd8fcfcca7d071216f7858eed859b986d88d"
+}

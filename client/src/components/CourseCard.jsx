@@ -1,5 +1,6 @@
 import React from 'react';
-import { CheckCircle, Terminal, AlertCircle, FileText } from 'lucide-react';
+import CourseContentBadge from './CourseContentBadge';
+import { Terminal } from 'lucide-react';
 
 export default function CourseCard({ course, onSelectCourse }) {
   const coverUrl = course.cover || course.cover_image || `https://course-cover.labex.io/${course.alias || course.id}.png`;
@@ -8,21 +9,6 @@ export default function CourseCard({ course, onSelectCourse }) {
   const readiness = course.readiness || 'unknown';
   const isReady = readiness === 'ready';
   const isPartial = readiness === 'partial';
-
-  // Badges based on genuine backend readiness
-  const statusBadge = isReady ? (
-    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white shadow-md flex items-center gap-1">
-      <CheckCircle className="w-3 h-3" /> Hands-on Ready
-    </span>
-  ) : isPartial ? (
-    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white shadow-md flex items-center gap-1">
-      <AlertCircle className="w-3 h-3" /> Thực hành một phần
-    </span>
-  ) : (
-    <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-700/80 text-slate-200 shadow-md flex items-center gap-1">
-      <FileText className="w-3 h-3" /> Tham khảo nguồn
-    </span>
-  );
 
   return (
     <div 
@@ -53,7 +39,7 @@ export default function CourseCard({ course, onSelectCourse }) {
         
         {/* Top Badges */}
         <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
-          {statusBadge}
+          <CourseContentBadge course={course} />
         </div>
 
         {/* Level Tag */}
@@ -100,7 +86,7 @@ export default function CourseCard({ course, onSelectCourse }) {
             </span>
           </div>
           <div className="flex items-center gap-1 text-[11px] text-slate-400">
-            <span>{isReady ? 'Full Hands-on' : isPartial ? 'Thực hành 1 phần' : 'Xem outline'}</span>
+            <span>{course.source_verified_labs_count || 0} bài đối chiếu</span>
           </div>
         </div>
       </div>

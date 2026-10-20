@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "source_lab_id": 270246,
+  "source_url": "https://labex.io/labs/linux-files-and-directories-270246",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nIn this challenge, you will practice essential Linux file management skills using the terminal. You will perform common tasks such as backing up configuration files, organizing project directories, and cleaning up old files.\n\nTo succeed, you should be familiar with basic concepts like:\n\n- **Paths**: Using `~` to refer to your home directory (e.g., `~/Desktop`).\n- **Recursive Operations**: Handling directories that contain other files.\n\nYou will be working with the following commands to manage your data efficiently.\n\n## Achievements\n\nUpon completing this challenge, you will demonstrate proficiency in using:\n\n- `cp` - to copy files and directories\n- `mv` - to move and rename files and directories\n- `rm` - to remove files and directories\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Copy Files and Directories",
+      "content": "# Copy Files and Directories\n\nThis step focuses on using the `cp` command to back up data. You will copy a configuration file and a directory to your Desktop.\n\nKey Terminology:\n\n- `~`: Represents your home directory.\n- `~/.zshrc`: A hidden configuration file in your home directory.\n- `~/Code`: A directory containing source code.\n\nYour goal is to duplicate these items into `~/Desktop`.\n\n## Tasks\n\n1. Copy the `~/.zshrc` file to `~/Desktop/zshrc-copy`.\n2. Copy the entire `~/Code` directory to `~/Desktop`.\n\n## Requirements\n\n- Use the `cp` command to complete both tasks.\n- The `-r` option is essential when copying directories recursively to ensure all contents are included.\n\n## Example\n\nAfter successfully executing these tasks, you should observe a new file named `zshrc-copy` and a directory named `Code` residing on your Desktop. You can easily verify the successful copy operation by listing the contents of your Desktop using the following command:\n\n```bash\nls -l ~/Desktop\n```\n\nSample Output:\n\n```plaintext\ndrwxr-xr-x 2 labex labex    6 Jan 19 09:25 Code\n-rwxr-xr-x 1 labex labex  636 Jan 15 10:47 code.desktop\n-rwxr-xr-x 1 labex labex  749 Jan 15 10:47 gedit.desktop\n-rwxr-xr-x 1 labex labex 5106 Jan 15 10:47 gvim.desktop\n-rwxr-xr-x 1 labex labex 8499 Jan 15 10:47 xfce4-terminal.desktop\n-rw-r--r-- 1 labex labex 4752 Jan 19 09:25 zshrc-copy\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Rename Files and Directories",
+      "content": "# Rename Files and Directories\n\nHaving mastered copying, the next crucial skill is renaming files and directories. In this step, you will utilize the `mv` command, a versatile tool that serves dual purposes: moving files and directories, and, as you will practice here, renaming them. We will now work with the copies you created in the previous step.\n\n## Tasks\n\n1. Rename the `~/Desktop/zshrc-copy` file to `~/Desktop/zshrc-move`.\n2. Rename the `~/Desktop/Code` directory to `~/Desktop/Code-move`.\n\n## Requirements\n\n- Use the `mv` command exclusively for both renaming operations.\n- Remember that the `mv` command's behavior for renaming is essentially moving an item to the same location but with a new name.\n\n## Example\n\nUpon completion of these renaming tasks, your Desktop should now display `zshrc-move` and `Code-move` instead of their previous names. Verify the changes by listing the contents of your Desktop once more:\n\n```bash\nls -l ~/Desktop\n```\n\nSample Output:\n\n```plaintext\ndrwxr-xr-x 2 labex labex    6 Jan 19 09:25 Code-move\n-rwxr-xr-x 1 labex labex  636 Jan 15 10:47 code.desktop\n-rwxr-xr-x 1 labex labex  749 Jan 15 10:47 gedit.desktop\n-rwxr-xr-x 1 labex labex 5106 Jan 15 10:47 gvim.desktop\n-rwxr-xr-x 1 labex labex 8499 Jan 15 10:47 xfce4-terminal.desktop\n-rw-r--r-- 1 labex labex 4752 Jan 19 09:25 zshrc-move\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Remove Files and Directories",
+      "content": "# Remove Files and Directories\n\nHaving learned to copy and rename, the final essential file management skill is removal. This step focuses on the `rm` command, used for deleting files and directories. It's crucial to exercise caution with `rm`, as deleted items are typically permanently removed from the file system. In this step, you will clean up the files and directories you've been working with on your Desktop.\n\n## Tasks\n\n1. Remove the `~/Desktop/zshrc-move` file.\n2. Remove the `~/Desktop/Code-move` directory.\n\n## Requirements\n\n- Use the `rm` command to remove both the file and the directory.\n- Be especially cautious when using `rm` with directories. You might need to use options like `-r` or `-R` for recursive removal of directories and their contents, but for this specific task, consider if it's necessary. (Hint: Consider the default behavior of `rm` when dealing with directories).\n\n## Example\n\nAfter successfully removing these items, neither `zshrc-move` nor `Code-move` should be visible on your Desktop anymore. Verify the removal by listing the Desktop's contents one last time:\n\n```bash\nls -l ~/Desktop\n```\n\nSample Output:\n\n```plaintext\n-rwxr-xr-x 1 labex labex  636 Jan 15 10:47 code.desktop\n-rwxr-xr-x 1 labex labex  749 Jan 15 10:47 gedit.desktop\n-rwxr-xr-x 1 labex labex 5106 Jan 15 10:47 gvim.desktop\n-rwxr-xr-x 1 labex labex 8499 Jan 15 10:47 xfce4-terminal.desktop\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Summary",
+      "content": "# Summary\n\nCongratulations! You have successfully completed the \"Files and Directories\" challenge, marking a significant step in your Linux journey. You are now equipped with the essential Linux file management commands: `cp` for duplicating files and directories, `mv` for both moving and renaming them, and `rm` for removing them when they are no longer needed. These skills form the bedrock of efficient file system navigation and management within Linux environments. Consistent practice with these commands will solidify your understanding and greatly enhance your proficiency in Linux file operations. Keep practicing and exploring the vast capabilities of the Linux command line!\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "4b86f4d9aad127001d761aeebc0b1f346712b96e2eb01d6054b7d22b6f3c29a2"
+}

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 18005,
+  "source_url": "https://labex.io/tutorials/linux-software-installation-on-linux-18005",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nUbuntu software is usually delivered as packages. Repositories publish package files plus metadata describing names, versions, dependencies, and download locations. `apt` works with repositories and resolves dependencies; `dpkg` manages the installed `.deb` package database at a lower level.\n\nYou will update metadata, search before installing, inspect an installed package, remove it, and install a deterministic local `.deb`. Every change uses a disposable practice package and can be verified from package state rather than terminal history.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Read Package State and Sources",
+      "content": "## Read Package State and Sources\n\nIn this step, you will distinguish repository configuration, available metadata, and installed package state.\n\nInspect enabled source definitions. Modern Ubuntu images may use `.list` or `.sources` files. This read-only pipeline searches both locations: `grep -R` searches recursively, `-h` hides source filenames, `-s` suppresses missing-file messages, and `-E` enables the grouped pattern. `head` limits the display to twelve matching lines:\n\n```bash\ngrep -RhsE '^(deb |Types:|URIs:|Suites:)' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null | head -n 12\n```\n\nAsk dpkg whether Bash is installed. `-W` selects package records, while `-f` supplies a display format. `${Package}`, `${Version}`, and `${db:Status-Status}` are dpkg fields, not shell variables, because the format is inside single quotes:\n\n```bash\ndpkg-query -W -f='package=${Package} version=${Version} status=${db:Status-Status}\\n' bash\n```\n\n`dpkg-query` reads local installed state. In contrast, `apt-cache policy` compares the installed version with versions known from configured repositories:\n\n```bash\napt-cache policy bash\n```\n\nSave a stable installed-state observation:\n\n```bash\nmkdir -p /home/labex/project/package-lab\ndpkg-query -W -f='${Package} ${db:Status-Status}\\n' bash > /home/labex/project/package-lab/bash-state.txt\ncat /home/labex/project/package-lab/bash-state.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Refresh Repository Metadata",
+      "content": "## Refresh Repository Metadata\n\nIn this step, you will refresh the package index and understand what `apt update` changes.\n\nRun:\n\n```bash\nsudo apt update\n```\n\nThis downloads current repository metadata. It does **not** install newer versions of every package; `apt upgrade` is the separate operation that upgrades installed packages.\n\nInspect the metadata cache directory:\n\n```bash\nls -ld /var/lib/apt/lists\nfind /var/lib/apt/lists -maxdepth 1 -type f | head\n```\n\nRecord how many regular metadata files are present:\n\n```bash\nfind /var/lib/apt/lists -maxdepth 1 -type f | wc -l | tr -d ' ' > /home/labex/project/package-lab/index-file-count.txt\ncat /home/labex/project/package-lab/index-file-count.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Search, Inspect, and Install a Repository Package",
+      "content": "## Search, Inspect, and Install a Repository Package\n\nIn this step, you will investigate a package before installing it.\n\nSearch package names and descriptions for the tree-listing utility:\n\n```bash\napt search '^tree$'\n```\n\nRead its metadata:\n\n```bash\napt show tree\n```\n\nInstall it with dependency handling. `sudo` provides the required administrative privilege, and `-y` automatically answers yes to this already-reviewed installation request:\n\n```bash\nsudo apt install -y tree\n```\n\nVerify both package state and command lookup, then use it:\n\n```bash\ndpkg-query -W -f='${Package} ${Version} ${db:Status-Status}\\n' tree | tee /home/labex/project/package-lab/tree-installed.txt\ncommand -v tree\ntree -L 1 /home/labex/project/package-lab\n```\n\nList paths delivered by the package:\n\n```bash\ndpkg -L tree | head\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Remove a Package and Verify the Result",
+      "content": "## Remove a Package and Verify the Result\n\nIn this step, you will remove the practice repository package and distinguish related cleanup operations.\n\nRemove `tree`:\n\n```bash\nsudo apt remove -y tree\n```\n\n`remove` deletes package-installed programs but may retain package configuration. `purge` also removes package-owned configuration. `autoremove` removes dependencies that were installed automatically and are no longer needed; review its proposal before confirming on a real host.\n\nPreview what dependency cleanup would do without changing the system. The `--dry-run` option performs the calculation but does not remove anything:\n\n```bash\nsudo apt autoremove --dry-run | tee /home/labex/project/package-lab/autoremove-preview.txt\n```\n\nRead the proposed actions before ever running `apt autoremove` without `--dry-run`, especially on a shared or production host.\n\nThe current Bash session may remember a command's old path. Clear that command-location cache, then verify the command is gone and record the package database state:\n\n```bash\nhash -r\ncommand -v tree || echo \"tree command is unavailable\"\ndpkg-query -W -f='${db:Status-Status}\\n' tree 2>/dev/null || echo \"not-installed\" | tee /home/labex/project/package-lab/tree-removed.txt\n```\n\nEnsure a stable marker regardless of whether dpkg retains a residual record:\n\n```bash\nif dpkg-query -W -f='${db:Status-Status}' tree 2>/dev/null | grep -qx installed; then echo \"still-installed\"; else echo \"not-installed\"; fi > /home/labex/project/package-lab/tree-removed.txt\ncat /home/labex/project/package-lab/tree-removed.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Inspect and Install a Local Deb Package",
+      "content": "## Inspect and Install a Local Deb Package\n\nIn this step, you will inspect a prepared `.deb`, install it through apt, run its command, and remove it cleanly.\n\nEnter the workspace and inspect package metadata and payload without installing:\n\n```bash\ncd /home/labex/project/package-lab\ndpkg-deb -I labex-greeter_1.0_all.deb\ndpkg-deb -c labex-greeter_1.0_all.deb\n```\n\nThe `./` prefix tells apt this is a local file rather than a repository package name:\n\n```bash\nsudo apt install -y ./labex-greeter_1.0_all.deb\n```\n\nQuery and run it:\n\n```bash\ndpkg-query -W -f='${Package} ${Version} ${db:Status-Status}\\n' labex-greeter\nlabex-greeter | tee local-package-output.txt\n```\n\nRemove the package after the test and prove the payload command is gone:\n\n```bash\nsudo apt remove -y labex-greeter\nif command -v labex-greeter >/dev/null; then echo \"still-installed\"; else echo \"local-package-removed\"; fi > local-package-state.txt\ncat local-package-state.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nYou distinguished repository metadata from installed state, refreshed apt indexes, investigated a package before installation, verified payload files and command lookup, removed a repository package, and completed the lifecycle of an inspected local `.deb`.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "3633f2c7864e7f55e73d768a0039b22886b80a1a64b2a71628a554a5065a8cf9"
+}

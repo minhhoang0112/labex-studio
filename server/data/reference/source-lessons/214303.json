@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 214303,
+  "source_url": "https://labex.io/tutorials/linux-linux-tail-command-file-end-display-214303",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this tutorial, we'll explore the `tail` command in Linux, a powerful utility designed to display the last lines of a text file. We'll focus on a practical scenario of monitoring system log files, a common task for system administrators. By the end of this tutorial, you'll understand how to use `tail` to view file contents, customize output, and monitor real-time changes. This hands-on experience will provide valuable skills for troubleshooting and system monitoring.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basics of tail",
+      "content": "## Understanding the Basics of tail\n\nThe `tail` command is a go-to tool for viewing the end of a file. It's particularly useful for checking recent entries in log files or quickly glancing at the latest changes in a document.\n\nLet's start by examining a sample log file. We'll use a file called `system.log` in the `/home/labex/project` directory.\n\nInput:\n\n```bash\ntail /home/labex/project/system.log\n```\n\nType this command in your terminal and press Enter. Don't worry if you're not familiar with the terminal - it's just a text-based interface where you can type commands.\n\nThis command will display the last 10 lines of the `system.log` file. The output might look similar to this:\n\n```\n2024-03-15 09:23:45 [INFO] User 'john_doe' logged in successfully\n2024-03-15 09:24:12 [WARNING] Disk usage on /dev/sda1 reached 80%\n2024-03-15 09:25:03 [ERROR] Failed to connect to database server\n2024-03-15 09:25:30 [INFO] Backup process started\n2024-03-15 09:26:17 [INFO] Network interface eth0 went down\n2024-03-15 09:26:45 [INFO] Network interface eth0 is up\n2024-03-15 09:27:22 [WARNING] High CPU usage detected: 92%\n2024-03-15 09:28:01 [INFO] Scheduled system update initiated\n2024-03-15 09:28:39 [ERROR] Unable to reach email server\n2024-03-15 09:29:10 [INFO] Firewall rules updated successfully\n```\n\nLet's break down what you're seeing:\n\n- Each line represents a log entry.\n- The first part of each line is a timestamp (date and time).\n- The text in square brackets (like [INFO], [WARNING], or [ERROR]) indicates the severity level of the log entry.\n- The rest of the line is the actual log message.\n\nBy default, `tail` shows the last 10 lines of the file. This behavior is particularly useful for quickly checking recent log entries or file modifications without having to open and scroll through the entire file.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Customizing the Number of Lines",
+      "content": "## Customizing the Number of Lines\n\nSometimes, you might need to view more or fewer lines than the default 10. The `-n` option (short for \"number\") allows you to specify exactly how many lines you want to see.\n\nLet's view the last 5 lines of our log file:\n\nInput:\n\n```bash\ntail -n 5 /home/labex/project/system.log\n```\n\nType this command in your terminal and press Enter. The `-n 5` part tells `tail` to show only the last 5 lines instead of the default 10.\n\nThis command will output something like:\n\n```\n2024-03-15 09:27:22 [WARNING] High CPU usage detected: 92%\n2024-03-15 09:28:01 [INFO] Scheduled system update initiated\n2024-03-15 09:28:39 [ERROR] Unable to reach email server\n2024-03-15 09:29:10 [INFO] Firewall rules updated successfully\n2024-03-15 09:29:45 [INFO] User 'jane_smith' logged out\n```\n\nAs you can see, we now have a more focused view of the most recent log entries. This can be particularly useful when you're looking for the latest events without being overwhelmed by too much information.\n\nYou can replace 5 with any number you like. For example, `tail -n 20` would show the last 20 lines, while `tail -n 1` would show only the very last line of the file.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Viewing Content from a Specific Line",
+      "content": "## Viewing Content from a Specific Line\n\nWhile `tail` is typically used to view the end of a file, you can also use it to display content starting from a specific line number. This is done by using a plus sign (`+`) before the line number.\n\nLet's view the content of our log file starting from the 50th line:\n\nInput:\n\n```bash\ntail -n +50 /home/labex/project/system.log\n```\n\nType this command in your terminal and press Enter. The `-n +50` tells `tail` to start displaying content from the 50th line onwards.\n\nThis command will display all lines from the 50th line to the end of the file. The output might be quite long, depending on the size of your log file. Here's a sample of what you might see:\n\n```\n2024-03-15 08:45:12 [INFO] Backup process completed successfully\n2024-03-15 08:46:03 [WARNING] Low memory warning: Available memory below 15%\n2024-03-15 08:47:30 [INFO] System update check initiated\n...\n(more lines)\n...\n2024-03-15 09:29:10 [INFO] Firewall rules updated successfully\n2024-03-15 09:29:45 [INFO] User 'jane_smith' logged out\n```\n\nThis feature is particularly useful when you need to view a large portion of a file, starting from a specific point. It can help you investigate issues that might have started at a particular time or after a certain event in your logs.\n\nNote: If you specify a number larger than the total number of lines in the file, `tail` will simply show you the entire file content.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Monitoring File Changes in Real-Time",
+      "content": "## Monitoring File Changes in Real-Time\n\nOne of the most powerful features of `tail` is its ability to monitor files in real-time. This is particularly useful for watching log files as they're being written to. We use the `-f` option (which stands for \"follow\") to achieve this.\n\nLet's monitor our log file in real-time:\n\nInput:\n\n```bash\ntail -f /home/labex/project/system.log\n```\n\nType this command in your terminal and press Enter. After running this command, you'll see the last 10 lines of the file, followed by any new lines that are added to the file in real-time.\n\nTo simulate new log entries being added, **open a new terminal window** and run the following command:\n\n```bash\necho \"$(date) [INFO] New log entry for testing\" >> /home/labex/project/system.log\n```\n\nYou should see the new entry appear in the terminal where `tail -f` is running. This real-time monitoring is invaluable for system administrators who need to track system events as they happen.\n\nTo exit the `tail -f` command, press `Ctrl+C` in the terminal where it's running. This keyboard shortcut sends an interrupt signal to the current process, stopping the `tail` command.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Combining Options for Advanced Usage",
+      "content": "## Combining Options for Advanced Usage\n\nThe `tail` command becomes even more powerful when you combine different options. Let's combine the `-n` option with the `-f` option to monitor the last 3 lines of our log file in real-time.\n\nInput:\n\n```bash\ntail -n 3 -f /home/labex/project/system.log\n```\n\nType this command in your terminal and press Enter. This command will display the last 3 lines of the file and then continue to show any new lines added to the file. This can be useful when you want to focus on the very latest entries in a rapidly changing log file.\n\nTo test this, open another terminal window and add a new log entry:\n\n```bash\necho \"$(date) [WARNING] Unusual network activity detected\" >> /home/labex/project/system.log\n```\n\nYou should see this new entry appear in the terminal where `tail -n 3 -f` is running, along with the two previous entries.\n\nRemember to use `Ctrl+C` to exit the `tail` command when you're done monitoring.\n\nTip: The order of options doesn't matter in this case. `tail -f -n 3` would work the same way.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this tutorial, we explored the versatile `tail` command in Linux, focusing on its application in monitoring log files. We learned how to:\n\n1. View the last lines of a file using the basic `tail` command\n2. Customize the number of lines displayed using the `-n` option\n3. View content starting from a specific line using `tail -n +N`\n4. Monitor file changes in real-time with the `-f` option\n5. Combine options for more advanced usage\n\nThese skills are fundamental for system administration, debugging, and monitoring tasks. As you become more comfortable with `tail`, you'll find it an indispensable tool in your Linux toolkit.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "83a348b52df9fc1e9618d310207be9a41af886368bf7c46a21306af66a1e4169"
+}

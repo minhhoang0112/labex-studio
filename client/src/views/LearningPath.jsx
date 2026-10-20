@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import CourseContentBadge from '../components/CourseContentBadge';
 import { 
   ArrowLeft, Terminal, Shield, CheckCircle, BookOpen,
-  Sparkles, ChevronRight, Play, AlertCircle, FileText
+  Sparkles, ChevronRight, Play
 } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -232,20 +233,6 @@ function CourseRoadmapCard({ course, onSelectCourse }) {
   const isReady = course.status === 'ready';
   const isPartial = course.status === 'partial';
 
-  const badge = isReady ? (
-    <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-emerald-500 text-white shadow-sm flex items-center gap-1">
-      <CheckCircle className="w-3 h-3" /> Ready
-    </span>
-  ) : isPartial ? (
-    <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-amber-500 text-white shadow-sm flex items-center gap-1">
-      <AlertCircle className="w-3 h-3" /> Thực hành 1 phần
-    </span>
-  ) : (
-    <span className="px-2.5 py-0.5 rounded text-[11px] font-medium bg-slate-700 text-slate-200 shadow-sm flex items-center gap-1">
-      <FileText className="w-3 h-3" /> Tham khảo nguồn
-    </span>
-  );
-
   const handleClick = () => {
     onSelectCourse(course.alias || course.id);
   };
@@ -271,7 +258,7 @@ function CourseRoadmapCard({ course, onSelectCourse }) {
           }}
         />
         <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
-          {badge}
+          <CourseContentBadge course={course} />
         </div>
       </div>
 
@@ -285,7 +272,9 @@ function CourseRoadmapCard({ course, onSelectCourse }) {
             {course.name}
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 line-clamp-2">
-            {course.reason || 'Khóa học thuộc lộ trình Linux.'}
+            {course.imported_labs_count > 0
+              ? `${course.imported_labs_count}/${course.source_labs_count} bài đã nhập · ${course.source_verified_labs_count || 0} bài đã đối chiếu bản gốc tiếng Anh.`
+              : 'Đã có giáo trình nguồn; đang bổ sung tài liệu bài học.'}
           </p>
           {!!course.prerequisite_skills?.length && <p className="mt-3 text-xs text-slate-600 dark:text-slate-300"><strong>Trước khi học:</strong> {course.prerequisite_skills.join('; ')}.</p>}
           {!!course.learning_outcomes?.length && <ul className="mt-3 text-xs text-slate-600 dark:text-slate-300 list-disc pl-4 space-y-1">{course.learning_outcomes.map(outcome => <li key={outcome}>{outcome}</li>)}</ul>}

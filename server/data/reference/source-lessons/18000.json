@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "source_lab_id": 18000,
+  "source_url": "https://labex.io/tutorials/linux-get-help-on-linux-commands-18000",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nExperienced Linux users do not memorize every command and option. They know how to ask the system what a name means, find a short usage summary, open complete documentation, and search manuals by topic.\n\nThis lab follows directly from basic file operations. You will investigate familiar commands such as `cd`, `ls`, and `cp`, then save small evidence files under `/home/labex/project/command-help`. By the end, unfamiliar syntax will be a documentation question rather than a roadblock.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Identify What a Command Name Means",
+      "content": "## Identify What a Command Name Means\n\nIn this step, you will distinguish shell builtins, aliases, and executable files before choosing the right help source.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/command-help\n```\n\nSome commands are built into the shell because they must change the shell itself. Ask the shell what `cd` is:\n\n```bash\ntype cd\n```\n\nYou should see output containing:\n\n```text\ncd is a shell builtin\n```\n\nOther names may be aliases—short replacements configured by the shell—or external programs stored as files. Inspect `ls`:\n\n```bash\ntype ls\n```\n\nDepending on the shell configuration, the output may identify an alias or an executable path. Use `type -a` to show every matching form the shell can find:\n\n```bash\ntype -a ls\n```\n\n`command -V` provides another readable description:\n\n```bash\ncommand -V cp\n```\n\n`command -v` prints the command or path the shell would actually choose:\n\n```bash\ncommand -v cp\n```\n\nSave a short classification report. The first `>` creates or replaces the report; each later `>>` appends another command's output without erasing earlier lines:\n\n```bash\ntype cd > command-types.txt\ntype ls >> command-types.txt\ncommand -V cp >> command-types.txt\n```\n\n```bash\ncat command-types.txt\n```\n\nThe report should identify `cd` as a builtin and describe both `ls` and `cp`. Knowing the command type helps because shell builtins use shell-specific documentation, while external programs commonly support `--help` and manual pages.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Read Quick Help and Usage Syntax",
+      "content": "## Read Quick Help and Usage Syntax\n\nIn this step, you will use builtin help and `--help`, then learn how to read common notation in a usage line.\n\nBecause `cd` is a shell builtin, ask Bash for its documentation. The lab terminal uses Zsh, and `help` is a Bash builtin rather than a standalone command, so invoke Bash explicitly:\n\n```bash\nbash -c 'help cd'\n```\n\nThe first line begins with a usage pattern similar to `cd [-L|[-P ...]] [dir]`. You do not need to understand every option yet. Focus on the structure: the command name comes first, and items in square brackets are optional.\n\nExternal programs often support `--help`. The complete `ls` help is long, so this is the course's first deliberate use of a **pipeline**. A pipe is written as `|`. The command on the left writes normal output, and the command on the right receives that output as its input. Here, `head -n 8` keeps only the first eight lines:\n\n```bash\nls --help | head -n 8\n```\n\nThe first line has this general form:\n\n```text\nUsage: ls [OPTION]... [FILE]...\n```\n\n`[OPTION]...` means zero or more options. `[FILE]...` means zero or more file or directory arguments. The brackets describe the syntax; you do not type them literally.\n\nCheck quick help for copying:\n\n```bash\ncp --help | head -n 8\n```\n\nSave the first few lines from both commands with section labels. `>` starts a new file, while `>>` appends each following section:\n\n```bash\necho \"=== ls ===\" > quick-help.txt\nls --help | head -n 3 >> quick-help.txt\necho \"=== cp ===\" >> quick-help.txt\ncp --help | head -n 3 >> quick-help.txt\n```\n\n```bash\ncat quick-help.txt\n```\n\nThis small file is not a replacement for the full help text; it proves that you can find and recognize command usage lines.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Navigate a Manual Page",
+      "content": "## Navigate a Manual Page\n\nIn this step, you will use the interactive `man` viewer and learn what manual sections mean.\n\nOpen the manual page for `ls`:\n\n```bash\nman ls\n```\n\nThe manual opens in a pager, usually `less`. Practice these keys inside the viewer:\n\n- **Down Arrow**: move down one line;\n- **Space**: move forward one screen;\n- **b**: move backward one screen;\n- type `/sort` and press Enter: search forward for `sort`;\n- **n**: move to the next match;\n- **q**: quit and return to the shell prompt.\n\nThe heading usually shows `LS(1)`. The number is a manual section. Section 1 contains ordinary user commands; other sections cover system calls, library functions, configuration formats, and administration commands.\n\nUse `man -f` for a one-line description, also known as a “whatis” lookup:\n\n```bash\nman -f ls\n```\n\nSave a non-interactive excerpt of the same manual page. Read this pipeline from left to right: `-P cat` makes `man` print instead of opening a pager, `col -b` removes terminal-formatting control characters, `head -n 20` keeps twenty lines, and `>` stores the final stream:\n\n```bash\nman -P cat ls | col -b | head -n 20 > ls-man-excerpt.txt\n```\n\n```bash\ncat ls-man-excerpt.txt\n```\n\nYou should see the manual heading, name, synopsis, and beginning of the description. This confirms that interactive and non-interactive views come from the same documentation.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Discover Commands by Topic",
+      "content": "## Discover Commands by Topic\n\nIn this step, you will use `apropos` when you know the task but not the command name.\n\n`apropos` searches the short descriptions stored in the manual database. Search for password-related documentation:\n\n```bash\napropos password | head -n 15\n```\n\nEach result contains a manual name, its section in parentheses, and a short description. One result should describe `passwd`.\n\nSearch for file-related topics:\n\n```bash\napropos file | head -n 20\n```\n\nBroad keywords return many results. A more specific phrase can be more useful:\n\n```bash\napropos \"copy files\"\n```\n\nYou can also filter a broad result. The `-i` option makes `grep` ignore letter case, while `-m 5` stops after five matching lines:\n\n```bash\napropos file | grep -i -m 5 'copy'\n```\n\nSave the full password search so it can be examined later:\n\n```bash\napropos password > password-topics.txt\n```\n\n```bash\ngrep -E '^passwd|change.*password' password-topics.txt | head\n```\n\nWhen `apropos` finds nothing on a newly installed system, the manual database may need `sudo mandb`. This lab prepared the database automatically, but remembering that relationship makes the tool easier to troubleshoot elsewhere.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Summary",
+      "content": "## Summary\n\nYou learned a repeatable help strategy: use `type` or `command -V` to identify a name, shell-specific help such as Bash's `help` or a program's `--help` for quick syntax, `man` for complete documentation, and `apropos` when you know the topic but not the command. These tools remove the need to memorize every option and prepare you to investigate unfamiliar commands throughout the rest of the course.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "fb813d41b891071e595b661434f5d9f019580b4f0506bdb8d57a79ad23502e58"
+}

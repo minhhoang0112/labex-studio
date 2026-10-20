@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 210986,
+  "source_url": "https://labex.io/tutorials/linux-linux-cat-command-file-concatenating-210986",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nThis tutorial introduces the `cat` command in Linux, a versatile tool for viewing and manipulating text files. You'll learn how to use `cat` to display file contents, combine files, and utilize various options to enhance file viewing. By the end of this tutorial, you'll be comfortable using `cat` for basic file operations, an essential skill for any Linux user.\n\nImagine you're a new intern at a tech startup. Your first task is to compile a daily report from various text files scattered across the company's Linux server. You'll need to view file contents, combine files, and format the output. The `cat` command will be your primary tool for this task.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Exploring the Project Directory",
+      "content": "## Exploring the Project Directory\n\nLet's start by examining the contents of your project directory.\n\n1. Open your terminal. You should see a command prompt, typically ending with a `$` symbol.\n\n2. Navigate to the project directory:\n\n```bash\ncd /home/labex/project\n```\n\nThis command changes your current directory to `/home/labex/project`. The `cd` command stands for \"change directory\".\n\n3. Verify your current location:\n\n```bash\npwd\n```\n\nThe `pwd` command stands for \"print working directory\". It should display `/home/labex/project`.\n\n4. List the contents of the directory:\n\n```bash\nls\n```\n\nThis command will show you all the files and directories in your current location. You should see several text files listed, including `daily_report.txt`, `sales.txt`, and `marketing.txt`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Viewing File Contents",
+      "content": "## Viewing File Contents\n\nNow, let's use the `cat` command to view the contents of a file. The `cat` command is short for \"concatenate\", but it's often used to simply display file contents.\n\n1. View the contents of the file `daily_report.txt`:\n\n```bash\ncat daily_report.txt\n```\n\nThis command will display the entire contents of the file in your terminal. If the file is long, it may scroll past the visible area of your terminal window.\n\n2. If you can't see the beginning of the file, you can clear your terminal screen for a fresh start:\n\n```bash\nclear\n```\n\nThe `clear` command isn't strictly necessary, but it can help keep your workspace tidy. Don't worry about understanding it fully now; you'll learn more about terminal management in future lessons.\n\n3. Now, view the file contents again:\n\n```bash\ncat daily_report.txt\n```\n\nTake a moment to read the contents. This is the power of the `cat` command - it allows you to quickly view the contents of text files directly in your terminal.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Combining Multiple Files",
+      "content": "## Combining Multiple Files\n\nThe `cat` command can also be used to combine multiple files. This is where the \"concatenate\" part of its name comes from.\n\n1. First, let's view the contents of both `sales.txt` and `marketing.txt` separately:\n\n```bash\ncat sales.txt\ncat marketing.txt\n```\n\nTake note of the contents of each file.\n\n2. Now, let's combine these files:\n\n```bash\ncat sales.txt marketing.txt\n```\n\nThis command will display the contents of both files, one after the other, as if they were a single file. Notice how `cat` simply outputs the contents of each file in the order you specify.\n\n3. Now we're going to introduce a new concept called \"output redirection\". In Linux, we can take the output of a command (what you normally see printed in the terminal) and send it to a file instead. We do this using the `>` symbol. Here's how it works:\n\n```bash\ncat sales.txt marketing.txt > combined_report.txt\n```\n\nLet's break this down:\n\n- `cat sales.txt marketing.txt` is the command we've used before to display the contents of both files.\n- The `>` symbol is new. It tells Linux to take whatever would have been displayed in the terminal and instead write it to a file.\n- `combined_report.txt` is the name of the new file we're creating.\n\nSo, this command is saying: \"Take the combined contents of sales.txt and marketing.txt, and instead of showing them to me, put them in a new file called combined_report.txt.\"\n\nThis is a powerful feature in Linux that allows you to save the output of commands for later use. Don't worry if it seems a bit confusing at first - you'll get plenty of practice with it in future lessons.\n\n4. To make sure our redirection worked, let's verify the contents of the new file:\n\n```bash\ncat combined_report.txt\n```\n\nYou should see the contents of both `sales.txt` and `marketing.txt` in this new file. If you do, congratulations! You've successfully used output redirection to combine files.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Using the Line Number Option",
+      "content": "## Using the Line Number Option\n\nThe `cat` command offers options to enhance its output. Let's explore the line number option.\n\n1. Display the contents of `daily_report.txt` with line numbers:\n\n```bash\ncat -n daily_report.txt\n```\n\nThe `-n` option tells `cat` to number all output lines. This can be very useful when you need to refer to specific lines in a file.\n\n2. Compare this to the output without line numbers:\n\n```bash\ncat daily_report.txt\n```\n\nNotice how the `-n` option adds a number at the beginning of each line, making it easier to reference specific parts of the file.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Displaying End of Line Characters",
+      "content": "## Displaying End of Line Characters\n\nAnother useful option is to display end-of-line characters. This can help you identify issues with line endings or trailing spaces.\n\n1. View the contents of `daily_report.txt` with end-of-line characters visible:\n\n```bash\ncat -E daily_report.txt\n```\n\nThe `-E` option tells `cat` to display a `$` at the end of each line. This makes it easy to see where each line ends, which can be particularly useful when dealing with formatting issues.\n\n2. Compare this to the regular output:\n\n```bash\ncat daily_report.txt\n```\n\nNotice how the `-E` option adds a `$` at the end of each line, making line endings explicit.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this tutorial, you learned how to use the `cat` command for various file operations:\n\n- Viewing file contents\n- Combining multiple files\n- Using options like line numbers (-n) and end-of-line display (-E)\n\nThese skills will be invaluable for managing and manipulating text files in Linux environments. As you continue your Linux journey, you'll find many more uses for the versatile `cat` command.\n\nAdditional `cat` command options not covered in this tutorial include:\n\n- `-A`: Show all non-printing characters (equivalent to -vET)\n- `-b`: Number non-blank output lines\n- `-s`: Suppress repeated empty output lines\n- `-T`: Display TAB characters as ^I\n- `-v`: Use ^ and M- notation, except for LFD and TAB\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "676754f748b585dc3fd0fa11566b80272bfc3687a1e3484a438af5a1d6eb902e"
+}

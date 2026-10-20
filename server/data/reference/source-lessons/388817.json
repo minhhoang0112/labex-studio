@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 388817,
+  "source_url": "https://labex.io/tutorials/shell-comparing-arrays-in-shell-388817",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn how to compare arrays in Shell scripting. Arrays are useful data structures for storing multiple values, and comparing them is a common task in programming. You will work with three arrays and develop a script to find the common elements among them. This process will help you understand array manipulation, loops, and conditional statements in Shell scripting.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Create the script file",
+      "content": "## Create the script file\n\nFirst, let's create a new file for our script.\n\n1. Open a terminal in the WebIDE. You should see a command prompt ending with a `$` sign.\n\n2. Navigate to the project directory:\n\n```bash\ncd ~/project\n```\n\nThis command changes your current directory to the project folder. The `~` symbol represents your home directory, and `/project` is a subfolder within it.\n\n3. Create a new file named `array-comparison.sh`:\n\n```bash\ntouch array-comparison.sh\n```\n\nThe `touch` command creates an empty file. If the file already exists, it updates the file's timestamp without modifying its contents.\n\n4. Open the file in the WebIDE editor. You can do this by clicking on the file name in the file explorer on the left side of your WebIDE interface.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Add the shebang and initialize the arrays",
+      "content": "## Add the shebang and initialize the arrays\n\nNow, let's start writing our script by adding the shebang and initializing our arrays.\n\n1. Add the following content to `array-comparison.sh`:\n\n```bash\n#!/bin/bash\n\n## Initialize the arrays\na=(3 5 8 10 6)\nb=(6 5 4 12)\nc=(14 7 5 7)\n```\n\nLet's break this down:\n\n- The first line `#!/bin/bash` is called a shebang. It tells the system to use the Bash interpreter to run this script. This line is crucial for any shell script.\n- We then initialize three arrays: `a`, `b`, and `c`. In Bash, arrays are defined by enclosing the elements in parentheses `()` and separating them with spaces.\n- Each array contains different integer values. We'll use these arrays to find common elements.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Implement the first comparison loop",
+      "content": "## Implement the first comparison loop\n\nLet's implement the first comparison loop to find common elements between arrays `a` and `b`.\n\nAdd the following code to your script:\n\n```bash\n## Initialize an array to store common elements between a and b\nz=()\n\n## Compare arrays a and b\nfor x in \"${a[@]}\"; do\n  for y in \"${b[@]}\"; do\n    if [ $x = $y ]; then\n      z+=($x)\n    fi\n  done\ndone\n\necho \"Common elements between a and b: ${z[@]}\"\n```\n\nLet's explain this code in detail:\n\n- `z=()` initializes an empty array `z` to store the common elements.\n- `for x in \"${a[@]}\"` is a loop that iterates over each element in array `a`. The `\"${a[@]}\"` syntax expands to all elements of the array.\n- We then have a nested loop `for y in \"${b[@]}\"` that iterates over each element in array `b`.\n- `if [ $x = $y ]` checks if the current element from `a` is equal to the current element from `b`.\n- If they are equal, we add this element to array `z` using `z+=($x)`.\n- Finally, we print the common elements using `echo \"Common elements between a and b: ${z[@]}\"`. The `${z[@]}` syntax expands to all elements of array `z`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Implement the second comparison loop",
+      "content": "## Implement the second comparison loop\n\nNow, let's implement the second comparison loop to find common elements between array `c` and the previously found common elements in array `z`.\n\nAdd the following code to your script:\n\n```bash\n## Initialize an array to store common elements among a, b, and c\nj=()\n\n## Compare array c with the common elements found in z\nfor i in \"${c[@]}\"; do\n  for k in \"${z[@]}\"; do\n    if [ $i = $k ]; then\n      j+=($i)\n    fi\n  done\ndone\n\necho \"Common elements among a, b, and c: ${j[@]}\"\n```\n\nThis code is similar to the previous loop, but with a few key differences:\n\n- We initialize a new empty array `j` to store the final common elements.\n- The outer loop `for i in \"${c[@]}\"` iterates over elements in array `c`.\n- The inner loop `for k in \"${z[@]}\"` iterates over the common elements we found between `a` and `b`, which are stored in array `z`.\n- We compare elements from `c` with elements in `z`, and if there's a match, we add it to array `j`.\n- Finally, we print the common elements among all three arrays.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Make the script executable and run it",
+      "content": "## Make the script executable and run it\n\nNow that we have completed our script, let's make it executable and run it.\n\n1. In the terminal, make the script executable:\n\n```bash\nchmod +x ~/project/array-comparison.sh\n```\n\nThe `chmod` command changes the permissions of a file. The `+x` option adds executable permissions, allowing you to run the script.\n\n2. Run the script:\n\n```bash\n~/project/array-comparison.sh\n```\n\nThis command executes your script. The `~/project/` part specifies the path to the script.\n\nYou should see output similar to this:\n\n```\nCommon elements between a and b: 5 6\nCommon elements among a, b, and c: 5\n```\n\nThis output shows that:\n\n- The common elements between arrays `a` and `b` are 5 and 6.\n- The common element among all three arrays (`a`, `b`, and `c`) is 5.\n\nIf you don't see this output or encounter an error, double-check your script for any typos or missing parts.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you learned how to compare arrays in Shell scripting. You created a script that finds common elements among three arrays using nested loops and conditional statements. This exercise demonstrated key concepts in Shell scripting, including:\n\n1. Creating and initializing arrays\n2. Using nested loops to compare array elements\n3. Conditional statements to check for equality\n4. Adding elements to arrays dynamically\n5. Making a script executable and running it\n\nThese skills are fundamental in Shell scripting and can be applied to more complex data processing tasks in the future. As you continue to work with Shell scripts, you'll find that array manipulation is a powerful tool for handling sets of data efficiently.\n\nRemember, practice is key to mastering these concepts. Try modifying the script to work with different arrays or to find unique elements instead of common ones. Happy scripting!\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "6050128d05217ba915b048e12f737cb98dbb4b1bf0f447475b417cb5ade0abb7"
+}

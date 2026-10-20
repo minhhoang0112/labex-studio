@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_lab_id": 725415,
+  "source_url": "https://labex.io/tutorials/linux-managing-services-and-system-logs-725415",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nA process is a running program. A service is a long-running system function managed according to a definition and lifecycle policy. On Ubuntu, systemd reads unit definitions, starts and stops services, tracks their states, and records their output in the system journal.\n\nIn this lab, you will use an isolated `labex-heartbeat` practice service. You will inspect its unit, control its runtime state, configure boot-time enablement, query journal and traditional text logs, follow live output, diagnose a controlled failure, and restore healthy operation. You will not edit unit files or touch the SSH service.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Recognize systemd and Service Units",
+      "content": "## Recognize systemd and Service Units\n\nIn this step, you will confirm that systemd is available and distinguish running units from installed unit files.\n\nEnter the lab workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\nDisplay the systemd version. The first line is enough for identification:\n\n```bash\nsystemctl --version | head -n 1\n```\n\nAsk systemd for its overall state:\n\n```bash\nsystemctl is-system-running || true\n```\n\n`running` means all required units are healthy. A training VM can report `degraded` because an unrelated optional unit failed; the command still proves that systemd is responding.\n\nList a sample of services that are currently running:\n\n```bash\nsystemctl list-units --type=service --state=running --no-pager | head -n 12\n```\n\nA unit is an object managed by systemd. Service units end in `.service`. Unit files describe what can be managed, even when it is not currently running:\n\n```bash\nsystemctl list-unit-files --type=service --no-pager | head -n 12\n```\n\nSave a compact systemd summary. Command substitution `$(...)` inserts command output into the text written by `printf`:\n\n```bash\nprintf 'systemd=%s\\nstate=%s\\n' \"$(systemctl --version | head -n 1)\" \"$(systemctl is-system-running)\" > systemd-summary.txt\n```\n\n```bash\ncat systemd-summary.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Inspect a Service Definition and State",
+      "content": "## Inspect a Service Definition and State\n\nIn this step, you will inspect the prepared practice service before starting it.\n\n`systemctl status` combines the loaded unit path, enablement, runtime state, process information, and recent log lines:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nThe service should be `inactive (dead)` and `disabled`. Inactive means it is not currently running; disabled means it is not configured to start through its install target at boot. These are separate properties.\n\nDisplay the unit definition:\n\n```bash\nsystemctl cat labex-heartbeat.service\n```\n\nThe `[Unit]` section describes identity and ordering, `[Service]` defines the process, and `[Install]` describes enablement. You only inspect this prepared unit; you do not need to write one.\n\nUse `systemctl show` for machine-readable properties:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState\n```\n\nSave those properties for verification:\n\n```bash\nsystemctl show labex-heartbeat.service -p LoadState -p ActiveState -p SubState -p UnitFileState > service-properties.txt\n```\n\n```bash\ncat service-properties.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Start, Stop, and Restart a Service",
+      "content": "## Start, Stop, and Restart a Service\n\nIn this step, you will change the runtime state of the practice service and confirm each result.\n\nStarting and stopping system services requires elevated privileges. Start the service:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nCheck the concise active state:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\nThe expected output is `active`. View the fuller status:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager\n```\n\nThe status now includes a main PID. Stop the service and inspect the result:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsystemctl is-active labex-heartbeat.service || true\n```\n\nThe expected state is `inactive`. Start it again, then use restart to replace the running process in one operation:\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\n```bash\nsudo systemctl restart labex-heartbeat.service\n```\n\n```bash\nsystemctl show labex-heartbeat.service -p ActiveState -p SubState -p MainPID\n```\n\nThe service should finish this step with `ActiveState=active` and `SubState=running`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Configure Boot-Time Enablement",
+      "content": "## Configure Boot-Time Enablement\n\nIn this step, you will distinguish a service's current runtime state from whether it is enabled for future boots.\n\nThe service is active from the previous step, but setup left its unit file disabled. Check enablement:\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nEnable the service:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```\n\nEnablement creates links that connect the service to a boot target. It does not need to restart an already running service.\n\nPractice removing those boot links:\n\n```bash\nsudo systemctl disable labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service || true\n```\n\nThe service can remain active even though the output is now `disabled`. Re-enable it for the final lab state:\n\n```bash\nsudo systemctl enable labex-heartbeat.service\n```\n\nConfirm both independent properties:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\nsystemctl is-enabled labex-heartbeat.service\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Query Service Logs with journalctl",
+      "content": "## Query Service Logs with journalctl\n\nIn this step, you will read recent service output from the systemd journal and save a focused snapshot.\n\nServices managed by systemd normally send standard output and standard error to the journal. Query only the practice unit:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nThe `-u` option selects a unit, `-n 10` keeps the ten most recent records, and `--no-pager` prints them directly. You should see recent heartbeat records. The startup message may have scrolled outside this limited view while the service continued to run.\n\nLimit results to a recent time window:\n\n```bash\nsudo journalctl -u labex-heartbeat.service --since \"5 minutes ago\" --no-pager\n```\n\nFilter by warning-or-higher priority. No output is a healthy and valid result when the service has not logged a warning:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -p warning --since \"5 minutes ago\" --no-pager\n```\n\nSave a recent unit-specific snapshot in the project workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 20 --no-pager > service-journal.txt\n```\n\n```bash\ntail -n 5 service-journal.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Follow a Traditional Text Log",
+      "content": "## Follow a Traditional Text Log\n\nIn this step, you will inspect `/var/log` and follow a text log as new records arrive.\n\nThe `/var/log` hierarchy stores many traditional system and application logs. List a small sample:\n\n```bash\nls -lh /var/log | head -n 12\n```\n\nRead the latest practice-service records:\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log\n```\n\nThe `-f` option follows a file and displays new lines as another process appends them:\n\n```bash\ntail -f /var/log/labex-heartbeat.log\n```\n\nWait until you see at least two new heartbeat lines, then press `Ctrl+C`. This interrupts `tail`; it does not stop the service that is writing the log.\n\nFilter heartbeat lines and view the most recent three:\n\n```bash\ngrep '^heartbeat ' /var/log/labex-heartbeat.log | tail -n 3\n```\n\nSave a five-line sample in the project workspace:\n\n```bash\ncd /home/labex/project/service-lab\n```\n\n```bash\ntail -n 5 /var/log/labex-heartbeat.log > traditional-log-sample.txt\n```\n\n```bash\ncat traditional-log-sample.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Diagnose and Recover a Failed Service",
+      "content": "## Diagnose and Recover a Failed Service\n\nIn this step, you will create a controlled configuration failure, use service state and logs to identify it, and restore healthy operation.\n\nStop the practice service and back up its simple configuration:\n\n```bash\nsudo systemctl stop labex-heartbeat.service\n```\n\n```bash\nsudo cp /etc/labex-heartbeat.conf /etc/labex-heartbeat.conf.bak\n```\n\nReplace the numeric interval with an invalid value. This intentionally breaks only the practice service:\n\n```bash\nsudo sed -i 's/^INTERVAL=2$/INTERVAL=invalid/' /etc/labex-heartbeat.conf\n```\n\nAttempt to start the service. A failure message is expected:\n\n```bash\nsudo systemctl start labex-heartbeat.service || true\n```\n\nInspect the failed state:\n\n```bash\nsystemctl status labex-heartbeat.service --no-pager || true\n```\n\n```bash\nsystemctl is-failed labex-heartbeat.service\n```\n\nThe status tells you that the process exited, but the journal gives the application-specific reason:\n\n```bash\nsudo journalctl -u labex-heartbeat.service -n 10 --no-pager\n```\n\nLook for `configuration error: INTERVAL must be a positive integer`. Restore the known-good configuration, clear the recorded failed state, and start the service again:\n\n```bash\nsudo mv /etc/labex-heartbeat.conf.bak /etc/labex-heartbeat.conf\n```\n\n```bash\nsudo systemctl reset-failed labex-heartbeat.service\n```\n\n```bash\nsudo systemctl start labex-heartbeat.service\n```\n\nConfirm the recovery:\n\n```bash\nsystemctl is-active labex-heartbeat.service\n```\n\n```bash\ncat /etc/labex-heartbeat.conf\n```\n\nThe service should be `active`, and the configuration should again contain `INTERVAL=2`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "content": "## Summary\n\nYou distinguished processes, services, active state, and boot-time enablement. You inspected a systemd unit, controlled a safe practice service with `systemctl`, and queried its records with `journalctl`.\n\nYou also inspected `/var/log`, followed live text output with `tail -f`, used status and logs together to explain a controlled failure, and restored the service. This state-first, logs-second workflow is a practical foundation for beginner service troubleshooting.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "98fd744b27d9f499385338688372a4f87d52e1eb68118d3b3af066b333ed2f7c"
+}

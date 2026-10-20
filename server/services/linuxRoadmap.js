@@ -74,6 +74,8 @@ export function courseReadiness(courseId, labs = listLabs(), index = readLinuxIn
   const ready = availability.filter(lab => lab.can_grade).length;
   const practice = availability.filter(lab => lab.can_start_terminal).length;
   return { imported_labs_count: imported.length, runnable_labs_count: ready, practice_labs_count: practice,
+    content_status: imported.length ? (!index.courses.find(c=>c.id===courseId) || imported.length === index.courses.find(c=>c.id===courseId).source_labs_count ? 'complete' : 'partial') : 'reference-only',
+    source_verified_labs_count: imported.filter(lab=>lab.source_content?.status==='verified-english').length,
     supported_tasks_count: availability.reduce((sum, lab) => sum + lab.supported_steps_count, 0) };
 }
 

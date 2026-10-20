@@ -1,0 +1,57 @@
+{
+  "id": "linux-disable-web-directory-listing-662309",
+  "course_id": "linux-security-for-devsecops",
+  "source_lab_id": 662309,
+  "source_url": "https://labex.io/labs/linux-disable-web-directory-listing-662309",
+  "order": 4,
+  "title": "Disable Web Directory Listing",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "# Introduction\n\nYou are reviewing a Linux static content host after a content sync for a new download area. The site itself should stay public, but the `/downloads/` path is currently revealing a browsable index that exposes internal file names and structure.\n\nBefore the rollout is signed off, you need to confirm the current behavior, find the setting that enables the listing, disable it, and make sure direct links to intended files still work. This mirrors a common web hardening task after static content or artifact publishing changes.\n\nThe boundary is discovery: the download area may serve known files, but it should not expose a browsable inventory of everything in the directory.\n",
+  "sections": [
+    {
+      "id": "source-662309-section-0",
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nYou are reviewing a Linux static content host after a content sync for a new download area. The site itself should stay public, but the `/downloads/` path is currently revealing a browsable index that exposes internal file names and structure.\n\nBefore the rollout is signed off, you need to confirm the current behavior, find the setting that enables the listing, disable it, and make sure direct links to intended files still work. This mirrors a common web hardening task after static content or artifact publishing changes.\n\nThe boundary is discovery: the download area may serve known files, but it should not expose a browsable inventory of everything in the directory.\n",
+      "kind": "introduction"
+    },
+    {
+      "id": "source-662309-section-1",
+      "position": 1,
+      "title": "Disable the Directory Listing",
+      "content": "# Disable the Directory Listing\n\nYou are checking a small static site before it is handed back to the application team. The site itself is expected to stay online, but the `/downloads/` directory is exposing a browsable index instead of only serving known files.\n\nStart by reproducing the behavior over HTTP, then change the server configuration that controls directory indexes. The fix should remove the listing without turning the whole site or the direct download path into an outage.\n\nKeep the distinction clear while you work: `/downloads/` should stop listing the directory, but `/downloads/release-notes.txt` should remain available as an explicit file request.\n\n## Current Situation\n\nThe project lives at `/home/labex/project`.\n\nThe web server is already running on the exercise port, and its behavior is controlled by the project environment file plus a restart helper.\n\n## Scope\n\nOnly port `18280`, the site root, `/downloads/`, and `/downloads/release-notes.txt` are in scope.\n\nWork with `server.env` and `restart-server.sh` rather than spawning a different web server.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Use HTTP to confirm how `/downloads/` behaves before any change.\n- Change the project configuration so directory listing is off.\n- Apply the change through the project restart helper.\n- Re-check `/downloads/` and confirm `release-notes.txt` and the site root still succeed.\n\n## Acceptance Criteria\n\n- The site root still responds on port `18280`.\n- `/downloads/` no longer returns a browsable HTML index.\n- `/downloads/release-notes.txt` remains directly accessible.\n- The directory-listing behavior is changed through the existing project configuration.\n\n## Hints\n\n<details>\n<summary>How do I see the listing behavior?</summary>\n\nUse `curl -i` against `http://127.0.0.1:18280/downloads/` and read the status line and body. After your fix, the same URL should no longer return an HTML index.\n\n</details>\n\n<details>\n<summary>Where is listing controlled?</summary>\n\nThe server reads `server.env` in this project, including the flag that turns directory indexes on or off. Edit that file, run `./restart-server.sh`, then repeat the `curl` checks.\n\n</details>\n",
+      "kind": "task",
+      "task": "Complete the requirements in Disable the Directory Listing.",
+      "hint": "Follow the original instructions above. Automatic grading requires an independently reviewed verifier.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu gốc; chưa có fixture và bộ chấm local được kiểm chứng cho bước này."
+      }
+    },
+    {
+      "id": "source-662309-section-2",
+      "position": 2,
+      "title": "Summary",
+      "content": "# Summary\n\nIn this challenge, you handled a realistic web hardening cleanup after a content rollout. You disabled a browsable directory listing, restarted the service through the existing helper script, and verified that legitimate file delivery still worked. This is a practical DevSecOps task: reduce unnecessary information exposure without breaking normal content access.\n\nThe site remains useful to visitors, but the directory structure is no longer exposed as an index.\n",
+      "kind": "summary"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-662309-section-1",
+      "position": 1,
+      "title": "Disable the Directory Listing",
+      "content": "# Disable the Directory Listing\n\nYou are checking a small static site before it is handed back to the application team. The site itself is expected to stay online, but the `/downloads/` directory is exposing a browsable index instead of only serving known files.\n\nStart by reproducing the behavior over HTTP, then change the server configuration that controls directory indexes. The fix should remove the listing without turning the whole site or the direct download path into an outage.\n\nKeep the distinction clear while you work: `/downloads/` should stop listing the directory, but `/downloads/release-notes.txt` should remain available as an explicit file request.\n\n## Current Situation\n\nThe project lives at `/home/labex/project`.\n\nThe web server is already running on the exercise port, and its behavior is controlled by the project environment file plus a restart helper.\n\n## Scope\n\nOnly port `18280`, the site root, `/downloads/`, and `/downloads/release-notes.txt` are in scope.\n\nWork with `server.env` and `restart-server.sh` rather than spawning a different web server.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Use HTTP to confirm how `/downloads/` behaves before any change.\n- Change the project configuration so directory listing is off.\n- Apply the change through the project restart helper.\n- Re-check `/downloads/` and confirm `release-notes.txt` and the site root still succeed.\n\n## Acceptance Criteria\n\n- The site root still responds on port `18280`.\n- `/downloads/` no longer returns a browsable HTML index.\n- `/downloads/release-notes.txt` remains directly accessible.\n- The directory-listing behavior is changed through the existing project configuration.\n\n## Hints\n\n<details>\n<summary>How do I see the listing behavior?</summary>\n\nUse `curl -i` against `http://127.0.0.1:18280/downloads/` and read the status line and body. After your fix, the same URL should no longer return an HTML index.\n\n</details>\n\n<details>\n<summary>Where is listing controlled?</summary>\n\nThe server reads `server.env` in this project, including the flag that turns directory indexes on or off. Edit that file, run `./restart-server.sh`, then repeat the `curl` checks.\n\n</details>\n",
+      "kind": "task",
+      "task": "Complete the requirements in Disable the Directory Listing.",
+      "hint": "Follow the original instructions above. Automatic grading requires an independently reviewed verifier.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu gốc; chưa có fixture và bộ chấm local được kiểm chứng cho bước này."
+      }
+    }
+  ],
+  "curriculum_version": 1
+}

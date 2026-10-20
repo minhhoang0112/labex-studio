@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_lab_id": 18001,
+  "source_url": "https://labex.io/tutorials/linux-basic-file-operations-in-linux-18001",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nLinux organizes data as a tree of directories and files. Commands operate on locations in that tree, so reliable file work begins with three questions: Where am I? What is here? Which path identifies the item I want?\n\nThis lab builds those ideas gradually in `/home/labex/project/file-basics`. You will navigate with absolute and relative paths, inspect visible and hidden entries, create files and directories, select names with wildcards, and safely copy, move, and remove practice files. The final step introduces terminal shortcuts that make these operations faster without changing their meaning.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Locate Your Working Directory",
+      "content": "## Locate Your Working Directory\n\nIn this step, you will connect the terminal prompt to the directory where commands operate.\n\nThe shell always has a current working directory. Relative paths start from that directory, so checking your location prevents many beginner mistakes. Move to this lab's workspace using its complete path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nA path beginning with `/` is an **absolute path**. It starts at the filesystem root and identifies the same location regardless of where you began.\n\nPrint the working directory:\n\n```bash\npwd\n```\n\nYou should see:\n\n```text\n/home/labex/project/file-basics\n```\n\nSave that location as evidence. The `>` operator redirects the output into `starting-location.txt`; because the output goes to the file, nothing is printed this time:\n\n```bash\npwd > starting-location.txt\n```\n\nRead the file to confirm what was saved:\n\n```bash\ncat starting-location.txt\n```\n\nThe terminal screen and the file should show the same absolute path.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Navigate with Relative Paths",
+      "content": "## Navigate with Relative Paths\n\nIn this step, you will move through neighboring directories using relative paths and the special names `.` and `..`.\n\nReturn to the workspace if necessary:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\nList its visible entries:\n\n```bash\nls\n```\n\nYou should see `path-map` and `starting-location.txt`. Enter `path-map` using a **relative path**—a path interpreted from the current directory:\n\n```bash\ncd path-map\n```\n\n```bash\npwd\n```\n\nNow enter `north` and read its reference file:\n\n```bash\ncd north\n```\n\n```bash\ncat reference.txt\n```\n\nThe output is `north reference`. The name `..` means the parent directory, one level above the current location:\n\n```bash\ncd ..\n```\n\nMove from `path-map` into its `south` child:\n\n```bash\ncd south\n```\n\n```bash\ncat reference.txt\n```\n\nThe name `.` means the current directory. Save the current absolute location into the lab root by combining `pwd` with a relative destination that climbs two levels:\n\n```bash\npwd > ../../relative-location.txt\n```\n\nReturn directly to the lab root with its absolute path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\ncat relative-location.txt\n```\n\nThe saved path should end with `/path-map/south`. You have used both relative movement and an absolute return path.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Inspect Directory Contents",
+      "content": "## Inspect Directory Contents\n\nIn this step, you will use `ls` options to reveal hidden names and file details.\n\nRun a plain listing in the lab root:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nls\n```\n\nLinux normally hides names that begin with a dot. The `-a` option means “all” and includes those entries:\n\n```bash\nls -a\n```\n\nYou should now see `.practice-note`, along with `.` for the current directory and `..` for its parent.\n\nThe `-l` option produces a **long listing** with permissions, owner, size, time, and name:\n\n```bash\nls -l\n```\n\nCombine the options to inspect all entries in long form:\n\n```bash\nls -la\n```\n\nEach output line begins with a type and permission field. A leading `d` identifies a directory; a leading `-` identifies a regular file. Permissions are taught in depth later.\n\nSave the names, including hidden entries. `ls` already displays them alphabetically in this controlled workspace, so no additional sorting command is needed yet:\n\n```bash\nls -A > all-names.txt\n```\n\nUnlike `-a`, `-A` omits the special `.` and `..` entries while retaining other hidden names. Display the result:\n\n```bash\ncat all-names.txt\n```\n\nThe list should include `.practice-note`, `path-map`, and the files created in earlier steps.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Create Directories and Files",
+      "content": "## Create Directories and Files\n\nIn this step, you will create a small project tree and place text inside regular files.\n\n`mkdir` creates a directory. Its `-p` option also creates missing parent directories, so one command can build a nested path:\n\n```bash\ncd /home/labex/project/file-basics\n```\n\n```bash\nmkdir -p workspace/docs workspace/logs\n```\n\nThis creates `workspace` plus its `docs` and `logs` children. Inspect the result:\n\n```bash\nfind workspace -maxdepth 2 -type d\n```\n\n`touch` creates an empty file when the name does not exist. Create two files at once:\n\n```bash\ntouch workspace/docs/guide.txt workspace/logs/app.log\n```\n\nWrite content to the guide. A single `>` replaces the destination with the command's output:\n\n```bash\necho \"Linux file practice\" > workspace/docs/guide.txt\n```\n\nAppend a second line with `>>`, which preserves existing content:\n\n```bash\necho \"Paths make locations predictable\" >> workspace/docs/guide.txt\n```\n\nRead the complete file:\n\n```bash\ncat workspace/docs/guide.txt\n```\n\nYou should see both lines in their original order. The empty `app.log` also exists, ready for later wildcard practice.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Select Names with Wildcards",
+      "content": "## Select Names with Wildcards\n\nIn this step, you will create groups of files and select them by filename patterns.\n\nMove into the logs directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace/logs\n```\n\nBrace expansion generates several literal names before the command runs. Create numbered logs:\n\n```bash\ntouch app{1..3}.log worker{1..2}.log notes.txt\n```\n\nThe shell expands `{1..3}` into `1 2 3`, so `app{1..3}.log` becomes three arguments.\n\nA wildcard is different: it matches names that already exist. `*` matches any sequence of characters:\n\n```bash\nls *.log\n```\n\nThe output includes every name ending in `.log`, but not `notes.txt`.\n\nThe `?` wildcard matches exactly one character. List only the numbered `app` logs:\n\n```bash\nls app?.log\n```\n\nThe shell expands filename patterns in alphabetical order. `printf` prints each expanded name on its own line, and `>` saves those lines:\n\n```bash\nprintf '%s\\n' *.log > matched-logs.txt\n```\n\n```bash\ncat matched-logs.txt\n```\n\nThe saved list should contain `app.log`, `app1.log`, `app2.log`, `app3.log`, `worker1.log`, and `worker2.log`. Quoting `*.log` would prevent wildcard expansion, so the pattern is intentionally unquoted here.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Copy, Move, and Remove Files Safely",
+      "content": "## Copy, Move, and Remove Files Safely\n\nIn this step, you will compare the effects of `cp`, `mv`, and `rm` before using them in the following challenge.\n\nReturn to the workspace directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace\n```\n\n`cp SOURCE DESTINATION` creates another file while leaving the source in place. Make a backup copy of the guide:\n\n```bash\ncp docs/guide.txt docs/guide-backup.txt\n```\n\nConfirm that the two files have identical content. `cmp` compares two files byte for byte. It prints nothing when they match; an error message would mean they differ:\n\n```bash\ncmp docs/guide.txt docs/guide-backup.txt\n```\n\n`mv SOURCE DESTINATION` relocates or renames an item. Move the backup into the workspace root and give it a clearer name:\n\n```bash\nmv docs/guide-backup.txt archived-guide.txt\n```\n\nList both locations:\n\n```bash\nls docs\n```\n\n```bash\nls\n```\n\nYou should see `guide.txt` under `docs` and `archived-guide.txt` in the current directory.\n\n`rm` permanently removes a named file; there is normally no terminal recycle bin. Remove only the disposable notes file:\n\n```bash\nrm logs/notes.txt\n```\n\nList the directory again to make the deletion observable:\n\n```bash\nls logs\n```\n\n`notes.txt` should no longer appear. The original guide and its moved copy remain available, while the one explicitly named disposable file is gone.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Work Faster with Terminal Shortcuts",
+      "content": "## Work Faster with Terminal Shortcuts\n\nIn this step, you will practice four terminal controls that reduce typing and help recover from a command that keeps running.\n\nFirst enter the documents directory:\n\n```bash\ncd /home/labex/project/file-basics/workspace/docs\n```\n\nRun a command you will reuse:\n\n```bash\ncat guide.txt\n```\n\nPress the **Up Arrow** once. The previous `cat guide.txt` command should reappear at the prompt. Press Enter to run it again. Command recall avoids retyping and still lets you edit the recalled line before execution.\n\nNext type `cat g` without pressing Enter, then press **Tab**. Because only `guide.txt` matches, the shell should complete the filename. Press Enter to run the completed command.\n\nNow start a command that waits continuously:\n\n```bash\ntail -f /dev/null\n```\n\n`tail -f` follows a file and waits for new data. `/dev/null` never provides useful lines, so the command appears to sit silently. Press **Ctrl+C** to send an interrupt and return to the prompt. This is the standard first response when a foreground command should stop.\n\nPress **Ctrl+L** to clear old output from the visible screen. Like `clear`, this does not delete files or command history.\n\nCreate a completion marker after returning to the prompt:\n\n```bash\necho \"Shortcuts practiced\" > /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\n```bash\ncat /home/labex/project/file-basics/shortcuts-complete.txt\n```\n\nThe marker confirms that you successfully regained the prompt after the interactive practice.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "content": "## Summary\n\nYou learned how the working directory and paths control file operations. You navigated with absolute and relative paths, inspected hidden entries and metadata, created a directory tree and text files, selected names with wildcards, and compared copying, moving, and permanent removal. You also practiced command recall, Tab completion, `Ctrl+C`, and `Ctrl+L`. The next lab teaches how to find reliable help when an unfamiliar command or option appears.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "42d9652ed6b9b653a70a9d38409ac421c47b44fd33e9f483ec6b16539f03290e"
+}

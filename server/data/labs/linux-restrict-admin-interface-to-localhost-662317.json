@@ -1,0 +1,57 @@
+{
+  "id": "linux-restrict-admin-interface-to-localhost-662317",
+  "course_id": "linux-security-for-devsecops",
+  "source_lab_id": 662317,
+  "source_url": "https://labex.io/labs/linux-restrict-admin-interface-to-localhost-662317",
+  "order": 2,
+  "title": "Restrict Admin Interface to Localhost",
+  "type": "challenge",
+  "difficulty": "Intermediate",
+  "estimated_time": "30 mins",
+  "overview": "# Introduction\n\nYou are taking over a small Linux web host near the end of a release rehearsal. The public landing page still needs to stay reachable for the team, but the internal admin interface should never have been left open on the network.\n\nBefore the host is handed back, you need to confirm how the two rehearsal listeners are bound, find the configuration that controls the admin service binding, and tighten it without interrupting the public page. This is the kind of low-drama, high-importance cleanup that often lands on platform or DevSecOps teams after a deployment window.\n\nThe boundary is bind address, not service existence: the public page may listen broadly, but the admin interface should be host-local.\n",
+  "sections": [
+    {
+      "id": "source-662317-section-0",
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nYou are taking over a small Linux web host near the end of a release rehearsal. The public landing page still needs to stay reachable for the team, but the internal admin interface should never have been left open on the network.\n\nBefore the host is handed back, you need to confirm how the two rehearsal listeners are bound, find the configuration that controls the admin service binding, and tighten it without interrupting the public page. This is the kind of low-drama, high-importance cleanup that often lands on platform or DevSecOps teams after a deployment window.\n\nThe boundary is bind address, not service existence: the public page may listen broadly, but the admin interface should be host-local.\n",
+      "kind": "introduction"
+    },
+    {
+      "id": "source-662317-section-1",
+      "position": 1,
+      "title": "Restrict the Admin Interface",
+      "content": "# Restrict the Admin Interface\n\nYou are taking over a small web host after a release rehearsal. The previous operator left one important requirement in the handoff note: the landing page can stay public, but the admin interface is only meant to be reachable from the host itself.\n\nThe system is already running, so start from what the host is actually exposing now. Your job is to confirm the current bind state, find the setting that controls the admin listener, and narrow that listener without breaking the public site.\n\nKeep the two listeners conceptually separate while you work. The public page and admin interface have different exposure requirements even though they run on the same host.\n\n## Current Situation\n\nThe project lives at `/home/labex/project`.\n\nTwo task listeners are running for this exercise: the public landing page and the admin interface. The admin interface currently needs a bind-address correction, not a port change or a replacement server.\n\n## Scope\n\nOnly TCP ports `18080` and `18081` are in scope. Treat every other listener on the host as platform noise.\n\nWork with the files already provided in the project directory. Do not start parallel replacement HTTP servers just to make a check pass.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Inspect the bind addresses in use for TCP ports `18080` and `18081`.\n- Change the admin listener so port `18081` is bound only to `127.0.0.1`, without moving it to another port.\n- Reload or restart that admin service in the way this project expects, so your change takes effect.\n- Confirm the public experience on port `18080` still works and the admin interface on `18081` still answers on localhost.\n\n## Acceptance Criteria\n\n- The public site remains available on port `18080`.\n- The admin interface remains on port `18081`.\n- The admin listener is bound only to localhost.\n- The project restart path has been used so the running service reflects the configuration change.\n\n## Hints\n\n<details>\n<summary>How do I confirm what is listening on `18080` and `18081`?</summary>\n\nUse `ss -lntp`, piping through `grep -E '18080|18081'` if the full listing is noisy. Check the local address for each port before and after your change.\n\n</details>\n\n<details>\n<summary>I updated the config but the listener did not change.</summary>\n\nEdit `admin-service.env` so the bind address is localhost and the port stays `18081`, then run `./restart-admin-service.sh` from the project directory so the admin process reloads those settings.\n\n</details>\n",
+      "kind": "task",
+      "task": "Complete the requirements in Restrict the Admin Interface.",
+      "hint": "Follow the original instructions above. Automatic grading requires an independently reviewed verifier.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu gốc; chưa có fixture và bộ chấm local được kiểm chứng cho bước này."
+      }
+    },
+    {
+      "id": "source-662317-section-2",
+      "position": 2,
+      "title": "Summary",
+      "content": "# Summary\n\nIn this challenge, you completed a realistic post-release cleanup on a Linux host. You confirmed how the rehearsal listeners were bound, tracked down the configuration that controlled the admin listener, restricted it to localhost, and verified that the public landing page still worked. This is a common DevSecOps hardening task: reduce unnecessary exposure without breaking the service that still needs to stay online.\n\nThe public page remains reachable, while the admin interface is limited to the host-local boundary where it belongs.\n",
+      "kind": "summary"
+    }
+  ],
+  "steps": [
+    {
+      "id": "source-662317-section-1",
+      "position": 1,
+      "title": "Restrict the Admin Interface",
+      "content": "# Restrict the Admin Interface\n\nYou are taking over a small web host after a release rehearsal. The previous operator left one important requirement in the handoff note: the landing page can stay public, but the admin interface is only meant to be reachable from the host itself.\n\nThe system is already running, so start from what the host is actually exposing now. Your job is to confirm the current bind state, find the setting that controls the admin listener, and narrow that listener without breaking the public site.\n\nKeep the two listeners conceptually separate while you work. The public page and admin interface have different exposure requirements even though they run on the same host.\n\n## Current Situation\n\nThe project lives at `/home/labex/project`.\n\nTwo task listeners are running for this exercise: the public landing page and the admin interface. The admin interface currently needs a bind-address correction, not a port change or a replacement server.\n\n## Scope\n\nOnly TCP ports `18080` and `18081` are in scope. Treat every other listener on the host as platform noise.\n\nWork with the files already provided in the project directory. Do not start parallel replacement HTTP servers just to make a check pass.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Inspect the bind addresses in use for TCP ports `18080` and `18081`.\n- Change the admin listener so port `18081` is bound only to `127.0.0.1`, without moving it to another port.\n- Reload or restart that admin service in the way this project expects, so your change takes effect.\n- Confirm the public experience on port `18080` still works and the admin interface on `18081` still answers on localhost.\n\n## Acceptance Criteria\n\n- The public site remains available on port `18080`.\n- The admin interface remains on port `18081`.\n- The admin listener is bound only to localhost.\n- The project restart path has been used so the running service reflects the configuration change.\n\n## Hints\n\n<details>\n<summary>How do I confirm what is listening on `18080` and `18081`?</summary>\n\nUse `ss -lntp`, piping through `grep -E '18080|18081'` if the full listing is noisy. Check the local address for each port before and after your change.\n\n</details>\n\n<details>\n<summary>I updated the config but the listener did not change.</summary>\n\nEdit `admin-service.env` so the bind address is localhost and the port stays `18081`, then run `./restart-admin-service.sh` from the project directory so the admin process reloads those settings.\n\n</details>\n",
+      "kind": "task",
+      "task": "Complete the requirements in Restrict the Admin Interface.",
+      "hint": "Follow the original instructions above. Automatic grading requires an independently reviewed verifier.",
+      "verification": {
+        "kind": "unsupported",
+        "reason": "Đã có tài liệu gốc; chưa có fixture và bộ chấm local được kiểm chứng cho bước này."
+      }
+    }
+  ],
+  "curriculum_version": 1
+}

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_lab_id": 388812,
+  "source_url": "https://labex.io/tutorials/shell-shell-arrays-388812",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn how to work with arrays in shell programming. Arrays are data structures that allow you to store multiple values under a single name, making it easier to organize and manipulate data. You will learn how to initialize arrays, add elements to them, access elements by their index, and determine the number of elements in an array. This knowledge is fundamental for more advanced shell scripting and data manipulation tasks.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Create a new shell script file",
+      "content": "## Create a new shell script file\n\nLet's start by creating a new shell script file where we'll write our array operations.\n\n1. Open your terminal in the WebIDE.\n2. Navigate to the project directory:\n\n   ```bash\n   cd ~/project\n   ```\n\n3. Create a new file named `arrays.sh` using the touch command:\n\n   ```bash\n   touch arrays.sh\n   ```\n\n4. Open the `arrays.sh` file in the WebIDE.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Initialize empty arrays",
+      "content": "## Initialize empty arrays\n\nNow that we have our script file, let's start by initializing three empty arrays.\n\nAdd the following code to your `arrays.sh` file:\n\n```bash\n#!/bin/bash\n\n## Initialize empty arrays\nNUMBERS=()\nSTRINGS=()\nNAMES=()\n```\n\nLet's break down what this code does:\n\n- The first line `#!/bin/bash` is called a shebang. It tells the system that this script should be executed by the Bash shell.\n- We're creating three empty arrays: `NUMBERS`, `STRINGS`, and `NAMES`.\n- The `()` syntax initializes an empty array.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Add elements to the arrays",
+      "content": "## Add elements to the arrays\n\nNow that we have our empty arrays, let's add some elements to them.\n\nAdd the following code to your `arrays.sh` file, below the array initializations:\n\n```bash\n## Add elements to NUMBERS array\nNUMBERS+=(1)\nNUMBERS+=(2)\nNUMBERS+=(3)\n\n## Add elements to STRINGS array\nSTRINGS+=(\"hello\")\nSTRINGS+=(\"world\")\n\n## Add elements to NAMES array\nNAMES+=(\"John\")\nNAMES+=(\"Eric\")\nNAMES+=(\"Jessica\")\n```\n\nHere's what this code does:\n\n- We use the `+=` operator to append elements to our arrays.\n- For `NUMBERS`, we're adding the integers 1, 2, and 3.\n- For `STRINGS`, we're adding the words \"hello\" and \"world\".\n- For `NAMES`, we're adding three names: \"John\", \"Eric\", and \"Jessica\".\n- Note that we enclose string elements in quotes, but numbers don't need quotes.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Determine the number of elements in an array",
+      "content": "## Determine the number of elements in an array\n\nOne common operation with arrays is finding out how many elements they contain. Let's do this for our `NAMES` array.\n\nAdd the following code to your `arrays.sh` file:\n\n```bash\n## Get the number of elements in the NAMES array\nNumberOfNames=${#NAMES[@]}\n```\n\nThis line does the following:\n\n- `${#NAMES[@]}` gives us the number of elements in the `NAMES` array.\n- We store this value in a variable called `NumberOfNames`.\n- The `@` symbol inside the brackets refers to all elements of the array.\n- The `#` symbol before `NAMES` tells the shell to count the elements.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Access a specific element in an array",
+      "content": "## Access a specific element in an array\n\nNow, let's access a specific element in our `NAMES` array. We'll get the second name.\n\nAdd this code to your `arrays.sh` file:\n\n```bash\n## Access the second name in the NAMES array\nsecond_name=${NAMES[1]}\n```\n\nHere's what this code does:\n\n- We're accessing the second element of the `NAMES` array with `${NAMES[1]}`.\n- Remember, array indices in Bash start at 0, so `[1]` gives us the second element.\n- We store this value in a variable called `second_name`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Print the arrays and variables",
+      "content": "## Print the arrays and variables\n\nFinally, let's add some code to print out our arrays and variables to see the results of our operations.\n\nAdd the following code to the end of your `arrays.sh` file:\n\n```bash\n## Print the arrays and variables\necho \"NUMBERS array: ${NUMBERS[@]}\"\necho \"STRINGS array: ${STRINGS[@]}\"\necho \"The number of names listed in the NAMES array: $NumberOfNames\"\necho \"The second name on the NAMES list is: $second_name\"\n```\n\nThis code does the following:\n\n- We use `echo` to print strings to the console.\n- `${NUMBERS[@]}` and `${STRINGS[@]}` print all elements of these arrays.\n- We print the `NumberOfNames` and `second_name` variables we created earlier.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Run the script",
+      "content": "## Run the script\n\nNow that we've written our script, it's time to run it and see the results.\n\n1. In your terminal, make sure you're in the correct directory:\n\n   ```bash\n   cd ~/project\n   ```\n\n2. Make the script executable:\n\n   ```bash\n   chmod +x arrays.sh\n   ```\n\n3. Run the script:\n\n   ```bash\n   ./arrays.sh\n   ```\n\nYou should see output similar to this:\n\n```\nNUMBERS array: 1 2 3\nSTRINGS array: hello world\nThe number of names listed in the NAMES array: 3\nThe second name on the NAMES list is: Eric\n```\n\nThis output shows that our array operations were successful:\n\n- The `NUMBERS` array contains 1, 2, and 3.\n- The `STRINGS` array contains \"hello\" and \"world\".\n- We correctly counted 3 names in the `NAMES` array.\n- We successfully retrieved \"Eric\" as the second name.\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you've learned the fundamentals of working with arrays in shell scripting. You've practiced initializing arrays, adding elements to them, accessing specific elements, and determining the number of elements in an array. These skills are crucial for more advanced shell scripting tasks, especially when dealing with lists of data or when you need to perform operations on multiple items. Arrays provide a powerful way to organize and manipulate data in your shell scripts, making your code more efficient and easier to manage.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "7a96d4403efbffa2013ba8a7bf19060e6c0fa42fcc75e3aabf34f8469ecf8e41"
+}

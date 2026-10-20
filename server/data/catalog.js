@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
+import { applySourceContent } from '../services/sourceContent.js';
 
 const labsDirectory = fileURLToPath(new URL("./labs/", import.meta.url));
 
@@ -11,7 +12,7 @@ export function loadLab(id) {
   if (!isValidId(id)) return null;
   try {
     const lab = JSON.parse(fs.readFileSync(`${labsDirectory}/${id}.json`, "utf8"));
-    return lab.id === id ? lab : null;
+    return lab.id === id ? applySourceContent(lab) : null;
   } catch (error) {
     if (error.code === "ENOENT") return null;
     throw error;

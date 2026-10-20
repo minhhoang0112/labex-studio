@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 209743,
+  "source_url": "https://labex.io/tutorials/linux-linux-mv-command-file-moving-and-renaming-209743",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nThis tutorial provides an overview of the `mv` command in Linux. The `mv` command is a versatile tool used for moving or renaming files and directories within a Linux environment. Understanding its basic usage and various options is essential for efficient file management.\n\nIn this lab, you will take on the role of a junior system administrator tasked with organizing files for a small web development company. You'll use the `mv` command to manage project files, update content, and maintain an organized file structure.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Exploring the Project Directory",
+      "content": "## Exploring the Project Directory\n\nLet's start by examining the contents of our project directory.\n\n1. Open your terminal. You should be in the `/home/labex/project` directory by default. To confirm this, you can use the `pwd` command, which you've learned previously. It will display your current working directory.\n\n2. Use the `ls` command to list the contents of the current directory:\n\n```bash\nls\n```\n\nYou should see several files and directories related to web development projects. The output might look something like this:\n\n```\nindex.html  styles.css  script.js  utils.js  images\n```\n\nDon't worry if you see additional files or if some of these are missing. The important thing is to understand what files and directories are present in your working environment.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Moving a File",
+      "content": "## Moving a File\n\nNow, let's move a file to organize our project structure better. We'll move the `styles.css` file into a new directory called `css`.\n\n1. First, we need to create the `css` directory. Use the `mkdir` command, which you've learned previously:\n\n```bash\nmkdir css\n```\n\nThis command creates a new directory named `css` in your current location.\n\n2. Now, let's use the `mv` command to move `styles.css` into the `css` directory:\n\n```bash\nmv styles.css css/\n```\n\nLet's break down this command:\n\n- `mv` is the command we're using to move files\n- `styles.css` is the source file we want to move\n- `css/` is the destination directory where we want to move the file\n\nThe forward slash after `css` indicates that it's a directory. Including the slash is optional but can help clarify that we're moving the file into a directory.\n\n3. To verify that the file has been moved, we can use the `ls` command again, this time to look inside the `css` directory:\n\n```bash\nls css\n```\n\nYou should see `styles.css` listed in the output. If you don't see it, don't worry - we'll check this in our verification step.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Renaming a File",
+      "content": "## Renaming a File\n\nSometimes, we need to rename files to follow naming conventions or update versions. The `mv` command can also be used to rename files.\n\n1. Let's rename `index.html` to `home.html`. We'll use the `mv` command again, but this time both the source and destination will be in the same directory:\n\n```bash\nmv index.html home.html\n```\n\nIn this command:\n\n- `index.html` is the current name of the file (the source)\n- `home.html` is the new name we want to give the file (the destination)\n\nWhen the source and destination are in the same directory, `mv` understands that we want to rename the file rather than move it.\n\n2. To verify the change, use the `ls` command:\n\n```bash\nls\n```\n\nYou should see `home.html` in the list, but `index.html` should no longer be present. If both files are present, or if you only see `index.html`, don't worry - our verification step will help us check this.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Moving Multiple Files",
+      "content": "## Moving Multiple Files\n\nOften, you'll need to move multiple files at once. Let's organize our JavaScript files by moving them into a `scripts` directory.\n\n1. First, create a new directory for scripts using the `mkdir` command:\n\n```bash\nmkdir scripts\n```\n\n2. Now, we'll use the `mv` command to move all `.js` files into the `scripts` directory:\n\n```bash\nmv *.js scripts/\n```\n\nLet's break down this command:\n\n- `mv` is our command to move files\n- `*.js` is a pattern that matches all files ending with `.js`. The `*` is a wildcard that means \"match any characters\"\n- `scripts/` is our destination directory\n\nThis command will move all JavaScript files (files ending with .js) into the `scripts` directory.\n\n3. To verify the move, use the `ls` command to check the contents of the `scripts` directory:\n\n```bash\nls scripts\n```\n\nYou should see all the JavaScript files listed. If you don't see any files, or if you see some `.js` files still in the main project directory, don't worry - our verification steps will help us check this.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Using the -i Option for Safe Moves",
+      "content": "## Using the -i Option for Safe Moves\n\nWhen moving files, it's good practice to use the `-i` option to prevent accidental overwrites. The `-i` option stands for \"interactive\" and will prompt you before overwriting an existing file.\n\n1. Let's create a test file to experiment with. We'll use a new command called `echo` to do this. Don't worry about understanding `echo` fully - we're just using it to create a file with some content:\n\n   ```bash\n   echo \"Test content\" > test.txt\n   ```\n\n   This command creates a new file named `test.txt` with the content \"Test content\".\n\n   Make sure `home.html` exists before running the next command. You can check with:\n\n   ```bash\n   ls home.html\n   ```\n\n   If it doesn't, create it with the following command:\n\n   ```bash\n   echo \"Home page\" > home.html\n   ```\n\n2. Now, let's try to move this file to overwrite an existing file, using the `-i` option:\n\n   ```bash\n   mv -i test.txt home.html\n   ```\n\n3. You will be prompted with a message similar to:\n\n   ```plaintext\n   mv: overwrite 'home.html'?\n   ```\n\nThis is asking if you want to overwrite the existing `home.html` file with `test.txt`. Type `n` and press Enter to cancel the operation.\n\nThe `-i` option is very useful when you're not sure if you might be overwriting important files. It gives you a chance to reconsider before making changes.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you've learned how to use the `mv` command to organize files in a web development project. You've practiced moving files, renaming them, working with multiple files, and using the `-i` options for safer file operations.\n\nHere are some additional `mv` command options not covered in the lab:\n\n- `-f`: Force move without prompting for confirmation\n- `-n`: Do not overwrite an existing file\n- `-v`: Verbose mode, explaining what is being done\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "e4778a3659b8fa077c2618c12d464851f8dde9fad229d428d6afd2a94a9c32c3"
+}

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 219189,
+  "source_url": "https://labex.io/tutorials/linux-linux-diff-command-file-comparing-219189",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, we will explore the `diff` command, an essential tool for software developers and system administrators working with Linux. The `diff` command is used to compare the contents of two files and highlight the differences between them. This skill is particularly valuable when managing code versions, reviewing changes in configuration files, or identifying discrepancies in text-based data.\n\nWe'll simulate a software development scenario where you'll use the `diff` command to compare different versions of files, helping you understand how this command can be applied in real-world situations.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding the Basic Usage of diff",
+      "content": "## Understanding the Basic Usage of diff\n\nLet's start by comparing two simple text files to understand the basic output of the `diff` command.\n\nFirst, navigate to the project directory:\n\n```bash\ncd /home/labex/project\n```\n\nNow, let's use the `diff` command to compare two files:\n\n```bash\ndiff file1.txt file2.txt\n```\n\nYou should see output similar to this:\n\n```\n1,2c1,2\n< This is version 1 of the file.\n< It contains some initial content.\n---\n> This is version 2 of the file.\n> It contains updated content.\n4c4\n< This is the fourth line.\n---\n> This is a modified fourth line.\n```\n\nLet's break down this output:\n\n- The numbers (like `1,2c1,2`) indicate the line numbers in both files where changes occur.\n- The letter `c` means \"change\". Other possible letters are `a` for \"add\" and `d` for \"delete\".\n- Lines starting with `<` are from the first file (file1.txt).\n- Lines starting with `>` are from the second file (file2.txt).\n- The `---` separates the content from the first file and the second file.\n\nThis output tells us that:\n\n1. Lines 1 and 2 in both files are different.\n2. Line 4 in both files is different.\n3. Line 3 (not shown in the output) is identical in both files.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Comparing Python Scripts",
+      "content": "## Comparing Python Scripts\n\nNow, let's apply the `diff` command to a more realistic scenario. Imagine you're working on a Python script and want to compare two versions.\n\nFirst, let's view the contents of both script versions:\n\n```bash\ncat script_v1.py\n```\n\nYou should see:\n\n```python\ndef greet(name):\n    print(\"Hello, \" + name + \"!\")\n\ndef main():\n    name = input(\"Enter your name: \")\n    greet(name)\n\nif __name__ == \"__main__\":\n    main()\n```\n\nNow, let's look at the second version:\n\n```bash\ncat script_v2.py\n```\n\nYou should see:\n\n```python\ndef greet(name):\n    print(f\"Hello, {name.capitalize()}!\")\n\ndef main():\n    name = input(\"Enter your name: \")\n    greet(name)\n    print(\"Thank you for using this script!\")\n\nif __name__ == \"__main__\":\n    main()\n```\n\nNow, let's use `diff` to compare these scripts:\n\n```bash\ndiff script_v1.py script_v2.py\n```\n\nYou should see output similar to this:\n\n```\n2c2\n<     print(\"Hello, \" + name + \"!\")\n---\n>     print(f\"Hello, {name.capitalize()}!\")\n6a7\n>     print(\"Thank you for using this script!\")\n```\n\nThis output tells us:\n\n1. Line 2 has been changed. The greeting now uses an f-string and capitalizes the name.\n2. A new line (Line 7 in the new version) has been added with a thank you message.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Using the Unified Format",
+      "content": "## Using the Unified Format\n\nThe unified format (`-u` option) provides a more readable output, especially for larger files or when context is important.\n\nCompare the Python scripts using the unified format:\n\n```bash\ndiff -u script_v1.py script_v2.py\n```\n\nYou should see output similar to this:\n\n```\n--- script_v1.py 2023-12-28 10:00:00.000000000 +0000\n+++ script_v2.py 2023-12-28 10:05:00.000000000 +0000\n@@ -1,8 +1,9 @@\n def greet(name):\n-    print(\"Hello, \" + name + \"!\")\n+    print(f\"Hello, {name.capitalize()}!\")\n\n def main():\n     name = input(\"Enter your name: \")\n     greet(name)\n+    print(\"Thank you for using this script!\")\n\n if __name__ == \"__main__\":\n```\n\nLet's break down this output:\n\n- The first two lines show the files being compared and their timestamps.\n- Lines starting with `-` are from the first file (script_v1.py).\n- Lines starting with `+` are from the second file (script_v2.py).\n- Lines without `-` or `+` provide context and are unchanged between the files.\n- The `@@ -1,8 +1,9 @@` line indicates that we're seeing lines 1-8 from the first file and lines 1-9 from the second file.\n\nThis format is often preferred because it provides more context around the changes.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Ignoring Whitespace Changes",
+      "content": "## Ignoring Whitespace Changes\n\nSometimes, differences in whitespace (spaces, tabs) are not significant. The `-w` option tells `diff` to ignore these changes.\n\nLet's create a new version of our script with some whitespace changes:\n\n> Notes: You must add some whitespace to the script manually, copy-pasting the code will not contain any whitespace.\n\n```bash\ncat > script_v3.py << EOF\ndef greet(name):\n    print(f\"Hello, {name.capitalize()}!\")\n\ndef main():\n    name = input(\"Enter your name: \")\n    greet(name)\n    print(\"Thank you for using this script!\")\n\nif __name__ == \"__main__\":\n    main()\nEOF\n```\n\nNow, let's compare script_v2.py and script_v3.py, first without and then with the `-w` option:\n\n```bash\ndiff script_v2.py script_v3.py\n```\n\nYou might see some differences due to whitespace. Now try:\n\n```bash\ndiff -w script_v2.py script_v3.py\n```\n\nYou should see no output, indicating no differences when ignoring whitespace.\n\nThis is useful when you want to focus on content changes rather than formatting differences.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Comparing Directories",
+      "content": "## Comparing Directories\n\nThe `diff` command can also compare entire directories. Let's create two directories with some files and compare them.\n\nCreate the directories and files:\n\n```bash\necho \"This is a file in dir1\" > dir1/file.txt\necho \"This is a file in dir2\" > dir2/file.txt\necho \"This file is unique to dir1\" > dir1/unique1.txt\necho \"This file is unique to dir2\" > dir2/unique2.txt\n```\n\nNow, compare the directories:\n\n```bash\ndiff -r dir1 dir2\n```\n\nYou should see output similar to this:\n\n```\nOnly in dir1: unique1.txt\nOnly in dir2: unique2.txt\ndiff -r dir1/file.txt dir2/file.txt\n1c1\n< This is a file in dir1\n---\n> This is a file in dir2\n```\n\nThis output tells us:\n\n1. `dir1` has a file called `unique1.txt` that doesn't exist in `dir2`.\n2. `dir2` has a file called `unique2.txt` that doesn't exist in `dir1`.\n3. The `file.txt` exists in both directories but has different content.\n\nThe `-r` option makes `diff` recursively compare subdirectories as well, which is useful for comparing complex directory structures.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, we explored the Linux `diff` command in a software development context. We learned how to:\n\n1. Compare two text files and interpret the basic `diff` output\n2. Compare different versions of Python scripts\n3. Use the unified format for more readable output\n4. Ignore whitespace changes in comparisons\n5. Compare entire directories recursively\n\nAdditional `diff` options not covered in this lab include:\n\n- `-y`: Side-by-side comparison\n- `-i`: Ignore case differences\n- `-b`: Ignore changes in the amount of whitespace\n- `-B`: Ignore changes whose lines are all blank\n- `-q`: Report only when files differ, without showing the differences\n\nThese options can be combined for more specific comparisons.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "3aa7b3fef6f086b7a68793f252248a65f1559abd836a6600a9f1f6423ad7e1e1"
+}

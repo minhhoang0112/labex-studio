@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "source_lab_id": 590847,
+  "source_url": "https://labex.io/tutorials/comptia-modify-directory-ownership-with-chown-in-linux-590847",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, you will learn the practical application of the `chown` command to modify directory ownership in Linux. Mastering file and directory ownership is a fundamental aspect of Linux system administration, crucial for managing permissions and securing access to shared resources. This hands-on exercise will guide you through the process of changing a directory's group ownership, a common task for organizing collaborative projects.\n\nYou will start by setting up the necessary environment, which includes creating a new group named `research` and adding your user to it. Following the setup, you will create a directory and examine its initial ownership details. The central part of this lab involves using the `chown` command to reassign the directory to the `research` group. To conclude, you will use the `ls -l` command to verify that the ownership has been successfully updated, confirming your changes.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Prepare the Environment and Verify Group Membership",
+      "content": "## Prepare the Environment and Verify Group Membership\n\nIn this step, you will prepare the necessary user group for the subsequent exercises. In Linux, file ownership is defined by a user and a group. This allows for flexible permission management. We will create a new group called `research` and add our current user, `labex`, to this group. This will allow us to later assign ownership of files and directories to this specific group.\n\nFirst, let's create the `research` group. We will use the `groupadd` command. Since creating a group modifies system configuration files, we need to use `sudo` to execute the command with administrative privileges.\n\nExecute the following command in your terminal:\n\n```bash\nsudo groupadd research\n```\n\nThis command does not produce any output upon success. To verify that the group has been created, we can search for it in the `/etc/group` file. This file contains information about all the groups on the system. We'll use the `grep` command to find the line corresponding to our new group.\n\n```bash\ngrep 'research' /etc/group\n```\n\nYou should see an output similar to this, although the group ID (the number) might be different:\n\n```plaintext\nresearch:x:5003:\n```\n\nNow that the group exists, the next step is to add the `labex` user to it. We'll use the `usermod` command, which stands for \"user modify\". The `-aG` options are important: `-a` means to append, and `-G` specifies the supplementary group(s). Without `-a`, you would remove the user from all other groups.\n\nRun this command to add `labex` to the `research` group:\n\n```bash\nsudo usermod -aG research labex\n```\n\nAgain, this command won't produce any output if it's successful. Let's verify the change by checking the `/etc/group` file one more time.\n\n```bash\ngrep 'research' /etc/group\n```\n\nThe output should now show `labex` at the end of the line, indicating that the user is a member of the group.\n\n```plaintext\nresearch:x:5003:labex\n```\n\nWith the `research` group created and the `labex` user assigned to it, our environment is now properly set up for the next steps in managing file and directory ownership.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Create a Directory and Inspect its Initial Ownership",
+      "content": "## Create a Directory and Inspect its Initial Ownership\n\nIn this step, you will create a new directory within your project folder and then inspect its default ownership settings. Whenever a new file or directory is created in Linux, the system automatically assigns ownership. Typically, the owner is the user who created it, and the group owner is that user's primary group.\n\nYour current working directory is `/home/labex/project`. We will create a new directory here named `RandD`. The `mkdir` command is used for this purpose, which stands for \"make directory\".\n\nExecute the following command to create the directory:\n\n```bash\nmkdir RandD\n```\n\nNow that the `RandD` directory has been created, let's examine its properties, specifically its ownership. We can do this using the `ls -l` command. The `-l` option tells `ls` to use a \"long listing\" format, which provides detailed information about files and directories.\n\nRun this command in your terminal:\n\n```bash\nls -l\n```\n\nYou will see a list of files and directories in your current location. Look for the line corresponding to `RandD`. The output should look similar to this:\n\n```plaintext\ndrwxrwxr-x 2 labex labex 6 Jun 26 10:28 RandD\n```\n\nLet's break down the ownership part of this line. The third column shows the user owner, which is `labex`. The fourth column shows the group owner, which is also `labex`. This confirms that by default, the new directory is owned by the user who created it (`labex`) and their primary group (`labex`).\n\nIn the next step, you will learn how to change these default ownership settings.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Change Directory Ownership Using the chown Command",
+      "content": "## Change Directory Ownership Using the chown Command\n\nIn this step, you will use the `chown` command to change the ownership of the `RandD` directory. This is a common task for system administrators when managing shared project directories. Our goal is to keep the user owner as `labex` but change the group owner to the `research` group we created in the first step. This will allow any member of the `research` group to collaborate in this directory, based on the permissions set for the group.\n\nThe command to change ownership is `chown`, which stands for \"change owner\". The general syntax is `chown [user]:[group] [file/directory]`.\n\nTo change the ownership of the `RandD` directory to the user `labex` and the group `research`, you will run the following command. We use `sudo` because modifying group ownership, even for a directory you own, often requires elevated privileges.\n\nExecute this command in your terminal, which is currently in the `~/project` directory:\n\n```bash\nsudo chown labex:research RandD\n```\n\nIf the command is successful, it will not produce any output. The change is applied silently.\n\nYou have now successfully changed the ownership of the `RandD` directory. In the final step, you will verify this change visually.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Verify the New Directory Ownership with ls -l",
+      "content": "## Verify the New Directory Ownership with ls -l\n\nIn this step, you will confirm that the ownership change you made in the previous step was successful. It is a crucial practice in system administration to always verify that your commands have had the intended effect. We will use the same `ls -l` command as before to inspect the directory's properties.\n\nYour terminal should still be in the `~/project` directory. To see the updated ownership details for the `RandD` directory, run the `ls -l` command again.\n\n```bash\nls -l\n```\n\nExamine the output line for the `RandD` directory. It should now reflect the new group owner. The output will look similar to this:\n\n```plaintext\ndrwxrwxr-x 2 labex research 6 Jun 26 10:28 RandD\n```\n\nCompare this to the output you saw in Step 2. The third column, the user owner, is still `labex`. However, the fourth column, the group owner, has now changed from `labex` to `research`. This confirms that your `chown` command worked correctly.\n\nYou have successfully created a directory, changed its group ownership to facilitate collaboration, and verified the change.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you learned the essential steps for managing directory ownership in a Linux environment. You began by preparing the necessary user and group settings, which involved creating a new group called `research` with the `sudo groupadd` command. You then added the current user, `labex`, to this new group using `sudo usermod -aG`, and verified these changes by inspecting the `/etc/group` file.\n\nAfter setting up the environment, you created a new directory and inspected its default ownership using the `ls -l` command. The core skill practiced was using the `chown` command to modify the directory's group ownership to the newly created `research` group. Finally, you confirmed the successful change by running `ls -l` again, which showed the updated group owner for the directory.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "a9dc47d2546f79f8381e040525192c0922e8140dfd5bb7a5165f1b3cf3345ab6"
+}

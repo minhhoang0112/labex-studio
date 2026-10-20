@@ -82,8 +82,8 @@ test("the learner receives a complete ordered Linux syllabus and accurate catalo
   assert.equal(challenges.labs.length, 156);
   assert.equal(challenges.course.imported_labs_count, 33);
   assert.equal(challenges.labs.filter(item => item.reused).length, 4);
-  assert.equal(roadmap.totals.unique_imported_labs, 178);
-  assert.equal(roadmap.totals.imported_labs, 182);
+  assert.equal(roadmap.totals.unique_imported_labs, 185);
+  assert.equal(roadmap.totals.imported_labs, 189);
   const sharedId = "linux-add-new-user-and-group-17987";
   assert.ok(challenges.labs.some(item => item.id === sharedId && item.reused));
   const shared = await fetch(`${base}/labs/${sharedId}?courseId=linux-practice-challenges`).then(r => r.json());

@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "source_lab_id": 388809,
+  "source_url": "https://labex.io/tutorials/linux-hello-bash-388809",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nThis lab will guide you through creating a simple shell script that prints the classic \"Hello, World!\" message. You will learn the fundamentals of shell programming using the Bash shell, which is widely used in Unix-like operating systems such as Linux. This lab is designed for beginners, so don't worry if you're new to programming or using the command line.\n\n<div class=\"alert alert-warning\" role=\"alert\">\n<p>If you are new to Linux or LabEx, it is recommended to begin with the <b><a style=\"color: unset;text-decoration: underline;\" href=\"https://labex.io/courses/quick-start-with-linux\" target=\"_blank\">Quick Start with Linux</a></b> or <b><a style=\"color: unset;text-decoration: underline;\" href=\"https://labex.io/courses/linux-basic-commands-practice-online\" target=\"_blank\">Practice Linux Commands</a></b> to learn the basics systematically. After completing the course, you can return here to practice your skills.</p>\n</div>\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Introduction to WebIDE (VS Code)",
+      "content": "## Introduction to WebIDE (VS Code)\n\nIn this step, you'll explore the WebIDE based on Visual Studio Code (VS Code). This integrated development environment provides a convenient way to edit scripts and access the terminal all in one place.\n\nIt's important to note that while the default shell in the WebIDE is Zsh, we'll be writing Bash scripts in this lab. Bash (Bourne Again SHell) is the most common and widely used shell in Unix-like systems. Zsh (Z Shell) is an extended version of Bash with some improvements and features. For the purposes of this lab, the differences won't affect our work, as our scripts will explicitly use Bash through the shebang line (`#!/bin/bash`).\n\n### Accessing the WebIDE\n\nWhen you start the lab, you'll see the WebIDE interface in your browser. It consists of several key parts:\n\n- File Explorer (left sidebar): Shows the directory structure and files.\n- Editor (main area): Where you'll write and edit your scripts.\n- Terminal (bottom panel): Where you'll run commands and execute scripts.\n\n### Opening the Terminal\n\nTo open the terminal in the WebIDE:\n\nClick \"Terminal\" in the top menu, then select \"New Terminal\" from the dropdown.\n\nThis will open a new terminal panel at the bottom of the WebIDE. You'll see a command prompt that looks similar to this:\n\n```\nlabex:project/ $\n```\n\nThis indicates that you're logged in as the user `labex`, and your current directory is `~/project` (which is shorthand for `/home/labex/project`).\n\n### Using the Terminal\n\n![WebIDE terminal interface example](https://file.labex.io/namespace/df87b950-1f37-4316-bc07-6537a1f2c481/shell/learn-shell/lab-01-hello-world/en/../assets/screenshot-20240816-gnuaVty3@2x.png)\n\nYou can use this terminal just like you would use a regular terminal on a Linux system. For example, to see the contents of your current directory, you can type:\n\n```bash\nls\n```\n\nAnd press Enter. This will list all files and directories in your current location.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Create a Shell Script File",
+      "content": "## Create a Shell Script File\n\nIn this step, you'll create a new file for the shell script. We'll use the `touch` command in the terminal to do this. The `touch` command is used to create empty files or update the access and modification times of existing files.\n\nType the following command in the terminal and press Enter:\n\n```bash\ntouch hello.sh\n```\n\nThis command creates an empty file named `hello.sh` in your current directory. The `.sh` extension is commonly used for shell scripts, but it's not mandatory.\n\n![Terminal touch command example](https://file.labex.io/namespace/df87b950-1f37-4316-bc07-6537a1f2c481/shell/learn-shell/lab-01-hello-world/en/../assets/20241016-08-58-15-YSiQ4aDD.png)\n\nYou won't see any output after running this command. In Unix-like systems, no output usually means the command was successful.\n\nAlternatively, you can create the file using the WebIDE interface:\n\nIn the File Explorer, right-click in the `/home/labex/project` directory, select \"New File\" from the context menu, type the filename `hello.sh`, and press Enter.\n\nThis will create a new file named `hello.sh` and open it in the editor.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Edit the Shell Script",
+      "content": "## Edit the Shell Script\n\nIn this step, you'll add content to the file using the WebIDE's built-in editor.\n\nIf the file isn't already open in the editor:\n\nIn the File Explorer, double-click `hello.sh` to open it.\n\nIn the editor, type the following two lines exactly as shown:\n\n```bash\n#!/bin/bash\necho 'Hello, World!'\n```\n\nLet's break down what these lines mean:\n\n- `#!/bin/bash` - This is called a \"shebang\" line. It tells the system which interpreter should be used to run this script. In this case, we're specifying the Bash shell.\n- `echo 'Hello, World!'` - This line uses the `echo` command to print the text \"Hello, World!\" to the screen.\n\nAfter typing these lines, save the file by pressing `Ctrl + S` or by going to File > Save in the top menu.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Make the Script Executable",
+      "content": "## Make the Script Executable\n\nIn this step, you'll make the script executable. In Unix-like systems, files have permissions that control who can read, write, or execute them. By default, new files are not executable.\n\nTo make our script executable, we use the `chmod` command (which stands for \"change mode\"). Type the following command in the terminal and press Enter:\n\n```bash\nchmod +x hello.sh\n```\n\nHere's what this command does:\n\n- `chmod` is the command to change file permissions\n- `+x` means \"add execute permission\"\n- `hello.sh` is the name of our file\n\nYou won't see any output from this command if it's successful.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Execute the Script",
+      "content": "## Execute the Script\n\nIn this step, you'll run the executable script. To run a script in the current directory, we use `./` before the script name. This `./` tells the system to look for the script in the current directory.\n\nType the following command in the terminal and press Enter:\n\n```bash\n./hello.sh\n```\n\nIf everything has been done correctly, you should see the output:\n\n```\nHello, World!\n```\n\n![Terminal script execution output](https://file.labex.io/namespace/df87b950-1f37-4316-bc07-6537a1f2c481/shell/learn-shell/lab-01-hello-world/en/../assets/screenshot-20240816-KjPEn5gj@2x.png)\n\nCongratulations! You've just run your first shell script.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "View the Script Contents",
+      "content": "## View the Script Contents\n\nIn this step, you'll view the script contents to confirm everything is correct. We can do this using the `cat` command, which displays the contents of a file in the terminal.\n\nType the following command in the terminal and press Enter:\n\n```bash\ncat hello.sh\n```\n\nYou should see the contents of your script displayed:\n\n```bash\n#!/bin/bash\necho 'Hello, World!'\n```\n\nThis is a good habit to get into when working with scripts – always double-check your work!\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you have successfully created and executed a simple Bash shell script. You've learned how to:\n\n1. Navigate the WebIDE and use its integrated terminal\n2. Create a new script file using either the `touch` command or the WebIDE interface\n3. Edit a file using the WebIDE's built-in editor\n4. Understand the purpose of the shebang line in shell scripts\n5. Use the `echo` command to print text\n6. Make a script executable using the `chmod` command\n7. Run a shell script from the command line\n8. View the contents of a file using the `cat` command\n\nThese fundamental skills form the basis for more advanced shell scripting and automation tasks in Unix-like environments. As you continue to learn, you'll discover how powerful and flexible shell scripting can be for managing systems and automating tasks.\n\nRemember, practice is key in programming. Try modifying the script to print different messages or create new scripts to perform other simple tasks. Don't be afraid to experiment – that's how you learn!\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "559a45068e8af047ca57d2ada79945dcda89e926b797490be6fe87af79abbb89"
+}

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 385274,
+  "source_url": "https://labex.io/tutorials/linux-environment-variables-in-linux-385274",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nPrograms often need small pieces of configuration: a home directory, a language, a search path, or an application setting. Linux processes receive many of these values through an **environment**, a collection of named strings.\n\nThis lab builds the idea in layers. You will first create a variable that belongs only to the current shell, then export a variable to child processes, inspect standard variables, extend `PATH`, and make settings appear in future Zsh sessions. Each step leaves an observable file or command result so you can verify what the shell actually did.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Create and Expand a Shell Variable",
+      "content": "## Create and Expand a Shell Variable\n\nIn this step, you will create a shell variable and observe how quoting affects expansion.\n\nA shell variable pairs a name with a value inside the current shell. Assignment syntax has no spaces around `=`. Quoting the value preserves the embedded space:\n\n```bash\ncd /home/labex/project/environment-lab\ncourse_name=\"Linux for Noobs\"\n```\n\nPrefixing the name with `$` asks the shell to **expand** it to its value:\n\n```bash\necho \"$course_name\"\n```\n\nDouble quotes allow expansion and keep the result as one argument. Single quotes preserve the dollar sign literally. Compare them:\n\n```bash\nprintf 'double: %s\\n' \"$course_name\"\nprintf 'single: %s\\n' '$course_name'\n```\n\nSave the expanded value as an observable result:\n\n```bash\nprintf 'course=%s\\n' \"$course_name\" > shell-variable.txt\ncat shell-variable.txt\n```\n\nThis variable exists only in the current shell unless it is exported.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Observe Child-Process Inheritance",
+      "content": "## Observe Child-Process Inheritance\n\nIn this step, you will compare an ordinary shell variable with an exported variable inside a child process.\n\nEvery command runs in a process. A child process receives exported environment variables from its parent, but it does not receive ordinary shell variables.\n\nReturn to the workspace and create one variable of each kind:\n\n```bash\ncd /home/labex/project/environment-lab\nlocal_message=\"visible only in this shell\"\nexport SHARED_MESSAGE=\"visible in child processes\"\n```\n\nCreate a small Bash child process that prints both names. The quoted heredoc marker prevents the current shell from expanding the variables while writing the script:\n\n```bash\ncat > inspect-child.sh <<'EOF'\n#!/bin/bash\nprintf 'local=%s\\n' \"${local_message:-<missing>}\"\nprintf 'shared=%s\\n' \"${SHARED_MESSAGE:-<missing>}\"\nEOF\nchmod +x inspect-child.sh\n```\n\nRun it and redirect the output to a file, then display the file. Keeping these as separate commands makes it clear which action runs the child process and which action inspects the saved result:\n\n```bash\n./inspect-child.sh > child-environment.txt\ncat child-environment.txt\n```\n\nThe ordinary variable appears as `<missing>`, while `SHARED_MESSAGE` is inherited. Confirm that the exported name is present in the environment:\n\n```bash\nenv | grep '^SHARED_MESSAGE='\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Inspect Standard Environment Variables",
+      "content": "## Inspect Standard Environment Variables\n\nIn this step, you will inspect standard variables that describe your account, working directory, terminal, and command search path.\n\nLinux shells normally provide useful standard variables:\n\n- `HOME` is your home directory.\n- `USER` is your account name.\n- `SHELL` is your configured login shell.\n- `PWD` tracks the current working directory.\n- `PATH` lists command-search directories separated by colons.\n- `TERM` describes terminal capabilities to interactive programs.\n\nDisplay selected values with `printenv`, which reads exported variables by name:\n\n```bash\nprintenv HOME USER SHELL PWD TERM\n```\n\n`PATH` is easier to read one entry per line. Send the value through `tr` to replace every colon with a newline:\n\n```bash\nprintf '%s\\n' \"$PATH\" | tr ':' '\\n'\n```\n\nCreate a stable report from variables whose expected values are known in this lab:\n\n```bash\ncd /home/labex/project/environment-lab\nprintf 'HOME=%s\\nUSER=%s\\n' \"$HOME\" \"$USER\" > standard-environment.txt\ncat standard-environment.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Extend PATH with a Personal Command",
+      "content": "## Extend PATH with a Personal Command\n\nIn this step, you will add a personal executable directory to `PATH` and run a command by name from another directory.\n\nWhen you enter a command without a slash, the shell searches the directories in `PATH` from left to right. You can add a personal executable directory without replacing the existing search path.\n\nCreate a command named `course-status`:\n\n```bash\nmkdir -p \"$HOME/bin\"\ncat > \"$HOME/bin/course-status\" <<'EOF'\n#!/bin/bash\necho \"Linux learning environment is ready\"\nEOF\nchmod +x \"$HOME/bin/course-status\"\n```\n\nAppend the directory to the current `PATH`. Keeping `$PATH` preserves access to standard commands:\n\n```bash\nexport PATH=\"$PATH:$HOME/bin\"\n```\n\nAsk the shell which file it will execute, then run the command from a different directory:\n\n```bash\ncommand -v course-status\ncd /tmp\ncourse-status\n```\n\nSave its output in the lab workspace:\n\n```bash\ncourse-status > /home/labex/project/environment-lab/path-command.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Persist Settings for Future Zsh Sessions",
+      "content": "## Persist Settings for Future Zsh Sessions\n\nIn this step, you will configure future Zsh sessions and distinguish persistent configuration from current-shell state.\n\nExporting changes the current process and its future children; it does not edit a configuration file. A setting appears in later terminals only when a startup file recreates it. The LabEx Terminal uses Zsh, whose interactive startup file is `~/.zshrc`.\n\nAppend a clearly marked block. Each `export` line recreates one environment setting whenever a new interactive Zsh starts. This beginner version keeps the startup file intentionally direct: preserve the existing `PATH`, then add the personal directory at the end.\n\n```bash\ncat >> \"$HOME/.zshrc\" <<'EOF'\n## LABEX_ENV_LAB_START\nexport PROJECT_DIR=\"$HOME/project\"\nexport PATH=\"$PATH:$HOME/bin\"\n## LABEX_ENV_LAB_END\nEOF\n```\n\nThe `source` command reads a file in the current shell. Reload `.zshrc` now so you can use its settings without closing the Terminal:\n\n```bash\nsource \"$HOME/.zshrc\"\n```\n\nConfirm that the reloaded variable is available:\n\n```bash\nprintf 'PROJECT_DIR=%s\\n' \"$PROJECT_DIR\"\n```\n\nYou should see `PROJECT_DIR=/home/labex/project`. You can also start a new Zsh process to prove that a future session loads the same settings. In `zsh -ic`, `-i` requests an interactive shell so `.zshrc` is read, and `-c` supplies the command that shell should run. Redirect its two output lines into `future-shell.txt`, then inspect the file:\n\n```bash\nzsh -ic 'printf \"PROJECT_DIR=%s\\n\" \"$PROJECT_DIR\"; command -v course-status' > /home/labex/project/environment-lab/future-shell.txt\ncat /home/labex/project/environment-lab/future-shell.txt\n```\n\nThe first line should show `/home/labex/project`; the second should show `/home/labex/bin/course-status`.\n\nFinally, learn the difference between current state and persistent configuration. Create and remove a temporary environment variable:\n\n```bash\nexport TEMP_NOTE=\"remove me\"\nprintenv TEMP_NOTE\nunset TEMP_NOTE\nprintenv TEMP_NOTE\n```\n\nThe final `printenv` produces no output and returns a nonzero status because the name no longer exists. `unset` removes the name from the current shell. If a name is still defined in a startup file, a future shell will recreate it until that configuration line is removed.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nYou observed the three mechanisms that are often confused: a shell variable belongs to one shell, `export` passes a value to child processes, and a startup file recreates settings in future shells. You also inspected standard environment variables, extended `PATH` without losing existing entries, verified command lookup, and removed temporary state with `unset`.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "f9c251467e2363d52958c2c565297eba145a0cc32893a521161c4e7798efede3"
+}

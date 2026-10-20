@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 17994,
+  "source_url": "https://labex.io/tutorials/linux-sequence-control-and-pipeline-17994",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nSmall Linux commands become much more useful when the shell coordinates them. A command reports success or failure through an exit status; sequence operators decide what runs next; a pipe connects one command's standard output to another command's standard input.\n\nYou will build these ideas one layer at a time, then use `grep`, `cut`, `wc`, `sort`, and `uniq` to transform a small service-event dataset. Later text-processing labs will deepen these filters, so the focus here is how data and decisions move between commands.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Observe Command Exit Status",
+      "content": "## Observe Command Exit Status\n\nIn this step, you will connect visible command behavior with the numeric status the shell records.\n\nAn exit status of `0` means success; a nonzero value means the command could not complete its requested operation. Run a successful file test and immediately print `$?`, which holds the most recent status:\n\n```bash\ncd /home/labex/project/pipeline-lab\ntest -f events.csv\necho $?\n```\n\nThe output is `0`. Now test a missing file:\n\n```bash\ntest -f missing.csv\necho $?\n```\n\nThe status is nonzero. Read `$?` immediately because every later command replaces it.\n\nCreate a stable observation using an `if` statement. You will study full shell scripting later; here it simply converts the status into text:\n\n```bash\nif test -f events.csv; then echo \"events.csv is ready\"; else echo \"events.csv is missing\"; fi > status-result.txt\ncat status-result.txt\n```\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Control Which Command Runs Next",
+      "content": "## Control Which Command Runs Next\n\nIn this step, you will compare unconditional and conditional command operators.\n\nA semicolon runs the next command regardless of the previous result:\n\n```bash\nfalse; echo \"semicolon continues\"\n```\n\n`&&` runs the right command only after success:\n\n```bash\ntest -f events.csv && echo \"input found\"\ntest -f missing.csv && echo \"you should not see this\"\n```\n\n`||` runs the right command only after failure:\n\n```bash\ntest -f missing.csv || echo \"input missing\"\n```\n\nThese operators can express a small success/failure decision. Copy the dataset only if it exists, otherwise print an error:\n\n```bash\ntest -f events.csv && cp events.csv working.csv || echo \"Copy failed\"\n```\n\nVerify that the guarded copy matches its source:\n\n```bash\ncmp events.csv working.csv && echo \"guarded copy matches\" > sequence-result.txt\ncat sequence-result.txt\n```\n\nFor complex logic, prefer a readable `if` statement; long `&&`/`||` chains can become ambiguous.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Send Output Through a Pipeline",
+      "content": "## Send Output Through a Pipeline\n\nIn this step, you will connect commands with `|` and observe how each stage narrows a stream.\n\nThe left command writes standard output into the pipe; the right command reads that data as standard input. Select only `ERROR` records:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncat events.csv | grep ',ERROR,'\n```\n\n`grep` can read a file directly, so this shorter form has the same result:\n\n```bash\ngrep ',ERROR,' events.csv\n```\n\nAdd `wc -l` to count matching lines:\n\n```bash\ngrep ',ERROR,' events.csv | wc -l\n```\n\nSave both the filtered stream and count. `tee` duplicates its standard input: it writes one copy to `error-events.csv` and passes the other copy onward through standard output. The final `wc -l` therefore counts exactly the lines that were saved:\n\n```bash\ngrep ',ERROR,' events.csv | tee error-events.csv | wc -l > error-count.txt\ncat error-events.csv\ncat error-count.txt\n```\n\nInspect both files after the pipeline. `error-events.csv` contains the matching records, while `error-count.txt` contains their count.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Extract Fields with Cut",
+      "content": "## Extract Fields with Cut\n\nIn this step, you will treat each CSV line as delimiter-separated fields.\n\n`cut -d, -f1` uses comma as the delimiter and prints field 1, the service name:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv\n```\n\nPrint the service and severity fields together:\n\n```bash\ncut -d, -f1,2 events.csv\n```\n\nCombine filtering and extraction to list only services that produced warnings:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1\n```\n\nSave this intermediate result:\n\n```bash\ngrep ',WARN,' events.csv | cut -d, -f1 > warning-services.txt\ncat warning-services.txt\n```\n\n`cut` works well for simple records whose delimiter never appears inside a field. More complex formats may need `awk` or a format-aware tool.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Sort and Count Repeated Values",
+      "content": "## Sort and Count Repeated Values\n\nIn this step, you will build a complete frequency pipeline and understand why sorting comes before `uniq`.\n\n`uniq` combines only **adjacent** equal lines. First extract service names, then sort them so identical values are neighbors:\n\n```bash\ncd /home/labex/project/pipeline-lab\ncut -d, -f1 events.csv | sort\n```\n\nAdd `uniq -c` to count each run of equal names:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c\n```\n\nSort the counts numerically in descending order. `sort -k1,1nr` uses the first field as a numeric, reverse-order key:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr\n```\n\nSave the final report:\n\n```bash\ncut -d, -f1 events.csv | sort | uniq -c | sort -k1,1nr > service-frequency.txt\ncat service-frequency.txt\n```\n\nRead this pipeline left to right: extract → sort → count adjacent duplicates → rank counts.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nYou used exit status as the shell's success signal, controlled execution with `;`, `&&`, and `||`, and built pipelines with clear stages. You then filtered records, extracted fields, counted lines, sorted values, and counted duplicates—exactly the vocabulary needed for the next data-pipeline Challenge.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "c396469ceec0619082aa29670e6a21a18e0b3d6c235472617acc4b477f25edab"
+}

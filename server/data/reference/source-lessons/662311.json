@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "source_lab_id": 662311,
+  "source_url": "https://labex.io/labs/linux-fix-world-writable-web-directory-662311",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "# Introduction\n\nYou are reviewing a Linux web application after a hurried troubleshooting change. The application still needs to write generated files into its uploads directory, but the current directory mode is far too broad and allows any local user to modify that content.\n\nBefore the host is handed back, you need to restore a safer permission boundary without breaking the application's write path. This is a common integrity hardening task after temporary chmod-based fixes.\n\nThe boundary is write authority over web-served content: the application writer needs access, but every local user should not be able to modify uploads.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Remove the World-Write Permission",
+      "content": "# Remove the World-Write Permission\n\nYou are reviewing a web upload area after a temporary permissions change. The application still needs to write uploaded content, but the upload directory was opened to every local user, which weakens the integrity boundary around web-served files.\n\nThis fix is about tightening the directory without breaking the application writer. Inspect the current ownership, remove world-write, and then prove both the application write path and HTTP reads still behave normally.\n\nThe correct remediation should feel conservative: keep the path, owner, group workflow, and web behavior intact while removing only unnecessary write access.\n\n## Current Situation\n\nThe project lives at `/home/labex/project`.\n\nThe site is already running on the exercise port. The upload path is `webroot/uploads`, and the project includes `app-write-check.sh` to simulate the application write path.\n\n## Scope\n\nFocus on port `18580`, `webroot/uploads`, and the provided write check script.\n\nLeave other host paths alone. Do not move the uploads directory or replace it with a different path.\n\n## Your Goal\n\n- Move to `/home/labex/project`.\n- Inspect `webroot/uploads` ownership and permissions.\n- Correct the directory mode to drop world-write without breaking group access for `webapp`.\n- Run `./app-write-check.sh` as the `webapp` user to prove writes still succeed.\n- Fetch the site root and a file under uploads over HTTP on `18580`.\n\n## Acceptance Criteria\n\n- `webroot/uploads` is no longer world-writable.\n- The `webapp` write path still succeeds through the provided check script.\n- The site root and an uploaded file remain reachable over HTTP on port `18580`.\n- The uploads directory remains in its original project path.\n\n## Hints\n\n<details>\n<summary>How do I see the problem?</summary>\n\nFrom the project directory, run `ls -ld webroot/uploads` and look for the world-write bit in the mode string.\n\n</details>\n\n<details>\n<summary>What change keeps the app working?</summary>\n\nThe directory is owned by `labex:webapp`. After editing, owner and group still need write access, but others should not. Use `sudo chmod` on that directory only, then rerun `app-write-check.sh` and your `curl` smoke tests.\n\n</details>\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Summary",
+      "content": "# Summary\n\nIn this challenge, you cleaned up a realistic post-troubleshooting permission problem on a Linux web application. You removed world-write access from the uploads directory, preserved the application's write path, and confirmed that the web content still worked. This is a common integrity hardening task: keep required application writes while removing overly broad local modification rights.\n\nThe upload path remains usable by the application role, but it is no longer writable by every local user.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "551811cdfa68a4680ee44571d752c4e60b78c42d587c196d3fee86fe6a860c4d"
+}

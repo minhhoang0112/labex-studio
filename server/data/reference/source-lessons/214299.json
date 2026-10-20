@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source_lab_id": 214299,
+  "source_url": "https://labex.io/tutorials/linux-linux-more-command-file-scrolling-214299",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nIn this lab, we will explore the `more` command in Linux, a useful tool for viewing and navigating large text files. As a system administrator or data analyst, you'll often encounter large log files or datasets that are impractical to view all at once. The `more` command allows you to scroll through these files efficiently, making it an essential skill in your Linux toolkit.\n\nYou are a junior data analyst at a weather research station. Your task is to examine a large dataset containing historical weather information for the past year. The file is too big to view all at once, so you'll use the `more` command to navigate through it effectively.\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Locating the Weather Data File",
+      "content": "## Locating the Weather Data File\n\nFirst, let's locate our weather data file. It should be in your project directory.\n\n1. Open your terminal. By default, you should be in the `/home/labex/project` directory. If you're unsure, you can always check your current directory using the `pwd` command.\n\n2. List the contents of the directory:\n\n   ```bash\n   ls\n   ```\n\n   You should see a file named `weather_data.txt` among the listed files.\n\nIf you don't see the `weather_data.txt` file, don't worry. It's possible that you might be in a different directory. In that case, try changing to the project directory:\n\n```bash\ncd /home/labex/project\n```\n\nThen list the contents again using `ls`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Basic Usage of the more Command",
+      "content": "## Basic Usage of the more Command\n\nNow that we've located our file, let's use the `more` command to view its contents.\n\n1. Enter the following command:\n\n   ```bash\n   more weather_data.txt\n   ```\n\n2. You should now see the first page of the weather data file. The file is displayed one screen at a time.\n\n3. To navigate through the file:\n   - Press the `Space` bar to move to the next page.\n   - Press `Enter` to move down one line.\n   - Press `b` to go back one page.\n   - Press `q` to quit and return to the command prompt.\n\nTake some time to practice these navigation commands. Remember, in large files, using `Space` to move by pages is usually more efficient than moving line by line with `Enter`.\n\nIf you accidentally exit the `more` view, don't worry! You can always reopen the file by running the `more weather_data.txt` command again.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Starting from a Specific Line",
+      "content": "## Starting from a Specific Line\n\nSometimes, you might want to start viewing the file from a specific line number. This is particularly useful when you're returning to a specific part of a large file.\n\n1. Let's start viewing from line 100 of our weather data file. Use the `more` command with the `+` option followed by the line number:\n\n   ```bash\n   more +100 weather_data.txt\n   ```\n\n2. The file will now open starting from line 100.\n\n3. You can verify you're at line 100 by pressing `=` while viewing the file. This will display the current line number at the bottom of the screen.\n\n4. Navigate through the file using the `Space` bar and exit using `q` as before.\n\nIf you see an error message or unexpected behavior, double-check that you've typed the command correctly. The `+` should be immediately followed by the number, with no space in between.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Customizing the Display",
+      "content": "## Customizing the Display\n\nThe `more` command allows you to customize how many lines are displayed at once. This can be helpful when you're trying to view the file in smaller chunks.\n\n1. Let's display only 10 lines at a time. Use the `more` command with the `-` option followed by the number of lines:\n\n   ```bash\n   more -10 weather_data.txt\n   ```\n\n2. You should now see only 10 lines of the file at a time.\n\n3. Press `Enter` to advance one line at a time, or `Space` to move to the next 10-line block.\n\n4. As before, you can use `b` to go back and `q` to quit.\n\nIf you find 10 lines too few or too many, feel free to experiment with different numbers. For example, you could try `more -5 weather_data.txt` or `more -15 weather_data.txt`.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Searching for Specific Data",
+      "content": "## Searching for Specific Data\n\nAs a data analyst, you often need to find specific information quickly. The `more` command allows you to search for patterns within the file.\n\n1. Let's say you want to find data for a specific date, like \"2023-07-15\". Use the following command:\n\n   ```bash\n   more +/\"2023-07-15\" weather_data.txt\n   ```\n\n   Note: The `+/` before the search term tells `more` to jump to the first matching area for this pattern. Depending on your terminal and pager behavior, you may see one or more context lines before the exact match.\n\n2. The file will open near the first occurrence of \"2023-07-15\", often with a little surrounding context.\n\n3. To find the next occurrence of the same pattern, you can:\n\n   - Type `/` and press `Enter` (this repeats the last search)\n   - Or type `/2023-08-15` and press `Enter` (this explicitly searches for the pattern again)\n\n4. If the pattern isn't found, you'll see a message \"Pattern not found\" at the bottom of the screen.\n\nRemember, the search is case-sensitive. If you're not finding what you expect, check your capitalization.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, you've learned how to use the `more` command to efficiently navigate large text files. You've explored its basic usage, how to start from specific lines, customize the display, and search for patterns within a file. These skills are crucial for working with large datasets or log files in Linux environments.\n\nAdditional `more` command options not covered in this lab include:\n\n- `-d`: Displays helpful prompts\n- `-f`: Counts logical lines instead of screen lines\n- `-p`: Clears the screen before displaying the page\n- `-c`: Repaints the screen instead of scrolling\n- `-s`: Squeezes multiple blank lines into one\n- `-u`: Suppresses underlining\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "417132389850a321f18ab70cc0c16d42bc0c979c2ba3c3b8bbf2ec472578aa6d"
+}

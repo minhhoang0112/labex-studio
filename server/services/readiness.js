@@ -61,7 +61,9 @@ export function getLabReadiness(lab) {
   const results = steps.map(step => getStepReadiness(step, lab));
   const supported = results.filter(result => result.ready).length;
   return { state: !steps.length ? "reference-only" : supported === steps.length ? "ready" : supported ? "partial" : "blocked",
-    can_open: Boolean(steps.length), can_start_terminal: !lab.id?.startsWith('win-') && supported > 0, can_grade: supported === steps.length && supported > 0,
+    // A missing automatic grader must not prevent reading a Linux lesson or
+    // practicing commands in its private shell. Task readiness remains strict.
+    can_open: Boolean(steps.length), can_start_terminal: !lab.id?.startsWith('win-') && steps.length > 0, can_grade: supported === steps.length && supported > 0,
     supported_steps_count: supported, total_steps_count: steps.length,
     missing_capabilities: [...new Set(results.flatMap(result => result.missing_capabilities))],
     reasons: [...new Set(results.flatMap(result => result.reasons))] };

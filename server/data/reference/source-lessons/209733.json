@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_lab_id": 209733,
+  "source_url": "https://labex.io/tutorials/linux-linux-cd-command-directory-changing-209733",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nWelcome to the exciting world of Linux navigation! In this lab, you'll learn how to use the `cd` command, your digital compass in the Linux file system. Imagine you're an explorer in a vast, interconnected city of directories. The `cd` command is your trusty vehicle, allowing you to move swiftly between different \"neighborhoods\" (directories) of your Linux \"city\" (file system).\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Understanding Your Starting Point",
+      "content": "## Understanding Your Starting Point\n\nBefore we start our journey, let's find out where we are in our Linux city.\n\n1. Open your terminal. This is your control panel for navigating the Linux file system. It might look intimidating at first, but think of it as your GPS device in this digital world.\n\n![Linux terminal control panel](https://file.labex.io/namespace/33fa8aba-d546-42e9-9692-64968aeaf0cc/linux/lab-linux-command-cd/en/../assets/20240807-09-12-54-eFTo6Fr0.png)\n\n2. Type the following command and press Enter:\n\n```bash\npwd\n```\n\nThis command stands for \"print working directory\" and shows your current location. Don't worry if you make a typo - you can always retype the command.\n\nYou should see an output similar to this:\n\n```\n/home/labex/project\n```\n\nThis means you're in the `project` folder, which is inside the `labex` folder, which is inside the `home` folder. Think of it as your current address in the Linux city.\n\nNote: If you see a different output, don't panic! It just means you're starting from a different location. The important thing is to understand what the output represents.\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Your First Move - Going Home",
+      "content": "## Your First Move - Going Home\n\nNow that we know where we are, let's make our first move. We'll go to your home directory, which is like your base camp in the Linux city.\n\n1. Type the following command and press Enter:\n\n```bash\ncd ~\n```\n\nThe tilde (`~`) is a shortcut that represents your home directory. It's like telling your GPS, \"Take me home!\"\n\nIf you cannot type the tilde character on your keyboard, use `cd` without an argument instead. It takes you to the same home directory:\n\n```bash\ncd\n```\n\n2. Now, let's check where we are:\n\n```bash\npwd\n```\n\nYou should see:\n\n```\n/home/labex\n```\n\nCongratulations! You've just made your first move using the `cd` command. If you don't see `/home/labex`, try either `cd ~` (with a space before `~`) or `cd` without an argument.\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Exploring the Neighborhood - Moving to a Specific Directory",
+      "content": "## Exploring the Neighborhood - Moving to a Specific Directory\n\nNow that we're home, let's venture out to a specific directory. We'll move to the `project` directory, which is where we started.\n\n1. Type the following command and press Enter:\n\n```bash\ncd project\n```\n\nThis is like telling your GPS, \"Take me to the project neighborhood.\" If you get an error saying the directory doesn't exist, don't worry! Try `ls` to list the directories available, and choose one you can see.\n\n2. Check your new location:\n\n```bash\npwd\n```\n\nYou should see:\n\n```\n/home/labex/project\n```\n\nYou've successfully moved to a specific directory! If you're in a different directory, that's okay too. The important thing is that you've moved from your home directory to another one.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Moving Up - Returning to the Parent Directory",
+      "content": "## Moving Up - Returning to the Parent Directory\n\nSometimes, we need to move up in the directory structure. Let's go back to our home directory.\n\n1. Type the following command and press Enter:\n\n```bash\ncd ..\n```\n\nThe two dots (`..`) represent the parent directory. It's like telling your GPS, \"Take me to the neighborhood one level up.\"\n\n2. Check your location:\n\n```bash\npwd\n```\n\nYou should see:\n\n```\n/home/labex\n```\n\nYou've moved up one level in the directory structure! If you're not in `/home/labex`, don't worry. The important thing is that you've moved up one level from where you were before.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Quick Return - Going Back to the Previous Directory",
+      "content": "## Quick Return - Going Back to the Previous Directory\n\nLinux provides a handy shortcut to return to the directory you were in before your last move.\n\n1. First, let's move to a different directory. If you're in your home directory, you can use:\n\n```bash\ncd project\n```\n\nIf `project` doesn't exist, use `ls` to find an available directory and `cd` into it.\n\n2. Now, let's use the shortcut to return to the previous directory:\n\n```bash\ncd -\n```\n\nThis command is like telling your GPS, \"Take me back to where I just was!\"\n\n3. Check your location:\n\n```bash\npwd\n```\n\nYou should be back in the directory you were in before step 1. This `-` (dash) is a useful shortcut when you need to quickly switch between two directories.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Absolute Paths - Navigating from the Root",
+      "content": "## Absolute Paths - Navigating from the Root\n\nSo far, we've been using relative paths - paths relative to our current location. Now, let's use an absolute path to move to a specific location, regardless of where we are.\n\n1. Type the following command and press Enter:\n\n```bash\ncd /etc\n```\n\nThis is an absolute path, starting from the root directory (`/`). The `/etc` directory is an important system directory in Linux that contains configuration files. It's like giving your GPS the full address, starting from the country all the way down to the specific building.\n\n2. Check your location:\n\n```bash\npwd\n```\n\nYou should see:\n\n```\n/etc\n```\n\nYou've navigated to a specific location using an absolute path! This directory exists on all Linux systems, so you should be able to access it without any errors.\n\n3. Let's take a quick peek at what's in this directory:\n\n```bash\nls\n```\n\nYou'll see a list of many configuration files and directories. Don't worry about understanding all of these now - we're just exploring!\n\n4. Now, let's return to our home directory using an absolute path:\n\n```bash\ncd /home/labex\n```\n\nThis command will take you directly back to your home directory, no matter where you are in the file system.\n\nRemember, using absolute paths is like using the full postal address - it works from anywhere, but it's often longer to type than relative paths.\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Linux Easter Egg - The Maze of Twisty Little Passages",
+      "content": "## Linux Easter Egg - The Maze of Twisty Little Passages\n\nNow that you've mastered the basics of navigation, let's have some fun with a Linux easter egg that's all about navigation!\n\n1. First, let's make sure we're in our home directory:\n\n```bash\ncd ~\n```\n\n2. Now, let's create a directory structure for our maze:\n\n```bash\nmkdir -p maze/twisty/little/passages\n```\n\nThis command creates a nested directory structure. Don't worry about the details of this command for now - we'll learn about creating directories in a future lab.\n\n3. Now, let's navigate through our maze:\n\n```bash\ncd maze/twisty/little/passages\n```\n\n4. Check where you are:\n\n```bash\npwd\n```\n\nYou should see:\n\n```\n/home/labex/maze/twisty/little/passages\n```\n\nCongratulations! You've navigated through a maze of twisty little passages, all alike! This is a reference to a classic text adventure game called \"Colossal Cave Adventure,\" which heavily influenced early computer gaming and hacker culture.\n\n5. Let's return home:\n\n```bash\ncd ~\n```\n\nThis lab may not be as complex as the original Colossal Cave, but it shows how you can use the `cd` command to navigate through even the twistiest of directory structures!\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Summary",
+      "content": "## Summary\n\nIn this lab, we've explored the `cd` command, your trusty navigation tool in the Linux file system. We've learned how to:\n\n1. Check our current location using `pwd`\n2. Move to the home directory using `cd ~`\n3. Navigate to specific directories using relative paths\n4. Move up in the directory structure with `cd ..`\n5. Quickly switch between two directories using `cd -`\n6. Use absolute paths for precise navigation\n7. Have fun with a Linux easter egg by creating and navigating a maze\n8. Understand additional `cd` command options\n\nThe `cd` command has a few more options that can be useful in specific situations:\n\n- `cd`: Without any arguments, this takes you to your home directory.\n- `cd /`: This takes you to the root directory of the entire file system.\n- `cd $HOME`: This is another way to go to your home directory.\n\nThese options provide additional flexibility when navigating your Linux file system. Feel free to try them out!\n\nWith these skills, you're now equipped to navigate the Linux file system like a pro! Remember, practice makes perfect. The more you use these commands, the more comfortable you'll become with Linux navigation. Don't be afraid to explore – in Linux, you can always find your way back home with `cd ~`. Happy exploring in your Linux city!\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "170030f62470638057376a128fac37b9596ef256918aafafdb609d269b409c21"
+}

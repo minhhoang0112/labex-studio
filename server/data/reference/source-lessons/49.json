@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "source_lab_id": 49,
+  "source_url": "https://labex.io/tutorials/linux-user-account-management-49",
+  "checked_at": "2026-10-20T05:45:48.427Z",
+  "sections": [
+    {
+      "position": 0,
+      "title": "Introduction",
+      "content": "## Introduction\n\nThis lab will guide you through basic user account management operations in Linux systems. You'll learn how to create, modify, and delete user accounts, as well as how to set and change passwords. These are fundamental skills for Linux system administration. Don't worry if you're new to Linux - we'll explain everything step by step!\n",
+      "need_verify": false
+    },
+    {
+      "position": 1,
+      "title": "Creating a New User",
+      "content": "## Creating a New User\n\nLet's start by creating a new user account named \"joker\".\n\n1. Open a terminal. In Linux, the terminal is a text interface where you can enter commands.\n2. Type the following command and press Enter:\n\n```bash\nsudo useradd joker\n```\n\nLet's break this down:\n\n- `sudo` is a command that gives you temporary superuser (administrator) privileges. We use it because creating a new user requires these higher-level permissions.\n- `useradd` is the command to create a new user.\n- `joker` is the username we're creating.\n\nNote: If you try to run this command without `sudo`, you'll get a \"permission denied\" error. This is because regular users aren't allowed to create new user accounts - it's a task reserved for system administrators.\n\nThis highlights the difference between a superuser and a common user. As a common user, you can't create new user accounts, but by using `sudo`, you can temporarily elevate your privileges to perform this administrative task.\n\n3. To verify that the user was created, we'll examine the `/etc/passwd` file:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nThe `/etc/passwd` file is like a phonebook for user accounts. Each line represents one user account, with different pieces of information separated by colons (:).\n\nYou should see output similar to:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\n```\n\nThis line shows:\n\n- Username: joker\n- Password: x (the actual password is stored securely elsewhere)\n- User ID: 5001\n- Group ID: 5001\n- Home Directory: `/home/joker`, but it hasn't been created yet\n- Default Shell: `/bin/sh`\n",
+      "need_verify": true
+    },
+    {
+      "position": 2,
+      "title": "Creating a User with a Home Directory",
+      "content": "## Creating a User with a Home Directory\n\nNow, let's create another user named \"bob\" and give them a home directory.\n\n1. Run the following command:\n\n```bash\nsudo useradd -m bob\n```\n\nThe `-m` option tells the system to create a home directory for the user. A home directory is like a personal folder where a user can store their files and settings.\n\n2. Let's verify that the home directory was created:\n\n```bash\nsudo ls -ld /home/bob\n```\n\nYou should see output similar to:\n\n```plaintext\ndrwxr-x--- 2 bob bob 57 Jan 19 13:33 /home/bob\n```\n\nThis output shows:\n\n- `d` at the start means it's a directory\n- `rwxr-x---` shows who can read, write, or execute in this directory\n- The two `bob` entries show that both the user and group owner of this directory is bob\n- `57` is the size of the directory in bytes\n- `Jan 19 13:33` is when the directory was created\n- `/home/bob` is the location of the directory\n",
+      "need_verify": true
+    },
+    {
+      "position": 3,
+      "title": "Setting a User Password",
+      "content": "## Setting a User Password\n\nNow we need to set a password for our new users. Let's set a password for \"joker\".\n\n1. Run the following command:\n\n```bash\nsudo passwd joker\n```\n\n2. You'll be asked to enter a new password twice. For this lab, use a simple password like \"password123\".\n\n> **Important**: The password will not be displayed as you type it. This is a security feature in Linux to prevent others from seeing your password as you type it. If you accidentally enter the wrong password, you can try again.\n> **Important**: Remember this password! You'll need it later in the lab.\n\n3. If successful, you'll see a message saying \"passwd: password updated successfully\".\n\nNote: In a real-world scenario, always use strong, unique passwords!\n\nBehind the scenes, Linux stores encrypted passwords in a secure file called `/etc/shadow`. This is more secure than storing them in the `/etc/passwd` file where anyone could see them.\n",
+      "need_verify": true
+    },
+    {
+      "position": 4,
+      "title": "Modifying User Properties",
+      "content": "## Modifying User Properties\n\nLinux allows us to change various settings for a user account after it's been created. Let's change joker's home directory as an example.\n\n1. Run the following command:\n\n```bash\nsudo usermod -d /home/wayne joker\n```\n\nHere's what this does:\n\n- `usermod` is the command to modify user account settings\n- `-d /home/wayne` specifies the new home directory\n- `joker` is the user we're modifying\n\n2. Let's verify the change:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\n`-w` is used to match the whole word, and `grep` is used to search for the word in the file. You should see that joker's home directory has been updated in the output.\n",
+      "need_verify": true
+    },
+    {
+      "position": 5,
+      "title": "Changing User Shell",
+      "content": "## Changing User Shell\n\nAnother important setting we can modify is the user's default shell. The shell is the program that interprets and runs the commands you type in the terminal.\n\nBy default, the user 'joker' is using `/bin/sh` as their shell. While `sh` (Bourne Shell) is a basic shell that's present on most Unix-like systems, `bash` (Bourne Again Shell) offers more features and is generally more user-friendly.\n\nChanging joker's shell to bash provides several benefits:\n\n- More intuitive command-line interface\n- Enhanced scripting capabilities\n- Better customization options for the user's environment\n\nHere's how to make the change:\n\n1. Change joker's default shell to bash:\n\n```bash\nsudo usermod -s /bin/bash joker\n```\n\n2. Verify the change:\n\n```bash\nsudo grep -w 'joker' /etc/passwd\n```\n\nYou should see `/bin/bash` at the end of joker's entry. This means bash is now joker's default shell.\n\nAfter making this change, joker will have access to the more feature-rich bash environment whenever they log in or open a new terminal session.\n",
+      "need_verify": true
+    },
+    {
+      "position": 6,
+      "title": "Adding a User to a Group",
+      "content": "## Adding a User to a Group\n\nIn Linux, we use groups to organize users and manage permissions. One important group is the `sudo` group, which gives users administrative privileges. Let's add joker to the `sudo` group as an example.\n\nWhy would we add a user to the sudo group?\n\n1. System administration: Users in the sudo group can perform system-wide administrative tasks.\n2. Software installation: Sudo group members can install and update software packages.\n3. Configuration changes: They can modify system configuration files.\n4. User management: They can create, modify, or delete other user accounts.\n\nYou might wonder: \"Why add someone to the sudo group when we can always use the 'sudo' command?\" Here's why:\n\n- Convenience: Users in the sudo group can use sudo without needing to know the root password. They use their own password instead.\n- Granular control: System administrators can configure sudo to allow specific users to run only certain commands with superuser privileges.\n- Accountability: Unlike sharing the root password, sudo logs who ran what command, improving security and traceability.\n- Security: It's generally more secure to have named accounts with sudo access than to share the root password among multiple admins.\n\nIn a real-world scenario, you would typically add a user to the sudo group if:\n\n- They are a system administrator or IT staff member who needs to perform regular maintenance tasks.\n- They are a developer who needs to install specific software or make system changes for their work.\n- They are a power user who needs elevated privileges for certain tasks, but you don't want to give them the root password.\n\nRemember, adding a user to the sudo group gives them significant power over the system, so this should be done cautiously and only when necessary.\n\nNow, let's add joker to the sudo group:\n\n1. Run this command:\n\n```bash\nsudo usermod -aG sudo joker\n```\n\nHere's what this does:\n\n- `usermod` is the command to modify user accounts\n- `-aG` means \"append to Group\" (add to a group without removing from other groups)\n- `sudo` is the group we're adding the user to\n- `joker` is the user we're modifying\n\n2. Verify the change:\n\n```bash\ngroups joker\n```\n\nYou should see `sudo` listed among joker's groups.\n\n3. To see the effect of this change, we need to switch to the joker user and try a command that requires sudo privileges:\n\n```bash\nsu - joker\n```\n\nThis command switches from your current user (labex) to the joker user. You will be prompted to enter joker's password. Remember, this is the password you set earlier (`password123`). As you type the password, you won't see any characters on the screen - this is a security feature.\n\n4. Once logged in as joker, let's try to view a file that normally requires root privileges:\n\n```bash\nsudo cat /etc/shadow\n```\n\nEnter joker's password again when prompted. You should be able to see the contents of the `/etc/shadow` file, which is usually only accessible to root. This confirms that joker now has sudo privileges.\n\n5. After you're done, type `exit` to return to your original user account (labex).\n\nNote: In a production environment, you should be very careful about who you add to the sudo group. With great power comes great responsibility!\n",
+      "need_verify": true
+    },
+    {
+      "position": 7,
+      "title": "Locking and Unlocking User Accounts",
+      "content": "## Locking and Unlocking User Accounts\n\nSometimes, you might need to temporarily disable a user account without deleting it.\n\n1. Lock the joker account:\n\n```bash\nsudo passwd -l joker\n```\n\nThe `-l` option locks the password.\n\n2. Try to switch to the joker user:\n\n```bash\nsu - joker\n```\n\nYou'll be asked for a password. Enter the password you set for joker earlier (\"password123\" if you followed our suggestion).\n\nYou should see an \"authentication failure\" message. This means the account is successfully locked.\n\n3. Now, let's unlock the account:\n\n```bash\nsudo passwd -u joker\n```\n\nThe `-u` option unlocks the password.\n\n4. Try switching to the joker user again:\n\n```bash\nsu - joker\n```\n\nEnter the password when prompted. This time, you should be able to switch to the joker user successfully.\n\n**Type `exit` to return to your original user account before continuing to the next step.**\n",
+      "need_verify": true
+    },
+    {
+      "position": 8,
+      "title": "Deleting a User",
+      "content": "## Deleting a User\n\nFinally, let's learn how to delete a user. We'll delete the \"bob\" user we created earlier.\n\n1. Delete bob and their home directory:\n\n```bash\nsudo userdel -r bob\n```\n\nThe `userdel` command deletes user accounts. The `-r` option removes the user's home directory and mail spool.\n\n2. Verify that the user has been deleted:\n\n```bash\nsudo grep -w 'bob' /etc/passwd\nsudo ls -ld /home/bob\n```\n\nBoth commands should return no results. This means the user and their home directory have been successfully removed.\n",
+      "need_verify": true
+    },
+    {
+      "position": 9,
+      "title": "Summary",
+      "content": "## Summary\n\nCongratulations! You've completed the Linux User Account Management lab. You've learned how to:\n\n1. Create new user accounts\n2. Set user passwords\n3. Modify user properties like home directory and default shell\n4. Add users to groups\n5. Lock and unlock user accounts\n6. Delete user accounts\n\nYou've also been introduced to important Linux concepts like the `/etc/passwd` file, home directories, shells, and user groups. These are fundamental skills for Linux system administration. Remember, in real-world scenarios, always follow your organization's security policies when managing user accounts.\n",
+      "need_verify": false
+    }
+  ],
+  "sha256": "7cf8cb26855e625acd885deda59b7574a2ee0d5c203b21dbb0d3689061f822d7"
+}
