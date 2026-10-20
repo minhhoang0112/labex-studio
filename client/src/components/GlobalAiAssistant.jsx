@@ -394,11 +394,19 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
         </div>
       )}
 
-      {/* Fullscreen Interactive ChatGPT Voice Call Modal */}
+      {/* Compact Interactive ChatGPT Voice Call Dock / Floating Modal */}
       <VoiceCallModal
         isOpen={isVoiceCallOpen}
         onClose={() => setIsVoiceCallOpen(false)}
         initialPersona={persona}
+        lab={{
+          id: currentId,
+          title_vi: currentView === 'catalog' 
+            ? 'Khám phá Khóa học & Lộ trình' 
+            : currentView === 'path' 
+              ? `Lộ trình kỹ năng (${currentId})` 
+              : `Khóa học (${currentId})`
+        }}
       />
     </>
   );

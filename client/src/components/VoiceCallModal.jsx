@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Mic, MicOff, PhoneOff, Volume2, VolumeX, Sparkles, 
-  RotateCcw, Bot, Briefcase, GraduationCap, X, MessageSquare, AlertCircle
+  RotateCcw, Bot, Briefcase, GraduationCap, X, MessageSquare, AlertCircle,
+  Minus, Maximize2, Minimize2, ChevronUp, Terminal, BookOpen
 } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -27,6 +28,7 @@ export default function VoiceCallModal({
 }) {
   const [persona, setPersona] = useState(initialPersona);
   const [callState, setCallState] = useState('idle'); // 'idle' | 'listening' | 'thinking' | 'speaking'
+  const [viewMode, setViewMode] = useState('dock'); // 'dock' (compact PiP) | 'minimized' | 'fullscreen'
   const [transcript, setTranscript] = useState('');
   const [lastUserSpeech, setLastUserSpeech] = useState('');
   const [aiSpeechText, setAiSpeechText] = useState('');
@@ -316,171 +318,344 @@ export default function VoiceCallModal({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-2xl text-white select-none animate-in fade-in duration-200">
-      {/* Background ambient lighting glow */}
-      <div className={`absolute w-[450px] h-[450px] rounded-full blur-3xl pointer-events-none transition-all duration-1000 ${
-        callState === 'listening' ? 'bg-emerald-500/20 scale-125' :
-        callState === 'thinking' ? 'bg-amber-500/25 scale-110 animate-pulse' :
-        callState === 'speaking' ? 'bg-primary-500/30 scale-150 animate-pulse' : 'bg-indigo-600/15'
-      }`} />
+  // 1. Minimized View: An ultra-compact floating live pill in the corner
+  if (viewMode === 'minimized') {
+    return (
+      <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-slate-950/95 border border-slate-700/80 shadow-2xl backdrop-blur-xl text-white animate-in fade-in select-none">
+        {/* Mini Glowing Orb */}
+        <button
+          onClick={callState === 'speaking' ? handleInterrupt : (callState === 'idle' ? startListening : undefined)}
+          title={callState === 'speaking' ? 'Chạm để ngắt lời' : 'Chạm để nói'}
+          className={`w-7 h-7 rounded-full flex items-center justify-center transition shadow-md ${
+            callState === 'listening' ? 'bg-gradient-to-tr from-emerald-500 to-teal-400 ring-2 ring-emerald-400 animate-pulse' :
+            callState === 'thinking' ? 'bg-gradient-to-tr from-amber-500 to-orange-400 animate-spin' :
+            callState === 'speaking' ? 'bg-gradient-to-tr from-primary-500 to-indigo-400 ring-2 ring-primary-400 animate-pulse' :
+            'bg-slate-700'
+          }`}
+        >
+          {callState === 'listening' && <Mic className="w-3.5 h-3.5 text-white animate-bounce" />}
+          {callState === 'thinking' && <Sparkles className="w-3.5 h-3.5 text-white" />}
+          {callState === 'speaking' && <Volume2 className="w-3.5 h-3.5 text-white" />}
+          {callState === 'idle' && <Mic className="w-3.5 h-3.5 text-slate-300" />}
+        </button>
 
-      {/* Main Container */}
-      <div className="relative w-full max-w-xl mx-4 flex flex-col items-center justify-between h-[85vh] max-h-[750px] py-6 px-4">
-        {/* Top Header */}
-        <div className="w-full flex items-center justify-between border-b border-white/10 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg ${
-              persona === 'interviewer' ? 'bg-gradient-to-tr from-amber-500 to-rose-600' : 'bg-gradient-to-tr from-primary-500 to-indigo-600'
-            }`}>
-              {persona === 'interviewer' ? <Briefcase className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-sm sm:text-base tracking-tight">Labby Voice Live</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-white/10 border border-white/15 text-slate-300">
-                  {persona === 'interviewer' ? 'Tech Lead' : 'Gia Sư Lab'}
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400">
-                {lab ? (lab.title_vi || lab.title) : 'Đàm thoại trực tiếp thời gian thực'}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {/* Switch persona button */}
-            <button
-              onClick={() => {
-                const next = persona === 'tutor' ? 'interviewer' : 'tutor';
-                setPersona(next);
-                cleanup();
-              }}
-              title="Chuyển chế độ Gia sư / Phỏng vấn"
-              className="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs font-semibold border border-white/10 transition flex items-center gap-1.5"
-            >
-              {persona === 'tutor' ? <Briefcase className="w-3.5 h-3.5 text-amber-400" /> : <GraduationCap className="w-3.5 h-3.5 text-primary-400" />}
-              <span className="hidden sm:inline">{persona === 'tutor' ? 'Sang Phỏng Vấn' : 'Sang Gia Sư'}</span>
-            </button>
-
-            {/* Close button */}
-            <button
-              onClick={onClose}
-              title="Thoát Voice Mode"
-              className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+        <div className="flex flex-col">
+          <span className="text-xs font-bold leading-tight">
+            {callState === 'listening' ? 'Đang nghe...' :
+             callState === 'thinking' ? 'Đang nghĩ...' :
+             callState === 'speaking' ? 'Đang nói...' : 'Labby Voice'}
+          </span>
+          <span className="text-[10px] text-slate-400 truncate max-w-[110px]">
+            {lab ? (lab.title_vi || lab.title) : 'Trợ lý học tập'}
+          </span>
         </div>
 
-        {/* Center: The ChatGPT-style Interactive Voice Orb */}
-        <div className="flex-1 flex flex-col items-center justify-center my-6 relative">
-          <div 
-            onClick={callState === 'speaking' ? handleInterrupt : (callState === 'idle' ? startListening : undefined)}
-            className="relative cursor-pointer group flex items-center justify-center"
-            title={callState === 'speaking' ? 'Chạm để ngắt lời' : 'Chạm để bắt đầu nói'}
-          >
-            {/* Outer pulsating audio wave ripples */}
-            <div className={`absolute w-56 h-56 sm:w-64 sm:h-64 rounded-full transition-all duration-700 pointer-events-none ${
-              callState === 'listening' ? 'border-2 border-emerald-400/40 animate-ping opacity-75' :
-              callState === 'speaking' ? 'border-2 border-primary-400/50 animate-ping opacity-75' :
-              callState === 'thinking' ? 'border-2 border-amber-400/30 animate-pulse' : 'border border-white/10'
-            }`} />
+        {/* Expand back to Dock Mode */}
+        <button
+          onClick={() => setViewMode('dock')}
+          title="Mở rộng khung trợ lý"
+          className="p-1 rounded-full hover:bg-white/10 text-slate-300 hover:text-white transition"
+        >
+          <ChevronUp className="w-4 h-4" />
+        </button>
 
-            <div className={`absolute w-44 h-44 sm:w-52 sm:h-52 rounded-full transition-all duration-500 pointer-events-none ${
-              callState === 'listening' ? 'bg-emerald-500/15 scale-110 animate-pulse' :
-              callState === 'speaking' ? 'bg-primary-500/20 scale-125 animate-pulse' :
-              callState === 'thinking' ? 'bg-amber-500/20 scale-105' : 'bg-white/5'
-            }`} />
+        {/* Mute toggle */}
+        <button
+          onClick={() => {
+            const nextMuted = !isMuted;
+            setIsMuted(nextMuted);
+            if (nextMuted && recognitionRef.current) {
+              try { recognitionRef.current.abort(); } catch {}
+              setCallState('idle');
+            } else if (!nextMuted && callState === 'idle') {
+              startListening();
+            }
+          }}
+          title={isMuted ? "Bật lại Micro" : "Tắt Micro"}
+          className={`p-1 rounded-full transition ${isMuted ? 'text-rose-400 hover:bg-rose-950/60' : 'text-slate-300 hover:bg-white/10'}`}
+        >
+          {isMuted ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
+        </button>
 
-            {/* The Central Glowing Sphere */}
-            <div className={`w-32 h-32 sm:w-40 sm:h-40 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 relative overflow-hidden ${
-              callState === 'listening' 
-                ? 'bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 scale-105 shadow-emerald-500/50 ring-4 ring-emerald-400/30' :
-              callState === 'thinking' 
-                ? 'bg-gradient-to-tr from-amber-600 via-orange-500 to-yellow-400 scale-100 animate-spin shadow-amber-500/40 ring-4 ring-amber-400/30' :
-              callState === 'speaking' 
-                ? 'bg-gradient-to-tr from-primary-600 via-indigo-500 to-purple-500 scale-110 shadow-primary-500/50 ring-4 ring-primary-400/40 animate-pulse' :
-                'bg-gradient-to-tr from-slate-800 via-indigo-900 to-slate-700 shadow-indigo-500/20 ring-2 ring-white/10'
-            }`}>
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.4),transparent)]" />
-              
-              {/* Dynamic Icon inside Orb */}
-              <div className="relative text-white flex flex-col items-center gap-1">
-                {callState === 'listening' && (
-                  <div className="flex items-center gap-1">
-                    <span className="w-1.5 h-6 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-10 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-8 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                    <span className="w-1.5 h-4 bg-white rounded-full animate-bounce" style={{ animationDelay: '450ms' }} />
-                  </div>
-                )}
-                {callState === 'thinking' && <Sparkles className="w-8 h-8 animate-spin text-white" />}
-                {callState === 'speaking' && <Volume2 className="w-8 h-8 animate-pulse text-white" />}
-                {callState === 'idle' && <Mic className="w-8 h-8 text-white/80 group-hover:scale-110 transition-transform" />}
+        {/* End Call */}
+        <button
+          onClick={onClose}
+          title="Kết thúc đàm thoại"
+          className="p-1.5 rounded-full bg-rose-600/80 hover:bg-rose-600 text-white transition shadow-sm"
+        >
+          <PhoneOff className="w-3 h-3" />
+        </button>
+      </div>
+    );
+  }
+
+  // 2. Fullscreen Focused View (if explicitly requested by user)
+  if (viewMode === 'fullscreen') {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-2xl text-white select-none animate-in fade-in duration-200">
+        <div className={`absolute w-[450px] h-[450px] rounded-full blur-3xl pointer-events-none transition-all duration-1000 ${
+          callState === 'listening' ? 'bg-emerald-500/20 scale-125' :
+          callState === 'thinking' ? 'bg-amber-500/25 scale-110 animate-pulse' :
+          callState === 'speaking' ? 'bg-primary-500/30 scale-150 animate-pulse' : 'bg-indigo-600/15'
+        }`} />
+
+        <div className="relative w-full max-w-xl mx-4 flex flex-col items-center justify-between h-[85vh] max-h-[750px] py-6 px-4">
+          {/* Header */}
+          <div className="w-full flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex items-center gap-2.5">
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg ${
+                persona === 'interviewer' ? 'bg-gradient-to-tr from-amber-500 to-rose-600' : 'bg-gradient-to-tr from-primary-500 to-indigo-600'
+              }`}>
+                {persona === 'interviewer' ? <Briefcase className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
               </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-sm sm:text-base tracking-tight">Labby Voice Live</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-white/10 border border-white/15 text-slate-300">
+                    {persona === 'interviewer' ? 'Tech Lead' : 'Gia Sư Lab'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  {lab ? (lab.title_vi || lab.title) : 'Đàm thoại trực tiếp thời gian thực'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setViewMode('dock')}
+                title="Thu nhỏ xuống góc màn hình"
+                className="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs font-semibold border border-white/10 transition flex items-center gap-1.5"
+              >
+                <Minimize2 className="w-3.5 h-3.5" />
+                <span>Thu nhỏ dạng Dock</span>
+              </button>
+
+              <button
+                onClick={onClose}
+                title="Thoát Voice Mode"
+                className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
 
-          {/* Status Text Under Sphere */}
-          <div className="mt-7 text-center">
-            <span className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition ${
-              callState === 'listening' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shadow-lg shadow-emerald-500/20' :
-              callState === 'thinking' ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30 animate-pulse' :
-              callState === 'speaking' ? 'bg-primary-500/20 text-primary-300 border border-primary-400/30' :
-              'bg-white/10 text-slate-300 border border-white/10'
-            }`}>
-              <span className={`w-2 h-2 rounded-full ${
-                callState === 'listening' ? 'bg-emerald-400 animate-ping' :
-                callState === 'thinking' ? 'bg-amber-400 animate-bounce' :
-                callState === 'speaking' ? 'bg-primary-400 animate-pulse' : 'bg-slate-400'
-              }`} />
-              {callState === 'listening' ? 'Đang lắng nghe bạn nói...' :
-               callState === 'thinking' ? 'Labby đang suy nghĩ...' :
-               callState === 'speaking' ? 'Labby đang trả lời...' : 'Sẵn sàng đàm thoại'}
-            </span>
+          {/* Fullscreen Orb */}
+          <div className="flex-1 flex flex-col items-center justify-center my-6 relative">
+            <div 
+              onClick={callState === 'speaking' ? handleInterrupt : (callState === 'idle' ? startListening : undefined)}
+              className="relative cursor-pointer group flex items-center justify-center"
+              title={callState === 'speaking' ? 'Chạm để ngắt lời' : 'Chạm để bắt đầu nói'}
+            >
+              <div className={`w-36 h-36 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 relative overflow-hidden ${
+                callState === 'listening' ? 'bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 scale-105 shadow-emerald-500/50 ring-4 ring-emerald-400/30' :
+                callState === 'thinking' ? 'bg-gradient-to-tr from-amber-600 via-orange-500 to-yellow-400 scale-100 animate-spin shadow-amber-500/40 ring-4 ring-amber-400/30' :
+                callState === 'speaking' ? 'bg-gradient-to-tr from-primary-600 via-indigo-500 to-purple-500 scale-110 shadow-primary-500/50 ring-4 ring-primary-400/40 animate-pulse' :
+                'bg-gradient-to-tr from-slate-800 via-indigo-900 to-slate-700 shadow-indigo-500/20 ring-2 ring-white/10'
+              }`}>
+                <div className="relative text-white">
+                  {callState === 'listening' && <Mic className="w-10 h-10 animate-bounce" />}
+                  {callState === 'thinking' && <Sparkles className="w-10 h-10 animate-spin" />}
+                  {callState === 'speaking' && <Volume2 className="w-10 h-10 animate-pulse" />}
+                  {callState === 'idle' && <Mic className="w-10 h-10 text-white/80" />}
+                </div>
+              </div>
+            </div>
 
-            {callState === 'speaking' && (
-              <p className="text-[11px] text-slate-400 mt-2">
-                (Chạm vào quả cầu hoặc bấm "Ngắt lời" để nói tiếp)
-              </p>
+            <div className="mt-6 text-center">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-slate-300">
+                {callState === 'listening' ? 'Đang lắng nghe bạn nói...' :
+                 callState === 'thinking' ? 'Labby đang suy nghĩ...' :
+                 callState === 'speaking' ? 'Labby đang trả lời...' : 'Sẵn sàng đàm thoại'}
+              </span>
+            </div>
+
+            {/* Subtitles */}
+            {showSubtitles && (
+              <div className="w-full max-w-lg mt-5 bg-slate-900/80 border border-white/10 rounded-2xl p-3.5 backdrop-blur-md min-h-[75px] max-h-[140px] overflow-y-auto text-xs leading-relaxed text-slate-200 shadow-xl">
+                {transcript && <div className="text-emerald-300 font-medium">Bạn: {transcript}</div>}
+                {!transcript && callState === 'speaking' && <div className="text-slate-100 font-medium">Labby: {cleanForSpeech(aiSpeechText)}</div>}
+                {!transcript && callState !== 'speaking' && lastUserSpeech && <div className="text-slate-400 text-[11px]">Gần nhất: {lastUserSpeech}</div>}
+              </div>
             )}
           </div>
 
-          {/* Subtitles / Live Transcript Box */}
-          {showSubtitles && (
-            <div className="w-full max-w-lg mt-5 bg-slate-900/80 border border-white/10 rounded-2xl p-3.5 backdrop-blur-md min-h-[75px] max-h-[140px] overflow-y-auto text-xs leading-relaxed text-slate-200 shadow-xl">
-              {transcript && (
-                <div className="text-emerald-300 font-medium flex items-start gap-1.5 animate-in fade-in">
-                  <span className="text-slate-400 font-bold shrink-0">Bạn:</span>
-                  <span>{transcript}</span>
-                </div>
-              )}
-              {!transcript && callState === 'speaking' && (
-                <div className="text-slate-100 flex items-start gap-1.5 animate-in fade-in">
-                  <span className="text-primary-400 font-bold shrink-0">Labby:</span>
-                  <span>{cleanForSpeech(aiSpeechText)}</span>
-                </div>
-              )}
-              {!transcript && callState !== 'speaking' && lastUserSpeech && (
-                <div className="text-slate-400 text-[11px] truncate">
-                  <span className="font-semibold text-slate-500">Gần nhất: </span>
-                  {lastUserSpeech}
-                </div>
-              )}
-              {!transcript && callState === 'idle' && !lastUserSpeech && (
-                <div className="text-slate-500 text-center italic py-2">
-                  Hãy nói qua mic, lời nói của bạn và câu trả lời của AI sẽ hiện tại đây...
-                </div>
-              )}
+          {/* Fullscreen Controls */}
+          <div className="w-full flex items-center justify-center gap-5 border-t border-white/10 pt-4">
+            <button
+              onClick={() => setIsMuted(!isMuted)}
+              className={`w-12 h-12 rounded-full flex items-center justify-center transition shadow-lg ${
+                isMuted ? 'bg-rose-600 text-white' : 'bg-white/15 text-white'
+              }`}
+            >
+              {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            </button>
+            <button
+              onClick={onClose}
+              className="w-14 h-14 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center transition shadow-xl"
+            >
+              <PhoneOff className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 3. Compact Floating Dock Mode (Default: PiP style, NO full-screen blocker!)
+  // User can freely interact with the lab, terminal, and courses behind it!
+  return (
+    <div className="fixed bottom-5 right-5 z-50 w-[92vw] sm:w-[380px] max-h-[490px] rounded-2xl bg-slate-950/95 backdrop-blur-xl border border-slate-700/80 shadow-2xl text-white flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-200 select-none">
+      {/* Top Header */}
+      <div className="px-3.5 py-2.5 bg-slate-900/80 border-b border-white/10 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2">
+          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white shadow-xs ${
+            persona === 'interviewer' ? 'bg-gradient-to-tr from-amber-500 to-rose-600' : 'bg-gradient-to-tr from-primary-500 to-indigo-600'
+          }`}>
+            {persona === 'interviewer' ? <Briefcase className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="font-extrabold text-xs tracking-tight">Labby Voice</span>
+              <button
+                onClick={() => {
+                  const next = persona === 'tutor' ? 'interviewer' : 'tutor';
+                  setPersona(next);
+                  cleanup();
+                }}
+                title="Bấm để đổi chế độ"
+                className="text-[9px] px-1.5 py-0.2 rounded-full font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 border border-white/15 text-slate-300 transition"
+              >
+                {persona === 'interviewer' ? '👔 Tech Lead' : '🎓 Gia Sư'}
+              </button>
             </div>
-          )}
+          </div>
         </div>
 
-        {/* Bottom Control Bar */}
-        <div className="w-full flex items-center justify-center gap-5 border-t border-white/10 pt-4">
-          {/* Mute Mic toggle */}
+        {/* Header Action Buttons: Minimize, Maximize, Close */}
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setViewMode('minimized')}
+            title="Thu nhỏ thanh mảnh (không che màn hình)"
+            className="p-1 rounded-md hover:bg-white/10 text-slate-400 hover:text-white transition"
+          >
+            <Minus className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            onClick={() => setViewMode('fullscreen')}
+            title="Mở toàn màn hình"
+            className="p-1 rounded-md hover:bg-white/10 text-slate-400 hover:text-white transition"
+          >
+            <Maximize2 className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            onClick={onClose}
+            title="Kết thúc đàm thoại"
+            className="p-1 rounded-md hover:bg-rose-600/80 text-rose-400 hover:text-white transition"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Real-time Context Awareness Indicator */}
+      <div className="px-3 py-1.5 bg-slate-900/40 border-b border-white/5 flex items-center justify-between text-[11px] text-slate-300">
+        <div className="flex items-center gap-1.5 truncate">
+          <BookOpen className="w-3 h-3 text-primary-400 shrink-0" />
+          <span className="truncate font-medium">{lab ? (lab.title_vi || lab.title) : 'LabEx Studio'}</span>
+        </div>
+        {currentStep && (
+          <span className="shrink-0 text-[10px] px-1.5 py-0.2 rounded bg-primary-950/60 text-primary-300 border border-primary-800/40">
+            Bước {currentStep.step || 1}
+          </span>
+        )}
+      </div>
+
+      {/* Main Interactive Center */}
+      <div className="p-3.5 flex flex-col items-center justify-center gap-3">
+        {/* Compact Voice Orb */}
+        <div 
+          onClick={callState === 'speaking' ? handleInterrupt : (callState === 'idle' ? startListening : undefined)}
+          className="relative cursor-pointer group flex items-center justify-center my-1"
+          title={callState === 'speaking' ? 'Chạm để ngắt lời' : 'Chạm để nói'}
+        >
+          {/* Subtle pulsating outer ripple */}
+          <div className={`absolute w-24 h-24 rounded-full transition-all duration-700 pointer-events-none ${
+            callState === 'listening' ? 'border-2 border-emerald-400/40 animate-ping opacity-60' :
+            callState === 'speaking' ? 'border-2 border-primary-400/50 animate-ping opacity-60' :
+            callState === 'thinking' ? 'border border-amber-400/30 animate-pulse' : 'border border-white/5'
+          }`} />
+
+          {/* Central Sphere */}
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-500 relative overflow-hidden ${
+            callState === 'listening' ? 'bg-gradient-to-tr from-emerald-600 to-teal-400 ring-2 ring-emerald-400/50 scale-105' :
+            callState === 'thinking' ? 'bg-gradient-to-tr from-amber-600 to-yellow-400 ring-2 ring-amber-400/50 animate-spin' :
+            callState === 'speaking' ? 'bg-gradient-to-tr from-primary-600 to-indigo-400 ring-2 ring-primary-400/50 scale-105 animate-pulse' :
+            'bg-gradient-to-tr from-slate-800 to-slate-700 ring-1 ring-white/10 group-hover:scale-105'
+          }`}>
+            <div className="relative text-white">
+              {callState === 'listening' && <Mic className="w-5 h-5 animate-bounce" />}
+              {callState === 'thinking' && <Sparkles className="w-5 h-5 animate-spin" />}
+              {callState === 'speaking' && <Volume2 className="w-5 h-5 animate-pulse" />}
+              {callState === 'idle' && <Mic className="w-5 h-5 text-slate-300" />}
+            </div>
+          </div>
+        </div>
+
+        {/* Status Pill */}
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+          callState === 'listening' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' :
+          callState === 'thinking' ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30 animate-pulse' :
+          callState === 'speaking' ? 'bg-primary-500/20 text-primary-300 border border-primary-400/30' :
+          'bg-white/10 text-slate-300'
+        }`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${
+            callState === 'listening' ? 'bg-emerald-400 animate-ping' :
+            callState === 'thinking' ? 'bg-amber-400 animate-bounce' :
+            callState === 'speaking' ? 'bg-primary-400 animate-pulse' : 'bg-slate-400'
+          }`} />
+          {callState === 'listening' ? 'Đang lắng nghe...' :
+           callState === 'thinking' ? 'Labby đang suy nghĩ...' :
+           callState === 'speaking' ? 'Labby đang nói...' : 'Sẵn sàng'}
+        </span>
+
+        {/* Live Subtitle Transcript Box (Compact Scrollable) */}
+        {showSubtitles && (
+          <div className="w-full bg-slate-900/90 border border-white/10 rounded-xl p-2.5 text-xs leading-relaxed text-slate-200 h-[80px] overflow-y-auto">
+            {transcript && (
+              <div className="text-emerald-300 font-medium">
+                <span className="text-slate-400 font-bold mr-1">Bạn:</span>
+                {transcript}
+              </div>
+            )}
+            {!transcript && callState === 'speaking' && (
+              <div className="text-slate-100 font-medium">
+                <span className="text-primary-400 font-bold mr-1">Labby:</span>
+                {cleanForSpeech(aiSpeechText)}
+              </div>
+            )}
+            {!transcript && callState !== 'speaking' && lastUserSpeech && (
+              <div className="text-slate-400 text-[11px]">
+                <span className="font-semibold text-slate-500 mr-1">Vừa hỏi:</span>
+                {lastUserSpeech}
+              </div>
+            )}
+            {!transcript && callState === 'idle' && !lastUserSpeech && (
+              <div className="text-slate-500 text-center italic py-1 text-[11px]">
+                Nói bất cứ lúc nào, trợ lý sẽ phản hồi qua giọng nói...
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Bottom Floating Control Bar */}
+      <div className="px-3.5 py-2.5 bg-slate-900/90 border-t border-white/10 flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          {/* Mute Mic button */}
           <button
             onClick={() => {
               const nextMuted = !isMuted;
@@ -493,22 +668,23 @@ export default function VoiceCallModal({
               }
             }}
             title={isMuted ? "Bật lại Micro" : "Tắt Micro"}
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition shadow-lg ${
-              isMuted ? 'bg-rose-600/80 hover:bg-rose-600 text-white' : 'bg-white/15 hover:bg-white/25 text-white'
+            className={`p-2 rounded-xl border text-xs font-semibold transition flex items-center gap-1 ${
+              isMuted ? 'bg-rose-600 text-white border-rose-500' : 'bg-white/10 hover:bg-white/15 text-slate-300 border-white/10'
             }`}
           >
-            {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            {isMuted ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
+            <span className="text-[10px]">{isMuted ? 'Bật Mic' : 'Tắt Mic'}</span>
           </button>
 
-          {/* Interrupt Speaking button (when AI is speaking) */}
+          {/* Interrupt Speaking button */}
           {callState === 'speaking' && (
             <button
               onClick={handleInterrupt}
               title="Ngắt lời AI để nói ngay"
-              className="px-4 py-2.5 rounded-full bg-amber-500/90 hover:bg-amber-500 text-slate-950 font-bold text-xs shadow-lg transition flex items-center gap-1.5 animate-pulse"
+              className="px-2.5 py-2 rounded-xl bg-amber-500/90 hover:bg-amber-500 text-slate-950 font-bold text-xs shadow-xs transition flex items-center gap-1 animate-pulse"
             >
-              <RotateCcw className="w-4 h-4" />
-              <span>Ngắt lời</span>
+              <RotateCcw className="w-3 h-3" />
+              <span className="text-[10px]">Ngắt lời</span>
             </button>
           )}
 
@@ -516,22 +692,23 @@ export default function VoiceCallModal({
           <button
             onClick={() => setShowSubtitles(!showSubtitles)}
             title="Bật/Tắt phụ đề chữ"
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition shadow-lg ${
-              showSubtitles ? 'bg-white/20 text-white' : 'bg-white/10 text-slate-400 hover:text-white'
+            className={`p-2 rounded-xl border transition ${
+              showSubtitles ? 'bg-white/15 text-white border-white/20' : 'bg-white/5 text-slate-400 border-white/10 hover:text-white'
             }`}
           >
-            <MessageSquare className="w-5 h-5" />
-          </button>
-
-          {/* End Call Button */}
-          <button
-            onClick={onClose}
-            title="Kết thúc đàm thoại"
-            className="w-14 h-14 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center transition shadow-xl shadow-rose-600/30 hover:scale-105 active:scale-95"
-          >
-            <PhoneOff className="w-6 h-6" />
+            <MessageSquare className="w-3.5 h-3.5" />
           </button>
         </div>
+
+        {/* End Call Button */}
+        <button
+          onClick={onClose}
+          title="Kết thúc đàm thoại"
+          className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-1 shadow-md transition hover:scale-105 active:scale-95"
+        >
+          <PhoneOff className="w-3.5 h-3.5" />
+          <span>Tắt</span>
+        </button>
       </div>
     </div>
   );
