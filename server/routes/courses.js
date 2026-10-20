@@ -5,11 +5,17 @@ import { isValidId, listLabs, loadLab } from "../data/catalog.js";
 import { getLinuxRoadmap, readLinuxIndex, readLinuxOutlines, courseReadiness, listCourseLabs } from "../services/linuxRoadmap.js";
 import { getLabReadiness, getStepReadiness } from "../services/readiness.js";
 import { getVerificationDefinition } from "../services/verification.js";
+import { getWindowsRoadmap, readWindowsRoadmap } from "../services/windowsRoadmap.js";
 
 const router = express.Router();
 const readData = (file) => JSON.parse(fs.readFileSync(fileURLToPath(new URL(`../data/${file}`, import.meta.url)), "utf8"));
 
 function publicPath(path) {
+  if (path.alias === 'windows') {
+    const roadmap=getWindowsRoadmap(getCourses());
+    return {...path,...roadmap,course_count:roadmap.totals.courses,labs_count:roadmap.totals.imported_labs,
+      runnable_labs_count:roadmap.totals.runnable_labs,has_cert:false,roadmap_url:'/api/roadmaps/windows-system-administrator'};
+  }
   if (path.alias !== "linux") return path;
   const courses = getCourses();
   const index = readLinuxIndex();
@@ -33,6 +39,7 @@ function publicPath(path) {
 export function getCourses() {
   const labs = listLabs();
   const index = readLinuxIndex();
+  const windowsPlan = readWindowsRoadmap();
   return readData("courses.json").map((course) => {
     const available = listCourseLabs(course.id, labs, index);
     const source = index.courses.find(item => item.id === course.id);
@@ -41,6 +48,9 @@ export function getCourses() {
     const isReady = available.length && readiness.runnable_labs_count === available.length;
     const practiceCount = readiness.practice_labs_count;
     const runnableCount = readiness.runnable_labs_count;
+    const outline=windowsPlan.courses.find(item=>item.id===course.id);
+    const plannedCount=outline && !outline.initially_implemented ? outline.syllabus_modules.reduce((n,m)=>n+m.planned_lessons.length,0) : 0;
+    const planned=!!outline && !available.length;
     return { ...metadata, level: typeof course.level === "number" ? course.level : ({ beginner: 1, intermediate: 2, advanced: 3 }[String(course.level).toLowerCase()] || 1),
       level_label: course.level_label || (typeof course.level === "string" ? course.level : "Beginner"),
       cover: course.cover || course.cover_image, skills: course.skills || [], tags: course.tags || [],
@@ -50,7 +60,12 @@ export function getCourses() {
       source_url: source?.source_url, source_labs_count: source?.source_labs_count ?? null, ...readiness,
       practice_labs_count: practiceCount,
       runnable_labs_count: runnableCount,
-      readiness: isReady ? "ready" : available.length ? "partial" : "reference-only",
+      ...(outline ? {curriculum_status:planned?'planned':plannedCount && available.length<plannedCount?'in-progress':'implemented',
+        syllabus_modules:outline.syllabus_modules,planned_lessons_count:plannedCount,prerequisites:outline.prerequisites,
+        prerequisite_courses:outline.prerequisites.map(id=>({id,name:windowsPlan.courses.find(item=>item.id===id)?.name || id})),
+        learning_outcomes:outline.learning_outcomes,environment_plan:outline.environment_plan,references:outline.references,
+        roadmap_alias:'windows',content_status:planned?'planned':plannedCount && available.length<plannedCount?'partial':readiness.content_status} : {}),
+      readiness: planned ? 'planned' : isReady && (!plannedCount || available.length>=plannedCount) ? "ready" : available.length ? "partial" : "reference-only",
       labs_count: available.length, available: practiceCount > 0 || ((course.topic === 'windows' || course.id.includes('windows')) && available.length > 0),
       lab_ids: available.map((lab) => lab.id),
       steps_count: available.reduce((sum, lab) => sum + lab.steps.length, 0) };
@@ -59,6 +74,9 @@ export function getCourses() {
 
 router.get("/roadmaps/linux-system-administrator", (_req, res, next) => {
   try { res.json(getLinuxRoadmap()); } catch (error) { next(error); }
+});
+router.get('/roadmaps/windows-system-administrator',(_req,res,next)=>{
+  try{res.json(getWindowsRoadmap(getCourses()));}catch(error){next(error);}
 });
 
 router.get("/topics", (_req, res, next) => {

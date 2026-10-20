@@ -141,9 +141,9 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
               <Terminal className="w-4 h-4 text-slate-900" /> Lộ trình Linux Enterprise
             </button>
             <button
-              onClick={() => handleSelectTopic('windows')}
+              onClick={() => onSelectPath ? onSelectPath('windows') : handleSelectTopic('windows')}
               className="px-5 py-3 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-bold shadow-lg shadow-primary-500/25 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]">
-              <Server className="w-4 h-4 text-white" /> Windows Server Cloud Labs
+              <Server className="w-4 h-4 text-white" /> Lộ trình Windows & IT Support
             </button>
             <button
               onClick={() => {

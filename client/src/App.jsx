@@ -84,6 +84,7 @@ export default function App() {
           <LearningPath
             key={route.id}
             pathAlias={route.id}
+            onSelectPath={selectPath}
             onBack={() => navigate('/learn')}
             onSelectCourse={selectCourse}
           />

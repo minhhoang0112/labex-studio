@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { api } from '../lib/api';
 
-export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCourse }) {
+export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCourse, onSelectPath }) {
   const [roadmap, setRoadmap] = useState(null);
   const [attempt, setAttempt] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -71,6 +71,8 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
 
   // Use factual totals from roadmap
   const totals = roadmap.totals;
+  const isWindows=roadmap.alias === 'windows';
+  const firstCourse=coursesForStart(roadmap);
 
   const coursesList = roadmap?.courses || [];
   const sourceOrder = roadmap?.source_order || [];
@@ -99,6 +101,10 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
           
           {/* Mode Switcher Tabs */}
           <div className="flex items-center bg-gray-100 dark:bg-gray-800 p-1 rounded-lg text-xs font-semibold">
+            {onSelectPath && <>
+              <button onClick={()=>onSelectPath('linux')} className={`px-3 py-1 rounded-md ${!isWindows?'text-primary-600 bg-white dark:bg-gray-700':'text-gray-500'}`}>Linux</button>
+              <button onClick={()=>onSelectPath('windows')} className={`px-3 py-1 rounded-md ${isWindows?'text-primary-600 bg-white dark:bg-gray-700':'text-gray-500'}`}>Windows</button>
+            </>}
             <button
               onClick={() => setViewMode('recommended')}
               className={`px-3 py-1 rounded-md transition ${
@@ -108,7 +114,7 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
               }`}>
               Lộ trình học đề xuất (Local)
             </button>
-            <button
+            {!isWindows && <button
               onClick={() => setViewMode('source')}
               className={`px-3 py-1 rounded-md transition ${
                 viewMode === 'source' 
@@ -116,7 +122,7 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}>
               Thứ tự khóa nguồn
-            </button>
+            </button>}
           </div>
         </div>
       </div>
@@ -128,7 +134,7 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
             <div className="space-y-4 max-w-3xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold border border-blue-400/30">
                 <Sparkles className="w-3.5 h-3.5" />
-                Đối chiếu trực tiếp từ LabEx.io Learning Path
+                {isWindows?'Lộ trình tự biên soạn · Tham khảo Microsoft Learn':'Đối chiếu trực tiếp từ LabEx.io Learning Path'}
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black tracking-tight flex items-center gap-3">
@@ -136,37 +142,39 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
               </h1>
 
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                Đường dẫn học tập có cấu trúc từ dòng lệnh cơ bản đến quản trị hệ thống và tự động hóa shell. Thực hành trực tiếp trong môi trường Isolated Linux an toàn.
+                {isWindows?roadmap.description:'Đường dẫn học tập có cấu trúc từ dòng lệnh cơ bản đến quản trị hệ thống và tự động hóa shell. Thực hành trực tiếp trong môi trường Isolated Linux an toàn.'}
               </p>
 
               {/* Factual Stats Bar */}
               <div className="flex flex-wrap items-center gap-6 pt-2 text-sm text-slate-300">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-blue-400" />
-                  <span><strong>{totals.source_courses}</strong> khóa tại nguồn LabEx</span>
+                  <span><strong>{isWindows?totals.courses:totals.source_courses}</strong> {isWindows?'khóa trong lộ trình':'khóa tại nguồn LabEx'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Terminal className="w-4 h-4 text-slate-400" />
-                  <span><strong>{totals.source_labs}</strong> bài học tại nguồn</span>
+                  <span><strong>{isWindows?totals.imported_labs:totals.source_labs}</strong> {isWindows?'bài đã có nội dung':'bài học tại nguồn'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-emerald-300">
                   <CheckCircle className="w-4 h-4" />
               <span><strong>{totals.runnable_labs}</strong> bài chấm đủ nhiệm vụ local</span>
                 </div>
               </div>
+              {isWindows && <p className="text-sm text-sky-200">{totals.implemented_courses} khóa có bài · {totals.planned_courses} khóa mới có đề cương · {totals.planned_lessons} bài dự kiến, chưa triển khai.</p>}
             </div>
 
             {/* Quick Action Box */}
             <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10 w-full lg:w-80 shrink-0 space-y-4">
               <div className="text-xs uppercase tracking-wider text-slate-400 font-bold">Bắt đầu lộ trình</div>
               <div className="text-sm text-slate-200">
-                Khởi đầu với <strong>Quick Start with Linux</strong> (10 bài thực hành chuẩn) để nắm vững các lệnh nền tảng.
+                {isWindows?'Bắt đầu bằng đề cương Nền tảng Windows 11. Bạn cũng có thể vào khóa IT Support đã có 25 bài để thực hành ngay.':<>Khởi đầu với <strong>Quick Start with Linux</strong> (10 bài thực hành chuẩn) để nắm vững các lệnh nền tảng.</>}
               </div>
               <button
-                onClick={() => onSelectCourse('quick-start-with-linux')}
+                onClick={() => onSelectCourse(firstCourse)}
                 className="w-full py-3 px-4 rounded-xl bg-primary-600 hover:bg-primary-500 font-semibold text-white shadow-lg shadow-primary-500/30 flex items-center justify-center gap-2 transition-all">
-                <Play className="w-4 h-4 fill-current" /> Bắt đầu Quick Start
+                <Play className="w-4 h-4 fill-current" /> {isWindows?'Xem khóa đầu tiên':'Bắt đầu Quick Start'}
               </button>
+              {isWindows && <button onClick={()=>onSelectCourse(roadmap.available_start_course_id)} className="text-sm text-sky-200 underline">Mở 25 bài IT Support đã có →</button>}
             </div>
           </div>
         </div>
@@ -174,6 +182,7 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
 
       {/* Main Roadmap Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 space-y-12">
+        {isWindows && <p className="rounded-xl border border-sky-200 dark:border-sky-900 bg-sky-50 dark:bg-sky-950 p-4 text-sm text-sky-900 dark:text-sky-100">{roadmap.guidance}</p>}
         {/* Stages view in Recommended Mode */}
         {viewMode === 'recommended' && stages.length > 0 ? (
           stages.map((stage, sIdx) => {
@@ -248,13 +257,13 @@ function CourseRoadmapCard({ course, onSelectCourse }) {
       {/* Cover / Visual */}
       <div className="relative aspect-video w-full bg-slate-100 dark:bg-gray-800 overflow-hidden">
         <img
-          src={`https://course-cover.labex.io/${course.alias || course.id}.png`}
+          src={course.cover || course.cover_image || `https://course-cover.labex.io/${course.alias || course.id}.png`}
           alt={course.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
           onError={(e) => {
             e.currentTarget.onerror = null;
-            e.currentTarget.src = 'https://course-cover.labex.io/quick-start-with-linux.png';
+            e.currentTarget.src = course.topic === 'windows' ? '/images/windows-course.svg' : 'https://course-cover.labex.io/quick-start-with-linux.png';
           }}
         />
         <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
@@ -272,10 +281,11 @@ function CourseRoadmapCard({ course, onSelectCourse }) {
             {course.name}
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 line-clamp-2">
-            {course.imported_labs_count > 0
+            {course.topic==='windows' ? course.reason : course.imported_labs_count > 0
               ? `${course.imported_labs_count}/${course.source_labs_count} bài đã nhập · ${course.source_verified_labs_count || 0} bài đã đối chiếu bản gốc tiếng Anh.`
               : 'Đã có giáo trình nguồn; đang bổ sung tài liệu bài học.'}
           </p>
+          {course.optional && <p className="mt-2 text-xs font-semibold text-sky-600 dark:text-sky-300">Nhánh mở rộng tùy chọn</p>}
           {!!course.prerequisite_skills?.length && <p className="mt-3 text-xs text-slate-600 dark:text-slate-300"><strong>Trước khi học:</strong> {course.prerequisite_skills.join('; ')}.</p>}
           {!!course.learning_outcomes?.length && <ul className="mt-3 text-xs text-slate-600 dark:text-slate-300 list-disc pl-4 space-y-1">{course.learning_outcomes.map(outcome => <li key={outcome}>{outcome}</li>)}</ul>}
           {course.practice_strategy && <p className="mt-3 text-xs text-slate-600 dark:text-slate-300"><strong>Cách học:</strong> {course.practice_strategy}</p>}
@@ -285,8 +295,8 @@ function CourseRoadmapCard({ course, onSelectCourse }) {
         <div className="pt-3 border-t dark:border-gray-800 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
           <span className="flex items-center gap-1">
             <Terminal className="w-3.5 h-3.5 text-primary-500" />
-            {isReady || isPartial 
-              ? `${course.practice_labs_count ?? 0} bài mở terminal · ${course.runnable_labs_count ?? 0} bài chấm đủ`
+            {course.status==='planned' ? `${course.planned_lessons_count} bài dự kiến · Chưa triển khai` : isReady || isPartial
+              ? `${course.imported_labs_count ?? course.practice_labs_count ?? 0} bài local · ${course.runnable_labs_count ?? 0} bài chấm đủ`
               : `${course.source_labs_count} bài tại nguồn`}
           </span>
           <span className="font-medium text-primary-600 dark:text-primary-400 inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
@@ -297,3 +307,5 @@ function CourseRoadmapCard({ course, onSelectCourse }) {
     </div>
   );
 }
+
+function coursesForStart(roadmap){return roadmap.start_course_id || 'quick-start-with-linux';}

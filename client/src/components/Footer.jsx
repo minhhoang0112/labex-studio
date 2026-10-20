@@ -58,7 +58,7 @@ export default function Footer({ onSelectPath, onSelectTopic }) {
               </li>
               <li>
                 <button 
-                  onClick={() => onSelectTopic ? onSelectTopic('windows') : onSelectPath?.('windows')}
+                  onClick={() => onSelectPath ? onSelectPath('windows') : onSelectTopic?.('windows')}
                   className="hover:text-primary-400 transition-colors flex items-center gap-1.5 text-left">
                   <Server className="w-3.5 h-3.5 text-blue-400" />
                   <span>Windows Server & Azure VM</span>

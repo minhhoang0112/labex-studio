@@ -62,6 +62,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
 
   const { course, labs: syllabusLabs = [] } = data;
   const isWindows = course.topic === 'windows';
+  const isPlanned=course.curriculum_status === 'planned';
   const labs = syllabusLabs.filter(lab => lab.availability?.state !== 'reference-only' &&
     (lab.steps_count > 0 || lab.step_ids?.length > 0));
   const isComplete = lab => isLabCompleted(lab, labProgress(lab.id));
@@ -315,12 +316,28 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
         ) : (
           <div className="p-8 text-center bg-white dark:bg-gray-800 rounded-xl border border-dashed dark:border-gray-700 space-y-3">
             <FileText className="w-8 h-8 text-slate-400 mx-auto" />
-            <h3 className="font-bold text-gray-800 dark:text-gray-200">Khóa học tham khảo giáo trình nguồn</h3>
+            <h3 className="font-bold text-gray-800 dark:text-gray-200">{isPlanned?'Khóa học đã có đề cương — nội dung sẽ bổ sung sau':'Khóa học tham khảo giáo trình nguồn'}</h3>
             <p className="text-sm text-gray-500 max-w-md mx-auto">
-              Khóa học này hiện đã được đối chiếu metadata và giáo trình nguồn ({course.source_labs_count || 0} bài tại LabEx.io). Nội dung thực hành local đang được triển khai theo kế hoạch.
+              {isPlanned?`${course.planned_lessons_count} bài dự kiến dưới đây là kế hoạch học tập. Chưa có hướng dẫn thực hành, dữ liệu lab hoặc bộ chấm; chưa thể bắt đầu học khóa này.`:`Khóa học này hiện đã được đối chiếu metadata và giáo trình nguồn (${course.source_labs_count || 0} bài tại LabEx.io). Nội dung thực hành local đang được triển khai theo kế hoạch.`}
             </p>
           </div>
         )}
+        {isWindows && course.syllabus_modules?.length>0 && <section className="mt-8 space-y-5" aria-label="Đề cương khóa học Windows">
+          <div className="flex flex-wrap justify-between items-center gap-3">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{isPlanned?'Đề cương dự kiến':'Khung kiến thức của khóa'}</h2>
+            <a href="/paths/windows" className="text-sm text-primary-600 dark:text-primary-300 underline">← Lộ trình Windows đầy đủ</a>
+          </div>
+          <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 space-y-4 text-sm text-gray-700 dark:text-gray-300">
+            <div><h3 className="font-bold">Mục tiêu sau khóa học</h3><ul className="list-disc pl-5 mt-2 space-y-1">{course.learning_outcomes.map(item=><li key={item}>{item}</li>)}</ul></div>
+            {!!course.prerequisite_courses?.length && <div><h3 className="font-bold">Nên học trước (khuyến nghị)</h3><ul className="list-disc pl-5 mt-2 space-y-1">{course.prerequisite_courses.map(item=><li key={item.id}><a className="text-primary-600 dark:text-primary-300 underline" href={`/courses/${item.id}`}>{item.name}</a></li>)}</ul></div>}
+            <p><strong>Môi trường dự kiến: </strong>{course.environment_plan}</p>
+          </div>
+          {course.syllabus_modules.map((module,index)=><div key={module.id} className="p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <h3 className="font-bold text-gray-900 dark:text-white">{index+1}. {module.title}</h3>
+            <ul className="mt-3 list-disc pl-5 space-y-2 text-sm text-gray-600 dark:text-gray-300">{module.planned_lessons.map(item=><li key={item}>{item}{isPlanned && <span className="ml-2 text-xs text-slate-500">· Chưa triển khai</span>}</li>)}</ul>
+          </div>)}
+          <div className="p-5 rounded-xl bg-sky-50 dark:bg-sky-950 text-sm space-y-2"><h3 className="font-bold">Tài liệu Microsoft tham khảo cho đề cương</h3>{course.references?.map(ref=><p key={ref.url}><a className="text-primary-600 dark:text-primary-300 underline" href={ref.url} target="_blank" rel="noreferrer">{ref.title} ↗</a></p>)}<p className="text-xs text-gray-500">Lộ trình tự biên soạn; không phải khóa học hay chứng chỉ do Microsoft cấp.</p></div>
+        </section>}
         <CourseSyllabus stages={data.stages || []} onStartLab={onStartLab} lang={lang} />
       </div>
     </div>

@@ -1,0 +1,856 @@
+{
+  "id": "windows-system-administrator",
+  "alias": "windows",
+  "title": "Lộ trình Windows: IT Support → System Administrator",
+  "description": "Lộ trình từ máy trạm Windows 11, mạng và PowerShell đến hỗ trợ người dùng, quản trị Windows Server, vận hành, bảo mật và dự án doanh nghiệp. Nhánh Azure hybrid là tùy chọn.",
+  "curriculum_origin": "locally-planned-microsoft-references",
+  "updated_at": "2026-10-20",
+  "start_course_id": "windows-11-fundamentals",
+  "available_start_course_id": "windows-11-it-support-troubleshooting",
+  "prerequisites_advisory": true,
+  "source_order": [],
+  "guidance": "Thứ tự là khuyến nghị, không khóa bài đã có. Có thể thực hành 25 bài IT Support hiện có trong khi chờ các khóa nền tảng được bổ sung. Mỗi bài mới phải có giải thích bản chất, hướng dẫn, tự thực hành, bộ kiểm tra trạng thái và hoàn nguyên trước khi đánh dấu triển khai.",
+  "stages": [
+    {
+      "id": "foundations",
+      "name": "Nền tảng máy trạm, mạng và PowerShell",
+      "description": "Hiểu công cụ và bản chất trước khi sửa lỗi.",
+      "course_ids": [
+        "windows-11-fundamentals",
+        "windows-networking-fundamentals",
+        "windows-powershell-for-sysadmins"
+      ]
+    },
+    {
+      "id": "support",
+      "name": "IT Support và Helpdesk",
+      "description": "Áp dụng nền tảng để tiếp nhận ticket, chẩn đoán và phục hồi máy trạm.",
+      "course_ids": [
+        "windows-11-it-support-troubleshooting"
+      ]
+    },
+    {
+      "id": "server",
+      "name": "Junior Windows System Administrator",
+      "description": "Đi từ nền tảng máy chủ đến danh tính, dịch vụ mạng, tệp và IIS.",
+      "course_ids": [
+        "windows-server-administration-essentials",
+        "windows-active-directory-group-policy",
+        "windows-dns-dhcp-network-services",
+        "windows-file-services-storage",
+        "windows-iis-web-services"
+      ]
+    },
+    {
+      "id": "operations",
+      "name": "Vận hành, khôi phục và bảo mật",
+      "description": "Tự động hóa, giám sát, backup và thay đổi có kiểm chứng.",
+      "course_ids": [
+        "windows-powershell-automation",
+        "windows-troubleshooting-and-incident-response",
+        "windows-backup-disaster-recovery",
+        "windows-security-hardening"
+      ]
+    },
+    {
+      "id": "hybrid",
+      "name": "Azure và quản trị hybrid — tùy chọn",
+      "description": "Học sau nền tảng; cần khảo sát quyền, license và chi phí khi triển khai.",
+      "course_ids": [
+        "windows-azure-hybrid-administration"
+      ]
+    },
+    {
+      "id": "capstone",
+      "name": "Dự án thực tế và chuẩn bị đi làm",
+      "description": "Ghép kỹ năng qua ticket, báo cáo sự cố và bàn giao hệ thống.",
+      "course_ids": [
+        "windows-system-administrator-capstone"
+      ]
+    }
+  ],
+  "courses": [
+    {
+      "id": "windows-11-fundamentals",
+      "name": "Nền tảng Windows 11 cho IT Support",
+      "stage": "foundations",
+      "prerequisites": [],
+      "prerequisite_skills": [],
+      "learning_outcomes": [
+        "Hiểu tài khoản, hệ thống tệp, tiến trình và dịch vụ",
+        "Dùng công cụ quản trị và làm việc theo quy trình thay đổi có hoàn nguyên"
+      ],
+      "optional": false,
+      "environment_plan": "CLIENT01 hiện có; chưa triển khai bài mới",
+      "references": [
+        {
+          "title": "Windows security documentation",
+          "url": "https://learn.microsoft.com/en-us/windows/security/"
+        },
+        {
+          "title": "Windows Client: xử lý sự cố mạng",
+          "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/networking-overview"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-11-fundamentals-module-1",
+          "title": "Kiến trúc và công cụ Windows",
+          "planned_lessons": [
+            "Khảo sát phiên bản, phần cứng và công cụ quản trị",
+            "Phân biệt tiến trình, dịch vụ và tác vụ khởi động"
+          ]
+        },
+        {
+          "id": "windows-11-fundamentals-module-2",
+          "title": "Tài khoản và dữ liệu",
+          "planned_lessons": [
+            "Tài khoản local, UAC và quyền quản trị",
+            "Đường dẫn, profile, NTFS và quyền truy cập"
+          ]
+        },
+        {
+          "id": "windows-11-fundamentals-module-3",
+          "title": "Cài đặt và bảo trì",
+          "planned_lessons": [
+            "Cài ứng dụng, driver và cập nhật: kiểm tra nguồn, lập kế hoạch hoàn nguyên",
+            "Thu thập thông tin máy và lập biên bản cấu hình"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-networking-fundamentals",
+      "name": "Mạng máy tính căn bản trên Windows",
+      "stage": "foundations",
+      "prerequisites": [
+        "windows-11-fundamentals"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Hiểu IP, subnet, gateway, DNS, DHCP và cổng TCP",
+        "Chẩn đoán theo lớp thay vì thử lệnh ngẫu nhiên"
+      ],
+      "optional": false,
+      "environment_plan": "CLIENT01 hiện có; bài thay đổi IP cần đường truy cập dự phòng",
+      "references": [
+        {
+          "title": "Windows Server Networking",
+          "url": "https://learn.microsoft.com/en-us/windows-server/networking/"
+        },
+        {
+          "title": "Windows Client: xử lý sự cố mạng",
+          "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/networking-overview"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-networking-fundamentals-module-1",
+          "title": "Đọc cấu hình mạng",
+          "planned_lessons": [
+            "Đọc IP, subnet mask, gateway và đường đi gói tin",
+            "Phân biệt IP tĩnh, DHCP và địa chỉ APIPA"
+          ]
+        },
+        {
+          "id": "windows-networking-fundamentals-module-2",
+          "title": "Phân giải tên và kết nối",
+          "planned_lessons": [
+            "Phân biệt lỗi DNS với lỗi đường truyền",
+            "Kiểm tra TCP, firewall và kết nối ứng dụng"
+          ]
+        },
+        {
+          "id": "windows-networking-fundamentals-module-3",
+          "title": "Tình huống helpdesk",
+          "planned_lessons": [
+            "Chẩn đoán có mạng nhưng không truy cập được dịch vụ",
+            "Lập sơ đồ mạng và báo cáo bằng chứng trước/sau"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-powershell-for-sysadmins",
+      "name": "PowerShell cơ bản cho quản trị hệ thống",
+      "stage": "foundations",
+      "prerequisites": [
+        "windows-11-fundamentals"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Hiểu cmdlet, đối tượng và pipeline",
+        "Đọc trạng thái dịch vụ, tiến trình và tệp bằng lệnh"
+      ],
+      "optional": false,
+      "environment_plan": "Windows VM hiện có",
+      "references": [
+        {
+          "title": "Get started with Windows PowerShell",
+          "url": "https://learn.microsoft.com/en-us/training/paths/get-started-windows-powershell/"
+        }
+      ],
+      "practice_strategy": "Đã có bài local; học theo danh sách bài và kiểm tra khả năng hỗ trợ từng nhiệm vụ.",
+      "syllabus_modules": [
+        {
+          "id": "windows-powershell-for-sysadmins-module-1",
+          "title": "Cú pháp và trợ giúp",
+          "planned_lessons": [
+            "Cmdlet, Get-Help và pipeline"
+          ]
+        },
+        {
+          "id": "windows-powershell-for-sysadmins-module-2",
+          "title": "Quản trị bằng lệnh",
+          "planned_lessons": [
+            "Tiến trình, dịch vụ, tệp và quyền"
+          ]
+        }
+      ],
+      "initially_implemented": true
+    },
+    {
+      "id": "windows-11-it-support-troubleshooting",
+      "name": "IT Support Windows 11: xử lý sự cố thực tế",
+      "stage": "support",
+      "prerequisites": [
+        "windows-11-fundamentals",
+        "windows-networking-fundamentals",
+        "windows-powershell-for-sysadmins"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Tiếp nhận ticket, xác định phạm vi lỗi và thu thập bằng chứng",
+        "Thực hành cấu hình, sửa lỗi, backup và xác minh kết quả"
+      ],
+      "optional": false,
+      "environment_plan": "CLIENT01 hiện có; chỉ nạp lỗi qua kịch bản đã có baseline/restore",
+      "references": [
+        {
+          "title": "Windows Client: xử lý sự cố mạng",
+          "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/networking-overview"
+        },
+        {
+          "title": "Windows security documentation",
+          "url": "https://learn.microsoft.com/en-us/windows/security/"
+        }
+      ],
+      "practice_strategy": "Đã có bài local; học theo danh sách bài và kiểm tra khả năng hỗ trợ từng nhiệm vụ.",
+      "syllabus_modules": [
+        {
+          "id": "windows-11-it-support-troubleshooting-module-1",
+          "title": "Quy trình helpdesk",
+          "planned_lessons": [
+            "Tiếp nhận ticket, phân loại và giao tiếp với người dùng"
+          ]
+        },
+        {
+          "id": "windows-11-it-support-troubleshooting-module-2",
+          "title": "Sửa lỗi và khôi phục",
+          "planned_lessons": [
+            "25 bài đã có; gồm 7 kịch bản nạp lỗi và các bài chẩn đoán/cấu hình"
+          ]
+        }
+      ],
+      "initially_implemented": true
+    },
+    {
+      "id": "windows-server-administration-essentials",
+      "name": "Windows Server: nền tảng và Active Directory",
+      "stage": "server",
+      "prerequisites": [
+        "windows-networking-fundamentals",
+        "windows-powershell-for-sysadmins"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Hiểu vai trò máy chủ, domain và mô hình client/server",
+        "Làm quen AD DS, GPO, DNS/DHCP và chia sẻ tệp"
+      ],
+      "optional": false,
+      "environment_plan": "Windows Server VM hiện có",
+      "references": [
+        {
+          "title": "Deploy and manage Active Directory Domain Services",
+          "url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-active-directory-domain-services/"
+        },
+        {
+          "title": "Windows Server Networking",
+          "url": "https://learn.microsoft.com/en-us/windows-server/networking/"
+        }
+      ],
+      "practice_strategy": "Đã có bài local; học theo danh sách bài và kiểm tra khả năng hỗ trợ từng nhiệm vụ.",
+      "syllabus_modules": [
+        {
+          "id": "windows-server-administration-essentials-module-1",
+          "title": "Quản trị máy chủ",
+          "planned_lessons": [
+            "Vai trò, dịch vụ và công cụ quản trị"
+          ]
+        },
+        {
+          "id": "windows-server-administration-essentials-module-2",
+          "title": "Dịch vụ nền tảng",
+          "planned_lessons": [
+            "Bài AD DS, GPO, DNS/DHCP và SMB hiện có"
+          ]
+        }
+      ],
+      "initially_implemented": true
+    },
+    {
+      "id": "windows-active-directory-group-policy",
+      "name": "Active Directory và Group Policy chuyên sâu",
+      "stage": "server",
+      "prerequisites": [
+        "windows-server-administration-essentials"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Thiết kế OU, nhóm và phân quyền theo vai trò",
+        "Triển khai GPO và chẩn đoán xác thực/domain join"
+      ],
+      "optional": false,
+      "environment_plan": "Server + CLIENT01: phải khảo sát VNet/DNS/domain và baseline trước khi triển khai",
+      "references": [
+        {
+          "title": "Deploy and manage Active Directory Domain Services",
+          "url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-active-directory-domain-services/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-active-directory-group-policy-module-1",
+          "title": "Thiết kế danh tính",
+          "planned_lessons": [
+            "Thiết kế OU, security group và quy tắc cấp quyền",
+            "Vòng đời tài khoản: onboarding, offboarding và delegation"
+          ]
+        },
+        {
+          "id": "windows-active-directory-group-policy-module-2",
+          "title": "Group Policy",
+          "planned_lessons": [
+            "Thiết lập, liên kết và kiểm tra phạm vi áp dụng GPO",
+            "Đọc gpresult, xử lý xung đột và lỗi policy"
+          ]
+        },
+        {
+          "id": "windows-active-directory-group-policy-module-3",
+          "title": "Máy trạm trong domain",
+          "planned_lessons": [
+            "Domain join, DNS và đồng bộ thời gian",
+            "Chẩn đoán đăng nhập domain và secure channel"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-dns-dhcp-network-services",
+      "name": "DNS, DHCP và dịch vụ mạng Windows Server",
+      "stage": "server",
+      "prerequisites": [
+        "windows-server-administration-essentials",
+        "windows-networking-fundamentals"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Quản lý zone/record DNS và scope/lease DHCP",
+        "Chẩn đoán sự cố cấp IP và phân giải tên theo bằng chứng"
+      ],
+      "optional": false,
+      "environment_plan": "DNS có thể dùng Server hiện có; DHCP cần mạng lab cô lập phù hợp, không thay DHCP của Azure VNet",
+      "references": [
+        {
+          "title": "Windows Server Networking",
+          "url": "https://learn.microsoft.com/en-us/windows-server/networking/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-dns-dhcp-network-services-module-1",
+          "title": "DNS nội bộ",
+          "planned_lessons": [
+            "Tạo forward/reverse zone và bản ghi cần thiết",
+            "Kiểm tra client resolver, cache và forwarder"
+          ]
+        },
+        {
+          "id": "windows-dns-dhcp-network-services-module-2",
+          "title": "DHCP",
+          "planned_lessons": [
+            "Thiết kế scope, exclusion, reservation và option",
+            "Đọc lease, authorization và nhật ký DHCP"
+          ]
+        },
+        {
+          "id": "windows-dns-dhcp-network-services-module-3",
+          "title": "Xử lý lỗi mạng doanh nghiệp",
+          "planned_lessons": [
+            "Chẩn đoán DNS record sai hoặc dịch vụ dừng",
+            "Phân tích thiếu lease và sai tùy chọn mạng"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-file-services-storage",
+      "name": "File Server, phân quyền và lưu trữ Windows",
+      "stage": "server",
+      "prerequisites": [
+        "windows-server-administration-essentials",
+        "windows-active-directory-group-policy"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Tính quyền hiệu lực SMB kết hợp NTFS",
+        "Quản lý dung lượng, quota và truy cập thư mục theo nhóm"
+      ],
+      "optional": false,
+      "environment_plan": "Server + client; bài volume/disk cần VHD hoặc đĩa dữ liệu thử, chưa cấp phát",
+      "references": [
+        {
+          "title": "Manage storage and file services",
+          "url": "https://learn.microsoft.com/en-us/training/paths/manage-storage-file-services/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-file-services-storage-module-1",
+          "title": "Chia sẻ tệp theo phòng ban",
+          "planned_lessons": [
+            "Thiết kế nhóm và thư mục chia sẻ theo vai trò",
+            "Kiểm tra quyền share, NTFS và kế thừa"
+          ]
+        },
+        {
+          "id": "windows-file-services-storage-module-2",
+          "title": "Vận hành lưu trữ",
+          "planned_lessons": [
+            "Kiểm tra volume, dung lượng và sự kiện ổ đĩa",
+            "Lập kế hoạch quota, FSRM và kiểm soát loại tệp"
+          ]
+        },
+        {
+          "id": "windows-file-services-storage-module-3",
+          "title": "Tình huống thực tế",
+          "planned_lessons": [
+            "Sửa lỗi Access Denied mà không cấp Full Control tràn lan",
+            "Khôi phục tệp thử nghiệm và xác nhận quyền sau restore"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-iis-web-services",
+      "name": "IIS và vận hành dịch vụ web nội bộ",
+      "stage": "server",
+      "prerequisites": [
+        "windows-server-administration-essentials",
+        "windows-networking-fundamentals"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Hiểu website, application pool, binding và quyền truy cập",
+        "Phân biệt lỗi dịch vụ, HTTP, DNS và firewall"
+      ],
+      "optional": false,
+      "environment_plan": "Server hiện có; không mở cổng công khai mới khi chưa cần",
+      "references": [
+        {
+          "title": "IIS documentation",
+          "url": "https://learn.microsoft.com/en-us/iis/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-iis-web-services-module-1",
+          "title": "Triển khai website",
+          "planned_lessons": [
+            "Tạo website thử nghiệm và application pool riêng",
+            "Cấu hình binding, tên miền nội bộ và truy cập từ client"
+          ]
+        },
+        {
+          "id": "windows-iis-web-services-module-2",
+          "title": "Đọc log và chẩn đoán",
+          "planned_lessons": [
+            "Phân tích HTTP status, IIS log và lỗi quyền thư mục",
+            "Xử lý app pool dừng và website không phản hồi"
+          ]
+        },
+        {
+          "id": "windows-iis-web-services-module-3",
+          "title": "Bảo trì có hoàn nguyên",
+          "planned_lessons": [
+            "Lập kế hoạch HTTPS và chứng chỉ trong lab",
+            "Backup cấu hình IIS, thay đổi và rollback"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-powershell-automation",
+      "name": "PowerShell tự động hóa công việc SysAdmin",
+      "stage": "operations",
+      "prerequisites": [
+        "windows-powershell-for-sysadmins",
+        "windows-server-administration-essentials"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Viết script có kiểm tra đầu vào, log và xử lý lỗi",
+        "Tự động hóa tác vụ lặp lại có khả năng chạy lại an toàn"
+      ],
+      "optional": false,
+      "environment_plan": "VM hiện có; phân biệt PowerShell qua Azure Agent chạy SYSTEM với phiên người dùng",
+      "references": [
+        {
+          "title": "Maintain system administration tasks in Windows PowerShell",
+          "url": "https://learn.microsoft.com/en-us/training/paths/maintain-system-administration-tasks-windows-powershell/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-powershell-automation-module-1",
+          "title": "Script vận hành",
+          "planned_lessons": [
+            "Tham số, biến, điều kiện và vòng lặp trong tác vụ quản trị",
+            "Xử lý lỗi, log, exit code và kiểm tra kết quả"
+          ]
+        },
+        {
+          "id": "windows-powershell-automation-module-2",
+          "title": "Dữ liệu và lập lịch",
+          "planned_lessons": [
+            "Nhập CSV, kiểm tra dữ liệu và xuất báo cáo",
+            "Task Scheduler, tài khoản chạy tác vụ và quyền tối thiểu"
+          ]
+        },
+        {
+          "id": "windows-powershell-automation-module-3",
+          "title": "Quản trị từ xa",
+          "planned_lessons": [
+            "Khảo sát WinRM và thực thi từ xa trong lab",
+            "Viết script kiểm kê có dry-run và cơ chế hoàn nguyên"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-troubleshooting-and-incident-response",
+      "name": "Chẩn đoán sự cố Windows Server",
+      "stage": "operations",
+      "prerequisites": [
+        "windows-server-administration-essentials",
+        "windows-networking-fundamentals",
+        "windows-powershell-for-sysadmins"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Đọc Event Viewer, theo dõi hiệu năng và đặt giả thuyết",
+        "Xác minh dịch vụ phục hồi bằng phép thử chức năng"
+      ],
+      "optional": false,
+      "environment_plan": "Windows Server VM hiện có",
+      "references": [
+        {
+          "title": "Monitor and troubleshoot Windows Server environments",
+          "url": "https://learn.microsoft.com/en-us/training/paths/monitor-troubleshoot-windows-server-environments/"
+        }
+      ],
+      "practice_strategy": "Đã có bài local; học theo danh sách bài và kiểm tra khả năng hỗ trợ từng nhiệm vụ.",
+      "syllabus_modules": [
+        {
+          "id": "windows-troubleshooting-and-incident-response-module-1",
+          "title": "Quan sát và bằng chứng",
+          "planned_lessons": [
+            "Log, Event ID và hiệu năng"
+          ]
+        },
+        {
+          "id": "windows-troubleshooting-and-incident-response-module-2",
+          "title": "Khắc phục và xác minh",
+          "planned_lessons": [
+            "Dịch vụ, mạng và cấu hình: các bài đã có"
+          ]
+        }
+      ],
+      "initially_implemented": true
+    },
+    {
+      "id": "windows-backup-disaster-recovery",
+      "name": "Backup, khôi phục và diễn tập sự cố Windows",
+      "stage": "operations",
+      "prerequisites": [
+        "windows-file-services-storage",
+        "windows-powershell-automation"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Phân biệt backup, snapshot, restore point, RPO và RTO",
+        "Khôi phục dữ liệu và chứng minh bản backup sử dụng được"
+      ],
+      "optional": false,
+      "environment_plan": "Bài file dùng VM hiện có; system-state/AD restore cần bản sao lab và lưu trữ riêng, chưa triển khai",
+      "references": [
+        {
+          "title": "Manage storage and file services",
+          "url": "https://learn.microsoft.com/en-us/training/paths/manage-storage-file-services/"
+        },
+        {
+          "title": "Monitor and troubleshoot Windows Server environments",
+          "url": "https://learn.microsoft.com/en-us/training/paths/monitor-troubleshoot-windows-server-environments/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-backup-disaster-recovery-module-1",
+          "title": "Thiết kế sao lưu",
+          "planned_lessons": [
+            "Xác định dữ liệu quan trọng, lịch backup, RPO/RTO và retention",
+            "Phân biệt file backup, system state và snapshot"
+          ]
+        },
+        {
+          "id": "windows-backup-disaster-recovery-module-2",
+          "title": "Diễn tập khôi phục",
+          "planned_lessons": [
+            "Sao lưu và restore dữ liệu vào thư mục kiểm chứng riêng",
+            "Thử phục hồi cấu hình và quyền truy cập sau lỗi"
+          ]
+        },
+        {
+          "id": "windows-backup-disaster-recovery-module-3",
+          "title": "Phục hồi dịch vụ",
+          "planned_lessons": [
+            "Lập runbook mất máy chủ và khôi phục từng dịch vụ",
+            "Thiết kế diễn tập system state/AD restore trên bản sao cô lập"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-security-hardening",
+      "name": "Bảo mật và hardening Windows cho SysAdmin",
+      "stage": "operations",
+      "prerequisites": [
+        "windows-active-directory-group-policy",
+        "windows-file-services-storage",
+        "windows-troubleshooting-and-incident-response"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Áp dụng quyền tối thiểu, auditing và quản lý bản vá",
+        "Đánh giá tác động bảo mật và giữ đường quản trị dự phòng"
+      ],
+      "optional": false,
+      "environment_plan": "VM lab hiện có; không bật BitLocker hoặc thay chính sách truy cập diện rộng trước khi có phương án khôi phục",
+      "references": [
+        {
+          "title": "Windows security documentation",
+          "url": "https://learn.microsoft.com/en-us/windows/security/"
+        },
+        {
+          "title": "Deploy and manage Active Directory Domain Services",
+          "url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-active-directory-domain-services/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-security-hardening-module-1",
+          "title": "Tài khoản và quyền",
+          "planned_lessons": [
+            "Rà soát local admin, tài khoản dịch vụ và quyền đăng nhập",
+            "Thiết kế password/account policy và kiểm tra phạm vi"
+          ]
+        },
+        {
+          "id": "windows-security-hardening-module-2",
+          "title": "Bảo vệ máy và mạng",
+          "planned_lessons": [
+            "Kiểm tra Windows Defender, firewall và nhật ký bảo mật",
+            "Lập kế hoạch bản vá, reboot và xác minh dịch vụ"
+          ]
+        },
+        {
+          "id": "windows-security-hardening-module-3",
+          "title": "Hardening có kiểm chứng",
+          "planned_lessons": [
+            "So sánh cấu hình với baseline và lập báo cáo sai lệch",
+            "Thử một thay đổi hardening có backup và rollback"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-azure-hybrid-administration",
+      "name": "Windows Server và Azure hybrid — mở rộng",
+      "stage": "hybrid",
+      "prerequisites": [
+        "windows-security-hardening",
+        "windows-backup-disaster-recovery"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Phân biệt AD DS, Microsoft Entra ID và danh tính hybrid",
+        "Lập kế hoạch quản trị Azure VM, giám sát, backup và chi phí"
+      ],
+      "optional": true,
+      "environment_plan": "Nhánh tùy chọn; cần kiểm tra tenant, license, quyền và chi phí trước mọi tài nguyên mới",
+      "references": [
+        {
+          "title": "Deploy and manage Active Directory Domain Services",
+          "url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-active-directory-domain-services/"
+        },
+        {
+          "title": "Monitor and troubleshoot Windows Server environments",
+          "url": "https://learn.microsoft.com/en-us/training/paths/monitor-troubleshoot-windows-server-environments/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-azure-hybrid-administration-module-1",
+          "title": "Danh tính hybrid",
+          "planned_lessons": [
+            "So sánh AD DS, Entra ID và các kiểu join thiết bị",
+            "Thiết kế đồng bộ danh tính và kiểm tra điều kiện tenant"
+          ]
+        },
+        {
+          "id": "windows-azure-hybrid-administration-module-2",
+          "title": "Vận hành Azure VM",
+          "planned_lessons": [
+            "Đọc boot diagnostics, VM Agent và kết nối quản trị",
+            "Phân biệt stop/deallocate, disk, IP và ngân sách"
+          ]
+        },
+        {
+          "id": "windows-azure-hybrid-administration-module-3",
+          "title": "Quản trị hybrid",
+          "planned_lessons": [
+            "Thiết kế theo dõi máy chủ với Azure Monitor/Arc",
+            "Lập phương án Azure Backup và dự toán chi phí"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    },
+    {
+      "id": "windows-system-administrator-capstone",
+      "name": "Dự án tổng hợp: vận hành hạ tầng Windows doanh nghiệp",
+      "stage": "capstone",
+      "prerequisites": [
+        "windows-11-it-support-troubleshooting",
+        "windows-active-directory-group-policy",
+        "windows-dns-dhcp-network-services",
+        "windows-file-services-storage",
+        "windows-iis-web-services",
+        "windows-powershell-automation",
+        "windows-troubleshooting-and-incident-response",
+        "windows-backup-disaster-recovery",
+        "windows-security-hardening"
+      ],
+      "prerequisite_skills": [
+        "Kiến thức từ các khóa học trước được gợi ý bên dưới"
+      ],
+      "learning_outcomes": [
+        "Thiết kế, triển khai và bàn giao một hệ thống Windows nhỏ",
+        "Xử lý ticket, giải thích nguyên nhân gốc và chứng minh khôi phục"
+      ],
+      "optional": false,
+      "environment_plan": "Dự kiến tái dùng server + client nếu topology cho phép; không tự tạo VM mới",
+      "references": [
+        {
+          "title": "Deploy and manage Active Directory Domain Services",
+          "url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-active-directory-domain-services/"
+        },
+        {
+          "title": "Windows Server Networking",
+          "url": "https://learn.microsoft.com/en-us/windows-server/networking/"
+        },
+        {
+          "title": "Manage storage and file services",
+          "url": "https://learn.microsoft.com/en-us/training/paths/manage-storage-file-services/"
+        },
+        {
+          "title": "Monitor and troubleshoot Windows Server environments",
+          "url": "https://learn.microsoft.com/en-us/training/paths/monitor-troubleshoot-windows-server-environments/"
+        }
+      ],
+      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "syllabus_modules": [
+        {
+          "id": "windows-system-administrator-capstone-module-1",
+          "title": "Thiết kế doanh nghiệp nhỏ",
+          "planned_lessons": [
+            "Lập sơ đồ, danh tính, địa chỉ mạng và ma trận quyền",
+            "Viết kế hoạch triển khai, kiểm thử và hoàn nguyên"
+          ]
+        },
+        {
+          "id": "windows-system-administrator-capstone-module-2",
+          "title": "Triển khai và xử lý ticket",
+          "planned_lessons": [
+            "Onboarding nhân viên, cấp thư mục và policy theo vai trò",
+            "Điều tra ticket kết hợp DNS, quyền và dịch vụ web"
+          ]
+        },
+        {
+          "id": "windows-system-administrator-capstone-module-3",
+          "title": "Diễn tập và bàn giao",
+          "planned_lessons": [
+            "Khôi phục dữ liệu, kiểm thử chức năng và đo RPO/RTO thực tế",
+            "Bàn giao runbook, bằng chứng, báo cáo sự cố và phỏng vấn giải thích"
+          ]
+        }
+      ],
+      "initially_implemented": false
+    }
+  ]
+}
