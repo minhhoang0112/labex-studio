@@ -59,7 +59,17 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
       </div>
       <div className="ml-auto flex items-center gap-1.5">
         {onToggleExpanded && <button aria-label={expanded ? 'Hiện hướng dẫn' : 'Mở rộng máy ảo'} title={expanded ? 'Hiện lại hướng dẫn bên cạnh máy ảo' : 'Ẩn hướng dẫn để dành toàn bộ chiều rộng cho máy ảo'} onClick={onToggleExpanded} className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-slate-700 hover:bg-slate-800">{expanded ? <PanelLeftOpen size={14} /> : <PanelLeftClose size={14} />}<span className="hidden lg:inline">{expanded ? 'Hiện hướng dẫn' : 'Mở rộng'}</span></button>}
-        {status?.powerStateCode !== 'PowerState/running' && <button disabled={busy || status?.isBusy || !status?.controlConfigured} onClick={() => power('start')} className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-600 rounded disabled:opacity-40"><Power size={13} />Bật Máy Ảo</button>}
+        {status?.powerStateCode !== 'PowerState/running' ? (
+          <button disabled={busy || status?.isBusy || !status?.controlConfigured} onClick={() => power('start')} className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-600 hover:bg-blue-500 rounded disabled:opacity-40 transition">
+            <Power size={13} />
+            <span>Bật Máy Ảo</span>
+          </button>
+        ) : (
+          <button disabled={busy || status?.isBusy || !status?.controlConfigured} onClick={() => power('stop')} title="Dừng và deallocate ngay để không phát sinh phí compute" className="flex items-center gap-1.5 px-2.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded font-medium disabled:opacity-40 transition shadow-xs">
+            <Power size={13} />
+            <span>Tắt VM (Dừng phí)</span>
+          </button>
+        )}
         <details className="relative">
           <summary aria-label="Thao tác máy ảo" className="list-none cursor-pointer p-1.5 rounded hover:bg-slate-800"><MoreHorizontal size={17} /></summary>
           <div className="absolute right-0 top-full mt-2 z-30 min-w-44 p-1.5 rounded-lg border border-slate-700 bg-slate-900 shadow-xl">
