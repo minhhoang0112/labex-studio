@@ -173,3 +173,4 @@ az vm auto-shutdown `
 - Phương án này giải quyết 100% đúng trọng tâm mong muốn của người học: **Tập trung vào sửa lỗi máy tính thực tế của nhân viên (Windows 11 Desktop), giải quyết đúng các bài toán thường gặp nhất khi đi thực tập IT Support tại Việt Nam**.
 - Chi phí kiểm soát chặt chẽ: Dùng B-series giá rẻ, ổ Standard SSD, deallocate ngay trên web và có lịch auto-shutdown bảo hiểm.
 - Toàn bộ nội dung khóa học và cơ chế kiểm tra chức năng được chuẩn bị kỹ lưỡng trước khi phát sinh chi phí hạ tầng.
+

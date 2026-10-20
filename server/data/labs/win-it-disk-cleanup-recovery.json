@@ -1,0 +1,120 @@
+{
+  "id": "win-it-disk-cleanup-recovery",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 4,
+  "title": "Cứu Hộ Ổ C Báo Đỏ & Sao Lưu Dữ Liệu Nhân Viên",
+  "title_vi": "Cứu Hộ Ổ C Báo Đỏ & Sao Lưu Dữ Liệu Nhân Viên",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "30 mins",
+  "target_vm": "client",
+  "ticket": {
+    "ticket_id": "HD-104",
+    "requester": "Hoàng Minh Đức",
+    "department": "Phòng Thiết Kế Đồ Họa",
+    "priority": "High",
+    "title": "Ổ đĩa C báo đỏ chỉ còn 200MB trống, máy tính bị đơ không lưu được file thiết kế"
+  },
+  "overview": "Quy trình giải cứu ổ đĩa hệ thống bị đầy dung lượng: Phân tích các thư mục rác an toàn để xóa mà không gây hỏng hệ điều hành Windows, và checklist sao lưu dữ liệu toàn diện (Desktop, Documents, Chrome Bookmarks) trước khi cài lại máy.",
+  "sections": [
+    {
+      "id": "win-it-dsk-sec-0",
+      "title": "Quy tắc vàng dọn dẹp ổ đĩa hệ thống trong doanh nghiệp",
+      "title_vi": "Quy tắc vàng dọn dẹp ổ đĩa hệ thống trong doanh nghiệp",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Nguyên tắc dọn dẹp ổ C an toàn\n\nNhiều người dùng hoặc kỹ thuật viên thiếu kinh nghiệm vội vàng xóa các file hệ thống dẫn đến hỏng boot hoặc crash Windows. Chuyên viên IT chuyên nghiệp luôn tuân thủ nguyên tắc khoanh vùng sau:\n\n1. **Thư mục Temp của User và Windows:**\n   - `%temp%` (`C:\\Users\\<Username>\\AppData\\Local\\Temp`): Rác sinh ra khi mở tệp, giải nén, cài app. Có thể xóa 100% tệp trong đây mà không sợ mất dữ liệu.\n   - `C:\\Windows\\Temp`: Rác của các dịch vụ hệ thống.\n2. **Bộ nhớ tạm của Windows Update:**\n   - `C:\\Windows\\SoftwareDistribution\\Download`: Chứa các bản cài đặt cập nhật cũ đã cài xong. Sau khi cập nhật, thư mục này có thể chiếm từ 5GB đến 20GB dung lượng lãng phí.\n3. **Thư mục sao lưu phiên bản cũ:**\n   - `C:\\Windows.old`: Sinh ra khi nâng cấp Windows. Sử dụng công cụ Storage Sense / Disk Cleanup của Windows để xóa an toàn.\n4. **Checklist sao lưu dữ liệu người dùng:**\n   - Dữ liệu quan trọng của nhân viên văn phòng chủ yếu nằm ở: `Desktop`, `Documents`, `Downloads`, `Pictures` và Dấu trang (Bookmarks) trình duyệt.",
+      "content_vi": "## Nguyên tắc dọn dẹp ổ C an toàn\n\nNhiều người dùng hoặc kỹ thuật viên thiếu kinh nghiệm vội vàng xóa các file hệ thống dẫn đến hỏng boot hoặc crash Windows. Chuyên viên IT chuyên nghiệp luôn tuân thủ nguyên tắc khoanh vùng sau:\n\n1. **Thư mục Temp của User và Windows:**\n   - `%temp%` (`C:\\Users\\<Username>\\AppData\\Local\\Temp`): Rác sinh ra khi mở tệp, giải nén, cài app. Có thể xóa 100% tệp trong đây mà không sợ mất dữ liệu.\n   - `C:\\Windows\\Temp`: Rác của các dịch vụ hệ thống.\n2. **Bộ nhớ tạm của Windows Update:**\n   - `C:\\Windows\\SoftwareDistribution\\Download`: Chứa các bản cài đặt cập nhật cũ đã cài xong. Sau khi cập nhật, thư mục này có thể chiếm từ 5GB đến 20GB dung lượng lãng phí.\n3. **Thư mục sao lưu phiên bản cũ:**\n   - `C:\\Windows.old`: Sinh ra khi nâng cấp Windows. Sử dụng công cụ Storage Sense / Disk Cleanup của Windows để xóa an toàn.\n4. **Checklist sao lưu dữ liệu người dùng:**\n   - Dữ liệu quan trọng của nhân viên văn phòng chủ yếu nằm ở: `Desktop`, `Documents`, `Downloads`, `Pictures` và Dấu trang (Bookmarks) trình duyệt.",
+      "hint": "Nắm vững danh sách các thư mục an toàn được phép xóa để giải phóng dung lượng."
+    },
+    {
+      "id": "win-it-dsk-sec-1",
+      "title": "Kiểm Tra Dung Lượng Ổ Đĩa & Xác Định Thư Mục Rác",
+      "title_vi": "Kiểm Tra Dung Lượng Ổ Đĩa & Xác Định Thư Mục Rác",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Kiểm tra dung lượng còn trống của các ổ đĩa trên máy tính bằng PowerShell.",
+      "task_vi": "Kiểm tra dung lượng còn trống của các ổ đĩa trên máy tính bằng PowerShell.",
+      "hint": "Chạy lệnh: Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free",
+      "hint_vi": "Chạy lệnh: Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-PSDrive|Get-Volume|wmic logicaldisk)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "shell"
+      ],
+      "content": "### Xem dung lượng các ổ đĩa:\n```powershell\nGet-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name=\"Used (GB)\";Expression={[math]::round($_.Used/1GB,2)}}, @{Name=\"Free (GB)\";Expression={[math]::round($_.Free/1GB,2)}}\n```",
+      "content_vi": "### Xem dung lượng các ổ đĩa:\n```powershell\nGet-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name=\"Used (GB)\";Expression={[math]::round($_.Used/1GB,2)}}, @{Name=\"Free (GB)\";Expression={[math]::round($_.Free/1GB,2)}}\n```"
+    },
+    {
+      "id": "win-it-dsk-sec-2",
+      "title": "Dọn Dẹp Thư Mục Tạm Temp & Sao Lưu Dữ Liệu Profile",
+      "title_vi": "Dọn Dẹp Thư Mục Tạm Temp & Sao Lưu Dữ Liệu Profile",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Kiểm tra thư mục tạm Temp và thực hiện quy trình sao lưu nhanh các tệp tài liệu quan trọng.",
+      "task_vi": "Kiểm tra thư mục tạm Temp và thực hiện quy trình sao lưu nhanh các tệp tài liệu quan trọng.",
+      "hint": "Chạy lệnh: Get-ChildItem $env:TEMP -ErrorAction SilentlyContinue | Measure-Object",
+      "hint_vi": "Chạy lệnh: Get-ChildItem $env:TEMP -ErrorAction SilentlyContinue | Measure-Object",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:TEMP|Get-ChildItem|Remove-Item)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "shell"
+      ],
+      "content": "### Kiểm tra rác trong thư mục Temp:\n```powershell\nGet-ChildItem -Path $env:TEMP -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum\n```\n\n### Lệnh xóa dọn dẹp các file rác trong Temp:\n```powershell\nRemove-Item -Path \"$env:TEMP\\*.*\" -Force -Recurse -ErrorAction SilentlyContinue\n```",
+      "content_vi": "### Kiểm tra rác trong thư mục Temp:\n```powershell\nGet-ChildItem -Path $env:TEMP -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum\n```\n\n### Lệnh xóa dọn dẹp các file rác trong Temp:\n```powershell\nRemove-Item -Path \"$env:TEMP\\*.*\" -Force -Recurse -ErrorAction SilentlyContinue\n```"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-it-dsk-sec-1",
+      "title": "Kiểm Tra Dung Lượng Ổ Đĩa",
+      "title_vi": "Kiểm Tra Dung Lượng Ổ Đĩa",
+      "position": 1,
+      "task": "Xem dung lượng còn trống của các ổ đĩa trên máy tính.",
+      "task_vi": "Xem dung lượng còn trống của các ổ đĩa trên máy tính.",
+      "hint": "Get-PSDrive -PSProvider FileSystem",
+      "hint_vi": "Get-PSDrive -PSProvider FileSystem"
+    },
+    {
+      "id": "win-it-dsk-sec-2",
+      "title": "Dọn Dẹp Thư Mục Temp",
+      "title_vi": "Dọn Dẹp Thư Mục Temp",
+      "position": 2,
+      "task": "Đo lường và dọn dẹp thư mục tạm Temp.",
+      "task_vi": "Đo lường và dọn dẹp thư mục tạm Temp.",
+      "hint": "Get-ChildItem $env:TEMP",
+      "hint_vi": "Get-ChildItem $env:TEMP"
+    }
+  ]
+}

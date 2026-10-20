@@ -253,6 +253,36 @@ export default function LabGuide({
 
       {/* Main Guide Content (Scrollable) */}
       <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
+        {/* Helpdesk Ticket Badge (If lab has an associated support ticket) */}
+        {lab?.ticket && (
+          <div className="rounded-xl border border-amber-300 dark:border-amber-800/60 bg-gradient-to-r from-amber-50/90 via-orange-50/60 to-amber-50/90 dark:from-amber-950/40 dark:via-orange-950/30 dark:to-amber-950/40 p-3.5 shadow-xs">
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded text-[10px] font-black tracking-wider uppercase bg-amber-600 text-white shadow-xs">
+                  TICKET {lab.ticket.ticket_id}
+                </span>
+                <span className="text-xs font-bold text-amber-900 dark:text-amber-200">
+                  {lab.ticket.department}
+                </span>
+              </div>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                lab.ticket.priority === 'Urgent' 
+                  ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-300 dark:border-rose-800'
+                  : 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
+              }`}>
+                Ưu tiên: {lab.ticket.priority}
+              </span>
+            </div>
+            <div className="text-xs text-slate-800 dark:text-slate-200">
+              <span className="font-semibold text-slate-600 dark:text-slate-400">Người báo cáo: </span>
+              <strong>{lab.ticket.requester}</strong>
+            </div>
+            <p className="text-xs text-amber-950 dark:text-amber-100/95 font-medium mt-1 italic border-l-2 border-amber-400 dark:border-amber-600 pl-2">
+              "{lab.ticket.title}"
+            </p>
+          </div>
+        )}
+
         {/* Section Picker Dropdown */}
         <div>
           <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">

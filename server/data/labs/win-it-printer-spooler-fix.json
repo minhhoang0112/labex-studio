@@ -1,0 +1,121 @@
+{
+  "id": "win-it-printer-spooler-fix",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 2,
+  "title": "Xử Lý Sự Cố Kẹt Hàng Đợi Máy In (Print Spooler Error)",
+  "title_vi": "Xử Lý Sự Cố Kẹt Hàng Đợi Máy In (Print Spooler Error)",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25 mins",
+  "target_vm": "client",
+  "ticket": {
+    "ticket_id": "HD-102",
+    "requester": "Lê Thị Mai",
+    "department": "Phòng Kế Toán",
+    "priority": "Urgent",
+    "title": "Máy in văn phòng bị đơ, hàng chục lệnh in bị kẹt không in được hợp đồng gấp"
+  },
+  "overview": "Xử lý sự cố kinh điển của IT Helpdesk: Lệnh in tài liệu bị lỗi khiến dịch vụ Print Spooler bị nghẽn, các lệnh in sau bị kẹt cứng bấm Cancel không xóa được. Thực hành quy trình phục hồi dịch vụ chuẩn.",
+  "sections": [
+    {
+      "id": "win-it-pr-sec-0",
+      "title": "Cơ chế hoạt động của Print Spooler trong Windows",
+      "title_vi": "Cơ chế hoạt động của Print Spooler trong Windows",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Cơ chế hàng đợi in (Print Spooler Service)\n\nKhi người dùng nhấn **Print (Ctrl + P)** từ Word, Excel hay trình duyệt:\n1. Windows không gửi trực tiếp tài liệu tới máy in ngay lập tức. Thay vào đó, hệ điều hành tạo 2 tệp tạm trong thư mục `C:\\Windows\\System32\\spool\\PRINTERS`:\n   - Tệp `.SHD` (Shadow file): Chứa thông tin cấu hình (tên máy in, số bản in, định dạng giấy).\n   - Tệp `.SPL` (Spool file): Chứa dữ liệu nội dung cần in thực tế.\n2. Dịch vụ `Print Spooler` (tên dịch vụ: `Spooler`) đóng vai trò điều phối các tệp này lần lượt gửi ra cổng in của máy in vật lý.\n\n### Nguyên nhân gây kẹt in:\n- Một tệp tài liệu quá nặng hoặc định dạng driver không tương thích làm quá trình gửi dữ liệu bị crash giữa chừng.\n- Tệp `.SPL` bị khóa (locked) trong thư mục `spool\\PRINTERS`. Người dùng bấm Cancel qua giao diện thì Windows báo 'Deleting...' nhưng không bao giờ xóa được vì tiến trình `spoolsv.exe` vẫn đang giữ file.",
+      "content_vi": "## Cơ chế hàng đợi in (Print Spooler Service)\n\nKhi người dùng nhấn **Print (Ctrl + P)** từ Word, Excel hay trình duyệt:\n1. Windows không gửi trực tiếp tài liệu tới máy in ngay lập tức. Thay vào đó, hệ điều hành tạo 2 tệp tạm trong thư mục `C:\\Windows\\System32\\spool\\PRINTERS`:\n   - Tệp `.SHD` (Shadow file): Chứa thông tin cấu hình (tên máy in, số bản in, định dạng giấy).\n   - Tệp `.SPL` (Spool file): Chứa dữ liệu nội dung cần in thực tế.\n2. Dịch vụ `Print Spooler` (tên dịch vụ: `Spooler`) đóng vai trò điều phối các tệp này lần lượt gửi ra cổng in của máy in vật lý.\n\n### Nguyên nhân gây kẹt in:\n- Một tệp tài liệu quá nặng hoặc định dạng driver không tương thích làm quá trình gửi dữ liệu bị crash giữa chừng.\n- Tệp `.SPL` bị khóa (locked) trong thư mục `spool\\PRINTERS`. Người dùng bấm Cancel qua giao diện thì Windows báo 'Deleting...' nhưng không bao giờ xóa được vì tiến trình `spoolsv.exe` vẫn đang giữ file.",
+      "hint": "Nắm vững cơ chế giải phóng file khóa bằng cách tạm dừng dịch vụ Spooler trước khi xóa tệp rác."
+    },
+    {
+      "id": "win-it-pr-sec-1",
+      "title": "Kiểm tra Dịch Vụ Print Spooler & Hàng Đợi",
+      "title_vi": "Kiểm tra Dịch Vụ Print Spooler & Hàng Đợi",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Kiểm tra trạng thái của dịch vụ Print Spooler trên máy tính bằng PowerShell.",
+      "task_vi": "Kiểm tra trạng thái của dịch vụ Print Spooler trên máy tính bằng PowerShell.",
+      "hint": "Chạy lệnh: Get-Service Spooler",
+      "hint_vi": "Chạy lệnh: Get-Service Spooler",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Get-Service Spooler|get-service spooler)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "shell"
+      ],
+      "content": "### Bước 1: Kiểm tra trạng thái dịch vụ\nChạy lệnh để xem Spooler có đang Running hay bị Stopped:\n```powershell\nGet-Service Spooler\n```\n\n### Xem các tệp đang kẹt trong hàng đợi:\n```powershell\nGet-ChildItem -Path \"C:\\Windows\\System32\\spool\\PRINTERS\" -Force\n```",
+      "content_vi": "### Bước 1: Kiểm tra trạng thái dịch vụ\nChạy lệnh để xem Spooler có đang Running hay bị Stopped:\n```powershell\nGet-Service Spooler\n```\n\n### Xem các tệp đang kẹt trong hàng đợi:\n```powershell\nGet-ChildItem -Path \"C:\\Windows\\System32\\spool\\PRINTERS\" -Force\n```"
+    },
+    {
+      "id": "win-it-pr-sec-2",
+      "title": "Quy Trình Phục Hồi & Xóa Sạch Hàng Đợi Bị Kẹt",
+      "title_vi": "Quy Trình Phục Hồi & Xóa Sạch Hàng Đợi Bị Kẹt",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Thực hiện quy trình 3 bước chuẩn IT: Dừng dịch vụ Spooler, dọn sạch thư mục tạm PRINTERS và khởi động lại dịch vụ.",
+      "task_vi": "Thực hiện quy trình 3 bước chuẩn IT: Dừng dịch vụ Spooler, dọn sạch thư mục tạm PRINTERS và khởi động lại dịch vụ.",
+      "hint": "Chạy lệnh: Stop-Service Spooler -Force; Start-Service Spooler; Get-Service Spooler",
+      "hint_vi": "Chạy lệnh: Stop-Service Spooler -Force; Start-Service Spooler; Get-Service Spooler",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Stop-Service Spooler|net stop spooler)",
+            "(?:Start-Service Spooler|net start spooler)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "shell"
+      ],
+      "content": "### Quy trình 3 bước chuẩn chuyên viên IT Helpdesk:\n```powershell\n# Bước 1: Tạm dừng dịch vụ Print Spooler để mở khóa các file kẹt\nStop-Service Spooler -Force\n\n# Bước 2: Xóa sạch toàn bộ tệp tạm kẹt trong thư mục hàng đợi\nRemove-Item -Path \"C:\\Windows\\System32\\spool\\PRINTERS\\*.*\" -Force -ErrorAction SilentlyContinue\n\n# Bước 3: Khởi động lại dịch vụ Print Spooler\nStart-Service Spooler\nGet-Service Spooler\n```\n\n*(Sau bước này, bạn có thể gửi lệnh in tài liệu mới hoàn toàn bình thường)*",
+      "content_vi": "### Quy trình 3 bước chuẩn chuyên viên IT Helpdesk:\n```powershell\n# Bước 1: Tạm dừng dịch vụ Print Spooler để mở khóa các file kẹt\nStop-Service Spooler -Force\n\n# Bước 2: Xóa sạch toàn bộ tệp tạm kẹt trong thư mục hàng đợi\nRemove-Item -Path \"C:\\Windows\\System32\\spool\\PRINTERS\\*.*\" -Force -ErrorAction SilentlyContinue\n\n# Bước 3: Khởi động lại dịch vụ Print Spooler\nStart-Service Spooler\nGet-Service Spooler\n```\n\n*(Sau bước này, bạn có thể gửi lệnh in tài liệu mới hoàn toàn bình thường)*"
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-it-pr-sec-1",
+      "title": "Kiểm tra Dịch Vụ Print Spooler",
+      "title_vi": "Kiểm tra Dịch Vụ Print Spooler",
+      "position": 1,
+      "task": "Kiểm tra trạng thái của dịch vụ Print Spooler trên máy tính.",
+      "task_vi": "Kiểm tra trạng thái của dịch vụ Print Spooler trên máy tính.",
+      "hint": "Get-Service Spooler",
+      "hint_vi": "Get-Service Spooler"
+    },
+    {
+      "id": "win-it-pr-sec-2",
+      "title": "Phục Hồi Dịch Vụ & Xóa Hàng Đợi Kẹt",
+      "title_vi": "Phục Hồi Dịch Vụ & Xóa Hàng Đợi Kẹt",
+      "position": 2,
+      "task": "Dừng dịch vụ Spooler, dọn sạch hàng đợi và khởi động lại dịch vụ.",
+      "task_vi": "Dừng dịch vụ Spooler, dọn sạch hàng đợi và khởi động lại dịch vụ.",
+      "hint": "Stop-Service Spooler -Force; Start-Service Spooler",
+      "hint_vi": "Stop-Service Spooler -Force; Start-Service Spooler"
+    }
+  ]
+}

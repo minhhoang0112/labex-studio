@@ -1,0 +1,120 @@
+{
+  "id": "win-it-pc-onboarding-setup",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 1,
+  "title": "Windows 11 Onboarding & Setup Máy Mới Cho Nhân Viên",
+  "title_vi": "Windows 11 Onboarding & Setup Máy Mới Cho Nhân Viên",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "30 mins",
+  "target_vm": "client",
+  "ticket": {
+    "ticket_id": "HD-101",
+    "requester": "Nguyễn Văn Hùng",
+    "department": "Phòng Marketing & Truyền Thông",
+    "priority": "High",
+    "title": "Yêu cầu cấp phát và cài đặt máy tính Windows 11 cho nhân viên mới vào ngày mai"
+  },
+  "overview": "Quy trình chuẩn hóa IT Helpdesk: Đặt tên máy theo quy ước doanh nghiệp, cấu hình múi giờ UTC+7 Việt Nam, thiết lập định dạng ngày tháng và xử lý lỗi bộ gõ tiếng Việt Unikey.",
+  "sections": [
+    {
+      "id": "win-it-onb-sec-0",
+      "title": "Quy chuẩn bàn giao máy tính trong doanh nghiệp (IT Onboarding Checklist)",
+      "title_vi": "Quy chuẩn bàn giao máy tính trong doanh nghiệp (IT Onboarding Checklist)",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Quy trình bàn giao máy tính cho nhân viên mới\n\nKhi nhân viên mới gia nhập công ty, IT Support chịu trách nhiệm chuẩn bị một máy trạm an toàn, ổn định và đầy đủ công cụ làm việc:\n\n1. **Đặt tên máy tính (Computer Name):** Phải tuân theo quy ước quản lý thiết bị (ví dụ `[Mã Quốc Gia]-[Chi Nhánh]-[Phòng Ban]-[Số Máy]`, ví dụ `VN-HN-MKT-01`). Tên máy rõ ràng giúp IT dễ dàng hỗ trợ từ xa qua IP hoặc hostname.\n2. **Định dạng Vùng & Múi Giờ:** Cấu hình chuẩn UTC+7 (SE Asia Standard Time) và định dạng ngày tháng `dd/MM/yyyy` để tránh lỗi khi người dùng nhập dữ liệu phần mềm kế toán hoặc ERP.\n3. **Bộ gõ Tiếng Việt:** Cài đặt Unikey/EVKey, cấu hình khởi động cùng Windows và sửa lỗi không gõ được tiếng Việt khi chạy ứng dụng dưới quyền Administrator.",
+      "content_vi": "## Quy trình bàn giao máy tính cho nhân viên mới\n\nKhi nhân viên mới gia nhập công ty, IT Support chịu trách nhiệm chuẩn bị một máy trạm an toàn, ổn định và đầy đủ công cụ làm việc:\n\n1. **Đặt tên máy tính (Computer Name):** Phải tuân theo quy ước quản lý thiết bị (ví dụ `[Mã Quốc Gia]-[Chi Nhánh]-[Phòng Ban]-[Số Máy]`, ví dụ `VN-HN-MKT-01`). Tên máy rõ ràng giúp IT dễ dàng hỗ trợ từ xa qua IP hoặc hostname.\n2. **Định dạng Vùng & Múi Giờ:** Cấu hình chuẩn UTC+7 (SE Asia Standard Time) và định dạng ngày tháng `dd/MM/yyyy` để tránh lỗi khi người dùng nhập dữ liệu phần mềm kế toán hoặc ERP.\n3. **Bộ gõ Tiếng Việt:** Cài đặt Unikey/EVKey, cấu hình khởi động cùng Windows và sửa lỗi không gõ được tiếng Việt khi chạy ứng dụng dưới quyền Administrator.",
+      "hint": "Đọc kỹ yêu cầu và thực hiện các bước cấu hình bằng GUI hoặc PowerShell trên máy ảo."
+    },
+    {
+      "id": "win-it-onb-sec-1",
+      "title": "Cấu hình Múi giờ & Định dạng Ngày tháng Việt Nam",
+      "title_vi": "Cấu hình Múi giờ & Định dạng Ngày tháng Việt Nam",
+      "position": 1,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Kiểm tra và thiết lập múi giờ của máy trạm sang 'SE Asia Standard Time' (UTC+7:00 Bangkok, Hanoi, Jakarta).",
+      "task_vi": "Kiểm tra và thiết lập múi giờ của máy trạm sang 'SE Asia Standard Time' (UTC+7:00 Bangkok, Hanoi, Jakarta).",
+      "hint": "Chạy lệnh PowerShell: Set-TimeZone -Id 'SE Asia Standard Time'; Get-TimeZone",
+      "hint_vi": "Chạy lệnh PowerShell: Set-TimeZone -Id 'SE Asia Standard Time'; Get-TimeZone",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:Set-TimeZone|Get-TimeZone|tzutil)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "shell"
+      ],
+      "content": "### Thao tác qua GUI (Giao diện đồ họa)\n1. Mở **Start Menu** $\\to$ chọn **Settings** (hoặc nhấn phím tắt `Windows + I`).\n2. Chọn mục **Time & language** $\\to$ chọn **Date & time**.\n3. Tại mục **Time zone**, chọn `(UTC+07:00) Bangkok, Hanoi, Jakarta`.\n\n### Thao tác nhanh qua PowerShell\n```powershell\nSet-TimeZone -Id 'SE Asia Standard Time'\nGet-TimeZone\n```",
+      "content_vi": "### Thao tác qua GUI (Giao diện đồ họa)\n1. Mở **Start Menu** $\\to$ chọn **Settings** (hoặc nhấn phím tắt `Windows + I`).\n2. Chọn mục **Time & language** $\\to$ chọn **Date & time**.\n3. Tại mục **Time zone**, chọn `(UTC+07:00) Bangkok, Hanoi, Jakarta`.\n\n### Thao tác nhanh qua PowerShell\n```powershell\nSet-TimeZone -Id 'SE Asia Standard Time'\nGet-TimeZone\n```"
+    },
+    {
+      "id": "win-it-onb-sec-2",
+      "title": "Thiết lập Tên Máy Tính Theo Chuẩn Doanh Nghiệp & Khắc Phục Lỗi Unikey",
+      "title_vi": "Thiết lập Tên Máy Tính Theo Chuẩn Doanh Nghiệp & Khắc Phục Lỗi Unikey",
+      "position": 2,
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true,
+      "task": "Kiểm tra tên máy tính hiện tại và ghi nhận thông tin hệ thống chuẩn bị bàn giao.",
+      "task_vi": "Kiểm tra tên máy tính hiện tại và ghi nhận thông tin hệ thống chuẩn bị bàn giao.",
+      "hint": "Chạy lệnh: $env:COMPUTERNAME; Get-ComputerInfo | Select-Object CsName, OsName, WindowsVersion",
+      "hint_vi": "Chạy lệnh: $env:COMPUTERNAME; Get-ComputerInfo | Select-Object CsName, OsName, WindowsVersion",
+      "verification": {
+        "kind": "commands",
+        "user": "labex",
+        "groups": [
+          [
+            "(?:COMPUTERNAME|Get-ComputerInfo|hostname)"
+          ]
+        ],
+        "allowed_status": [
+          0,
+          1
+        ]
+      },
+      "required_capabilities": [
+        "terminal",
+        "shell"
+      ],
+      "content": "### Nguyên tắc xử lý lỗi Unikey gõ tiếng Việt:\n- **Lỗi 1 (Không gõ được tiếng Việt trong app chạy quyền Admin):** Do cơ chế cách ly UIPI (User Interface Privilege Isolation) của Windows. Khi một app (như Command Prompt / Task Manager / phần mềm kế toán) chạy quyền Admin, Unikey nếu đang chạy dưới quyền User thông thường sẽ bị Windows chặn không cho gửi phím gõ vào app đó. **Giải pháp:** Luôn cấu hình Unikey chạy `Run as administrator`.\n- **Lỗi 2 (Nhảy chữ, lặp chữ):** Tắt tính năng tự động sửa chính tả của Windows (Autocorrect misspelled words) trong `Settings > Time & language > Typing`.",
+      "content_vi": "### Nguyên tắc xử lý lỗi Unikey gõ tiếng Việt:\n- **Lỗi 1 (Không gõ được tiếng Việt trong app chạy quyền Admin):** Do cơ chế cách ly UIPI (User Interface Privilege Isolation) của Windows. Khi một app (như Command Prompt / Task Manager / phần mềm kế toán) chạy quyền Admin, Unikey nếu đang chạy dưới quyền User thông thường sẽ bị Windows chặn không cho gửi phím gõ vào app đó. **Giải pháp:** Luôn cấu hình Unikey chạy `Run as administrator`.\n- **Lỗi 2 (Nhảy chữ, lặp chữ):** Tắt tính năng tự động sửa chính tả của Windows (Autocorrect misspelled words) trong `Settings > Time & language > Typing`."
+    }
+  ],
+  "curriculum_version": 1,
+  "steps": [
+    {
+      "id": "win-it-onb-sec-1",
+      "title": "Cấu hình Múi giờ & Định dạng Ngày tháng Việt Nam",
+      "title_vi": "Cấu hình Múi giờ & Định dạng Ngày tháng Việt Nam",
+      "position": 1,
+      "task": "Thiết lập múi giờ của máy trạm sang 'SE Asia Standard Time' (UTC+7:00).",
+      "task_vi": "Thiết lập múi giờ của máy trạm sang 'SE Asia Standard Time' (UTC+7:00).",
+      "hint": "Set-TimeZone -Id 'SE Asia Standard Time'",
+      "hint_vi": "Set-TimeZone -Id 'SE Asia Standard Time'"
+    },
+    {
+      "id": "win-it-onb-sec-2",
+      "title": "Thiết lập Tên Máy Tính & Khắc Phục Lỗi Unikey",
+      "title_vi": "Thiết lập Tên Máy Tính & Khắc Phục Lỗi Unikey",
+      "position": 2,
+      "task": "Kiểm tra tên máy tính hiện tại và ghi nhận thông tin hệ thống.",
+      "task_vi": "Kiểm tra tên máy tính hiện tại và ghi nhận thông tin hệ thống.",
+      "hint": "hostname",
+      "hint_vi": "hostname"
+    }
+  ]
+}
