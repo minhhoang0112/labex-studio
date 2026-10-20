@@ -1,0 +1,131 @@
+{
+  "id": "win-it-ip-route-diagnostics",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 9,
+  "title": "Mất mạng: đọc IP, gateway, DHCP và bảng định tuyến",
+  "title_vi": "Mất mạng: đọc IP, gateway, DHCP và bảng định tuyến",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Mạng máy trạm",
+  "overview": "Đi từ link → địa chỉ IP → tuyến đi → DNS → cổng ứng dụng. Azure quản lý IP riêng qua DHCP; cấu hình IP tĩnh bên trong guest sai có thể làm mất RDP.",
+  "ticket": {
+    "ticket_id": "HD-212",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Người dùng nói mất mạng; cần xác định lỗi IP, tuyến đi hay dịch vụ đích."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/troubleshoot-tcp-ip-communication-guidance",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-netipconfiguration",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-ip-route-diagnostics-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-212: Người dùng nói mất mạng; cần xác định lỗi IP, tuyến đi hay dịch vụ đích.\n\n### Mục tiêu và bản chất\nĐi từ link → địa chỉ IP → tuyến đi → DNS → cổng ứng dụng. Azure quản lý IP riêng qua DHCP; cấu hình IP tĩnh bên trong guest sai có thể làm mất RDP.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-ip-route-diagnostics.\n\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\n### Phạm vi và lưu ý\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: troubleshoot-tcp-ip-communication-guidance](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/troubleshoot-tcp-ip-communication-guidance)\n- [Microsoft: get-netipconfiguration](https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-netipconfiguration)\n",
+      "content_vi": "## Ticket HD-212: Người dùng nói mất mạng; cần xác định lỗi IP, tuyến đi hay dịch vụ đích.\n\n### Mục tiêu và bản chất\nĐi từ link → địa chỉ IP → tuyến đi → DNS → cổng ứng dụng. Azure quản lý IP riêng qua DHCP; cấu hình IP tĩnh bên trong guest sai có thể làm mất RDP.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-ip-route-diagnostics.\n\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\n### Phạm vi và lưu ý\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: troubleshoot-tcp-ip-communication-guidance](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/troubleshoot-tcp-ip-communication-guidance)\n- [Microsoft: get-netipconfiguration](https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-netipconfiguration)\n"
+    },
+    {
+      "id": "win-it-ip-route-diagnostics-sec-1",
+      "title": "Chụp thông tin IPv4 của adapter thật",
+      "title_vi": "Chụp thông tin IPv4 của adapter thật",
+      "position": 1,
+      "content": "## Chụp thông tin IPv4 của adapter thật\n\n### Vì sao làm bước này?\nLưu các trường cấu hình để có thể đối chiếu trước/sau. Không nhầm IP public của Azure với địa chỉ private trên NIC của Windows.\n\n### Thao tác\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceIndex,InterfaceAlias,IPAddress,PrefixLength | Export-Csv \"$p\\ipv4.csv\" -NoTypeInformation\nipconfig /all; Import-Csv \"$p\\ipv4.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nCSV có ít nhất một IPv4 không phải loopback và thông tin adapter.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\n### Câu hỏi tự giải thích\nVì sao máy có IP hợp lệ vẫn có thể không truy cập được website?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Chụp thông tin IPv4 của adapter thật\n\n### Vì sao làm bước này?\nLưu các trường cấu hình để có thể đối chiếu trước/sau. Không nhầm IP public của Azure với địa chỉ private trên NIC của Windows.\n\n### Thao tác\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceIndex,InterfaceAlias,IPAddress,PrefixLength | Export-Csv \"$p\\ipv4.csv\" -NoTypeInformation\nipconfig /all; Import-Csv \"$p\\ipv4.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nCSV có ít nhất một IPv4 không phải loopback và thông tin adapter.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\n### Câu hỏi tự giải thích\nVì sao máy có IP hợp lệ vẫn có thể không truy cập được website?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "CSV có ít nhất một IPv4 không phải loopback và thông tin adapter.",
+      "task_vi": "CSV có ít nhất một IPv4 không phải loopback và thông tin adapter.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceIndex,InterfaceAlias,IPAddress,PrefixLength | Export-Csv \"$p\\ipv4.csv\" -NoTypeInformation\nipconfig /all; Import-Csv \"$p\\ipv4.csv\" | Format-Table",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceIndex,InterfaceAlias,IPAddress,PrefixLength | Export-Csv \"$p\\ipv4.csv\" -NoTypeInformation\nipconfig /all; Import-Csv \"$p\\ipv4.csv\" | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-ip-route-diagnostics-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-ip-route-diagnostics-sec-2",
+      "title": "Đọc default route và ghi giả thuyết",
+      "title_vi": "Đọc default route và ghi giả thuyết",
+      "position": 2,
+      "content": "## Đọc default route và ghi giả thuyết\n\n### Vì sao làm bước này?\nDefault route chọn đường cho đích không khớp tuyến cụ thể hơn. Gateway không trả ping không đồng nghĩa mất mạng vì ICMP có thể bị lọc.\n\n### Thao tác\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' | Select-Object DestinationPrefix,NextHop,InterfaceIndex,RouteMetric | Export-Csv \"$p\\routes.csv\" -NoTypeInformation\nGet-NetIPConfiguration | Format-List InterfaceAlias,IPv4Address,IPv4DefaultGateway,DNSServer\nImport-Csv \"$p\\routes.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nroutes.csv có default route khớp trạng thái NIC hiện tại. Đây là bài chẩn đoán cấu hình, chưa nạp lỗi DHCP thật.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\n### Câu hỏi tự giải thích\nMáy chỉ vào được cùng subnet nhưng không ra subnet khác: bạn kiểm tra trường nào trước?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Đọc default route và ghi giả thuyết\n\n### Vì sao làm bước này?\nDefault route chọn đường cho đích không khớp tuyến cụ thể hơn. Gateway không trả ping không đồng nghĩa mất mạng vì ICMP có thể bị lọc.\n\n### Thao tác\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' | Select-Object DestinationPrefix,NextHop,InterfaceIndex,RouteMetric | Export-Csv \"$p\\routes.csv\" -NoTypeInformation\nGet-NetIPConfiguration | Format-List InterfaceAlias,IPv4Address,IPv4DefaultGateway,DNSServer\nImport-Csv \"$p\\routes.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nroutes.csv có default route khớp trạng thái NIC hiện tại. Đây là bài chẩn đoán cấu hình, chưa nạp lỗi DHCP thật.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\n### Câu hỏi tự giải thích\nMáy chỉ vào được cùng subnet nhưng không ra subnet khác: bạn kiểm tra trường nào trước?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "routes.csv có default route khớp trạng thái NIC hiện tại. Đây là bài chẩn đoán cấu hình, chưa nạp lỗi DHCP thật.",
+      "task_vi": "routes.csv có default route khớp trạng thái NIC hiện tại. Đây là bài chẩn đoán cấu hình, chưa nạp lỗi DHCP thật.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' | Select-Object DestinationPrefix,NextHop,InterfaceIndex,RouteMetric | Export-Csv \"$p\\routes.csv\" -NoTypeInformation\nGet-NetIPConfiguration | Format-List InterfaceAlias,IPv4Address,IPv4DefaultGateway,DNSServer\nImport-Csv \"$p\\routes.csv\" | Format-Table",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' | Select-Object DestinationPrefix,NextHop,InterfaceIndex,RouteMetric | Export-Csv \"$p\\routes.csv\" -NoTypeInformation\nGet-NetIPConfiguration | Format-List InterfaceAlias,IPv4Address,IPv4DefaultGateway,DNSServer\nImport-Csv \"$p\\routes.csv\" | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-ip-route-diagnostics-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-ip-route-diagnostics-sec-1",
+      "title": "Chụp thông tin IPv4 của adapter thật",
+      "title_vi": "Chụp thông tin IPv4 của adapter thật",
+      "position": 1,
+      "content": "## Chụp thông tin IPv4 của adapter thật\n\n### Vì sao làm bước này?\nLưu các trường cấu hình để có thể đối chiếu trước/sau. Không nhầm IP public của Azure với địa chỉ private trên NIC của Windows.\n\n### Thao tác\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceIndex,InterfaceAlias,IPAddress,PrefixLength | Export-Csv \"$p\\ipv4.csv\" -NoTypeInformation\nipconfig /all; Import-Csv \"$p\\ipv4.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nCSV có ít nhất một IPv4 không phải loopback và thông tin adapter.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\n### Câu hỏi tự giải thích\nVì sao máy có IP hợp lệ vẫn có thể không truy cập được website?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Chụp thông tin IPv4 của adapter thật\n\n### Vì sao làm bước này?\nLưu các trường cấu hình để có thể đối chiếu trước/sau. Không nhầm IP public của Azure với địa chỉ private trên NIC của Windows.\n\n### Thao tác\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceIndex,InterfaceAlias,IPAddress,PrefixLength | Export-Csv \"$p\\ipv4.csv\" -NoTypeInformation\nipconfig /all; Import-Csv \"$p\\ipv4.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nCSV có ít nhất một IPv4 không phải loopback và thông tin adapter.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\n### Câu hỏi tự giải thích\nVì sao máy có IP hợp lệ vẫn có thể không truy cập được website?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "CSV có ít nhất một IPv4 không phải loopback và thông tin adapter.",
+      "task_vi": "CSV có ít nhất một IPv4 không phải loopback và thông tin adapter.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceIndex,InterfaceAlias,IPAddress,PrefixLength | Export-Csv \"$p\\ipv4.csv\" -NoTypeInformation\nipconfig /all; Import-Csv \"$p\\ipv4.csv\" | Format-Table",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceIndex,InterfaceAlias,IPAddress,PrefixLength | Export-Csv \"$p\\ipv4.csv\" -NoTypeInformation\nipconfig /all; Import-Csv \"$p\\ipv4.csv\" | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-ip-route-diagnostics-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-ip-route-diagnostics-sec-2",
+      "title": "Đọc default route và ghi giả thuyết",
+      "title_vi": "Đọc default route và ghi giả thuyết",
+      "position": 2,
+      "content": "## Đọc default route và ghi giả thuyết\n\n### Vì sao làm bước này?\nDefault route chọn đường cho đích không khớp tuyến cụ thể hơn. Gateway không trả ping không đồng nghĩa mất mạng vì ICMP có thể bị lọc.\n\n### Thao tác\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' | Select-Object DestinationPrefix,NextHop,InterfaceIndex,RouteMetric | Export-Csv \"$p\\routes.csv\" -NoTypeInformation\nGet-NetIPConfiguration | Format-List InterfaceAlias,IPv4Address,IPv4DefaultGateway,DNSServer\nImport-Csv \"$p\\routes.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nroutes.csv có default route khớp trạng thái NIC hiện tại. Đây là bài chẩn đoán cấu hình, chưa nạp lỗi DHCP thật.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\n### Câu hỏi tự giải thích\nMáy chỉ vào được cùng subnet nhưng không ra subnet khác: bạn kiểm tra trường nào trước?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Đọc default route và ghi giả thuyết\n\n### Vì sao làm bước này?\nDefault route chọn đường cho đích không khớp tuyến cụ thể hơn. Gateway không trả ping không đồng nghĩa mất mạng vì ICMP có thể bị lọc.\n\n### Thao tác\nSettings → Network & internet → Ethernet để đọc cấu hình. Win+R → ncpa.cpl để xem adapter; không disable adapter Azure.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' | Select-Object DestinationPrefix,NextHop,InterfaceIndex,RouteMetric | Export-Csv \"$p\\routes.csv\" -NoTypeInformation\nGet-NetIPConfiguration | Format-List InterfaceAlias,IPv4Address,IPv4DefaultGateway,DNSServer\nImport-Csv \"$p\\routes.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nroutes.csv có default route khớp trạng thái NIC hiện tại. Đây là bài chẩn đoán cấu hình, chưa nạp lỗi DHCP thật.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy ipconfig /release, netsh reset, Disable-NetAdapter hoặc đổi gateway của NIC đang dùng RDP. APIPA 169.254/16 là dấu hiệu cần điều tra DHCP, không tự nó chứng minh dây mạng hỏng.\n\n### Câu hỏi tự giải thích\nMáy chỉ vào được cùng subnet nhưng không ra subnet khác: bạn kiểm tra trường nào trước?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "routes.csv có default route khớp trạng thái NIC hiện tại. Đây là bài chẩn đoán cấu hình, chưa nạp lỗi DHCP thật.",
+      "task_vi": "routes.csv có default route khớp trạng thái NIC hiện tại. Đây là bài chẩn đoán cấu hình, chưa nạp lỗi DHCP thật.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' | Select-Object DestinationPrefix,NextHop,InterfaceIndex,RouteMetric | Export-Csv \"$p\\routes.csv\" -NoTypeInformation\nGet-NetIPConfiguration | Format-List InterfaceAlias,IPv4Address,IPv4DefaultGateway,DNSServer\nImport-Csv \"$p\\routes.csv\" | Format-Table",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-ip-route-diagnostics'; Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' | Select-Object DestinationPrefix,NextHop,InterfaceIndex,RouteMetric | Export-Csv \"$p\\routes.csv\" -NoTypeInformation\nGet-NetIPConfiguration | Format-List InterfaceAlias,IPv4Address,IPv4DefaultGateway,DNSServer\nImport-Csv \"$p\\routes.csv\" | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-ip-route-diagnostics-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

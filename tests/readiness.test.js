@@ -50,7 +50,7 @@ test('namespace does not advertise Docker-only capabilities; no nested Docker or
     const windows = getLabReadiness(load('win-powershell-basics'));
     assert.equal(windows.can_start_terminal, false);
     assert.equal(windows.can_grade, false);
-    assert.ok(windows.missing_capabilities.includes('windows'));
+    assert.ok(windows.missing_capabilities.includes('windows-remote'));
   });
 });
 

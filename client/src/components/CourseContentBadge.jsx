@@ -1,6 +1,10 @@
 import { BookOpen, CheckCircle } from 'lucide-react';
 
 export default function CourseContentBadge({ course }) {
+  if (course.curriculum_origin === 'locally-authored-microsoft-references') return <span
+    title="Giáo trình tiếng Việt tự biên soạn theo tài liệu Microsoft; nguồn tham khảo nằm trong từng bài."
+    className="px-2.5 py-1 rounded-md text-[11px] font-semibold shadow-sm inline-flex items-center gap-1 bg-blue-600 text-white"
+  ><BookOpen className="w-3 h-3" />Giáo trình thực hành Windows</span>;
   const imported=course.imported_labs_count ?? course.labs_count ?? 0;
   const total=course.source_labs_count || imported;
   const verified=course.source_verified_labs_count || 0;

@@ -2,13 +2,21 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 export function cloudConfig(env = process.env) {
+  return getVmTargetConfig('server', env);
+}
+
+export function getVmTargetConfig(target = 'server', env = process.env) {
+  if (!['server', 'client'].includes(target)) throw cloudError('Target VM không hợp lệ.', 400, 'CLOUD_INVALID_TARGET');
+  const prefix = target === 'client' ? 'CLIENT' : 'SERVER';
   return {
+    target,
     subscriptionId: env.AZURE_SUBSCRIPTION_ID || '',
-    resourceGroup: env.AZURE_VM_RG || 'LabEx-India-RG',
-    vmName: env.AZURE_VM_NAME || 'LabEx-WinServer',
-    publicIp: env.AZURE_VM_IP || '20.40.49.168',
-    adminUsername: env.WINDOWS_ADMIN_USERNAME || 'adminlab',
-    password: env.WINDOWS_ADMIN_PASSWORD || '',
+    resourceGroup: env[`AZURE_${prefix}_VM_RG`] || env.AZURE_VM_RG || 'LabEx-India-RG',
+    vmName: env[`AZURE_${prefix}_VM_NAME`] || (target === 'server' ? env.AZURE_VM_NAME || 'LabEx-WinServer' : 'LabEx-CLIENT01'),
+    publicIp: env[`AZURE_${prefix}_VM_IP`] || (target === 'server' ? env.AZURE_VM_IP || '20.40.49.168' : ''),
+    adminUsername: env[`WINDOWS_${prefix}_ADMIN_USERNAME`] || env.WINDOWS_ADMIN_USERNAME || 'adminlab',
+    password: env[`WINDOWS_${prefix}_ADMIN_PASSWORD`] || (target === 'server' ? env.WINDOWS_ADMIN_PASSWORD || '' : ''),
+    rdpDomain: env[`WINDOWS_${prefix}_RDP_DOMAIN`] || (target === 'server' ? env.WINDOWS_RDP_DOMAIN || '' : ''),
     rdpPort: Number(env.WINDOWS_RDP_PORT || 3389),
     guacdHost: env.GUACD_HOST || '127.0.0.1',
     guacdPort: Number(env.GUACD_PORT || 4822),

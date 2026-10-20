@@ -1,7 +1,9 @@
 import crypto from 'node:crypto';
 import net from 'node:net';
 import GuacamoleLite from 'guacamole-lite';
-import { cloudConfig, cloudError } from './cloudConfig.js';
+import { getVmTargetConfig, cloudError } from './cloudConfig.js';
+import { resolveVmTarget } from './vmTargets.js';
+import { windowsFaults } from './windowsFaults.js';
 
 export function checkTcp(host, port, timeout = 2000) {
   return new Promise(resolve => {
@@ -15,7 +17,8 @@ export function checkTcp(host, port, timeout = 2000) {
   });
 }
 
-export function createDesktopGateway({ config = cloudConfig, now = Date.now, probe = checkTcp } = {}) {
+export function createDesktopGateway({ config = getVmTargetConfig, now = Date.now, probe = checkTcp,
+  authorize = (labId, target) => windowsFaults.assertAccess(labId, target) } = {}) {
   const tickets = new Map();
   const key = crypto.randomBytes(32);
   const current = config();
@@ -32,19 +35,20 @@ export function createDesktopGateway({ config = cloudConfig, now = Date.now, pro
     const value = Buffer.concat([cipher.update(json, 'utf8'), cipher.final()]);
     return Buffer.from(JSON.stringify({ iv: iv.toString('base64'), value: value.toString('base64') })).toString('base64');
   }
-  async function status() {
-    const value = config();
-    return { configured: Boolean(value.password), guacdAvailable: await probe(value.guacdHost, value.guacdPort),
+  async function status({ target = 'server' } = {}) {
+    const value = config(target);
+    return { configured: Boolean(value.password && value.publicIp), guacdAvailable: await probe(value.guacdHost, value.guacdPort),
       target: value.vmName, path: '/ws/desktop' };
   }
-  async function issue(labId, { width = 1280, height = 800, dpi = 96 } = {}) {
-    const available = await status();
+  async function issue(labId, { width = 1280, height = 800, dpi = 96, target } = {}) {
+    target = resolveVmTarget({ labId, target });
+    const available = await status({ target });
     if (!available.configured) throw cloudError('Chưa cấu hình WINDOWS_ADMIN_PASSWORD ở backend.', 503, 'CLOUD_RDP_CONFIG_REQUIRED');
     if (!available.guacdAvailable) throw cloudError('Chưa kết nối được guacd. Chạy scripts/setup-guacd.py trong WSL.', 503, 'CLOUD_GUACD_UNAVAILABLE');
     for (const [ticket, item] of tickets) if (item.expires <= now()) tickets.delete(ticket);
     if (tickets.size >= 32) throw cloudError('Có quá nhiều yêu cầu Desktop. Thử lại sau.', 429, 'CLOUD_BUSY');
     const ticket = crypto.randomBytes(32).toString('base64url');
-    tickets.set(ticket, { labId, expires: now() + 30000,
+    tickets.set(ticket, { labId, target, expires: now() + 30000,
       width: Math.round(Math.max(640, Math.min(3840, Number(width) || 1280))),
       height: Math.round(Math.max(480, Math.min(2160, Number(height) || 800))),
       dpi: Math.round(Math.max(96, Math.min(192, Number(dpi) || 96))) });
@@ -59,9 +63,11 @@ export function createDesktopGateway({ config = cloudConfig, now = Date.now, pro
       socket.end('HTTP/1.1 401 Unauthorized\r\nConnection: close\r\n\r\n');
       return;
     }
-    const value = config();
+    try { authorize(item.labId, item.target); }
+    catch { socket.end('HTTP/1.1 409 Conflict\r\nConnection: close\r\n\r\n'); return; }
+    const value = config(item.target);
     const settings = { hostname: value.publicIp, port: String(value.rdpPort),
-      username: value.adminUsername, password: value.password, domain: process.env.WINDOWS_RDP_DOMAIN || '',
+      username: value.adminUsername, password: value.password, domain: value.rdpDomain || '',
       security: 'nla', 'ignore-cert': process.env.WINDOWS_RDP_IGNORE_CERT === 'true' ? 'true' : 'false',
       width: item.width, height: item.height, dpi: item.dpi, 'resize-method': 'display-update',
       'color-depth': 32, 'enable-font-smoothing': 'true', 'force-lossless': 'true',
@@ -70,7 +76,13 @@ export function createDesktopGateway({ config = cloudConfig, now = Date.now, pro
     // guacamole-lite receives its encrypted token internally; the browser only
     // sees an opaque short-lived ticket. Never accept browser-supplied hosts.
     req.url = '/?token=' + encodeURIComponent(encode({ type: 'rdp', settings }));
-    bridge.webSocketServer.handleUpgrade(req, socket, head, ws => bridge.webSocketServer.emit('connection', ws, req));
+    bridge.webSocketServer.handleUpgrade(req, socket, head, ws => {
+      ws.rdpTarget = item.target;
+      bridge.webSocketServer.emit('connection', ws, req);
+    });
   }
-  return { status, issue, upgrade, close: () => bridge.close() };
+  function disconnectTarget(target) {
+    for (const ws of bridge.webSocketServer.clients) if (ws.rdpTarget === target) ws.close(1012, 'Preparing a new lab scenario');
+  }
+  return { status, issue, upgrade, disconnectTarget, close: () => bridge.close() };
 }

@@ -4,6 +4,7 @@ import { execLabCommand } from "../pty/linuxEnvironment.js";
 import { verifyDefinition, getVerificationDefinition } from "../services/verification.js";
 import { getStepReadiness } from "../services/readiness.js";
 import { verifyWindowsRemote } from '../services/windowsRemoteVerifier.js';
+import { isWindowsLab } from '../services/vmTargets.js';
 
 export function createVerifyRouter({ findLab = loadLab, runCommand = execLabCommand, readHistory, verifyWindows = verifyWindowsRemote } = {}) {
   const router = express.Router();
@@ -25,7 +26,7 @@ export function createVerifyRouter({ findLab = loadLab, runCommand = execLabComm
       const definition = getVerificationDefinition(step);
       // All rules come from the local curriculum. Browser-supplied commands,
       // history, success flags and output never contribute to a grade.
-      const result = labId.startsWith('win-') ? await verifyWindows(labId, step) : await verifyDefinition(labId, definition, {
+      const result = isWindowsLab(lab) ? await verifyWindows(labId, step) : await verifyDefinition(labId, definition, {
         runCommand,
         acknowledged: req.body.acknowledge === true,
         stepIndex,
@@ -46,6 +47,7 @@ export function createVerifyRouter({ findLab = loadLab, runCommand = execLabComm
         verification_method: result.method,
       });
     } catch (error) {
+      if (error.code?.startsWith('CLOUD_')) return res.status(error.status || 503).json({ passed: false, message: error.message, code: error.code });
       return res.status(error.code === "ENVIRONMENT_UNAVAILABLE" ? 503 : 500).json({
         passed: false,
         message: error.code === "ENVIRONMENT_UNAVAILABLE" ? error.message : "Không thể kiểm tra bước này lúc này.",

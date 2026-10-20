@@ -19,7 +19,7 @@ const page = await browser.newPage();
 const errors = [];
 page.on('pageerror', error => errors.push(error.message));
 await page.route('**/api/environment', route => route.fulfill({ json: { available: false, capabilities: {} } }));
-await page.route('**/api/cloud-vm/status', route => route.fulfill({ json: { powerState: 'unknown', controlConfigured: false } }));
+await page.route('**/api/cloud-vm/status*', route => route.fulfill({ json: { powerState: 'unknown', controlConfigured: false } }));
 const report = { checks: [], fixtures: 'Only runtime status mocked; lesson JSON and SVG files served by the real local backend.' };
 try {
   for (const width of [390, 768, 1440]) {

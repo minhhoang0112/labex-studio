@@ -38,10 +38,9 @@ export function getCourses() {
     const source = index.courses.find(item => item.id === course.id);
     const readiness = courseReadiness(course.id, labs, index);
     const { user_count, rating, has_cert, ...metadata } = course;
-    const isWinCourse = course.topic === "windows" || course.id.startsWith("win-") || course.id.includes("windows");
-    const isReady = available.length && (readiness.runnable_labs_count === available.length || isWinCourse);
-    const practiceCount = isWinCourse ? available.length : readiness.practice_labs_count;
-    const runnableCount = isWinCourse ? available.length : readiness.runnable_labs_count;
+    const isReady = available.length && readiness.runnable_labs_count === available.length;
+    const practiceCount = readiness.practice_labs_count;
+    const runnableCount = readiness.runnable_labs_count;
     return { ...metadata, level: typeof course.level === "number" ? course.level : ({ beginner: 1, intermediate: 2, advanced: 3 }[String(course.level).toLowerCase()] || 1),
       level_label: course.level_label || (typeof course.level === "string" ? course.level : "Beginner"),
       cover: course.cover || course.cover_image, skills: course.skills || [], tags: course.tags || [],
@@ -52,7 +51,7 @@ export function getCourses() {
       practice_labs_count: practiceCount,
       runnable_labs_count: runnableCount,
       readiness: isReady ? "ready" : available.length ? "partial" : "reference-only",
-      labs_count: available.length, available: practiceCount > 0,
+      labs_count: available.length, available: practiceCount > 0 || ((course.topic === 'windows' || course.id.includes('windows')) && available.length > 0),
       lab_ids: available.map((lab) => lab.id),
       steps_count: available.reduce((sum, lab) => sum + lab.steps.length, 0) };
   });
@@ -106,20 +105,10 @@ router.get("/courses/:id", (req, res, next) => {
     const imported = listCourseLabs(course.id).sort((a, b) => (a.order ?? 999) - (b.order ?? 999) || a.id.localeCompare(b.id));
     const summary = lab => {
       const { id, title, title_vi, difficulty, estimated_time, overview, steps, sections, order, type, source, source_lab_id, source_url } = lab;
-      const isWinLab = id?.startsWith('win-') || lab.course_id?.includes('win') || lab.course_id?.includes('windows');
-      const baseAvailability = getLabReadiness(lab);
-      const availability = isWinLab ? {
-        state: "ready",
-        can_open: true,
-        can_start_terminal: true,
-        can_grade: true,
-        supported_steps_count: steps.length,
-        total_steps_count: steps.length,
-        missing_capabilities: [],
-        reasons: []
-      } : baseAvailability;
+      const availability = getLabReadiness(lab);
       return {
         id, title, title_vi, difficulty, estimated_time, overview, order, type,
+        curriculum_group: lab.curriculum_group, practice_mode: lab.practice_mode,
         source, source_lab_id, source_url, availability, sections_count: sections?.length || steps.length,
         steps_count: steps.length, step_ids: steps.map((step) => step.id),
       };
@@ -185,18 +174,7 @@ router.get("/labs/:id", (req, res, next) => {
       ...((verification || verification_by_provider) ? { verification_kind: getVerificationDefinition({ verify_command, verification, verification_by_provider })?.kind } : {}),
       ...((section.kind === "task" || task) ? { grading: getStepReadiness({ ...section, verify_command, verification, verification_by_provider }, lab) } : {}),
     });
-    const isWinLab = lab.id?.startsWith('win-') || lab.course_id?.includes('win') || lab.course_id?.includes('windows');
-    const baseAvailability = getLabReadiness(lab);
-    const availability = isWinLab ? {
-      state: "ready",
-      can_open: true,
-      can_start_terminal: true,
-      can_grade: true,
-      supported_steps_count: lab.steps.length,
-      total_steps_count: lab.steps.length,
-      missing_capabilities: [],
-      reasons: []
-    } : baseAvailability;
+    const availability = getLabReadiness(lab);
     res.json({ ...lab, course_id: requestedCourse || lab.course_id, primary_course_id: lab.course_id, course_ids: courseIds,
       availability, steps: lab.steps.map(step => publicSection(step, true)),
       sections: (lab.sections || lab.steps).map(section => publicSection(section, !lab.sections)) });

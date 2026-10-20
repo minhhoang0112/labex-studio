@@ -1,0 +1,131 @@
+{
+  "id": "win-it-dns-resolver-diagnostics",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 10,
+  "title": "DNS, hosts và cache: phân biệt các đường phân giải",
+  "title_vi": "DNS, hosts và cache: phân biệt các đường phân giải",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Mạng máy trạm",
+  "overview": "Resolver có thể dùng hosts, cache và DNS. Công cụ truy vấn DNS trực tiếp không luôn phản ánh kết quả ứng dụng nhìn thấy. Quan sát trước khi xóa cache.",
+  "ticket": {
+    "ticket_id": "HD-213",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Một tên truy cập được trên máy này nhưng không được trên máy khác."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/networking/dns/troubleshoot/troubleshoot-dns-data-collection",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-dns-resolver-diagnostics-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-213: Một tên truy cập được trên máy này nhưng không được trên máy khác.\n\n### Mục tiêu và bản chất\nResolver có thể dùng hosts, cache và DNS. Công cụ truy vấn DNS trực tiếp không luôn phản ánh kết quả ứng dụng nhìn thấy. Quan sát trước khi xóa cache.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics.\n\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\n### Phạm vi và lưu ý\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: troubleshoot-dns-data-collection](https://learn.microsoft.com/en-us/windows-server/networking/dns/troubleshoot/troubleshoot-dns-data-collection)\n- [Microsoft: ipconfig](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig)\n",
+      "content_vi": "## Ticket HD-213: Một tên truy cập được trên máy này nhưng không được trên máy khác.\n\n### Mục tiêu và bản chất\nResolver có thể dùng hosts, cache và DNS. Công cụ truy vấn DNS trực tiếp không luôn phản ánh kết quả ứng dụng nhìn thấy. Quan sát trước khi xóa cache.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics.\n\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\n### Phạm vi và lưu ý\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: troubleshoot-dns-data-collection](https://learn.microsoft.com/en-us/windows-server/networking/dns/troubleshoot/troubleshoot-dns-data-collection)\n- [Microsoft: ipconfig](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig)\n"
+    },
+    {
+      "id": "win-it-dns-resolver-diagnostics-sec-1",
+      "title": "Ghi DNS server đang cấu hình",
+      "title_vi": "Ghi DNS server đang cấu hình",
+      "position": 1,
+      "content": "## Ghi DNS server đang cấu hình\n\n### Vì sao làm bước này?\nDNS server là nơi hỏi tên; gateway là next hop. Hai vai trò khác nhau dù trong một số mạng nhỏ chúng cùng địa chỉ.\n\n### Thao tác\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object InterfaceAlias,@{n='Servers';e={$_.ServerAddresses -join ';'}} | Export-Csv \"$p\\dns-servers.csv\" -NoTypeInformation\nImport-Csv \"$p\\dns-servers.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo chứa ít nhất một DNS server đang cấu hình thật.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\n### Câu hỏi tự giải thích\nVì sao ping IP được nhưng truy cập bằng tên không được thường khiến bạn nghĩ tới resolver?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Ghi DNS server đang cấu hình\n\n### Vì sao làm bước này?\nDNS server là nơi hỏi tên; gateway là next hop. Hai vai trò khác nhau dù trong một số mạng nhỏ chúng cùng địa chỉ.\n\n### Thao tác\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object InterfaceAlias,@{n='Servers';e={$_.ServerAddresses -join ';'}} | Export-Csv \"$p\\dns-servers.csv\" -NoTypeInformation\nImport-Csv \"$p\\dns-servers.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo chứa ít nhất một DNS server đang cấu hình thật.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\n### Câu hỏi tự giải thích\nVì sao ping IP được nhưng truy cập bằng tên không được thường khiến bạn nghĩ tới resolver?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Báo cáo chứa ít nhất một DNS server đang cấu hình thật.",
+      "task_vi": "Báo cáo chứa ít nhất một DNS server đang cấu hình thật.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object InterfaceAlias,@{n='Servers';e={$_.ServerAddresses -join ';'}} | Export-Csv \"$p\\dns-servers.csv\" -NoTypeInformation\nImport-Csv \"$p\\dns-servers.csv\" | Format-Table",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object InterfaceAlias,@{n='Servers';e={$_.ServerAddresses -join ';'}} | Export-Csv \"$p\\dns-servers.csv\" -NoTypeInformation\nImport-Csv \"$p\\dns-servers.csv\" | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-dns-resolver-diagnostics-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-dns-resolver-diagnostics-sec-2",
+      "title": "Thử resolver mà không phụ thuộc Internet",
+      "title_vi": "Thử resolver mà không phụ thuộc Internet",
+      "position": 2,
+      "content": "## Thử resolver mà không phụ thuộc Internet\n\n### Vì sao làm bước này?\nlocalhost là trường hợp cục bộ phù hợp cho kiểm tra offline. So sánh với bài portal.company.local đã học để hiểu vai trò hosts.\n\n### Thao tác\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; $a=@([Net.Dns]::GetHostAddresses('localhost') | ForEach-Object IPAddressToString)\n[pscustomobject]@{ Name='localhost'; Addresses=$a; Note='Local resolver, not proof of public DNS health' } | ConvertTo-Json | Set-Content \"$p\\resolver.json\" -Encoding UTF8\nGet-Content \"$p\\resolver.json\"\n```\n\n### Kết quả và cách tự kiểm tra\nCó 127.0.0.1 hoặc ::1; không coi đây là bằng chứng Internet hay DNS công ty hoạt động.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\n### Câu hỏi tự giải thích\nVì sao nslookup có thể báo khác ứng dụng sau khi bạn sửa hosts?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Thử resolver mà không phụ thuộc Internet\n\n### Vì sao làm bước này?\nlocalhost là trường hợp cục bộ phù hợp cho kiểm tra offline. So sánh với bài portal.company.local đã học để hiểu vai trò hosts.\n\n### Thao tác\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; $a=@([Net.Dns]::GetHostAddresses('localhost') | ForEach-Object IPAddressToString)\n[pscustomobject]@{ Name='localhost'; Addresses=$a; Note='Local resolver, not proof of public DNS health' } | ConvertTo-Json | Set-Content \"$p\\resolver.json\" -Encoding UTF8\nGet-Content \"$p\\resolver.json\"\n```\n\n### Kết quả và cách tự kiểm tra\nCó 127.0.0.1 hoặc ::1; không coi đây là bằng chứng Internet hay DNS công ty hoạt động.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\n### Câu hỏi tự giải thích\nVì sao nslookup có thể báo khác ứng dụng sau khi bạn sửa hosts?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Có 127.0.0.1 hoặc ::1; không coi đây là bằng chứng Internet hay DNS công ty hoạt động.",
+      "task_vi": "Có 127.0.0.1 hoặc ::1; không coi đây là bằng chứng Internet hay DNS công ty hoạt động.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; $a=@([Net.Dns]::GetHostAddresses('localhost') | ForEach-Object IPAddressToString)\n[pscustomobject]@{ Name='localhost'; Addresses=$a; Note='Local resolver, not proof of public DNS health' } | ConvertTo-Json | Set-Content \"$p\\resolver.json\" -Encoding UTF8\nGet-Content \"$p\\resolver.json\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; $a=@([Net.Dns]::GetHostAddresses('localhost') | ForEach-Object IPAddressToString)\n[pscustomobject]@{ Name='localhost'; Addresses=$a; Note='Local resolver, not proof of public DNS health' } | ConvertTo-Json | Set-Content \"$p\\resolver.json\" -Encoding UTF8\nGet-Content \"$p\\resolver.json\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-dns-resolver-diagnostics-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-dns-resolver-diagnostics-sec-1",
+      "title": "Ghi DNS server đang cấu hình",
+      "title_vi": "Ghi DNS server đang cấu hình",
+      "position": 1,
+      "content": "## Ghi DNS server đang cấu hình\n\n### Vì sao làm bước này?\nDNS server là nơi hỏi tên; gateway là next hop. Hai vai trò khác nhau dù trong một số mạng nhỏ chúng cùng địa chỉ.\n\n### Thao tác\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object InterfaceAlias,@{n='Servers';e={$_.ServerAddresses -join ';'}} | Export-Csv \"$p\\dns-servers.csv\" -NoTypeInformation\nImport-Csv \"$p\\dns-servers.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo chứa ít nhất một DNS server đang cấu hình thật.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\n### Câu hỏi tự giải thích\nVì sao ping IP được nhưng truy cập bằng tên không được thường khiến bạn nghĩ tới resolver?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Ghi DNS server đang cấu hình\n\n### Vì sao làm bước này?\nDNS server là nơi hỏi tên; gateway là next hop. Hai vai trò khác nhau dù trong một số mạng nhỏ chúng cùng địa chỉ.\n\n### Thao tác\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object InterfaceAlias,@{n='Servers';e={$_.ServerAddresses -join ';'}} | Export-Csv \"$p\\dns-servers.csv\" -NoTypeInformation\nImport-Csv \"$p\\dns-servers.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo chứa ít nhất một DNS server đang cấu hình thật.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\n### Câu hỏi tự giải thích\nVì sao ping IP được nhưng truy cập bằng tên không được thường khiến bạn nghĩ tới resolver?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Báo cáo chứa ít nhất một DNS server đang cấu hình thật.",
+      "task_vi": "Báo cáo chứa ít nhất một DNS server đang cấu hình thật.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object InterfaceAlias,@{n='Servers';e={$_.ServerAddresses -join ';'}} | Export-Csv \"$p\\dns-servers.csv\" -NoTypeInformation\nImport-Csv \"$p\\dns-servers.csv\" | Format-Table",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-DnsClientServerAddress -AddressFamily IPv4 | Where-Object { $_.ServerAddresses.Count -gt 0 } | Select-Object InterfaceAlias,@{n='Servers';e={$_.ServerAddresses -join ';'}} | Export-Csv \"$p\\dns-servers.csv\" -NoTypeInformation\nImport-Csv \"$p\\dns-servers.csv\" | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-dns-resolver-diagnostics-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-dns-resolver-diagnostics-sec-2",
+      "title": "Thử resolver mà không phụ thuộc Internet",
+      "title_vi": "Thử resolver mà không phụ thuộc Internet",
+      "position": 2,
+      "content": "## Thử resolver mà không phụ thuộc Internet\n\n### Vì sao làm bước này?\nlocalhost là trường hợp cục bộ phù hợp cho kiểm tra offline. So sánh với bài portal.company.local đã học để hiểu vai trò hosts.\n\n### Thao tác\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; $a=@([Net.Dns]::GetHostAddresses('localhost') | ForEach-Object IPAddressToString)\n[pscustomobject]@{ Name='localhost'; Addresses=$a; Note='Local resolver, not proof of public DNS health' } | ConvertTo-Json | Set-Content \"$p\\resolver.json\" -Encoding UTF8\nGet-Content \"$p\\resolver.json\"\n```\n\n### Kết quả và cách tự kiểm tra\nCó 127.0.0.1 hoặc ::1; không coi đây là bằng chứng Internet hay DNS công ty hoạt động.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\n### Câu hỏi tự giải thích\nVì sao nslookup có thể báo khác ứng dụng sau khi bạn sửa hosts?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Thử resolver mà không phụ thuộc Internet\n\n### Vì sao làm bước này?\nlocalhost là trường hợp cục bộ phù hợp cho kiểm tra offline. So sánh với bài portal.company.local đã học để hiểu vai trò hosts.\n\n### Thao tác\nWin+R → notepad để đọc hosts; chỉ mở đọc. Dùng PowerShell quan sát DNS server của adapter và cache hiện tại.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; $a=@([Net.Dns]::GetHostAddresses('localhost') | ForEach-Object IPAddressToString)\n[pscustomobject]@{ Name='localhost'; Addresses=$a; Note='Local resolver, not proof of public DNS health' } | ConvertTo-Json | Set-Content \"$p\\resolver.json\" -Encoding UTF8\nGet-Content \"$p\\resolver.json\"\n```\n\n### Kết quả và cách tự kiểm tra\nCó 127.0.0.1 hoặc ::1; không coi đây là bằng chứng Internet hay DNS công ty hoạt động.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thay DNS server Azure bằng địa chỉ ngẫu nhiên. Không đưa toàn bộ cache DNS thật của người dùng lên diễn đàn công khai.\n\n### Câu hỏi tự giải thích\nVì sao nslookup có thể báo khác ứng dụng sau khi bạn sửa hosts?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Có 127.0.0.1 hoặc ::1; không coi đây là bằng chứng Internet hay DNS công ty hoạt động.",
+      "task_vi": "Có 127.0.0.1 hoặc ::1; không coi đây là bằng chứng Internet hay DNS công ty hoạt động.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; $a=@([Net.Dns]::GetHostAddresses('localhost') | ForEach-Object IPAddressToString)\n[pscustomobject]@{ Name='localhost'; Addresses=$a; Note='Local resolver, not proof of public DNS health' } | ConvertTo-Json | Set-Content \"$p\\resolver.json\" -Encoding UTF8\nGet-Content \"$p\\resolver.json\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-dns-resolver-diagnostics'; $a=@([Net.Dns]::GetHostAddresses('localhost') | ForEach-Object IPAddressToString)\n[pscustomobject]@{ Name='localhost'; Addresses=$a; Note='Local resolver, not proof of public DNS health' } | ConvertTo-Json | Set-Content \"$p\\resolver.json\" -Encoding UTF8\nGet-Content \"$p\\resolver.json\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-dns-resolver-diagnostics-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

@@ -23,7 +23,7 @@ async function pageFor(host = '127.0.0.1') {
   await page.route('**/api/ai/chat', route => route.fulfill({ json: { reply: 'Xin chào! Tôi là Labby, trợ lý học tập của bạn.', mode: 'gemini', model: 'fixture-model' } }));
   page.on('pageerror', error => errors.push(error.message));
   await page.route('**/api/environment', route => route.fulfill({ json: { available: false, capabilities: {} } }));
-  await page.route('**/api/cloud-vm/status', route => route.fulfill({ json: { powerState: 'unknown', controlConfigured: false } }));
+  await page.route('**/api/cloud-vm/status*', route => route.fulfill({ json: { powerState: 'unknown', controlConfigured: false } }));
   await page.goto(`http://${host}:5000/labs/win-server-ad-users-groups`);
   await page.getByRole('combobox').selectOption('1');
   return page;

@@ -1,0 +1,131 @@
+{
+  "id": "win-it-startup-audit",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 24,
+  "title": "Khởi động chậm: phân biệt Startup app, service và scheduled task",
+  "title_vi": "Khởi động chậm: phân biệt Startup app, service và scheduled task",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Chẩn đoán hệ thống",
+  "overview": "Startup Apps chỉ là một nhóm trong nhiều cơ chế tự chạy. Phải phân biệt ngữ cảnh user và machine, publisher và tác động trước khi disable.",
+  "ticket": {
+    "ticket_id": "HD-220",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Sau đăng nhập mở nhiều chương trình; muốn tìm mục khởi động không cần thiết."
+  },
+  "references": [
+    {
+      "url": "https://support.microsoft.com/en-us/windows/experience/startup-boot/configure-startup-applications-in-windows",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://support.microsoft.com/en-us/windows/experience/startup-boot/how-to-perform-a-clean-boot-in-windows",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-startup-audit-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-220: Sau đăng nhập mở nhiều chương trình; muốn tìm mục khởi động không cần thiết.\n\n### Mục tiêu và bản chất\nStartup Apps chỉ là một nhóm trong nhiều cơ chế tự chạy. Phải phân biệt ngữ cảnh user và machine, publisher và tác động trước khi disable.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-startup-audit.\n\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\n### Phạm vi và lưu ý\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: configure-startup-applications-in-windows](https://support.microsoft.com/en-us/windows/experience/startup-boot/configure-startup-applications-in-windows)\n- [Microsoft: how-to-perform-a-clean-boot-in-windows](https://support.microsoft.com/en-us/windows/experience/startup-boot/how-to-perform-a-clean-boot-in-windows)\n",
+      "content_vi": "## Ticket HD-220: Sau đăng nhập mở nhiều chương trình; muốn tìm mục khởi động không cần thiết.\n\n### Mục tiêu và bản chất\nStartup Apps chỉ là một nhóm trong nhiều cơ chế tự chạy. Phải phân biệt ngữ cảnh user và machine, publisher và tác động trước khi disable.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-startup-audit.\n\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\n### Phạm vi và lưu ý\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: configure-startup-applications-in-windows](https://support.microsoft.com/en-us/windows/experience/startup-boot/configure-startup-applications-in-windows)\n- [Microsoft: how-to-perform-a-clean-boot-in-windows](https://support.microsoft.com/en-us/windows/experience/startup-boot/how-to-perform-a-clean-boot-in-windows)\n"
+    },
+    {
+      "id": "win-it-startup-audit-sec-1",
+      "title": "Đọc startup theo ngữ cảnh thực thi",
+      "title_vi": "Đọc startup theo ngữ cảnh thực thi",
+      "position": 1,
+      "content": "## Đọc startup theo ngữ cảnh thực thi\n\n### Vì sao làm bước này?\nPowerShell web chạy SYSTEM nên HKCU không phải user đang mở Desktop. Win32_StartupCommand giúp quan sát nhiều vị trí cùng User; không coi đây là toàn bộ persistence trên máy.\n\n### Thao tác\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-startup-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$r=@(Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User)\nConvertTo-Json -InputObject @{ Items=$r } -Depth 4 | Set-Content \"$p\\startup.json\" -Encoding UTF8\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; Context=[Security.Principal.WindowsIdentity]::GetCurrent().Name; Count=$r.Count } | ConvertTo-Json | Set-Content \"$p\\context.json\" -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo có context SYSTEM và startup.json hợp lệ; 0 mục là kết quả có thể hợp lệ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\n### Câu hỏi tự giải thích\nVì sao xem HKCU Run từ SYSTEM có thể bỏ sót app tự chạy của nhân viên?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Đọc startup theo ngữ cảnh thực thi\n\n### Vì sao làm bước này?\nPowerShell web chạy SYSTEM nên HKCU không phải user đang mở Desktop. Win32_StartupCommand giúp quan sát nhiều vị trí cùng User; không coi đây là toàn bộ persistence trên máy.\n\n### Thao tác\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-startup-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$r=@(Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User)\nConvertTo-Json -InputObject @{ Items=$r } -Depth 4 | Set-Content \"$p\\startup.json\" -Encoding UTF8\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; Context=[Security.Principal.WindowsIdentity]::GetCurrent().Name; Count=$r.Count } | ConvertTo-Json | Set-Content \"$p\\context.json\" -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo có context SYSTEM và startup.json hợp lệ; 0 mục là kết quả có thể hợp lệ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\n### Câu hỏi tự giải thích\nVì sao xem HKCU Run từ SYSTEM có thể bỏ sót app tự chạy của nhân viên?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Báo cáo có context SYSTEM và startup.json hợp lệ; 0 mục là kết quả có thể hợp lệ.",
+      "task_vi": "Báo cáo có context SYSTEM và startup.json hợp lệ; 0 mục là kết quả có thể hợp lệ.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-startup-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$r=@(Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User)\nConvertTo-Json -InputObject @{ Items=$r } -Depth 4 | Set-Content \"$p\\startup.json\" -Encoding UTF8\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; Context=[Security.Principal.WindowsIdentity]::GetCurrent().Name; Count=$r.Count } | ConvertTo-Json | Set-Content \"$p\\context.json\" -Encoding UTF8",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-startup-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$r=@(Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User)\nConvertTo-Json -InputObject @{ Items=$r } -Depth 4 | Set-Content \"$p\\startup.json\" -Encoding UTF8\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; Context=[Security.Principal.WindowsIdentity]::GetCurrent().Name; Count=$r.Count } | ConvertTo-Json | Set-Content \"$p\\context.json\" -Encoding UTF8",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-startup-audit-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-startup-audit-sec-2",
+      "title": "Kiểm kê dịch vụ tự chạy mà không tắt",
+      "title_vi": "Kiểm kê dịch vụ tự chạy mà không tắt",
+      "position": 2,
+      "content": "## Kiểm kê dịch vụ tự chạy mà không tắt\n\n### Vì sao làm bước này?\nAutomatic không đồng nghĩa service đang chạy. Ghi cả StartMode, State và đường dẫn để điều tra publisher, không xóa theo tên trông lạ.\n\n### Thao tác\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-startup-audit'; Get-CimInstance Win32_Service | Where-Object StartMode -eq Auto | Select-Object Name,State,StartMode,PathName | Export-Csv \"$p\\auto-services.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\auto-services.csv\" | Select-Object -First 10\n```\n\n### Kết quả và cách tự kiểm tra\nCó dịch vụ StartMode Auto thật; trạng thái có thể Running hoặc Stopped.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\n### Câu hỏi tự giải thích\nBạn cần những bằng chứng nào trước khi tắt một dịch vụ có tên không quen thuộc?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Kiểm kê dịch vụ tự chạy mà không tắt\n\n### Vì sao làm bước này?\nAutomatic không đồng nghĩa service đang chạy. Ghi cả StartMode, State và đường dẫn để điều tra publisher, không xóa theo tên trông lạ.\n\n### Thao tác\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-startup-audit'; Get-CimInstance Win32_Service | Where-Object StartMode -eq Auto | Select-Object Name,State,StartMode,PathName | Export-Csv \"$p\\auto-services.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\auto-services.csv\" | Select-Object -First 10\n```\n\n### Kết quả và cách tự kiểm tra\nCó dịch vụ StartMode Auto thật; trạng thái có thể Running hoặc Stopped.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\n### Câu hỏi tự giải thích\nBạn cần những bằng chứng nào trước khi tắt một dịch vụ có tên không quen thuộc?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Có dịch vụ StartMode Auto thật; trạng thái có thể Running hoặc Stopped.",
+      "task_vi": "Có dịch vụ StartMode Auto thật; trạng thái có thể Running hoặc Stopped.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-startup-audit'; Get-CimInstance Win32_Service | Where-Object StartMode -eq Auto | Select-Object Name,State,StartMode,PathName | Export-Csv \"$p\\auto-services.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\auto-services.csv\" | Select-Object -First 10",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-startup-audit'; Get-CimInstance Win32_Service | Where-Object StartMode -eq Auto | Select-Object Name,State,StartMode,PathName | Export-Csv \"$p\\auto-services.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\auto-services.csv\" | Select-Object -First 10",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-startup-audit-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-startup-audit-sec-1",
+      "title": "Đọc startup theo ngữ cảnh thực thi",
+      "title_vi": "Đọc startup theo ngữ cảnh thực thi",
+      "position": 1,
+      "content": "## Đọc startup theo ngữ cảnh thực thi\n\n### Vì sao làm bước này?\nPowerShell web chạy SYSTEM nên HKCU không phải user đang mở Desktop. Win32_StartupCommand giúp quan sát nhiều vị trí cùng User; không coi đây là toàn bộ persistence trên máy.\n\n### Thao tác\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-startup-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$r=@(Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User)\nConvertTo-Json -InputObject @{ Items=$r } -Depth 4 | Set-Content \"$p\\startup.json\" -Encoding UTF8\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; Context=[Security.Principal.WindowsIdentity]::GetCurrent().Name; Count=$r.Count } | ConvertTo-Json | Set-Content \"$p\\context.json\" -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo có context SYSTEM và startup.json hợp lệ; 0 mục là kết quả có thể hợp lệ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\n### Câu hỏi tự giải thích\nVì sao xem HKCU Run từ SYSTEM có thể bỏ sót app tự chạy của nhân viên?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Đọc startup theo ngữ cảnh thực thi\n\n### Vì sao làm bước này?\nPowerShell web chạy SYSTEM nên HKCU không phải user đang mở Desktop. Win32_StartupCommand giúp quan sát nhiều vị trí cùng User; không coi đây là toàn bộ persistence trên máy.\n\n### Thao tác\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-startup-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$r=@(Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User)\nConvertTo-Json -InputObject @{ Items=$r } -Depth 4 | Set-Content \"$p\\startup.json\" -Encoding UTF8\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; Context=[Security.Principal.WindowsIdentity]::GetCurrent().Name; Count=$r.Count } | ConvertTo-Json | Set-Content \"$p\\context.json\" -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo có context SYSTEM và startup.json hợp lệ; 0 mục là kết quả có thể hợp lệ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\n### Câu hỏi tự giải thích\nVì sao xem HKCU Run từ SYSTEM có thể bỏ sót app tự chạy của nhân viên?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Báo cáo có context SYSTEM và startup.json hợp lệ; 0 mục là kết quả có thể hợp lệ.",
+      "task_vi": "Báo cáo có context SYSTEM và startup.json hợp lệ; 0 mục là kết quả có thể hợp lệ.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-startup-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$r=@(Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User)\nConvertTo-Json -InputObject @{ Items=$r } -Depth 4 | Set-Content \"$p\\startup.json\" -Encoding UTF8\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; Context=[Security.Principal.WindowsIdentity]::GetCurrent().Name; Count=$r.Count } | ConvertTo-Json | Set-Content \"$p\\context.json\" -Encoding UTF8",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-startup-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$r=@(Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User)\nConvertTo-Json -InputObject @{ Items=$r } -Depth 4 | Set-Content \"$p\\startup.json\" -Encoding UTF8\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; Context=[Security.Principal.WindowsIdentity]::GetCurrent().Name; Count=$r.Count } | ConvertTo-Json | Set-Content \"$p\\context.json\" -Encoding UTF8",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-startup-audit-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-startup-audit-sec-2",
+      "title": "Kiểm kê dịch vụ tự chạy mà không tắt",
+      "title_vi": "Kiểm kê dịch vụ tự chạy mà không tắt",
+      "position": 2,
+      "content": "## Kiểm kê dịch vụ tự chạy mà không tắt\n\n### Vì sao làm bước này?\nAutomatic không đồng nghĩa service đang chạy. Ghi cả StartMode, State và đường dẫn để điều tra publisher, không xóa theo tên trông lạ.\n\n### Thao tác\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-startup-audit'; Get-CimInstance Win32_Service | Where-Object StartMode -eq Auto | Select-Object Name,State,StartMode,PathName | Export-Csv \"$p\\auto-services.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\auto-services.csv\" | Select-Object -First 10\n```\n\n### Kết quả và cách tự kiểm tra\nCó dịch vụ StartMode Auto thật; trạng thái có thể Running hoặc Stopped.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\n### Câu hỏi tự giải thích\nBạn cần những bằng chứng nào trước khi tắt một dịch vụ có tên không quen thuộc?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Kiểm kê dịch vụ tự chạy mà không tắt\n\n### Vì sao làm bước này?\nAutomatic không đồng nghĩa service đang chạy. Ghi cả StartMode, State và đường dẫn để điều tra publisher, không xóa theo tên trông lạ.\n\n### Thao tác\nSettings → Apps → Startup và Task Manager → Startup apps. Chỉ quan sát. Với task, dùng taskschd.msc; với service dùng services.msc.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-startup-audit'; Get-CimInstance Win32_Service | Where-Object StartMode -eq Auto | Select-Object Name,State,StartMode,PathName | Export-Csv \"$p\\auto-services.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\auto-services.csv\" | Select-Object -First 10\n```\n\n### Kết quả và cách tự kiểm tra\nCó dịch vụ StartMode Auto thật; trạng thái có thể Running hoặc Stopped.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng msconfig Diagnostic startup trên VM từ xa: có thể tắt networking. Không tắt Azure Agent/RDP/Defender để tăng tốc.\n\n### Câu hỏi tự giải thích\nBạn cần những bằng chứng nào trước khi tắt một dịch vụ có tên không quen thuộc?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Có dịch vụ StartMode Auto thật; trạng thái có thể Running hoặc Stopped.",
+      "task_vi": "Có dịch vụ StartMode Auto thật; trạng thái có thể Running hoặc Stopped.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-startup-audit'; Get-CimInstance Win32_Service | Where-Object StartMode -eq Auto | Select-Object Name,State,StartMode,PathName | Export-Csv \"$p\\auto-services.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\auto-services.csv\" | Select-Object -First 10",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-startup-audit'; Get-CimInstance Win32_Service | Where-Object StartMode -eq Auto | Select-Object Name,State,StartMode,PathName | Export-Csv \"$p\\auto-services.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\auto-services.csv\" | Select-Object -First 10",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-startup-audit-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

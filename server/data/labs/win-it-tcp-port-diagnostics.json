@@ -1,0 +1,131 @@
+{
+  "id": "win-it-tcp-port-diagnostics",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 12,
+  "title": "Website không mở: kiểm tra TCP listener và cổng dịch vụ",
+  "title_vi": "Website không mở: kiểm tra TCP listener và cổng dịch vụ",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Mạng máy trạm",
+  "overview": "Kết nối IP không xác nhận dịch vụ ứng dụng. Phải có process đang listen đúng địa chỉ/cổng, đường đi thông và giao thức ứng dụng phù hợp.",
+  "ticket": {
+    "ticket_id": "HD-214",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Máy có mạng nhưng một ứng dụng vẫn không kết nối được."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-nettcpconnection",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-tcp-port-diagnostics-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-214: Máy có mạng nhưng một ứng dụng vẫn không kết nối được.\n\n### Mục tiêu và bản chất\nKết nối IP không xác nhận dịch vụ ứng dụng. Phải có process đang listen đúng địa chỉ/cổng, đường đi thông và giao thức ứng dụng phù hợp.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics.\n\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\n### Phạm vi và lưu ý\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-nettcpconnection](https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-nettcpconnection)\n- [Microsoft: test-netconnection](https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection)\n",
+      "content_vi": "## Ticket HD-214: Máy có mạng nhưng một ứng dụng vẫn không kết nối được.\n\n### Mục tiêu và bản chất\nKết nối IP không xác nhận dịch vụ ứng dụng. Phải có process đang listen đúng địa chỉ/cổng, đường đi thông và giao thức ứng dụng phù hợp.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics.\n\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\n### Phạm vi và lưu ý\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-nettcpconnection](https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-nettcpconnection)\n- [Microsoft: test-netconnection](https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection)\n"
+    },
+    {
+      "id": "win-it-tcp-port-diagnostics-sec-1",
+      "title": "Thực nghiệm một cổng đang mở",
+      "title_vi": "Thực nghiệm một cổng đang mở",
+      "position": 1,
+      "content": "## Thực nghiệm một cổng đang mở\n\n### Vì sao làm bước này?\nListener tồn tại trong một process rồi được đóng trong finally. Cả tạo listener và thử kết nối phải ở cùng khối lệnh để không bị mất process giữa hai lần gửi.\n\n### Thao tác\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,18081)\ntry { $listener.Start(); $c=New-Object Net.Sockets.TcpClient; try { $c.Connect('127.0.0.1',18081); [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$c.Connected } | ConvertTo-Json | Set-Content \"$p\\open.json\" -Encoding UTF8 } finally { $c.Dispose() } } finally { $listener.Stop() }\n```\n\n### Kết quả và cách tự kiểm tra\nopen.json ghi Connected=true khi listener tồn tại.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\n### Câu hỏi tự giải thích\nListen trên 127.0.0.1 khác listen trên 0.0.0.0 như thế nào?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Thực nghiệm một cổng đang mở\n\n### Vì sao làm bước này?\nListener tồn tại trong một process rồi được đóng trong finally. Cả tạo listener và thử kết nối phải ở cùng khối lệnh để không bị mất process giữa hai lần gửi.\n\n### Thao tác\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,18081)\ntry { $listener.Start(); $c=New-Object Net.Sockets.TcpClient; try { $c.Connect('127.0.0.1',18081); [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$c.Connected } | ConvertTo-Json | Set-Content \"$p\\open.json\" -Encoding UTF8 } finally { $c.Dispose() } } finally { $listener.Stop() }\n```\n\n### Kết quả và cách tự kiểm tra\nopen.json ghi Connected=true khi listener tồn tại.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\n### Câu hỏi tự giải thích\nListen trên 127.0.0.1 khác listen trên 0.0.0.0 như thế nào?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "open.json ghi Connected=true khi listener tồn tại.",
+      "task_vi": "open.json ghi Connected=true khi listener tồn tại.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,18081)\ntry { $listener.Start(); $c=New-Object Net.Sockets.TcpClient; try { $c.Connect('127.0.0.1',18081); [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$c.Connected } | ConvertTo-Json | Set-Content \"$p\\open.json\" -Encoding UTF8 } finally { $c.Dispose() } } finally { $listener.Stop() }",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,18081)\ntry { $listener.Start(); $c=New-Object Net.Sockets.TcpClient; try { $c.Connect('127.0.0.1',18081); [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$c.Connected } | ConvertTo-Json | Set-Content \"$p\\open.json\" -Encoding UTF8 } finally { $c.Dispose() } } finally { $listener.Stop() }",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-tcp-port-diagnostics-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-tcp-port-diagnostics-sec-2",
+      "title": "Thử lại khi dịch vụ đã dừng",
+      "title_vi": "Thử lại khi dịch vụ đã dừng",
+      "position": 2,
+      "content": "## Thử lại khi dịch vụ đã dừng\n\n### Vì sao làm bước này?\nCùng một địa chỉ có thể truy cập IP bình thường nhưng bị từ chối TCP khi không có listener. Đo kết quả thật, không ghi tay giá trị False.\n\n### Thao tác\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; $c=New-Object Net.Sockets.TcpClient\ntry { $ok=$false; try { $t=$c.ConnectAsync('127.0.0.1',18081); if ($t.Wait(1500)) { $ok=$c.Connected } } catch { $ok=$false }; [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$ok; Conclusion='No listener is different from DNS failure' } | ConvertTo-Json | Set-Content \"$p\\closed.json\" -Encoding UTF8 } finally { $c.Dispose() }\n```\n\n### Kết quả và cách tự kiểm tra\nclosed.json Connected=false; không còn listener trên port 18081.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\n### Câu hỏi tự giải thích\nTCP 443 mở có đảm bảo chứng chỉ TLS hoặc đăng nhập ứng dụng hợp lệ không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Thử lại khi dịch vụ đã dừng\n\n### Vì sao làm bước này?\nCùng một địa chỉ có thể truy cập IP bình thường nhưng bị từ chối TCP khi không có listener. Đo kết quả thật, không ghi tay giá trị False.\n\n### Thao tác\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; $c=New-Object Net.Sockets.TcpClient\ntry { $ok=$false; try { $t=$c.ConnectAsync('127.0.0.1',18081); if ($t.Wait(1500)) { $ok=$c.Connected } } catch { $ok=$false }; [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$ok; Conclusion='No listener is different from DNS failure' } | ConvertTo-Json | Set-Content \"$p\\closed.json\" -Encoding UTF8 } finally { $c.Dispose() }\n```\n\n### Kết quả và cách tự kiểm tra\nclosed.json Connected=false; không còn listener trên port 18081.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\n### Câu hỏi tự giải thích\nTCP 443 mở có đảm bảo chứng chỉ TLS hoặc đăng nhập ứng dụng hợp lệ không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "closed.json Connected=false; không còn listener trên port 18081.",
+      "task_vi": "closed.json Connected=false; không còn listener trên port 18081.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; $c=New-Object Net.Sockets.TcpClient\ntry { $ok=$false; try { $t=$c.ConnectAsync('127.0.0.1',18081); if ($t.Wait(1500)) { $ok=$c.Connected } } catch { $ok=$false }; [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$ok; Conclusion='No listener is different from DNS failure' } | ConvertTo-Json | Set-Content \"$p\\closed.json\" -Encoding UTF8 } finally { $c.Dispose() }",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; $c=New-Object Net.Sockets.TcpClient\ntry { $ok=$false; try { $t=$c.ConnectAsync('127.0.0.1',18081); if ($t.Wait(1500)) { $ok=$c.Connected } } catch { $ok=$false }; [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$ok; Conclusion='No listener is different from DNS failure' } | ConvertTo-Json | Set-Content \"$p\\closed.json\" -Encoding UTF8 } finally { $c.Dispose() }",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-tcp-port-diagnostics-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-tcp-port-diagnostics-sec-1",
+      "title": "Thực nghiệm một cổng đang mở",
+      "title_vi": "Thực nghiệm một cổng đang mở",
+      "position": 1,
+      "content": "## Thực nghiệm một cổng đang mở\n\n### Vì sao làm bước này?\nListener tồn tại trong một process rồi được đóng trong finally. Cả tạo listener và thử kết nối phải ở cùng khối lệnh để không bị mất process giữa hai lần gửi.\n\n### Thao tác\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,18081)\ntry { $listener.Start(); $c=New-Object Net.Sockets.TcpClient; try { $c.Connect('127.0.0.1',18081); [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$c.Connected } | ConvertTo-Json | Set-Content \"$p\\open.json\" -Encoding UTF8 } finally { $c.Dispose() } } finally { $listener.Stop() }\n```\n\n### Kết quả và cách tự kiểm tra\nopen.json ghi Connected=true khi listener tồn tại.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\n### Câu hỏi tự giải thích\nListen trên 127.0.0.1 khác listen trên 0.0.0.0 như thế nào?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Thực nghiệm một cổng đang mở\n\n### Vì sao làm bước này?\nListener tồn tại trong một process rồi được đóng trong finally. Cả tạo listener và thử kết nối phải ở cùng khối lệnh để không bị mất process giữa hai lần gửi.\n\n### Thao tác\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,18081)\ntry { $listener.Start(); $c=New-Object Net.Sockets.TcpClient; try { $c.Connect('127.0.0.1',18081); [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$c.Connected } | ConvertTo-Json | Set-Content \"$p\\open.json\" -Encoding UTF8 } finally { $c.Dispose() } } finally { $listener.Stop() }\n```\n\n### Kết quả và cách tự kiểm tra\nopen.json ghi Connected=true khi listener tồn tại.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\n### Câu hỏi tự giải thích\nListen trên 127.0.0.1 khác listen trên 0.0.0.0 như thế nào?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "open.json ghi Connected=true khi listener tồn tại.",
+      "task_vi": "open.json ghi Connected=true khi listener tồn tại.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,18081)\ntry { $listener.Start(); $c=New-Object Net.Sockets.TcpClient; try { $c.Connect('127.0.0.1',18081); [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$c.Connected } | ConvertTo-Json | Set-Content \"$p\\open.json\" -Encoding UTF8 } finally { $c.Dispose() } } finally { $listener.Stop() }",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$listener=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,18081)\ntry { $listener.Start(); $c=New-Object Net.Sockets.TcpClient; try { $c.Connect('127.0.0.1',18081); [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$c.Connected } | ConvertTo-Json | Set-Content \"$p\\open.json\" -Encoding UTF8 } finally { $c.Dispose() } } finally { $listener.Stop() }",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-tcp-port-diagnostics-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-tcp-port-diagnostics-sec-2",
+      "title": "Thử lại khi dịch vụ đã dừng",
+      "title_vi": "Thử lại khi dịch vụ đã dừng",
+      "position": 2,
+      "content": "## Thử lại khi dịch vụ đã dừng\n\n### Vì sao làm bước này?\nCùng một địa chỉ có thể truy cập IP bình thường nhưng bị từ chối TCP khi không có listener. Đo kết quả thật, không ghi tay giá trị False.\n\n### Thao tác\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; $c=New-Object Net.Sockets.TcpClient\ntry { $ok=$false; try { $t=$c.ConnectAsync('127.0.0.1',18081); if ($t.Wait(1500)) { $ok=$c.Connected } } catch { $ok=$false }; [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$ok; Conclusion='No listener is different from DNS failure' } | ConvertTo-Json | Set-Content \"$p\\closed.json\" -Encoding UTF8 } finally { $c.Dispose() }\n```\n\n### Kết quả và cách tự kiểm tra\nclosed.json Connected=false; không còn listener trên port 18081.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\n### Câu hỏi tự giải thích\nTCP 443 mở có đảm bảo chứng chỉ TLS hoặc đăng nhập ứng dụng hợp lệ không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Thử lại khi dịch vụ đã dừng\n\n### Vì sao làm bước này?\nCùng một địa chỉ có thể truy cập IP bình thường nhưng bị từ chối TCP khi không có listener. Đo kết quả thật, không ghi tay giá trị False.\n\n### Thao tác\nMở Resource Monitor bằng resmon → Network → Listening Ports. Quan sát process và địa chỉ bind; dùng listener loopback của riêng bài.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; $c=New-Object Net.Sockets.TcpClient\ntry { $ok=$false; try { $t=$c.ConnectAsync('127.0.0.1',18081); if ($t.Wait(1500)) { $ok=$c.Connected } } catch { $ok=$false }; [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$ok; Conclusion='No listener is different from DNS failure' } | ConvertTo-Json | Set-Content \"$p\\closed.json\" -Encoding UTF8 } finally { $c.Dispose() }\n```\n\n### Kết quả và cách tự kiểm tra\nclosed.json Connected=false; không còn listener trên port 18081.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nListener chỉ bind 127.0.0.1 nên không mở dịch vụ ra Internet. Không đổi RDP 3389 hoặc NSG của VM.\n\n### Câu hỏi tự giải thích\nTCP 443 mở có đảm bảo chứng chỉ TLS hoặc đăng nhập ứng dụng hợp lệ không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "closed.json Connected=false; không còn listener trên port 18081.",
+      "task_vi": "closed.json Connected=false; không còn listener trên port 18081.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; $c=New-Object Net.Sockets.TcpClient\ntry { $ok=$false; try { $t=$c.ConnectAsync('127.0.0.1',18081); if ($t.Wait(1500)) { $ok=$c.Connected } } catch { $ok=$false }; [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$ok; Conclusion='No listener is different from DNS failure' } | ConvertTo-Json | Set-Content \"$p\\closed.json\" -Encoding UTF8 } finally { $c.Dispose() }",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-tcp-port-diagnostics'; $c=New-Object Net.Sockets.TcpClient\ntry { $ok=$false; try { $t=$c.ConnectAsync('127.0.0.1',18081); if ($t.Wait(1500)) { $ok=$c.Connected } } catch { $ok=$false }; [pscustomobject]@{ Address='127.0.0.1'; Port=18081; Connected=$ok; Conclusion='No listener is different from DNS failure' } | ConvertTo-Json | Set-Content \"$p\\closed.json\" -Encoding UTF8 } finally { $c.Dispose() }",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-tcp-port-diagnostics-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

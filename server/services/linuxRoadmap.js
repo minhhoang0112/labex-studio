@@ -72,7 +72,7 @@ export function courseReadiness(courseId, labs = listLabs(), index = readLinuxIn
   const imported = listCourseLabs(courseId, labs, index);
   const availability = imported.map(lab => getLabReadiness(lab));
   const ready = availability.filter(lab => lab.can_grade).length;
-  const practice = availability.filter(lab => lab.can_start_terminal).length;
+  const practice = availability.filter(lab => lab.can_start_terminal || lab.can_start_windows).length;
   return { imported_labs_count: imported.length, runnable_labs_count: ready, practice_labs_count: practice,
     content_status: imported.length ? (!index.courses.find(c=>c.id===courseId) || imported.length === index.courses.find(c=>c.id===courseId).source_labs_count ? 'complete' : 'partial') : 'reference-only',
     source_verified_labs_count: imported.filter(lab=>lab.source_content?.status==='verified-english').length,

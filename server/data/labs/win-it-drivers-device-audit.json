@@ -1,0 +1,131 @@
+{
+  "id": "win-it-drivers-device-audit",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 22,
+  "title": "Device Manager: chẩn đoán driver và thiết bị ngoại vi",
+  "title_vi": "Device Manager: chẩn đoán driver và thiết bị ngoại vi",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Chẩn đoán hệ thống",
+  "overview": "Device Manager liên kết thiết bị với driver và mã lỗi. VM có phần cứng ảo nên không thay thế kiểm thử cáp USB, máy in vật lý hay Wi-Fi trên laptop.",
+  "ticket": {
+    "ticket_id": "HD-218",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Chuột, âm thanh hoặc thiết bị ngoại vi không hoạt động sau cập nhật."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/install/using-device-manager",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/windows-device-and-driver-management-overview",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-drivers-device-audit-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-218: Chuột, âm thanh hoặc thiết bị ngoại vi không hoạt động sau cập nhật.\n\n### Mục tiêu và bản chất\nDevice Manager liên kết thiết bị với driver và mã lỗi. VM có phần cứng ảo nên không thay thế kiểm thử cáp USB, máy in vật lý hay Wi-Fi trên laptop.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-drivers-device-audit.\n\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\n### Phạm vi và lưu ý\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: using-device-manager](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/using-device-manager)\n- [Microsoft: windows-device-and-driver-management-overview](https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/windows-device-and-driver-management-overview)\n",
+      "content_vi": "## Ticket HD-218: Chuột, âm thanh hoặc thiết bị ngoại vi không hoạt động sau cập nhật.\n\n### Mục tiêu và bản chất\nDevice Manager liên kết thiết bị với driver và mã lỗi. VM có phần cứng ảo nên không thay thế kiểm thử cáp USB, máy in vật lý hay Wi-Fi trên laptop.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-drivers-device-audit.\n\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\n### Phạm vi và lưu ý\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: using-device-manager](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/using-device-manager)\n- [Microsoft: windows-device-and-driver-management-overview](https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/windows-device-and-driver-management-overview)\n"
+    },
+    {
+      "id": "win-it-drivers-device-audit-sec-1",
+      "title": "Kiểm kê PnP và mã lỗi",
+      "title_vi": "Kiểm kê PnP và mã lỗi",
+      "position": 1,
+      "content": "## Kiểm kê PnP và mã lỗi\n\n### Vì sao làm bước này?\nConfigManagerErrorCode=0 nghĩa không có lỗi cấu hình được báo tại thời điểm đọc, không bảo đảm thiết bị vật lý hoạt động hoàn hảo.\n\n### Thao tác\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-CimInstance Win32_PnPEntity | Select-Object Name,PNPDeviceID,ConfigManagerErrorCode | Export-Csv \"$p\\devices.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\devices.csv\" | Select-Object -First 10\n```\n\n### Kết quả và cách tự kiểm tra\ndevices.csv có PNPDeviceID thật và mã trạng thái; không cần tạo lỗi driver để đạt bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\n### Câu hỏi tự giải thích\nBạn kiểm tra gì trước khi rollback driver thiết bị đang dùng cho kết nối từ xa?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Kiểm kê PnP và mã lỗi\n\n### Vì sao làm bước này?\nConfigManagerErrorCode=0 nghĩa không có lỗi cấu hình được báo tại thời điểm đọc, không bảo đảm thiết bị vật lý hoạt động hoàn hảo.\n\n### Thao tác\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-CimInstance Win32_PnPEntity | Select-Object Name,PNPDeviceID,ConfigManagerErrorCode | Export-Csv \"$p\\devices.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\devices.csv\" | Select-Object -First 10\n```\n\n### Kết quả và cách tự kiểm tra\ndevices.csv có PNPDeviceID thật và mã trạng thái; không cần tạo lỗi driver để đạt bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\n### Câu hỏi tự giải thích\nBạn kiểm tra gì trước khi rollback driver thiết bị đang dùng cho kết nối từ xa?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "devices.csv có PNPDeviceID thật và mã trạng thái; không cần tạo lỗi driver để đạt bài.",
+      "task_vi": "devices.csv có PNPDeviceID thật và mã trạng thái; không cần tạo lỗi driver để đạt bài.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-CimInstance Win32_PnPEntity | Select-Object Name,PNPDeviceID,ConfigManagerErrorCode | Export-Csv \"$p\\devices.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\devices.csv\" | Select-Object -First 10",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-CimInstance Win32_PnPEntity | Select-Object Name,PNPDeviceID,ConfigManagerErrorCode | Export-Csv \"$p\\devices.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\devices.csv\" | Select-Object -First 10",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-drivers-device-audit-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-drivers-device-audit-sec-2",
+      "title": "Ghi publisher và phiên bản driver",
+      "title_vi": "Ghi publisher và phiên bản driver",
+      "position": 2,
+      "content": "## Ghi publisher và phiên bản driver\n\n### Vì sao làm bước này?\nMốc driver version, signer và DeviceID giúp so sánh trước/sau update. Chỉ số IsSigned không thay cho việc kiểm tra nguồn tải và mức phù hợp thiết bị.\n\n### Thao tác\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; Get-CimInstance Win32_PnPSignedDriver | Select-Object -First 30 DeviceID,DeviceName,DriverVersion,DriverProviderName,IsSigned | Export-Csv \"$p\\drivers.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\drivers.csv\" | Select-Object -First 5\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo có driver version và DeviceID đối chiếu được trên VM.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\n### Câu hỏi tự giải thích\nNếu VM không có Wi-Fi hardware, tại sao bạn không thể thực nghiệm lỗi sóng Wi-Fi thật trong bài này?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Ghi publisher và phiên bản driver\n\n### Vì sao làm bước này?\nMốc driver version, signer và DeviceID giúp so sánh trước/sau update. Chỉ số IsSigned không thay cho việc kiểm tra nguồn tải và mức phù hợp thiết bị.\n\n### Thao tác\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; Get-CimInstance Win32_PnPSignedDriver | Select-Object -First 30 DeviceID,DeviceName,DriverVersion,DriverProviderName,IsSigned | Export-Csv \"$p\\drivers.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\drivers.csv\" | Select-Object -First 5\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo có driver version và DeviceID đối chiếu được trên VM.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\n### Câu hỏi tự giải thích\nNếu VM không có Wi-Fi hardware, tại sao bạn không thể thực nghiệm lỗi sóng Wi-Fi thật trong bài này?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Báo cáo có driver version và DeviceID đối chiếu được trên VM.",
+      "task_vi": "Báo cáo có driver version và DeviceID đối chiếu được trên VM.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; Get-CimInstance Win32_PnPSignedDriver | Select-Object -First 30 DeviceID,DeviceName,DriverVersion,DriverProviderName,IsSigned | Export-Csv \"$p\\drivers.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\drivers.csv\" | Select-Object -First 5",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; Get-CimInstance Win32_PnPSignedDriver | Select-Object -First 30 DeviceID,DeviceName,DriverVersion,DriverProviderName,IsSigned | Export-Csv \"$p\\drivers.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\drivers.csv\" | Select-Object -First 5",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-drivers-device-audit-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-drivers-device-audit-sec-1",
+      "title": "Kiểm kê PnP và mã lỗi",
+      "title_vi": "Kiểm kê PnP và mã lỗi",
+      "position": 1,
+      "content": "## Kiểm kê PnP và mã lỗi\n\n### Vì sao làm bước này?\nConfigManagerErrorCode=0 nghĩa không có lỗi cấu hình được báo tại thời điểm đọc, không bảo đảm thiết bị vật lý hoạt động hoàn hảo.\n\n### Thao tác\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-CimInstance Win32_PnPEntity | Select-Object Name,PNPDeviceID,ConfigManagerErrorCode | Export-Csv \"$p\\devices.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\devices.csv\" | Select-Object -First 10\n```\n\n### Kết quả và cách tự kiểm tra\ndevices.csv có PNPDeviceID thật và mã trạng thái; không cần tạo lỗi driver để đạt bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\n### Câu hỏi tự giải thích\nBạn kiểm tra gì trước khi rollback driver thiết bị đang dùng cho kết nối từ xa?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Kiểm kê PnP và mã lỗi\n\n### Vì sao làm bước này?\nConfigManagerErrorCode=0 nghĩa không có lỗi cấu hình được báo tại thời điểm đọc, không bảo đảm thiết bị vật lý hoạt động hoàn hảo.\n\n### Thao tác\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-CimInstance Win32_PnPEntity | Select-Object Name,PNPDeviceID,ConfigManagerErrorCode | Export-Csv \"$p\\devices.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\devices.csv\" | Select-Object -First 10\n```\n\n### Kết quả và cách tự kiểm tra\ndevices.csv có PNPDeviceID thật và mã trạng thái; không cần tạo lỗi driver để đạt bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\n### Câu hỏi tự giải thích\nBạn kiểm tra gì trước khi rollback driver thiết bị đang dùng cho kết nối từ xa?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "devices.csv có PNPDeviceID thật và mã trạng thái; không cần tạo lỗi driver để đạt bài.",
+      "task_vi": "devices.csv có PNPDeviceID thật và mã trạng thái; không cần tạo lỗi driver để đạt bài.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-CimInstance Win32_PnPEntity | Select-Object Name,PNPDeviceID,ConfigManagerErrorCode | Export-Csv \"$p\\devices.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\devices.csv\" | Select-Object -First 10",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-CimInstance Win32_PnPEntity | Select-Object Name,PNPDeviceID,ConfigManagerErrorCode | Export-Csv \"$p\\devices.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\devices.csv\" | Select-Object -First 10",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-drivers-device-audit-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-drivers-device-audit-sec-2",
+      "title": "Ghi publisher và phiên bản driver",
+      "title_vi": "Ghi publisher và phiên bản driver",
+      "position": 2,
+      "content": "## Ghi publisher và phiên bản driver\n\n### Vì sao làm bước này?\nMốc driver version, signer và DeviceID giúp so sánh trước/sau update. Chỉ số IsSigned không thay cho việc kiểm tra nguồn tải và mức phù hợp thiết bị.\n\n### Thao tác\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; Get-CimInstance Win32_PnPSignedDriver | Select-Object -First 30 DeviceID,DeviceName,DriverVersion,DriverProviderName,IsSigned | Export-Csv \"$p\\drivers.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\drivers.csv\" | Select-Object -First 5\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo có driver version và DeviceID đối chiếu được trên VM.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\n### Câu hỏi tự giải thích\nNếu VM không có Wi-Fi hardware, tại sao bạn không thể thực nghiệm lỗi sóng Wi-Fi thật trong bài này?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Ghi publisher và phiên bản driver\n\n### Vì sao làm bước này?\nMốc driver version, signer và DeviceID giúp so sánh trước/sau update. Chỉ số IsSigned không thay cho việc kiểm tra nguồn tải và mức phù hợp thiết bị.\n\n### Thao tác\nWin+R → devmgmt.msc; mở Properties thiết bị → General, Driver, Details → Hardware Ids. Ghi mã lỗi thay vì chỉ ghi “tam giác vàng”.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; Get-CimInstance Win32_PnPSignedDriver | Select-Object -First 30 DeviceID,DeviceName,DriverVersion,DriverProviderName,IsSigned | Export-Csv \"$p\\drivers.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\drivers.csv\" | Select-Object -First 5\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo có driver version và DeviceID đối chiếu được trên VM.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông uninstall NIC, controller ổ đĩa hoặc display adapter của VM đang học. Không tải driver từ website tổng hợp không rõ publisher.\n\n### Câu hỏi tự giải thích\nNếu VM không có Wi-Fi hardware, tại sao bạn không thể thực nghiệm lỗi sóng Wi-Fi thật trong bài này?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Báo cáo có driver version và DeviceID đối chiếu được trên VM.",
+      "task_vi": "Báo cáo có driver version và DeviceID đối chiếu được trên VM.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; Get-CimInstance Win32_PnPSignedDriver | Select-Object -First 30 DeviceID,DeviceName,DriverVersion,DriverProviderName,IsSigned | Export-Csv \"$p\\drivers.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\drivers.csv\" | Select-Object -First 5",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-drivers-device-audit'; Get-CimInstance Win32_PnPSignedDriver | Select-Object -First 30 DeviceID,DeviceName,DriverVersion,DriverProviderName,IsSigned | Export-Csv \"$p\\drivers.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\drivers.csv\" | Select-Object -First 5",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-drivers-device-audit-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

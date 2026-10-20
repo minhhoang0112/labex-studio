@@ -1,0 +1,132 @@
+{
+  "id": "win-it-file-extension-fix",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 3,
+  "title": "Tệp CSV không mở đúng: phần mở rộng kép và dữ liệu",
+  "title_vi": "Tệp CSV không mở đúng: phần mở rộng kép và dữ liệu",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Nền tảng Helpdesk",
+  "overview": "Tên hiển thị, phần mở rộng và nội dung là ba thứ khác nhau. Đổi tên không chuyển đổi định dạng. Lab nạp một tệp CSV hợp lệ nhưng mang đuôi .csv.txt.",
+  "ticket": {
+    "ticket_id": "HD-202",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Kế toán nhận invoice.csv nhưng Windows nhận là Text Document."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ren",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/import-csv",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "fault-injection",
+  "sections": [
+    {
+      "id": "win-it-file-extension-fix-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-202: Kế toán nhận invoice.csv nhưng Windows nhận là Text Document.\n\n### Mục tiêu và bản chất\nTên hiển thị, phần mở rộng và nội dung là ba thứ khác nhau. Đổi tên không chuyển đổi định dạng. Lab nạp một tệp CSV hợp lệ nhưng mang đuôi .csv.txt.\n\n### Cách làm trên CLIENT01\nBài có **nạp lỗi thật trong vùng riêng của lab**. Bấm Chuẩn bị sự cố, chờ thành công rồi Kết nối lại Desktop. Làm bước chẩn đoán trước khi sửa. Sau khi chấm, bấm Hoàn nguyên kịch bản trước khi sang bài khác.\n\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\n### Phạm vi và lưu ý\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: ren](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ren)\n- [Microsoft: import-csv](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/import-csv)\n",
+      "content_vi": "## Ticket HD-202: Kế toán nhận invoice.csv nhưng Windows nhận là Text Document.\n\n### Mục tiêu và bản chất\nTên hiển thị, phần mở rộng và nội dung là ba thứ khác nhau. Đổi tên không chuyển đổi định dạng. Lab nạp một tệp CSV hợp lệ nhưng mang đuôi .csv.txt.\n\n### Cách làm trên CLIENT01\nBài có **nạp lỗi thật trong vùng riêng của lab**. Bấm Chuẩn bị sự cố, chờ thành công rồi Kết nối lại Desktop. Làm bước chẩn đoán trước khi sửa. Sau khi chấm, bấm Hoàn nguyên kịch bản trước khi sang bài khác.\n\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\n### Phạm vi và lưu ý\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: ren](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ren)\n- [Microsoft: import-csv](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/import-csv)\n"
+    },
+    {
+      "id": "win-it-file-extension-fix-sec-1",
+      "title": "Nhìn tên đầy đủ và đọc nội dung",
+      "title_vi": "Nhìn tên đầy đủ và đọc nội dung",
+      "position": 1,
+      "content": "## Nhìn tên đầy đủ và đọc nội dung\n\n### Vì sao làm bước này?\nSau khi bấm Chuẩn bị sự cố và kết nối lại Desktop, tệp mẫu phải tồn tại với đuôi .csv.txt. Việc ẩn phần mở rộng có thể làm người dùng không nhận ra tên kép.\n\n### Thao tác\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ChildItem 'C:\\LabEx\\PracticeFaults\\extension' -File | Select-Object Name,Extension,Length; Get-Content 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nTên thật invoice.csv.txt; nội dung có cột Item,Quantity và hai dòng hàng hóa.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\n### Câu hỏi tự giải thích\nVì sao invoice.csv.exe nguy hiểm dù File Explorer hiển thị thiếu đuôi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Nhìn tên đầy đủ và đọc nội dung\n\n### Vì sao làm bước này?\nSau khi bấm Chuẩn bị sự cố và kết nối lại Desktop, tệp mẫu phải tồn tại với đuôi .csv.txt. Việc ẩn phần mở rộng có thể làm người dùng không nhận ra tên kép.\n\n### Thao tác\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ChildItem 'C:\\LabEx\\PracticeFaults\\extension' -File | Select-Object Name,Extension,Length; Get-Content 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nTên thật invoice.csv.txt; nội dung có cột Item,Quantity và hai dòng hàng hóa.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\n### Câu hỏi tự giải thích\nVì sao invoice.csv.exe nguy hiểm dù File Explorer hiển thị thiếu đuôi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Tên thật invoice.csv.txt; nội dung có cột Item,Quantity và hai dòng hàng hóa.",
+      "task_vi": "Tên thật invoice.csv.txt; nội dung có cột Item,Quantity và hai dòng hàng hóa.",
+      "hint": "Get-ChildItem 'C:\\LabEx\\PracticeFaults\\extension' -File | Select-Object Name,Extension,Length; Get-Content 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'",
+      "hint_vi": "Get-ChildItem 'C:\\LabEx\\PracticeFaults\\extension' -File | Select-Object Name,Extension,Length; Get-Content 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-file-extension-fix-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-file-extension-fix-sec-2",
+      "title": "Sửa tên rồi kiểm tra dữ liệu thật",
+      "title_vi": "Sửa tên rồi kiểm tra dữ liệu thật",
+      "position": 2,
+      "content": "## Sửa tên rồi kiểm tra dữ liệu thật\n\n### Vì sao làm bước này?\nChỉ bỏ đuôi .txt vì nội dung đã là CSV. Sau thao tác phải đọc được hai bản ghi, không chỉ nhìn biểu tượng. Bấm Kiểm tra kết quả khi tên và nội dung đã đúng.\n\n### Thao tác\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nRename-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt' -NewName 'invoice.csv'; Import-Csv 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv' | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nHai bản ghi Keyboard/2 và Mouse/3. Hoàn nguyên kịch bản khi xong để chuyển bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\n### Câu hỏi tự giải thích\nNếu nội dung thật là XLSX, đổi đuôi sang CSV có tạo ra CSV hợp lệ không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Sửa tên rồi kiểm tra dữ liệu thật\n\n### Vì sao làm bước này?\nChỉ bỏ đuôi .txt vì nội dung đã là CSV. Sau thao tác phải đọc được hai bản ghi, không chỉ nhìn biểu tượng. Bấm Kiểm tra kết quả khi tên và nội dung đã đúng.\n\n### Thao tác\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nRename-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt' -NewName 'invoice.csv'; Import-Csv 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv' | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nHai bản ghi Keyboard/2 và Mouse/3. Hoàn nguyên kịch bản khi xong để chuyển bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\n### Câu hỏi tự giải thích\nNếu nội dung thật là XLSX, đổi đuôi sang CSV có tạo ra CSV hợp lệ không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai bản ghi Keyboard/2 và Mouse/3. Hoàn nguyên kịch bản khi xong để chuyển bài.",
+      "task_vi": "Hai bản ghi Keyboard/2 và Mouse/3. Hoàn nguyên kịch bản khi xong để chuyển bài.",
+      "hint": "Rename-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt' -NewName 'invoice.csv'; Import-Csv 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv' | Format-Table",
+      "hint_vi": "Rename-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt' -NewName 'invoice.csv'; Import-Csv 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv' | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-file-extension-fix-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-file-extension-fix-sec-1",
+      "title": "Nhìn tên đầy đủ và đọc nội dung",
+      "title_vi": "Nhìn tên đầy đủ và đọc nội dung",
+      "position": 1,
+      "content": "## Nhìn tên đầy đủ và đọc nội dung\n\n### Vì sao làm bước này?\nSau khi bấm Chuẩn bị sự cố và kết nối lại Desktop, tệp mẫu phải tồn tại với đuôi .csv.txt. Việc ẩn phần mở rộng có thể làm người dùng không nhận ra tên kép.\n\n### Thao tác\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ChildItem 'C:\\LabEx\\PracticeFaults\\extension' -File | Select-Object Name,Extension,Length; Get-Content 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nTên thật invoice.csv.txt; nội dung có cột Item,Quantity và hai dòng hàng hóa.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\n### Câu hỏi tự giải thích\nVì sao invoice.csv.exe nguy hiểm dù File Explorer hiển thị thiếu đuôi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Nhìn tên đầy đủ và đọc nội dung\n\n### Vì sao làm bước này?\nSau khi bấm Chuẩn bị sự cố và kết nối lại Desktop, tệp mẫu phải tồn tại với đuôi .csv.txt. Việc ẩn phần mở rộng có thể làm người dùng không nhận ra tên kép.\n\n### Thao tác\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ChildItem 'C:\\LabEx\\PracticeFaults\\extension' -File | Select-Object Name,Extension,Length; Get-Content 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nTên thật invoice.csv.txt; nội dung có cột Item,Quantity và hai dòng hàng hóa.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\n### Câu hỏi tự giải thích\nVì sao invoice.csv.exe nguy hiểm dù File Explorer hiển thị thiếu đuôi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Tên thật invoice.csv.txt; nội dung có cột Item,Quantity và hai dòng hàng hóa.",
+      "task_vi": "Tên thật invoice.csv.txt; nội dung có cột Item,Quantity và hai dòng hàng hóa.",
+      "hint": "Get-ChildItem 'C:\\LabEx\\PracticeFaults\\extension' -File | Select-Object Name,Extension,Length; Get-Content 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'",
+      "hint_vi": "Get-ChildItem 'C:\\LabEx\\PracticeFaults\\extension' -File | Select-Object Name,Extension,Length; Get-Content 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-file-extension-fix-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-file-extension-fix-sec-2",
+      "title": "Sửa tên rồi kiểm tra dữ liệu thật",
+      "title_vi": "Sửa tên rồi kiểm tra dữ liệu thật",
+      "position": 2,
+      "content": "## Sửa tên rồi kiểm tra dữ liệu thật\n\n### Vì sao làm bước này?\nChỉ bỏ đuôi .txt vì nội dung đã là CSV. Sau thao tác phải đọc được hai bản ghi, không chỉ nhìn biểu tượng. Bấm Kiểm tra kết quả khi tên và nội dung đã đúng.\n\n### Thao tác\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nRename-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt' -NewName 'invoice.csv'; Import-Csv 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv' | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nHai bản ghi Keyboard/2 và Mouse/3. Hoàn nguyên kịch bản khi xong để chuyển bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\n### Câu hỏi tự giải thích\nNếu nội dung thật là XLSX, đổi đuôi sang CSV có tạo ra CSV hợp lệ không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Sửa tên rồi kiểm tra dữ liệu thật\n\n### Vì sao làm bước này?\nChỉ bỏ đuôi .txt vì nội dung đã là CSV. Sau thao tác phải đọc được hai bản ghi, không chỉ nhìn biểu tượng. Bấm Kiểm tra kết quả khi tên và nội dung đã đúng.\n\n### Thao tác\nFile Explorer → View → Show → File name extensions. Mở C:\\LabEx\\PracticeFaults\\extension, xem Properties và mở bằng Notepad trước khi đổi tên.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nRename-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt' -NewName 'invoice.csv'; Import-Csv 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv' | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nHai bản ghi Keyboard/2 và Mouse/3. Hoàn nguyên kịch bản khi xong để chuyển bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông thử mở tệp lạ bằng cách tắt kiểm tra bảo mật. Không đổi hàng loạt phần mở rộng chỉ để làm biểu tượng đẹp hơn.\n\n### Câu hỏi tự giải thích\nNếu nội dung thật là XLSX, đổi đuôi sang CSV có tạo ra CSV hợp lệ không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai bản ghi Keyboard/2 và Mouse/3. Hoàn nguyên kịch bản khi xong để chuyển bài.",
+      "task_vi": "Hai bản ghi Keyboard/2 và Mouse/3. Hoàn nguyên kịch bản khi xong để chuyển bài.",
+      "hint": "Rename-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt' -NewName 'invoice.csv'; Import-Csv 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv' | Format-Table",
+      "hint_vi": "Rename-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt' -NewName 'invoice.csv'; Import-Csv 'C:\\LabEx\\PracticeFaults\\extension\\invoice.csv' | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-file-extension-fix-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ],
+  "fault_scenario": "extension"
+}

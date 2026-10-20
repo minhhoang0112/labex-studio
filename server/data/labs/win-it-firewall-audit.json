@@ -1,0 +1,131 @@
+{
+  "id": "win-it-firewall-audit",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 13,
+  "title": "Chẩn đoán Windows Firewall mà không tắt bảo vệ",
+  "title_vi": "Chẩn đoán Windows Firewall mà không tắt bảo vệ",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Mạng máy trạm",
+  "overview": "Đọc profile và rule theo chiều Inbound/Outbound, protocol, port và phạm vi địa chỉ. Không suy luận chỉ từ tên rule.",
+  "ticket": {
+    "ticket_id": "HD-215",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Ứng dụng không kết nối; người dùng đề nghị tắt Firewall toàn máy."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/netsecurity/get-netfirewallrule",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/netsecurity/get-netfirewallprofile",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-firewall-audit-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-215: Ứng dụng không kết nối; người dùng đề nghị tắt Firewall toàn máy.\n\n### Mục tiêu và bản chất\nĐọc profile và rule theo chiều Inbound/Outbound, protocol, port và phạm vi địa chỉ. Không suy luận chỉ từ tên rule.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-firewall-audit.\n\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\n### Phạm vi và lưu ý\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-netfirewallrule](https://learn.microsoft.com/en-us/powershell/module/netsecurity/get-netfirewallrule)\n- [Microsoft: get-netfirewallprofile](https://learn.microsoft.com/en-us/powershell/module/netsecurity/get-netfirewallprofile)\n",
+      "content_vi": "## Ticket HD-215: Ứng dụng không kết nối; người dùng đề nghị tắt Firewall toàn máy.\n\n### Mục tiêu và bản chất\nĐọc profile và rule theo chiều Inbound/Outbound, protocol, port và phạm vi địa chỉ. Không suy luận chỉ từ tên rule.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-firewall-audit.\n\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\n### Phạm vi và lưu ý\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-netfirewallrule](https://learn.microsoft.com/en-us/powershell/module/netsecurity/get-netfirewallrule)\n- [Microsoft: get-netfirewallprofile](https://learn.microsoft.com/en-us/powershell/module/netsecurity/get-netfirewallprofile)\n"
+    },
+    {
+      "id": "win-it-firewall-audit-sec-1",
+      "title": "Ghi trạng thái từng profile",
+      "title_vi": "Ghi trạng thái từng profile",
+      "position": 1,
+      "content": "## Ghi trạng thái từng profile\n\n### Vì sao làm bước này?\nDomain, Private và Public có cấu hình khác nhau. Trạng thái profile không trực tiếp cho biết NIC đang dùng profile nào; cần đọc thêm Get-NetConnectionProfile.\n\n### Thao tác\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-firewall-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction | Export-Csv \"$p\\profiles.csv\" -NoTypeInformation\nGet-NetConnectionProfile | Format-Table; Import-Csv \"$p\\profiles.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo ba profile; trường Enabled khớp máy hiện tại. Không cần tắt profile nào để đạt bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\n### Câu hỏi tự giải thích\nVì sao rule chỉ bật cho Private có thể không áp dụng trên mạng Public?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Ghi trạng thái từng profile\n\n### Vì sao làm bước này?\nDomain, Private và Public có cấu hình khác nhau. Trạng thái profile không trực tiếp cho biết NIC đang dùng profile nào; cần đọc thêm Get-NetConnectionProfile.\n\n### Thao tác\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-firewall-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction | Export-Csv \"$p\\profiles.csv\" -NoTypeInformation\nGet-NetConnectionProfile | Format-Table; Import-Csv \"$p\\profiles.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo ba profile; trường Enabled khớp máy hiện tại. Không cần tắt profile nào để đạt bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\n### Câu hỏi tự giải thích\nVì sao rule chỉ bật cho Private có thể không áp dụng trên mạng Public?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Báo cáo ba profile; trường Enabled khớp máy hiện tại. Không cần tắt profile nào để đạt bài.",
+      "task_vi": "Báo cáo ba profile; trường Enabled khớp máy hiện tại. Không cần tắt profile nào để đạt bài.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-firewall-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction | Export-Csv \"$p\\profiles.csv\" -NoTypeInformation\nGet-NetConnectionProfile | Format-Table; Import-Csv \"$p\\profiles.csv\" | Format-Table",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-firewall-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction | Export-Csv \"$p\\profiles.csv\" -NoTypeInformation\nGet-NetConnectionProfile | Format-Table; Import-Csv \"$p\\profiles.csv\" | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-firewall-audit-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-firewall-audit-sec-2",
+      "title": "Tách rule và bộ lọc port",
+      "title_vi": "Tách rule và bộ lọc port",
+      "position": 2,
+      "content": "## Tách rule và bộ lọc port\n\n### Vì sao làm bước này?\nCmdlet Get-NetFirewallRule không hiển thị tất cả điều kiện port trực tiếp. Kết hợp PortFilter để điều tra, không sửa rule dựa vào DisplayName được dịch.\n\n### Thao tác\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-firewall-audit'\nGet-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | ForEach-Object { $r=$_; $f=$r | Get-NetFirewallPortFilter; [pscustomobject]@{ Name=$r.Name; Direction=[string]$r.Direction; Action=[string]$r.Action; Protocol=[string]$f.Protocol; LocalPort=[string]$f.LocalPort } } | Export-Csv \"$p\\rdp-rule.csv\" -NoTypeInformation\nImport-Csv \"$p\\rdp-rule.csv\" | Format-List\n```\n\n### Kết quả và cách tự kiểm tra\nRule RDP inbound có protocol TCP và local port 3389; đây chỉ là quan sát một rule, không kết luận toàn bộ effective policy.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\n### Câu hỏi tự giải thích\nNgoài Windows Firewall, Azure còn lớp nào có thể chặn kết nối từ Internet?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tách rule và bộ lọc port\n\n### Vì sao làm bước này?\nCmdlet Get-NetFirewallRule không hiển thị tất cả điều kiện port trực tiếp. Kết hợp PortFilter để điều tra, không sửa rule dựa vào DisplayName được dịch.\n\n### Thao tác\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-firewall-audit'\nGet-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | ForEach-Object { $r=$_; $f=$r | Get-NetFirewallPortFilter; [pscustomobject]@{ Name=$r.Name; Direction=[string]$r.Direction; Action=[string]$r.Action; Protocol=[string]$f.Protocol; LocalPort=[string]$f.LocalPort } } | Export-Csv \"$p\\rdp-rule.csv\" -NoTypeInformation\nImport-Csv \"$p\\rdp-rule.csv\" | Format-List\n```\n\n### Kết quả và cách tự kiểm tra\nRule RDP inbound có protocol TCP và local port 3389; đây chỉ là quan sát một rule, không kết luận toàn bộ effective policy.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\n### Câu hỏi tự giải thích\nNgoài Windows Firewall, Azure còn lớp nào có thể chặn kết nối từ Internet?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Rule RDP inbound có protocol TCP và local port 3389; đây chỉ là quan sát một rule, không kết luận toàn bộ effective policy.",
+      "task_vi": "Rule RDP inbound có protocol TCP và local port 3389; đây chỉ là quan sát một rule, không kết luận toàn bộ effective policy.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-firewall-audit'\nGet-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | ForEach-Object { $r=$_; $f=$r | Get-NetFirewallPortFilter; [pscustomobject]@{ Name=$r.Name; Direction=[string]$r.Direction; Action=[string]$r.Action; Protocol=[string]$f.Protocol; LocalPort=[string]$f.LocalPort } } | Export-Csv \"$p\\rdp-rule.csv\" -NoTypeInformation\nImport-Csv \"$p\\rdp-rule.csv\" | Format-List",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-firewall-audit'\nGet-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | ForEach-Object { $r=$_; $f=$r | Get-NetFirewallPortFilter; [pscustomobject]@{ Name=$r.Name; Direction=[string]$r.Direction; Action=[string]$r.Action; Protocol=[string]$f.Protocol; LocalPort=[string]$f.LocalPort } } | Export-Csv \"$p\\rdp-rule.csv\" -NoTypeInformation\nImport-Csv \"$p\\rdp-rule.csv\" | Format-List",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-firewall-audit-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-firewall-audit-sec-1",
+      "title": "Ghi trạng thái từng profile",
+      "title_vi": "Ghi trạng thái từng profile",
+      "position": 1,
+      "content": "## Ghi trạng thái từng profile\n\n### Vì sao làm bước này?\nDomain, Private và Public có cấu hình khác nhau. Trạng thái profile không trực tiếp cho biết NIC đang dùng profile nào; cần đọc thêm Get-NetConnectionProfile.\n\n### Thao tác\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-firewall-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction | Export-Csv \"$p\\profiles.csv\" -NoTypeInformation\nGet-NetConnectionProfile | Format-Table; Import-Csv \"$p\\profiles.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo ba profile; trường Enabled khớp máy hiện tại. Không cần tắt profile nào để đạt bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\n### Câu hỏi tự giải thích\nVì sao rule chỉ bật cho Private có thể không áp dụng trên mạng Public?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Ghi trạng thái từng profile\n\n### Vì sao làm bước này?\nDomain, Private và Public có cấu hình khác nhau. Trạng thái profile không trực tiếp cho biết NIC đang dùng profile nào; cần đọc thêm Get-NetConnectionProfile.\n\n### Thao tác\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-firewall-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction | Export-Csv \"$p\\profiles.csv\" -NoTypeInformation\nGet-NetConnectionProfile | Format-Table; Import-Csv \"$p\\profiles.csv\" | Format-Table\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo ba profile; trường Enabled khớp máy hiện tại. Không cần tắt profile nào để đạt bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\n### Câu hỏi tự giải thích\nVì sao rule chỉ bật cho Private có thể không áp dụng trên mạng Public?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Báo cáo ba profile; trường Enabled khớp máy hiện tại. Không cần tắt profile nào để đạt bài.",
+      "task_vi": "Báo cáo ba profile; trường Enabled khớp máy hiện tại. Không cần tắt profile nào để đạt bài.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-firewall-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction | Export-Csv \"$p\\profiles.csv\" -NoTypeInformation\nGet-NetConnectionProfile | Format-Table; Import-Csv \"$p\\profiles.csv\" | Format-Table",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-firewall-audit'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,DefaultOutboundAction | Export-Csv \"$p\\profiles.csv\" -NoTypeInformation\nGet-NetConnectionProfile | Format-Table; Import-Csv \"$p\\profiles.csv\" | Format-Table",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-firewall-audit-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-firewall-audit-sec-2",
+      "title": "Tách rule và bộ lọc port",
+      "title_vi": "Tách rule và bộ lọc port",
+      "position": 2,
+      "content": "## Tách rule và bộ lọc port\n\n### Vì sao làm bước này?\nCmdlet Get-NetFirewallRule không hiển thị tất cả điều kiện port trực tiếp. Kết hợp PortFilter để điều tra, không sửa rule dựa vào DisplayName được dịch.\n\n### Thao tác\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-firewall-audit'\nGet-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | ForEach-Object { $r=$_; $f=$r | Get-NetFirewallPortFilter; [pscustomobject]@{ Name=$r.Name; Direction=[string]$r.Direction; Action=[string]$r.Action; Protocol=[string]$f.Protocol; LocalPort=[string]$f.LocalPort } } | Export-Csv \"$p\\rdp-rule.csv\" -NoTypeInformation\nImport-Csv \"$p\\rdp-rule.csv\" | Format-List\n```\n\n### Kết quả và cách tự kiểm tra\nRule RDP inbound có protocol TCP và local port 3389; đây chỉ là quan sát một rule, không kết luận toàn bộ effective policy.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\n### Câu hỏi tự giải thích\nNgoài Windows Firewall, Azure còn lớp nào có thể chặn kết nối từ Internet?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tách rule và bộ lọc port\n\n### Vì sao làm bước này?\nCmdlet Get-NetFirewallRule không hiển thị tất cả điều kiện port trực tiếp. Kết hợp PortFilter để điều tra, không sửa rule dựa vào DisplayName được dịch.\n\n### Thao tác\nWin+R → wf.msc → Windows Defender Firewall Properties rồi Inbound/Outbound Rules. Chỉ quan sát rule Remote Desktop, không disable.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-firewall-audit'\nGet-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | ForEach-Object { $r=$_; $f=$r | Get-NetFirewallPortFilter; [pscustomobject]@{ Name=$r.Name; Direction=[string]$r.Direction; Action=[string]$r.Action; Protocol=[string]$f.Protocol; LocalPort=[string]$f.LocalPort } } | Export-Csv \"$p\\rdp-rule.csv\" -NoTypeInformation\nImport-Csv \"$p\\rdp-rule.csv\" | Format-List\n```\n\n### Kết quả và cách tự kiểm tra\nRule RDP inbound có protocol TCP và local port 3389; đây chỉ là quan sát một rule, không kết luận toàn bộ effective policy.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nBài này kiểm kê, không nạp lỗi Firewall. Tắt toàn bộ Firewall có thể mở dịch vụ không liên quan và không xác định được rule gây lỗi.\n\n### Câu hỏi tự giải thích\nNgoài Windows Firewall, Azure còn lớp nào có thể chặn kết nối từ Internet?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Rule RDP inbound có protocol TCP và local port 3389; đây chỉ là quan sát một rule, không kết luận toàn bộ effective policy.",
+      "task_vi": "Rule RDP inbound có protocol TCP và local port 3389; đây chỉ là quan sát một rule, không kết luận toàn bộ effective policy.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-firewall-audit'\nGet-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | ForEach-Object { $r=$_; $f=$r | Get-NetFirewallPortFilter; [pscustomobject]@{ Name=$r.Name; Direction=[string]$r.Direction; Action=[string]$r.Action; Protocol=[string]$f.Protocol; LocalPort=[string]$f.LocalPort } } | Export-Csv \"$p\\rdp-rule.csv\" -NoTypeInformation\nImport-Csv \"$p\\rdp-rule.csv\" | Format-List",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-firewall-audit'\nGet-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | ForEach-Object { $r=$_; $f=$r | Get-NetFirewallPortFilter; [pscustomobject]@{ Name=$r.Name; Direction=[string]$r.Direction; Action=[string]$r.Action; Protocol=[string]$f.Protocol; LocalPort=[string]$f.LocalPort } } | Export-Csv \"$p\\rdp-rule.csv\" -NoTypeInformation\nImport-Csv \"$p\\rdp-rule.csv\" | Format-List",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-firewall-audit-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

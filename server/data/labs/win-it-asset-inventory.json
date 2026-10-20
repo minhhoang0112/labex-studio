@@ -1,0 +1,131 @@
+{
+  "id": "win-it-asset-inventory",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 2,
+  "title": "Tiếp nhận ticket và kiểm kê phần cứng, hệ điều hành",
+  "title_vi": "Tiếp nhận ticket và kiểm kê phần cứng, hệ điều hành",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Nền tảng Helpdesk",
+  "overview": "Tách triệu chứng khỏi nguyên nhân. Thu thập tên thiết bị, thời điểm bắt đầu, thay đổi gần nhất và tác động kinh doanh. Dữ liệu cấu hình là mốc đối chiếu cho lần xử lý sau.",
+  "ticket": {
+    "ticket_id": "HD-201",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Máy nhân viên bị chậm; cần biết cấu hình và phạm vi ảnh hưởng trước khi sửa."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-computerinfo",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-asset-inventory-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-201: Máy nhân viên bị chậm; cần biết cấu hình và phạm vi ảnh hưởng trước khi sửa.\n\n### Mục tiêu và bản chất\nTách triệu chứng khỏi nguyên nhân. Thu thập tên thiết bị, thời điểm bắt đầu, thay đổi gần nhất và tác động kinh doanh. Dữ liệu cấu hình là mốc đối chiếu cho lần xử lý sau.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-asset-inventory.\n\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\n### Phạm vi và lưu ý\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-computerinfo](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-computerinfo)\n- [Microsoft: get-ciminstance](https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance)\n",
+      "content_vi": "## Ticket HD-201: Máy nhân viên bị chậm; cần biết cấu hình và phạm vi ảnh hưởng trước khi sửa.\n\n### Mục tiêu và bản chất\nTách triệu chứng khỏi nguyên nhân. Thu thập tên thiết bị, thời điểm bắt đầu, thay đổi gần nhất và tác động kinh doanh. Dữ liệu cấu hình là mốc đối chiếu cho lần xử lý sau.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-asset-inventory.\n\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\n### Phạm vi và lưu ý\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-computerinfo](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-computerinfo)\n- [Microsoft: get-ciminstance](https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance)\n"
+    },
+    {
+      "id": "win-it-asset-inventory-sec-1",
+      "title": "Ghi nhận cấu hình máy thật",
+      "title_vi": "Ghi nhận cấu hình máy thật",
+      "position": 1,
+      "content": "## Ghi nhận cấu hình máy thật\n\n### Vì sao làm bước này?\nCIM trả về đối tượng có trường dữ liệu; Format-Table chỉ phục vụ hiển thị. Xuất JSON trước khi định dạng để báo cáo còn truy vấn được.\n\n### Thao tác\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-asset-inventory'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$osInfo=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; OS=$osInfo.Caption; Build=$osInfo.BuildNumber; RAM=[int64]$cs.TotalPhysicalMemory } | ConvertTo-Json | Set-Content \"$p\\inventory.json\" -Encoding UTF8\nGet-Content \"$p\\inventory.json\"\n```\n\n### Kết quả và cách tự kiểm tra\ninventory.json có tên CLIENT01, tên Windows, build và RAM lớn hơn 0.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\n### Câu hỏi tự giải thích\nTại sao ghi “máy chậm” chưa đủ để quyết định nâng RAM?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Ghi nhận cấu hình máy thật\n\n### Vì sao làm bước này?\nCIM trả về đối tượng có trường dữ liệu; Format-Table chỉ phục vụ hiển thị. Xuất JSON trước khi định dạng để báo cáo còn truy vấn được.\n\n### Thao tác\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-asset-inventory'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$osInfo=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; OS=$osInfo.Caption; Build=$osInfo.BuildNumber; RAM=[int64]$cs.TotalPhysicalMemory } | ConvertTo-Json | Set-Content \"$p\\inventory.json\" -Encoding UTF8\nGet-Content \"$p\\inventory.json\"\n```\n\n### Kết quả và cách tự kiểm tra\ninventory.json có tên CLIENT01, tên Windows, build và RAM lớn hơn 0.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\n### Câu hỏi tự giải thích\nTại sao ghi “máy chậm” chưa đủ để quyết định nâng RAM?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "inventory.json có tên CLIENT01, tên Windows, build và RAM lớn hơn 0.",
+      "task_vi": "inventory.json có tên CLIENT01, tên Windows, build và RAM lớn hơn 0.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-asset-inventory'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$osInfo=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; OS=$osInfo.Caption; Build=$osInfo.BuildNumber; RAM=[int64]$cs.TotalPhysicalMemory } | ConvertTo-Json | Set-Content \"$p\\inventory.json\" -Encoding UTF8\nGet-Content \"$p\\inventory.json\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-asset-inventory'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$osInfo=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; OS=$osInfo.Caption; Build=$osInfo.BuildNumber; RAM=[int64]$cs.TotalPhysicalMemory } | ConvertTo-Json | Set-Content \"$p\\inventory.json\" -Encoding UTF8\nGet-Content \"$p\\inventory.json\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-asset-inventory-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-asset-inventory-sec-2",
+      "title": "Tạo phiếu tiếp nhận có thể bàn giao",
+      "title_vi": "Tạo phiếu tiếp nhận có thể bàn giao",
+      "position": 2,
+      "content": "## Tạo phiếu tiếp nhận có thể bàn giao\n\n### Vì sao làm bước này?\nMột ticket hữu ích ghi rõ triệu chứng, phạm vi, bằng chứng và bước tiếp theo. Chưa có bằng chứng thì ghi giả thuyết, không ghi là kết luận.\n\n### Thao tác\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-asset-inventory'\n[pscustomobject]@{ Ticket='HD-201'; Computer=$env:COMPUTERNAME; Symptom='Slow application startup'; Scope='One workstation'; Evidence='inventory.json'; NextAction='Collect process and event evidence'; UserConfirmed=$false } | ConvertTo-Json | Set-Content \"$p\\ticket.json\" -Encoding UTF8\nGet-Content \"$p\\ticket.json\"\n```\n\n### Kết quả và cách tự kiểm tra\nPhiếu có phạm vi một máy và chưa tự nhận đã được người dùng xác nhận.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\n### Câu hỏi tự giải thích\nKhi nào cần nâng mức ưu tiên và chuyển ticket cho System Administrator?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tạo phiếu tiếp nhận có thể bàn giao\n\n### Vì sao làm bước này?\nMột ticket hữu ích ghi rõ triệu chứng, phạm vi, bằng chứng và bước tiếp theo. Chưa có bằng chứng thì ghi giả thuyết, không ghi là kết luận.\n\n### Thao tác\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-asset-inventory'\n[pscustomobject]@{ Ticket='HD-201'; Computer=$env:COMPUTERNAME; Symptom='Slow application startup'; Scope='One workstation'; Evidence='inventory.json'; NextAction='Collect process and event evidence'; UserConfirmed=$false } | ConvertTo-Json | Set-Content \"$p\\ticket.json\" -Encoding UTF8\nGet-Content \"$p\\ticket.json\"\n```\n\n### Kết quả và cách tự kiểm tra\nPhiếu có phạm vi một máy và chưa tự nhận đã được người dùng xác nhận.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\n### Câu hỏi tự giải thích\nKhi nào cần nâng mức ưu tiên và chuyển ticket cho System Administrator?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Phiếu có phạm vi một máy và chưa tự nhận đã được người dùng xác nhận.",
+      "task_vi": "Phiếu có phạm vi một máy và chưa tự nhận đã được người dùng xác nhận.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-asset-inventory'\n[pscustomobject]@{ Ticket='HD-201'; Computer=$env:COMPUTERNAME; Symptom='Slow application startup'; Scope='One workstation'; Evidence='inventory.json'; NextAction='Collect process and event evidence'; UserConfirmed=$false } | ConvertTo-Json | Set-Content \"$p\\ticket.json\" -Encoding UTF8\nGet-Content \"$p\\ticket.json\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-asset-inventory'\n[pscustomobject]@{ Ticket='HD-201'; Computer=$env:COMPUTERNAME; Symptom='Slow application startup'; Scope='One workstation'; Evidence='inventory.json'; NextAction='Collect process and event evidence'; UserConfirmed=$false } | ConvertTo-Json | Set-Content \"$p\\ticket.json\" -Encoding UTF8\nGet-Content \"$p\\ticket.json\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-asset-inventory-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-asset-inventory-sec-1",
+      "title": "Ghi nhận cấu hình máy thật",
+      "title_vi": "Ghi nhận cấu hình máy thật",
+      "position": 1,
+      "content": "## Ghi nhận cấu hình máy thật\n\n### Vì sao làm bước này?\nCIM trả về đối tượng có trường dữ liệu; Format-Table chỉ phục vụ hiển thị. Xuất JSON trước khi định dạng để báo cáo còn truy vấn được.\n\n### Thao tác\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-asset-inventory'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$osInfo=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; OS=$osInfo.Caption; Build=$osInfo.BuildNumber; RAM=[int64]$cs.TotalPhysicalMemory } | ConvertTo-Json | Set-Content \"$p\\inventory.json\" -Encoding UTF8\nGet-Content \"$p\\inventory.json\"\n```\n\n### Kết quả và cách tự kiểm tra\ninventory.json có tên CLIENT01, tên Windows, build và RAM lớn hơn 0.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\n### Câu hỏi tự giải thích\nTại sao ghi “máy chậm” chưa đủ để quyết định nâng RAM?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Ghi nhận cấu hình máy thật\n\n### Vì sao làm bước này?\nCIM trả về đối tượng có trường dữ liệu; Format-Table chỉ phục vụ hiển thị. Xuất JSON trước khi định dạng để báo cáo còn truy vấn được.\n\n### Thao tác\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-asset-inventory'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$osInfo=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; OS=$osInfo.Caption; Build=$osInfo.BuildNumber; RAM=[int64]$cs.TotalPhysicalMemory } | ConvertTo-Json | Set-Content \"$p\\inventory.json\" -Encoding UTF8\nGet-Content \"$p\\inventory.json\"\n```\n\n### Kết quả và cách tự kiểm tra\ninventory.json có tên CLIENT01, tên Windows, build và RAM lớn hơn 0.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\n### Câu hỏi tự giải thích\nTại sao ghi “máy chậm” chưa đủ để quyết định nâng RAM?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "inventory.json có tên CLIENT01, tên Windows, build và RAM lớn hơn 0.",
+      "task_vi": "inventory.json có tên CLIENT01, tên Windows, build và RAM lớn hơn 0.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-asset-inventory'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$osInfo=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; OS=$osInfo.Caption; Build=$osInfo.BuildNumber; RAM=[int64]$cs.TotalPhysicalMemory } | ConvertTo-Json | Set-Content \"$p\\inventory.json\" -Encoding UTF8\nGet-Content \"$p\\inventory.json\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-asset-inventory'; New-Item -ItemType Directory -Path $p -Force | Out-Null\n$osInfo=Get-CimInstance Win32_OperatingSystem; $cs=Get-CimInstance Win32_ComputerSystem\n[pscustomobject]@{ Computer=$env:COMPUTERNAME; OS=$osInfo.Caption; Build=$osInfo.BuildNumber; RAM=[int64]$cs.TotalPhysicalMemory } | ConvertTo-Json | Set-Content \"$p\\inventory.json\" -Encoding UTF8\nGet-Content \"$p\\inventory.json\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-asset-inventory-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-asset-inventory-sec-2",
+      "title": "Tạo phiếu tiếp nhận có thể bàn giao",
+      "title_vi": "Tạo phiếu tiếp nhận có thể bàn giao",
+      "position": 2,
+      "content": "## Tạo phiếu tiếp nhận có thể bàn giao\n\n### Vì sao làm bước này?\nMột ticket hữu ích ghi rõ triệu chứng, phạm vi, bằng chứng và bước tiếp theo. Chưa có bằng chứng thì ghi giả thuyết, không ghi là kết luận.\n\n### Thao tác\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-asset-inventory'\n[pscustomobject]@{ Ticket='HD-201'; Computer=$env:COMPUTERNAME; Symptom='Slow application startup'; Scope='One workstation'; Evidence='inventory.json'; NextAction='Collect process and event evidence'; UserConfirmed=$false } | ConvertTo-Json | Set-Content \"$p\\ticket.json\" -Encoding UTF8\nGet-Content \"$p\\ticket.json\"\n```\n\n### Kết quả và cách tự kiểm tra\nPhiếu có phạm vi một máy và chưa tự nhận đã được người dùng xác nhận.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\n### Câu hỏi tự giải thích\nKhi nào cần nâng mức ưu tiên và chuyển ticket cho System Administrator?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tạo phiếu tiếp nhận có thể bàn giao\n\n### Vì sao làm bước này?\nMột ticket hữu ích ghi rõ triệu chứng, phạm vi, bằng chứng và bước tiếp theo. Chưa có bằng chứng thì ghi giả thuyết, không ghi là kết luận.\n\n### Thao tác\nWin+R trên thanh Desktop → msinfo32; xem System Summary. Mở Settings → System → About để đối chiếu thông tin.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-asset-inventory'\n[pscustomobject]@{ Ticket='HD-201'; Computer=$env:COMPUTERNAME; Symptom='Slow application startup'; Scope='One workstation'; Evidence='inventory.json'; NextAction='Collect process and event evidence'; UserConfirmed=$false } | ConvertTo-Json | Set-Content \"$p\\ticket.json\" -Encoding UTF8\nGet-Content \"$p\\ticket.json\"\n```\n\n### Kết quả và cách tự kiểm tra\nPhiếu có phạm vi một máy và chưa tự nhận đã được người dùng xác nhận.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông đưa mật khẩu, license key, email cá nhân hoặc file người dùng vào ticket. Dung lượng RAM của VM không đại diện cho mọi máy văn phòng.\n\n### Câu hỏi tự giải thích\nKhi nào cần nâng mức ưu tiên và chuyển ticket cho System Administrator?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Phiếu có phạm vi một máy và chưa tự nhận đã được người dùng xác nhận.",
+      "task_vi": "Phiếu có phạm vi một máy và chưa tự nhận đã được người dùng xác nhận.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-asset-inventory'\n[pscustomobject]@{ Ticket='HD-201'; Computer=$env:COMPUTERNAME; Symptom='Slow application startup'; Scope='One workstation'; Evidence='inventory.json'; NextAction='Collect process and event evidence'; UserConfirmed=$false } | ConvertTo-Json | Set-Content \"$p\\ticket.json\" -Encoding UTF8\nGet-Content \"$p\\ticket.json\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-asset-inventory'\n[pscustomobject]@{ Ticket='HD-201'; Computer=$env:COMPUTERNAME; Symptom='Slow application startup'; Scope='One workstation'; Evidence='inventory.json'; NextAction='Collect process and event evidence'; UserConfirmed=$false } | ConvertTo-Json | Set-Content \"$p\\ticket.json\" -Encoding UTF8\nGet-Content \"$p\\ticket.json\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-asset-inventory-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

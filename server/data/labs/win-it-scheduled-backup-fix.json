@@ -1,0 +1,132 @@
+{
+  "id": "win-it-scheduled-backup-fix",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 20,
+  "title": "Backup không chạy vì Scheduled Task bị vô hiệu hóa",
+  "title_vi": "Backup không chạy vì Scheduled Task bị vô hiệu hóa",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Sao lưu và khôi phục",
+  "overview": "Task Scheduler gồm trigger, action, principal và điều kiện chạy. Task tồn tại không có nghĩa đã chạy; LastTaskResult phải được đối chiếu với dữ liệu đầu ra.",
+  "ticket": {
+    "ticket_id": "HD-210",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Thư mục backup không có bản mới dù đã cấu hình lịch hàng ngày."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/get-scheduledtask",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/get-scheduledtaskinfo",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "fault-injection",
+  "sections": [
+    {
+      "id": "win-it-scheduled-backup-fix-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-210: Thư mục backup không có bản mới dù đã cấu hình lịch hàng ngày.\n\n### Mục tiêu và bản chất\nTask Scheduler gồm trigger, action, principal và điều kiện chạy. Task tồn tại không có nghĩa đã chạy; LastTaskResult phải được đối chiếu với dữ liệu đầu ra.\n\n### Cách làm trên CLIENT01\nBài có **nạp lỗi thật trong vùng riêng của lab**. Bấm Chuẩn bị sự cố, chờ thành công rồi Kết nối lại Desktop. Làm bước chẩn đoán trước khi sửa. Sau khi chấm, bấm Hoàn nguyên kịch bản trước khi sang bài khác.\n\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\n### Phạm vi và lưu ý\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-scheduledtask](https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/get-scheduledtask)\n- [Microsoft: get-scheduledtaskinfo](https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/get-scheduledtaskinfo)\n",
+      "content_vi": "## Ticket HD-210: Thư mục backup không có bản mới dù đã cấu hình lịch hàng ngày.\n\n### Mục tiêu và bản chất\nTask Scheduler gồm trigger, action, principal và điều kiện chạy. Task tồn tại không có nghĩa đã chạy; LastTaskResult phải được đối chiếu với dữ liệu đầu ra.\n\n### Cách làm trên CLIENT01\nBài có **nạp lỗi thật trong vùng riêng của lab**. Bấm Chuẩn bị sự cố, chờ thành công rồi Kết nối lại Desktop. Làm bước chẩn đoán trước khi sửa. Sau khi chấm, bấm Hoàn nguyên kịch bản trước khi sang bài khác.\n\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\n### Phạm vi và lưu ý\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-scheduledtask](https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/get-scheduledtask)\n- [Microsoft: get-scheduledtaskinfo](https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/get-scheduledtaskinfo)\n"
+    },
+    {
+      "id": "win-it-scheduled-backup-fix-sec-1",
+      "title": "Đọc trạng thái, action và lần chạy gần nhất",
+      "title_vi": "Đọc trạng thái, action và lần chạy gần nhất",
+      "position": 1,
+      "content": "## Đọc trạng thái, action và lần chạy gần nhất\n\n### Vì sao làm bước này?\nPhân biệt Disabled, Ready, Running. Action sai đường dẫn và thiếu quyền cũng gây lỗi dù task Enabled; không kết luận dựa một cột.\n\n### Thao tác\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ScheduledTask -TaskName LabExSupportBackup | Format-List TaskName,State,Actions,Principal; Get-ScheduledTaskInfo -TaskName LabExSupportBackup\n```\n\n### Kết quả và cách tự kiểm tra\nTask Disabled; action chạy backup.ps1 trong thư mục taskbackup.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\n### Câu hỏi tự giải thích\nLastTaskResult=0 từ lần chạy cũ có chứng minh backup hôm nay đã được tạo không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Đọc trạng thái, action và lần chạy gần nhất\n\n### Vì sao làm bước này?\nPhân biệt Disabled, Ready, Running. Action sai đường dẫn và thiếu quyền cũng gây lỗi dù task Enabled; không kết luận dựa một cột.\n\n### Thao tác\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ScheduledTask -TaskName LabExSupportBackup | Format-List TaskName,State,Actions,Principal; Get-ScheduledTaskInfo -TaskName LabExSupportBackup\n```\n\n### Kết quả và cách tự kiểm tra\nTask Disabled; action chạy backup.ps1 trong thư mục taskbackup.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\n### Câu hỏi tự giải thích\nLastTaskResult=0 từ lần chạy cũ có chứng minh backup hôm nay đã được tạo không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Task Disabled; action chạy backup.ps1 trong thư mục taskbackup.",
+      "task_vi": "Task Disabled; action chạy backup.ps1 trong thư mục taskbackup.",
+      "hint": "Get-ScheduledTask -TaskName LabExSupportBackup | Format-List TaskName,State,Actions,Principal; Get-ScheduledTaskInfo -TaskName LabExSupportBackup",
+      "hint_vi": "Get-ScheduledTask -TaskName LabExSupportBackup | Format-List TaskName,State,Actions,Principal; Get-ScheduledTaskInfo -TaskName LabExSupportBackup",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-scheduled-backup-fix-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-scheduled-backup-fix-sec-2",
+      "title": "Bật lịch và kiểm tra bản sao thật",
+      "title_vi": "Bật lịch và kiểm tra bản sao thật",
+      "position": 2,
+      "content": "## Bật lịch và kiểm tra bản sao thật\n\n### Vì sao làm bước này?\nChạy thủ công giúp thử action ngay thay vì chờ tới ngày mai. Kiểm tra file mới và hash; sau đó mới tin lịch đã sửa.\n\n### Thao tác\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nEnable-ScheduledTask -TaskName LabExSupportBackup; Start-ScheduledTask -TaskName LabExSupportBackup; Start-Sleep -Seconds 3; Get-ScheduledTaskInfo -TaskName LabExSupportBackup; Get-FileHash 'C:\\LabEx\\PracticeFaults\\taskbackup\\Source\\invoice.txt','C:\\LabEx\\PracticeFaults\\taskbackup\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nTask không Disabled, lần chạy trả 0, hai file khớp SHA256. Bộ chấm thử chạy lại task; hoàn nguyên khi xong.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\n### Câu hỏi tự giải thích\nVì sao task chạy dưới SYSTEM thấy thư mục mạng khác với user vừa đăng nhập?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Bật lịch và kiểm tra bản sao thật\n\n### Vì sao làm bước này?\nChạy thủ công giúp thử action ngay thay vì chờ tới ngày mai. Kiểm tra file mới và hash; sau đó mới tin lịch đã sửa.\n\n### Thao tác\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nEnable-ScheduledTask -TaskName LabExSupportBackup; Start-ScheduledTask -TaskName LabExSupportBackup; Start-Sleep -Seconds 3; Get-ScheduledTaskInfo -TaskName LabExSupportBackup; Get-FileHash 'C:\\LabEx\\PracticeFaults\\taskbackup\\Source\\invoice.txt','C:\\LabEx\\PracticeFaults\\taskbackup\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nTask không Disabled, lần chạy trả 0, hai file khớp SHA256. Bộ chấm thử chạy lại task; hoàn nguyên khi xong.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\n### Câu hỏi tự giải thích\nVì sao task chạy dưới SYSTEM thấy thư mục mạng khác với user vừa đăng nhập?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Task không Disabled, lần chạy trả 0, hai file khớp SHA256. Bộ chấm thử chạy lại task; hoàn nguyên khi xong.",
+      "task_vi": "Task không Disabled, lần chạy trả 0, hai file khớp SHA256. Bộ chấm thử chạy lại task; hoàn nguyên khi xong.",
+      "hint": "Enable-ScheduledTask -TaskName LabExSupportBackup; Start-ScheduledTask -TaskName LabExSupportBackup; Start-Sleep -Seconds 3; Get-ScheduledTaskInfo -TaskName LabExSupportBackup; Get-FileHash 'C:\\LabEx\\PracticeFaults\\taskbackup\\Source\\invoice.txt','C:\\LabEx\\PracticeFaults\\taskbackup\\Backup\\invoice.txt'",
+      "hint_vi": "Enable-ScheduledTask -TaskName LabExSupportBackup; Start-ScheduledTask -TaskName LabExSupportBackup; Start-Sleep -Seconds 3; Get-ScheduledTaskInfo -TaskName LabExSupportBackup; Get-FileHash 'C:\\LabEx\\PracticeFaults\\taskbackup\\Source\\invoice.txt','C:\\LabEx\\PracticeFaults\\taskbackup\\Backup\\invoice.txt'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-scheduled-backup-fix-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-scheduled-backup-fix-sec-1",
+      "title": "Đọc trạng thái, action và lần chạy gần nhất",
+      "title_vi": "Đọc trạng thái, action và lần chạy gần nhất",
+      "position": 1,
+      "content": "## Đọc trạng thái, action và lần chạy gần nhất\n\n### Vì sao làm bước này?\nPhân biệt Disabled, Ready, Running. Action sai đường dẫn và thiếu quyền cũng gây lỗi dù task Enabled; không kết luận dựa một cột.\n\n### Thao tác\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ScheduledTask -TaskName LabExSupportBackup | Format-List TaskName,State,Actions,Principal; Get-ScheduledTaskInfo -TaskName LabExSupportBackup\n```\n\n### Kết quả và cách tự kiểm tra\nTask Disabled; action chạy backup.ps1 trong thư mục taskbackup.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\n### Câu hỏi tự giải thích\nLastTaskResult=0 từ lần chạy cũ có chứng minh backup hôm nay đã được tạo không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Đọc trạng thái, action và lần chạy gần nhất\n\n### Vì sao làm bước này?\nPhân biệt Disabled, Ready, Running. Action sai đường dẫn và thiếu quyền cũng gây lỗi dù task Enabled; không kết luận dựa một cột.\n\n### Thao tác\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ScheduledTask -TaskName LabExSupportBackup | Format-List TaskName,State,Actions,Principal; Get-ScheduledTaskInfo -TaskName LabExSupportBackup\n```\n\n### Kết quả và cách tự kiểm tra\nTask Disabled; action chạy backup.ps1 trong thư mục taskbackup.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\n### Câu hỏi tự giải thích\nLastTaskResult=0 từ lần chạy cũ có chứng minh backup hôm nay đã được tạo không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Task Disabled; action chạy backup.ps1 trong thư mục taskbackup.",
+      "task_vi": "Task Disabled; action chạy backup.ps1 trong thư mục taskbackup.",
+      "hint": "Get-ScheduledTask -TaskName LabExSupportBackup | Format-List TaskName,State,Actions,Principal; Get-ScheduledTaskInfo -TaskName LabExSupportBackup",
+      "hint_vi": "Get-ScheduledTask -TaskName LabExSupportBackup | Format-List TaskName,State,Actions,Principal; Get-ScheduledTaskInfo -TaskName LabExSupportBackup",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-scheduled-backup-fix-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-scheduled-backup-fix-sec-2",
+      "title": "Bật lịch và kiểm tra bản sao thật",
+      "title_vi": "Bật lịch và kiểm tra bản sao thật",
+      "position": 2,
+      "content": "## Bật lịch và kiểm tra bản sao thật\n\n### Vì sao làm bước này?\nChạy thủ công giúp thử action ngay thay vì chờ tới ngày mai. Kiểm tra file mới và hash; sau đó mới tin lịch đã sửa.\n\n### Thao tác\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nEnable-ScheduledTask -TaskName LabExSupportBackup; Start-ScheduledTask -TaskName LabExSupportBackup; Start-Sleep -Seconds 3; Get-ScheduledTaskInfo -TaskName LabExSupportBackup; Get-FileHash 'C:\\LabEx\\PracticeFaults\\taskbackup\\Source\\invoice.txt','C:\\LabEx\\PracticeFaults\\taskbackup\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nTask không Disabled, lần chạy trả 0, hai file khớp SHA256. Bộ chấm thử chạy lại task; hoàn nguyên khi xong.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\n### Câu hỏi tự giải thích\nVì sao task chạy dưới SYSTEM thấy thư mục mạng khác với user vừa đăng nhập?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Bật lịch và kiểm tra bản sao thật\n\n### Vì sao làm bước này?\nChạy thủ công giúp thử action ngay thay vì chờ tới ngày mai. Kiểm tra file mới và hash; sau đó mới tin lịch đã sửa.\n\n### Thao tác\nBấm Chuẩn bị sự cố. Win+R → taskschd.msc → Task Scheduler Library → LabExSupportBackup. Xem trạng thái Disabled và action trước khi bật.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nEnable-ScheduledTask -TaskName LabExSupportBackup; Start-ScheduledTask -TaskName LabExSupportBackup; Start-Sleep -Seconds 3; Get-ScheduledTaskInfo -TaskName LabExSupportBackup; Get-FileHash 'C:\\LabEx\\PracticeFaults\\taskbackup\\Source\\invoice.txt','C:\\LabEx\\PracticeFaults\\taskbackup\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nTask không Disabled, lần chạy trả 0, hai file khớp SHA256. Bộ chấm thử chạy lại task; hoàn nguyên khi xong.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nChỉ thay task LabExSupportBackup. Không sửa task của Azure Agent, Windows Update, Defender hoặc task portal DNS của bài khác.\n\n### Câu hỏi tự giải thích\nVì sao task chạy dưới SYSTEM thấy thư mục mạng khác với user vừa đăng nhập?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Task không Disabled, lần chạy trả 0, hai file khớp SHA256. Bộ chấm thử chạy lại task; hoàn nguyên khi xong.",
+      "task_vi": "Task không Disabled, lần chạy trả 0, hai file khớp SHA256. Bộ chấm thử chạy lại task; hoàn nguyên khi xong.",
+      "hint": "Enable-ScheduledTask -TaskName LabExSupportBackup; Start-ScheduledTask -TaskName LabExSupportBackup; Start-Sleep -Seconds 3; Get-ScheduledTaskInfo -TaskName LabExSupportBackup; Get-FileHash 'C:\\LabEx\\PracticeFaults\\taskbackup\\Source\\invoice.txt','C:\\LabEx\\PracticeFaults\\taskbackup\\Backup\\invoice.txt'",
+      "hint_vi": "Enable-ScheduledTask -TaskName LabExSupportBackup; Start-ScheduledTask -TaskName LabExSupportBackup; Start-Sleep -Seconds 3; Get-ScheduledTaskInfo -TaskName LabExSupportBackup; Get-FileHash 'C:\\LabEx\\PracticeFaults\\taskbackup\\Source\\invoice.txt','C:\\LabEx\\PracticeFaults\\taskbackup\\Backup\\invoice.txt'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-scheduled-backup-fix-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ],
+  "fault_scenario": "taskbackup"
+}

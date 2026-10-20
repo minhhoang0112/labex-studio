@@ -61,6 +61,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
   }
 
   const { course, labs: syllabusLabs = [] } = data;
+  const isWindows = course.topic === 'windows';
   const labs = syllabusLabs.filter(lab => lab.availability?.state !== 'reference-only' &&
     (lab.steps_count > 0 || lab.step_ids?.length > 0));
   const isComplete = lab => isLabCompleted(lab, labProgress(lab.id));
@@ -113,7 +114,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
               )}
             </div>
 
-            <p className="text-xs text-slate-500 dark:text-slate-400">Thực hành local: {course.practice_labs_count ?? 0} bài mở môi trường · {course.runnable_labs_count ?? 0} bài có đủ bộ chấm. Đã đối chiếu tài liệu gốc EN: {course.source_verified_labs_count || 0} bài.</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Thực hành local: {course.practice_labs_count ?? 0} bài mở môi trường · {course.runnable_labs_count ?? 0} bài có đủ bộ chấm. {isWindows ? 'Thực hành trên Windows VM; tài liệu tham khảo nằm trong từng bài.' : `Đã đối chiếu tài liệu gốc EN: ${course.source_verified_labs_count || 0} bài.`}</p>
 
             <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
               {course.name}
@@ -176,7 +177,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
               <div className="text-sm">
                 <strong>{isVi ? 'Phiên bản bài tập thực hành Local tiếng Việt:' : 'Local Hands-on Vietnamese Practice Labs:'}</strong>
                 <p className="text-xs text-blue-700 dark:text-blue-300 mt-0.5">
-                  {isVi 
+                  {isVi
                     ? 'Nhóm bài tập tự biên soạn bổ sung về log, kiểm kê tệp, checksum và tự động hóa. Đây là nhóm riêng, không thay thế 41 bài của khóa nguồn.'
                     : 'Additional locally authored exercises on logs, file inventory, checksums and automation. These do not replace the 41 source lessons.'}
                 </p>
@@ -210,7 +211,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
                   {isVi ? 'Danh sách bài thực hành (Hands-On Labs)' : 'Hands-On Labs'}
                 </h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {isVi 
+                  {isWindows ? (isVi ? 'Học theo thứ tự từ cấu hình, chẩn đoán đến sửa lỗi và khôi phục trên Windows VM' : 'Practice configuration, diagnosis, repair and recovery on a Windows VM') : isVi
                     ? 'Mỗi bài học đều chạy trên terminal Linux biệt lập kèm hướng dẫn chi tiết' 
                     : 'Each lab runs in an isolated Linux terminal with step-by-step guidance'}
                 </p>
@@ -237,6 +238,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
                     className="p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/60 shadow-sm hover:shadow-md transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     
                     <div className="space-y-1.5 flex-1">
+                      {lab.curriculum_group && <p className="text-xs font-semibold text-primary-600 dark:text-primary-300">{lab.curriculum_group} · {lab.practice_mode === 'fault-injection' ? 'Có nạp lỗi thực hành' : 'Cấu hình / chẩn đoán'}</p>}
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">
                           {index + 1}

@@ -1,9 +1,9 @@
 {
   "id": "win-it-disk-cleanup-recovery",
   "course_id": "windows-11-it-support-troubleshooting",
-  "order": 4,
-  "title": "Cứu Hộ Ổ C Báo Đỏ & Sao Lưu Dữ Liệu Nhân Viên",
-  "title_vi": "Cứu Hộ Ổ C Báo Đỏ & Sao Lưu Dữ Liệu Nhân Viên",
+  "order": 16,
+  "title": "Tìm Và Dọn Log Mẫu An Toàn Trên Ổ C",
+  "title_vi": "Tìm Và Dọn Log Mẫu An Toàn Trên Ổ C",
   "type": "lab",
   "difficulty": "Beginner",
   "estimated_time": "30 mins",
@@ -15,7 +15,7 @@
     "priority": "High",
     "title": "Ổ đĩa C báo đỏ chỉ còn 200MB trống, máy tính bị đơ không lưu được file thiết kế"
   },
-  "overview": "Quy trình giải cứu ổ đĩa hệ thống bị đầy dung lượng: Phân tích các thư mục rác an toàn để xóa mà không gây hỏng hệ điều hành Windows, và checklist sao lưu dữ liệu toàn diện (Desktop, Documents, Chrome Bookmarks) trước khi cài lại máy.",
+  "overview": "Quy trình giải cứu ổ đĩa hệ thống bị đầy dung lượng: Phân tích các thư mục rác an toàn để xóa mà không gây hỏng hệ điều hành Windows, và checklist sao lưu dữ liệu toàn diện (Desktop, Documents, Chrome Bookmarks) trước khi cài lại máy. Phiên thực hành tạo tối đa 256 MiB log mẫu; không làm đầy thật ổ C hoặc xóa dữ liệu nhân viên.",
   "sections": [
     {
       "id": "win-it-dsk-sec-0",
@@ -42,21 +42,11 @@
       "hint": "Chạy lệnh: Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free",
       "hint_vi": "Chạy lệnh: Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-PSDrive|Get-Volume|wmic logicaldisk)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote",
+        "rule_id": "win-it-dsk-sec-1"
       },
       "required_capabilities": [
-        "terminal",
-        "shell"
+        "windows-remote"
       ],
       "content": "### Xem dung lượng các ổ đĩa:\n```powershell\nGet-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name=\"Used (GB)\";Expression={[math]::round($_.Used/1GB,2)}}, @{Name=\"Free (GB)\";Expression={[math]::round($_.Free/1GB,2)}}\n```",
       "content_vi": "### Xem dung lượng các ổ đĩa:\n```powershell\nGet-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name=\"Used (GB)\";Expression={[math]::round($_.Used/1GB,2)}}, @{Name=\"Free (GB)\";Expression={[math]::round($_.Free/1GB,2)}}\n```"
@@ -69,52 +59,62 @@
       "kind": "task",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "task": "Kiểm tra thư mục tạm Temp và thực hiện quy trình sao lưu nhanh các tệp tài liệu quan trọng.",
-      "task_vi": "Kiểm tra thư mục tạm Temp và thực hiện quy trình sao lưu nhanh các tệp tài liệu quan trọng.",
-      "hint": "Chạy lệnh: Get-ChildItem $env:TEMP -ErrorAction SilentlyContinue | Measure-Object",
-      "hint_vi": "Chạy lệnh: Get-ChildItem $env:TEMP -ErrorAction SilentlyContinue | Measure-Object",
+      "task": "Dọn log mẫu trong DummyLogs xuống tối đa 1 MiB và giữ nguyên tài liệu nhân viên.",
+      "task_vi": "Dọn log mẫu trong DummyLogs xuống tối đa 1 MiB và giữ nguyên tài liệu nhân viên.",
+      "hint": "Đo dung lượng trước/sau; chỉ dọn C:\\Windows\\Temp\\DummyLogs, không xóa employee-note.txt.",
+      "hint_vi": "Đo dung lượng trước/sau; chỉ dọn C:\\Windows\\Temp\\DummyLogs, không xóa employee-note.txt.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:TEMP|Get-ChildItem|Remove-Item)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote",
+        "rule_id": "win-it-dsk-sec-2"
       },
       "required_capabilities": [
-        "terminal",
-        "shell"
+        "windows-remote"
       ],
-      "content": "### Kiểm tra rác trong thư mục Temp:\n```powershell\nGet-ChildItem -Path $env:TEMP -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum\n```\n\n### Lệnh xóa dọn dẹp các file rác trong Temp:\n```powershell\nRemove-Item -Path \"$env:TEMP\\*.*\" -Force -Recurse -ErrorAction SilentlyContinue\n```",
-      "content_vi": "### Kiểm tra rác trong thư mục Temp:\n```powershell\nGet-ChildItem -Path $env:TEMP -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum\n```\n\n### Lệnh xóa dọn dẹp các file rác trong Temp:\n```powershell\nRemove-Item -Path \"$env:TEMP\\*.*\" -Force -Recurse -ErrorAction SilentlyContinue\n```"
+      "content": "### Đo và dọn đúng dữ liệu lab\n\nBấm **Chuẩn bị sự cố** để tạo tối đa 256 MiB log tại `C:\\Windows\\Temp\\DummyLogs`. Lab giữ ít nhất 5 GiB trống trước khi tạo; đây là bài tìm dữ liệu tăng dung lượng, không làm đầy ổ hệ điều hành.\n\n```powershell\nGet-ChildItem 'C:\\Windows\\Temp\\DummyLogs' -File | Measure-Object Length -Sum\nGet-Content 'C:\\LabEx\\Keep\\employee-note.txt'\n```\n\nMở File Explorer tới đúng thư mục DummyLogs, xác minh đây là log mẫu của bài rồi xóa các file log trong thư mục đó. Không xóa toàn bộ Windows Temp, Downloads hay thư mục người dùng. Giữ nguyên `C:\\LabEx\\Keep\\employee-note.txt`.\n\n```powershell\nGet-PSDrive -PSProvider FileSystem\n```\n\nBộ chấm chấp nhận thư mục DummyLogs còn tồn tại nhưng đã sạch (tối đa 1 MiB) và yêu cầu tài liệu được giữ nguyên nội dung. Không chỉ chấm theo tên thư mục biến mất. Ở môi trường thật, phải xác định chủ dữ liệu, retention và phương án backup trước khi dọn.\n",
+      "content_vi": "### Đo và dọn đúng dữ liệu lab\n\nBấm **Chuẩn bị sự cố** để tạo tối đa 256 MiB log tại `C:\\Windows\\Temp\\DummyLogs`. Lab giữ ít nhất 5 GiB trống trước khi tạo; đây là bài tìm dữ liệu tăng dung lượng, không làm đầy ổ hệ điều hành.\n\n```powershell\nGet-ChildItem 'C:\\Windows\\Temp\\DummyLogs' -File | Measure-Object Length -Sum\nGet-Content 'C:\\LabEx\\Keep\\employee-note.txt'\n```\n\nMở File Explorer tới đúng thư mục DummyLogs, xác minh đây là log mẫu của bài rồi xóa các file log trong thư mục đó. Không xóa toàn bộ Windows Temp, Downloads hay thư mục người dùng. Giữ nguyên `C:\\LabEx\\Keep\\employee-note.txt`.\n\n```powershell\nGet-PSDrive -PSProvider FileSystem\n```\n\nBộ chấm chấp nhận thư mục DummyLogs còn tồn tại nhưng đã sạch (tối đa 1 MiB) và yêu cầu tài liệu được giữ nguyên nội dung. Không chỉ chấm theo tên thư mục biến mất. Ở môi trường thật, phải xác định chủ dữ liệu, retention và phương án backup trước khi dọn.\n"
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 2,
   "steps": [
     {
       "id": "win-it-dsk-sec-1",
-      "title": "Kiểm Tra Dung Lượng Ổ Đĩa",
-      "title_vi": "Kiểm Tra Dung Lượng Ổ Đĩa",
+      "title": "Kiểm Tra Dung Lượng Ổ Đĩa & Xác Định Thư Mục Rác",
+      "title_vi": "Kiểm Tra Dung Lượng Ổ Đĩa & Xác Định Thư Mục Rác",
       "position": 1,
-      "task": "Xem dung lượng còn trống của các ổ đĩa trên máy tính.",
-      "task_vi": "Xem dung lượng còn trống của các ổ đĩa trên máy tính.",
-      "hint": "Get-PSDrive -PSProvider FileSystem",
-      "hint_vi": "Get-PSDrive -PSProvider FileSystem"
+      "task": "Kiểm tra dung lượng còn trống của các ổ đĩa trên máy tính bằng PowerShell.",
+      "task_vi": "Kiểm tra dung lượng còn trống của các ổ đĩa trên máy tính bằng PowerShell.",
+      "hint": "Chạy lệnh: Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free",
+      "hint_vi": "Chạy lệnh: Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free",
+      "content": "### Xem dung lượng các ổ đĩa:\n```powershell\nGet-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name=\"Used (GB)\";Expression={[math]::round($_.Used/1GB,2)}}, @{Name=\"Free (GB)\";Expression={[math]::round($_.Free/1GB,2)}}\n```",
+      "content_vi": "### Xem dung lượng các ổ đĩa:\n```powershell\nGet-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name=\"Used (GB)\";Expression={[math]::round($_.Used/1GB,2)}}, @{Name=\"Free (GB)\";Expression={[math]::round($_.Free/1GB,2)}}\n```",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-dsk-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
     },
     {
       "id": "win-it-dsk-sec-2",
-      "title": "Dọn Dẹp Thư Mục Temp",
-      "title_vi": "Dọn Dẹp Thư Mục Temp",
+      "title": "Dọn Dẹp Thư Mục Tạm Temp & Sao Lưu Dữ Liệu Profile",
+      "title_vi": "Dọn Dẹp Thư Mục Tạm Temp & Sao Lưu Dữ Liệu Profile",
       "position": 2,
-      "task": "Đo lường và dọn dẹp thư mục tạm Temp.",
-      "task_vi": "Đo lường và dọn dẹp thư mục tạm Temp.",
-      "hint": "Get-ChildItem $env:TEMP",
-      "hint_vi": "Get-ChildItem $env:TEMP"
+      "task": "Dọn log mẫu trong DummyLogs xuống tối đa 1 MiB và giữ nguyên tài liệu nhân viên.",
+      "task_vi": "Dọn log mẫu trong DummyLogs xuống tối đa 1 MiB và giữ nguyên tài liệu nhân viên.",
+      "hint": "Đo dung lượng trước/sau; chỉ dọn C:\\Windows\\Temp\\DummyLogs, không xóa employee-note.txt.",
+      "hint_vi": "Đo dung lượng trước/sau; chỉ dọn C:\\Windows\\Temp\\DummyLogs, không xóa employee-note.txt.",
+      "content": "### Đo và dọn đúng dữ liệu lab\n\nBấm **Chuẩn bị sự cố** để tạo tối đa 256 MiB log tại `C:\\Windows\\Temp\\DummyLogs`. Lab giữ ít nhất 5 GiB trống trước khi tạo; đây là bài tìm dữ liệu tăng dung lượng, không làm đầy ổ hệ điều hành.\n\n```powershell\nGet-ChildItem 'C:\\Windows\\Temp\\DummyLogs' -File | Measure-Object Length -Sum\nGet-Content 'C:\\LabEx\\Keep\\employee-note.txt'\n```\n\nMở File Explorer tới đúng thư mục DummyLogs, xác minh đây là log mẫu của bài rồi xóa các file log trong thư mục đó. Không xóa toàn bộ Windows Temp, Downloads hay thư mục người dùng. Giữ nguyên `C:\\LabEx\\Keep\\employee-note.txt`.\n\n```powershell\nGet-PSDrive -PSProvider FileSystem\n```\n\nBộ chấm chấp nhận thư mục DummyLogs còn tồn tại nhưng đã sạch (tối đa 1 MiB) và yêu cầu tài liệu được giữ nguyên nội dung. Không chỉ chấm theo tên thư mục biến mất. Ở môi trường thật, phải xác định chủ dữ liệu, retention và phương án backup trước khi dọn.\n",
+      "content_vi": "### Đo và dọn đúng dữ liệu lab\n\nBấm **Chuẩn bị sự cố** để tạo tối đa 256 MiB log tại `C:\\Windows\\Temp\\DummyLogs`. Lab giữ ít nhất 5 GiB trống trước khi tạo; đây là bài tìm dữ liệu tăng dung lượng, không làm đầy ổ hệ điều hành.\n\n```powershell\nGet-ChildItem 'C:\\Windows\\Temp\\DummyLogs' -File | Measure-Object Length -Sum\nGet-Content 'C:\\LabEx\\Keep\\employee-note.txt'\n```\n\nMở File Explorer tới đúng thư mục DummyLogs, xác minh đây là log mẫu của bài rồi xóa các file log trong thư mục đó. Không xóa toàn bộ Windows Temp, Downloads hay thư mục người dùng. Giữ nguyên `C:\\LabEx\\Keep\\employee-note.txt`.\n\n```powershell\nGet-PSDrive -PSProvider FileSystem\n```\n\nBộ chấm chấp nhận thư mục DummyLogs còn tồn tại nhưng đã sạch (tối đa 1 MiB) và yêu cầu tài liệu được giữ nguyên nội dung. Không chỉ chấm theo tên thư mục biến mất. Ở môi trường thật, phải xác định chủ dữ liệu, retention và phương án backup trước khi dọn.\n",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-dsk-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
     }
-  ]
+  ],
+  "practice_mode": "fault-injection",
+  "curriculum_group": "Chẩn đoán hệ thống"
 }

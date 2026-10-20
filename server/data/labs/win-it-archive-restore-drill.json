@@ -1,0 +1,131 @@
+{
+  "id": "win-it-archive-restore-drill",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 19,
+  "title": "Backup ZIP và diễn tập khôi phục vào thư mục mới",
+  "title_vi": "Backup ZIP và diễn tập khôi phục vào thư mục mới",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Sao lưu và khôi phục",
+  "overview": "Một file ZIP tạo xong chưa là backup đã kiểm chứng. Phục hồi vào thư mục mới tránh ghi đè bản đang dùng; hash giúp xác minh nội dung.",
+  "ticket": {
+    "ticket_id": "HD-211",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Cần mang hồ sơ sang máy mới và thử bản nén có phục hồi được không."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-5.1",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/expand-archive",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-archive-restore-drill-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-211: Cần mang hồ sơ sang máy mới và thử bản nén có phục hồi được không.\n\n### Mục tiêu và bản chất\nMột file ZIP tạo xong chưa là backup đã kiểm chứng. Phục hồi vào thư mục mới tránh ghi đè bản đang dùng; hash giúp xác minh nội dung.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-archive-restore-drill.\n\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\n### Phạm vi và lưu ý\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: compress-archive](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-5.1)\n- [Microsoft: expand-archive](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/expand-archive)\n",
+      "content_vi": "## Ticket HD-211: Cần mang hồ sơ sang máy mới và thử bản nén có phục hồi được không.\n\n### Mục tiêu và bản chất\nMột file ZIP tạo xong chưa là backup đã kiểm chứng. Phục hồi vào thư mục mới tránh ghi đè bản đang dùng; hash giúp xác minh nội dung.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-archive-restore-drill.\n\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\n### Phạm vi và lưu ý\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: compress-archive](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-5.1)\n- [Microsoft: expand-archive](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/expand-archive)\n"
+    },
+    {
+      "id": "win-it-archive-restore-drill-sec-1",
+      "title": "Tạo archive từ tài liệu mẫu",
+      "title_vi": "Tạo archive từ tài liệu mẫu",
+      "position": 1,
+      "content": "## Tạo archive từ tài liệu mẫu\n\n### Vì sao làm bước này?\nChọn nội dung trong Source thay vì nén nhầm cả cây thư mục cha. Ghi manifest nguồn để lần phục hồi có chuẩn so sánh.\n\n### Thao tác\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Archive recovery HD-210' | Set-Content \"$p\\Source\\notes.txt\" -Encoding UTF8\nGet-FileHash \"$p\\Source\\notes.txt\" | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\nCompress-Archive -Path \"$p\\Source\\*\" -DestinationPath \"$p\\archive.zip\" -Force\n```\n\n### Kết quả và cách tự kiểm tra\nZIP hợp lệ có entry notes.txt; nguồn và manifest còn giữ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\n### Câu hỏi tự giải thích\nVì sao không nên kiểm tra backup chỉ bằng kích thước file ZIP?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tạo archive từ tài liệu mẫu\n\n### Vì sao làm bước này?\nChọn nội dung trong Source thay vì nén nhầm cả cây thư mục cha. Ghi manifest nguồn để lần phục hồi có chuẩn so sánh.\n\n### Thao tác\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Archive recovery HD-210' | Set-Content \"$p\\Source\\notes.txt\" -Encoding UTF8\nGet-FileHash \"$p\\Source\\notes.txt\" | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\nCompress-Archive -Path \"$p\\Source\\*\" -DestinationPath \"$p\\archive.zip\" -Force\n```\n\n### Kết quả và cách tự kiểm tra\nZIP hợp lệ có entry notes.txt; nguồn và manifest còn giữ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\n### Câu hỏi tự giải thích\nVì sao không nên kiểm tra backup chỉ bằng kích thước file ZIP?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "ZIP hợp lệ có entry notes.txt; nguồn và manifest còn giữ.",
+      "task_vi": "ZIP hợp lệ có entry notes.txt; nguồn và manifest còn giữ.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Archive recovery HD-210' | Set-Content \"$p\\Source\\notes.txt\" -Encoding UTF8\nGet-FileHash \"$p\\Source\\notes.txt\" | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\nCompress-Archive -Path \"$p\\Source\\*\" -DestinationPath \"$p\\archive.zip\" -Force",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Archive recovery HD-210' | Set-Content \"$p\\Source\\notes.txt\" -Encoding UTF8\nGet-FileHash \"$p\\Source\\notes.txt\" | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\nCompress-Archive -Path \"$p\\Source\\*\" -DestinationPath \"$p\\archive.zip\" -Force",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-archive-restore-drill-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-archive-restore-drill-sec-2",
+      "title": "Restore và so hash",
+      "title_vi": "Restore và so hash",
+      "position": 2,
+      "content": "## Restore và so hash\n\n### Vì sao làm bước này?\nGiải nén vào Restore, không giải đè Source. Việc thử phục hồi xác nhận cả định dạng archive và khả năng lấy dữ liệu ra.\n\n### Thao tác\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; Expand-Archive -LiteralPath \"$p\\archive.zip\" -DestinationPath \"$p\\Restore\" -Force\nGet-FileHash \"$p\\Source\\notes.txt\",\"$p\\Restore\\notes.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nHai hash khớp với manifest, nội dung có mã HD-210.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\n### Câu hỏi tự giải thích\nBạn cần thêm thử nghiệm gì trước khi dùng cùng quy trình cho dữ liệu đang được phần mềm kế toán ghi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Restore và so hash\n\n### Vì sao làm bước này?\nGiải nén vào Restore, không giải đè Source. Việc thử phục hồi xác nhận cả định dạng archive và khả năng lấy dữ liệu ra.\n\n### Thao tác\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; Expand-Archive -LiteralPath \"$p\\archive.zip\" -DestinationPath \"$p\\Restore\" -Force\nGet-FileHash \"$p\\Source\\notes.txt\",\"$p\\Restore\\notes.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nHai hash khớp với manifest, nội dung có mã HD-210.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\n### Câu hỏi tự giải thích\nBạn cần thêm thử nghiệm gì trước khi dùng cùng quy trình cho dữ liệu đang được phần mềm kế toán ghi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai hash khớp với manifest, nội dung có mã HD-210.",
+      "task_vi": "Hai hash khớp với manifest, nội dung có mã HD-210.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; Expand-Archive -LiteralPath \"$p\\archive.zip\" -DestinationPath \"$p\\Restore\" -Force\nGet-FileHash \"$p\\Source\\notes.txt\",\"$p\\Restore\\notes.txt\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; Expand-Archive -LiteralPath \"$p\\archive.zip\" -DestinationPath \"$p\\Restore\" -Force\nGet-FileHash \"$p\\Source\\notes.txt\",\"$p\\Restore\\notes.txt\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-archive-restore-drill-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-archive-restore-drill-sec-1",
+      "title": "Tạo archive từ tài liệu mẫu",
+      "title_vi": "Tạo archive từ tài liệu mẫu",
+      "position": 1,
+      "content": "## Tạo archive từ tài liệu mẫu\n\n### Vì sao làm bước này?\nChọn nội dung trong Source thay vì nén nhầm cả cây thư mục cha. Ghi manifest nguồn để lần phục hồi có chuẩn so sánh.\n\n### Thao tác\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Archive recovery HD-210' | Set-Content \"$p\\Source\\notes.txt\" -Encoding UTF8\nGet-FileHash \"$p\\Source\\notes.txt\" | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\nCompress-Archive -Path \"$p\\Source\\*\" -DestinationPath \"$p\\archive.zip\" -Force\n```\n\n### Kết quả và cách tự kiểm tra\nZIP hợp lệ có entry notes.txt; nguồn và manifest còn giữ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\n### Câu hỏi tự giải thích\nVì sao không nên kiểm tra backup chỉ bằng kích thước file ZIP?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tạo archive từ tài liệu mẫu\n\n### Vì sao làm bước này?\nChọn nội dung trong Source thay vì nén nhầm cả cây thư mục cha. Ghi manifest nguồn để lần phục hồi có chuẩn so sánh.\n\n### Thao tác\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Archive recovery HD-210' | Set-Content \"$p\\Source\\notes.txt\" -Encoding UTF8\nGet-FileHash \"$p\\Source\\notes.txt\" | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\nCompress-Archive -Path \"$p\\Source\\*\" -DestinationPath \"$p\\archive.zip\" -Force\n```\n\n### Kết quả và cách tự kiểm tra\nZIP hợp lệ có entry notes.txt; nguồn và manifest còn giữ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\n### Câu hỏi tự giải thích\nVì sao không nên kiểm tra backup chỉ bằng kích thước file ZIP?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "ZIP hợp lệ có entry notes.txt; nguồn và manifest còn giữ.",
+      "task_vi": "ZIP hợp lệ có entry notes.txt; nguồn và manifest còn giữ.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Archive recovery HD-210' | Set-Content \"$p\\Source\\notes.txt\" -Encoding UTF8\nGet-FileHash \"$p\\Source\\notes.txt\" | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\nCompress-Archive -Path \"$p\\Source\\*\" -DestinationPath \"$p\\archive.zip\" -Force",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Archive recovery HD-210' | Set-Content \"$p\\Source\\notes.txt\" -Encoding UTF8\nGet-FileHash \"$p\\Source\\notes.txt\" | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\nCompress-Archive -Path \"$p\\Source\\*\" -DestinationPath \"$p\\archive.zip\" -Force",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-archive-restore-drill-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-archive-restore-drill-sec-2",
+      "title": "Restore và so hash",
+      "title_vi": "Restore và so hash",
+      "position": 2,
+      "content": "## Restore và so hash\n\n### Vì sao làm bước này?\nGiải nén vào Restore, không giải đè Source. Việc thử phục hồi xác nhận cả định dạng archive và khả năng lấy dữ liệu ra.\n\n### Thao tác\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; Expand-Archive -LiteralPath \"$p\\archive.zip\" -DestinationPath \"$p\\Restore\" -Force\nGet-FileHash \"$p\\Source\\notes.txt\",\"$p\\Restore\\notes.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nHai hash khớp với manifest, nội dung có mã HD-210.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\n### Câu hỏi tự giải thích\nBạn cần thêm thử nghiệm gì trước khi dùng cùng quy trình cho dữ liệu đang được phần mềm kế toán ghi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Restore và so hash\n\n### Vì sao làm bước này?\nGiải nén vào Restore, không giải đè Source. Việc thử phục hồi xác nhận cả định dạng archive và khả năng lấy dữ liệu ra.\n\n### Thao tác\nFile Explorer → thư mục bài → mở archive.zip để xem cấu trúc. Extract All vào Restore để so sánh với Source.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; Expand-Archive -LiteralPath \"$p\\archive.zip\" -DestinationPath \"$p\\Restore\" -Force\nGet-FileHash \"$p\\Source\\notes.txt\",\"$p\\Restore\\notes.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nHai hash khớp với manifest, nội dung có mã HD-210.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nCompress-Archive bỏ qua một số file ẩn; không dùng bài ZIP để kết luận đã backup toàn bộ profile, ACL, EFS hay dữ liệu ứng dụng đang mở.\n\n### Câu hỏi tự giải thích\nBạn cần thêm thử nghiệm gì trước khi dùng cùng quy trình cho dữ liệu đang được phần mềm kế toán ghi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai hash khớp với manifest, nội dung có mã HD-210.",
+      "task_vi": "Hai hash khớp với manifest, nội dung có mã HD-210.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; Expand-Archive -LiteralPath \"$p\\archive.zip\" -DestinationPath \"$p\\Restore\" -Force\nGet-FileHash \"$p\\Source\\notes.txt\",\"$p\\Restore\\notes.txt\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-archive-restore-drill'; Expand-Archive -LiteralPath \"$p\\archive.zip\" -DestinationPath \"$p\\Restore\" -Force\nGet-FileHash \"$p\\Source\\notes.txt\",\"$p\\Restore\\notes.txt\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-archive-restore-drill-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

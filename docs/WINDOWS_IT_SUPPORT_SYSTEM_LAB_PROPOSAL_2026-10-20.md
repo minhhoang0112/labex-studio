@@ -1,5 +1,7 @@
 # Đề xuất phòng lab Windows: IT Support → System Administrator
 
+> Quyết định mới nhất: ưu tiên chi phí thấp và bật/tắt Azure VM ngay trên web khi học, không triển khai phương án máy mới $30/tháng. Xem [bàn giao Antigravity](../ANTIGRAVITY_WINDOWS_CLOUD_HANDOVER.md) để thực hiện đúng hướng đã sửa; các phần CLIENT01/DC01/SRV01 dưới đây là kiến trúc tương lai, không phải yêu cầu tạo ngay cả cụm.
+
 Ngày đối chiếu: 20/10/2026. Đây là bản thiết kế để thống nhất hướng phát triển, chưa phải danh sách chức năng đã triển khai. Lượt khảo sát chỉ đọc mã và cấu hình máy, không cài phần mềm, tạo VM, nạp lỗi hoặc thay đổi máy ảo hiện có.
 
 ## 1. Hiện trạng và mục tiêu

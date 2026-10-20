@@ -1,0 +1,132 @@
+{
+  "id": "win-it-deleted-file-restore",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 18,
+  "title": "Khôi phục tài liệu bị xóa từ bản backup đã xác minh",
+  "title_vi": "Khôi phục tài liệu bị xóa từ bản backup đã xác minh",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Sao lưu và khôi phục",
+  "overview": "Lab chuẩn bị bản gốc, bản backup rồi xóa riêng file làm việc. Bạn phải xác định bản có thể phục hồi, tránh ghi đè dữ liệu mới và xác minh nội dung.",
+  "ticket": {
+    "ticket_id": "HD-209",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Nhân viên xóa nhầm hóa đơn; cần phục hồi đúng nội dung chứ không chỉ tạo file trùng tên."
+  },
+  "references": [
+    {
+      "url": "https://support.microsoft.com/en-us/windows/experience/backup-recovery/backup-restore-and-recovery-in-windows",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/copy-item",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "fault-injection",
+  "sections": [
+    {
+      "id": "win-it-deleted-file-restore-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-209: Nhân viên xóa nhầm hóa đơn; cần phục hồi đúng nội dung chứ không chỉ tạo file trùng tên.\n\n### Mục tiêu và bản chất\nLab chuẩn bị bản gốc, bản backup rồi xóa riêng file làm việc. Bạn phải xác định bản có thể phục hồi, tránh ghi đè dữ liệu mới và xác minh nội dung.\n\n### Cách làm trên CLIENT01\nBài có **nạp lỗi thật trong vùng riêng của lab**. Bấm Chuẩn bị sự cố, chờ thành công rồi Kết nối lại Desktop. Làm bước chẩn đoán trước khi sửa. Sau khi chấm, bấm Hoàn nguyên kịch bản trước khi sang bài khác.\n\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\n### Phạm vi và lưu ý\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: backup-restore-and-recovery-in-windows](https://support.microsoft.com/en-us/windows/experience/backup-recovery/backup-restore-and-recovery-in-windows)\n- [Microsoft: copy-item](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/copy-item)\n",
+      "content_vi": "## Ticket HD-209: Nhân viên xóa nhầm hóa đơn; cần phục hồi đúng nội dung chứ không chỉ tạo file trùng tên.\n\n### Mục tiêu và bản chất\nLab chuẩn bị bản gốc, bản backup rồi xóa riêng file làm việc. Bạn phải xác định bản có thể phục hồi, tránh ghi đè dữ liệu mới và xác minh nội dung.\n\n### Cách làm trên CLIENT01\nBài có **nạp lỗi thật trong vùng riêng của lab**. Bấm Chuẩn bị sự cố, chờ thành công rồi Kết nối lại Desktop. Làm bước chẩn đoán trước khi sửa. Sau khi chấm, bấm Hoàn nguyên kịch bản trước khi sang bài khác.\n\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\n### Phạm vi và lưu ý\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: backup-restore-and-recovery-in-windows](https://support.microsoft.com/en-us/windows/experience/backup-recovery/backup-restore-and-recovery-in-windows)\n- [Microsoft: copy-item](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/copy-item)\n"
+    },
+    {
+      "id": "win-it-deleted-file-restore-sec-1",
+      "title": "Xác định điểm phục hồi và file còn giữ",
+      "title_vi": "Xác định điểm phục hồi và file còn giữ",
+      "position": 1,
+      "content": "## Xác định điểm phục hồi và file còn giữ\n\n### Vì sao làm bước này?\nFile mất khỏi thư mục làm việc không đồng nghĩa backup cũng mất. Đọc bản backup trước, ghi lại nội dung cần trả lại và kiểm tra không có file mới cần bảo vệ.\n\n### Thao tác\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ChildItem 'C:\\LabEx\\PracticeFaults\\restorefile' -Force; Get-Content 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\ninvoice.txt gốc không tồn tại; Backup\\invoice.txt còn nguyên với mã HD-208.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\n### Câu hỏi tự giải thích\nNếu người dùng đã tạo hóa đơn mới cùng tên, bạn phục hồi thế nào để không mất bản mới?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Xác định điểm phục hồi và file còn giữ\n\n### Vì sao làm bước này?\nFile mất khỏi thư mục làm việc không đồng nghĩa backup cũng mất. Đọc bản backup trước, ghi lại nội dung cần trả lại và kiểm tra không có file mới cần bảo vệ.\n\n### Thao tác\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ChildItem 'C:\\LabEx\\PracticeFaults\\restorefile' -Force; Get-Content 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\ninvoice.txt gốc không tồn tại; Backup\\invoice.txt còn nguyên với mã HD-208.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\n### Câu hỏi tự giải thích\nNếu người dùng đã tạo hóa đơn mới cùng tên, bạn phục hồi thế nào để không mất bản mới?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "invoice.txt gốc không tồn tại; Backup\\invoice.txt còn nguyên với mã HD-208.",
+      "task_vi": "invoice.txt gốc không tồn tại; Backup\\invoice.txt còn nguyên với mã HD-208.",
+      "hint": "Get-ChildItem 'C:\\LabEx\\PracticeFaults\\restorefile' -Force; Get-Content 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'",
+      "hint_vi": "Get-ChildItem 'C:\\LabEx\\PracticeFaults\\restorefile' -Force; Get-Content 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-deleted-file-restore-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-deleted-file-restore-sec-2",
+      "title": "Phục hồi và kiểm tra toàn vẹn",
+      "title_vi": "Phục hồi và kiểm tra toàn vẹn",
+      "position": 2,
+      "content": "## Phục hồi và kiểm tra toàn vẹn\n\n### Vì sao làm bước này?\nCopy dữ liệu từ bản đã xác minh; không viết lại hóa đơn bằng trí nhớ. Bộ chấm so sánh SHA256 hai file nên một file rỗng cùng tên không đạt.\n\n### Thao tác\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nCopy-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt' -Destination 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt','C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nHai hash giống nhau. Cho người dùng xác nhận tài liệu; hoàn nguyên kịch bản sau khi chấm để chuyển bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\n### Câu hỏi tự giải thích\nBackup thành công hàng ngày nhưng chưa từng thử restore có rủi ro gì?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Phục hồi và kiểm tra toàn vẹn\n\n### Vì sao làm bước này?\nCopy dữ liệu từ bản đã xác minh; không viết lại hóa đơn bằng trí nhớ. Bộ chấm so sánh SHA256 hai file nên một file rỗng cùng tên không đạt.\n\n### Thao tác\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nCopy-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt' -Destination 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt','C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nHai hash giống nhau. Cho người dùng xác nhận tài liệu; hoàn nguyên kịch bản sau khi chấm để chuyển bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\n### Câu hỏi tự giải thích\nBackup thành công hàng ngày nhưng chưa từng thử restore có rủi ro gì?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai hash giống nhau. Cho người dùng xác nhận tài liệu; hoàn nguyên kịch bản sau khi chấm để chuyển bài.",
+      "task_vi": "Hai hash giống nhau. Cho người dùng xác nhận tài liệu; hoàn nguyên kịch bản sau khi chấm để chuyển bài.",
+      "hint": "Copy-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt' -Destination 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt','C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'",
+      "hint_vi": "Copy-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt' -Destination 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt','C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-deleted-file-restore-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-deleted-file-restore-sec-1",
+      "title": "Xác định điểm phục hồi và file còn giữ",
+      "title_vi": "Xác định điểm phục hồi và file còn giữ",
+      "position": 1,
+      "content": "## Xác định điểm phục hồi và file còn giữ\n\n### Vì sao làm bước này?\nFile mất khỏi thư mục làm việc không đồng nghĩa backup cũng mất. Đọc bản backup trước, ghi lại nội dung cần trả lại và kiểm tra không có file mới cần bảo vệ.\n\n### Thao tác\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ChildItem 'C:\\LabEx\\PracticeFaults\\restorefile' -Force; Get-Content 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\ninvoice.txt gốc không tồn tại; Backup\\invoice.txt còn nguyên với mã HD-208.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\n### Câu hỏi tự giải thích\nNếu người dùng đã tạo hóa đơn mới cùng tên, bạn phục hồi thế nào để không mất bản mới?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Xác định điểm phục hồi và file còn giữ\n\n### Vì sao làm bước này?\nFile mất khỏi thư mục làm việc không đồng nghĩa backup cũng mất. Đọc bản backup trước, ghi lại nội dung cần trả lại và kiểm tra không có file mới cần bảo vệ.\n\n### Thao tác\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-ChildItem 'C:\\LabEx\\PracticeFaults\\restorefile' -Force; Get-Content 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\ninvoice.txt gốc không tồn tại; Backup\\invoice.txt còn nguyên với mã HD-208.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\n### Câu hỏi tự giải thích\nNếu người dùng đã tạo hóa đơn mới cùng tên, bạn phục hồi thế nào để không mất bản mới?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "invoice.txt gốc không tồn tại; Backup\\invoice.txt còn nguyên với mã HD-208.",
+      "task_vi": "invoice.txt gốc không tồn tại; Backup\\invoice.txt còn nguyên với mã HD-208.",
+      "hint": "Get-ChildItem 'C:\\LabEx\\PracticeFaults\\restorefile' -Force; Get-Content 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'",
+      "hint_vi": "Get-ChildItem 'C:\\LabEx\\PracticeFaults\\restorefile' -Force; Get-Content 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-deleted-file-restore-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-deleted-file-restore-sec-2",
+      "title": "Phục hồi và kiểm tra toàn vẹn",
+      "title_vi": "Phục hồi và kiểm tra toàn vẹn",
+      "position": 2,
+      "content": "## Phục hồi và kiểm tra toàn vẹn\n\n### Vì sao làm bước này?\nCopy dữ liệu từ bản đã xác minh; không viết lại hóa đơn bằng trí nhớ. Bộ chấm so sánh SHA256 hai file nên một file rỗng cùng tên không đạt.\n\n### Thao tác\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nCopy-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt' -Destination 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt','C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nHai hash giống nhau. Cho người dùng xác nhận tài liệu; hoàn nguyên kịch bản sau khi chấm để chuyển bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\n### Câu hỏi tự giải thích\nBackup thành công hàng ngày nhưng chưa từng thử restore có rủi ro gì?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Phục hồi và kiểm tra toàn vẹn\n\n### Vì sao làm bước này?\nCopy dữ liệu từ bản đã xác minh; không viết lại hóa đơn bằng trí nhớ. Bộ chấm so sánh SHA256 hai file nên một file rỗng cùng tên không đạt.\n\n### Thao tác\nBấm Chuẩn bị sự cố → kết nối lại → C:\\LabEx\\PracticeFaults\\restorefile. Xem Backup, copy invoice.txt về thư mục cha bằng File Explorer hoặc PowerShell.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nCopy-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt' -Destination 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt','C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'\n```\n\n### Kết quả và cách tự kiểm tra\nHai hash giống nhau. Cho người dùng xác nhận tài liệu; hoàn nguyên kịch bản sau khi chấm để chuyển bài.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi dữ liệu vào ổ thật đang cần cứu file đã xóa. Bài dùng backup có sẵn, không mô phỏng forensic undelete hay phục hồi sector.\n\n### Câu hỏi tự giải thích\nBackup thành công hàng ngày nhưng chưa từng thử restore có rủi ro gì?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai hash giống nhau. Cho người dùng xác nhận tài liệu; hoàn nguyên kịch bản sau khi chấm để chuyển bài.",
+      "task_vi": "Hai hash giống nhau. Cho người dùng xác nhận tài liệu; hoàn nguyên kịch bản sau khi chấm để chuyển bài.",
+      "hint": "Copy-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt' -Destination 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt','C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'",
+      "hint_vi": "Copy-Item -LiteralPath 'C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt' -Destination 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt'; Get-FileHash 'C:\\LabEx\\PracticeFaults\\restorefile\\invoice.txt','C:\\LabEx\\PracticeFaults\\restorefile\\Backup\\invoice.txt'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-deleted-file-restore-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ],
+  "fault_scenario": "restorefile"
+}

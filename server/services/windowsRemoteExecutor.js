@@ -1,18 +1,21 @@
 import crypto from 'node:crypto';
 import { azureClient } from './azureComputeClient.js';
-import { cloudConfig, cloudError, publicCloudError } from './cloudConfig.js';
+import { getVmTargetConfig, cloudError, publicCloudError } from './cloudConfig.js';
+import { resolveVmTarget } from './vmTargets.js';
+import { withVmLock } from './vmOperationLock.js';
 
-export function createWindowsRemoteExecutor({ client = azureClient, config = cloudConfig } = {}) {
-  let busy = false;
-  return async function execute(command, { labId } = {}) {
+export function createWindowsRemoteExecutor({ client = azureClient, config = getVmTargetConfig } = {}) {
+  return async function execute(command, { labId, target, lockHeld = false, workspaceOnly = false } = {}) {
     if (typeof command !== 'string' || !command.trim() || command.length > 16000) {
       throw cloudError('Lệnh PowerShell trống hoặc quá dài.', 400, 'CLOUD_INVALID_COMMAND');
     }
-    if (busy) throw cloudError('VM đang chạy một lệnh khác. Chờ lệnh hoàn tất rồi thử lại.', 409, 'CLOUD_BUSY');
-    busy = true;
+    // Internal smoke tools can use a separate scratch directory. HTTP routes
+    // never forward workspaceOnly/lockHeld from request bodies.
+    target = resolveVmTarget({ labId: workspaceOnly ? undefined : labId, target });
+    if (!lockHeld) return withVmLock(target, 'powershell', () => execute(command, { labId, target, workspaceOnly, lockHeld: true }));
     try {
-      if (labId && !/^win-[a-z0-9-]+$/.test(labId)) throw cloudError('Mã bài Windows không hợp lệ.', 400, 'CLOUD_INVALID_COMMAND');
-      const { resourceGroup, vmName } = config();
+      if (labId && !/^(win-|win11-)[a-z0-9-]+$/.test(labId)) throw cloudError('Mã bài Windows không hợp lệ.', 400, 'CLOUD_INVALID_COMMAND');
+      const { resourceGroup, vmName } = config(target);
       const marker = 'LABEX_RESULT_' + crypto.randomBytes(16).toString('hex') + ':';
       // The user's script is decoded by PowerShell ONLY ON THE AZURE VM.
       // A random result marker prevents a command's normal output forging success.
@@ -54,7 +57,6 @@ try {
       }
       return { ...parsed, transport: 'azure-run-command', target: vmName };
     } catch (error) { throw publicCloudError(error); }
-    finally { busy = false; }
   };
 }
 export const executeWindowsRemote = createWindowsRemoteExecutor();

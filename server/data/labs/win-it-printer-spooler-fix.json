@@ -1,7 +1,7 @@
 {
   "id": "win-it-printer-spooler-fix",
   "course_id": "windows-11-it-support-troubleshooting",
-  "order": 2,
+  "order": 14,
   "title": "Xử Lý Sự Cố Kẹt Hàng Đợi Máy In (Print Spooler Error)",
   "title_vi": "Xử Lý Sự Cố Kẹt Hàng Đợi Máy In (Print Spooler Error)",
   "type": "lab",
@@ -15,7 +15,7 @@
     "priority": "Urgent",
     "title": "Máy in văn phòng bị đơ, hàng chục lệnh in bị kẹt không in được hợp đồng gấp"
   },
-  "overview": "Xử lý sự cố kinh điển của IT Helpdesk: Lệnh in tài liệu bị lỗi khiến dịch vụ Print Spooler bị nghẽn, các lệnh in sau bị kẹt cứng bấm Cancel không xóa được. Thực hành quy trình phục hồi dịch vụ chuẩn.",
+  "overview": "Xử lý sự cố kinh điển của IT Helpdesk: Lệnh in tài liệu bị lỗi khiến dịch vụ Print Spooler bị nghẽn, các lệnh in sau bị kẹt cứng bấm Cancel không xóa được. Thực hành quy trình phục hồi dịch vụ chuẩn. Lab tạo sự cố dịch vụ dừng và tệp orphan mẫu, không tạo một print job Windows hợp lệ hoặc máy in vật lý.",
   "sections": [
     {
       "id": "win-it-pr-sec-0",
@@ -42,21 +42,11 @@
       "hint": "Chạy lệnh: Get-Service Spooler",
       "hint_vi": "Chạy lệnh: Get-Service Spooler",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-Service Spooler|get-service spooler)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote",
+        "rule_id": "win-it-pr-sec-1"
       },
       "required_capabilities": [
-        "terminal",
-        "shell"
+        "windows-remote"
       ],
       "content": "### Bước 1: Kiểm tra trạng thái dịch vụ\nChạy lệnh để xem Spooler có đang Running hay bị Stopped:\n```powershell\nGet-Service Spooler\n```\n\n### Xem các tệp đang kẹt trong hàng đợi:\n```powershell\nGet-ChildItem -Path \"C:\\Windows\\System32\\spool\\PRINTERS\" -Force\n```",
       "content_vi": "### Bước 1: Kiểm tra trạng thái dịch vụ\nChạy lệnh để xem Spooler có đang Running hay bị Stopped:\n```powershell\nGet-Service Spooler\n```\n\n### Xem các tệp đang kẹt trong hàng đợi:\n```powershell\nGet-ChildItem -Path \"C:\\Windows\\System32\\spool\\PRINTERS\" -Force\n```"
@@ -71,51 +61,60 @@
       "need_verify": true,
       "task": "Thực hiện quy trình 3 bước chuẩn IT: Dừng dịch vụ Spooler, dọn sạch thư mục tạm PRINTERS và khởi động lại dịch vụ.",
       "task_vi": "Thực hiện quy trình 3 bước chuẩn IT: Dừng dịch vụ Spooler, dọn sạch thư mục tạm PRINTERS và khởi động lại dịch vụ.",
-      "hint": "Chạy lệnh: Stop-Service Spooler -Force; Start-Service Spooler; Get-Service Spooler",
-      "hint_vi": "Chạy lệnh: Stop-Service Spooler -Force; Start-Service Spooler; Get-Service Spooler",
+      "hint": "Dừng Spooler, dọn tệp LabEx-orphan.SHD/SPL trong PRINTERS, khởi động lại Spooler và kiểm tra queue sạch.",
+      "hint_vi": "Dừng Spooler, dọn tệp LabEx-orphan.SHD/SPL trong PRINTERS, khởi động lại Spooler và kiểm tra queue sạch.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Stop-Service Spooler|net stop spooler)",
-            "(?:Start-Service Spooler|net start spooler)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote",
+        "rule_id": "win-it-pr-sec-2"
       },
       "required_capabilities": [
-        "terminal",
-        "shell"
+        "windows-remote"
       ],
-      "content": "### Quy trình 3 bước chuẩn chuyên viên IT Helpdesk:\n```powershell\n# Bước 1: Tạm dừng dịch vụ Print Spooler để mở khóa các file kẹt\nStop-Service Spooler -Force\n\n# Bước 2: Xóa sạch toàn bộ tệp tạm kẹt trong thư mục hàng đợi\nRemove-Item -Path \"C:\\Windows\\System32\\spool\\PRINTERS\\*.*\" -Force -ErrorAction SilentlyContinue\n\n# Bước 3: Khởi động lại dịch vụ Print Spooler\nStart-Service Spooler\nGet-Service Spooler\n```\n\n*(Sau bước này, bạn có thể gửi lệnh in tài liệu mới hoàn toàn bình thường)*",
-      "content_vi": "### Quy trình 3 bước chuẩn chuyên viên IT Helpdesk:\n```powershell\n# Bước 1: Tạm dừng dịch vụ Print Spooler để mở khóa các file kẹt\nStop-Service Spooler -Force\n\n# Bước 2: Xóa sạch toàn bộ tệp tạm kẹt trong thư mục hàng đợi\nRemove-Item -Path \"C:\\Windows\\System32\\spool\\PRINTERS\\*.*\" -Force -ErrorAction SilentlyContinue\n\n# Bước 3: Khởi động lại dịch vụ Print Spooler\nStart-Service Spooler\nGet-Service Spooler\n```\n\n*(Sau bước này, bạn có thể gửi lệnh in tài liệu mới hoàn toàn bình thường)*"
+      "content": "### Quy trình 3 bước chuẩn chuyên viên IT Helpdesk:\n```powershell\n# Bước 1: Tạm dừng dịch vụ Print Spooler để mở khóa các file kẹt\nStop-Service Spooler -Force\n\n# Bước 2: Xóa sạch toàn bộ tệp tạm kẹt trong thư mục hàng đợi\nRemove-Item -Path \"C:\\Windows\\System32\\spool\\PRINTERS\\*.*\" -Force -ErrorAction SilentlyContinue\n\n# Bước 3: Khởi động lại dịch vụ Print Spooler\nStart-Service Spooler\nGet-Service Spooler\n```\n\nBộ chấm kiểm tra Spooler chạy và thư mục queue sạch. Đây là bài khôi phục dịch vụ với tệp orphan do lab tạo, không giả lập được toàn bộ lỗi driver hoặc chứng minh máy in vật lý đã in thành công.",
+      "content_vi": "### Quy trình 3 bước chuẩn chuyên viên IT Helpdesk:\n```powershell\n# Bước 1: Tạm dừng dịch vụ Print Spooler để mở khóa các file kẹt\nStop-Service Spooler -Force\n\n# Bước 2: Xóa sạch toàn bộ tệp tạm kẹt trong thư mục hàng đợi\nRemove-Item -Path \"C:\\Windows\\System32\\spool\\PRINTERS\\*.*\" -Force -ErrorAction SilentlyContinue\n\n# Bước 3: Khởi động lại dịch vụ Print Spooler\nStart-Service Spooler\nGet-Service Spooler\n```\n\nBộ chấm kiểm tra Spooler chạy và thư mục queue sạch. Đây là bài khôi phục dịch vụ với tệp orphan do lab tạo, không giả lập được toàn bộ lỗi driver hoặc chứng minh máy in vật lý đã in thành công."
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 2,
   "steps": [
     {
       "id": "win-it-pr-sec-1",
-      "title": "Kiểm tra Dịch Vụ Print Spooler",
-      "title_vi": "Kiểm tra Dịch Vụ Print Spooler",
+      "title": "Kiểm tra Dịch Vụ Print Spooler & Hàng Đợi",
+      "title_vi": "Kiểm tra Dịch Vụ Print Spooler & Hàng Đợi",
       "position": 1,
-      "task": "Kiểm tra trạng thái của dịch vụ Print Spooler trên máy tính.",
-      "task_vi": "Kiểm tra trạng thái của dịch vụ Print Spooler trên máy tính.",
-      "hint": "Get-Service Spooler",
-      "hint_vi": "Get-Service Spooler"
+      "task": "Kiểm tra trạng thái của dịch vụ Print Spooler trên máy tính bằng PowerShell.",
+      "task_vi": "Kiểm tra trạng thái của dịch vụ Print Spooler trên máy tính bằng PowerShell.",
+      "hint": "Chạy lệnh: Get-Service Spooler",
+      "hint_vi": "Chạy lệnh: Get-Service Spooler",
+      "content": "### Bước 1: Kiểm tra trạng thái dịch vụ\nChạy lệnh để xem Spooler có đang Running hay bị Stopped:\n```powershell\nGet-Service Spooler\n```\n\n### Xem các tệp đang kẹt trong hàng đợi:\n```powershell\nGet-ChildItem -Path \"C:\\Windows\\System32\\spool\\PRINTERS\" -Force\n```",
+      "content_vi": "### Bước 1: Kiểm tra trạng thái dịch vụ\nChạy lệnh để xem Spooler có đang Running hay bị Stopped:\n```powershell\nGet-Service Spooler\n```\n\n### Xem các tệp đang kẹt trong hàng đợi:\n```powershell\nGet-ChildItem -Path \"C:\\Windows\\System32\\spool\\PRINTERS\" -Force\n```",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-pr-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
     },
     {
       "id": "win-it-pr-sec-2",
-      "title": "Phục Hồi Dịch Vụ & Xóa Hàng Đợi Kẹt",
-      "title_vi": "Phục Hồi Dịch Vụ & Xóa Hàng Đợi Kẹt",
+      "title": "Quy Trình Phục Hồi & Xóa Sạch Hàng Đợi Bị Kẹt",
+      "title_vi": "Quy Trình Phục Hồi & Xóa Sạch Hàng Đợi Bị Kẹt",
       "position": 2,
-      "task": "Dừng dịch vụ Spooler, dọn sạch hàng đợi và khởi động lại dịch vụ.",
-      "task_vi": "Dừng dịch vụ Spooler, dọn sạch hàng đợi và khởi động lại dịch vụ.",
-      "hint": "Stop-Service Spooler -Force; Start-Service Spooler",
-      "hint_vi": "Stop-Service Spooler -Force; Start-Service Spooler"
+      "task": "Thực hiện quy trình 3 bước chuẩn IT: Dừng dịch vụ Spooler, dọn sạch thư mục tạm PRINTERS và khởi động lại dịch vụ.",
+      "task_vi": "Thực hiện quy trình 3 bước chuẩn IT: Dừng dịch vụ Spooler, dọn sạch thư mục tạm PRINTERS và khởi động lại dịch vụ.",
+      "hint": "Dừng Spooler, dọn tệp LabEx-orphan.SHD/SPL trong PRINTERS, khởi động lại Spooler và kiểm tra queue sạch.",
+      "hint_vi": "Dừng Spooler, dọn tệp LabEx-orphan.SHD/SPL trong PRINTERS, khởi động lại Spooler và kiểm tra queue sạch.",
+      "content": "### Quy trình 3 bước chuẩn chuyên viên IT Helpdesk:\n```powershell\n# Bước 1: Tạm dừng dịch vụ Print Spooler để mở khóa các file kẹt\nStop-Service Spooler -Force\n\n# Bước 2: Xóa sạch toàn bộ tệp tạm kẹt trong thư mục hàng đợi\nRemove-Item -Path \"C:\\Windows\\System32\\spool\\PRINTERS\\*.*\" -Force -ErrorAction SilentlyContinue\n\n# Bước 3: Khởi động lại dịch vụ Print Spooler\nStart-Service Spooler\nGet-Service Spooler\n```\n\nBộ chấm kiểm tra Spooler chạy và thư mục queue sạch. Đây là bài khôi phục dịch vụ với tệp orphan do lab tạo, không giả lập được toàn bộ lỗi driver hoặc chứng minh máy in vật lý đã in thành công.",
+      "content_vi": "### Quy trình 3 bước chuẩn chuyên viên IT Helpdesk:\n```powershell\n# Bước 1: Tạm dừng dịch vụ Print Spooler để mở khóa các file kẹt\nStop-Service Spooler -Force\n\n# Bước 2: Xóa sạch toàn bộ tệp tạm kẹt trong thư mục hàng đợi\nRemove-Item -Path \"C:\\Windows\\System32\\spool\\PRINTERS\\*.*\" -Force -ErrorAction SilentlyContinue\n\n# Bước 3: Khởi động lại dịch vụ Print Spooler\nStart-Service Spooler\nGet-Service Spooler\n```\n\nBộ chấm kiểm tra Spooler chạy và thư mục queue sạch. Đây là bài khôi phục dịch vụ với tệp orphan do lab tạo, không giả lập được toàn bộ lỗi driver hoặc chứng minh máy in vật lý đã in thành công.",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-pr-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
     }
-  ]
+  ],
+  "practice_mode": "fault-injection",
+  "curriculum_group": "Máy in và dịch vụ"
 }

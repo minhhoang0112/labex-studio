@@ -1,0 +1,132 @@
+{
+  "id": "win-it-app-config-repair",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 5,
+  "title": "Ứng dụng không chạy do đường dẫn cấu hình sai",
+  "title_vi": "Ứng dụng không chạy do đường dẫn cấu hình sai",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Ứng dụng và cấu hình",
+  "overview": "Lỗi ứng dụng không luôn do thiếu phần mềm hay Windows hỏng. Tái hiện thông báo, đối chiếu cấu hình với file thật và sửa thay đổi nhỏ nhất.",
+  "ticket": {
+    "ticket_id": "HD-204",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Công cụ nội bộ báo không tìm thấy dữ liệu sau khi thay cấu hình."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/convertfrom-json",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/test-path",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "fault-injection",
+  "sections": [
+    {
+      "id": "win-it-app-config-repair-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-204: Công cụ nội bộ báo không tìm thấy dữ liệu sau khi thay cấu hình.\n\n### Mục tiêu và bản chất\nLỗi ứng dụng không luôn do thiếu phần mềm hay Windows hỏng. Tái hiện thông báo, đối chiếu cấu hình với file thật và sửa thay đổi nhỏ nhất.\n\n### Cách làm trên CLIENT01\nBài có **nạp lỗi thật trong vùng riêng của lab**. Bấm Chuẩn bị sự cố, chờ thành công rồi Kết nối lại Desktop. Làm bước chẩn đoán trước khi sửa. Sau khi chấm, bấm Hoàn nguyên kịch bản trước khi sang bài khác.\n\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\n### Phạm vi và lưu ý\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: convertfrom-json](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/convertfrom-json)\n- [Microsoft: test-path](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/test-path)\n",
+      "content_vi": "## Ticket HD-204: Công cụ nội bộ báo không tìm thấy dữ liệu sau khi thay cấu hình.\n\n### Mục tiêu và bản chất\nLỗi ứng dụng không luôn do thiếu phần mềm hay Windows hỏng. Tái hiện thông báo, đối chiếu cấu hình với file thật và sửa thay đổi nhỏ nhất.\n\n### Cách làm trên CLIENT01\nBài có **nạp lỗi thật trong vùng riêng của lab**. Bấm Chuẩn bị sự cố, chờ thành công rồi Kết nối lại Desktop. Làm bước chẩn đoán trước khi sửa. Sau khi chấm, bấm Hoàn nguyên kịch bản trước khi sang bài khác.\n\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\n### Phạm vi và lưu ý\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: convertfrom-json](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/convertfrom-json)\n- [Microsoft: test-path](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/test-path)\n"
+    },
+    {
+      "id": "win-it-app-config-repair-sec-1",
+      "title": "Tái hiện và cô lập nguyên nhân",
+      "title_vi": "Tái hiện và cô lập nguyên nhân",
+      "position": 1,
+      "content": "## Tái hiện và cô lập nguyên nhân\n\n### Vì sao làm bước này?\nỨng dụng đọc DataFile từ JSON. File cấu hình hợp lệ về cú pháp vẫn có thể chứa đường dẫn không tồn tại. Đọc lỗi và kiểm tra từng đường dẫn.\n\n### Thao tác\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-Content 'C:\\LabEx\\PracticeFaults\\appconfig\\settings.json'; Get-ChildItem 'C:\\LabEx\\PracticeFaults\\appconfig'; & 'C:\\LabEx\\PracticeFaults\\appconfig\\run.ps1'\n```\n\n### Kết quả và cách tự kiểm tra\nLệnh chạy ứng dụng báo lỗi DataFile; settings.json trỏ missing.txt trong khi dữ liệu thật là data.txt. Lỗi tái hiện ở bước này là có chủ đích.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\n### Câu hỏi tự giải thích\nBạn phân biệt lỗi cấu hình và lỗi không đủ quyền đọc file bằng bằng chứng nào?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tái hiện và cô lập nguyên nhân\n\n### Vì sao làm bước này?\nỨng dụng đọc DataFile từ JSON. File cấu hình hợp lệ về cú pháp vẫn có thể chứa đường dẫn không tồn tại. Đọc lỗi và kiểm tra từng đường dẫn.\n\n### Thao tác\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-Content 'C:\\LabEx\\PracticeFaults\\appconfig\\settings.json'; Get-ChildItem 'C:\\LabEx\\PracticeFaults\\appconfig'; & 'C:\\LabEx\\PracticeFaults\\appconfig\\run.ps1'\n```\n\n### Kết quả và cách tự kiểm tra\nLệnh chạy ứng dụng báo lỗi DataFile; settings.json trỏ missing.txt trong khi dữ liệu thật là data.txt. Lỗi tái hiện ở bước này là có chủ đích.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\n### Câu hỏi tự giải thích\nBạn phân biệt lỗi cấu hình và lỗi không đủ quyền đọc file bằng bằng chứng nào?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Lệnh chạy ứng dụng báo lỗi DataFile; settings.json trỏ missing.txt trong khi dữ liệu thật là data.txt. Lỗi tái hiện ở bước này là có chủ đích.",
+      "task_vi": "Lệnh chạy ứng dụng báo lỗi DataFile; settings.json trỏ missing.txt trong khi dữ liệu thật là data.txt. Lỗi tái hiện ở bước này là có chủ đích.",
+      "hint": "Get-Content 'C:\\LabEx\\PracticeFaults\\appconfig\\settings.json'; Get-ChildItem 'C:\\LabEx\\PracticeFaults\\appconfig'; & 'C:\\LabEx\\PracticeFaults\\appconfig\\run.ps1'",
+      "hint_vi": "Get-Content 'C:\\LabEx\\PracticeFaults\\appconfig\\settings.json'; Get-ChildItem 'C:\\LabEx\\PracticeFaults\\appconfig'; & 'C:\\LabEx\\PracticeFaults\\appconfig\\run.ps1'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-app-config-repair-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-app-config-repair-sec-2",
+      "title": "Sửa cấu hình và chạy lại nghiệp vụ",
+      "title_vi": "Sửa cấu hình và chạy lại nghiệp vụ",
+      "position": 2,
+      "content": "## Sửa cấu hình và chạy lại nghiệp vụ\n\n### Vì sao làm bước này?\nGiữ bản before để có thể so sánh và quay lui. Không chỉ tạo file missing.txt cho hết lỗi; cấu hình phải trỏ đúng dữ liệu được yêu cầu.\n\n### Thao tác\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\PracticeFaults\\appconfig'; Copy-Item \"$p\\settings.json\" \"$p\\settings.before.json\"\n@{ DataFile=\"$p\\data.txt\" } | ConvertTo-Json | Set-Content \"$p\\settings.json\" -Encoding UTF8\n& \"$p\\run.ps1\"; Get-Content \"$p\\result.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nỨng dụng sinh LABEX APP OK: CLIENT01. Bộ chấm chạy lại phép kiểm tra chức năng. Hoàn nguyên kịch bản khi xong.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\n### Câu hỏi tự giải thích\nTại sao chỉ ghi “đã sửa file” chưa đủ để xác nhận ứng dụng hoạt động?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Sửa cấu hình và chạy lại nghiệp vụ\n\n### Vì sao làm bước này?\nGiữ bản before để có thể so sánh và quay lui. Không chỉ tạo file missing.txt cho hết lỗi; cấu hình phải trỏ đúng dữ liệu được yêu cầu.\n\n### Thao tác\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\PracticeFaults\\appconfig'; Copy-Item \"$p\\settings.json\" \"$p\\settings.before.json\"\n@{ DataFile=\"$p\\data.txt\" } | ConvertTo-Json | Set-Content \"$p\\settings.json\" -Encoding UTF8\n& \"$p\\run.ps1\"; Get-Content \"$p\\result.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nỨng dụng sinh LABEX APP OK: CLIENT01. Bộ chấm chạy lại phép kiểm tra chức năng. Hoàn nguyên kịch bản khi xong.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\n### Câu hỏi tự giải thích\nTại sao chỉ ghi “đã sửa file” chưa đủ để xác nhận ứng dụng hoạt động?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Ứng dụng sinh LABEX APP OK: CLIENT01. Bộ chấm chạy lại phép kiểm tra chức năng. Hoàn nguyên kịch bản khi xong.",
+      "task_vi": "Ứng dụng sinh LABEX APP OK: CLIENT01. Bộ chấm chạy lại phép kiểm tra chức năng. Hoàn nguyên kịch bản khi xong.",
+      "hint": "$p='C:\\LabEx\\PracticeFaults\\appconfig'; Copy-Item \"$p\\settings.json\" \"$p\\settings.before.json\"\n@{ DataFile=\"$p\\data.txt\" } | ConvertTo-Json | Set-Content \"$p\\settings.json\" -Encoding UTF8\n& \"$p\\run.ps1\"; Get-Content \"$p\\result.txt\"",
+      "hint_vi": "$p='C:\\LabEx\\PracticeFaults\\appconfig'; Copy-Item \"$p\\settings.json\" \"$p\\settings.before.json\"\n@{ DataFile=\"$p\\data.txt\" } | ConvertTo-Json | Set-Content \"$p\\settings.json\" -Encoding UTF8\n& \"$p\\run.ps1\"; Get-Content \"$p\\result.txt\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-app-config-repair-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-app-config-repair-sec-1",
+      "title": "Tái hiện và cô lập nguyên nhân",
+      "title_vi": "Tái hiện và cô lập nguyên nhân",
+      "position": 1,
+      "content": "## Tái hiện và cô lập nguyên nhân\n\n### Vì sao làm bước này?\nỨng dụng đọc DataFile từ JSON. File cấu hình hợp lệ về cú pháp vẫn có thể chứa đường dẫn không tồn tại. Đọc lỗi và kiểm tra từng đường dẫn.\n\n### Thao tác\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-Content 'C:\\LabEx\\PracticeFaults\\appconfig\\settings.json'; Get-ChildItem 'C:\\LabEx\\PracticeFaults\\appconfig'; & 'C:\\LabEx\\PracticeFaults\\appconfig\\run.ps1'\n```\n\n### Kết quả và cách tự kiểm tra\nLệnh chạy ứng dụng báo lỗi DataFile; settings.json trỏ missing.txt trong khi dữ liệu thật là data.txt. Lỗi tái hiện ở bước này là có chủ đích.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\n### Câu hỏi tự giải thích\nBạn phân biệt lỗi cấu hình và lỗi không đủ quyền đọc file bằng bằng chứng nào?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tái hiện và cô lập nguyên nhân\n\n### Vì sao làm bước này?\nỨng dụng đọc DataFile từ JSON. File cấu hình hợp lệ về cú pháp vẫn có thể chứa đường dẫn không tồn tại. Đọc lỗi và kiểm tra từng đường dẫn.\n\n### Thao tác\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\nGet-Content 'C:\\LabEx\\PracticeFaults\\appconfig\\settings.json'; Get-ChildItem 'C:\\LabEx\\PracticeFaults\\appconfig'; & 'C:\\LabEx\\PracticeFaults\\appconfig\\run.ps1'\n```\n\n### Kết quả và cách tự kiểm tra\nLệnh chạy ứng dụng báo lỗi DataFile; settings.json trỏ missing.txt trong khi dữ liệu thật là data.txt. Lỗi tái hiện ở bước này là có chủ đích.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\n### Câu hỏi tự giải thích\nBạn phân biệt lỗi cấu hình và lỗi không đủ quyền đọc file bằng bằng chứng nào?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Lệnh chạy ứng dụng báo lỗi DataFile; settings.json trỏ missing.txt trong khi dữ liệu thật là data.txt. Lỗi tái hiện ở bước này là có chủ đích.",
+      "task_vi": "Lệnh chạy ứng dụng báo lỗi DataFile; settings.json trỏ missing.txt trong khi dữ liệu thật là data.txt. Lỗi tái hiện ở bước này là có chủ đích.",
+      "hint": "Get-Content 'C:\\LabEx\\PracticeFaults\\appconfig\\settings.json'; Get-ChildItem 'C:\\LabEx\\PracticeFaults\\appconfig'; & 'C:\\LabEx\\PracticeFaults\\appconfig\\run.ps1'",
+      "hint_vi": "Get-Content 'C:\\LabEx\\PracticeFaults\\appconfig\\settings.json'; Get-ChildItem 'C:\\LabEx\\PracticeFaults\\appconfig'; & 'C:\\LabEx\\PracticeFaults\\appconfig\\run.ps1'",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-app-config-repair-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-app-config-repair-sec-2",
+      "title": "Sửa cấu hình và chạy lại nghiệp vụ",
+      "title_vi": "Sửa cấu hình và chạy lại nghiệp vụ",
+      "position": 2,
+      "content": "## Sửa cấu hình và chạy lại nghiệp vụ\n\n### Vì sao làm bước này?\nGiữ bản before để có thể so sánh và quay lui. Không chỉ tạo file missing.txt cho hết lỗi; cấu hình phải trỏ đúng dữ liệu được yêu cầu.\n\n### Thao tác\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\PracticeFaults\\appconfig'; Copy-Item \"$p\\settings.json\" \"$p\\settings.before.json\"\n@{ DataFile=\"$p\\data.txt\" } | ConvertTo-Json | Set-Content \"$p\\settings.json\" -Encoding UTF8\n& \"$p\\run.ps1\"; Get-Content \"$p\\result.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nỨng dụng sinh LABEX APP OK: CLIENT01. Bộ chấm chạy lại phép kiểm tra chức năng. Hoàn nguyên kịch bản khi xong.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\n### Câu hỏi tự giải thích\nTại sao chỉ ghi “đã sửa file” chưa đủ để xác nhận ứng dụng hoạt động?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Sửa cấu hình và chạy lại nghiệp vụ\n\n### Vì sao làm bước này?\nGiữ bản before để có thể so sánh và quay lui. Không chỉ tạo file missing.txt cho hết lỗi; cấu hình phải trỏ đúng dữ liệu được yêu cầu.\n\n### Thao tác\nBấm Chuẩn bị sự cố; kết nối lại. File Explorer → C:\\LabEx\\PracticeFaults\\appconfig. Mở settings.json bằng Notepad; giữ bản sao trước khi sửa.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\PracticeFaults\\appconfig'; Copy-Item \"$p\\settings.json\" \"$p\\settings.before.json\"\n@{ DataFile=\"$p\\data.txt\" } | ConvertTo-Json | Set-Content \"$p\\settings.json\" -Encoding UTF8\n& \"$p\\run.ps1\"; Get-Content \"$p\\result.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nỨng dụng sinh LABEX APP OK: CLIENT01. Bộ chấm chạy lại phép kiểm tra chức năng. Hoàn nguyên kịch bản khi xong.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông sửa Registry toàn máy hoặc cài lại Windows cho lỗi đường dẫn cục bộ. Script run.ps1 của lab không phải ứng dụng của bên thứ ba.\n\n### Câu hỏi tự giải thích\nTại sao chỉ ghi “đã sửa file” chưa đủ để xác nhận ứng dụng hoạt động?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Ứng dụng sinh LABEX APP OK: CLIENT01. Bộ chấm chạy lại phép kiểm tra chức năng. Hoàn nguyên kịch bản khi xong.",
+      "task_vi": "Ứng dụng sinh LABEX APP OK: CLIENT01. Bộ chấm chạy lại phép kiểm tra chức năng. Hoàn nguyên kịch bản khi xong.",
+      "hint": "$p='C:\\LabEx\\PracticeFaults\\appconfig'; Copy-Item \"$p\\settings.json\" \"$p\\settings.before.json\"\n@{ DataFile=\"$p\\data.txt\" } | ConvertTo-Json | Set-Content \"$p\\settings.json\" -Encoding UTF8\n& \"$p\\run.ps1\"; Get-Content \"$p\\result.txt\"",
+      "hint_vi": "$p='C:\\LabEx\\PracticeFaults\\appconfig'; Copy-Item \"$p\\settings.json\" \"$p\\settings.before.json\"\n@{ DataFile=\"$p\\data.txt\" } | ConvertTo-Json | Set-Content \"$p\\settings.json\" -Encoding UTF8\n& \"$p\\run.ps1\"; Get-Content \"$p\\result.txt\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-app-config-repair-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ],
+  "fault_scenario": "appconfig"
+}

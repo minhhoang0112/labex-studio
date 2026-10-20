@@ -1,0 +1,131 @@
+{
+  "id": "win-it-software-deployment",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 4,
+  "title": "Cài đặt, nâng phiên bản và gỡ ứng dụng portable nội bộ",
+  "title_vi": "Cài đặt, nâng phiên bản và gỡ ứng dụng portable nội bộ",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Ứng dụng và cấu hình",
+  "overview": "Cài đặt là một thay đổi cần biết nguồn gốc, phiên bản, phạm vi và cách quay lui. Lab dùng script portable tự tạo, không tải EXE lạ và không giả là đang cài Microsoft Office.",
+  "ticket": {
+    "ticket_id": "HD-203",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Cần triển khai công cụ nội bộ có phiên bản và kiểm tra sau cài đặt."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://support.microsoft.com/en-us/windows/uninstall-or-remove-apps-and-programs-in-windows-4b55f974-2cc6-2d2b-d092-5905080eaf98",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-software-deployment-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-203: Cần triển khai công cụ nội bộ có phiên bản và kiểm tra sau cài đặt.\n\n### Mục tiêu và bản chất\nCài đặt là một thay đổi cần biết nguồn gốc, phiên bản, phạm vi và cách quay lui. Lab dùng script portable tự tạo, không tải EXE lạ và không giả là đang cài Microsoft Office.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-software-deployment.\n\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\n### Phạm vi và lưu ý\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-filehash](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash)\n- [Microsoft: uninstall-or-remove-apps-and-programs-in-windows-4b55f974-2cc6-2d2b-d092-5905080eaf98](https://support.microsoft.com/en-us/windows/uninstall-or-remove-apps-and-programs-in-windows-4b55f974-2cc6-2d2b-d092-5905080eaf98)\n",
+      "content_vi": "## Ticket HD-203: Cần triển khai công cụ nội bộ có phiên bản và kiểm tra sau cài đặt.\n\n### Mục tiêu và bản chất\nCài đặt là một thay đổi cần biết nguồn gốc, phiên bản, phạm vi và cách quay lui. Lab dùng script portable tự tạo, không tải EXE lạ và không giả là đang cài Microsoft Office.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-software-deployment.\n\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\n### Phạm vi và lưu ý\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-filehash](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash)\n- [Microsoft: uninstall-or-remove-apps-and-programs-in-windows-4b55f974-2cc6-2d2b-d092-5905080eaf98](https://support.microsoft.com/en-us/windows/uninstall-or-remove-apps-and-programs-in-windows-4b55f974-2cc6-2d2b-d092-5905080eaf98)\n"
+    },
+    {
+      "id": "win-it-software-deployment-sec-1",
+      "title": "Triển khai bản 1.0 và ghi mã kiểm tra",
+      "title_vi": "Triển khai bản 1.0 và ghi mã kiểm tra",
+      "position": 1,
+      "content": "## Triển khai bản 1.0 và ghi mã kiểm tra\n\n### Vì sao làm bước này?\nBản portable được cài bằng cách đặt file vào đúng thư mục. SHA256 dùng kiểm tra file có đổi; hash tự tính chưa chứng minh nhà phát hành đáng tin.\n\n### Thao tác\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-software-deployment'; New-Item -ItemType Directory -Path \"$p\\App\" -Force | Out-Null\n\"Write-Output 'LabEx Tool 1.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\nGet-FileHash \"$p\\App\\tool.ps1\" | Export-Csv \"$p\\install-manifest.csv\" -NoTypeInformation\n& \"$p\\App\\tool.ps1\"\n```\n\n### Kết quả và cách tự kiểm tra\nCông cụ in LabEx Tool 1.0; manifest chứa SHA256 khớp file đã triển khai.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\n### Câu hỏi tự giải thích\nHash từ chính website bị xâm nhập có đủ xác minh nguồn cài đặt không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Triển khai bản 1.0 và ghi mã kiểm tra\n\n### Vì sao làm bước này?\nBản portable được cài bằng cách đặt file vào đúng thư mục. SHA256 dùng kiểm tra file có đổi; hash tự tính chưa chứng minh nhà phát hành đáng tin.\n\n### Thao tác\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-software-deployment'; New-Item -ItemType Directory -Path \"$p\\App\" -Force | Out-Null\n\"Write-Output 'LabEx Tool 1.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\nGet-FileHash \"$p\\App\\tool.ps1\" | Export-Csv \"$p\\install-manifest.csv\" -NoTypeInformation\n& \"$p\\App\\tool.ps1\"\n```\n\n### Kết quả và cách tự kiểm tra\nCông cụ in LabEx Tool 1.0; manifest chứa SHA256 khớp file đã triển khai.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\n### Câu hỏi tự giải thích\nHash từ chính website bị xâm nhập có đủ xác minh nguồn cài đặt không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Công cụ in LabEx Tool 1.0; manifest chứa SHA256 khớp file đã triển khai.",
+      "task_vi": "Công cụ in LabEx Tool 1.0; manifest chứa SHA256 khớp file đã triển khai.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-software-deployment'; New-Item -ItemType Directory -Path \"$p\\App\" -Force | Out-Null\n\"Write-Output 'LabEx Tool 1.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\nGet-FileHash \"$p\\App\\tool.ps1\" | Export-Csv \"$p\\install-manifest.csv\" -NoTypeInformation\n& \"$p\\App\\tool.ps1\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-software-deployment'; New-Item -ItemType Directory -Path \"$p\\App\" -Force | Out-Null\n\"Write-Output 'LabEx Tool 1.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\nGet-FileHash \"$p\\App\\tool.ps1\" | Export-Csv \"$p\\install-manifest.csv\" -NoTypeInformation\n& \"$p\\App\\tool.ps1\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-software-deployment-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-software-deployment-sec-2",
+      "title": "Nâng cấp có bản quay lui",
+      "title_vi": "Nâng cấp có bản quay lui",
+      "position": 2,
+      "content": "## Nâng cấp có bản quay lui\n\n### Vì sao làm bước này?\nSao lưu bản đang chạy trước khi thay file. Trong thực tế cần xác minh chữ ký publisher, điều kiện license và thử trên nhóm nhỏ trước khi triển khai rộng.\n\n### Thao tác\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-software-deployment'; Copy-Item \"$p\\App\\tool.ps1\" \"$p\\tool-v1.rollback.ps1\"\n\"Write-Output 'LabEx Tool 2.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\n& \"$p\\App\\tool.ps1\"; Get-Content \"$p\\tool-v1.rollback.ps1\"\n```\n\n### Kết quả và cách tự kiểm tra\nBản đang triển khai 2.0, bản quay lui vẫn là 1.0. Khi gỡ portable, chỉ xóa thư mục App của bài sau khi lưu cấu hình cần giữ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\n### Câu hỏi tự giải thích\nNếu bản mới lỗi, bạn khôi phục file và kiểm tra những gì trước khi đóng ticket?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Nâng cấp có bản quay lui\n\n### Vì sao làm bước này?\nSao lưu bản đang chạy trước khi thay file. Trong thực tế cần xác minh chữ ký publisher, điều kiện license và thử trên nhóm nhỏ trước khi triển khai rộng.\n\n### Thao tác\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-software-deployment'; Copy-Item \"$p\\App\\tool.ps1\" \"$p\\tool-v1.rollback.ps1\"\n\"Write-Output 'LabEx Tool 2.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\n& \"$p\\App\\tool.ps1\"; Get-Content \"$p\\tool-v1.rollback.ps1\"\n```\n\n### Kết quả và cách tự kiểm tra\nBản đang triển khai 2.0, bản quay lui vẫn là 1.0. Khi gỡ portable, chỉ xóa thư mục App của bài sau khi lưu cấu hình cần giữ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\n### Câu hỏi tự giải thích\nNếu bản mới lỗi, bạn khôi phục file và kiểm tra những gì trước khi đóng ticket?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Bản đang triển khai 2.0, bản quay lui vẫn là 1.0. Khi gỡ portable, chỉ xóa thư mục App của bài sau khi lưu cấu hình cần giữ.",
+      "task_vi": "Bản đang triển khai 2.0, bản quay lui vẫn là 1.0. Khi gỡ portable, chỉ xóa thư mục App của bài sau khi lưu cấu hình cần giữ.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-software-deployment'; Copy-Item \"$p\\App\\tool.ps1\" \"$p\\tool-v1.rollback.ps1\"\n\"Write-Output 'LabEx Tool 2.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\n& \"$p\\App\\tool.ps1\"; Get-Content \"$p\\tool-v1.rollback.ps1\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-software-deployment'; Copy-Item \"$p\\App\\tool.ps1\" \"$p\\tool-v1.rollback.ps1\"\n\"Write-Output 'LabEx Tool 2.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\n& \"$p\\App\\tool.ps1\"; Get-Content \"$p\\tool-v1.rollback.ps1\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-software-deployment-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-software-deployment-sec-1",
+      "title": "Triển khai bản 1.0 và ghi mã kiểm tra",
+      "title_vi": "Triển khai bản 1.0 và ghi mã kiểm tra",
+      "position": 1,
+      "content": "## Triển khai bản 1.0 và ghi mã kiểm tra\n\n### Vì sao làm bước này?\nBản portable được cài bằng cách đặt file vào đúng thư mục. SHA256 dùng kiểm tra file có đổi; hash tự tính chưa chứng minh nhà phát hành đáng tin.\n\n### Thao tác\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-software-deployment'; New-Item -ItemType Directory -Path \"$p\\App\" -Force | Out-Null\n\"Write-Output 'LabEx Tool 1.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\nGet-FileHash \"$p\\App\\tool.ps1\" | Export-Csv \"$p\\install-manifest.csv\" -NoTypeInformation\n& \"$p\\App\\tool.ps1\"\n```\n\n### Kết quả và cách tự kiểm tra\nCông cụ in LabEx Tool 1.0; manifest chứa SHA256 khớp file đã triển khai.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\n### Câu hỏi tự giải thích\nHash từ chính website bị xâm nhập có đủ xác minh nguồn cài đặt không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Triển khai bản 1.0 và ghi mã kiểm tra\n\n### Vì sao làm bước này?\nBản portable được cài bằng cách đặt file vào đúng thư mục. SHA256 dùng kiểm tra file có đổi; hash tự tính chưa chứng minh nhà phát hành đáng tin.\n\n### Thao tác\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-software-deployment'; New-Item -ItemType Directory -Path \"$p\\App\" -Force | Out-Null\n\"Write-Output 'LabEx Tool 1.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\nGet-FileHash \"$p\\App\\tool.ps1\" | Export-Csv \"$p\\install-manifest.csv\" -NoTypeInformation\n& \"$p\\App\\tool.ps1\"\n```\n\n### Kết quả và cách tự kiểm tra\nCông cụ in LabEx Tool 1.0; manifest chứa SHA256 khớp file đã triển khai.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\n### Câu hỏi tự giải thích\nHash từ chính website bị xâm nhập có đủ xác minh nguồn cài đặt không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Công cụ in LabEx Tool 1.0; manifest chứa SHA256 khớp file đã triển khai.",
+      "task_vi": "Công cụ in LabEx Tool 1.0; manifest chứa SHA256 khớp file đã triển khai.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-software-deployment'; New-Item -ItemType Directory -Path \"$p\\App\" -Force | Out-Null\n\"Write-Output 'LabEx Tool 1.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\nGet-FileHash \"$p\\App\\tool.ps1\" | Export-Csv \"$p\\install-manifest.csv\" -NoTypeInformation\n& \"$p\\App\\tool.ps1\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-software-deployment'; New-Item -ItemType Directory -Path \"$p\\App\" -Force | Out-Null\n\"Write-Output 'LabEx Tool 1.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\nGet-FileHash \"$p\\App\\tool.ps1\" | Export-Csv \"$p\\install-manifest.csv\" -NoTypeInformation\n& \"$p\\App\\tool.ps1\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-software-deployment-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-software-deployment-sec-2",
+      "title": "Nâng cấp có bản quay lui",
+      "title_vi": "Nâng cấp có bản quay lui",
+      "position": 2,
+      "content": "## Nâng cấp có bản quay lui\n\n### Vì sao làm bước này?\nSao lưu bản đang chạy trước khi thay file. Trong thực tế cần xác minh chữ ký publisher, điều kiện license và thử trên nhóm nhỏ trước khi triển khai rộng.\n\n### Thao tác\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-software-deployment'; Copy-Item \"$p\\App\\tool.ps1\" \"$p\\tool-v1.rollback.ps1\"\n\"Write-Output 'LabEx Tool 2.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\n& \"$p\\App\\tool.ps1\"; Get-Content \"$p\\tool-v1.rollback.ps1\"\n```\n\n### Kết quả và cách tự kiểm tra\nBản đang triển khai 2.0, bản quay lui vẫn là 1.0. Khi gỡ portable, chỉ xóa thư mục App của bài sau khi lưu cấu hình cần giữ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\n### Câu hỏi tự giải thích\nNếu bản mới lỗi, bạn khôi phục file và kiểm tra những gì trước khi đóng ticket?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Nâng cấp có bản quay lui\n\n### Vì sao làm bước này?\nSao lưu bản đang chạy trước khi thay file. Trong thực tế cần xác minh chữ ký publisher, điều kiện license và thử trên nhóm nhỏ trước khi triển khai rộng.\n\n### Thao tác\nMở File Explorer tới thư mục bài. So sánh mô hình portable với Settings → Apps → Installed apps: portable không nhất thiết có mục Uninstall.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-software-deployment'; Copy-Item \"$p\\App\\tool.ps1\" \"$p\\tool-v1.rollback.ps1\"\n\"Write-Output 'LabEx Tool 2.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\n& \"$p\\App\\tool.ps1\"; Get-Content \"$p\\tool-v1.rollback.ps1\"\n```\n\n### Kết quả và cách tự kiểm tra\nBản đang triển khai 2.0, bản quay lui vẫn là 1.0. Khi gỡ portable, chỉ xóa thư mục App của bài sau khi lưu cấu hình cần giữ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông chạy mọi installer bằng quyền admin. Không dùng Win32_Product để kiểm kê MSI vì truy vấn có thể kích hoạt hành vi sửa chữa sản phẩm.\n\n### Câu hỏi tự giải thích\nNếu bản mới lỗi, bạn khôi phục file và kiểm tra những gì trước khi đóng ticket?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Bản đang triển khai 2.0, bản quay lui vẫn là 1.0. Khi gỡ portable, chỉ xóa thư mục App của bài sau khi lưu cấu hình cần giữ.",
+      "task_vi": "Bản đang triển khai 2.0, bản quay lui vẫn là 1.0. Khi gỡ portable, chỉ xóa thư mục App của bài sau khi lưu cấu hình cần giữ.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-software-deployment'; Copy-Item \"$p\\App\\tool.ps1\" \"$p\\tool-v1.rollback.ps1\"\n\"Write-Output 'LabEx Tool 2.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\n& \"$p\\App\\tool.ps1\"; Get-Content \"$p\\tool-v1.rollback.ps1\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-software-deployment'; Copy-Item \"$p\\App\\tool.ps1\" \"$p\\tool-v1.rollback.ps1\"\n\"Write-Output 'LabEx Tool 2.0'\" | Set-Content \"$p\\App\\tool.ps1\" -Encoding UTF8\n& \"$p\\App\\tool.ps1\"; Get-Content \"$p\\tool-v1.rollback.ps1\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-software-deployment-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

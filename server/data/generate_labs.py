@@ -20,8 +20,10 @@ def state_commands(rule):
 
 def validate_rule(rule, label, errors):
     kind = rule.get("kind")
-    if kind not in ("state", "commands", "all", "acknowledgement", "unsupported"):
+    if kind not in ("state", "commands", "all", "acknowledgement", "unsupported", "windows-remote"):
         errors.append(f"{label}: unknown verification kind")
+    if kind == "windows-remote" and (not label.startswith(("win-", "win11-")) or rule.get("rule_id") != label.split("/")[-1]):
+        errors.append(f"{label}: Windows verifier must reference this exact trusted server-side step")
     if kind == "state":
         command = rule.get("command", "").strip()
         if not command or re.fullmatch(r"(?:true|:|echo ['\"]?ok['\"]?);?", command) or re.search(r"\|\|\s*(?:true|:)\s*;?\s*$", command):

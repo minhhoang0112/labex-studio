@@ -1,0 +1,78 @@
+{
+  "kind": "review-plan-not-deployment-template",
+  "preparedOn": "2026-10-20",
+  "status": "rejected-by-user-reference-only-do-not-deploy",
+  "userDecision": "User rejected the additional 30 USD/month proposal; prefer inexpensive B-series and explicit web start/deallocate only while studying. See ANTIGRAVITY_WINDOWS_CLOUD_HANDOVER.md for current direction.",
+  "currentPreferredStrategy": "Reuse the existing VM for ordinary learning; prepare fault-injection backend before requesting any new billable resources",
+  "purpose": "Personal Windows IT Support dev/test fault-injection training",
+  "subscriptionOffer": "Azure for Students",
+  "region": "centralindia",
+  "existingVmPolicy": "Do not start, resize, inject faults into, or replace LabEx-WinServer during this preparation",
+  "proposedResources": {
+    "resourceGroup": "LabEx-Support-Lab-RG",
+    "vmName": "LabEx-CLIENT01",
+    "computerName": "CLIENT01",
+    "size": "Standard_B2as_v2",
+    "vcpus": 2,
+    "memoryGiB": 8,
+    "priority": "Regular",
+    "image": {
+      "publisher": "MicrosoftWindowsDesktop",
+      "offer": "windows-11",
+      "sku": "win11-25h2-ent",
+      "reviewedVersion": "26200.9711.261011",
+      "versionPolicy": "Pin the reviewed exact version at deployment; recheck availability then"
+    },
+    "securityType": "TrustedLaunch",
+    "secureBoot": true,
+    "vTpm": true,
+    "osDisk": {"sizeGiB": 128, "sku": "StandardSSD_LRS"},
+    "baselineSnapshot": {"sku": "Standard_LRS", "retainedCount": 1},
+    "publicIp": {"sku": "Standard", "version": "IPv4", "allocation": "Static"},
+    "network": {
+      "dedicatedVnet": true,
+      "peerExistingVnet": false,
+      "rdpPort": 3389,
+      "rdpSource": "Backend/Guacamole gateway public IPv4 /32, supplied at deployment",
+      "allowInternetWideRdp": false,
+      "exposeWinRm": false,
+      "preserveAzureAgentOutbound": true
+    },
+    "credentials": "Create fresh dedicated lab credentials using secure input; never store in this plan"
+  },
+  "costAssumptions": {
+    "currency": "USD",
+    "publicRetailCheckedOn": "2026-10-20",
+    "runtimeHoursPerMonth": [60, 120],
+    "baseComputePerHour": 0.0492,
+    "conservativeWindowsComputePerHour": 0.0584,
+    "standardSsdE10PerMonth": 10.56,
+    "standardIpv4PerHour": 0.005,
+    "ipHoursPerMonth": 730,
+    "standardLrsSnapshotPerUsedGbMonth": 0.05,
+    "assumedSnapshotUsedGb": 40,
+    "estimatedMonthlySubtotalRange": [19.16, 23.22],
+    "proposedAdditionalMonthlyBudget": null,
+    "budgetIsHardCap": false,
+    "excludes": ["Existing VM/disks/network", "Tax", "Disk operations", "Network egress", "Extra retained recovery disks or snapshots", "Any separately required licensing"],
+    "billingCaveat": "Windows client billing/license eligibility must be confirmed for the selected dev/test deployment; upper figure uses the Windows Server retail meter as a planning allowance, not a confirmed Windows 11 quote"
+  },
+  "deploymentGates": [
+    "User approves additional monthly budget and confirms remaining student credit",
+    "Revalidate regional total and Basv2 family vCPU quotas",
+    "Confirm SKU restrictions and capacity; list-skus timed out during this audit",
+    "Validate exact image version, dev/test terms and deployment parameters",
+    "Provide restricted RDP source and secure fresh credentials",
+    "Review Azure deployment validation/what-if before creating resources"
+  ],
+  "faultInjectionGates": [
+    "Dedicated VM baseline is healthy and recovery snapshot exists",
+    "Full reset has been demonstrated on the dedicated VM",
+    "Guest disk encryption and vTPM recovery implications are verified",
+    "Backend supports explicit target selection instead of single global VM",
+    "An exclusive session lease and durable operation journal are implemented",
+    "Scenario proves both pre-repair failure and post-repair functional success"
+  ],
+  "implementedNow": ["Read-only Azure inventory", "Public retail price capture", "Cloud-first architecture and recovery specification"],
+  "notImplementedYet": ["New VM deployment", "Multiple-target web runtime", "Fault injection engine", "Baseline reset automation", "New Windows 11 courses"]
+}

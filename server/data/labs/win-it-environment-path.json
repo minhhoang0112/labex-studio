@@ -1,0 +1,131 @@
+{
+  "id": "win-it-environment-path",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 6,
+  "title": "Command not found: PATH và phạm vi biến môi trường",
+  "title_vi": "Command not found: PATH và phạm vi biến môi trường",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Ứng dụng và cấu hình",
+  "overview": "PATH là danh sách thư mục shell tìm lệnh. Biến của process hiện tại khác biến User và Machine; PowerShell web tạo process mới cho mỗi lần gửi.",
+  "ticket": {
+    "ticket_id": "HD-205",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Công cụ tồn tại nhưng gọi tên lệnh không chạy được."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/setx",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-environment-path-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-205: Công cụ tồn tại nhưng gọi tên lệnh không chạy được.\n\n### Mục tiêu và bản chất\nPATH là danh sách thư mục shell tìm lệnh. Biến của process hiện tại khác biến User và Machine; PowerShell web tạo process mới cho mỗi lần gửi.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-environment-path.\n\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\n### Phạm vi và lưu ý\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: setx](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/setx)\n- [Microsoft: about_environment_variables](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables)\n",
+      "content_vi": "## Ticket HD-205: Công cụ tồn tại nhưng gọi tên lệnh không chạy được.\n\n### Mục tiêu và bản chất\nPATH là danh sách thư mục shell tìm lệnh. Biến của process hiện tại khác biến User và Machine; PowerShell web tạo process mới cho mỗi lần gửi.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-environment-path.\n\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\n### Phạm vi và lưu ý\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: setx](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/setx)\n- [Microsoft: about_environment_variables](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables)\n"
+    },
+    {
+      "id": "win-it-environment-path-sec-1",
+      "title": "Tạo công cụ và thử bằng đường dẫn đầy đủ",
+      "title_vi": "Tạo công cụ và thử bằng đường dẫn đầy đủ",
+      "position": 1,
+      "content": "## Tạo công cụ và thử bằng đường dẫn đầy đủ\n\n### Vì sao làm bước này?\nGọi đường dẫn đầy đủ giúp tách vấn đề tìm lệnh khỏi vấn đề nội dung lệnh. Dùng thư mục của lab, không thay công cụ Windows.\n\n### Thao tác\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-environment-path'; New-Item -ItemType Directory -Path \"$p\\Tools\" -Force | Out-Null\n'@echo LABEX-PATH-OK' | Set-Content \"$p\\Tools\\labexhello.cmd\" -Encoding ASCII\n& \"$p\\Tools\\labexhello.cmd\"\n```\n\n### Kết quả và cách tự kiểm tra\nIn LABEX-PATH-OK khi gọi file bằng đường dẫn đầy đủ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\n### Câu hỏi tự giải thích\nNếu gọi đường dẫn đầy đủ vẫn lỗi thì còn có thể quy cho PATH không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tạo công cụ và thử bằng đường dẫn đầy đủ\n\n### Vì sao làm bước này?\nGọi đường dẫn đầy đủ giúp tách vấn đề tìm lệnh khỏi vấn đề nội dung lệnh. Dùng thư mục của lab, không thay công cụ Windows.\n\n### Thao tác\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-environment-path'; New-Item -ItemType Directory -Path \"$p\\Tools\" -Force | Out-Null\n'@echo LABEX-PATH-OK' | Set-Content \"$p\\Tools\\labexhello.cmd\" -Encoding ASCII\n& \"$p\\Tools\\labexhello.cmd\"\n```\n\n### Kết quả và cách tự kiểm tra\nIn LABEX-PATH-OK khi gọi file bằng đường dẫn đầy đủ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\n### Câu hỏi tự giải thích\nNếu gọi đường dẫn đầy đủ vẫn lỗi thì còn có thể quy cho PATH không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "In LABEX-PATH-OK khi gọi file bằng đường dẫn đầy đủ.",
+      "task_vi": "In LABEX-PATH-OK khi gọi file bằng đường dẫn đầy đủ.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-environment-path'; New-Item -ItemType Directory -Path \"$p\\Tools\" -Force | Out-Null\n'@echo LABEX-PATH-OK' | Set-Content \"$p\\Tools\\labexhello.cmd\" -Encoding ASCII\n& \"$p\\Tools\\labexhello.cmd\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-environment-path'; New-Item -ItemType Directory -Path \"$p\\Tools\" -Force | Out-Null\n'@echo LABEX-PATH-OK' | Set-Content \"$p\\Tools\\labexhello.cmd\" -Encoding ASCII\n& \"$p\\Tools\\labexhello.cmd\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-environment-path-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-environment-path-sec-2",
+      "title": "Thử PATH trong một process rồi lưu bằng chứng",
+      "title_vi": "Thử PATH trong một process rồi lưu bằng chứng",
+      "position": 2,
+      "content": "## Thử PATH trong một process rồi lưu bằng chứng\n\n### Vì sao làm bước này?\nGộp thay PATH và gọi lệnh trong cùng khối vì lần gửi sau là process khác. Bằng chứng phải ghi đường dẫn lệnh đã phân giải, không chỉ một dòng báo thành công.\n\n### Thao tác\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-environment-path'; $env:PATH=\"$p\\Tools;$env:PATH\"\n$c=Get-Command labexhello.cmd; & $c.Source\n[pscustomobject]@{ Command=$c.Source; Scope='Process'; Output=(& $c.Source | Out-String).Trim() } | ConvertTo-Json | Set-Content \"$p\\path-test.json\" -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nCommand trỏ đúng Tools của bài; Scope là Process; kết quả LABEX-PATH-OK.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\n### Câu hỏi tự giải thích\nVì sao một cửa sổ terminal đang mở chưa nhìn thấy biến User vừa đổi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Thử PATH trong một process rồi lưu bằng chứng\n\n### Vì sao làm bước này?\nGộp thay PATH và gọi lệnh trong cùng khối vì lần gửi sau là process khác. Bằng chứng phải ghi đường dẫn lệnh đã phân giải, không chỉ một dòng báo thành công.\n\n### Thao tác\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-environment-path'; $env:PATH=\"$p\\Tools;$env:PATH\"\n$c=Get-Command labexhello.cmd; & $c.Source\n[pscustomobject]@{ Command=$c.Source; Scope='Process'; Output=(& $c.Source | Out-String).Trim() } | ConvertTo-Json | Set-Content \"$p\\path-test.json\" -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nCommand trỏ đúng Tools của bài; Scope là Process; kết quả LABEX-PATH-OK.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\n### Câu hỏi tự giải thích\nVì sao một cửa sổ terminal đang mở chưa nhìn thấy biến User vừa đổi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Command trỏ đúng Tools của bài; Scope là Process; kết quả LABEX-PATH-OK.",
+      "task_vi": "Command trỏ đúng Tools của bài; Scope là Process; kết quả LABEX-PATH-OK.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-environment-path'; $env:PATH=\"$p\\Tools;$env:PATH\"\n$c=Get-Command labexhello.cmd; & $c.Source\n[pscustomobject]@{ Command=$c.Source; Scope='Process'; Output=(& $c.Source | Out-String).Trim() } | ConvertTo-Json | Set-Content \"$p\\path-test.json\" -Encoding UTF8",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-environment-path'; $env:PATH=\"$p\\Tools;$env:PATH\"\n$c=Get-Command labexhello.cmd; & $c.Source\n[pscustomobject]@{ Command=$c.Source; Scope='Process'; Output=(& $c.Source | Out-String).Trim() } | ConvertTo-Json | Set-Content \"$p\\path-test.json\" -Encoding UTF8",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-environment-path-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-environment-path-sec-1",
+      "title": "Tạo công cụ và thử bằng đường dẫn đầy đủ",
+      "title_vi": "Tạo công cụ và thử bằng đường dẫn đầy đủ",
+      "position": 1,
+      "content": "## Tạo công cụ và thử bằng đường dẫn đầy đủ\n\n### Vì sao làm bước này?\nGọi đường dẫn đầy đủ giúp tách vấn đề tìm lệnh khỏi vấn đề nội dung lệnh. Dùng thư mục của lab, không thay công cụ Windows.\n\n### Thao tác\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-environment-path'; New-Item -ItemType Directory -Path \"$p\\Tools\" -Force | Out-Null\n'@echo LABEX-PATH-OK' | Set-Content \"$p\\Tools\\labexhello.cmd\" -Encoding ASCII\n& \"$p\\Tools\\labexhello.cmd\"\n```\n\n### Kết quả và cách tự kiểm tra\nIn LABEX-PATH-OK khi gọi file bằng đường dẫn đầy đủ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\n### Câu hỏi tự giải thích\nNếu gọi đường dẫn đầy đủ vẫn lỗi thì còn có thể quy cho PATH không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tạo công cụ và thử bằng đường dẫn đầy đủ\n\n### Vì sao làm bước này?\nGọi đường dẫn đầy đủ giúp tách vấn đề tìm lệnh khỏi vấn đề nội dung lệnh. Dùng thư mục của lab, không thay công cụ Windows.\n\n### Thao tác\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-environment-path'; New-Item -ItemType Directory -Path \"$p\\Tools\" -Force | Out-Null\n'@echo LABEX-PATH-OK' | Set-Content \"$p\\Tools\\labexhello.cmd\" -Encoding ASCII\n& \"$p\\Tools\\labexhello.cmd\"\n```\n\n### Kết quả và cách tự kiểm tra\nIn LABEX-PATH-OK khi gọi file bằng đường dẫn đầy đủ.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\n### Câu hỏi tự giải thích\nNếu gọi đường dẫn đầy đủ vẫn lỗi thì còn có thể quy cho PATH không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "In LABEX-PATH-OK khi gọi file bằng đường dẫn đầy đủ.",
+      "task_vi": "In LABEX-PATH-OK khi gọi file bằng đường dẫn đầy đủ.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-environment-path'; New-Item -ItemType Directory -Path \"$p\\Tools\" -Force | Out-Null\n'@echo LABEX-PATH-OK' | Set-Content \"$p\\Tools\\labexhello.cmd\" -Encoding ASCII\n& \"$p\\Tools\\labexhello.cmd\"",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-environment-path'; New-Item -ItemType Directory -Path \"$p\\Tools\" -Force | Out-Null\n'@echo LABEX-PATH-OK' | Set-Content \"$p\\Tools\\labexhello.cmd\" -Encoding ASCII\n& \"$p\\Tools\\labexhello.cmd\"",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-environment-path-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-environment-path-sec-2",
+      "title": "Thử PATH trong một process rồi lưu bằng chứng",
+      "title_vi": "Thử PATH trong một process rồi lưu bằng chứng",
+      "position": 2,
+      "content": "## Thử PATH trong một process rồi lưu bằng chứng\n\n### Vì sao làm bước này?\nGộp thay PATH và gọi lệnh trong cùng khối vì lần gửi sau là process khác. Bằng chứng phải ghi đường dẫn lệnh đã phân giải, không chỉ một dòng báo thành công.\n\n### Thao tác\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-environment-path'; $env:PATH=\"$p\\Tools;$env:PATH\"\n$c=Get-Command labexhello.cmd; & $c.Source\n[pscustomobject]@{ Command=$c.Source; Scope='Process'; Output=(& $c.Source | Out-String).Trim() } | ConvertTo-Json | Set-Content \"$p\\path-test.json\" -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nCommand trỏ đúng Tools của bài; Scope là Process; kết quả LABEX-PATH-OK.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\n### Câu hỏi tự giải thích\nVì sao một cửa sổ terminal đang mở chưa nhìn thấy biến User vừa đổi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Thử PATH trong một process rồi lưu bằng chứng\n\n### Vì sao làm bước này?\nGộp thay PATH và gọi lệnh trong cùng khối vì lần gửi sau là process khác. Bằng chứng phải ghi đường dẫn lệnh đã phân giải, không chỉ một dòng báo thành công.\n\n### Thao tác\nWin+R → sysdm.cpl → Advanced → Environment Variables để quan sát. Bài này chỉ đổi PATH của process thử nghiệm, không sửa PATH hệ thống.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-environment-path'; $env:PATH=\"$p\\Tools;$env:PATH\"\n$c=Get-Command labexhello.cmd; & $c.Source\n[pscustomobject]@{ Command=$c.Source; Scope='Process'; Output=(& $c.Source | Out-String).Trim() } | ConvertTo-Json | Set-Content \"$p\\path-test.json\" -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nCommand trỏ đúng Tools của bài; Scope là Process; kết quả LABEX-PATH-OK.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông ghi đè PATH máy bằng setx PATH. Không đặt thư mục Downloads hoặc thư mục mọi người có quyền ghi lên đầu PATH hệ thống.\n\n### Câu hỏi tự giải thích\nVì sao một cửa sổ terminal đang mở chưa nhìn thấy biến User vừa đổi?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Command trỏ đúng Tools của bài; Scope là Process; kết quả LABEX-PATH-OK.",
+      "task_vi": "Command trỏ đúng Tools của bài; Scope là Process; kết quả LABEX-PATH-OK.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-environment-path'; $env:PATH=\"$p\\Tools;$env:PATH\"\n$c=Get-Command labexhello.cmd; & $c.Source\n[pscustomobject]@{ Command=$c.Source; Scope='Process'; Output=(& $c.Source | Out-String).Trim() } | ConvertTo-Json | Set-Content \"$p\\path-test.json\" -Encoding UTF8",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-environment-path'; $env:PATH=\"$p\\Tools;$env:PATH\"\n$c=Get-Command labexhello.cmd; & $c.Source\n[pscustomobject]@{ Command=$c.Source; Scope='Process'; Output=(& $c.Source | Out-String).Trim() } | ConvertTo-Json | Set-Content \"$p\\path-test.json\" -Encoding UTF8",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-environment-path-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

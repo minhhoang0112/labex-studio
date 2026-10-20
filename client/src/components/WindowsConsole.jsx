@@ -11,12 +11,14 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
   const [executing, setExecuting] = useState(false);
   const [command, setCommand] = useState('');
   const [output, setOutput] = useState([]);
+  const [faultBusy, setFaultBusy] = useState(false);
+  const faultLab = Boolean(status?.faultScenario) || ['win-it-printer-spooler-fix', 'win-it-network-dns-troubleshoot', 'win-it-disk-cleanup-recovery'].includes(labId);
   const controller = useRef(null);
   useEffect(() => {
     const pending = new AbortController();
     controller.current = pending;
     async function refresh() {
-      try { const value = await api('/api/cloud-vm/status', { signal: pending.signal }); if (!pending.signal.aborted) setStatus(value); }
+      try { const value = await api('/api/cloud-vm/status?labId=' + encodeURIComponent(labId), { signal: pending.signal }); if (!pending.signal.aborted) setStatus(value); }
       catch (reason) { if (!pending.signal.aborted) setError(reason.message); }
     }
     refresh();
@@ -27,7 +29,8 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
     if (action === 'stop' && !confirm('Deallocate máy ảo Azure? Mọi phiên Desktop và lệnh đang chạy trên VM sẽ bị ngắt.')) return;
     setBusy(true); setError('');
     try {
-      const result = await api('/api/cloud-vm/' + action, { method: 'POST', signal: controller.current.signal });
+      const result = await api('/api/cloud-vm/' + action, { method: 'POST', signal: controller.current.signal,
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ labId }) });
       setStatus(value => ({ ...value, powerState: result.powerState, isBusy: true }));
     } catch (reason) { if (reason.name !== 'AbortError') setError(reason.message); }
     finally { setBusy(false); }
@@ -48,6 +51,16 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
     } catch (reason) { if (reason.name !== 'AbortError') { setError(reason.message); onOutput?.(`PS> ${submitted}\n${reason.message}\n`); } }
     finally { setExecuting(false); }
   }
+  async function fault(action) {
+    if (!confirm(action === 'prepare' ? 'Nạp sự cố thực hành lên CLIENT01? Chỉ thực hiện khi không có công việc khác trên VM.' : 'Hoàn nguyên các thay đổi do kịch bản tạo? Đây không phải khôi phục toàn bộ VM.')) return;
+    setFaultBusy(true); setError('');
+    try {
+      const session = await api('/api/cloud-vm/fault/' + action, { method: 'POST', signal: controller.current.signal,
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ labId, confirm: true }) });
+      setStatus(value => ({ ...value, faultSession: session }));
+    } catch (reason) { if (reason.name !== 'AbortError') setError(reason.message); }
+    finally { setFaultBusy(false); }
+  }
   return <div className="flex-1 min-h-0 flex flex-col bg-slate-950 text-slate-100 rounded-lg border border-slate-700 overflow-hidden">
     <div className="min-h-10 px-3 py-1 border-b border-slate-700 flex flex-wrap items-center gap-2 text-xs shrink-0">
       <Monitor size={16} className="text-blue-400 shrink-0" />
@@ -65,29 +78,35 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
             <span>Bật Máy Ảo</span>
           </button>
         ) : (
-          <button disabled={busy || status?.isBusy || !status?.controlConfigured} onClick={() => power('stop')} title="Dừng và deallocate ngay để không phát sinh phí compute" className="flex items-center gap-1.5 px-2.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded font-medium disabled:opacity-40 transition shadow-xs">
+          <button disabled={busy || status?.isBusy || !status?.controlConfigured} onClick={() => power('stop')} title="Dừng tính phí compute; ổ đĩa và IP giữ lại vẫn có thể tính phí" className="flex items-center gap-1.5 px-2.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded font-medium disabled:opacity-40 transition shadow-xs">
             <Power size={13} />
-            <span>Tắt VM (Dừng phí)</span>
+            <span>Tắt VM</span>
           </button>
         )}
         <details className="relative">
           <summary aria-label="Thao tác máy ảo" className="list-none cursor-pointer p-1.5 rounded hover:bg-slate-800"><MoreHorizontal size={17} /></summary>
           <div className="absolute right-0 top-full mt-2 z-30 min-w-44 p-1.5 rounded-lg border border-slate-700 bg-slate-900 shadow-xl">
-            <a className="block px-3 py-2 rounded hover:bg-slate-800" href="/api/cloud-vm/connect.rdp">Tải RDP dự phòng</a>
+            <a className="block px-3 py-2 rounded hover:bg-slate-800" href={'/api/cloud-vm/connect.rdp?labId=' + encodeURIComponent(labId)}>Tải RDP dự phòng</a>
             <button disabled={busy || status?.isBusy || !status?.controlConfigured} onClick={() => power('stop')} className="block text-left w-full px-3 py-2 rounded text-red-300 hover:bg-red-950 disabled:opacity-40">Tắt / Deallocate</button>
           </div>
         </details>
       </div>
     </div>
     {(error || status?.error || status?.operationError) && <div role="alert" className="p-3 bg-red-950 text-red-200 text-xs">{error || status.error || status.operationError}</div>}
+    {faultLab && <div className="flex flex-wrap items-center gap-2 border-b border-slate-700 px-3 py-2 text-xs">
+      <span role="status">Sự cố: {faultBusy ? 'đang xử lý, có thể mất vài phút' : status?.faultSession?.state || 'chưa nạp'}</span>
+      <button disabled={faultBusy || executing || status?.isBusy || status?.powerStateCode !== 'PowerState/running'} onClick={() => fault('prepare')} className="rounded bg-amber-700 px-2 py-1 disabled:opacity-40">Chuẩn bị sự cố</button>
+      <button disabled={faultBusy || executing || status?.isBusy || !status?.faultSession || status.faultSession.state === 'reset'} onClick={() => fault('reset')} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Hoàn nguyên kịch bản</button>
+      <span className="text-slate-400">Cần baseline và kiểm thử khôi phục trước khi nạp lỗi.</span>
+    </div>}
     <div className={`flex-1 min-h-0 ${tab === 'desktop' ? '' : 'hidden'}`}><WindowsDesktop labId={labId} /></div>
     <div className={`flex-1 min-h-0 flex-col ${tab === 'powershell' ? 'flex' : 'hidden'}`}>
       <p className="p-3 text-xs text-amber-200 bg-amber-950/30">Lệnh chạy trên VM thật qua Azure Agent, quyền SYSTEM, thư mục C:\LabEx\Labs\{labId}. Mỗi lệnh thường mất từ 20 giây; phiên lệnh mới không giữ biến shell của lệnh trước.</p>
       <pre aria-label="Kết quả PowerShell VM" className="flex-1 min-h-0 overflow-auto whitespace-pre-wrap p-3 text-xs">{output.join('\n\n')}</pre>
       {executing && <div role="status" className="p-2 text-xs text-blue-300">Đang chờ VM thực thi PowerShell…</div>}
       <form onSubmit={run} className="p-3 flex gap-2 border-t border-slate-700">
-        <input aria-label="Lệnh PowerShell trên VM" value={command} onChange={event => setCommand(event.target.value)} disabled={executing} className="flex-1 min-w-0 bg-slate-900 p-2 rounded font-mono text-sm" placeholder="Get-Service" />
-        <button disabled={executing || !command.trim()} className="px-3 bg-blue-600 rounded disabled:opacity-40">Chạy</button>
+        <input aria-label="Lệnh PowerShell trên VM" value={command} onChange={event => setCommand(event.target.value)} disabled={executing || faultBusy || status?.isBusy} className="flex-1 min-w-0 bg-slate-900 p-2 rounded font-mono text-sm" placeholder="Get-Service" />
+        <button disabled={executing || faultBusy || status?.isBusy || !command.trim()} className="px-3 bg-blue-600 rounded disabled:opacity-40">Chạy</button>
       </form>
     </div>
   </div>;

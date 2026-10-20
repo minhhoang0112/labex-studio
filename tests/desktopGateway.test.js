@@ -8,7 +8,7 @@ test('desktop tickets expose no credentials and expire before WebSocket upgrade'
     config: () => ({ password: 'SECRET_NOT_FOR_BROWSER', publicIp: 'fixed-vm', adminUsername: 'admin',
       vmName: 'vm', guacdHost: '127.0.0.1', guacdPort: 4822, rdpPort: 3389 }) });
   t.after(() => gateway.close());
-  const session = await gateway.issue('win-test', { width: 1280, hostname: 'attacker.example' });
+  const session = await gateway.issue('win-powershell-basics', { width: 1280, hostname: 'attacker.example' });
   assert.equal(session.path, '/ws/desktop');
   assert.ok(session.ticket.length >= 40);
   assert.equal(JSON.stringify(session).includes('SECRET'), false);
@@ -27,8 +27,24 @@ test('desktop tickets expose no credentials and expire before WebSocket upgrade'
 
 test('desktop sessions fail clearly when the RDP secret or guacd is missing', async t => {
   const noSecret = createDesktopGateway({ config: () => ({ guacdHost: '127.0.0.1', guacdPort: 4822 }), probe: async () => true });
-  const noDaemon = createDesktopGateway({ config: () => ({ password: 'secret', guacdHost: '127.0.0.1', guacdPort: 4822 }), probe: async () => false });
+  const noDaemon = createDesktopGateway({ config: () => ({ password: 'secret', publicIp: 'fixed-vm', guacdHost: '127.0.0.1', guacdPort: 4822 }), probe: async () => false });
   t.after(() => { noSecret.close(); noDaemon.close(); });
-  await assert.rejects(noSecret.issue('win-test'), error => error.code === 'CLOUD_RDP_CONFIG_REQUIRED');
-  await assert.rejects(noDaemon.issue('win-test'), error => error.code === 'CLOUD_GUACD_UNAVAILABLE');
+  await assert.rejects(noSecret.issue('win-powershell-basics'), error => error.code === 'CLOUD_RDP_CONFIG_REQUIRED');
+  await assert.rejects(noDaemon.issue('win-powershell-basics'), error => error.code === 'CLOUD_GUACD_UNAVAILABLE');
+});
+
+test('a client ticket issued before a fault lease is checked again at upgrade', async t => {
+  const gateway = createDesktopGateway({ probe: async () => true,
+    config: () => ({ password: 'fixture-secret', publicIp: 'client-fixture', guacdHost: '127.0.0.1', guacdPort: 4822 }),
+    authorize: () => { throw new Error('Client has changed ownership.'); },
+  });
+  t.after(() => gateway.close());
+  const session = await gateway.issue('win-it-pc-onboarding-setup');
+  const request = { url: '/ws/desktop?ticket=' + session.ticket };
+  let response;
+  const socket = { end: message => { response = message; } };
+  gateway.upgrade(request, socket, Buffer.alloc(0));
+  assert.match(response, /409 Conflict/);
+  gateway.upgrade(request, socket, Buffer.alloc(0));
+  assert.match(response, /401 Unauthorized/);
 });

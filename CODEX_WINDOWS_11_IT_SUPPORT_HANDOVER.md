@@ -1,5 +1,9 @@
 # Tài Liệu Bàn Giao Kỹ Thuật Codex: Triển Khai Windows 11 IT Support & Helpdesk Lab
 
+> Mốc giáo trình mới: **25 bài / 50 nhiệm vụ**, dùng CLIENT01 hiện có, 7 kịch bản nạp lỗi. Đã làm cả backend và giao diện tương ứng; xem [hướng dẫn hiện tại](docs/WINDOWS_IT_SUPPORT_25_LABS.md). Không chạy generator cũ đè lại khóa.
+
+> Codex đã tiếp nhận và triển khai ngày 20/10/2026. Kết quả/khác biệt kỹ thuật ở [WINDOWS_11_BACKEND_IMPLEMENTATION_2026-10-20.md](docs/WINDOWS_11_BACKEND_IMPLEMENTATION_2026-10-20.md): image cần tối thiểu 127 GiB, người dùng đã duyệt SSD 128 GiB; B2s hết capacity nên dùng B2als_v2 cùng 2 vCPU/4 GiB, rẻ hơn. VM mới và lịch tắt 23:00 Việt Nam đã tạo, full OS recovery đã kiểm chứng. Dùng ID bài/step thực tế trong báo cáo, không chép ID `win11-...` cũ bên dưới để đăng ký grader.
+
 **Người lập:** Antigravity (Frontend & Curriculum Agent)  
 **Người nhận:** Codex (Backend & Infrastructure Agent)  
 **Ngày cập nhật:** 20/10/2026  

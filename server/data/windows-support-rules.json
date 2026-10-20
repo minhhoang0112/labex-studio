@@ -1,0 +1,154 @@
+{
+  "win-it-asset-inventory-sec-1": {
+    "lab_id": "win-it-asset-inventory",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'inventory.json') -Raw | ConvertFrom-Json; $r.Computer -eq $env:COMPUTERNAME -and $r.Build -eq (Get-CimInstance Win32_OperatingSystem).BuildNumber -and [int64]$r.RAM -eq [int64](Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory"
+  },
+  "win-it-asset-inventory-sec-2": {
+    "lab_id": "win-it-asset-inventory",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'ticket.json') -Raw | ConvertFrom-Json; $r.Ticket -eq 'HD-201' -and $r.Computer -eq $env:COMPUTERNAME -and $r.Scope -eq 'One workstation' -and $r.UserConfirmed -eq $false -and $r.NextAction.Length -gt 15"
+  },
+  "win-it-file-extension-fix-sec-1": {
+    "lab_id": "win-it-file-extension-fix",
+    "probe": "$f='C:\\LabEx\\PracticeFaults\\extension\\invoice.csv.txt'; (Test-Path $f) -and (Get-Content $f -Raw).Contains('Keyboard,2')"
+  },
+  "win-it-software-deployment-sec-1": {
+    "lab_id": "win-it-software-deployment",
+    "probe": "$f=Join-Path $labRoot 'App\\tool.ps1'; $m=Import-Csv (Join-Path $labRoot 'install-manifest.csv'); (Get-Content $f -Raw).Contains('LabEx Tool 1.0') -and $m.Hash -eq (Get-FileHash $f).Hash"
+  },
+  "win-it-software-deployment-sec-2": {
+    "lab_id": "win-it-software-deployment",
+    "probe": "(Get-Content (Join-Path $labRoot 'App\\tool.ps1') -Raw).Contains('LabEx Tool 2.0') -and (Get-Content (Join-Path $labRoot 'tool-v1.rollback.ps1') -Raw).Contains('LabEx Tool 1.0')"
+  },
+  "win-it-app-config-repair-sec-1": {
+    "lab_id": "win-it-app-config-repair",
+    "probe": "$p='C:\\LabEx\\PracticeFaults\\appconfig'; $c=Get-Content \"$p\\settings.json\" -Raw | ConvertFrom-Json; $c.DataFile -eq \"$p\\missing.txt\" -and (Test-Path \"$p\\data.txt\")"
+  },
+  "win-it-environment-path-sec-1": {
+    "lab_id": "win-it-environment-path",
+    "probe": "(Get-Content (Join-Path $labRoot 'Tools\\labexhello.cmd') -Raw).Trim() -eq '@echo LABEX-PATH-OK'"
+  },
+  "win-it-environment-path-sec-2": {
+    "lab_id": "win-it-environment-path",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'path-test.json') -Raw | ConvertFrom-Json; $r.Command -eq (Join-Path $labRoot 'Tools\\labexhello.cmd') -and $r.Scope -eq 'Process' -and $r.Output -eq 'LABEX-PATH-OK'"
+  },
+  "win-it-local-accounts-audit-sec-1": {
+    "lab_id": "win-it-local-accounts-audit",
+    "probe": "$rows=@(Import-Csv (Join-Path $labRoot 'users.csv')); $rows.Count -gt 0 -and @($rows | Where-Object { $sid=$_.SID; @(Get-LocalUser | Where-Object { $_.SID.Value -eq $sid }).Count -eq 1 }).Count -eq $rows.Count"
+  },
+  "win-it-local-accounts-audit-sec-2": {
+    "lab_id": "win-it-local-accounts-audit",
+    "probe": "$g=Get-LocalGroup -Name LabEx_DocReaders; $g.Description -eq 'LabEx training document readers' -and $g.SID.Value -like 'S-1-5-21-*'"
+  },
+  "win-it-ntfs-permissions-sec-1": {
+    "lab_id": "win-it-ntfs-permissions",
+    "probe": "$s=Get-Content (Join-Path $labRoot 'before.sddl') -Raw; $a=New-Object Security.AccessControl.DirectorySecurity; $a.SetSecurityDescriptorSddlForm($s.Trim()); (Test-Path (Join-Path $labRoot 'Docs\\guide.txt')) -and $s.Contains('D:')"
+  },
+  "win-it-ntfs-permissions-sec-2": {
+    "lab_id": "win-it-ntfs-permissions",
+    "probe": "$sid=(Get-LocalGroup LabEx_DocReaders).SID.Value; $a=Get-Acl (Join-Path $labRoot 'Docs'); @($a.Access | Where-Object { $_.IdentityReference.Translate([Security.Principal.SecurityIdentifier]).Value -eq $sid -and $_.AccessControlType -eq 'Allow' -and ([int]$_.FileSystemRights -band (-bnot [int][Security.AccessControl.FileSystemRights]::Synchronize)) -eq [int][Security.AccessControl.FileSystemRights]::ReadAndExecute -and $_.InheritanceFlags -eq [Security.AccessControl.InheritanceFlags]'ContainerInherit,ObjectInherit' -and -not $_.IsInherited }).Count -eq 1 -and -not $a.AreAccessRulesProtected"
+  },
+  "win-it-backup-robocopy-sec-1": {
+    "lab_id": "win-it-backup-robocopy",
+    "probe": "$m=@(Import-Csv (Join-Path $labRoot 'manifest.csv')); $m.Count -eq 2 -and @($m | Where-Object { (Get-FileHash $_.Path).Hash -eq $_.Hash }).Count -eq 2"
+  },
+  "win-it-backup-robocopy-sec-2": {
+    "lab_id": "win-it-backup-robocopy",
+    "probe": "$m=@(Import-Csv (Join-Path $labRoot 'manifest.csv')); (Test-Path (Join-Path $labRoot 'robocopy.log')) -and $m.Count -eq 2 -and @($m | Where-Object { $b=Join-Path (Join-Path $labRoot 'Backup') (Split-Path $_.Path -Leaf); (Get-FileHash $b).Hash -eq $_.Hash -and (Get-FileHash $_.Path).Hash -eq $_.Hash }).Count -eq 2"
+  },
+  "win-it-deleted-file-restore-sec-1": {
+    "lab_id": "win-it-deleted-file-restore",
+    "probe": "$p='C:\\LabEx\\PracticeFaults\\restorefile'; -not (Test-Path \"$p\\invoice.txt\") -and (Get-Content \"$p\\Backup\\invoice.txt\" -Raw).Contains('HD-208')"
+  },
+  "win-it-scheduled-backup-fix-sec-1": {
+    "lab_id": "win-it-scheduled-backup-fix",
+    "probe": "$t=Get-ScheduledTask -TaskName LabExSupportBackup; $t.State -eq 'Disabled' -and $t.Actions.Arguments -like '*C:\\LabEx\\PracticeFaults\\taskbackup\\backup.ps1*'"
+  },
+  "win-it-archive-restore-drill-sec-1": {
+    "lab_id": "win-it-archive-restore-drill",
+    "probe": "Add-Type -AssemblyName System.IO.Compression.FileSystem; $z=[IO.Compression.ZipFile]::OpenRead((Join-Path $labRoot 'archive.zip')); try { @($z.Entries | Where-Object FullName -eq 'notes.txt').Count -eq 1 } finally { $z.Dispose() }"
+  },
+  "win-it-archive-restore-drill-sec-2": {
+    "lab_id": "win-it-archive-restore-drill",
+    "probe": "$m=Import-Csv (Join-Path $labRoot 'manifest.csv'); $a=Join-Path $labRoot 'Source\\notes.txt'; $b=Join-Path $labRoot 'Restore\\notes.txt'; (Get-FileHash $a).Hash -eq $m.Hash -and (Get-FileHash $b).Hash -eq $m.Hash -and (Get-Content $b -Raw).Contains('HD-210')"
+  },
+  "win-it-ip-route-diagnostics-sec-1": {
+    "lab_id": "win-it-ip-route-diagnostics",
+    "probe": "$rows=@(Import-Csv (Join-Path $labRoot 'ipv4.csv')); @($rows | Where-Object { $ip=$_.IPAddress; $ip -ne '127.0.0.1' -and @(Get-NetIPAddress -AddressFamily IPv4 | Where-Object IPAddress -eq $ip).Count -gt 0 }).Count -gt 0"
+  },
+  "win-it-ip-route-diagnostics-sec-2": {
+    "lab_id": "win-it-ip-route-diagnostics",
+    "probe": "$rows=@(Import-Csv (Join-Path $labRoot 'routes.csv')); @($rows | Where-Object { $hop=$_.NextHop; $_.DestinationPrefix -eq '0.0.0.0/0' -and @(Get-NetRoute -DestinationPrefix '0.0.0.0/0' -AddressFamily IPv4 | Where-Object NextHop -eq $hop).Count -gt 0 }).Count -gt 0"
+  },
+  "win-it-dns-resolver-diagnostics-sec-1": {
+    "lab_id": "win-it-dns-resolver-diagnostics",
+    "probe": "$rows=@(Import-Csv (Join-Path $labRoot 'dns-servers.csv')); $actual=@(Get-DnsClientServerAddress -AddressFamily IPv4 | ForEach-Object ServerAddresses); @($rows | Where-Object { $servers=$_.Servers -split ';'; @($servers | Where-Object { $actual -contains $_ }).Count -gt 0 }).Count -gt 0"
+  },
+  "win-it-dns-resolver-diagnostics-sec-2": {
+    "lab_id": "win-it-dns-resolver-diagnostics",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'resolver.json') -Raw | ConvertFrom-Json; $r.Name -eq 'localhost' -and (@($r.Addresses) -contains '127.0.0.1' -or @($r.Addresses) -contains '::1') -and $r.Note -like '*not proof*'"
+  },
+  "win-it-tcp-port-diagnostics-sec-1": {
+    "lab_id": "win-it-tcp-port-diagnostics",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'open.json') -Raw | ConvertFrom-Json; $r.Address -eq '127.0.0.1' -and $r.Port -eq 18081 -and $r.Connected -eq $true"
+  },
+  "win-it-tcp-port-diagnostics-sec-2": {
+    "lab_id": "win-it-tcp-port-diagnostics",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'closed.json') -Raw | ConvertFrom-Json; $r.Port -eq 18081 -and $r.Connected -eq $false -and @(Get-NetTCPConnection -State Listen -LocalPort 18081 -ErrorAction SilentlyContinue).Count -eq 0"
+  },
+  "win-it-firewall-audit-sec-1": {
+    "lab_id": "win-it-firewall-audit",
+    "probe": "$r=@(Import-Csv (Join-Path $labRoot 'profiles.csv')); $r.Count -eq 3 -and @($r | Where-Object { $n=$_.Name; $e=$_.Enabled; @(Get-NetFirewallProfile | Where-Object { $_.Name -eq $n -and [string]$_.Enabled -eq $e }).Count -eq 1 }).Count -eq 3"
+  },
+  "win-it-firewall-audit-sec-2": {
+    "lab_id": "win-it-firewall-audit",
+    "probe": "$r=Import-Csv (Join-Path $labRoot 'rdp-rule.csv'); $f=Get-NetFirewallRule -Name 'RemoteDesktop-UserMode-In-TCP' | Get-NetFirewallPortFilter; $r.Name -eq 'RemoteDesktop-UserMode-In-TCP' -and $r.LocalPort -eq [string]$f.LocalPort -and $r.Protocol -eq [string]$f.Protocol"
+  },
+  "win-it-event-log-triage-sec-1": {
+    "lab_id": "win-it-event-log-triage",
+    "probe": "$r=@(Import-Csv (Join-Path $labRoot 'system-events.csv')); $r.Count -gt 0 -and @($r | Select-Object -First 3 | Where-Object { $id=[long]$_.RecordId; @(Get-WinEvent -LogName System -FilterXPath \"*[System[EventRecordID=$id]]\" -MaxEvents 1).Count -eq 1 }).Count -gt 0"
+  },
+  "win-it-event-log-triage-sec-2": {
+    "lab_id": "win-it-event-log-triage",
+    "probe": "@(Get-WinEvent -Path (Join-Path $labRoot 'system.evtx') -MaxEvents 1).Count -eq 1"
+  },
+  "win-it-performance-triage-sec-1": {
+    "lab_id": "win-it-performance-triage",
+    "probe": "$r=@(Import-Csv (Join-Path $labRoot 'processes.csv')); $r.Count -ge 1 -and $r.Count -le 10 -and @($r | Where-Object { $_.ProcessName.Length -gt 0 -and [long]$_.WorkingSet64 -gt 0 }).Count -eq $r.Count"
+  },
+  "win-it-performance-triage-sec-2": {
+    "lab_id": "win-it-performance-triage",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'capacity.json') -Raw | ConvertFrom-Json; $r.Computer -eq $env:COMPUTERNAME -and [long]$r.TotalRAMKiB -eq [long](Get-CimInstance Win32_OperatingSystem).TotalVisibleMemorySize -and [long]$r.FreeRAMKiB -ge 0 -and [long]$r.FreeRAMKiB -le [long]$r.TotalRAMKiB -and [long]$r.DiskFreeBytes -ge 0"
+  },
+  "win-it-drivers-device-audit-sec-1": {
+    "lab_id": "win-it-drivers-device-audit",
+    "probe": "$r=@(Import-Csv (Join-Path $labRoot 'devices.csv')); $actual=@(Get-CimInstance Win32_PnPEntity | ForEach-Object PNPDeviceID); @($r | Where-Object { $actual -contains $_.PNPDeviceID }).Count -gt 0"
+  },
+  "win-it-drivers-device-audit-sec-2": {
+    "lab_id": "win-it-drivers-device-audit",
+    "probe": "$r=@(Import-Csv (Join-Path $labRoot 'drivers.csv')); $actual=@(Get-CimInstance Win32_PnPSignedDriver | ForEach-Object DeviceID); @($r | Where-Object { $_.DriverVersion.Length -gt 0 -and $actual -contains $_.DeviceID }).Count -gt 0"
+  },
+  "win-it-windows-update-triage-sec-1": {
+    "lab_id": "win-it-windows-update-triage",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'build.json') -Raw | ConvertFrom-Json; $r.Build -eq (Get-CimInstance Win32_OperatingSystem).BuildNumber -and (Test-Path (Join-Path $labRoot 'hotfixes.csv'))"
+  },
+  "win-it-windows-update-triage-sec-2": {
+    "lab_id": "win-it-windows-update-triage",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'health.json') -Raw | ConvertFrom-Json; $r.Mode -eq 'CheckHealth' -and @('Healthy','Repairable','NonRepairable') -contains $r.ImageHealthState"
+  },
+  "win-it-startup-audit-sec-1": {
+    "lab_id": "win-it-startup-audit",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'context.json') -Raw | ConvertFrom-Json; $items=(Get-Content (Join-Path $labRoot 'startup.json') -Raw | ConvertFrom-Json).Items; $r.Computer -eq $env:COMPUTERNAME -and $r.Context -like '*SYSTEM' -and [int]$r.Count -eq @($items).Count"
+  },
+  "win-it-startup-audit-sec-2": {
+    "lab_id": "win-it-startup-audit",
+    "probe": "$r=@(Import-Csv (Join-Path $labRoot 'auto-services.csv')); @($r | Where-Object { $n=$_.Name; $_.StartMode -eq 'Auto' -and @(Get-CimInstance Win32_Service | Where-Object { $_.Name -eq $n -and $_.StartMode -eq 'Auto' }).Count -eq 1 }).Count -gt 0"
+  },
+  "win-it-capstone-handover-sec-1": {
+    "lab_id": "win-it-capstone-handover",
+    "probe": "$a=Get-Content (Join-Path $labRoot 'settings.json') -Raw | ConvertFrom-Json; $b=Get-Content (Join-Path $labRoot 'Backup\\settings.json') -Raw | ConvertFrom-Json; $a.Theme -eq 'Dark' -and $a.Version -eq 2 -and $b.Theme -eq 'Light' -and $b.Version -eq 1 -and (Get-FileHash (Join-Path $labRoot 'employee.txt')).Hash -eq (Get-FileHash (Join-Path $labRoot 'Backup\\employee.txt')).Hash"
+  },
+  "win-it-capstone-handover-sec-2": {
+    "lab_id": "win-it-capstone-handover",
+    "probe": "$r=Get-Content (Join-Path $labRoot 'handover.json') -Raw | ConvertFrom-Json; $a=(Get-FileHash (Join-Path $labRoot 'settings.json')).Hash; $d=(Get-FileHash (Join-Path $labRoot 'employee.txt')).Hash; $r.Ticket -eq 'HD-221' -and $r.Outcome -eq 'Rolled back' -and $r.ConfigHash -eq $a -and $r.DataHash -eq $d -and $a -eq (Get-FileHash (Join-Path $labRoot 'Backup\\settings.json')).Hash -and $d -eq (Get-FileHash (Join-Path $labRoot 'Backup\\employee.txt')).Hash -and $r.UserAcceptance -eq 'Pending real user confirmation'"
+  }
+}

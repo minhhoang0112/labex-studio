@@ -17,7 +17,7 @@ try {
   const page=await browser.newPage({viewport:{width:1440,height:1000}});
   page.on('pageerror',e=>report.errors.push(e.message));
   await page.route('**/api/environment',r=>r.fulfill({json:{available:false,capabilities:{}}}));
-  await page.route('**/api/cloud-vm/status',r=>r.fulfill({json:{powerState:'unknown',controlConfigured:false}}));
+  await page.route('**/api/cloud-vm/status*',r=>r.fulfill({json:{powerState:'unknown',controlConfigured:false}}));
   for(const width of [390,1440]) {
     await page.setViewportSize({width,height:1000});
     await page.goto('http://127.0.0.1:5000/paths/linux');

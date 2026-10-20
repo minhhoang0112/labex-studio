@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import { windowsStepReadiness } from './windowsRemoteVerifier.js';
+import { getVmTargetConfig } from './cloudConfig.js';
+import { labVmTarget, isWindowsLab } from './vmTargets.js';
 import { hasUnconditionalSuccess, isUnboundedCommandPattern, getVerificationDefinition } from "./verification.js";
 
 // Curriculum support for the current namespace provider. Live startup health is
@@ -42,13 +44,12 @@ export function getStepReadiness(step, lab = {}) {
     ...(lab.required_capabilities_by_provider?.[provider] || lab.required_capabilities || []),
     ...(step.required_capabilities_by_provider?.[provider] || step.required_capabilities || [])])];
   const missing = requirements.filter(capability => !available.has(capability));
-  if (lab.id?.startsWith('win-')) {
-    const win = windowsStepReadiness(step);
-    const allMissing = [...new Set([...missing, ...win.missing_capabilities])];
+  if (isWindowsLab(lab)) {
+    const win = windowsStepReadiness(step, lab);
     return {
-      ready: win.ready && !missing.length,
-      missing_capabilities: allMissing,
-      reasons: [...win.reasons, ...(missing.length ? [`Môi trường hiện tại thiếu: ${missing.join(", ")}.`] : [])]
+      ready: win.ready,
+      missing_capabilities: win.missing_capabilities,
+      reasons: win.reasons
     };
   }
   const reason = unsupportedRule(getVerificationDefinition(step, provider));
@@ -60,10 +61,14 @@ export function getLabReadiness(lab) {
   const steps = lab.steps || [];
   const results = steps.map(step => getStepReadiness(step, lab));
   const supported = results.filter(result => result.ready).length;
+  const windows = isWindowsLab(lab);
+  const vm = windows ? getVmTargetConfig(labVmTarget(lab)) : null;
   return { state: !steps.length ? "reference-only" : supported === steps.length ? "ready" : supported ? "partial" : "blocked",
     // A missing automatic grader must not prevent reading a Linux lesson or
     // practicing commands in its private shell. Task readiness remains strict.
-    can_open: Boolean(steps.length), can_start_terminal: !lab.id?.startsWith('win-') && steps.length > 0, can_grade: supported === steps.length && supported > 0,
+    can_open: Boolean(steps.length), can_start_terminal: !windows && steps.length > 0,
+    ...(windows ? { can_start_windows: Boolean(vm.subscriptionId && vm.publicIp && vm.password), target_vm: labVmTarget(lab) } : {}),
+    can_grade: supported === steps.length && supported > 0,
     supported_steps_count: supported, total_steps_count: steps.length,
     missing_capabilities: [...new Set(results.flatMap(result => result.missing_capabilities))],
     reasons: [...new Set(results.flatMap(result => result.reasons))] };

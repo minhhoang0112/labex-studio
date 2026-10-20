@@ -1,9 +1,9 @@
 {
   "id": "win-it-network-dns-troubleshoot",
   "course_id": "windows-11-it-support-troubleshooting",
-  "order": 3,
-  "title": "Xử Lý Sự Cố Mạng Văn Phòng, Lỗi IP APIPA & DNS",
-  "title_vi": "Xử Lý Sự Cố Mạng Văn Phòng, Lỗi IP APIPA & DNS",
+  "order": 11,
+  "title": "Chẩn Đoán Mạng Và Sửa Hosts Của Portal Nội Bộ",
+  "title_vi": "Chẩn Đoán Mạng Và Sửa Hosts Của Portal Nội Bộ",
   "type": "lab",
   "difficulty": "Beginner",
   "estimated_time": "25 mins",
@@ -13,7 +13,7 @@
     "requester": "Trần Tuấn Anh",
     "department": "Phòng Kinh Doanh",
     "priority": "High",
-    "title": "Máy tính cắm dây mạng báo No Internet Access, không vào được phần mềm CRM nội bộ"
+    "title": "Không mở được portal.company.local trong môi trường thực hành"
   },
   "overview": "Chẩn đoán nguyên nhân mất kết nối mạng văn phòng: Lỗi dải IP 169.254.x.x (APIPA) do không nhận được DHCP, xử lý lỗi DNS Cache và khắc phục file hosts bị cấu hình sai trỏ sai địa chỉ IP.",
   "sections": [
@@ -42,24 +42,14 @@
       "hint": "Chạy lệnh: ipconfig /all",
       "hint_vi": "Chạy lệnh: ipconfig /all",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:ipconfig /all|ipconfig|Get-NetIPAddress)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote",
+        "rule_id": "win-it-net-sec-1"
       },
       "required_capabilities": [
-        "terminal",
-        "shell"
+        "windows-remote"
       ],
-      "content": "### Kiểm tra thông số mạng chi tiết:\n```powershell\nipconfig /all\n```\n\n### Làm mới địa chỉ IP khi bị kẹt dải APIPA:\n```powershell\n# Giải phóng địa chỉ IP cũ đang bị lỗi\nipconfig /release\n\n# Yêu cầu DHCP Server cấp phát địa chỉ IP mới\nipconfig /renew\n```",
-      "content_vi": "### Kiểm tra thông số mạng chi tiết:\n```powershell\nipconfig /all\n```\n\n### Làm mới địa chỉ IP khi bị kẹt dải APIPA:\n```powershell\n# Giải phóng địa chỉ IP cũ đang bị lỗi\nipconfig /release\n\n# Yêu cầu DHCP Server cấp phát địa chỉ IP mới\nipconfig /renew\n```"
+      "content": "### Kiểm tra thông số mạng chi tiết:\n```powershell\nipconfig /all\n```\n\n### Làm mới địa chỉ IP khi bị kẹt dải APIPA:\n```powershell\n# Trên Azure: chỉ đọc cấu hình của management adapter\nGet-NetIPConfiguration\n\n# Không chạy ipconfig /release trên card đang giữ RDP và VM Agent.\n# Thực hành release/renew cần mạng lab riêng; bài này không nạp lỗi DHCP/APIPA.\n```",
+      "content_vi": "### Kiểm tra thông số mạng chi tiết:\n```powershell\nipconfig /all\n```\n\n### Làm mới địa chỉ IP khi bị kẹt dải APIPA:\n```powershell\n# Trên Azure: chỉ đọc cấu hình của management adapter\nGet-NetIPConfiguration\n\n# Không chạy ipconfig /release trên card đang giữ RDP và VM Agent.\n# Thực hành release/renew cần mạng lab riêng; bài này không nạp lỗi DHCP/APIPA.\n```"
     },
     {
       "id": "win-it-net-sec-2",
@@ -69,52 +59,62 @@
       "kind": "task",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "task": "Xóa sạch bộ nhớ đệm DNS Cache và kiểm tra nội dung tệp hosts xem có bị chặn tên miền không.",
-      "task_vi": "Xóa sạch bộ nhớ đệm DNS Cache và kiểm tra nội dung tệp hosts xem có bị chặn tên miền không.",
-      "hint": "Chạy lệnh: ipconfig /flushdns; Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts",
-      "hint_vi": "Chạy lệnh: ipconfig /flushdns; Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "task": "Sửa hosts để portal.company.local phân giải đúng và portal HTTP hoạt động.",
+      "task_vi": "Sửa hosts để portal.company.local phân giải đúng và portal HTTP hoạt động.",
+      "hint": "Sửa riêng dòng portal.company.local về 127.0.0.1, giữ nguyên các dòng khác; sau đó kiểm tra tên và HTTP port 18080.",
+      "hint_vi": "Sửa riêng dòng portal.company.local về 127.0.0.1, giữ nguyên các dòng khác; sau đó kiểm tra tên và HTTP port 18080.",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:ipconfig /flushdns|Clear-DnsClientCache)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote",
+        "rule_id": "win-it-net-sec-2"
       },
       "required_capabilities": [
-        "terminal",
-        "shell"
+        "windows-remote"
       ],
-      "content": "### Bước 1: Xóa cache DNS bị lưu thông tin sai lệch:\n```powershell\nipconfig /flushdns\n```\n\n### Bước 2: Kiểm tra tệp hosts xem có bị chèn địa chỉ giả mạo:\n```powershell\nGet-Content \"C:\\Windows\\System32\\drivers\\etc\\hosts\"\n```",
-      "content_vi": "### Bước 1: Xóa cache DNS bị lưu thông tin sai lệch:\n```powershell\nipconfig /flushdns\n```\n\n### Bước 2: Kiểm tra tệp hosts xem có bị chèn địa chỉ giả mạo:\n```powershell\nGet-Content \"C:\\Windows\\System32\\drivers\\etc\\hosts\"\n```"
+      "content": "### Sửa phân giải tên rồi kiểm tra dịch vụ\n\nBấm **Chuẩn bị sự cố** sau khi CLIENT01 và baseline sẵn sàng. Lab dựng portal thật trên loopback `127.0.0.1:18080`, rồi đổi riêng tên `portal.company.local` trong hosts sang địa chỉ sai. Không đổi DNS/card mạng quản lý Azure.\n\n```powershell\nGet-Content \"$env:windir\\System32\\drivers\\etc\\hosts\"\n[System.Net.Dns]::GetHostAddresses('portal.company.local')\n```\n\nMở Notepad bằng quyền Administrator, mở hosts và sửa **riêng dòng portal.company.local** về `127.0.0.1 portal.company.local`. Giữ nguyên các dòng khác. Xóa cache sau khi sửa:\n\n```powershell\nClear-DnsClientCache\nInvoke-WebRequest 'http://portal.company.local:18080/' -UseBasicParsing -UseDefaultCredentials\n```\n\nKết quả mong đợi: tên phân giải về 127.0.0.1 và portal trả `LabEx training portal OK`. Chỉ xóa dòng sai hoặc chạy flushdns chưa đủ: phải phân giải và truy cập đúng dịch vụ. `nslookup` truy vấn DNS trực tiếp nên không dùng riêng nó để kết luận hosts có hoạt động.\n",
+      "content_vi": "### Sửa phân giải tên rồi kiểm tra dịch vụ\n\nBấm **Chuẩn bị sự cố** sau khi CLIENT01 và baseline sẵn sàng. Lab dựng portal thật trên loopback `127.0.0.1:18080`, rồi đổi riêng tên `portal.company.local` trong hosts sang địa chỉ sai. Không đổi DNS/card mạng quản lý Azure.\n\n```powershell\nGet-Content \"$env:windir\\System32\\drivers\\etc\\hosts\"\n[System.Net.Dns]::GetHostAddresses('portal.company.local')\n```\n\nMở Notepad bằng quyền Administrator, mở hosts và sửa **riêng dòng portal.company.local** về `127.0.0.1 portal.company.local`. Giữ nguyên các dòng khác. Xóa cache sau khi sửa:\n\n```powershell\nClear-DnsClientCache\nInvoke-WebRequest 'http://portal.company.local:18080/' -UseBasicParsing -UseDefaultCredentials\n```\n\nKết quả mong đợi: tên phân giải về 127.0.0.1 và portal trả `LabEx training portal OK`. Chỉ xóa dòng sai hoặc chạy flushdns chưa đủ: phải phân giải và truy cập đúng dịch vụ. `nslookup` truy vấn DNS trực tiếp nên không dùng riêng nó để kết luận hosts có hoạt động.\n"
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 2,
   "steps": [
     {
       "id": "win-it-net-sec-1",
-      "title": "Chẩn đoán IP Card Mạng",
-      "title_vi": "Chẩn đoán IP Card Mạng",
+      "title": "Chẩn đoán IP Card Mạng & Yêu Cầu Cấp Lại IP từ DHCP",
+      "title_vi": "Chẩn đoán IP Card Mạng & Yêu Cầu Cấp Lại IP từ DHCP",
       "position": 1,
-      "task": "Xem thông tin cấu hình mạng của máy trạm.",
-      "task_vi": "Xem thông tin cấu hình mạng của máy trạm.",
-      "hint": "ipconfig /all",
-      "hint_vi": "ipconfig /all"
+      "task": "Xem thông tin toàn bộ cấu hình mạng của máy trạm và kiểm tra trạng thái card mạng.",
+      "task_vi": "Xem thông tin toàn bộ cấu hình mạng của máy trạm và kiểm tra trạng thái card mạng.",
+      "hint": "Chạy lệnh: ipconfig /all",
+      "hint_vi": "Chạy lệnh: ipconfig /all",
+      "content": "### Kiểm tra thông số mạng chi tiết:\n```powershell\nipconfig /all\n```\n\n### Làm mới địa chỉ IP khi bị kẹt dải APIPA:\n```powershell\n# Trên Azure: chỉ đọc cấu hình của management adapter\nGet-NetIPConfiguration\n\n# Không chạy ipconfig /release trên card đang giữ RDP và VM Agent.\n# Thực hành release/renew cần mạng lab riêng; bài này không nạp lỗi DHCP/APIPA.\n```",
+      "content_vi": "### Kiểm tra thông số mạng chi tiết:\n```powershell\nipconfig /all\n```\n\n### Làm mới địa chỉ IP khi bị kẹt dải APIPA:\n```powershell\n# Trên Azure: chỉ đọc cấu hình của management adapter\nGet-NetIPConfiguration\n\n# Không chạy ipconfig /release trên card đang giữ RDP và VM Agent.\n# Thực hành release/renew cần mạng lab riêng; bài này không nạp lỗi DHCP/APIPA.\n```",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-net-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
     },
     {
       "id": "win-it-net-sec-2",
-      "title": "Xóa DNS Cache & Kiểm Tra Hosts",
-      "title_vi": "Xóa DNS Cache & Kiểm Tra Hosts",
+      "title": "Xóa Bộ Nhớ Đệm DNS & Kiểm Tra Tệp Hosts",
+      "title_vi": "Xóa Bộ Nhớ Đệm DNS & Kiểm Tra Tệp Hosts",
       "position": 2,
-      "task": "Xóa sạch bộ nhớ đệm DNS Cache và xem nội dung tệp hosts.",
-      "task_vi": "Xóa sạch bộ nhớ đệm DNS Cache và xem nội dung tệp hosts.",
-      "hint": "ipconfig /flushdns",
-      "hint_vi": "ipconfig /flushdns"
+      "task": "Sửa hosts để portal.company.local phân giải đúng và portal HTTP hoạt động.",
+      "task_vi": "Sửa hosts để portal.company.local phân giải đúng và portal HTTP hoạt động.",
+      "hint": "Sửa riêng dòng portal.company.local về 127.0.0.1, giữ nguyên các dòng khác; sau đó kiểm tra tên và HTTP port 18080.",
+      "hint_vi": "Sửa riêng dòng portal.company.local về 127.0.0.1, giữ nguyên các dòng khác; sau đó kiểm tra tên và HTTP port 18080.",
+      "content": "### Sửa phân giải tên rồi kiểm tra dịch vụ\n\nBấm **Chuẩn bị sự cố** sau khi CLIENT01 và baseline sẵn sàng. Lab dựng portal thật trên loopback `127.0.0.1:18080`, rồi đổi riêng tên `portal.company.local` trong hosts sang địa chỉ sai. Không đổi DNS/card mạng quản lý Azure.\n\n```powershell\nGet-Content \"$env:windir\\System32\\drivers\\etc\\hosts\"\n[System.Net.Dns]::GetHostAddresses('portal.company.local')\n```\n\nMở Notepad bằng quyền Administrator, mở hosts và sửa **riêng dòng portal.company.local** về `127.0.0.1 portal.company.local`. Giữ nguyên các dòng khác. Xóa cache sau khi sửa:\n\n```powershell\nClear-DnsClientCache\nInvoke-WebRequest 'http://portal.company.local:18080/' -UseBasicParsing -UseDefaultCredentials\n```\n\nKết quả mong đợi: tên phân giải về 127.0.0.1 và portal trả `LabEx training portal OK`. Chỉ xóa dòng sai hoặc chạy flushdns chưa đủ: phải phân giải và truy cập đúng dịch vụ. `nslookup` truy vấn DNS trực tiếp nên không dùng riêng nó để kết luận hosts có hoạt động.\n",
+      "content_vi": "### Sửa phân giải tên rồi kiểm tra dịch vụ\n\nBấm **Chuẩn bị sự cố** sau khi CLIENT01 và baseline sẵn sàng. Lab dựng portal thật trên loopback `127.0.0.1:18080`, rồi đổi riêng tên `portal.company.local` trong hosts sang địa chỉ sai. Không đổi DNS/card mạng quản lý Azure.\n\n```powershell\nGet-Content \"$env:windir\\System32\\drivers\\etc\\hosts\"\n[System.Net.Dns]::GetHostAddresses('portal.company.local')\n```\n\nMở Notepad bằng quyền Administrator, mở hosts và sửa **riêng dòng portal.company.local** về `127.0.0.1 portal.company.local`. Giữ nguyên các dòng khác. Xóa cache sau khi sửa:\n\n```powershell\nClear-DnsClientCache\nInvoke-WebRequest 'http://portal.company.local:18080/' -UseBasicParsing -UseDefaultCredentials\n```\n\nKết quả mong đợi: tên phân giải về 127.0.0.1 và portal trả `LabEx training portal OK`. Chỉ xóa dòng sai hoặc chạy flushdns chưa đủ: phải phân giải và truy cập đúng dịch vụ. `nslookup` truy vấn DNS trực tiếp nên không dùng riêng nó để kết luận hosts có hoạt động.\n",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-net-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
     }
-  ]
+  ],
+  "practice_mode": "fault-injection",
+  "curriculum_group": "Mạng máy trạm"
 }

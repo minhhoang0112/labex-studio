@@ -1,0 +1,131 @@
+{
+  "id": "win-it-backup-robocopy",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 17,
+  "title": "Sao lưu thư mục bằng Robocopy và kiểm chứng SHA256",
+  "title_vi": "Sao lưu thư mục bằng Robocopy và kiểm chứng SHA256",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Sao lưu và khôi phục",
+  "overview": "Backup cần có phạm vi, tần suất, điểm lưu và thử phục hồi. Sao chép cùng ổ chỉ là bài tập; không chống mất cả VM, ransomware hoặc xóa nhầm cả hai bản.",
+  "ticket": {
+    "ticket_id": "HD-208",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Trước khi sửa máy phải sao lưu tài liệu và chứng minh dữ liệu còn nguyên."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-backup-robocopy-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-208: Trước khi sửa máy phải sao lưu tài liệu và chứng minh dữ liệu còn nguyên.\n\n### Mục tiêu và bản chất\nBackup cần có phạm vi, tần suất, điểm lưu và thử phục hồi. Sao chép cùng ổ chỉ là bài tập; không chống mất cả VM, ransomware hoặc xóa nhầm cả hai bản.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-backup-robocopy.\n\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\n### Phạm vi và lưu ý\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: robocopy](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)\n- [Microsoft: get-filehash](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash)\n",
+      "content_vi": "## Ticket HD-208: Trước khi sửa máy phải sao lưu tài liệu và chứng minh dữ liệu còn nguyên.\n\n### Mục tiêu và bản chất\nBackup cần có phạm vi, tần suất, điểm lưu và thử phục hồi. Sao chép cùng ổ chỉ là bài tập; không chống mất cả VM, ransomware hoặc xóa nhầm cả hai bản.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-backup-robocopy.\n\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\n### Phạm vi và lưu ý\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: robocopy](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)\n- [Microsoft: get-filehash](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash)\n"
+    },
+    {
+      "id": "win-it-backup-robocopy-sec-1",
+      "title": "Tạo tập dữ liệu và manifest trước backup",
+      "title_vi": "Tạo tập dữ liệu và manifest trước backup",
+      "position": 1,
+      "content": "## Tạo tập dữ liệu và manifest trước backup\n\n### Vì sao làm bước này?\nĐo dữ liệu trước khi sao lưu. SHA256 so sánh nội dung từng file; thời gian sửa đổi và kích thước giống nhau chưa đủ xác nhận trùng nội dung.\n\n### Thao tác\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Quarterly plan HD-207' | Set-Content \"$p\\Source\\plan.txt\" -Encoding UTF8\n'Budget=2000000' | Set-Content \"$p\\Source\\budget.txt\" -Encoding UTF8\nGet-ChildItem \"$p\\Source\" -File | Get-FileHash | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\n```\n\n### Kết quả và cách tự kiểm tra\nHai file nguồn và manifest hai SHA256.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\n### Câu hỏi tự giải thích\nVì sao không nên bắt đầu bằng xóa file gốc rồi mới kiểm tra bản backup?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tạo tập dữ liệu và manifest trước backup\n\n### Vì sao làm bước này?\nĐo dữ liệu trước khi sao lưu. SHA256 so sánh nội dung từng file; thời gian sửa đổi và kích thước giống nhau chưa đủ xác nhận trùng nội dung.\n\n### Thao tác\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Quarterly plan HD-207' | Set-Content \"$p\\Source\\plan.txt\" -Encoding UTF8\n'Budget=2000000' | Set-Content \"$p\\Source\\budget.txt\" -Encoding UTF8\nGet-ChildItem \"$p\\Source\" -File | Get-FileHash | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\n```\n\n### Kết quả và cách tự kiểm tra\nHai file nguồn và manifest hai SHA256.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\n### Câu hỏi tự giải thích\nVì sao không nên bắt đầu bằng xóa file gốc rồi mới kiểm tra bản backup?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai file nguồn và manifest hai SHA256.",
+      "task_vi": "Hai file nguồn và manifest hai SHA256.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Quarterly plan HD-207' | Set-Content \"$p\\Source\\plan.txt\" -Encoding UTF8\n'Budget=2000000' | Set-Content \"$p\\Source\\budget.txt\" -Encoding UTF8\nGet-ChildItem \"$p\\Source\" -File | Get-FileHash | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Quarterly plan HD-207' | Set-Content \"$p\\Source\\plan.txt\" -Encoding UTF8\n'Budget=2000000' | Set-Content \"$p\\Source\\budget.txt\" -Encoding UTF8\nGet-ChildItem \"$p\\Source\" -File | Get-FileHash | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-backup-robocopy-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-backup-robocopy-sec-2",
+      "title": "Backup có log và xác minh từng file",
+      "title_vi": "Backup có log và xác minh từng file",
+      "position": 2,
+      "content": "## Backup có log và xác minh từng file\n\n### Vì sao làm bước này?\nDùng retry hữu hạn để không treo ticket hàng giờ. Mã thoát được chuẩn hóa sau khi kiểm tra vì executor web thường coi mã khác 0 là thất bại.\n\n### Thao tác\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /COPY:DAT /R:1 /W:1 /LOG:\"$p\\robocopy.log\"\n$code=$LASTEXITCODE; if ($code -ge 8) { throw \"Robocopy failed: $code\" }\nGet-ChildItem \"$p\\Backup\" -File | Get-FileHash\n$global:LASTEXITCODE=0\n```\n\n### Kết quả và cách tự kiểm tra\nHai file Backup có hash khớp manifest nguồn, log tồn tại. Trong thực tế cần thêm bản ngoài máy và bản offline/immutable theo chính sách.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\n### Câu hỏi tự giải thích\nBạn chọn RPO/RTO thế nào cho thư mục kế toán thay đổi mỗi giờ?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Backup có log và xác minh từng file\n\n### Vì sao làm bước này?\nDùng retry hữu hạn để không treo ticket hàng giờ. Mã thoát được chuẩn hóa sau khi kiểm tra vì executor web thường coi mã khác 0 là thất bại.\n\n### Thao tác\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /COPY:DAT /R:1 /W:1 /LOG:\"$p\\robocopy.log\"\n$code=$LASTEXITCODE; if ($code -ge 8) { throw \"Robocopy failed: $code\" }\nGet-ChildItem \"$p\\Backup\" -File | Get-FileHash\n$global:LASTEXITCODE=0\n```\n\n### Kết quả và cách tự kiểm tra\nHai file Backup có hash khớp manifest nguồn, log tồn tại. Trong thực tế cần thêm bản ngoài máy và bản offline/immutable theo chính sách.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\n### Câu hỏi tự giải thích\nBạn chọn RPO/RTO thế nào cho thư mục kế toán thay đổi mỗi giờ?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai file Backup có hash khớp manifest nguồn, log tồn tại. Trong thực tế cần thêm bản ngoài máy và bản offline/immutable theo chính sách.",
+      "task_vi": "Hai file Backup có hash khớp manifest nguồn, log tồn tại. Trong thực tế cần thêm bản ngoài máy và bản offline/immutable theo chính sách.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /COPY:DAT /R:1 /W:1 /LOG:\"$p\\robocopy.log\"\n$code=$LASTEXITCODE; if ($code -ge 8) { throw \"Robocopy failed: $code\" }\nGet-ChildItem \"$p\\Backup\" -File | Get-FileHash\n$global:LASTEXITCODE=0",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /COPY:DAT /R:1 /W:1 /LOG:\"$p\\robocopy.log\"\n$code=$LASTEXITCODE; if ($code -ge 8) { throw \"Robocopy failed: $code\" }\nGet-ChildItem \"$p\\Backup\" -File | Get-FileHash\n$global:LASTEXITCODE=0",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-backup-robocopy-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-backup-robocopy-sec-1",
+      "title": "Tạo tập dữ liệu và manifest trước backup",
+      "title_vi": "Tạo tập dữ liệu và manifest trước backup",
+      "position": 1,
+      "content": "## Tạo tập dữ liệu và manifest trước backup\n\n### Vì sao làm bước này?\nĐo dữ liệu trước khi sao lưu. SHA256 so sánh nội dung từng file; thời gian sửa đổi và kích thước giống nhau chưa đủ xác nhận trùng nội dung.\n\n### Thao tác\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Quarterly plan HD-207' | Set-Content \"$p\\Source\\plan.txt\" -Encoding UTF8\n'Budget=2000000' | Set-Content \"$p\\Source\\budget.txt\" -Encoding UTF8\nGet-ChildItem \"$p\\Source\" -File | Get-FileHash | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\n```\n\n### Kết quả và cách tự kiểm tra\nHai file nguồn và manifest hai SHA256.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\n### Câu hỏi tự giải thích\nVì sao không nên bắt đầu bằng xóa file gốc rồi mới kiểm tra bản backup?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Tạo tập dữ liệu và manifest trước backup\n\n### Vì sao làm bước này?\nĐo dữ liệu trước khi sao lưu. SHA256 so sánh nội dung từng file; thời gian sửa đổi và kích thước giống nhau chưa đủ xác nhận trùng nội dung.\n\n### Thao tác\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Quarterly plan HD-207' | Set-Content \"$p\\Source\\plan.txt\" -Encoding UTF8\n'Budget=2000000' | Set-Content \"$p\\Source\\budget.txt\" -Encoding UTF8\nGet-ChildItem \"$p\\Source\" -File | Get-FileHash | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation\n```\n\n### Kết quả và cách tự kiểm tra\nHai file nguồn và manifest hai SHA256.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\n### Câu hỏi tự giải thích\nVì sao không nên bắt đầu bằng xóa file gốc rồi mới kiểm tra bản backup?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai file nguồn và manifest hai SHA256.",
+      "task_vi": "Hai file nguồn và manifest hai SHA256.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Quarterly plan HD-207' | Set-Content \"$p\\Source\\plan.txt\" -Encoding UTF8\n'Budget=2000000' | Set-Content \"$p\\Source\\budget.txt\" -Encoding UTF8\nGet-ChildItem \"$p\\Source\" -File | Get-FileHash | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'; New-Item -ItemType Directory -Path \"$p\\Source\" -Force | Out-Null\n'Quarterly plan HD-207' | Set-Content \"$p\\Source\\plan.txt\" -Encoding UTF8\n'Budget=2000000' | Set-Content \"$p\\Source\\budget.txt\" -Encoding UTF8\nGet-ChildItem \"$p\\Source\" -File | Get-FileHash | Export-Csv \"$p\\manifest.csv\" -NoTypeInformation",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-backup-robocopy-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-backup-robocopy-sec-2",
+      "title": "Backup có log và xác minh từng file",
+      "title_vi": "Backup có log và xác minh từng file",
+      "position": 2,
+      "content": "## Backup có log và xác minh từng file\n\n### Vì sao làm bước này?\nDùng retry hữu hạn để không treo ticket hàng giờ. Mã thoát được chuẩn hóa sau khi kiểm tra vì executor web thường coi mã khác 0 là thất bại.\n\n### Thao tác\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /COPY:DAT /R:1 /W:1 /LOG:\"$p\\robocopy.log\"\n$code=$LASTEXITCODE; if ($code -ge 8) { throw \"Robocopy failed: $code\" }\nGet-ChildItem \"$p\\Backup\" -File | Get-FileHash\n$global:LASTEXITCODE=0\n```\n\n### Kết quả và cách tự kiểm tra\nHai file Backup có hash khớp manifest nguồn, log tồn tại. Trong thực tế cần thêm bản ngoài máy và bản offline/immutable theo chính sách.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\n### Câu hỏi tự giải thích\nBạn chọn RPO/RTO thế nào cho thư mục kế toán thay đổi mỗi giờ?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Backup có log và xác minh từng file\n\n### Vì sao làm bước này?\nDùng retry hữu hạn để không treo ticket hàng giờ. Mã thoát được chuẩn hóa sau khi kiểm tra vì executor web thường coi mã khác 0 là thất bại.\n\n### Thao tác\nMở Source và Backup trong thư mục bài bằng File Explorer. Xem dữ liệu trước và sau, nhưng dùng hash để xác minh thay vì chỉ nhìn tên file.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /COPY:DAT /R:1 /W:1 /LOG:\"$p\\robocopy.log\"\n$code=$LASTEXITCODE; if ($code -ge 8) { throw \"Robocopy failed: $code\" }\nGet-ChildItem \"$p\\Backup\" -File | Get-FileHash\n$global:LASTEXITCODE=0\n```\n\n### Kết quả và cách tự kiểm tra\nHai file Backup có hash khớp manifest nguồn, log tồn tại. Trong thực tế cần thêm bản ngoài máy và bản offline/immutable theo chính sách.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông dùng /MIR ở bài này: mirror có thể lan truyền thao tác xóa. Robocopy có mã 0–7 không phải thất bại sao chép; mã từ 8 cần xử lý.\n\n### Câu hỏi tự giải thích\nBạn chọn RPO/RTO thế nào cho thư mục kế toán thay đổi mỗi giờ?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Hai file Backup có hash khớp manifest nguồn, log tồn tại. Trong thực tế cần thêm bản ngoài máy và bản offline/immutable theo chính sách.",
+      "task_vi": "Hai file Backup có hash khớp manifest nguồn, log tồn tại. Trong thực tế cần thêm bản ngoài máy và bản offline/immutable theo chính sách.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /COPY:DAT /R:1 /W:1 /LOG:\"$p\\robocopy.log\"\n$code=$LASTEXITCODE; if ($code -ge 8) { throw \"Robocopy failed: $code\" }\nGet-ChildItem \"$p\\Backup\" -File | Get-FileHash\n$global:LASTEXITCODE=0",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-backup-robocopy'\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /COPY:DAT /R:1 /W:1 /LOG:\"$p\\robocopy.log\"\n$code=$LASTEXITCODE; if ($code -ge 8) { throw \"Robocopy failed: $code\" }\nGet-ChildItem \"$p\\Backup\" -File | Get-FileHash\n$global:LASTEXITCODE=0",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-backup-robocopy-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

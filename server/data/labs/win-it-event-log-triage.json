@@ -1,0 +1,131 @@
+{
+  "id": "win-it-event-log-triage",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 21,
+  "title": "Event Viewer: thu thập log và dựng dòng thời gian sự cố",
+  "title_vi": "Event Viewer: thu thập log và dựng dòng thời gian sự cố",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "35 mins",
+  "target_vm": "client",
+  "curriculum_version": 3,
+  "curriculum_group": "Chẩn đoán hệ thống",
+  "overview": "Event ID chỉ có ý nghĩa cùng Provider, thời gian, channel và nội dung. Một lỗi xuất hiện gần thời điểm không tự chứng minh nó là nguyên nhân.",
+  "ticket": {
+    "ticket_id": "HD-216",
+    "requester": "Nhân viên văn phòng",
+    "department": "IT Helpdesk",
+    "priority": "Normal",
+    "title": "Ứng dụng báo lỗi lúc sáng; cần bằng chứng để chuyển đúng đội hỗ trợ."
+  },
+  "references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil",
+      "publisher": "Microsoft",
+      "accessed_at": "2026-10-20"
+    }
+  ],
+  "practice_mode": "configuration-diagnostics",
+  "sections": [
+    {
+      "id": "win-it-event-log-triage-sec-0",
+      "title": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "title_vi": "Tiếp nhận ticket, nguyên lý và phạm vi thực hành",
+      "position": 0,
+      "kind": "introduction",
+      "layout": "doc-fullscreen",
+      "need_verify": false,
+      "content": "## Ticket HD-216: Ứng dụng báo lỗi lúc sáng; cần bằng chứng để chuyển đúng đội hỗ trợ.\n\n### Mục tiêu và bản chất\nEvent ID chỉ có ý nghĩa cùng Provider, thời gian, channel và nội dung. Một lỗi xuất hiện gần thời điểm không tự chứng minh nó là nguyên nhân.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-event-log-triage.\n\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\n### Phạm vi và lưu ý\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-winevent](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent)\n- [Microsoft: wevtutil](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil)\n",
+      "content_vi": "## Ticket HD-216: Ứng dụng báo lỗi lúc sáng; cần bằng chứng để chuyển đúng đội hỗ trợ.\n\n### Mục tiêu và bản chất\nEvent ID chỉ có ý nghĩa cùng Provider, thời gian, channel và nội dung. Một lỗi xuất hiện gần thời điểm không tự chứng minh nó là nguyên nhân.\n\n### Cách làm trên CLIENT01\nBài **cấu hình/chẩn đoán trên VM thật**, không có nút nạp lỗi. Hoàn nguyên phiên sự cố trước đó trước khi làm bài. Các file bài này nằm riêng trong C:\\LabEx\\Labs\\win-it-event-log-triage.\n\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\n### Phạm vi và lưu ý\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\nDesktop dùng tài khoản tương tác; PowerShell web chạy **SYSTEM** qua Azure Agent và mỗi lần gửi là process mới. Không dùng HKCU hoặc Desktop của SYSTEM để suy luận cấu hình user đang đăng nhập. Chạy nguyên khối lệnh; biến không giữ sang lần gửi sau. Dùng nút Win+R của web để gửi phím vào VM. Không cần bật thêm Windows Server cho khóa này.\n\n### Tự luyện\nĐọc ticket, dự đoán nguyên nhân và tự đề xuất phép kiểm tra trước khi mở lời giải. Bộ chấm xác nhận trạng thái/kết quả có cấu trúc; câu hỏi giải thích dành cho tự đánh giá, không được tự động chứng nhận đã hiểu nghiệp vụ.\n\n### Tài liệu gốc\nGiáo trình tiếng Việt tự biên soạn, tham khảo Microsoft; không phải bản sao khóa LabEx hay chứng chỉ của Microsoft. Đối chiếu tài liệu ngày 2026-10-20.\n\n- [Microsoft: get-winevent](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent)\n- [Microsoft: wevtutil](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil)\n"
+    },
+    {
+      "id": "win-it-event-log-triage-sec-1",
+      "title": "Xuất sự kiện thật có cấu trúc",
+      "title_vi": "Xuất sự kiện thật có cấu trúc",
+      "position": 1,
+      "content": "## Xuất sự kiện thật có cấu trúc\n\n### Vì sao làm bước này?\nGet-WinEvent là đối tượng có thể lọc. Lưu XML hoặc EVTX khi cần điều tra sâu; CSV là bản tóm tắt để xử lý ticket.\n\n### Thao tác\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-WinEvent -LogName System -MaxEvents 20 | Select-Object RecordId,Id,ProviderName,TimeCreated,LevelDisplayName,Message | Export-Csv \"$p\\system-events.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\system-events.csv\" | Select-Object -First 5 RecordId,Id,ProviderName,TimeCreated\n```\n\n### Kết quả và cách tự kiểm tra\nCó sự kiện thật; RecordId dùng đối chiếu lại với System channel.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\n### Câu hỏi tự giải thích\nEvent ID 1000 của provider A có chắc cùng ý nghĩa với provider B không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Xuất sự kiện thật có cấu trúc\n\n### Vì sao làm bước này?\nGet-WinEvent là đối tượng có thể lọc. Lưu XML hoặc EVTX khi cần điều tra sâu; CSV là bản tóm tắt để xử lý ticket.\n\n### Thao tác\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-WinEvent -LogName System -MaxEvents 20 | Select-Object RecordId,Id,ProviderName,TimeCreated,LevelDisplayName,Message | Export-Csv \"$p\\system-events.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\system-events.csv\" | Select-Object -First 5 RecordId,Id,ProviderName,TimeCreated\n```\n\n### Kết quả và cách tự kiểm tra\nCó sự kiện thật; RecordId dùng đối chiếu lại với System channel.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\n### Câu hỏi tự giải thích\nEvent ID 1000 của provider A có chắc cùng ý nghĩa với provider B không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Có sự kiện thật; RecordId dùng đối chiếu lại với System channel.",
+      "task_vi": "Có sự kiện thật; RecordId dùng đối chiếu lại với System channel.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-WinEvent -LogName System -MaxEvents 20 | Select-Object RecordId,Id,ProviderName,TimeCreated,LevelDisplayName,Message | Export-Csv \"$p\\system-events.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\system-events.csv\" | Select-Object -First 5 RecordId,Id,ProviderName,TimeCreated",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-WinEvent -LogName System -MaxEvents 20 | Select-Object RecordId,Id,ProviderName,TimeCreated,LevelDisplayName,Message | Export-Csv \"$p\\system-events.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\system-events.csv\" | Select-Object -First 5 RecordId,Id,ProviderName,TimeCreated",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-event-log-triage-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    },
+    {
+      "id": "win-it-event-log-triage-sec-2",
+      "title": "Lưu bản log gốc để bàn giao",
+      "title_vi": "Lưu bản log gốc để bàn giao",
+      "position": 2,
+      "content": "## Lưu bản log gốc để bàn giao\n\n### Vì sao làm bước này?\nEVTX giữ cấu trúc gốc và có thể mở lại bằng Event Viewer. Xuất không làm xóa hay tắt log đang ghi.\n\n### Thao tác\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; wevtutil epl System \"$p\\system.evtx\" /ow:true\nGet-WinEvent -Path \"$p\\system.evtx\" -MaxEvents 3 | Select-Object Id,ProviderName,TimeCreated\n```\n\n### Kết quả và cách tự kiểm tra\nsystem.evtx mở đọc được và có sự kiện. Trước khi chia sẻ thật cần xét dữ liệu nhạy cảm và giới hạn thời gian/phạm vi.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\n### Câu hỏi tự giải thích\nNếu lỗi xảy ra 10:00 nhưng giờ máy lệch 7 tiếng, dòng thời gian có thể sai ra sao?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Lưu bản log gốc để bàn giao\n\n### Vì sao làm bước này?\nEVTX giữ cấu trúc gốc và có thể mở lại bằng Event Viewer. Xuất không làm xóa hay tắt log đang ghi.\n\n### Thao tác\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; wevtutil epl System \"$p\\system.evtx\" /ow:true\nGet-WinEvent -Path \"$p\\system.evtx\" -MaxEvents 3 | Select-Object Id,ProviderName,TimeCreated\n```\n\n### Kết quả và cách tự kiểm tra\nsystem.evtx mở đọc được và có sự kiện. Trước khi chia sẻ thật cần xét dữ liệu nhạy cảm và giới hạn thời gian/phạm vi.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\n### Câu hỏi tự giải thích\nNếu lỗi xảy ra 10:00 nhưng giờ máy lệch 7 tiếng, dòng thời gian có thể sai ra sao?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "system.evtx mở đọc được và có sự kiện. Trước khi chia sẻ thật cần xét dữ liệu nhạy cảm và giới hạn thời gian/phạm vi.",
+      "task_vi": "system.evtx mở đọc được và có sự kiện. Trước khi chia sẻ thật cần xét dữ liệu nhạy cảm và giới hạn thời gian/phạm vi.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; wevtutil epl System \"$p\\system.evtx\" /ow:true\nGet-WinEvent -Path \"$p\\system.evtx\" -MaxEvents 3 | Select-Object Id,ProviderName,TimeCreated",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; wevtutil epl System \"$p\\system.evtx\" /ow:true\nGet-WinEvent -Path \"$p\\system.evtx\" -MaxEvents 3 | Select-Object Id,ProviderName,TimeCreated",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-event-log-triage-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ],
+      "kind": "task",
+      "layout": "doc-workbench-split",
+      "need_verify": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-event-log-triage-sec-1",
+      "title": "Xuất sự kiện thật có cấu trúc",
+      "title_vi": "Xuất sự kiện thật có cấu trúc",
+      "position": 1,
+      "content": "## Xuất sự kiện thật có cấu trúc\n\n### Vì sao làm bước này?\nGet-WinEvent là đối tượng có thể lọc. Lưu XML hoặc EVTX khi cần điều tra sâu; CSV là bản tóm tắt để xử lý ticket.\n\n### Thao tác\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-WinEvent -LogName System -MaxEvents 20 | Select-Object RecordId,Id,ProviderName,TimeCreated,LevelDisplayName,Message | Export-Csv \"$p\\system-events.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\system-events.csv\" | Select-Object -First 5 RecordId,Id,ProviderName,TimeCreated\n```\n\n### Kết quả và cách tự kiểm tra\nCó sự kiện thật; RecordId dùng đối chiếu lại với System channel.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\n### Câu hỏi tự giải thích\nEvent ID 1000 của provider A có chắc cùng ý nghĩa với provider B không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Xuất sự kiện thật có cấu trúc\n\n### Vì sao làm bước này?\nGet-WinEvent là đối tượng có thể lọc. Lưu XML hoặc EVTX khi cần điều tra sâu; CSV là bản tóm tắt để xử lý ticket.\n\n### Thao tác\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-WinEvent -LogName System -MaxEvents 20 | Select-Object RecordId,Id,ProviderName,TimeCreated,LevelDisplayName,Message | Export-Csv \"$p\\system-events.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\system-events.csv\" | Select-Object -First 5 RecordId,Id,ProviderName,TimeCreated\n```\n\n### Kết quả và cách tự kiểm tra\nCó sự kiện thật; RecordId dùng đối chiếu lại với System channel.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\n### Câu hỏi tự giải thích\nEvent ID 1000 của provider A có chắc cùng ý nghĩa với provider B không?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "Có sự kiện thật; RecordId dùng đối chiếu lại với System channel.",
+      "task_vi": "Có sự kiện thật; RecordId dùng đối chiếu lại với System channel.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-WinEvent -LogName System -MaxEvents 20 | Select-Object RecordId,Id,ProviderName,TimeCreated,LevelDisplayName,Message | Export-Csv \"$p\\system-events.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\system-events.csv\" | Select-Object -First 5 RecordId,Id,ProviderName,TimeCreated",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; New-Item -ItemType Directory -Path $p -Force | Out-Null\nGet-WinEvent -LogName System -MaxEvents 20 | Select-Object RecordId,Id,ProviderName,TimeCreated,LevelDisplayName,Message | Export-Csv \"$p\\system-events.csv\" -NoTypeInformation -Encoding UTF8\nImport-Csv \"$p\\system-events.csv\" | Select-Object -First 5 RecordId,Id,ProviderName,TimeCreated",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-event-log-triage-sec-1"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    },
+    {
+      "id": "win-it-event-log-triage-sec-2",
+      "title": "Lưu bản log gốc để bàn giao",
+      "title_vi": "Lưu bản log gốc để bàn giao",
+      "position": 2,
+      "content": "## Lưu bản log gốc để bàn giao\n\n### Vì sao làm bước này?\nEVTX giữ cấu trúc gốc và có thể mở lại bằng Event Viewer. Xuất không làm xóa hay tắt log đang ghi.\n\n### Thao tác\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; wevtutil epl System \"$p\\system.evtx\" /ow:true\nGet-WinEvent -Path \"$p\\system.evtx\" -MaxEvents 3 | Select-Object Id,ProviderName,TimeCreated\n```\n\n### Kết quả và cách tự kiểm tra\nsystem.evtx mở đọc được và có sự kiện. Trước khi chia sẻ thật cần xét dữ liệu nhạy cảm và giới hạn thời gian/phạm vi.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\n### Câu hỏi tự giải thích\nNếu lỗi xảy ra 10:00 nhưng giờ máy lệch 7 tiếng, dòng thời gian có thể sai ra sao?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "content_vi": "## Lưu bản log gốc để bàn giao\n\n### Vì sao làm bước này?\nEVTX giữ cấu trúc gốc và có thể mở lại bằng Event Viewer. Xuất không làm xóa hay tắt log đang ghi.\n\n### Thao tác\nWin+R → eventvwr.msc → Windows Logs → System; Filter Current Log theo thời gian sự cố; mở General và Details.\n\nKhối dưới là hướng dẫn PowerShell tương đương trong phạm vi bài. Có thể mở PowerShell ngay trong Desktop bằng Win+R → powershell; riêng báo cáo đọc toàn máy nên dùng PowerShell web để nhất quán với bộ chấm. Nếu chạy trong Desktop thì dùng quyền quản trị khi thao tác cần quyền đó.\n\n```powershell\n$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; wevtutil epl System \"$p\\system.evtx\" /ow:true\nGet-WinEvent -Path \"$p\\system.evtx\" -MaxEvents 3 | Select-Object Id,ProviderName,TimeCreated\n```\n\n### Kết quả và cách tự kiểm tra\nsystem.evtx mở đọc được và có sự kiện. Trước khi chia sẻ thật cần xét dữ liệu nhạy cảm và giới hạn thời gian/phạm vi.\n\nThực hiện xong mới bấm **Kiểm tra kết quả**. Nếu chưa đạt, xem lại đường dẫn, tên cột, nội dung và quyền thực thi; không chỉ tạo một file rỗng trùng tên. Bộ chấm đọc lại dữ liệu trên CLIENT01.\n\n### Sai lầm cần tránh\nKhông Clear Log để “sửa lỗi”. Log có thể chứa tên máy, đường dẫn và tài khoản; chỉ chia sẻ phần cần thiết.\n\n### Câu hỏi tự giải thích\nNếu lỗi xảy ra 10:00 nhưng giờ máy lệch 7 tiếng, dòng thời gian có thể sai ra sao?\nViết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết quả → kết luận có giới hạn → bước tiếp theo. Trong môi trường thật cần người dùng xác nhận thao tác nghiệp vụ sau khi sửa.\n",
+      "task": "system.evtx mở đọc được và có sự kiện. Trước khi chia sẻ thật cần xét dữ liệu nhạy cảm và giới hạn thời gian/phạm vi.",
+      "task_vi": "system.evtx mở đọc được và có sự kiện. Trước khi chia sẻ thật cần xét dữ liệu nhạy cảm và giới hạn thời gian/phạm vi.",
+      "hint": "$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; wevtutil epl System \"$p\\system.evtx\" /ow:true\nGet-WinEvent -Path \"$p\\system.evtx\" -MaxEvents 3 | Select-Object Id,ProviderName,TimeCreated",
+      "hint_vi": "$p='C:\\LabEx\\Labs\\win-it-event-log-triage'; wevtutil epl System \"$p\\system.evtx\" /ow:true\nGet-WinEvent -Path \"$p\\system.evtx\" -MaxEvents 3 | Select-Object Id,ProviderName,TimeCreated",
+      "verification": {
+        "kind": "windows-remote",
+        "rule_id": "win-it-event-log-triage-sec-2"
+      },
+      "required_capabilities": [
+        "windows-remote"
+      ]
+    }
+  ]
+}

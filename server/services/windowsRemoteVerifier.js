@@ -1,9 +1,21 @@
 import { executeWindowsRemote } from './windowsRemoteExecutor.js';
 import { getCommandHistory } from '../pty/linuxEnvironment.js';
-import { cloudConfig } from './cloudConfig.js';
+import { getVmTargetConfig } from './cloudConfig.js';
+import { loadLab } from '../data/catalog.js';
+import { labVmTarget } from './vmTargets.js';
+import { windowsFaults, faultScenarios } from './windowsFaults.js';
+import fs from 'node:fs';
+
+const supportRules = JSON.parse(fs.readFileSync(new URL('../data/windows-support-rules.json', import.meta.url), 'utf8'));
 
 // Trusted server-side criteria. Never use browser-supplied PowerShell as a grader.
 const rules = {
+  ...supportRules,
+  'win-it-onb-sec-1': { probe: "(Get-TimeZone).Id -eq 'SE Asia Standard Time'" },
+  'win-it-onb-sec-2': { commands: [['hostname', '$env:COMPUTERNAME', 'Get-ComputerInfo | Select-Object CsName, OsName, WindowsVersion']], probe: "$env:COMPUTERNAME -eq 'CLIENT01' -and (Get-CimInstance Win32_OperatingSystem).ProductType -eq 1" },
+  'win-it-pr-sec-1': { commands: [['Get-Service Spooler']], probe: "$null -ne (Get-Service Spooler)" },
+  'win-it-net-sec-1': { commands: [['ipconfig /all', 'Get-NetIPAddress']], probe: '@(Get-NetIPAddress -AddressFamily IPv4).Count -gt 0' },
+  'win-it-dsk-sec-1': { commands: [['Get-PSDrive -PSProvider FileSystem', 'Get-Volume']], probe: '(Get-PSDrive C).Free -ge 0' },
   'win-ps-01-sec-1': { commands: [['Get-Command *-Service'], ['$PSVersionTable.PSVersion', '$PSVersionTable']], probe: '$PSVersionTable.PSVersion.Major -ge 5' },
   'win-ps-01-sec-2': { commands: [['Get-Process | Get-Member']], probe: '@(Get-Process | Get-Member).Count -gt 0' },
   'win-ps-02-sec-1': { commands: [["Get-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status"]], probe: '@(Get-Service | Where-Object Status -eq Running).Count -gt 0' },
@@ -25,21 +37,27 @@ const rules = {
   'win-tr-05-sec-1': { commands: [["Get-Counter '\\Processor(_Total)\\% Processor Time'"]], probe: '@(Get-Counter "\\Processor(_Total)\\% Processor Time").CounterSamples.Count -gt 0' },
 };
 
-export function windowsStepReadiness(step) {
-  const configured = Boolean(cloudConfig().subscriptionId);
-  const known = Boolean(rules[step.id]);
+export function windowsStepReadiness(step, lab = {}) {
+  const target = labVmTarget(lab);
+  const config = getVmTargetConfig(target);
+  const configured = Boolean(config.subscriptionId && (target === 'server' || config.publicIp && config.password));
+  const known = Boolean(rules[step.id] || faultScenarios[lab.id] && step.id.endsWith('-sec-2'));
   return { ready: configured && known, missing_capabilities: configured ? [] : ['windows-remote'],
     reasons: [...(!configured ? ['Chưa cấu hình đăng nhập Azure để kiểm tra Windows VM.'] : []),
       ...(!known ? ['Bước này chưa có bộ kiểm tra Windows từ xa được review.'] : [])] };
 }
 const normalize = command => command.trim().replace(/\s+/g, ' ').toLowerCase();
 
-export async function verifyWindowsRemote(labId, step, { execute = executeWindowsRemote, readHistory = getCommandHistory } = {}) {
+export async function verifyWindowsRemote(labId, step, { execute = executeWindowsRemote, readHistory = getCommandHistory, faults = windowsFaults } = {}) {
+  const vmTarget = labVmTarget(loadLab(labId));
+  faults.assertAccess(labId, vmTarget);
+  if (faultScenarios[labId] && step.id.endsWith('-sec-2')) return faults.verify(labId);
   const rule = rules[step.id];
   if (!rule) return { supported: false, passed: false, reason: 'Chưa có bộ kiểm tra Windows từ xa cho bước này.' };
+  if (rule.lab_id && rule.lab_id !== labId) return { supported: false, passed: false, reason: 'Bộ kiểm tra không thuộc bài hiện tại.' };
   let historyOK = !rule.commands;
   if (rule.commands) {
-    const target = cloudConfig().vmName;
+    const target = getVmTargetConfig(vmTarget).vmName;
     const history = await readHistory(labId);
     historyOK = rule.commands.every(group => group.some(command => history.some(entry => entry.status === 0 &&
       entry.target === target && entry.computerName && normalize(entry.command) === normalize(command))));
@@ -49,8 +67,9 @@ export async function verifyWindowsRemote(labId, step, { execute = executeWindow
   const moduleName = step.id.startsWith('win-ad-') ? 'ActiveDirectory'
     : step.id === 'win-iis-05-sec-1' ? 'WebAdministration' : null;
   const prerequisite = moduleName ? `if (-not (Get-Module -ListAvailable ${moduleName})) { exit 42 }; ` : '';
-  const command = `$ErrorActionPreference='Stop'; ${prerequisite}try { $value = & { ${expression} }; if ($value -is [bool] -and $value -eq $true) { exit 0 } else { exit 1 } } catch { Write-Error $_ -ErrorAction Continue; exit 1 }`;
-  const result = await execute(command, { labId });
+  const context = rule.lab_id ? `$labRoot='C:\\LabEx\\Labs\\${rule.lab_id}'; if ($env:COMPUTERNAME -ne 'CLIENT01' -or (Get-CimInstance Win32_OperatingSystem).ProductType -ne 1) { exit 43 }; ` : '';
+  const command = `$ErrorActionPreference='Stop'; ${prerequisite}${context}try { $value = & { ${expression} }; if ($value -is [bool] -and $value -eq $true) { exit 0 } else { exit 1 } } catch { Write-Error $_ -ErrorAction Continue; exit 1 }`;
+  const result = await execute(command, { labId, target: vmTarget });
   if (moduleName && result.exitCode === 42) return { supported: false, passed: false,
     reason: `VM chưa có module ${moduleName}. Cần chuẩn bị role/môi trường Windows trước khi thực hiện bài này.` };
   return { supported: true, passed: result.exitCode === 0 && !result.timedOut,
