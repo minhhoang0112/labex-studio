@@ -7,6 +7,7 @@ import LabWorkspace from './views/LabWorkspace';
 import LearningPath from './views/LearningPath';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
+import GlobalAiAssistant from './components/GlobalAiAssistant';
 
 function routeFromPath() {
   const parts = window.location.pathname.split('/').filter(Boolean);
@@ -116,6 +117,9 @@ export default function App() {
       )}
 
       {route.view !== 'lab' && <BackToTop />}
+      {route.view !== 'lab' && (
+        <GlobalAiAssistant currentView={route.view} currentId={route.id} />
+      )}
 
       <SearchModal
         isOpen={isSearchOpen}

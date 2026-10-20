@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { api } from '../lib/api';
+import VoiceCallModal from './VoiceCallModal';
 import {
   Bot,
   Send,
@@ -16,6 +17,7 @@ import {
   GraduationCap,
   Square,
   HelpCircle,
+  Radio,
 } from "lucide-react";
 
 // Clean markdown text for natural, pleasant speech synthesis
@@ -38,6 +40,7 @@ export default function AiTutor({
   onClearExternalPrompt,
 }) {
   const [persona, setPersona] = useState('tutor'); // 'tutor' | 'interviewer'
+  const [isVoiceCallOpen, setIsVoiceCallOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -324,8 +327,17 @@ export default function AiTutor({
             </div>
           </div>
 
-          {/* Right Header Controls: Stop speech & Auto voice toggle */}
-          <div className="flex items-center gap-1">
+          {/* Right Header Controls: Stop speech & Auto voice toggle & Voice Mode */}
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setIsVoiceCallOpen(true)}
+              title="Mở chế độ giao tiếp giọng nói 2 chiều liên tục (như ChatGPT Voice Mode)"
+              className="px-2 py-1 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-semibold flex items-center gap-1 shadow-xs transition hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-200" />
+              <span className="hidden sm:inline">Voice Mode</span>
+            </button>
+
             {isSpeaking && (
               <button
                 onClick={stopSpeaking}
@@ -351,7 +363,7 @@ export default function AiTutor({
               }`}
             >
               {autoVoice ? <Volume2 className="w-3.5 h-3.5 text-emerald-500 animate-pulse" /> : <VolumeX className="w-3.5 h-3.5" />}
-              <span className="text-[10px] hidden sm:inline font-medium">{autoVoice ? 'Giọng nói: Bật' : 'Giọng nói: Tắt'}</span>
+              <span className="text-[10px] hidden sm:inline font-medium">{autoVoice ? 'Bật đọc' : 'Tắt đọc'}</span>
             </button>
           </div>
         </div>
@@ -517,6 +529,16 @@ export default function AiTutor({
           <Send className="w-4 h-4" />
         </button>
       </form>
+
+      {/* Interactive Hands-free Voice Call Modal (ChatGPT Voice Mode) */}
+      <VoiceCallModal
+        isOpen={isVoiceCallOpen}
+        onClose={() => setIsVoiceCallOpen(false)}
+        lab={lab}
+        currentStep={currentStep}
+        lastTerminalOutput={lastTerminalOutput}
+        initialPersona={persona}
+      />
     </div>
   );
 }

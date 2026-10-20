@@ -133,4 +133,25 @@ router.post("/chat", async (req, res, next) => {
   try { res.json(await getTutorReply({ message: message.trim(), context, history, persona: persona || 'tutor' })); }
   catch (error) { next(error); }
 });
+
+router.get("/tts", async (req, res) => {
+  const text = String(req.query.text || "").trim().slice(0, 300);
+  if (!text) return res.status(400).send("Text required");
+  try {
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(text)}`;
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      }
+    });
+    if (!response.ok) throw new Error("TTS fetch failed");
+    res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    const arrayBuffer = await response.arrayBuffer();
+    res.send(Buffer.from(arrayBuffer));
+  } catch {
+    res.status(502).json({ error: "TTS service error" });
+  }
+});
+
 export default router;
