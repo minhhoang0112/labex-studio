@@ -11,6 +11,7 @@ import verifyRouter from "./routes/verify.js";
 import aiRouter from "./routes/ai.js";
 import { createCloudVmRouter } from "./routes/cloudVm.js";
 import { createDesktopGateway } from "./services/desktopGateway.js";
+import { createLiveVoiceGateway } from "./services/liveVoiceGateway.js";
 import { createEnvironmentRouter } from "./routes/environment.js";
 import { createTerminalSession } from "./pty/terminalManager.js";
 import { getEnvironment } from "./pty/linuxEnvironment.js";
@@ -24,6 +25,7 @@ const wss = new WebSocketServer({ noServer: true });
 const port = Number(process.env.PORT || 5000);
 const host = process.env.HOST || "127.0.0.1";
 const desktopGateway = createDesktopGateway();
+const liveVoiceGateway = createLiveVoiceGateway();
 
 process.on("uncaughtException", (error) => {
   if (error?.code === "EPIPE" || error?.code === "ECONNRESET") {
@@ -84,6 +86,10 @@ app.use((error, _req, res, _next) => {
 });
 server.on("upgrade", (req, socket, head) => {
   const url = new URL(req.url, "http://localhost");
+  if (url.pathname === '/ws/ai/live' && allowedOrigin(req.headers.origin)) {
+    liveVoiceGateway.upgrade(req,socket,head);
+    return;
+  }
   if (url.pathname === '/ws/desktop' && allowedOrigin(req.headers.origin)) {
     desktopGateway.upgrade(req, socket, head);
     return;
@@ -126,6 +132,7 @@ server.listen(port, host, () => {
   }
 });
 function shutdown() {
+  liveVoiceGateway.close();
   for (const client of wss.clients) client.close(1001, "Server shutting down");
   wss.close();
   server.close();

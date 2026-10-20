@@ -3,22 +3,13 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { api } from '../lib/api';
 import VoiceCallModal from './VoiceCallModal';
+import { createSpeechPlayer } from '../lib/speechPlayer';
+import { recognitionErrorMessage } from '../lib/voiceSession';
 import {
   Bot, Send, Sparkles, User, Loader2, Mic, MicOff,
   Volume2, VolumeX, Briefcase, GraduationCap, X, 
   MessageSquare, Radio, ChevronDown, Sparkle
 } from 'lucide-react';
-
-function cleanMarkdownForSpeech(text) {
-  if (!text) return '';
-  return text
-    .replace(/```[\s\S]*?```/g, ' đoạn mã đã hiển thị trên màn hình. ')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/[#*_~>]/g, '')
-    .replace(/\n+/g, '. ')
-    .trim();
-}
 
 export default function GlobalAiAssistant({ currentView, currentId }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,20 +47,14 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
     };
   }, []);
 
-  const playNaturalSpeech = (text) => {
-    const cleaned = cleanMarkdownForSpeech(text).slice(0, 300);
-    if (!cleaned) return;
-    if (audioPlayerRef.current) {
-      audioPlayerRef.current.pause();
-    }
-    try {
-      const audio = new Audio(`/api/ai/tts?text=${encodeURIComponent(cleaned)}`);
-      audioPlayerRef.current = audio;
-      audio.play().catch(() => {});
-    } catch {}
+  const playNaturalSpeech = text => {
+    audioPlayerRef.current?.pause();
+    const player=createSpeechPlayer(); audioPlayerRef.current=player;
+    player.speak(text).catch(()=>player.stop());
   };
 
   const toggleListening = () => {
+    if (isVoiceCallOpen) return;
     const SpeechRecognition = typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition);
     if (!SpeechRecognition) {
       alert("Trình duyệt chưa hỗ trợ nhận diện giọng nói. Hãy dùng Google Chrome hoặc Microsoft Edge.");
@@ -84,6 +69,7 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
       return;
     }
 
+    audioPlayerRef.current?.pause();
     try {
       const recognition = new SpeechRecognition();
       recognition.lang = 'vi-VN';
@@ -96,7 +82,7 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
         const transcript = Array.from(event.results).map(r => r[0].transcript).join('');
         setInput(transcript);
       };
-      recognition.onerror = () => setIsListening(false);
+      recognition.onerror = event => { setIsListening(false); if (!['aborted','no-speech'].includes(event.error)) setMessages(items=>[...items,{role:'assistant',content:recognitionErrorMessage(event.error),error:true}]); };
       recognition.onend = () => setIsListening(false);
       recognition.start();
     } catch {
@@ -139,6 +125,7 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
         }),
       });
 
+      if (controller.signal.aborted) return;
       const reply = data.reply || 'Tôi đã nhận được thông tin, hãy tiếp tục nhé.';
       setMessages([...updated, { role: 'assistant', content: reply }]);
 
@@ -149,8 +136,8 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
       if (controller.signal.aborted) return;
       setMessages([...updated, { role: 'assistant', content: 'Tạm thời chưa kết nối được dịch vụ AI. Hãy thử lại.', error: true }]);
     } finally {
-      inFlightRef.current = null;
-      setIsLoading(false);
+      if (inFlightRef.current === controller) inFlightRef.current = null;
+      if (!controller.signal.aborted) setIsLoading(false);
     }
   };
 
@@ -213,6 +200,7 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setAutoVoice(!autoVoice)}
+                disabled={isVoiceCallOpen}
                 title={autoVoice ? "Tắt đọc giọng nói" : "Bật đọc giọng nói tiếng Việt"}
                 className={`p-1.5 rounded-lg border text-xs transition ${
                   autoVoice ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40' : 'bg-white/10 text-slate-400 border-white/10 hover:text-white'
@@ -234,7 +222,8 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
           <div className="p-2.5 bg-slate-50 dark:bg-slate-950/50 border-b border-slate-200 dark:border-slate-800 flex flex-col gap-2">
             {/* Big prominent button for ChatGPT Voice Mode */}
             <button
-              onClick={() => setIsVoiceCallOpen(true)}
+              onClick={() => { audioPlayerRef.current?.pause(); inFlightRef.current?.abort(); setIsLoading(false); setAutoVoice(false); try { recognitionRef.current?.abort(); } catch {} setIsListening(false); setIsVoiceCallOpen(true); }}
+              disabled={isVoiceCallOpen}
               className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-primary-600 hover:from-emerald-500 hover:to-primary-500 text-white font-black text-xs shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 transition hover:scale-[1.01] active:scale-[0.99]"
             >
               <Radio className="w-4 h-4 text-emerald-200 animate-pulse" />
@@ -371,7 +360,8 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
               <button
                 type="button"
                 onClick={toggleListening}
-                title={isListening ? "Dừng ghi âm" : "Nói chuyện bằng giọng nói tiếng Việt"}
+                disabled={isVoiceCallOpen}
+                title={isVoiceCallOpen ? 'Mic đang dùng trong cuộc gọi' : isListening ? "Dừng ghi âm" : "Nói chuyện bằng giọng nói tiếng Việt"}
                 className={`absolute right-1.5 p-1.5 rounded-full transition ${
                   isListening
                     ? 'bg-rose-600 text-white animate-pulse'
@@ -396,6 +386,7 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
 
       {/* Compact Interactive ChatGPT Voice Call Dock / Floating Modal */}
       <VoiceCallModal
+        key={isVoiceCallOpen ? `voice-${persona}` : 'voice-closed'}
         isOpen={isVoiceCallOpen}
         onClose={() => setIsVoiceCallOpen(false)}
         initialPersona={persona}

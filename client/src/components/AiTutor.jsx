@@ -3,6 +3,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { api } from '../lib/api';
 import VoiceCallModal from './VoiceCallModal';
+import { createSpeechPlayer } from '../lib/speechPlayer';
+import { recognitionErrorMessage } from '../lib/voiceSession';
 import {
   Bot,
   Send,
@@ -21,17 +23,6 @@ import {
 } from "lucide-react";
 
 // Clean markdown text for natural, pleasant speech synthesis
-function cleanMarkdownForSpeech(text) {
-  if (!text) return '';
-  return text
-    .replace(/```[\s\S]*?```/g, ' đoạn mã đã hiển thị trên màn hình. ') // replace code blocks
-    .replace(/`([^`]+)`/g, '$1') // inline code
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // links
-    .replace(/[#*_~>]/g, '') // markdown symbols
-    .replace(/\n+/g, '. ')
-    .trim();
-}
-
 export default function AiTutor({
   lab,
   currentStep,
@@ -100,44 +91,12 @@ export default function AiTutor({
   }, [externalPrompt, isLoading]);
 
   // Text-To-Speech helper with natural Vietnamese voice stream
-  const speakText = (text) => {
+  const speakText = text => {
     stopSpeaking();
-    const cleaned = cleanMarkdownForSpeech(text).slice(0, 320);
-    if (!cleaned) return;
-
-    try {
-      const audio = new Audio(`/api/ai/tts?text=${encodeURIComponent(cleaned)}`);
-      audioPlayerRef.current = audio;
-      audio.onplay = () => setIsSpeaking(true);
-      audio.onended = () => {
-        setIsSpeaking(false);
-        audioPlayerRef.current = null;
-      };
-      audio.onerror = () => {
-        setIsSpeaking(false);
-        audioPlayerRef.current = null;
-        // Strictly only use Web Speech Synthesis if an authentic Vietnamese voice is installed
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-          const viVoice = window.speechSynthesis.getVoices().find(v =>
-            v.lang.startsWith('vi') || v.name.toLowerCase().includes('vietnam') || v.name.toLowerCase().includes('vietnamese')
-          );
-          if (viVoice) {
-            const utterance = new SpeechSynthesisUtterance(cleaned);
-            utterance.voice = viVoice;
-            utterance.lang = 'vi-VN';
-            utterance.onstart = () => setIsSpeaking(true);
-            utterance.onend = () => setIsSpeaking(false);
-            utterance.onerror = () => setIsSpeaking(false);
-            window.speechSynthesis.speak(utterance);
-          }
-        }
-      };
-      audio.play().catch(() => {
-        setIsSpeaking(false);
-      });
-    } catch {
-      setIsSpeaking(false);
-    }
+    const player=createSpeechPlayer(); audioPlayerRef.current=player;
+    player.speak(text,{onPlaying:()=>setIsSpeaking(true)}).catch(()=>{}).finally(()=>{
+      if(audioPlayerRef.current === player) {setIsSpeaking(false);audioPlayerRef.current=null;}
+    });
   };
 
   const stopSpeaking = () => {
@@ -153,6 +112,7 @@ export default function AiTutor({
 
   // Speech-To-Text helper
   const toggleListening = () => {
+    if (isVoiceCallOpen) return;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("Trình duyệt của bạn chưa hỗ trợ nhận diện giọng nói Web Speech. Hãy mở trên Chrome hoặc Edge để sử dụng micro nói chuyện với AI!");
@@ -188,8 +148,8 @@ export default function AiTutor({
       };
 
       recognition.onerror = (event) => {
-        console.warn('Speech recognition error:', event.error);
         setIsListening(false);
+        if (!['aborted','no-speech'].includes(event.error)) setMessages(items=>[...items,{role:'assistant',content:recognitionErrorMessage(event.error),error:true}]);
       };
 
       recognition.onend = () => {
@@ -359,7 +319,8 @@ export default function AiTutor({
           {/* Right Header Controls: Stop speech & Auto voice toggle & Voice Mode */}
           <div className="flex items-center gap-1.5">
             <button
-              onClick={() => setIsVoiceCallOpen(true)}
+              onClick={() => { stopSpeaking(); inFlight.current?.abort(); setIsLoading(false); setAutoVoice(false); try { recognitionRef.current?.abort(); } catch {} setIsListening(false); setIsVoiceCallOpen(true); }}
+              disabled={isVoiceCallOpen}
               title="Mở chế độ giao tiếp giọng nói 2 chiều liên tục (như ChatGPT Voice Mode)"
               className="px-2 py-1 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-semibold flex items-center gap-1 shadow-xs transition hover:scale-[1.02] active:scale-[0.98]"
             >
@@ -384,6 +345,7 @@ export default function AiTutor({
                 setAutoVoice(nextState);
                 if (!nextState) stopSpeaking();
               }}
+              disabled={isVoiceCallOpen}
               title={autoVoice ? "Tắt tự động đọc giọng nói" : "Bật tự động đọc giọng nói tiếng Việt"}
               className={`p-1.5 rounded-lg border text-xs transition flex items-center gap-1 ${
                 autoVoice 
@@ -538,7 +500,8 @@ export default function AiTutor({
           <button
             type="button"
             onClick={toggleListening}
-            title={isListening ? "Dừng ghi âm" : "Nói chuyện bằng giọng nói tiếng Việt"}
+            disabled={isVoiceCallOpen}
+            title={isVoiceCallOpen ? 'Mic đang dùng trong cuộc gọi' : isListening ? "Dừng ghi âm" : "Nói chuyện bằng giọng nói tiếng Việt"}
             className={`absolute right-2 p-1.5 rounded-full transition ${
               isListening 
                 ? 'bg-rose-600 text-white animate-pulse shadow-md shadow-rose-500/30' 
@@ -561,6 +524,7 @@ export default function AiTutor({
 
       {/* Interactive Hands-free Voice Call Modal (ChatGPT Voice Mode) */}
       <VoiceCallModal
+        key={isVoiceCallOpen ? `voice-${persona}` : 'voice-closed'}
         isOpen={isVoiceCallOpen}
         onClose={() => setIsVoiceCallOpen(false)}
         lab={lab}
