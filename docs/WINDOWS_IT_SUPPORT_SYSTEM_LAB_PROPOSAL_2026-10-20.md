@@ -24,13 +24,11 @@ Mô hình đích gồm ba vai trò, có thể triển khai dần:
 
 Bài desktop độc lập chỉ cần CLIENT01. Bài domain cần CLIENT01 + DC01. Thêm SRV01 khi học dịch vụ doanh nghiệp. Không bắt buộc chạy cả ba cho mọi bài.
 
-Máy host được đọc trong lượt này: Windows 11 Home Single Language, RAM khả dụng theo hệ điều hành khoảng 7,2 GiB (cấu hình khoảng 8 GB), CPU 8 nhân/16 luồng, đã bật ảo hóa; C trống khoảng 11,8 GiB, D khoảng 105 GiB. Không phù hợp chạy đồng thời Chrome/web, WSL/Docker và cụm ba VM Windows. Chưa kiểm tra model phần cứng để kết luận loại RAM hay dung lượng nâng cấp được hỗ trợ.
+Hướng đã thống nhất với người học: các máy thực hành chạy trên Azure; máy cá nhân chỉ chạy web và kết nối Desktop. Không cần cài Hyper-V hay nâng RAM máy cá nhân cho cụm Windows này. Giai đoạn đầu ưu tiên một CLIENT01 độc lập, giữ nguyên Server hiện có; chưa tạo đồng thời cả ba máy.
 
-Hyper-V đầy đủ không được hỗ trợ trên Windows Home. Có hypervisor phục vụ WSL không đồng nghĩa đã có Hyper-V Manager và PowerShell Direct để quản lý các VM lab. Nếu đổi sang Windows Pro/Enterprise và đủ tài nguyên thì Hyper-V là một phương án; với Home cần đánh giá hypervisor khác và khả năng tích hợp trước khi chọn. [Điều kiện cài Hyper-V](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/install-hyper-v).
+Đối chiếu thêm ngày 20/10/2026: tài liệu triển khai Windows 11 của Microsoft ghi rõ tài khoản Student và Free Trial được phép triển khai Windows 11 cho phát triển/thử nghiệm. Đây là hướng sử dụng học tập được đề xuất cho Azure for Students hiện tại; không suy rộng thành quyền cung cấp desktop thương mại/production. Tài liệu dev/test khác vẫn đề cập Visual Studio subscription, nên cần đọc đúng ngoại lệ Student và xác minh image, điều khoản cùng kết quả kiểm tra triển khai của subscription cụ thể. [Windows 11 trên Azure — ghi chú Student/Free Trial](https://learn.microsoft.com/en-us/azure/virtual-machines/windows/windows-desktop-multitenant-hosting-deployment), [Azure Windows client dev/test](https://learn.microsoft.com/en-us/azure/virtual-machines/windows/client-images).
 
-Chưa nên tạo ngay Windows 11 trên Azure chỉ vì đã có Azure Students. Cần kiểm tra quyền sử dụng image/license và ngân sách của cấu hình cụ thể. Microsoft có quy định riêng cho Windows client dev/test trên Azure; Windows 11 Enterprise Evaluation có thời hạn 90 ngày để đánh giá, không phải bản quyền sử dụng vĩnh viễn. [Azure Windows client](https://learn.microsoft.com/en-us/azure/virtual-machines/windows/client-images), [Windows 11 Enterprise Evaluation](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-11-enterprise).
-
-Đề xuất trước mắt: dùng Server Azure hiện có để làm pilot các lỗi dịch vụ/tệp/ứng dụng trong phạm vi lab; chuẩn bị giáo trình Windows 11 song song. Chọn nơi chạy CLIENT01 sau khi xác định tài nguyên và quyền sử dụng phù hợp, không mặc định phát sinh thêm VM tính phí.
+Chỉ nạp lỗi trên máy lab riêng sau khi đã kiểm tra baseline và đường khôi phục; không nạp lỗi lên LabEx-WinServer đang phục vụ các bài hiện có. Bản kiểm kê và cấu hình/chi phí cụ thể được lập riêng trước khi tạo tài nguyên tính phí.
 
 ## 3. Lộ trình giảng dạy dự kiến
 
@@ -71,11 +69,11 @@ Mỗi tình huống cần hợp đồng rõ ràng: nền tảng/role/version đ�
 
 Chỉ nạp lỗi bằng script đã review và gắn ID tình huống phía backend. Khóa phiên tránh hai tab/người học cùng thay một VM. Nếu nạp lỗi thất bại hoặc trạng thái VM khác baseline thì báo lỗi chuẩn bị, không tính thành bài người học làm sai. AI không tự ý tạo hoặc thực thi script phá lỗi.
 
-Giữ kênh quản lý/cứu hộ riêng với đường mạng đang được học viên sửa. Nếu bài làm mất DNS/RDP/route, cần console hoặc kênh độc lập để còn sửa và hoàn nguyên. PowerShell Direct trên Hyper-V là ví dụ kênh không phụ thuộc cấu hình mạng guest; chỉ dùng khi host/guest đáp ứng điều kiện. [PowerShell Direct](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/powershell-direct).
+Giữ đường quản lý/cứu hộ ngoài các thành phần bài học được phép làm lỗi. Trên Azure, Run Command có thể hỗ trợ khi RDP lỗi nhưng không độc lập với toàn bộ mạng guest. PowerShell Direct của Hyper-V trên máy cá nhân không điều khiển trực tiếp VM Azure và không được dùng làm phương án cứu hộ ở đây. Các lỗi cắt mạng quản lý hoặc làm hỏng boot cần quy trình khôi phục ổ đĩa từ baseline qua Azure control plane đã thử thành công.
 
 Azure Run Command hiện có phụ thuộc VM Agent và kết nối outbound; nó chạy dưới SYSTEM. Vì vậy không nạp lỗi vào VM Agent hoặc cắt toàn bộ kết nối cần để quản lý VM. Các lỗi mạng rộng và lỗi boot cần phương án cứu hộ khác trước khi đưa vào bài. [Giới hạn Run Command](https://learn.microsoft.com/en-us/azure/virtual-machines/windows/run-command).
 
-Ảnh baseline/clone/checkpoint phục vụ hoàn nguyên cả máy. Script undo chỉ thích hợp với thay đổi nhỏ đã biết, không đủ khôi phục mọi thao tác tự do của học viên. Khôi phục cụm AD cần tính nhất quán giữa DC và client; không xem snapshot DC như bản sao lưu AD đầy đủ. [Hyper-V checkpoints](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/checkpoints), [AD DS virtualization safeguards](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/introduction-to-active-directory-domain-services-ad-ds-virtualization-level-100).
+Baseline trên Azure dùng snapshot managed disk và ổ phục hồi tương thích, không gọi là checkpoint Hyper-V. Script undo chỉ thích hợp với thay đổi nhỏ đã biết, không đủ khôi phục mọi thao tác tự do của học viên. Snapshot ổ đĩa không bao gồm mọi thiết lập NSG, NIC, VM hoặc dữ liệu trên ổ khác; quy trình reset phải quản lý cả các thành phần đó. Khôi phục cụm AD cần tính nhất quán giữa DC và client; không xem snapshot DC như bản sao lưu AD đầy đủ. [Azure managed disk snapshot](https://learn.microsoft.com/en-us/azure/virtual-machines/snapshot-copy-managed-disk), [AD DS virtualization safeguards](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/introduction-to-active-directory-domain-services-ad-ds-virtualization-level-100).
 
 ## 6. Chấm kết quả như môi trường thật
 
@@ -109,7 +107,7 @@ Event ID 41 chỉ là bằng chứng hệ thống tắt/khởi động lại kh�
 1. Chuẩn hóa chất lượng 15 bài hiện tại và định nghĩa sáu ticket pilot.
 2. Xây hợp đồng baseline/inject/probe/verify/reset, khóa phiên và quyền thực thi theo user.
 3. Chứng minh vòng đời đầu-cuối bằng một lỗi dịch vụ có thể hoàn nguyên, rồi hoàn thiện đủ sáu tình huống Server.
-4. Đánh giá nơi chạy Windows 11 theo tài nguyên, license, khả năng console và chi phí; triển khai sáu tình huống Desktop.
+4. Triển khai Windows 11 trên Azure sau khi chốt cấu hình và ngân sách; kiểm chứng khôi phục rồi triển khai sáu tình huống Desktop.
 5. Mở cụm domain nhiều máy và mở rộng lộ trình sau khi pilot có bằng chứng hoạt động ổn định.
 
 Không gắn nhãn toàn bộ lộ trình đã sẵn sàng chỉ từ việc nhập đủ nội dung. Phải phân biệt có giáo trình, đã chuẩn bị VM, đã nạp được lỗi và đã kiểm chứng vòng đời thực hành.

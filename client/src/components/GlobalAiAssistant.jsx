@@ -167,26 +167,30 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
 
   return (
     <>
-      {/* Floating Action Trigger Button (Bottom-Right) */}
-      <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2">
-        {!isOpen && (
+      {/* Floating Action Trigger Button (Bottom-Right, Compact Circular FAB) */}
+      {!isOpen && (
+        <div className="fixed bottom-6 right-5 sm:bottom-8 sm:right-8 z-40">
           <button
             onClick={() => setIsOpen(true)}
-            title="Mở trợ lý Labby AI & Chế độ Thoại"
-            className="group relative flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-primary-600 via-indigo-600 to-purple-600 hover:from-primary-500 hover:to-purple-500 text-white font-bold text-xs shadow-xl shadow-primary-500/30 hover:scale-105 active:scale-95 transition-all"
+            title="Mở trợ lý Labby AI & Voice Mode"
+            aria-label="Mở trợ lý Labby AI"
+            className="group relative flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-gradient-to-tr from-primary-600 via-indigo-600 to-purple-600 hover:from-primary-500 hover:to-purple-500 text-white shadow-xl shadow-primary-500/30 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-primary-300"
           >
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-400"></span>
+            {/* Online status indicator */}
+            <span className="absolute top-0 right-0 flex h-3.5 w-3.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-400 border-2 border-white dark:border-slate-900"></span>
             </span>
 
-            <Bot className="w-4 h-4 text-white" />
-            <span className="hidden sm:inline">Hỏi Labby AI & Voice Mode</span>
-            <span className="sm:hidden">Labby AI</span>
-            <Mic className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+            <Bot className="w-6 h-6 text-white group-hover:rotate-6 transition-transform" />
+
+            {/* Mini mic badge */}
+            <span className="absolute -bottom-0.5 -left-0.5 p-1 bg-amber-500 text-white rounded-full shadow-xs">
+              <Mic className="w-2.5 h-2.5" />
+            </span>
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Floating Slide-over / Modal Chat Window */}
       {isOpen && (
@@ -399,3 +403,4 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
     </>
   );
 }
+

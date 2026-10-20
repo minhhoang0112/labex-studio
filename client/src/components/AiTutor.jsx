@@ -60,6 +60,7 @@ export default function AiTutor({
 
   const inFlight = useRef(null);
   const recognitionRef = useRef(null);
+  const audioPlayerRef = useRef(null);
   const messagesEndRef = useRef(null);
 
   // Check speech synthesis & recognition support
@@ -71,6 +72,10 @@ export default function AiTutor({
       inFlight.current?.abort();
       if (recognitionRef.current) {
         try { recognitionRef.current.abort(); } catch {}
+      }
+      if (audioPlayerRef.current) {
+        audioPlayerRef.current.pause();
+        audioPlayerRef.current = null;
       }
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -94,32 +99,56 @@ export default function AiTutor({
     }
   }, [externalPrompt, isLoading]);
 
-  // Text-To-Speech helper
+  // Text-To-Speech helper with natural Vietnamese voice stream
   const speakText = (text) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const cleaned = cleanMarkdownForSpeech(text);
+    stopSpeaking();
+    const cleaned = cleanMarkdownForSpeech(text).slice(0, 320);
     if (!cleaned) return;
 
-    const utterance = new SpeechSynthesisUtterance(cleaned);
-    utterance.lang = 'vi-VN';
-    utterance.rate = 1.05;
-
-    const voices = window.speechSynthesis.getVoices();
-    const viVoice = voices.find(v => v.lang.startsWith('vi') || v.name.toLowerCase().includes('vietnam') || v.name.toLowerCase().includes('vietnamese'));
-    if (viVoice) utterance.voice = viVoice;
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
+    try {
+      const audio = new Audio(`/api/ai/tts?text=${encodeURIComponent(cleaned)}`);
+      audioPlayerRef.current = audio;
+      audio.onplay = () => setIsSpeaking(true);
+      audio.onended = () => {
+        setIsSpeaking(false);
+        audioPlayerRef.current = null;
+      };
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        audioPlayerRef.current = null;
+        // Strictly only use Web Speech Synthesis if an authentic Vietnamese voice is installed
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          const viVoice = window.speechSynthesis.getVoices().find(v =>
+            v.lang.startsWith('vi') || v.name.toLowerCase().includes('vietnam') || v.name.toLowerCase().includes('vietnamese')
+          );
+          if (viVoice) {
+            const utterance = new SpeechSynthesisUtterance(cleaned);
+            utterance.voice = viVoice;
+            utterance.lang = 'vi-VN';
+            utterance.onstart = () => setIsSpeaking(true);
+            utterance.onend = () => setIsSpeaking(false);
+            utterance.onerror = () => setIsSpeaking(false);
+            window.speechSynthesis.speak(utterance);
+          }
+        }
+      };
+      audio.play().catch(() => {
+        setIsSpeaking(false);
+      });
+    } catch {
+      setIsSpeaking(false);
+    }
   };
 
   const stopSpeaking = () => {
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.pause();
+      audioPlayerRef.current = null;
+    }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      setIsSpeaking(false);
     }
+    setIsSpeaking(false);
   };
 
   // Speech-To-Text helper

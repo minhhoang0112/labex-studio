@@ -81,16 +81,27 @@ export default function VoiceCallModal({
     setCallState('idle');
   };
 
-  // Play fluent Vietnamese speech (Google TTS proxy stream with fallback)
+  // Play fluent Vietnamese speech (TTS proxy stream with strict native voice validation)
   const playNaturalSpeech = async (text, onFinished) => {
+    // 1. Immediately abort mic recognition while AI is speaking to prevent feedback loop
+    if (recognitionRef.current) {
+      try { recognitionRef.current.abort(); } catch {}
+    }
+
     setCallState('speaking');
     const cleaned = cleanForSpeech(text).slice(0, 320); // short conversational chunk
     if (!cleaned) {
-      if (onFinished) onFinished();
+      setCallState('idle');
+      if (onFinished && !isClosingRef.current) onFinished();
       return;
     }
 
     try {
+      if (audioPlayerRef.current) {
+        audioPlayerRef.current.pause();
+        audioPlayerRef.current = null;
+      }
+
       // Use proxy endpoint for 100% natural native Vietnamese audio
       const audioUrl = `/api/ai/tts?text=${encodeURIComponent(cleaned)}`;
       const audio = new Audio(audioUrl);
@@ -99,16 +110,20 @@ export default function VoiceCallModal({
       audio.onended = () => {
         setCallState('idle');
         audioPlayerRef.current = null;
-        if (onFinished && !isClosingRef.current) onFinished();
+        // Wait 350ms so speaker echo doesn't trigger the microphone
+        if (onFinished && !isClosingRef.current) {
+          setTimeout(onFinished, 350);
+        }
       };
 
       audio.onerror = () => {
-        // Fallback to browser Web Speech Synthesis if TTS network failed
+        audioPlayerRef.current = null;
         fallbackSpeechSynthesis(cleaned, onFinished);
       };
 
       await audio.play();
     } catch {
+      // Browser autoplay restriction or play error
       fallbackSpeechSynthesis(cleaned, onFinished);
     }
   };
@@ -120,17 +135,31 @@ export default function VoiceCallModal({
       return;
     }
     window.speechSynthesis.cancel();
+
+    // STRICT CHECK: Only use browser speech synthesis if a real Vietnamese voice is installed!
+    // Never allow Microsoft David or other English male voices to read Vietnamese.
+    const voices = window.speechSynthesis.getVoices();
+    const viVoice = voices.find(v => 
+      v.lang.startsWith('vi') || 
+      v.name.toLowerCase().includes('vietnam') || 
+      v.name.toLowerCase().includes('vietnamese')
+    );
+
+    if (!viVoice) {
+      // No Vietnamese voice installed in browser - gracefully skip speech, do NOT let English voice speak!
+      setCallState('idle');
+      if (onFinished && !isClosingRef.current) onFinished();
+      return;
+    }
+
     const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = viVoice;
     utterance.lang = 'vi-VN';
     utterance.rate = 1.05;
 
-    const voices = window.speechSynthesis.getVoices();
-    const viVoice = voices.find(v => v.lang.startsWith('vi') || v.name.toLowerCase().includes('vietnam'));
-    if (viVoice) utterance.voice = viVoice;
-
     utterance.onend = () => {
       setCallState('idle');
-      if (onFinished && !isClosingRef.current) onFinished();
+      if (onFinished && !isClosingRef.current) setTimeout(onFinished, 300);
     };
     utterance.onerror = () => {
       setCallState('idle');
@@ -171,13 +200,13 @@ export default function VoiceCallModal({
           .join('');
         setTranscript(currentTranscript);
 
-        // Turn-taking: pause of 1.3s after speaking automatically triggers AI reply
+        // Turn-taking: pause of 1.1s after speaking automatically triggers AI reply
         silenceTimerRef.current = setTimeout(() => {
-          if (currentTranscript.trim()) {
-            recognition.stop();
+          if (currentTranscript.trim().length >= 2) {
+            try { recognition.stop(); } catch {}
             handleSendSpokenInput(currentTranscript.trim());
           }
-        }, 1300);
+        }, 1100);
       };
 
       recognition.onerror = (e) => {
@@ -233,6 +262,7 @@ export default function VoiceCallModal({
           message: spokenText,
           persona,
           context: {
+            isVoiceMode: true,
             labId: lab?.id,
             platform: lab?.id?.startsWith('win-') ? 'windows' : 'linux',
             labTitle: lab?.title_vi || lab?.title,
@@ -506,3 +536,4 @@ export default function VoiceCallModal({
     </div>
   );
 }
+
