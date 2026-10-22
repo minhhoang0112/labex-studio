@@ -21,7 +21,7 @@ foreach ($desk in $desktopPaths) {
         $shortcut.TargetPath = $batTarget
         $shortcut.WorkingDirectory = $workspace
         $shortcut.Description = 'Khoi dong LabEx Studio va quan ly vong doi server'
-        $shortcut.IconLocation = "$env:SystemRoot\System32\shell32.dll,14" # Network / Globe workstation icon
+        $shortcut.IconLocation = "D:\Project\LabEx\client\public\labex.ico,0"
         $shortcut.Save()
     }
 }
