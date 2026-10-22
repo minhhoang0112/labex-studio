@@ -22,7 +22,7 @@ $node = (Get-Command node.exe).Source
 $bootstrap = Join-Path $workspace 'scripts\server-daemon.mjs'
 $created = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = ('"' + $node + '" "' + $bootstrap + '"'); CurrentDirectory = $workspace }
 if ($created.ReturnValue -ne 0) { throw ('Windows could not start the server: ' + $created.ReturnValue) }
-$deadline = (Get-Date).AddSeconds(10)
+$deadline = (Get-Date).AddSeconds(25)
 do {
     Start-Sleep -Milliseconds 200
     $listeners = @(Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue)
