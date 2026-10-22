@@ -8,8 +8,8 @@ import {getWindowsRoadmap} from '../server/services/windowsRoadmap.js';
 test('Windows roadmap has a coherent advisory prerequisite graph and distinct real/planned counts',()=>{
   const roadmap=getWindowsRoadmap(getCourses());
   assert.equal(roadmap.courses.length,15);assert.equal(roadmap.stages.length,6);
-  assert.equal(roadmap.totals.imported_labs,40);assert.equal(roadmap.totals.unique_imported_labs,40);
-  assert.equal(roadmap.totals.implemented_courses,4);assert.equal(roadmap.totals.planned_courses,11);assert.equal(roadmap.totals.planned_lessons,66);
+  assert.equal(roadmap.totals.imported_labs,46);assert.equal(roadmap.totals.unique_imported_labs,46);
+  assert.equal(roadmap.totals.implemented_courses,5);assert.equal(roadmap.totals.planned_courses,10);assert.equal(roadmap.totals.planned_lessons,60);
   const seen=new Set();
   for(const c of roadmap.courses){
     for(const id of c.prerequisites)assert.ok(seen.has(id),`${c.id} has missing/forward/cyclic prerequisite ${id}`);
@@ -31,8 +31,8 @@ test('Windows catalog, path aliases and course detail expose outline-only course
   const base=`http://127.0.0.1:${server.address().port}/api`;
   const get=async route=>{const res=await fetch(base+route);assert.equal(res.status,200,route);return res.json();};
   const roadmap=await get('/roadmaps/windows-system-administrator');
-  const path=await get('/paths/windows');assert.deepEqual(path.totals,roadmap.totals);assert.equal(path.labs_count,40);
-  const paths=await get('/paths');assert.equal(paths.paths.find(p=>p.alias==='windows').totals.planned_courses,11);
+  const path=await get('/paths/windows');assert.deepEqual(path.totals,roadmap.totals);assert.equal(path.labs_count,46);
+  const paths=await get('/paths');assert.equal(paths.paths.find(p=>p.alias==='windows').totals.planned_courses,10);
   const catalog=await get('/courses?topic=windows');assert.equal(catalog.total,15);
   for(const item of roadmap.courses.filter(c=>c.status==='planned')){
     const detail=await get('/courses/'+item.id);

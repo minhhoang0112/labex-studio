@@ -1,0 +1,74 @@
+{
+  "win-fnd-system-tools-task-1-v1": {
+    "lab_id": "win-fnd-system-tools",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $o=Get-CimInstance Win32_OperatingSystem; $c=Get-CimInstance Win32_ComputerSystem; $d.Caption -eq $o.Caption -and $d.Build -eq $o.BuildNumber -and [int]$d.ProductType -eq 1 -and [int]$o.BuildNumber -ge 22000 -and [int64]$d.RAM -eq [int64]$c.TotalPhysicalMemory"
+  },
+  "win-fnd-system-tools-task-2-v1": {
+    "lab_id": "win-fnd-system-tools",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $i=[Security.Principal.WindowsIdentity]::GetCurrent(); $d.Version -eq $PSVersionTable.PSVersion.ToString() -and $d.Edition -eq $PSVersionTable.PSEdition -and $d.IdentitySid -eq $i.User.Value -and $d.IsSystem -eq $i.IsSystem -and $d.Architecture -eq [Environment]::Is64BitProcess"
+  },
+  "win-fnd-process-services-startup-task-1-v1": {
+    "lab_id": "win-fnd-process-services-startup",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $p=Get-Process -Name wininit | Select-Object -First 1; $s=Get-Service Spooler; [int]$d.ProcessId -eq $p.Id -and $d.ProcessName -eq $p.ProcessName -and $d.ServiceName -eq $s.Name -and $d.ServiceStatus -in @('Running','Stopped','Paused','StartPending','StopPending','ContinuePending','PausePending')"
+  },
+  "win-fnd-process-services-startup-task-2-v1": {
+    "lab_id": "win-fnd-process-services-startup",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $d.Scope -eq 'MachineRunAndCommonStartup' -and (Same-FndItems @($d.Items) @(Get-FndStartup))"
+  },
+  "win-fnd-accounts-uac-task-1-v1": {
+    "lab_id": "win-fnd-accounts-uac",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $actual=@(Get-LocalUser | ForEach-Object { $_.Name+'|'+$_.SID.Value+'|'+[string][bool]$_.Enabled }); $saved=@($d.Users | ForEach-Object {$_.Name+'|'+$_.Sid+'|'+[string][bool]$_.Enabled}); $actual.Count -gt 0 -and (Same-FndItems $saved $actual)"
+  },
+  "win-fnd-accounts-uac-task-2-v1": {
+    "lab_id": "win-fnd-accounts-uac",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $p=Get-ItemProperty -LiteralPath 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System'; $i=[Security.Principal.WindowsIdentity]::GetCurrent(); $null -ne $d.EnableLUA -and [int]$d.EnableLUA -eq [int]$p.EnableLUA -and $d.IdentitySid -eq $i.User.Value -and $d.IsSystem -eq $i.IsSystem"
+  },
+  "win-fnd-files-profile-ntfs-task-1-v1": {
+    "lab_id": "win-fnd-files-profile-ntfs",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $file=Join-Path $labRoot 'Documents\\LearningNote.txt'; $d.File -eq $file -and (Test-Path -LiteralPath $file -PathType Leaf) -and (Get-Content -LiteralPath $file -Raw).Trim() -eq 'Windows fundamentals' -and $d.Profile -eq $env:USERPROFILE -and $d.IdentitySid -eq [Security.Principal.WindowsIdentity]::GetCurrent().User.Value"
+  },
+  "win-fnd-files-profile-ntfs-task-2-v1": {
+    "lab_id": "win-fnd-files-profile-ntfs",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $source=Join-Path $labRoot 'Documents\\LearningNote.txt'; $copy=Join-Path $labRoot 'LearningNote.copy.txt'; $acl=Get-Acl -LiteralPath $copy; (Get-Content -LiteralPath $source -Raw).Trim() -eq 'Windows fundamentals' -and $d.SourceHash -eq (Get-FileHash -LiteralPath $source).Hash -and $d.CopyHash -eq $d.SourceHash -and $d.CopyHash -eq (Get-FileHash -LiteralPath $copy).Hash -and $d.Owner -eq $acl.Owner -and $d.Sddl -eq $acl.Sddl"
+  },
+  "win-fnd-software-drivers-updates-task-1-v1": {
+    "lab_id": "win-fnd-software-drivers-updates",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $actual=@(Get-FndSoftware | ForEach-Object {$_.Key+'|'+$_.Name+'|'+$_.Version+'|'+$_.Publisher}); $saved=@($d.Software | ForEach-Object {$_.Key+'|'+$_.Name+'|'+$_.Version+'|'+$_.Publisher}); $d.Scope -eq 'MachineUninstallSample' -and (Same-FndItems $saved $actual)"
+  },
+  "win-fnd-software-drivers-updates-task-2-v1": {
+    "lab_id": "win-fnd-software-drivers-updates",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $actual=@(Get-FndDrivers | ForEach-Object {$_.DeviceID+'|'+$_.DeviceName+'|'+$_.Version+'|'+[string][bool]$_.Signed}); $saved=@($d.Drivers | ForEach-Object {$_.DeviceID+'|'+$_.DeviceName+'|'+$_.Version+'|'+[string][bool]$_.Signed}); $d.UpdateService -eq (Get-Service wuauserv).Name -and $d.ObservedServiceStatus -in @('Running','Stopped','StartPending','StopPending','Paused','PausePending','ContinuePending') -and (Same-FndItems $saved $actual) -and (Same-FndItems @($d.Hotfixes) @(Get-CimInstance Win32_QuickFixEngineering | ForEach-Object {[string]$_.HotFixID}))"
+  },
+  "win-fnd-baseline-change-rollback-task-1-v1": {
+    "lab_id": "win-fnd-baseline-change-rollback",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $file=Join-Path $labRoot 'config.json'; $backup=Join-Path $labRoot 'baseline.json'; $c=Get-Content -LiteralPath $backup -Raw | ConvertFrom-Json; $c.Version -eq 1 -and $c.Mode -eq 'Training' -and $d.BaselineHash -eq (Get-FileHash -LiteralPath $backup).Hash -and $d.ConfigHash -eq $d.BaselineHash -and $d.ConfigHash -eq (Get-FileHash -LiteralPath $file).Hash"
+  },
+  "win-fnd-baseline-change-rollback-task-2-v1": {
+    "lab_id": "win-fnd-baseline-change-rollback",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$baseline=Read-FndReport 'step1.json'; $d=Read-FndReport 'step2.json'; $file=Join-Path $labRoot 'config.json'; $backup=Join-Path $labRoot 'baseline.json'; $changed=Join-Path $labRoot 'changed.json'; $c=Get-Content -LiteralPath $file -Raw | ConvertFrom-Json; $v=Get-Content -LiteralPath $changed -Raw | ConvertFrom-Json; $hash=(Get-FileHash -LiteralPath $file).Hash; $c.Version -eq 1 -and $c.Mode -eq 'Training' -and $hash -eq (Get-FileHash -LiteralPath $backup).Hash -and $d.BeforeHash -eq $baseline.BaselineHash -and $d.BeforeHash -eq $hash -and $d.AfterHash -eq $hash -and $d.ChangedHash -eq (Get-FileHash -LiteralPath $changed).Hash -and $v.Version -eq 2 -and $v.Mode -eq 'Training' -and $d.ChangedHash -ne $d.BeforeHash -and $d.Result -eq 'Restored' -and -not [string]::IsNullOrWhiteSpace($d.ChangeReason)"
+  }
+}

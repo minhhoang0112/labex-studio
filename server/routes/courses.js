@@ -127,6 +127,7 @@ router.get("/courses/:id", (req, res, next) => {
       return {
         id, title, title_vi, difficulty, estimated_time, overview, order, type,
         curriculum_group: lab.curriculum_group, practice_mode: lab.practice_mode,
+        ...(lab.preparation ? {preparation:lab.preparation,target_vm:lab.target_vm,curriculum_module:lab.curriculum_module} : {}),
         source, source_lab_id, source_url, availability, sections_count: sections?.length || steps.length,
         steps_count: steps.length, step_ids: steps.map((step) => step.id),
       };

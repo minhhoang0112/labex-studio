@@ -51,7 +51,9 @@ export function createVerifyRouter({ findLab = loadLab, runCommand = execLabComm
       return res.status(error.code === "ENVIRONMENT_UNAVAILABLE" ? 503 : 500).json({
         passed: false,
         message: error.code === "ENVIRONMENT_UNAVAILABLE" ? error.message : "Không thể kiểm tra bước này lúc này.",
-        hint: "Kiểm tra terminal Linux và thử lại.",
+        hint: isWindowsLab(findLab(labId))
+          ? "Kiểm tra trạng thái Windows VM và PowerShell của bài rồi thử lại."
+          : "Kiểm tra terminal Linux và thử lại.",
       });
     }
   });

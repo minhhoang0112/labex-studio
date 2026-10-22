@@ -119,6 +119,21 @@ plan=dict(id='windows-system-administrator',alias='windows',title='Lộ trình W
 def save(path,value):
     path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
+# Preserve reviewed course metadata when reseeding the outline after lessons ship.
+previous_path=DATA/'windows-roadmap.json'
+if previous_path.exists():
+    previous=json.loads(previous_path.read_text(encoding='utf-8'))
+    for course in plan['courses']:
+        prior=next((c for c in previous.get('courses',[]) if c['id']==course['id']),None)
+        if prior and any((DATA/'labs').glob('*.json')):
+            linked=[lid for m in prior.get('syllabus_modules',[]) for lid in m.get('lab_ids',[])]
+            if linked and all((DATA/'labs'/f'{lid}.json').exists() for lid in linked):
+                for key in ('practice_strategy','environment_plan','references','syllabus_modules'):
+                    if key in prior:course[key]=prior[key]
+                plan['updated_at']=max(plan['updated_at'],previous.get('updated_at',plan['updated_at']))
+                if course['id']==plan['start_course_id']:
+                    plan['available_start_course_id']=course['id']
+                    plan['guidance']=previous.get('guidance',plan['guidance'])
 save(DATA/'windows-roadmap.json',plan)
 catalog=json.loads((DATA/'courses.json').read_text(encoding='utf-8'))
 ids={c['id'] for c in catalog}

@@ -8,6 +8,8 @@ import fs from 'node:fs';
 
 const supportRules = JSON.parse(fs.readFileSync(new URL('../data/windows-support-rules.json', import.meta.url), 'utf8'));
 const starterRules = JSON.parse(fs.readFileSync(new URL('../data/windows-starter-rules.json', import.meta.url), 'utf8'));
+const foundationsRules = JSON.parse(fs.readFileSync(new URL('../data/windows-foundations-rules.json', import.meta.url), 'utf8'));
+const foundationsHelpers = fs.readFileSync(new URL('../runtime/windows/fundamentals-common.ps1', import.meta.url), 'utf8');
 
 // Trusted server-side criteria. Never use browser-supplied PowerShell as a grader.
 const rules = {
@@ -37,13 +39,15 @@ const rules = {
   'win-tr-04-sec-1': { commands: [["Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId"]], probe: "$null -ne (Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion').ProductName" },
   'win-tr-05-sec-1': { commands: [["Get-Counter '\\Processor(_Total)\\% Processor Time'"]], probe: '@(Get-Counter "\\Processor(_Total)\\% Processor Time").CounterSamples.Count -gt 0' },
   ...starterRules,
+  ...foundationsRules,
 };
 
 export function windowsStepReadiness(step, lab = {}) {
   const target = labVmTarget(lab);
   const config = getVmTargetConfig(target);
   const configured = Boolean(config.subscriptionId && (target === 'server' || config.publicIp && config.password));
-  const known = Boolean(rules[step.id] || faultScenarios[lab.id] && step.id.endsWith('-sec-2'));
+  const rule=rules[step.id];
+  const known = Boolean(rule && (!rule.lab_id || rule.lab_id===lab.id) && (!rule.target_vm || rule.target_vm===target) || faultScenarios[lab.id] && step.id.endsWith('-sec-2'));
   return { ready: configured && known, missing_capabilities: configured ? [] : ['windows-remote'],
     reasons: [...(!configured ? ['Chưa cấu hình đăng nhập Azure để kiểm tra Windows VM.'] : []),
       ...(!known ? ['Bước này chưa có bộ kiểm tra Windows từ xa được review.'] : [])] };
@@ -57,6 +61,7 @@ export async function verifyWindowsRemote(labId, step, { execute = executeWindow
   const rule = rules[step.id];
   if (!rule) return { supported: false, passed: false, reason: 'Chưa có bộ kiểm tra Windows từ xa cho bước này.' };
   if (rule.lab_id && rule.lab_id !== labId) return { supported: false, passed: false, reason: 'Bộ kiểm tra không thuộc bài hiện tại.' };
+  if (rule.target_vm && rule.target_vm!==vmTarget) return {supported:false,passed:false,reason:'Bộ kiểm tra không thuộc VM của bài học.'};
   let historyOK = !rule.commands;
   if (rule.commands) {
     const target = getVmTargetConfig(vmTarget).vmName;
@@ -69,11 +74,13 @@ export async function verifyWindowsRemote(labId, step, { execute = executeWindow
   const moduleName = step.id.startsWith('win-ad-') ? 'ActiveDirectory'
     : step.id.startsWith('win-iis-05-sec-1') ? 'WebAdministration' : null;
   const prerequisite = moduleName ? `if (-not (Get-Module -ListAvailable ${moduleName})) { exit 42 }; ` : '';
-  const context = rule.lab_id ? `$labRoot='C:\\LabEx\\Labs\\${rule.lab_id}'; ` + (vmTarget==='client' ? "if ($env:COMPUTERNAME -ne 'CLIENT01' -or (Get-CimInstance Win32_OperatingSystem).ProductType -ne 1) { exit 43 }; " : '') : '';
-  const command = `$ErrorActionPreference='Stop'; ${prerequisite}${context}try { $value = & { ${expression} }; if ($value -is [bool] -and $value -eq $true) { exit 0 } else { exit 1 } } catch { Write-Error $_ -ErrorAction Continue; exit 1 }`;
+  const context = rule.lab_id ? `$labId='${rule.lab_id}'; $labRoot='C:\\LabEx\\Labs\\${rule.lab_id}'; ` + (vmTarget==='client' ? "if ($env:COMPUTERNAME -ne 'CLIENT01' -or (Get-CimInstance Win32_OperatingSystem).ProductType -ne 1) { exit 43 }; " : '') : '';
+  const helpers=foundationsRules[step.id]?"if([int](Get-CimInstance Win32_OperatingSystem).BuildNumber -lt 22000){exit 43};\n"+foundationsHelpers:'';
+  const command = `$ErrorActionPreference='Stop'; ${prerequisite}${context}${helpers}\ntry { $value = & { ${expression} }; if ($value -is [bool] -and $value -eq $true) { exit 0 } else { exit 1 } } catch { Write-Error $_ -ErrorAction Continue; exit 1 }`;
   const result = await execute(command, { labId, target: vmTarget });
   if (moduleName && result.exitCode === 42) return { supported: false, passed: false,
     reason: `VM chưa có module ${moduleName}. Cần chuẩn bị role/môi trường Windows trước khi thực hiện bài này.` };
+  if(result.exitCode===43)return {supported:false,passed:false,reason:'Bài này cần đúng CLIENT01 chạy Windows Client (Windows 11 cho khóa nền tảng). Không chấm trên Windows Server hoặc máy khác.'};
   return { supported: true, passed: result.exitCode === 0 && !result.timedOut,
     timedOut: Boolean(result.timedOut), method: 'windows-remote', target: result.target };
 }
