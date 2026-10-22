@@ -5,7 +5,7 @@ $desktopPaths = @(
 ) | Select-Object -Unique
 
 $labexIco = 'D:\Project\LabEx\client\public\labex.ico'
-$openquizIco = 'D:\Project\openquiz\public\openquiz.ico'
+$openlearnIco = 'D:\Project\openquiz\public\openlearn.ico'
 
 foreach ($desk in $desktopPaths) {
     if (Test-Path $desk) {
@@ -18,13 +18,13 @@ foreach ($desk in $desktopPaths) {
             Write-Host "Updated LabEx Studio icon at $desk" -ForegroundColor Green
         }
 
-        # Update OpenQuiz shortcut
-        $openquizLnk = Join-Path $desk 'OpenQuiz.lnk'
-        if (Test-Path $openquizLnk) {
-            $sc2 = $wsh.CreateShortcut($openquizLnk)
-            $sc2.IconLocation = "$openquizIco,0"
+        # Update OpenLearn shortcut
+        $openlearnLnk = Join-Path $desk 'OpenLearn.lnk'
+        if (Test-Path $openlearnLnk) {
+            $sc2 = $wsh.CreateShortcut($openlearnLnk)
+            $sc2.IconLocation = "$openlearnIco,0"
             $sc2.Save()
-            Write-Host "Updated OpenQuiz icon at $desk" -ForegroundColor Green
+            Write-Host "Updated OpenLearn icon at $desk" -ForegroundColor Green
         }
     }
 }
@@ -44,3 +44,4 @@ public class ShellNotify {
 } catch {
     # Fallback if shell32 type already defined
 }
+

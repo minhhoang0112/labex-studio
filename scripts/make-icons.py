@@ -93,3 +93,4 @@ if __name__ == "__main__":
         make_openquiz_icon(openquiz_src, openquiz_ico)
     else:
         print("Openquiz logo not found")
+
