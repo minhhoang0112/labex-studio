@@ -76,3 +76,4 @@ sequenceDiagram
 1. **Kiểm tra cổng 5000:** Mọi tác vụ backend cần giữ quy ước cổng `5000` cho local web server. Không tự ý đổi cổng mà không cập nhật các script launcher.
 2. **Bộ nhớ RAM:** Tiến trình Node.js backend hiện tại chạy rất nhẹ (~96MB - 100MB RAM khi idle). Nếu tích hợp thêm worker hoặc microservice, cần đảm bảo `scripts/stop-local.ps1` quét sạch các PID con liên quan để tránh leak RAM.
 3. **Thực thi trên Windows:** Toàn bộ lệnh gọi PowerShell từ file `.bat` luôn cần cờ `-NoProfile -ExecutionPolicy Bypass` để không bị chặn bởi chính sách bảo mật PowerShell của Windows.
+

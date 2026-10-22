@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Moon, Sun, BookOpen, Layers, RefreshCw, AlertCircle } from 'lucide-react';
+import { Search, Moon, Sun, BookOpen, Layers, RefreshCw, AlertCircle, Power } from 'lucide-react';
 import { api } from '../lib/api';
+import Dialog from './Dialog';
 
 export default function Navbar({ currentView, setView, onOpenSearch, isDarkMode, setIsDarkMode, onSkillTrees }) {
   const [langState, setLangState] = useState(() => {
@@ -9,6 +10,20 @@ export default function Navbar({ currentView, setView, onOpenSearch, isDarkMode,
   const [environment, setEnvironment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [attempt, setAttempt] = useState(0);
+  const [showShutdown, setShowShutdown] = useState(false);
+  const [shuttingDown, setShuttingDown] = useState(false);
+  const [shutDownDone, setShutDownDone] = useState(false);
+
+  const handleShutdown = async () => {
+    setShuttingDown(true);
+    try {
+      await api('/api/system/shutdown', { method: 'POST' });
+    } catch {
+      // Server may exit immediately and close socket, which is expected
+    }
+    setShuttingDown(false);
+    setShutDownDone(true);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -145,8 +160,90 @@ export default function Navbar({ currentView, setView, onOpenSearch, isDarkMode,
             className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
             {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
           </button>
+
+          {/* Shutdown Server Button */}
+          <button
+            onClick={() => {
+              setShutDownDone(false);
+              setShowShutdown(true);
+            }}
+            title="Tắt máy chủ LabEx & giải phóng RAM"
+            aria-label="Tắt máy chủ LabEx"
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200/50 dark:border-rose-900/40 transition-colors">
+            <Power className="w-4 h-4" />
+          </button>
         </div>
       </div>
+
+      {showShutdown && (
+        <Dialog
+          titleId="shutdown-title"
+          onClose={() => !shuttingDown && !shutDownDone && setShowShutdown(false)}
+          className="w-full max-w-md bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-2xl">
+          {shutDownDone ? (
+            <div className="text-center py-2">
+              <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-3">
+                <Power className="w-6 h-6" />
+              </div>
+              <h3 id="shutdown-title" className="text-lg font-bold text-gray-900 dark:text-white">
+                Máy chủ đã tắt thành công!
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                Bộ nhớ RAM đã được giải phóng 100%. Bạn có thể đóng tab trình duyệt này.
+              </p>
+              <div className="mt-5">
+                <button
+                  onClick={() => window.close()}
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-bold hover:opacity-90 transition">
+                  Đóng tab trình duyệt
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                  <Power className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 id="shutdown-title" className="text-base font-bold text-gray-900 dark:text-white">
+                    Tắt máy chủ LabEx?
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Giải phóng toàn bộ tài nguyên RAM và dừng server.
+                  </p>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-5">
+                Hành động này sẽ dừng tiến trình máy chủ Node.js trên cổng 5000. Bạn có thể mở lại bất cứ lúc nào qua biểu tượng <span className="font-semibold text-primary-500">LabEx Studio</span> ngoài màn hình Desktop.
+              </p>
+              <div className="flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  disabled={shuttingDown}
+                  onClick={() => setShowShutdown(false)}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  disabled={shuttingDown}
+                  onClick={handleShutdown}
+                  className="px-4 py-2 rounded-xl text-sm font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/30 transition flex items-center gap-2">
+                  {shuttingDown ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Đang tắt...</span>
+                    </>
+                  ) : (
+                    <span>Tắt máy chủ ngay</span>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </Dialog>
+      )}
     </header>
   );
 }

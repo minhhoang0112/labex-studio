@@ -53,6 +53,12 @@ app.get("/api/health", async (_req, res, next) => {
   try { res.json({ status: "ok", environment: await getEnvironment() }); }
   catch (error) { next(error); }
 });
+app.post("/api/system/shutdown", (_req, res) => {
+  res.json({ ok: true, message: "Hệ thống đang tắt và giải phóng tài nguyên..." });
+  setTimeout(() => {
+    process.exit(0);
+  }, 400);
+});
 app.use("/api", coursesRouter);
 app.use("/api", createEnvironmentRouter({ disconnect: async (labId) => {
   const clients = [...wss.clients].filter(client => client.labId === labId);
