@@ -3,7 +3,7 @@
   "course_id": "windows-troubleshooting-and-incident-response",
   "order": 4,
   "title": "Windows Registry Inspection & System Recovery",
-  "title_vi": "Kiểm Tra Cấu Hình Registry & Khôi Phục Hệ Thống",
+  "title_vi": "Đọc Registry và nguyên tắc chuẩn bị khôi phục",
   "type": "lab",
   "difficulty": "Advanced",
   "estimated_time": "30 mins",
@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## The Central Database of Windows Configuration\n\nThe Windows Registry contains hardware settings, OS configurations, installed software paths, and user profiles. PowerShell exposes Registry hives as standard PSDrives (`HKLM:`, `HKCU:`), allowing you to navigate them just like file directories.\n",
-      "content_vi": "## Cơ Sở Dữ Liệu Cấu Hình Trung Tâm Của Windows\n\nWindows Registry lưu trữ cấu hình phần cứng, thiết lập hệ điều hành, đường dẫn phần mềm và profile người dùng. PowerShell ánh xạ các nhánh Registry thành ổ đĩa logic (`HKLM:`, `HKCU:`), cho phép bạn điều hướng giống như thư mục tệp.",
+      "content": "Registry là cơ sở dữ liệu cấu hình phân cấp; HKLM chứa cấu hình máy, HKCU phụ thuộc tài khoản đang thực thi. Bài hiện chỉ đọc CurrentVersion, chưa phải bài khôi phục Registry. Không xóa khóa hoặc Import .reg vào máy thật để thử.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-registry-recovery khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "Registry là cơ sở dữ liệu cấu hình phân cấp; HKLM chứa cấu hình máy, HKCU phụ thuộc tài khoản đang thực thi. Bài hiện chỉ đọc CurrentVersion, chưa phải bài khôi phục Registry. Không xóa khóa hoặc Import .reg vào máy thật để thử.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-registry-recovery khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -31,8 +31,8 @@
       "need_verify": true,
       "task": "Query the Windows NT CurrentVersion registry key using Get-ItemProperty.",
       "task_vi": "Truy vấn thông tin phiên bản Windows trong nhánh Registry CurrentVersion bằng Get-ItemProperty.",
-      "hint": "Run: Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'",
-      "hint_vi": "Chạy lệnh: Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'",
+      "hint": "Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId",
+      "hint_vi": "Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -51,22 +51,23 @@
         "files",
         "shell"
       ],
-      "content": "### Querying Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n",
-      "content_vi": "### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```"
+      "content": "### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
+      "content_vi": "### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
       "id": "win-tr-04-sec-1",
       "title": "Navigating and Querying Registry Keys",
       "title_vi": "Điều Hướng & Truy Vấn Khóa Registry",
-      "content": "### Querying Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n",
-      "content_vi": "### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```",
+      "content": "### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
+      "content_vi": "### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
       "task": "Query the Windows NT CurrentVersion registry key using Get-ItemProperty.",
       "task_vi": "Truy vấn thông tin phiên bản Windows trong nhánh Registry CurrentVersion bằng Get-ItemProperty.",
-      "hint": "Run: Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'",
-      "hint_vi": "Chạy lệnh: Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'",
+      "hint": "Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId",
+      "hint_vi": "Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -124,7 +125,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

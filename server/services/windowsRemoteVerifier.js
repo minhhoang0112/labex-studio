@@ -7,6 +7,7 @@ import { windowsFaults, faultScenarios } from './windowsFaults.js';
 import fs from 'node:fs';
 
 const supportRules = JSON.parse(fs.readFileSync(new URL('../data/windows-support-rules.json', import.meta.url), 'utf8'));
+const starterRules = JSON.parse(fs.readFileSync(new URL('../data/windows-starter-rules.json', import.meta.url), 'utf8'));
 
 // Trusted server-side criteria. Never use browser-supplied PowerShell as a grader.
 const rules = {
@@ -23,18 +24,19 @@ const rules = {
   'win-fs-03-sec-1': { probe: '(Test-Path ./FinanceDocs -PathType Container) -and $null -ne (Get-Acl ./FinanceDocs).Owner' },
   'win-sc-05-sec-1': { probe: "(Test-Path ./health_report.txt -PathType Leaf) -and (Get-Item ./health_report.txt).Length -gt 0 -and ([IO.File]::ReadAllText((Join-Path $PWD health_report.txt)) -match 'DeviceID' -and [IO.File]::ReadAllText((Join-Path $PWD health_report.txt)) -match 'FreeSpace' -and [IO.File]::ReadAllText((Join-Path $PWD health_report.txt)) -match 'Size')" },
   'win-el-04-sec-1': { commands: [["Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message"]], probe: '$null -ne (Get-WinEvent -ListLog System)' },
-  'win-ad-01-sec-1': { guiProbe: "@(Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'mmc.exe' -and $_.CommandLine -match 'dsa\\.msc' }).Count -gt 0", commands: [['Get-Command *ADUser*'], ['Get-Command *ADOrganizationalUnit*']], probe: '$null -ne (Get-Module -ListAvailable ActiveDirectory)' },
+  'win-ad-01-sec-1': { probe: "@(Get-ADOrganizationalUnit -Filter 'Name -eq \"IT_Department\"').Count -gt 0" },
   'win-ad-01-sec-2': { probe: "$u=Get-ADUser -Identity david.miller -Properties GivenName,Surname,pwdLastSet; $u.GivenName -eq 'David' -and $u.Surname -eq 'Miller' -and $u.DistinguishedName -match ',OU=IT_Department,' -and [int64]$u.pwdLastSet -eq 0" },
   'win-ad-01-sec-3': { probe: "$g=Get-ADGroup -Identity Sec_IT_Admins; $g.GroupCategory -eq 'Security' -and $g.GroupScope -eq 'Global' -and $g.DistinguishedName -match ',OU=IT_Department,' -and @(Get-ADGroupMember $g | Where-Object SamAccountName -eq david.miller).Count -eq 1" },
   'win-net-03-sec-1': { commands: [['Resolve-DnsName localhost']], probe: '@(Resolve-DnsName localhost -ErrorAction Stop).Count -gt 0' },
   'win-fs-04-sec-1': { commands: [['Get-SmbShare']], probe: '@(Get-SmbShare).Count -gt 0' },
-  'win-gpo-02-sec-1': { commands: [['gpresult /r']], probe: '(Get-CimInstance Win32_OperatingSystem).ProductType -ge 2' },
-  'win-iis-05-sec-1': { probe: "Import-Module WebAdministration; $s=Get-Website -Name PortalCorp; $s.State -eq 'Started' -and $s.PhysicalPath -eq 'C:\\inetpub\\wwwroot' -and @($s.Bindings.Collection | Where-Object { $_.protocol -eq 'http' -and $_.bindingInformation -match ':8080:' }).Count -gt 0" },
+  'win-gpo-02-sec-1': { commands: [['gpresult /r','gpresult /scope computer /r']], probe: '(Get-CimInstance Win32_OperatingSystem).ProductType -ge 2' },
+  'win-iis-05-sec-1': { probe: "Import-Module WebAdministration; $s=Get-Website -Name PortalCorp; if($s.State -ne 'Started' -or $s.PhysicalPath -ne 'C:\\LabEx\\Labs\\win-server-iis-web\\site' -or @($s.Bindings.Collection | Where-Object { $_.protocol -eq 'http' -and $_.bindingInformation -eq '*:8080:' }).Count -lt 1){return $false}; $r=Invoke-WebRequest -UseBasicParsing -Uri 'http://127.0.0.1:8080' -TimeoutSec 10; $r.StatusCode -eq 200 -and $r.Content.Contains('LabEx PortalCorp')" },
   'win-tr-01-sec-1': { commands: [["Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message"]], probe: '$null -ne (Get-WinEvent -ListLog System)' },
   'win-tr-02-sec-1': { commands: [['Get-Service Spooler | Select-Object Name, Status, StartType, RequiredServices']], probe: '$null -ne (Get-Service Spooler)' },
   'win-tr-03-sec-1': { commands: [['Test-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue']], probe: '$null -ne (Get-Command Test-NetConnection)' },
   'win-tr-04-sec-1': { commands: [["Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId"]], probe: "$null -ne (Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion').ProductName" },
   'win-tr-05-sec-1': { commands: [["Get-Counter '\\Processor(_Total)\\% Processor Time'"]], probe: '@(Get-Counter "\\Processor(_Total)\\% Processor Time").CounterSamples.Count -gt 0' },
+  ...starterRules,
 };
 
 export function windowsStepReadiness(step, lab = {}) {
@@ -65,9 +67,9 @@ export async function verifyWindowsRemote(labId, step, { execute = executeWindow
   }
   const expression = rule.guiProbe && !historyOK ? rule.guiProbe : rule.probe;
   const moduleName = step.id.startsWith('win-ad-') ? 'ActiveDirectory'
-    : step.id === 'win-iis-05-sec-1' ? 'WebAdministration' : null;
+    : step.id.startsWith('win-iis-05-sec-1') ? 'WebAdministration' : null;
   const prerequisite = moduleName ? `if (-not (Get-Module -ListAvailable ${moduleName})) { exit 42 }; ` : '';
-  const context = rule.lab_id ? `$labRoot='C:\\LabEx\\Labs\\${rule.lab_id}'; if ($env:COMPUTERNAME -ne 'CLIENT01' -or (Get-CimInstance Win32_OperatingSystem).ProductType -ne 1) { exit 43 }; ` : '';
+  const context = rule.lab_id ? `$labRoot='C:\\LabEx\\Labs\\${rule.lab_id}'; ` + (vmTarget==='client' ? "if ($env:COMPUTERNAME -ne 'CLIENT01' -or (Get-CimInstance Win32_OperatingSystem).ProductType -ne 1) { exit 43 }; " : '') : '';
   const command = `$ErrorActionPreference='Stop'; ${prerequisite}${context}try { $value = & { ${expression} }; if ($value -is [bool] -and $value -eq $true) { exit 0 } else { exit 1 } } catch { Write-Error $_ -ErrorAction Continue; exit 1 }`;
   const result = await execute(command, { labId, target: vmTarget });
   if (moduleName && result.exitCode === 42) return { supported: false, passed: false,

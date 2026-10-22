@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## The Modern Network Troubleshooting Toolkit\n\nForget `ping` and `telnet`—PowerShell's `Test-NetConnection` (`tnc`) tests ICMP, TCP Port reachability, and trace route all in a single structured command.\n",
-      "content_vi": "## Bộ Công Cụ Chẩn Đoán Mạng Hiện Đại\n\n`Test-NetConnection` (`tnc`) của PowerShell là công cụ tối thượng: kiểm tra ICMP ping, kiểm tra cổng TCP dịch vụ cụ thể và dò đường định tuyến (trace route) trong một lệnh duy nhất.",
+      "content": "Chẩn đoán kết nối cần tách tên → IP → route → TCP → ứng dụng. Ping thành công không đảm bảo TCP mở; TCP mở không đảm bảo ứng dụng trả đúng nội dung. Bài này kiểm tra kết nối và đọc kết quả, không tự mở firewall hoặc sửa mạng Azure.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-network-connectivity khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "Chẩn đoán kết nối cần tách tên → IP → route → TCP → ứng dụng. Ping thành công không đảm bảo TCP mở; TCP mở không đảm bảo ứng dụng trả đúng nội dung. Bài này kiểm tra kết nối và đọc kết quả, không tự mở firewall hoặc sửa mạng Azure.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-network-connectivity khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -31,8 +31,8 @@
       "need_verify": true,
       "task": "Use Test-NetConnection to test localhost TCP port 80 or 443.",
       "task_vi": "Sử dụng lệnh Test-NetConnection để kiểm tra tính khả dụng của cổng TCP trên máy chủ.",
-      "hint": "Run: Test-NetConnection -ComputerName localhost -Port 80",
-      "hint_vi": "Chạy lệnh: Test-NetConnection -ComputerName localhost -Port 80",
+      "hint": "Test-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue",
+      "hint_vi": "Test-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -51,22 +51,23 @@
         "files",
         "shell"
       ],
-      "content": "### Port Testing\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n",
-      "content_vi": "### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```"
+      "content": "### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
+      "content_vi": "### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
       "id": "win-tr-03-sec-1",
       "title": "Testing TCP Port Reachability with Test-NetConnection",
       "title_vi": "Kiểm Tra Thông Cổng TCP Với Test-NetConnection",
-      "content": "### Port Testing\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n",
-      "content_vi": "### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```",
+      "content": "### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
+      "content_vi": "### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
       "task": "Use Test-NetConnection to test localhost TCP port 80 or 443.",
       "task_vi": "Sử dụng lệnh Test-NetConnection để kiểm tra tính khả dụng của cổng TCP trên máy chủ.",
-      "hint": "Run: Test-NetConnection -ComputerName localhost -Port 80",
-      "hint_vi": "Chạy lệnh: Test-NetConnection -ComputerName localhost -Port 80",
+      "hint": "Test-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue",
+      "hint_vi": "Test-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -124,7 +125,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

@@ -17,42 +17,33 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## Managing Services and Processes in Windows\n\nAs a Windows SysAdmin, monitoring system health and restarting stuck background services is a daily operational task. PowerShell provides fast, scriptable cmdlets (`Get-Process`, `Stop-Process`, `Get-Service`, `Restart-Service`).\n",
-      "content_vi": "## Quản trị Dịch vụ và Tiến trình trong Windows\n\nLà một quản trị viên hệ thống Windows, việc giám sát tài nguyên và xử lý các dịch vụ bị treo (stuck services) là công việc hàng ngày. PowerShell cung cấp các cmdlet mạnh mẽ giúp thao tác tức thì và tự động hóa (`Get-Process`, `Stop-Process`, `Get-Service`, `Restart-Service`).",
+      "content": "Một service là thành phần do Service Control Manager quản lý; process là chương trình đang chạy. Service có thể chạy trong một process dùng chung, vì vậy không được đồng nhất tên service với tên process. Bắt đầu bằng quan sát, chưa dừng hoặc đổi StartupType khi chưa hiểu dịch vụ phụ thuộc.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-manage-services-processes khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "Một service là thành phần do Service Control Manager quản lý; process là chương trình đang chạy. Service có thể chạy trong một process dùng chung, vì vậy không được đồng nhất tên service với tên process. Bắt đầu bằng quan sát, chưa dừng hoặc đổi StartupType khi chưa hiểu dịch vụ phụ thuộc.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-manage-services-processes khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
-      "id": "win-ps-02-sec-1",
+      "id": "win-ps-02-sec-1-v4",
       "title": "Filtering Running Services",
       "title_vi": "Lọc Danh sách Dịch vụ Đang Chạy",
       "position": 1,
       "kind": "task",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "task": "Query all services with Status equal to 'Running' and sort by DisplayName.",
-      "task_vi": "Truy vấn danh sách tất cả các dịch vụ có trạng thái 'Running' và sắp xếp theo tên hiển thị (DisplayName).",
-      "hint": "Run: Get-Service | Where-Object Status -eq 'Running'",
-      "hint_vi": "Chạy lệnh: Get-Service | Where-Object Status -eq 'Running'",
+      "task": "Lọc dịch vụ Running, sắp xếp tăng dần theo DisplayName và hiển thị 10 mục đầu.",
+      "task_vi": "Lọc dịch vụ Running, sắp xếp tăng dần theo DisplayName và hiển thị 10 mục đầu.",
+      "hint": "Get-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status",
+      "hint_vi": "Get-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-Service|Where-Object|Select-Object)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
         "files",
         "shell"
       ],
-      "content": "### Filtering Services\n\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status\n```\n",
-      "content_vi": "### Lọc Dịch vụ\n\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status\n```"
+      "content": "### Bản chất và tình huống thực tế\nWhere-Object lọc trạng thái tại thời điểm truy vấn. Sort-Object phải đứng trước Select-Object -First để lấy đúng 10 mục đầu theo tên hiển thị.\n\n### Hướng dẫn\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status\n```\n\n### Kết quả và cách tự kiểm tra\nTối đa 10 dịch vụ Running được sắp tăng dần theo DisplayName. Ít hơn 10 dịch vụ không có nghĩa truy vấn sai.\n\n### Câu hỏi tự giải thích\nLấy 10 dòng trước rồi mới sắp xếp khác gì sắp xếp toàn bộ trước?\n\n### Bài tự làm thêm (không chấm tự động)\nĐổi bộ lọc thành Stopped để so sánh, sau đó quay lại lệnh yêu cầu khi kiểm tra task.",
+      "content_vi": "### Bản chất và tình huống thực tế\nWhere-Object lọc trạng thái tại thời điểm truy vấn. Sort-Object phải đứng trước Select-Object -First để lấy đúng 10 mục đầu theo tên hiển thị.\n\n### Hướng dẫn\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status\n```\n\n### Kết quả và cách tự kiểm tra\nTối đa 10 dịch vụ Running được sắp tăng dần theo DisplayName. Ít hơn 10 dịch vụ không có nghĩa truy vấn sai.\n\n### Câu hỏi tự giải thích\nLấy 10 dòng trước rồi mới sắp xếp khác gì sắp xếp toàn bộ trước?\n\n### Bài tự làm thêm (không chấm tự động)\nĐổi bộ lọc thành Stopped để so sánh, sau đó quay lại lệnh yêu cầu khi kiểm tra task.",
+      "translation_needs_review": false
     },
     {
       "id": "win-ps-02-sec-2",
@@ -64,8 +55,8 @@
       "need_verify": true,
       "task": "Sort processes by CPU descending and display the top 5 resource consumers.",
       "task_vi": "Sắp xếp tiến trình giảm dần theo CPU và hiển thị 5 tiến trình tiêu tốn nhiều tài nguyên nhất.",
-      "hint": "Run: Get-Process | Sort-Object CPU -Descending | Select-Object -First 5",
-      "hint_vi": "Chạy lệnh: Get-Process | Sort-Object CPU -Descending | Select-Object -First 5",
+      "hint": "Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64",
+      "hint_vi": "Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -84,34 +75,25 @@
         "files",
         "shell"
       ],
-      "content": "### Resource Inspection\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```\n",
-      "content_vi": "### Kiểm tra Tài nguyên\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```"
+      "content": "### Bản chất và tình huống thực tế\nSắp xếp CPU của Get-Process chỉ tìm tiến trình đã dùng nhiều thời gian CPU tích lũy; một process chạy lâu có thể đứng đầu dù hiện đang nhàn. WorkingSet64 là số byte bộ nhớ vật lý đang sử dụng, không phải tổng RAM được cấp phát. Muốn CPU tức thời cần lấy mẫu theo thời gian/counter.\n\n### Hướng dẫn\n### Kiểm tra Tài nguyên\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTối đa 5 tiến trình, CPU giảm dần; có thể có giá trị trống khi không đọc được process. Không suy ra ngay một process có lỗi chỉ từ thứ hạng này.\n\n### Câu hỏi tự giải thích\nMột process lâu năm có CPU(s) cao có chắc đang làm máy chậm lúc này không?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đổi Sort-Object sang WorkingSet64 và so sánh. Không Kill process chỉ vì nằm trong top 5.",
+      "content_vi": "### Bản chất và tình huống thực tế\nSắp xếp CPU của Get-Process chỉ tìm tiến trình đã dùng nhiều thời gian CPU tích lũy; một process chạy lâu có thể đứng đầu dù hiện đang nhàn. WorkingSet64 là số byte bộ nhớ vật lý đang sử dụng, không phải tổng RAM được cấp phát. Muốn CPU tức thời cần lấy mẫu theo thời gian/counter.\n\n### Hướng dẫn\n### Kiểm tra Tài nguyên\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTối đa 5 tiến trình, CPU giảm dần; có thể có giá trị trống khi không đọc được process. Không suy ra ngay một process có lỗi chỉ từ thứ hạng này.\n\n### Câu hỏi tự giải thích\nMột process lâu năm có CPU(s) cao có chắc đang làm máy chậm lúc này không?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đổi Sort-Object sang WorkingSet64 và so sánh. Không Kill process chỉ vì nằm trong top 5.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
-      "id": "win-ps-02-sec-1",
+      "id": "win-ps-02-sec-1-v4",
       "title": "Filtering Running Services",
       "title_vi": "Lọc Danh sách Dịch vụ Đang Chạy",
-      "content": "### Filtering Services\n\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status\n```\n",
-      "content_vi": "### Lọc Dịch vụ\n\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Select-Object -First 10 Name, DisplayName, Status\n```",
-      "task": "Query all services with Status equal to 'Running' and sort by DisplayName.",
-      "task_vi": "Truy vấn danh sách tất cả các dịch vụ có trạng thái 'Running' và sắp xếp theo tên hiển thị (DisplayName).",
-      "hint": "Run: Get-Service | Where-Object Status -eq 'Running'",
-      "hint_vi": "Chạy lệnh: Get-Service | Where-Object Status -eq 'Running'",
+      "content": "### Bản chất và tình huống thực tế\nWhere-Object lọc trạng thái tại thời điểm truy vấn. Sort-Object phải đứng trước Select-Object -First để lấy đúng 10 mục đầu theo tên hiển thị.\n\n### Hướng dẫn\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status\n```\n\n### Kết quả và cách tự kiểm tra\nTối đa 10 dịch vụ Running được sắp tăng dần theo DisplayName. Ít hơn 10 dịch vụ không có nghĩa truy vấn sai.\n\n### Câu hỏi tự giải thích\nLấy 10 dòng trước rồi mới sắp xếp khác gì sắp xếp toàn bộ trước?\n\n### Bài tự làm thêm (không chấm tự động)\nĐổi bộ lọc thành Stopped để so sánh, sau đó quay lại lệnh yêu cầu khi kiểm tra task.",
+      "content_vi": "### Bản chất và tình huống thực tế\nWhere-Object lọc trạng thái tại thời điểm truy vấn. Sort-Object phải đứng trước Select-Object -First để lấy đúng 10 mục đầu theo tên hiển thị.\n\n### Hướng dẫn\n```powershell\nGet-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status\n```\n\n### Kết quả và cách tự kiểm tra\nTối đa 10 dịch vụ Running được sắp tăng dần theo DisplayName. Ít hơn 10 dịch vụ không có nghĩa truy vấn sai.\n\n### Câu hỏi tự giải thích\nLấy 10 dòng trước rồi mới sắp xếp khác gì sắp xếp toàn bộ trước?\n\n### Bài tự làm thêm (không chấm tự động)\nĐổi bộ lọc thành Stopped để so sánh, sau đó quay lại lệnh yêu cầu khi kiểm tra task.",
+      "task": "Lọc dịch vụ Running, sắp xếp tăng dần theo DisplayName và hiển thị 10 mục đầu.",
+      "task_vi": "Lọc dịch vụ Running, sắp xếp tăng dần theo DisplayName và hiển thị 10 mục đầu.",
+      "hint": "Get-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status",
+      "hint_vi": "Get-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-Service|Where-Object|Select-Object)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
@@ -157,18 +139,19 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
     },
     {
       "id": "win-ps-02-sec-2",
       "title": "Locating Top CPU Processes",
       "title_vi": "Tìm Tiến Trình Chiếm Nhiều CPU Nhất",
-      "content": "### Resource Inspection\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```\n",
-      "content_vi": "### Kiểm tra Tài nguyên\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```",
+      "content": "### Bản chất và tình huống thực tế\nSắp xếp CPU của Get-Process chỉ tìm tiến trình đã dùng nhiều thời gian CPU tích lũy; một process chạy lâu có thể đứng đầu dù hiện đang nhàn. WorkingSet64 là số byte bộ nhớ vật lý đang sử dụng, không phải tổng RAM được cấp phát. Muốn CPU tức thời cần lấy mẫu theo thời gian/counter.\n\n### Hướng dẫn\n### Kiểm tra Tài nguyên\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTối đa 5 tiến trình, CPU giảm dần; có thể có giá trị trống khi không đọc được process. Không suy ra ngay một process có lỗi chỉ từ thứ hạng này.\n\n### Câu hỏi tự giải thích\nMột process lâu năm có CPU(s) cao có chắc đang làm máy chậm lúc này không?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đổi Sort-Object sang WorkingSet64 và so sánh. Không Kill process chỉ vì nằm trong top 5.",
+      "content_vi": "### Bản chất và tình huống thực tế\nSắp xếp CPU của Get-Process chỉ tìm tiến trình đã dùng nhiều thời gian CPU tích lũy; một process chạy lâu có thể đứng đầu dù hiện đang nhàn. WorkingSet64 là số byte bộ nhớ vật lý đang sử dụng, không phải tổng RAM được cấp phát. Muốn CPU tức thời cần lấy mẫu theo thời gian/counter.\n\n### Hướng dẫn\n### Kiểm tra Tài nguyên\n\n```powershell\nGet-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTối đa 5 tiến trình, CPU giảm dần; có thể có giá trị trống khi không đọc được process. Không suy ra ngay một process có lỗi chỉ từ thứ hạng này.\n\n### Câu hỏi tự giải thích\nMột process lâu năm có CPU(s) cao có chắc đang làm máy chậm lúc này không?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đổi Sort-Object sang WorkingSet64 và so sánh. Không Kill process chỉ vì nằm trong top 5.",
       "task": "Sort processes by CPU descending and display the top 5 resource consumers.",
       "task_vi": "Sắp xếp tiến trình giảm dần theo CPU và hiển thị 5 tiến trình tiêu tốn nhiều tài nguyên nhất.",
-      "hint": "Run: Get-Process | Sort-Object CPU -Descending | Select-Object -First 5",
-      "hint_vi": "Chạy lệnh: Get-Process | Sort-Object CPU -Descending | Select-Object -First 5",
+      "hint": "Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64",
+      "hint_vi": "Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 ProcessName, Id, CPU, WorkingSet64",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -226,7 +209,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

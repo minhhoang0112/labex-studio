@@ -17,68 +17,49 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## The Essential Event IDs Every Windows Admin Must Know\n\nWhen a server misbehaves, the senior admin doesn't guess—they open Event Viewer. Here are the universal Event IDs:\n- **Event ID 4625**: An account failed to log on (potential brute-force attack or expired service account password).\n- **Event ID 7000 / 7034**: A service failed to start or terminated unexpectedly.\n- **Event ID 1000 / 1002**: Application crash or hang.\n- **Event ID 41**: The system has rebooted without cleanly shutting down first (unexpected power loss or BSOD).\n",
-      "content_vi": "## Các Mã Lỗi Event ID Mà Mọi Quản Trị Viên Phải Nắm\n\nKhi máy chủ gặp sự cố, kỹ sư quản trị không phỏng đoán mò mẫm—họ mở ngay Event Viewer. Dưới đây là các Event ID kinh điển:\n- **Event ID 4625**: Đăng nhập thất bại (dấu hiệu tấn công dò mật khẩu hoặc tài khoản dịch vụ bị đổi pass).\n- **Event ID 7000 / 7034**: Dịch vụ hệ thống không thể khởi động hoặc bị crash đột ngột.\n- **Event ID 1000 / 1002**: Ứng dụng bị sập (crash) hoặc bị treo không phản hồi (hang).\n- **Event ID 41**: Máy chủ bị mất nguồn đột ngột hoặc màn hình xanh (BSOD) tự khởi động lại.",
+      "content": "Event Viewer ghi các sự kiện theo log, provider, thời gian, ID và mức độ. Cùng một ID ở provider khác có thể có ý nghĩa khác. Một sự kiện không đủ để kết luận nguyên nhân gốc: cần đối chiếu thời điểm người dùng gặp lỗi và dịch vụ/ứng dụng liên quan. Không xóa log hoặc tạo lỗi dịch vụ chỉ để có dữ liệu làm bài.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-event-ids khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "Event Viewer ghi các sự kiện theo log, provider, thời gian, ID và mức độ. Cùng một ID ở provider khác có thể có ý nghĩa khác. Một sự kiện không đủ để kết luận nguyên nhân gốc: cần đối chiếu thời điểm người dùng gặp lỗi và dịch vụ/ứng dụng liên quan. Không xóa log hoặc tạo lỗi dịch vụ chỉ để có dữ liệu làm bài.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-event-ids khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
-      "id": "win-tr-01-sec-1",
+      "id": "win-tr-01-sec-1-v4",
       "title": "Investigating Service Failures (Event 7000 Series)",
       "title_vi": "Điều Tra Sự Cố Dịch Vụ (Dãy Event 7000)",
       "position": 1,
       "kind": "task",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "task": "Search System event log for Service Control Manager events (Event ID 7000/7001/7034).",
-      "task_vi": "Tìm kiếm trong System log các sự kiện do Service Control Manager ghi nhận (Event ID 7000, 7001, 7034).",
-      "hint": "Run: Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue",
-      "hint_vi": "Chạy lệnh: Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue",
+      "task": "Truy vấn 5 sự kiện gần nhất thuộc Service Control Manager với ID 7000, 7001 hoặc 7034; xử lý riêng trường hợp không có bản ghi.",
+      "task_vi": "Truy vấn 5 sự kiện gần nhất thuộc Service Control Manager với ID 7000, 7001 hoặc 7034; xử lý riêng trường hợp không có bản ghi.",
+      "hint": "try { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }",
+      "hint_vi": "try { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-WinEvent|Get-EventLog|Service Control Manager)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
         "files",
         "shell"
       ],
-      "content": "### Investigating Service Crashes\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\n```\n",
-      "content_vi": "### Điều tra Sự cố Dịch vụ\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\n```"
+      "content": "### Bản chất và tình huống thực tế\nLọc ngay tại Get-WinEvent bằng FilterHashtable thay vì tải toàn bộ log rồi lọc. Không có bản ghi phù hợp là kết quả hợp lệ; chỉ xử lý riêng NoMatchingEventsFound. Access Denied hoặc log không tồn tại phải báo lỗi thật.\n\n### Hướng dẫn\n```powershell\ntry { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }\n```\n\n### Kết quả và cách tự kiểm tra\nHiển thị tối đa 5 sự kiện Service Control Manager với ID 7000, 7001 hoặc 7034, mới nhất trước; hoặc thông báo không có sự kiện phù hợp. Không yêu cầu máy có lỗi để task đạt.\n\n### Câu hỏi tự giải thích\nNếu không có ID 7000/7001/7034, có kết luận mọi service đều khỏe không? Bạn cần thêm bằng chứng nào?\n\n### Bài tự làm thêm (không chấm tự động)\nGhi lại TimeCreated, ProviderName, ID và Message của một bản ghi nếu có. Nếu không có, ghi rõ bộ lọc và thời điểm đã kiểm tra.",
+      "content_vi": "### Bản chất và tình huống thực tế\nLọc ngay tại Get-WinEvent bằng FilterHashtable thay vì tải toàn bộ log rồi lọc. Không có bản ghi phù hợp là kết quả hợp lệ; chỉ xử lý riêng NoMatchingEventsFound. Access Denied hoặc log không tồn tại phải báo lỗi thật.\n\n### Hướng dẫn\n```powershell\ntry { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }\n```\n\n### Kết quả và cách tự kiểm tra\nHiển thị tối đa 5 sự kiện Service Control Manager với ID 7000, 7001 hoặc 7034, mới nhất trước; hoặc thông báo không có sự kiện phù hợp. Không yêu cầu máy có lỗi để task đạt.\n\n### Câu hỏi tự giải thích\nNếu không có ID 7000/7001/7034, có kết luận mọi service đều khỏe không? Bạn cần thêm bằng chứng nào?\n\n### Bài tự làm thêm (không chấm tự động)\nGhi lại TimeCreated, ProviderName, ID và Message của một bản ghi nếu có. Nếu không có, ghi rõ bộ lọc và thời điểm đã kiểm tra.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
-      "id": "win-tr-01-sec-1",
+      "id": "win-tr-01-sec-1-v4",
       "title": "Investigating Service Failures (Event 7000 Series)",
       "title_vi": "Điều Tra Sự Cố Dịch Vụ (Dãy Event 7000)",
-      "content": "### Investigating Service Crashes\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\n```\n",
-      "content_vi": "### Điều tra Sự cố Dịch vụ\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue | Format-List TimeCreated, Id, Message\n```",
-      "task": "Search System event log for Service Control Manager events (Event ID 7000/7001/7034).",
-      "task_vi": "Tìm kiếm trong System log các sự kiện do Service Control Manager ghi nhận (Event ID 7000, 7001, 7034).",
-      "hint": "Run: Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue",
-      "hint_vi": "Chạy lệnh: Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'} -MaxEvents 5 -ErrorAction SilentlyContinue",
+      "content": "### Bản chất và tình huống thực tế\nLọc ngay tại Get-WinEvent bằng FilterHashtable thay vì tải toàn bộ log rồi lọc. Không có bản ghi phù hợp là kết quả hợp lệ; chỉ xử lý riêng NoMatchingEventsFound. Access Denied hoặc log không tồn tại phải báo lỗi thật.\n\n### Hướng dẫn\n```powershell\ntry { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }\n```\n\n### Kết quả và cách tự kiểm tra\nHiển thị tối đa 5 sự kiện Service Control Manager với ID 7000, 7001 hoặc 7034, mới nhất trước; hoặc thông báo không có sự kiện phù hợp. Không yêu cầu máy có lỗi để task đạt.\n\n### Câu hỏi tự giải thích\nNếu không có ID 7000/7001/7034, có kết luận mọi service đều khỏe không? Bạn cần thêm bằng chứng nào?\n\n### Bài tự làm thêm (không chấm tự động)\nGhi lại TimeCreated, ProviderName, ID và Message của một bản ghi nếu có. Nếu không có, ghi rõ bộ lọc và thời điểm đã kiểm tra.",
+      "content_vi": "### Bản chất và tình huống thực tế\nLọc ngay tại Get-WinEvent bằng FilterHashtable thay vì tải toàn bộ log rồi lọc. Không có bản ghi phù hợp là kết quả hợp lệ; chỉ xử lý riêng NoMatchingEventsFound. Access Denied hoặc log không tồn tại phải báo lỗi thật.\n\n### Hướng dẫn\n```powershell\ntry { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }\n```\n\n### Kết quả và cách tự kiểm tra\nHiển thị tối đa 5 sự kiện Service Control Manager với ID 7000, 7001 hoặc 7034, mới nhất trước; hoặc thông báo không có sự kiện phù hợp. Không yêu cầu máy có lỗi để task đạt.\n\n### Câu hỏi tự giải thích\nNếu không có ID 7000/7001/7034, có kết luận mọi service đều khỏe không? Bạn cần thêm bằng chứng nào?\n\n### Bài tự làm thêm (không chấm tự động)\nGhi lại TimeCreated, ProviderName, ID và Message của một bản ghi nếu có. Nếu không có, ghi rõ bộ lọc và thời điểm đã kiểm tra.",
+      "task": "Truy vấn 5 sự kiện gần nhất thuộc Service Control Manager với ID 7000, 7001 hoặc 7034; xử lý riêng trường hợp không có bản ghi.",
+      "task_vi": "Truy vấn 5 sự kiện gần nhất thuộc Service Control Manager với ID 7000, 7001 hoặc 7034; xử lý riêng trường hợp không có bản ghi.",
+      "hint": "try { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }",
+      "hint_vi": "try { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-WinEvent|Get-EventLog|Service Control Manager)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
@@ -124,7 +105,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

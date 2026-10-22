@@ -17,68 +17,49 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## Automating Repetitive SysAdmin Tasks\n\nWriting clean PowerShell scripts with functions, error handling (`try/catch`), and parameter blocks turns hours of manual work into scheduled single-second tasks.\n",
-      "content_vi": "## Tự động hóa các Tác vụ Quản trị Lặp lại\n\nViết kịch bản PowerShell với hàm (functions), xử lý lỗi (`try/catch`) và tham số (parameters) giúp biến hàng giờ làm việc thủ công thành các tác vụ chạy tự động trong tích tắc.",
+      "content": "Tự động hóa vận hành cần báo cáo có cấu trúc để máy khác đọc lại. CSV là dữ liệu; Format-Table là trình bày. Không đưa Format-Table vào trước Export-Csv. Báo cáo chỉ phản ánh một thời điểm; dung lượng trống thay đổi trong lúc hệ thống hoạt động. Bài này là bước đầu trước biến, điều kiện, vòng lặp và script có xử lý lỗi ở khóa nâng cao.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-powershell-scripting-automation khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "Tự động hóa vận hành cần báo cáo có cấu trúc để máy khác đọc lại. CSV là dữ liệu; Format-Table là trình bày. Không đưa Format-Table vào trước Export-Csv. Báo cáo chỉ phản ánh một thời điểm; dung lượng trống thay đổi trong lúc hệ thống hoạt động. Bài này là bước đầu trước biến, điều kiện, vòng lặp và script có xử lý lỗi ở khóa nâng cao.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-powershell-scripting-automation khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
-      "id": "win-sc-05-sec-1",
+      "id": "win-sc-05-sec-1-v4",
       "title": "Generate a Server Health Summary Report",
       "title_vi": "Tạo Báo Cáo Tổng Hợp Sức Khỏe Máy Chủ",
       "position": 1,
       "kind": "task",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "task": "Write a PowerShell one-liner or script to output disk space and save to health_report.txt.",
-      "task_vi": "Chạy lệnh trích xuất thông tin dung lượng ổ đĩa và xuất ra tệp health_report.txt.",
-      "hint": "Run: Get-CimInstance Win32_LogicalDisk | Out-File health_report.txt",
-      "hint_vi": "Chạy lệnh: Get-CimInstance Win32_LogicalDisk | Out-File health_report.txt",
+      "task": "Xuất báo cáo CSV các ổ local với đúng tên máy, mã ổ, Size và FreeSpace.",
+      "task_vi": "Xuất báo cáo CSV các ổ local với đúng tên máy, mã ổ, Size và FreeSpace.",
+      "hint": "Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8",
+      "hint_vi": "Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:health_report|Get-CimInstance|Get-WmiObject|Get-PSDrive)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
         "files",
         "shell"
       ],
-      "content": "### Generating Report\n\n```powershell\nGet-CimInstance Win32_LogicalDisk | Select-Object DeviceID, FreeSpace, Size | Out-File health_report.txt\nGet-Content health_report.txt\n```\n",
-      "content_vi": "### Tạo Báo Cáo\n\n```powershell\nGet-CimInstance Win32_LogicalDisk | Select-Object DeviceID, FreeSpace, Size | Out-File health_report.txt\nGet-Content health_report.txt\n```"
+      "content": "### Bản chất và tình huống thực tế\nGet-CimInstance đọc ổ local cố định (DriveType=3). Gắn ComputerName để tránh nhầm báo cáo của máy khác. Size/FreeSpace tính bằng byte; dùng GiB khi trình bày cho người dùng, giữ số nguyên trong CSV.\n\n### Hướng dẫn\n```powershell\nGet-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nhealth_report.csv có một dòng cho mỗi ổ local, đúng ComputerName, DeviceID và Size của VM; FreeSpace nằm trong khoảng 0..Size. Tệp chỉ có chữ DeviceID/FreeSpace/Size hoặc sao chép từ máy khác không đạt.\n\n### Câu hỏi tự giải thích\nTại sao dung lượng trống không thể yêu cầu khớp tuyệt đối vài phút sau?\n\n### Bài tự làm thêm (không chấm tự động)\nĐọc lại bằng Import-Csv ./health_report.csv. Tự tính phần trăm trống và giải thích vì sao phải chuyển chuỗi CSV sang số trước khi so sánh.",
+      "content_vi": "### Bản chất và tình huống thực tế\nGet-CimInstance đọc ổ local cố định (DriveType=3). Gắn ComputerName để tránh nhầm báo cáo của máy khác. Size/FreeSpace tính bằng byte; dùng GiB khi trình bày cho người dùng, giữ số nguyên trong CSV.\n\n### Hướng dẫn\n```powershell\nGet-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nhealth_report.csv có một dòng cho mỗi ổ local, đúng ComputerName, DeviceID và Size của VM; FreeSpace nằm trong khoảng 0..Size. Tệp chỉ có chữ DeviceID/FreeSpace/Size hoặc sao chép từ máy khác không đạt.\n\n### Câu hỏi tự giải thích\nTại sao dung lượng trống không thể yêu cầu khớp tuyệt đối vài phút sau?\n\n### Bài tự làm thêm (không chấm tự động)\nĐọc lại bằng Import-Csv ./health_report.csv. Tự tính phần trăm trống và giải thích vì sao phải chuyển chuỗi CSV sang số trước khi so sánh.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
-      "id": "win-sc-05-sec-1",
+      "id": "win-sc-05-sec-1-v4",
       "title": "Generate a Server Health Summary Report",
       "title_vi": "Tạo Báo Cáo Tổng Hợp Sức Khỏe Máy Chủ",
-      "content": "### Generating Report\n\n```powershell\nGet-CimInstance Win32_LogicalDisk | Select-Object DeviceID, FreeSpace, Size | Out-File health_report.txt\nGet-Content health_report.txt\n```\n",
-      "content_vi": "### Tạo Báo Cáo\n\n```powershell\nGet-CimInstance Win32_LogicalDisk | Select-Object DeviceID, FreeSpace, Size | Out-File health_report.txt\nGet-Content health_report.txt\n```",
-      "task": "Write a PowerShell one-liner or script to output disk space and save to health_report.txt.",
-      "task_vi": "Chạy lệnh trích xuất thông tin dung lượng ổ đĩa và xuất ra tệp health_report.txt.",
-      "hint": "Run: Get-CimInstance Win32_LogicalDisk | Out-File health_report.txt",
-      "hint_vi": "Chạy lệnh: Get-CimInstance Win32_LogicalDisk | Out-File health_report.txt",
+      "content": "### Bản chất và tình huống thực tế\nGet-CimInstance đọc ổ local cố định (DriveType=3). Gắn ComputerName để tránh nhầm báo cáo của máy khác. Size/FreeSpace tính bằng byte; dùng GiB khi trình bày cho người dùng, giữ số nguyên trong CSV.\n\n### Hướng dẫn\n```powershell\nGet-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nhealth_report.csv có một dòng cho mỗi ổ local, đúng ComputerName, DeviceID và Size của VM; FreeSpace nằm trong khoảng 0..Size. Tệp chỉ có chữ DeviceID/FreeSpace/Size hoặc sao chép từ máy khác không đạt.\n\n### Câu hỏi tự giải thích\nTại sao dung lượng trống không thể yêu cầu khớp tuyệt đối vài phút sau?\n\n### Bài tự làm thêm (không chấm tự động)\nĐọc lại bằng Import-Csv ./health_report.csv. Tự tính phần trăm trống và giải thích vì sao phải chuyển chuỗi CSV sang số trước khi so sánh.",
+      "content_vi": "### Bản chất và tình huống thực tế\nGet-CimInstance đọc ổ local cố định (DriveType=3). Gắn ComputerName để tránh nhầm báo cáo của máy khác. Size/FreeSpace tính bằng byte; dùng GiB khi trình bày cho người dùng, giữ số nguyên trong CSV.\n\n### Hướng dẫn\n```powershell\nGet-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8\n```\n\n### Kết quả và cách tự kiểm tra\nhealth_report.csv có một dòng cho mỗi ổ local, đúng ComputerName, DeviceID và Size của VM; FreeSpace nằm trong khoảng 0..Size. Tệp chỉ có chữ DeviceID/FreeSpace/Size hoặc sao chép từ máy khác không đạt.\n\n### Câu hỏi tự giải thích\nTại sao dung lượng trống không thể yêu cầu khớp tuyệt đối vài phút sau?\n\n### Bài tự làm thêm (không chấm tự động)\nĐọc lại bằng Import-Csv ./health_report.csv. Tự tính phần trăm trống và giải thích vì sao phải chuyển chuỗi CSV sang số trước khi so sánh.",
+      "task": "Xuất báo cáo CSV các ổ local với đúng tên máy, mã ổ, Size và FreeSpace.",
+      "task_vi": "Xuất báo cáo CSV các ổ local với đúng tên máy, mã ổ, Size và FreeSpace.",
+      "hint": "Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8",
+      "hint_vi": "Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:health_report|Get-CimInstance|Get-WmiObject|Get-PSDrive)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
@@ -124,7 +105,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

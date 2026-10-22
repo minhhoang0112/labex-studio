@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## Why Do Services Fail to Start?\n\nIn real production environments, 90% of service startup failures stem from:\n1. **Logon Failure**: The service account password expired or lost the 'Log on as a service' right.\n2. **Dependency Failure**: A prerequisite service is disabled or failed to start.\n3. **Port Conflict**: Another program is already listening on the required TCP port.\n4. **Corrupt Configuration**: Faulty settings in the registry or app config file.\n",
-      "content_vi": "## Tại Sao Dịch Vụ Không Thể Khởi Động?\n\nTrong thực tế doanh nghiệp, 90% lỗi khởi động dịch vụ bắt nguồn từ:\n1. **Lỗi Đăng nhập (Logon Failure)**: Mật khẩu của tài khoản dịch vụ bị hết hạn hoặc mất quyền 'Log on as a service'.\n2. **Lỗi Phụ thuộc (Dependency Failure)**: Dịch vụ tiền đề (prerequisite) bị tắt hoặc không chạy.\n3. **Xung đột Cổng mạng**: Một ứng dụng khác đang chiếm dụng cổng TCP mà dịch vụ cần.\n4. **Cấu hình Sai**: Thông số trong Registry hoặc tệp cấu hình bị hỏng.",
+      "content": "Một dịch vụ Stopped có thể là trạng thái bình thường nếu StartupType Manual/Disabled hoặc trigger-start. Cần xác định yêu cầu vận hành, dependency và log trước khi sửa. Không restart Spooler/Winmgmt tùy tiện trên máy dùng chung.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-failed-services khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "Một dịch vụ Stopped có thể là trạng thái bình thường nếu StartupType Manual/Disabled hoặc trigger-start. Cần xác định yêu cầu vận hành, dependency và log trước khi sửa. Không restart Spooler/Winmgmt tùy tiện trên máy dùng chung.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-failed-services khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -31,8 +31,8 @@
       "need_verify": true,
       "task": "Query Spooler or Winmgmt service configuration, its start type and dependent services.",
       "task_vi": "Truy vấn cấu hình dịch vụ Spooler hoặc Winmgmt, kiểu khởi động (StartType) và các dịch vụ phụ thuộc.",
-      "hint": "Run: Get-Service Spooler -DependentServices",
-      "hint_vi": "Chạy lệnh: Get-Service Spooler -DependentServices",
+      "hint": "Get-Service Spooler | Select-Object Name, Status, StartType, RequiredServices",
+      "hint_vi": "Get-Service Spooler | Select-Object Name, Status, StartType, RequiredServices",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -51,22 +51,23 @@
         "files",
         "shell"
       ],
-      "content": "### Service Deep Dive\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```\n",
-      "content_vi": "### Phân tích Dịch Vụ\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```"
+      "content": "### Bản chất và tình huống thực tế\nĐọc Name, Status, StartType và RequiredServices của Spooler theo lệnh mẫu. Tên thuộc tính là tên service, không nhất thiết giống DisplayName.\n\n### Hướng dẫn\n### Phân tích Dịch Vụ\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó cấu hình thực tế của Spooler; cả Running và Stopped đều là quan sát hợp lệ trong bài đọc trạng thái. Chưa chứng minh đã sửa service.\n\n### Câu hỏi tự giải thích\nKhi nào Stopped là lỗi? Vì sao cần xem dependency trước khi đổi StartupType?\n\n### Bài tự làm thêm (không chấm tự động)\nTự tìm một service khác và đối chiếu Get-Service với Event Viewer, chỉ đọc.",
+      "content_vi": "### Bản chất và tình huống thực tế\nĐọc Name, Status, StartType và RequiredServices của Spooler theo lệnh mẫu. Tên thuộc tính là tên service, không nhất thiết giống DisplayName.\n\n### Hướng dẫn\n### Phân tích Dịch Vụ\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó cấu hình thực tế của Spooler; cả Running và Stopped đều là quan sát hợp lệ trong bài đọc trạng thái. Chưa chứng minh đã sửa service.\n\n### Câu hỏi tự giải thích\nKhi nào Stopped là lỗi? Vì sao cần xem dependency trước khi đổi StartupType?\n\n### Bài tự làm thêm (không chấm tự động)\nTự tìm một service khác và đối chiếu Get-Service với Event Viewer, chỉ đọc.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
       "id": "win-tr-02-sec-1",
       "title": "Inspecting Service Startup Type & Dependencies",
       "title_vi": "Kiểm Tra Kiểu Khởi Động & Phụ Thuộc Của Dịch Vụ",
-      "content": "### Service Deep Dive\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```\n",
-      "content_vi": "### Phân tích Dịch Vụ\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```",
+      "content": "### Bản chất và tình huống thực tế\nĐọc Name, Status, StartType và RequiredServices của Spooler theo lệnh mẫu. Tên thuộc tính là tên service, không nhất thiết giống DisplayName.\n\n### Hướng dẫn\n### Phân tích Dịch Vụ\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó cấu hình thực tế của Spooler; cả Running và Stopped đều là quan sát hợp lệ trong bài đọc trạng thái. Chưa chứng minh đã sửa service.\n\n### Câu hỏi tự giải thích\nKhi nào Stopped là lỗi? Vì sao cần xem dependency trước khi đổi StartupType?\n\n### Bài tự làm thêm (không chấm tự động)\nTự tìm một service khác và đối chiếu Get-Service với Event Viewer, chỉ đọc.",
+      "content_vi": "### Bản chất và tình huống thực tế\nĐọc Name, Status, StartType và RequiredServices của Spooler theo lệnh mẫu. Tên thuộc tính là tên service, không nhất thiết giống DisplayName.\n\n### Hướng dẫn\n### Phân tích Dịch Vụ\n\n```powershell\nGet-Service Spooler | Select-Object Name, Status, StartType, RequiredServices\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó cấu hình thực tế của Spooler; cả Running và Stopped đều là quan sát hợp lệ trong bài đọc trạng thái. Chưa chứng minh đã sửa service.\n\n### Câu hỏi tự giải thích\nKhi nào Stopped là lỗi? Vì sao cần xem dependency trước khi đổi StartupType?\n\n### Bài tự làm thêm (không chấm tự động)\nTự tìm một service khác và đối chiếu Get-Service với Event Viewer, chỉ đọc.",
       "task": "Query Spooler or Winmgmt service configuration, its start type and dependent services.",
       "task_vi": "Truy vấn cấu hình dịch vụ Spooler hoặc Winmgmt, kiểu khởi động (StartType) và các dịch vụ phụ thuộc.",
-      "hint": "Run: Get-Service Spooler -DependentServices",
-      "hint_vi": "Chạy lệnh: Get-Service Spooler -DependentServices",
+      "hint": "Get-Service Spooler | Select-Object Name, Status, StartType, RequiredServices",
+      "hint_vi": "Get-Service Spooler | Select-Object Name, Status, StartType, RequiredServices",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -124,7 +125,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

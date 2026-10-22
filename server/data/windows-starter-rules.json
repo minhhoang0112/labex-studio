@@ -1,0 +1,66 @@
+{
+  "win-ps-02-sec-1-v4": {
+    "lab_id": "win-manage-services-processes",
+    "probe": "@(Get-Service | Where-Object Status -eq Running).Count -gt 0",
+    "commands": [
+      [
+        "Get-Service | Where-Object Status -eq 'Running' | Sort-Object DisplayName | Select-Object -First 10 Name, DisplayName, Status"
+      ]
+    ]
+  },
+  "win-fs-03-sec-1-v4": {
+    "lab_id": "win-file-system-ntfs",
+    "probe": "(Test-Path ./FinanceDocs -PathType Container) -and @( (Get-Acl ./FinanceDocs).Access ).Count -gt 0",
+    "commands": [
+      [
+        "(Get-Acl ./FinanceDocs).Access | Format-Table IdentityReference, FileSystemRights, AccessControlType",
+        "Get-Acl ./FinanceDocs",
+        "New-Item -ItemType Directory -Path ./FinanceDocs -Force\n(Get-Acl ./FinanceDocs).Access | Format-Table IdentityReference, FileSystemRights, AccessControlType"
+      ]
+    ]
+  },
+  "win-sc-05-sec-1-v4": {
+    "lab_id": "win-powershell-scripting-automation",
+    "probe": "if(-not(Test-Path ./health_report.csv -PathType Leaf)){return $false}; $rows=@(Import-Csv -LiteralPath ./health_report.csv); $actual=@(Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3'); if($rows.Count -ne $actual.Count -or $rows.Count -lt 1){return $false}; $seen=@{}; foreach($r in $rows){$disk=@($actual | Where-Object DeviceID -eq $r.DeviceID); if($seen.ContainsKey([string]$r.DeviceID) -or $disk.Count -ne 1 -or $r.ComputerName -ne $env:COMPUTERNAME){return $false}; $seen[[string]$r.DeviceID]=$true; [long]$size=0; [long]$free=0; if(-not [long]::TryParse($r.Size,[ref]$size) -or -not [long]::TryParse($r.FreeSpace,[ref]$free) -or $size -ne [long]$disk[0].Size -or $free -lt 0 -or $free -gt $size){return $false}}; return $true",
+    "commands": [
+      [
+        "Get-CimInstance Win32_LogicalDisk -Filter 'DriveType=3' | Select-Object @{Name='ComputerName';Expression={$env:COMPUTERNAME}}, DeviceID, Size, FreeSpace | Export-Csv -LiteralPath ./health_report.csv -NoTypeInformation -Encoding UTF8"
+      ]
+    ]
+  },
+  "win-el-04-sec-1-v4": {
+    "lab_id": "win-event-log-analysis",
+    "probe": "$null -ne (Get-WinEvent -ListLog System)",
+    "commands": [
+      [
+        "try { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }"
+      ]
+    ]
+  },
+  "win-tr-01-sec-1-v4": {
+    "lab_id": "win-troubleshoot-event-ids",
+    "probe": "$null -ne (Get-WinEvent -ListLog System)",
+    "commands": [
+      [
+        "try { Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7000,7001,7034} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }"
+      ]
+    ]
+  },
+  "win-ad-01-sec-1-v4": {
+    "lab_id": "win-server-ad-users-groups",
+    "probe": "$root=(Get-ADDomain).DistinguishedName; $null -ne (Get-ADOrganizationalUnit -Identity ('OU=IT_Department,'+$root))"
+  },
+  "win-iis-05-sec-1-v4": {
+    "lab_id": "win-server-iis-web",
+    "probe": "Import-Module WebAdministration; $s=Get-Website -Name PortalCorp; if($s.State -ne 'Started' -or $s.PhysicalPath -ne 'C:\\LabEx\\Labs\\win-server-iis-web\\site' -or @($s.Bindings.Collection | Where-Object { $_.protocol -eq 'http' -and $_.bindingInformation -eq '*:8080:' }).Count -lt 1){return $false}; $r=Invoke-WebRequest -UseBasicParsing -Uri 'http://127.0.0.1:8080' -TimeoutSec 10; $r.StatusCode -eq 200 -and $r.Content.Contains('LabEx PortalCorp')"
+  },
+  "win-tr-05-sec-1-v4": {
+    "lab_id": "win-performance-monitoring-bottlenecks",
+    "probe": "$s=Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\"; $null -ne $s -and $null -ne $s.PercentProcessorTime -and [double]$s.PercentProcessorTime -ge 0 -and [double]$s.PercentProcessorTime -le 100",
+    "commands": [
+      [
+        "Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime"
+      ]
+    ]
+  }
+}

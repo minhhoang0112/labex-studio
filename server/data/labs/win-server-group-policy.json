@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## Centralized Management with Group Policy\n\nGroup Policy allows administrators to define security configurations and user environments once, enforcing them automatically across thousands of domain-joined PCs and servers.\n",
-      "content_vi": "## Quản Trị Tập Trung Với Group Policy\n\nGroup Policy cho phép quản trị viên định nghĩa cấu hình bảo mật một lần và tự động áp dụng bắt buộc lên hàng nghìn máy tính thành viên trong Domain.",
+      "content": "GPO có thiết lập User và Computer, phạm vi domain/site/OU và quy tắc ưu tiên. gpresult là công cụ đọc Resultant Set of Policy, không tạo hoặc liên kết GPO. PowerShell web chạy qua Agent bằng SYSTEM, không đại diện user đang đăng nhập Desktop. Cần chọn /scope computer khi xem policy máy từ web.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-group-policy khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "GPO có thiết lập User và Computer, phạm vi domain/site/OU và quy tắc ưu tiên. gpresult là công cụ đọc Resultant Set of Policy, không tạo hoặc liên kết GPO. PowerShell web chạy qua Agent bằng SYSTEM, không đại diện user đang đăng nhập Desktop. Cần chọn /scope computer khi xem policy máy từ web.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-group-policy khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -31,8 +31,8 @@
       "need_verify": true,
       "task": "Use gpresult to inspect the Resultant Set of Policy (RSoP) on the system.",
       "task_vi": "Sử dụng công cụ gpresult để kiểm tra các chính sách thực tế đang có hiệu lực trên máy tính.",
-      "hint": "Run: gpresult /r or gpresult /?",
-      "hint_vi": "Chạy lệnh: gpresult /r hoặc gpresult /?",
+      "hint": "gpresult /scope computer /r",
+      "hint_vi": "gpresult /scope computer /r",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -51,22 +51,23 @@
         "files",
         "shell"
       ],
-      "content": "### Checking GPO Status\n\n```powershell\ngpresult /r\n```\n",
-      "content_vi": "### Kiểm tra Trạng thái GPO\n\n```powershell\ngpresult /r\n```"
+      "content": "### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
+      "content_vi": "### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
       "id": "win-gpo-02-sec-1",
       "title": "Refreshing and Inspecting Applied Policies",
       "title_vi": "Làm Mới & Kiểm Tra Chính Sách Đã Áp Dụng",
-      "content": "### Checking GPO Status\n\n```powershell\ngpresult /r\n```\n",
-      "content_vi": "### Kiểm tra Trạng thái GPO\n\n```powershell\ngpresult /r\n```",
+      "content": "### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
+      "content_vi": "### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
       "task": "Use gpresult to inspect the Resultant Set of Policy (RSoP) on the system.",
       "task_vi": "Sử dụng công cụ gpresult để kiểm tra các chính sách thực tế đang có hiệu lực trên máy tính.",
-      "hint": "Run: gpresult /r or gpresult /?",
-      "hint_vi": "Chạy lệnh: gpresult /r hoặc gpresult /?",
+      "hint": "gpresult /scope computer /r",
+      "hint_vi": "gpresult /scope computer /r",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -124,7 +125,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

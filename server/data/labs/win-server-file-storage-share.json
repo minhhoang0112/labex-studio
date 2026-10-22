@@ -3,7 +3,7 @@
   "course_id": "windows-server-administration-essentials",
   "order": 4,
   "title": "File Server Management, SMB Shares & Storage Spaces",
-  "title_vi": "Quản Trị File Server, Chia Sẻ SMB & Storage Spaces",
+  "title_vi": "Khảo sát SMB Share và các lớp quyền truy cập",
   "type": "lab",
   "difficulty": "Intermediate",
   "estimated_time": "25 mins",
@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## Enterprise File Services\n\nFile Server is one of the most critical server roles in any enterprise, hosting financial documents, team shares, and department data stores with SMB 3.0 encryption.\n",
-      "content_vi": "## Dịch Vụ Tệp Doanh Nghiệp\n\nMáy chủ File Server là dịch vụ thiết yếu nhất trong mọi công ty, lưu trữ dữ liệu phòng ban, tài liệu kế toán và chia sẻ tệp qua giao thức SMB 3.0 an toàn.",
+      "content": "SMB cung cấp chia sẻ qua mạng, NTFS áp dụng trên filesystem. Khi truy cập SMB phải xét cả quyền share lẫn NTFS. Bài này khảo sát các share có sẵn, chưa tạo file server theo phòng ban hoặc phân quyền nghiệp vụ. Share quản trị như C$ không phải thư mục nên cấp cho người dùng thường.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-file-storage-share khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "SMB cung cấp chia sẻ qua mạng, NTFS áp dụng trên filesystem. Khi truy cập SMB phải xét cả quyền share lẫn NTFS. Bài này khảo sát các share có sẵn, chưa tạo file server theo phòng ban hoặc phân quyền nghiệp vụ. Share quản trị như C$ không phải thư mục nên cấp cho người dùng thường.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-file-storage-share khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -31,8 +31,8 @@
       "need_verify": true,
       "task": "Query all active SMB shares on the server using Get-SmbShare.",
       "task_vi": "Truy vấn danh sách tất cả các thư mục đang được chia sẻ mạng bằng Get-SmbShare.",
-      "hint": "Run: Get-SmbShare",
-      "hint_vi": "Chạy lệnh: Get-SmbShare",
+      "hint": "Get-SmbShare",
+      "hint_vi": "Get-SmbShare",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -51,22 +51,23 @@
         "files",
         "shell"
       ],
-      "content": "### SMB Shares\n\n```powershell\nGet-SmbShare\n```\n",
-      "content_vi": "### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```"
+      "content": "### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
+      "content_vi": "### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
       "id": "win-fs-04-sec-1",
       "title": "Inspecting SMB Shares with Get-SmbShare",
       "title_vi": "Kiểm Tra Các Thư Mục Chia Sẻ SMB",
-      "content": "### SMB Shares\n\n```powershell\nGet-SmbShare\n```\n",
-      "content_vi": "### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```",
+      "content": "### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
+      "content_vi": "### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
       "task": "Query all active SMB shares on the server using Get-SmbShare.",
       "task_vi": "Truy vấn danh sách tất cả các thư mục đang được chia sẻ mạng bằng Get-SmbShare.",
-      "hint": "Run: Get-SmbShare",
-      "hint_vi": "Chạy lệnh: Get-SmbShare",
+      "hint": "Get-SmbShare",
+      "hint_vi": "Get-SmbShare",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -124,7 +125,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

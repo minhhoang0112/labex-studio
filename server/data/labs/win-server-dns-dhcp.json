@@ -3,7 +3,7 @@
   "course_id": "windows-server-administration-essentials",
   "order": 3,
   "title": "Windows Server Core Networking: DNS & DHCP Roles",
-  "title_vi": "Hạ Tầng Mạng Máy Chủ: Dịch Vụ DNS & DHCP",
+  "title_vi": "Nhập môn DNS/DHCP và kiểm tra tên localhost",
   "type": "lab",
   "difficulty": "Intermediate",
   "estimated_time": "30 mins",
@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## Core Infrastructure Services\n\nWithout DNS, Active Directory cannot locate Domain Controllers. Without DHCP, clients cannot obtain IP addresses automatically. Mastering DNS and DHCP management is mandatory for every system engineer.\n",
-      "content_vi": "## Các Dịch Vụ Hạ Tầng Cốt Lõi\n\nKhông có DNS, Active Directory không thể định vị máy chủ điều khiển miền. Không có DHCP, các máy trạm không thể nhận địa chỉ IP tự động. Nắm vững quản trị DNS và DHCP là yêu cầu bắt buộc của mọi kỹ sư hệ thống.",
+      "content": "DNS phân giải tên; DHCP cấp cấu hình mạng như IP/gateway/DNS. Hai dịch vụ khác nhau. Bài nhập môn hiện chỉ quan sát phân giải localhost, chưa triển khai DNS zone hoặc DHCP scope. Không thay DNS/IP của VM Azure hay chạy DHCP server trên mạng đang dùng.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-dns-dhcp khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "DNS phân giải tên; DHCP cấp cấu hình mạng như IP/gateway/DNS. Hai dịch vụ khác nhau. Bài nhập môn hiện chỉ quan sát phân giải localhost, chưa triển khai DNS zone hoặc DHCP scope. Không thay DNS/IP của VM Azure hay chạy DHCP server trên mạng đang dùng.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-dns-dhcp khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -31,8 +31,8 @@
       "need_verify": true,
       "task": "Use Resolve-DnsName to query DNS records and test name resolution.",
       "task_vi": "Sử dụng Resolve-DnsName để kiểm tra bản ghi phân giải tên miền trên máy chủ.",
-      "hint": "Run: Resolve-DnsName localhost or Resolve-DnsName -Name google.com",
-      "hint_vi": "Chạy lệnh: Resolve-DnsName localhost hoặc Resolve-DnsName -Name google.com",
+      "hint": "Resolve-DnsName localhost",
+      "hint_vi": "Resolve-DnsName localhost",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -51,22 +51,23 @@
         "files",
         "shell"
       ],
-      "content": "### DNS Testing\n\n```powershell\nResolve-DnsName localhost\n```\n",
-      "content_vi": "### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```"
+      "content": "### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
+      "content_vi": "### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
       "id": "win-net-03-sec-1",
       "title": "Querying DNS Records with Resolve-DnsName",
       "title_vi": "Truy Vấn Bản Ghi DNS Với Resolve-DnsName",
-      "content": "### DNS Testing\n\n```powershell\nResolve-DnsName localhost\n```\n",
-      "content_vi": "### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```",
+      "content": "### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
+      "content_vi": "### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
       "task": "Use Resolve-DnsName to query DNS records and test name resolution.",
       "task_vi": "Sử dụng Resolve-DnsName để kiểm tra bản ghi phân giải tên miền trên máy chủ.",
-      "hint": "Run: Resolve-DnsName localhost or Resolve-DnsName -Name google.com",
-      "hint_vi": "Chạy lệnh: Resolve-DnsName localhost hoặc Resolve-DnsName -Name google.com",
+      "hint": "Resolve-DnsName localhost",
+      "hint_vi": "Resolve-DnsName localhost",
       "verification": {
         "kind": "commands",
         "user": "labex",
@@ -124,7 +125,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

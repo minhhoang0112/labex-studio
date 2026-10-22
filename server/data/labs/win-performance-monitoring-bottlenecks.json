@@ -17,68 +17,49 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## Identifying System Bottlenecks\n\nWhen users report 'the server is slow', a sysadmin measures four pillars:\n1. **Processor**: % Processor Time (sustained >85% indicates CPU bottleneck).\n2. **Memory**: Available MBytes (<10% indicates memory starvation) and Pages/sec.\n3. **Disk**: Avg. Disk Queue Length (>2 per physical spindle indicates disk saturation).\n4. **Network**: Bytes Total/sec.\n",
-      "content_vi": "## Nhận Diện Điểm Nghẽn Hệ Thống\n\nKhi người dùng phàn nàn 'máy chủ bị chậm', quản trị viên đo đạc 4 trụ cột tài nguyên:\n1. **Bộ vi xử lý (CPU)**: % Processor Time (liên tục >85% là nghẽn CPU).\n2. **Bộ nhớ (RAM)**: Available MBytes (<10% là cạn kiệt RAM) và Pages/sec.\n3. **Ổ đĩa (Disk)**: Avg. Disk Queue Length (>2 là ổ đĩa bị quá tải đọc/ghi).\n4. **Mạng (Network)**: Bytes Total/sec đo lượng băng thông truyền tải.",
+      "content": "Bottleneck cần chuỗi số đo theo thời gian và triệu chứng, không chẩn đoán từ một ảnh chụp. CPU cao ngắn hạn có thể bình thường. Counter path có thể đổi theo ngôn ngữ Windows, khác với thuộc tính CIM. Không tạo tải CPU hoặc dừng process để có số đo đẹp.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-performance-monitoring-bottlenecks khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "Bottleneck cần chuỗi số đo theo thời gian và triệu chứng, không chẩn đoán từ một ảnh chụp. CPU cao ngắn hạn có thể bình thường. Counter path có thể đổi theo ngôn ngữ Windows, khác với thuộc tính CIM. Không tạo tải CPU hoặc dừng process để có số đo đẹp.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-performance-monitoring-bottlenecks khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
-      "id": "win-tr-05-sec-1",
+      "id": "win-tr-05-sec-1-v4",
       "title": "Querying Live Performance Counters",
       "title_vi": "Đo Đạc Bộ Đếm Hiệu Năng Thực Tế (Performance Counters)",
       "position": 1,
       "kind": "task",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "task": "Query the current processor performance counter using Get-Counter.",
-      "task_vi": "Sử dụng Get-Counter để lấy chỉ số % sử dụng CPU tức thì của máy chủ.",
-      "hint": "Run: Get-Counter '\\Processor(_Total)\\% Processor Time'",
-      "hint_vi": "Chạy lệnh: Get-Counter '\\Processor(_Total)\\% Processor Time'",
+      "task": "Đọc phần trăm CPU tổng thể tại thời điểm lấy mẫu bằng lớp hiệu năng CIM.",
+      "task_vi": "Đọc phần trăm CPU tổng thể tại thời điểm lấy mẫu bằng lớp hiệu năng CIM.",
+      "hint": "Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime",
+      "hint_vi": "Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-Counter|Processor Time|Get-Process)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
         "files",
         "shell"
       ],
-      "content": "### Live Performance Counter\n\n```powershell\nGet-Counter '\\Processor(_Total)\\% Processor Time'\n```\n",
-      "content_vi": "### Lấy Chỉ Số Hiệu Năng Tức Thì\n\n```powershell\nGet-Counter '\\Processor(_Total)\\% Processor Time'\n```"
+      "content": "### Bản chất và tình huống thực tế\nLớp Win32_PerfFormattedData_PerfOS_Processor cung cấp số liệu hiệu năng đã xử lý; chọn Name _Total để xem CPU toàn máy. PercentProcessorTime khác CPU(s) tích lũy của Get-Process. Dùng tên thuộc tính CIM tránh phụ thuộc counter path đã bản địa hóa của Get-Counter.\n\n### Hướng dẫn\n```powershell\nGet-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime\n```\n\n### Kết quả và cách tự kiểm tra\nMột dòng _Total với PercentProcessorTime trong khoảng 0..100. Không yêu cầu CPU cao mới đạt; chưa kết luận bottleneck từ một mẫu.\n\n### Câu hỏi tự giải thích\nVì sao CPU 95% một lần chưa đủ kết luận máy thiếu vCPU?\n\n### Bài tự làm thêm (không chấm tự động)\nTự lấy 3 mẫu cách nhau một giây và ghi thời điểm; không tự tạo workload gây ảnh hưởng dịch vụ.",
+      "content_vi": "### Bản chất và tình huống thực tế\nLớp Win32_PerfFormattedData_PerfOS_Processor cung cấp số liệu hiệu năng đã xử lý; chọn Name _Total để xem CPU toàn máy. PercentProcessorTime khác CPU(s) tích lũy của Get-Process. Dùng tên thuộc tính CIM tránh phụ thuộc counter path đã bản địa hóa của Get-Counter.\n\n### Hướng dẫn\n```powershell\nGet-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime\n```\n\n### Kết quả và cách tự kiểm tra\nMột dòng _Total với PercentProcessorTime trong khoảng 0..100. Không yêu cầu CPU cao mới đạt; chưa kết luận bottleneck từ một mẫu.\n\n### Câu hỏi tự giải thích\nVì sao CPU 95% một lần chưa đủ kết luận máy thiếu vCPU?\n\n### Bài tự làm thêm (không chấm tự động)\nTự lấy 3 mẫu cách nhau một giây và ghi thời điểm; không tự tạo workload gây ảnh hưởng dịch vụ.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
-      "id": "win-tr-05-sec-1",
+      "id": "win-tr-05-sec-1-v4",
       "title": "Querying Live Performance Counters",
       "title_vi": "Đo Đạc Bộ Đếm Hiệu Năng Thực Tế (Performance Counters)",
-      "content": "### Live Performance Counter\n\n```powershell\nGet-Counter '\\Processor(_Total)\\% Processor Time'\n```\n",
-      "content_vi": "### Lấy Chỉ Số Hiệu Năng Tức Thì\n\n```powershell\nGet-Counter '\\Processor(_Total)\\% Processor Time'\n```",
-      "task": "Query the current processor performance counter using Get-Counter.",
-      "task_vi": "Sử dụng Get-Counter để lấy chỉ số % sử dụng CPU tức thì của máy chủ.",
-      "hint": "Run: Get-Counter '\\Processor(_Total)\\% Processor Time'",
-      "hint_vi": "Chạy lệnh: Get-Counter '\\Processor(_Total)\\% Processor Time'",
+      "content": "### Bản chất và tình huống thực tế\nLớp Win32_PerfFormattedData_PerfOS_Processor cung cấp số liệu hiệu năng đã xử lý; chọn Name _Total để xem CPU toàn máy. PercentProcessorTime khác CPU(s) tích lũy của Get-Process. Dùng tên thuộc tính CIM tránh phụ thuộc counter path đã bản địa hóa của Get-Counter.\n\n### Hướng dẫn\n```powershell\nGet-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime\n```\n\n### Kết quả và cách tự kiểm tra\nMột dòng _Total với PercentProcessorTime trong khoảng 0..100. Không yêu cầu CPU cao mới đạt; chưa kết luận bottleneck từ một mẫu.\n\n### Câu hỏi tự giải thích\nVì sao CPU 95% một lần chưa đủ kết luận máy thiếu vCPU?\n\n### Bài tự làm thêm (không chấm tự động)\nTự lấy 3 mẫu cách nhau một giây và ghi thời điểm; không tự tạo workload gây ảnh hưởng dịch vụ.",
+      "content_vi": "### Bản chất và tình huống thực tế\nLớp Win32_PerfFormattedData_PerfOS_Processor cung cấp số liệu hiệu năng đã xử lý; chọn Name _Total để xem CPU toàn máy. PercentProcessorTime khác CPU(s) tích lũy của Get-Process. Dùng tên thuộc tính CIM tránh phụ thuộc counter path đã bản địa hóa của Get-Counter.\n\n### Hướng dẫn\n```powershell\nGet-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime\n```\n\n### Kết quả và cách tự kiểm tra\nMột dòng _Total với PercentProcessorTime trong khoảng 0..100. Không yêu cầu CPU cao mới đạt; chưa kết luận bottleneck từ một mẫu.\n\n### Câu hỏi tự giải thích\nVì sao CPU 95% một lần chưa đủ kết luận máy thiếu vCPU?\n\n### Bài tự làm thêm (không chấm tự động)\nTự lấy 3 mẫu cách nhau một giây và ghi thời điểm; không tự tạo workload gây ảnh hưởng dịch vụ.",
+      "task": "Đọc phần trăm CPU tổng thể tại thời điểm lấy mẫu bằng lớp hiệu năng CIM.",
+      "task_vi": "Đọc phần trăm CPU tổng thể tại thời điểm lấy mẫu bằng lớp hiệu năng CIM.",
+      "hint": "Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime",
+      "hint_vi": "Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\" | Select-Object Name, PercentProcessorTime",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-Counter|Processor Time|Get-Process)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
@@ -124,7 +105,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }

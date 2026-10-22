@@ -17,68 +17,49 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "## The Heart of Windows Troubleshooting\n\nWindows records all critical operating system, driver, security and application activities in structured Event Logs. Cmdlet `Get-WinEvent` is the modern standard to query these logs with high performance using XPath or FilterHashtables.\n",
-      "content_vi": "## Trái tim của việc Chẩn đoán Sự cố Windows\n\nWindows ghi nhận toàn bộ hoạt động của hệ điều hành, driver, bảo mật và ứng dụng vào các tệp Event Log có cấu trúc. Lệnh `Get-WinEvent` là chuẩn hiện đại giúp truy vấn log tốc độ cao với FilterHashtable.",
+      "content": "Event Viewer ghi các sự kiện theo log, provider, thời gian, ID và mức độ. Cùng một ID ở provider khác có thể có ý nghĩa khác. Một sự kiện không đủ để kết luận nguyên nhân gốc: cần đối chiếu thời điểm người dùng gặp lỗi và dịch vụ/ứng dụng liên quan. Không xóa log hoặc tạo lỗi dịch vụ chỉ để có dữ liệu làm bài.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-event-log-analysis khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content_vi": "Event Viewer ghi các sự kiện theo log, provider, thời gian, ID và mức độ. Cùng một ID ở provider khác có thể có ý nghĩa khác. Một sự kiện không đủ để kết luận nguyên nhân gốc: cần đối chiếu thời điểm người dùng gặp lỗi và dịch vụ/ứng dụng liên quan. Không xóa log hoặc tạo lỗi dịch vụ chỉ để có dữ liệu làm bài.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-event-log-analysis khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
-      "id": "win-el-04-sec-1",
+      "id": "win-el-04-sec-1-v4",
       "title": "Filtering Error Events in the System Log",
       "title_vi": "Lọc Sự Kiện Lỗi (Error) Trong System Log",
       "position": 1,
       "kind": "task",
       "layout": "doc-workbench-split",
       "need_verify": true,
-      "task": "Query the latest 5 Error-level events from the System log.",
-      "task_vi": "Truy vấn 5 sự kiện cấp độ Lỗi (Error) gần nhất từ nhật ký System.",
-      "hint": "Run: Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5",
-      "hint_vi": "Chạy lệnh: Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5",
+      "task": "Truy vấn 5 sự kiện gần nhất thuộc Error (Level=2); xử lý riêng trường hợp không có bản ghi.",
+      "task_vi": "Truy vấn 5 sự kiện gần nhất thuộc Error (Level=2); xử lý riêng trường hợp không có bản ghi.",
+      "hint": "try { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }",
+      "hint_vi": "try { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-WinEvent|Get-EventLog|FilterHashtable)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
         "files",
         "shell"
       ],
-      "content": "### Querying System Errors\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message\n```\n",
-      "content_vi": "### Lọc Lỗi Hệ Thống\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message\n```"
+      "content": "### Bản chất và tình huống thực tế\nLọc ngay tại Get-WinEvent bằng FilterHashtable thay vì tải toàn bộ log rồi lọc. Không có bản ghi phù hợp là kết quả hợp lệ; chỉ xử lý riêng NoMatchingEventsFound. Access Denied hoặc log không tồn tại phải báo lỗi thật.\n\n### Hướng dẫn\n```powershell\ntry { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }\n```\n\n### Kết quả và cách tự kiểm tra\nHiển thị tối đa 5 sự kiện Error (Level=2), mới nhất trước; hoặc thông báo không có sự kiện phù hợp. Không yêu cầu máy có lỗi để task đạt.\n\n### Câu hỏi tự giải thích\nNếu không có ID 7000/7001/7034, có kết luận mọi service đều khỏe không? Bạn cần thêm bằng chứng nào?\n\n### Bài tự làm thêm (không chấm tự động)\nGhi lại TimeCreated, ProviderName, ID và Message của một bản ghi nếu có. Nếu không có, ghi rõ bộ lọc và thời điểm đã kiểm tra.",
+      "content_vi": "### Bản chất và tình huống thực tế\nLọc ngay tại Get-WinEvent bằng FilterHashtable thay vì tải toàn bộ log rồi lọc. Không có bản ghi phù hợp là kết quả hợp lệ; chỉ xử lý riêng NoMatchingEventsFound. Access Denied hoặc log không tồn tại phải báo lỗi thật.\n\n### Hướng dẫn\n```powershell\ntry { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }\n```\n\n### Kết quả và cách tự kiểm tra\nHiển thị tối đa 5 sự kiện Error (Level=2), mới nhất trước; hoặc thông báo không có sự kiện phù hợp. Không yêu cầu máy có lỗi để task đạt.\n\n### Câu hỏi tự giải thích\nNếu không có ID 7000/7001/7034, có kết luận mọi service đều khỏe không? Bạn cần thêm bằng chứng nào?\n\n### Bài tự làm thêm (không chấm tự động)\nGhi lại TimeCreated, ProviderName, ID và Message của một bản ghi nếu có. Nếu không có, ghi rõ bộ lọc và thời điểm đã kiểm tra.",
+      "translation_needs_review": false
     }
   ],
-  "curriculum_version": 1,
+  "curriculum_version": 4,
   "steps": [
     {
-      "id": "win-el-04-sec-1",
+      "id": "win-el-04-sec-1-v4",
       "title": "Filtering Error Events in the System Log",
       "title_vi": "Lọc Sự Kiện Lỗi (Error) Trong System Log",
-      "content": "### Querying System Errors\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message\n```\n",
-      "content_vi": "### Lọc Lỗi Hệ Thống\n\n```powershell\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Format-Table TimeCreated, Id, ProviderName, Message\n```",
-      "task": "Query the latest 5 Error-level events from the System log.",
-      "task_vi": "Truy vấn 5 sự kiện cấp độ Lỗi (Error) gần nhất từ nhật ký System.",
-      "hint": "Run: Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5",
-      "hint_vi": "Chạy lệnh: Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5",
+      "content": "### Bản chất và tình huống thực tế\nLọc ngay tại Get-WinEvent bằng FilterHashtable thay vì tải toàn bộ log rồi lọc. Không có bản ghi phù hợp là kết quả hợp lệ; chỉ xử lý riêng NoMatchingEventsFound. Access Denied hoặc log không tồn tại phải báo lỗi thật.\n\n### Hướng dẫn\n```powershell\ntry { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }\n```\n\n### Kết quả và cách tự kiểm tra\nHiển thị tối đa 5 sự kiện Error (Level=2), mới nhất trước; hoặc thông báo không có sự kiện phù hợp. Không yêu cầu máy có lỗi để task đạt.\n\n### Câu hỏi tự giải thích\nNếu không có ID 7000/7001/7034, có kết luận mọi service đều khỏe không? Bạn cần thêm bằng chứng nào?\n\n### Bài tự làm thêm (không chấm tự động)\nGhi lại TimeCreated, ProviderName, ID và Message của một bản ghi nếu có. Nếu không có, ghi rõ bộ lọc và thời điểm đã kiểm tra.",
+      "content_vi": "### Bản chất và tình huống thực tế\nLọc ngay tại Get-WinEvent bằng FilterHashtable thay vì tải toàn bộ log rồi lọc. Không có bản ghi phù hợp là kết quả hợp lệ; chỉ xử lý riêng NoMatchingEventsFound. Access Denied hoặc log không tồn tại phải báo lỗi thật.\n\n### Hướng dẫn\n```powershell\ntry { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }\n```\n\n### Kết quả và cách tự kiểm tra\nHiển thị tối đa 5 sự kiện Error (Level=2), mới nhất trước; hoặc thông báo không có sự kiện phù hợp. Không yêu cầu máy có lỗi để task đạt.\n\n### Câu hỏi tự giải thích\nNếu không có ID 7000/7001/7034, có kết luận mọi service đều khỏe không? Bạn cần thêm bằng chứng nào?\n\n### Bài tự làm thêm (không chấm tự động)\nGhi lại TimeCreated, ProviderName, ID và Message của một bản ghi nếu có. Nếu không có, ghi rõ bộ lọc và thời điểm đã kiểm tra.",
+      "task": "Truy vấn 5 sự kiện gần nhất thuộc Error (Level=2); xử lý riêng trường hợp không có bản ghi.",
+      "task_vi": "Truy vấn 5 sự kiện gần nhất thuộc Error (Level=2); xử lý riêng trường hợp không có bản ghi.",
+      "hint": "try { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }",
+      "hint_vi": "try { Get-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 -ErrorAction Stop | Format-Table TimeCreated, Id, ProviderName, Message -Wrap } catch { if ($_.FullyQualifiedErrorId -like 'NoMatchingEventsFound*') { Write-Output 'Khong co su kien phu hop trong log hien tai.' } else { throw } }",
       "verification": {
-        "kind": "commands",
-        "user": "labex",
-        "groups": [
-          [
-            "(?:Get-WinEvent|Get-EventLog|FilterHashtable)"
-          ]
-        ],
-        "allowed_status": [
-          0,
-          1
-        ]
+        "kind": "windows-remote"
       },
       "required_capabilities": [
         "terminal",
@@ -124,7 +105,20 @@
           "files",
           "shell"
         ]
-      }
+      },
+      "translation_needs_review": false
+    }
+  ],
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "reviewed_at": "2026-10-22",
+  "references": [
+    {
+      "title": "Microsoft Learn: PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/"
+    },
+    {
+      "title": "Microsoft Learn: Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
   ]
 }
