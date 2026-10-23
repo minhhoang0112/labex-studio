@@ -17,9 +17,12 @@ export function createWindowsRemoteExecutor({ client = azureClient, config = get
       if (labId && !/^(win-|win11-)[a-z0-9-]+$/.test(labId)) throw cloudError('Mã bài Windows không hợp lệ.', 400, 'CLOUD_INVALID_COMMAND');
       const { resourceGroup, vmName } = config(target);
       const marker = 'LABEX_RESULT_' + crypto.randomBytes(16).toString('hex') + ':';
+      const executionMarker = 'LABEX_EXECUTED_' + crypto.randomBytes(16).toString('hex');
       // The user's script is decoded by PowerShell ONLY ON THE AZURE VM.
       // A random result marker prevents a command's normal output forging success.
-      const encoded = Buffer.from("$ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue';\n" + command, 'utf16le').toString('base64');
+      const payload = "$ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue';\ntry { & {\n" + command + "\n} } finally { [Console]::Out.WriteLine('" + executionMarker + "') }";
+      const encoded = Buffer.from(payload, 'utf16le').toString('base64');
+      if(encoded.length>31000)throw cloudError('Lệnh vượt giới hạn dòng lệnh PowerShell của Windows. Hãy chia thành các khối nhỏ hơn.',400,'CLOUD_INVALID_COMMAND');
       const script = `$ErrorActionPreference='Stop'
 $ProgressPreference='SilentlyContinue'
 $payload='${encoded}'
@@ -41,7 +44,9 @@ try {
   if(-not $done){ & taskkill.exe /PID $proc.Id /T /F | Out-Null; $exitCode=124 } else { $proc.WaitForExit(); $exitCode=$proc.ExitCode }
   $out=[string]$outTask.GetAwaiter().GetResult()
   $err=[string]$errTask.GetAwaiter().GetResult()
-  $data=@{exitCode=$exitCode; stdout=$out.Substring(0,[Math]::Min(600,$out.Length)); stderr=$err.Substring(0,[Math]::Min(250,$err.Length)); timedOut=(-not $done); computerName=$env:COMPUTERNAME; identity=[Security.Principal.WindowsIdentity]::GetCurrent().Name; outputTruncated=($out.Length -gt 600 -or $err.Length -gt 250)}
+  $executionConfirmed=$out.Contains('${executionMarker}')
+  $out=$out.Replace('${executionMarker}', '').TrimEnd([char[]]"\r\n")
+  $data=@{exitCode=$exitCode; executionConfirmed=$executionConfirmed; stdout=$out.Substring(0,[Math]::Min(600,$out.Length)); stderr=$err.Substring(0,[Math]::Min(250,$err.Length)); timedOut=(-not $done); computerName=$env:COMPUTERNAME; identity=[Security.Principal.WindowsIdentity]::GetCurrent().Name; outputTruncated=($out.Length -gt 600 -or $err.Length -gt 250)}
   Write-Output ('${marker}'+($data | ConvertTo-Json -Compress))
 } finally { $proc.Dispose() }`;
       const result = await client().virtualMachines.runCommand(resourceGroup, vmName,
@@ -54,6 +59,9 @@ try {
       catch { throw cloudError('Output từ VM bị cắt hoặc không hợp lệ. Thử lệnh trả ít output hơn.', 502, 'CLOUD_REMOTE_PROTOCOL'); }
       if (!Number.isInteger(parsed.exitCode) || typeof parsed.stdout !== 'string' || typeof parsed.stderr !== 'string' || !parsed.computerName) {
         throw cloudError('VM trả về dữ liệu không hợp lệ.', 502, 'CLOUD_REMOTE_PROTOCOL');
+      }
+      if(parsed.exitCode===0 && !parsed.timedOut && parsed.executionConfirmed!==true){
+        throw cloudError('PowerShell trả mã 0 nhưng không xác nhận đã thực thi lệnh. Không chấm đạt; kiểm tra VM Agent và thử lại.',502,'CLOUD_REMOTE_PROTOCOL');
       }
       return { ...parsed, transport: 'azure-run-command', target: vmName };
     } catch (error) { throw publicCloudError(error); }

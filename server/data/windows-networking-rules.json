@@ -1,0 +1,74 @@
+{
+  "win-nwf-ipv4-routing-task-1-v1": {
+    "lab_id": "win-nwf-ipv4-routing",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $a=@(Get-NwfAddresses); $a.Count -gt 0 -and $d.Scope -eq 'IPv4AllInterfaces' -and (Same-FndItems @($d.Addresses) $a)"
+  },
+  "win-nwf-ipv4-routing-task-2-v1": {
+    "lab_id": "win-nwf-ipv4-routing",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $s=Get-NwfSubnet '10.20.30.45' 26; $e=$d.Exercise; (Same-FndItems @($d.Routes) @(Get-NwfRoutes)) -and $e.Address -eq '10.20.30.45' -and $e.Prefix -eq 26 -and $e.Network -eq $s.Network -and $e.LastAddress -eq $s.LastAddress -and $e.UsableHosts -eq 62 -and $e.GatewayExample -eq '10.20.30.1' -and $e.OtherSubnetExample -eq '10.20.30.99'"
+  },
+  "win-nwf-dhcp-apipa-task-1-v1": {
+    "lab_id": "win-nwf-dhcp-apipa",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $a=@(Get-NwfDhcp); $a.Count -gt 0 -and $d.Scope -eq 'IPv4Interfaces' -and (Same-FndItems @($d.Interfaces) $a)"
+  },
+  "win-nwf-dhcp-apipa-task-2-v1": {
+    "lab_id": "win-nwf-dhcp-apipa",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $d.Apipa -eq '169.254.12.34' -and $d.Loopback -eq '127.0.0.1' -and $d.Private -eq '172.16.5.8' -and $d.NotRfc1918 -eq '172.32.5.8' -and $d.NextCheck -eq 'LinkThenDhcpLease' -and $d.InternetProven -eq $false -and (Same-FndItems @($d.LiveAddresses) @(Get-NwfAddresses))"
+  },
+  "win-nwf-dns-resolution-task-1-v1": {
+    "lab_id": "win-nwf-dns-resolution",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $names=@(Get-NwfLocalNames); $d.Name -eq 'localhost' -and $d.Scope -eq 'OSResolverNotExternalDnsProof' -and $names.Count -gt 0 -and (Same-FndItems @($d.DnsServers) @(Get-NwfDns)) -and (Same-FndItems @($d.Resolved) $names)"
+  },
+  "win-nwf-dns-resolution-task-2-v1": {
+    "lab_id": "win-nwf-dns-resolution",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $d.Scenario -eq 'NameFailsIpTcpWorks' -and $d.NameResult -eq 'NXDOMAIN' -and $d.Hypothesis -eq 'NameOrDnsRecord' -and $d.NextCheck -eq 'SpellingRecordAndDnsScope' -and $d.HttpsBypassSafe -eq $false -and (Same-FndItems @($d.LocalResolver) @(Get-NwfLocalNames))"
+  },
+  "win-nwf-tcp-http-task-1-v1": {
+    "lab_id": "win-nwf-tcp-http",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $live=Get-NwfTcpExperiment; $d.Scope -eq 'LoopbackOnly' -and $d.Address -eq '127.0.0.1' -and $d.Transport -eq 'TCP' -and $d.OpenReachable -eq $true -and $d.ClosedReachable -eq $false -and $live.OpenReachable -and -not $live.ClosedReachable"
+  },
+  "win-nwf-tcp-http-task-2-v1": {
+    "lab_id": "win-nwf-tcp-http",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $good=Get-NwfHttpExperiment '/health'; $bad=Get-NwfHttpExperiment '/missing'; $d.Conclusion -eq 'TcpSuccessDoesNotProveApplicationHealth' -and $d.Healthy.Scope -eq 'LoopbackOnly' -and $d.Healthy.TcpConnected -eq $true -and $d.Healthy.Status -eq $good.Status -and $d.Healthy.Body -eq 'NETLAB_OK' -and $d.Missing.TcpConnected -eq $true -and $d.Missing.Status -eq $bad.Status -and $d.Missing.Body -eq 'NETLAB_NOT_FOUND'"
+  },
+  "win-nwf-helpdesk-endpoint-task-1-v1": {
+    "lab_id": "win-nwf-helpdesk-endpoint",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $file=Join-Path $labRoot 'client.json'; $before=Join-Path $labRoot 'before-config.json'; $c=Get-Content -LiteralPath $file -Raw|ConvertFrom-Json; $live=Get-NwfHttpExperiment $c.Path; $c.Path -eq '/missing' -and $d.Result.Path -eq '/missing' -and $d.Result.Scope -eq 'LoopbackOnly' -and $d.Result.TcpConnected -eq $true -and $d.Result.Status -eq $live.Status -and $live.Status -eq 404 -and $d.Result.Body -eq $live.Body -and $d.ConfigHash -eq (Get-FileHash -LiteralPath $file).Hash -and $d.ConfigHash -eq (Get-FileHash -LiteralPath $before).Hash -and $d.Diagnosis -eq 'WrongApplicationPath'"
+  },
+  "win-nwf-helpdesk-endpoint-task-2-v1": {
+    "lab_id": "win-nwf-helpdesk-endpoint",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$old=Read-FndReport 'step1.json'; $d=Read-FndReport 'step2.json'; $file=Join-Path $labRoot 'client.json'; $before=Join-Path $labRoot 'before-config.json'; $c=Get-Content -LiteralPath $file -Raw|ConvertFrom-Json; $b=Get-Content -LiteralPath $before -Raw|ConvertFrom-Json; $live=Get-NwfHttpExperiment $c.Path; $c.Path -eq '/health' -and $b.Path -eq '/missing' -and $old.Result.Status -eq 404 -and $old.Result.TcpConnected -eq $true -and $d.Result.Path -eq '/health' -and $d.Result.Scope -eq 'LoopbackOnly' -and $d.Result.Status -eq $live.Status -and $live.Status -eq 200 -and $d.Result.TcpConnected -eq $true -and $d.Result.Body -eq 'NETLAB_OK' -and $old.ConfigHash -eq $d.BeforeHash -and $d.BeforeHash -eq (Get-FileHash -LiteralPath $before).Hash -and $d.AfterHash -eq (Get-FileHash -LiteralPath $file).Hash -and $d.AfterHash -ne $d.BeforeHash -and $d.Change -eq 'OnlyLabApplicationPath'"
+  },
+  "win-nwf-evidence-runbook-task-1-v1": {
+    "lab_id": "win-nwf-evidence-runbook",
+    "target_vm": "client",
+    "report_file": "step1.json",
+    "probe": "$d=Read-FndReport 'step1.json'; $d.Scope -eq 'IPv4InfrastructureSnapshot' -and $d.Topology -eq 'ClientInterface-SelectedRoute-NextHop-Destination' -and $d.DnsRole -eq 'NameResolutionBeforeConnection' -and (Same-FndItems @($d.Addresses) @(Get-NwfAddresses)) -and (Same-FndItems @($d.Routes) @(Get-NwfRoutes)) -and (Same-FndItems @($d.Dns) @(Get-NwfDns))"
+  },
+  "win-nwf-evidence-runbook-task-2-v1": {
+    "lab_id": "win-nwf-evidence-runbook",
+    "target_vm": "client",
+    "report_file": "step2.json",
+    "probe": "$d=Read-FndReport 'step2.json'; $file=Join-Path $labRoot 'ticket.md'; $text=Get-Content -LiteralPath $file -Raw; $before=Get-NwfHttpExperiment '/missing'; $after=Get-NwfHttpExperiment '/health'; $d.Before.Scope -eq 'LoopbackOnly' -and $d.After.Scope -eq 'LoopbackOnly' -and $d.Before.TcpConnected -eq $true -and $d.Before.Status -eq $before.Status -and $d.After.Status -eq $after.Status -and $d.After.Body -eq 'NETLAB_OK' -and $d.Diagnosis -eq 'WrongApplicationPath' -and $d.ExternalNetworkProven -eq $false -and $d.TicketHash -eq (Get-FileHash -LiteralPath $file).Hash -and $text.Contains('Scope: LoopbackOnly') -and $text.Contains('Before: TCP=True HTTP=404') -and $text.Contains('Diagnosis: WrongApplicationPath') -and $text.Contains('Change: /missing -> /health') -and $text.Contains('After: HTTP=200 Body=NETLAB_OK') -and $text.Contains('Rollback: restore /missing in lab config only') -and $text.Contains('NotTested: LAN WAN external-DNS NSG')"
+  }
+}

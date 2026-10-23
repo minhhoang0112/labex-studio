@@ -1,0 +1,440 @@
+{
+  "win-adg-ou-groups-task-1-v1": {
+    "lab_id": "win-adg-ou-groups",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null\nNew-SrvOU 'Users'|Out-Null;New-SrvOU 'Groups'|Out-Null;New-SrvOU 'Workstations'|Out-Null\n(Get-SrvContext).RootDN",
+    "probe": "$m=Get-SrvContext;$ok=$true;foreach($name in @('Users','Groups','Workstations')){$o=Get-ADOrganizationalUnit -Identity ('OU='+$name+','+$m.RootDN) -Properties ProtectedFromAccidentalDeletion;$ok=$ok -and $o.ProtectedFromAccidentalDeletion -and (Test-SrvOwned 'AD' $o.ObjectGUID.ToString())};$ok",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-ou-groups-task-2-v1": {
+    "lab_id": "win-adg-ou-groups",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "New-SrvGroup 'Global'|Select-Object Name,GroupScope,GroupCategory\nNew-SrvGroup 'DomainLocal'|Select-Object Name,GroupScope,GroupCategory",
+    "probe": "$m=Get-SrvContext;$ok=$true;foreach($scope in @('Global','DomainLocal')){$g=Get-ADGroup -Identity ('lx'+$m.Run.Substring(0,8)+$scope);$ok=$ok -and $g.GroupScope -eq $scope -and $g.GroupCategory -eq 'Security' -and $g.DistinguishedName.EndsWith(',OU=Groups,'+$m.RootDN) -and (Test-SrvOwned 'AD' $g.ObjectGUID.ToString())};$ok",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-ou-groups-task-3-v1": {
+    "lab_id": "win-adg-ou-groups",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "$u=New-SrvUser 'learner';$gg=New-SrvGroup 'Global';$dl=New-SrvGroup 'DomainLocal'\nAdd-ADGroupMember -Identity $gg -Members $u;Add-ADGroupMember -Identity $dl -Members $gg\nGet-ADGroupMember $dl -Recursive|Select-Object Name,ObjectClass",
+    "probe": "$m=Get-SrvContext;$gg=Get-ADGroup -Identity ('lx'+$m.Run.Substring(0,8)+'Global');$dl=Get-ADGroup -Identity ('lx'+$m.Run.Substring(0,8)+'DomainLocal');$u=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'learner');(Test-SrvOwned 'AD' $u.ObjectGUID.ToString()) -and (Test-SrvOwned 'AD' $gg.ObjectGUID.ToString()) -and (Test-SrvOwned 'AD' $dl.ObjectGUID.ToString()) -and $gg.GroupCategory -eq 'Security' -and $dl.GroupCategory -eq 'Security' -and $gg.GroupScope -eq 'Global' -and $dl.GroupScope -eq 'DomainLocal' -and $gg.DistinguishedName.EndsWith(',OU=Groups,'+$m.RootDN) -and $dl.DistinguishedName.EndsWith(',OU=Groups,'+$m.RootDN) -and @(Get-ADGroupMember $gg|Where-Object SID -eq $u.SID).Count -eq 1 -and @(Get-ADGroupMember $dl|Where-Object SID -eq $gg.SID).Count -eq 1",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-account-delegation-task-1-v1": {
+    "lab_id": "win-adg-account-delegation",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null\n$u=New-SrvUser 'learner';$d=New-SrvUser 'delegate';$g=New-SrvGroup 'Global';Add-ADGroupMember $g -Members $d\n@($u,$d)|Select-Object SamAccountName,Enabled,SID",
+    "probe": "$m=Get-SrvContext;$ok=$true;foreach($s in @('learner','delegate')){$u=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+$s);$ok=$ok -and $u.Enabled -and $u.DistinguishedName.EndsWith(',OU=Users,'+$m.RootDN) -and (Test-SrvOwned 'AD' $u.ObjectGUID.ToString())};$g=Get-ADGroup -Identity ('lx'+$m.Run.Substring(0,8)+'Global');$d=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'delegate');$ok -and @(Get-ADGroupMember $g|Where-Object SID -eq $d.SID).Count -eq 1",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-account-delegation-task-2-v1": {
+    "lab_id": "win-adg-account-delegation",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "$m=Get-SrvContext;$g=New-SrvGroup 'Global';$dn='OU=Users,'+$m.RootDN\n$acl=Get-Acl ('AD:\\'+$dn);$right=Get-SrvResetRight\n$user=Get-ADObject -Identity ('CN=User,'+(Get-ADRootDSE).schemaNamingContext) -Properties schemaIDGUID\n$rule=[DirectoryServices.ActiveDirectoryAccessRule]::new($g.SID,[DirectoryServices.ActiveDirectoryRights]::ExtendedRight,[Security.AccessControl.AccessControlType]::Allow,$right,[DirectoryServices.ActiveDirectorySecurityInheritance]::Descendents,[guid]::new([byte[]]$user.schemaIDGUID))\n$acl.AddAccessRule($rule);Set-Acl ('AD:\\'+$dn) $acl",
+    "probe": "Test-SrvDelegation",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-account-delegation-task-3-v1": {
+    "lab_id": "win-adg-account-delegation",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "$m=Get-SrvContext;$u=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'learner');if(-not(Test-SrvResetAudit)){throw 'Need successful password reset by delegate identity, Security 4724'}\nDisable-ADAccount -Identity $u;Get-ADUser $u|Select-Object SamAccountName,Enabled",
+    "probe": "$m=Get-SrvContext;$u=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'learner');(Test-SrvDelegation) -and (Test-SrvResetAudit) -and -not $u.Enabled",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-gpo-scope-task-1-v1": {
+    "lab_id": "win-adg-gpo-scope",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory",
+      "GroupPolicy"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null;New-SrvOU 'Workstations'|Out-Null\nNew-SrvGpo 'GpoA'|Select-Object DisplayName,Id,GpoStatus",
+    "probe": "$m=Get-SrvContext;$g=Get-GPO -Guid $m.GpoA;(Test-SrvOwned 'GPO' $g.Id.ToString()) -and $g.DisplayName -eq ('LabEx-'+$m.Run+'-GpoA')",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-gpo-scope-task-2-v1": {
+    "lab_id": "win-adg-gpo-scope",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory",
+      "GroupPolicy"
+    ],
+    "exercise": "$m=Get-SrvContext;Set-GPRegistryValue -Guid $m.GpoA -Key 'HKLM\\Software\\Policies\\LabExTraining' -ValueName CourseMarker -Type String -Value $m.Run|Out-Null",
+    "probe": "$m=Get-SrvContext;$g=Get-GPO -Guid $m.GpoA;$v=Get-GPRegistryValue -Guid $g.Id -Key 'HKLM\\Software\\Policies\\LabExTraining' -ValueName CourseMarker;(Test-SrvOwned 'GPO' $g.Id.ToString()) -and $v.Type -eq 'String' -and $v.Value -eq $m.Run",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-gpo-scope-task-3-v1": {
+    "lab_id": "win-adg-gpo-scope",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory",
+      "GroupPolicy"
+    ],
+    "exercise": "$m=Get-SrvContext;$target='OU=Workstations,'+$m.RootDN\nif(-not @((Get-GPInheritance -Target $target).GpoLinks|Where-Object GpoId -eq $m.GpoA).Count){New-GPLink -Guid $m.GpoA -Target $target -LinkEnabled Yes -Enforced No|Out-Null}",
+    "probe": "$m=Get-SrvContext;$links=@((Get-GPInheritance -Target ('OU=Workstations,'+$m.RootDN)).GpoLinks|Where-Object GpoId -eq $m.GpoA);$links.Count -eq 1 -and $links[0].Enabled -and -not $links[0].Enforced -and (Test-SrvOwned 'GPO' $m.GpoA)",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-policy-diagnostics-task-1-v1": {
+    "lab_id": "win-adg-policy-diagnostics",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory",
+      "GroupPolicy"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null;New-SrvOU 'Workstations'|Out-Null;$g=New-SrvGpo 'GpoA';$m=Get-SrvContext\nSet-GPRegistryValue -Guid $g.Id -Key 'HKLM\\Software\\Policies\\LabExTraining' -ValueName CourseMarker -Type String -Value $m.Run|Out-Null\nif(-not @((Get-GPInheritance ('OU=Workstations,'+$m.RootDN)).GpoLinks|Where-Object GpoId -eq $g.Id).Count){New-GPLink -Guid $g.Id -Target ('OU=Workstations,'+$m.RootDN) -LinkEnabled Yes|Out-Null}",
+    "probe": "$m=Get-SrvContext;$g=Get-GPO -Guid $m.GpoA;$v=Get-GPRegistryValue -Guid $g.Id -Key 'HKLM\\Software\\Policies\\LabExTraining' -ValueName CourseMarker;(Test-SrvOwned 'GPO' $g.Id.ToString()) -and $v.Type -eq 'String' -and $v.Value -eq $m.Run -and @((Get-GPInheritance -Target ('OU=Workstations,'+$m.RootDN)).GpoLinks|Where-Object {$_.GpoId -eq $m.GpoA -and $_.Enabled}).Count -eq 1",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-adg-policy-diagnostics-task-2-v1": {
+    "lab_id": "win-adg-policy-diagnostics",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory",
+      "GroupPolicy"
+    ],
+    "exercise": "$m=Get-SrvContext;Write-Output ('Expected OU: OU=Workstations,'+$m.RootDN);Write-Output ('Expected marker: '+$m.Run)\nWrite-Output 'On CLIENT01 Desktop elevated: gpupdate /target:computer /force; gpresult /scope computer /r'",
+    "probe": "$m=Get-SrvContext;$c=Get-ADComputer -Identity CLIENT01;$c.DistinguishedName.EndsWith(',OU=Workstations,'+$m.RootDN)",
+    "client_probe": "(Get-CimInstance Win32_ComputerSystem).Domain -eq $expectedDomain -and (Get-ItemProperty -LiteralPath 'HKLM:\\Software\\Policies\\LabExTraining').CourseMarker -eq $expectedRun -and @(Get-CimInstance -Namespace root\\RSOP\\Computer -ClassName RSOP_GPO|Where-Object {$_.guidName -match [regex]::Escape($expectedGpo)}).Count -gt 0",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-adg-policy-diagnostics-task-3-v1": {
+    "lab_id": "win-adg-policy-diagnostics",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory",
+      "GroupPolicy"
+    ],
+    "exercise": "$m=Get-SrvContext;$g=Get-GPO -Guid $m.GpoA;$g.GpoStatus='AllSettingsEnabled';Write-Output 'Refresh computer policy on CLIENT01; inspect RSoP, then verify.'",
+    "probe": "$m=Get-SrvContext;(Get-GPO -Guid $m.GpoA).GpoStatus -eq 'AllSettingsEnabled'",
+    "client_probe": "(Get-ItemProperty -LiteralPath 'HKLM:\\Software\\Policies\\LabExTraining').CourseMarker -eq $expectedRun -and @(Get-CimInstance -Namespace root\\RSOP\\Computer -ClassName RSOP_GPO|Where-Object {$_.guidName -match [regex]::Escape($expectedGpo)}).Count -gt 0",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-adg-domain-join-task-1-v1": {
+    "lab_id": "win-adg-domain-join",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null;$m=Get-SrvContext;Get-ADDomainController -Discover|Select-Object HostName,IPv4Address,Domain\nWrite-Output $m.DomainDNS",
+    "probe": "$m=Get-SrvContext;$dc=Get-ADDomainController -Discover;$dc.Domain -eq $m.DomainDNS",
+    "client_probe": "@(Resolve-DnsName -Name ('_ldap._tcp.dc._msdcs.'+$expectedDomain) -Type SRV -DnsOnly -NoHostsFile).Count -gt 0",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-adg-domain-join-task-2-v1": {
+    "lab_id": "win-adg-domain-join",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "$m=Get-SrvContext;Write-Output ('Join domain in CLIENT01 Desktop: '+$m.DomainDNS);Write-Output 'Use sysdm.cpl / GUI credential prompt. Reboot CLIENT01 only when ready; retain local recovery login.'",
+    "probe": "$m=Get-SrvContext;$c=Get-ADComputer CLIENT01;$c.Enabled -and $c.DNSHostName.EndsWith('.'+$m.DomainDNS)",
+    "client_probe": "$c=Get-CimInstance Win32_ComputerSystem;$c.PartOfDomain -and $c.Domain -eq $expectedDomain -and $env:COMPUTERNAME -eq 'CLIENT01'",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-adg-domain-join-task-3-v1": {
+    "lab_id": "win-adg-domain-join",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "$m=Get-SrvContext;Write-Output 'CLIENT01 Desktop elevated: Test-ComputerSecureChannel -Verbose; nltest /dsgetdc:<domain shown in task 1>'",
+    "probe": "$m=Get-SrvContext;(Get-ADComputer CLIENT01).Enabled",
+    "client_probe": "(Get-CimInstance Win32_ComputerSystem).PartOfDomain -and (Get-CimInstance Win32_ComputerSystem).Domain -eq $expectedDomain -and (Test-ComputerSecureChannel)",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-adg-auth-runbook-task-1-v1": {
+    "lab_id": "win-adg-auth-runbook",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null;New-SrvUser 'learner'|Select-Object SamAccountName,SID,Enabled;Write-Output 'Set a private test password using ADUC GUI, not web history.'",
+    "probe": "$m=Get-SrvContext;$u=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'learner');$u.Enabled -and (Test-SrvOwned 'AD' $u.ObjectGUID.ToString())",
+    "client_probe": "(Get-CimInstance Win32_ComputerSystem).Domain -eq $expectedDomain -and (Test-ComputerSecureChannel)",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-adg-auth-runbook-task-2-v1": {
+    "lab_id": "win-adg-auth-runbook",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "$m=Get-SrvContext;$u=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'learner');Enable-ADAccount $u;Write-Output 'Retry real logon on CLIENT01; inspect 4625/4624 for the test user.'",
+    "probe": "$m=Get-SrvContext;(Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'learner')).Enabled",
+    "client_probe": "Test-EnterpriseLogonEvidence",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-adg-auth-runbook-task-3-v1": {
+    "lab_id": "win-adg-auth-runbook",
+    "target_vm": "server",
+    "modules": [
+      "ActiveDirectory"
+    ],
+    "exercise": "$m=Get-SrvContext;$u=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'learner')\nWrite-SrvObservation 'step3.json' @{UserSid=$u.SID.Value;Diagnosis='AccountDisabled';Change='EnableOnlyLabUser';Rollback='RestoreLabUserBaseline';NotTested='AllDomainUsers'}",
+    "probe": "$m=Get-SrvContext;$d=Read-SrvObservation 'step3.json';$u=Get-ADUser -Identity ('lx'+$m.Run.Substring(0,8)+'learner');$u.Enabled -and $d.UserSid -eq $u.SID.Value -and $d.Diagnosis -eq 'AccountDisabled' -and $d.Change -eq 'EnableOnlyLabUser' -and $d.Rollback -eq 'RestoreLabUserBaseline' -and $d.NotTested -eq 'AllDomainUsers'",
+    "client_probe": "Test-EnterpriseLogonEvidence",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-dnsdhcp-zones-records-task-1-v1": {
+    "lab_id": "win-dnsdhcp-zones-records",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null;New-SrvZone|Select-Object ZoneName,ZoneType,IsDsIntegrated,DynamicUpdate",
+    "probe": "$m=Get-SrvContext;$z=Get-DnsServerZone $m.Zone;(Test-SrvOwned 'ZONE' $m.Zone) -and $z.ZoneType -eq 'Primary' -and -not $z.IsDsIntegrated -and $z.DynamicUpdate -eq 'None' -and $z.ZoneFile -eq $m.ZoneFile",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-zones-records-task-2-v1": {
+    "lab_id": "win-dnsdhcp-zones-records",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "$m=Get-SrvContext\nif(-not(Get-DnsServerResourceRecord -ZoneName $m.Zone -Name app -RRType A -ErrorAction SilentlyContinue)){Add-DnsServerResourceRecordA -ZoneName $m.Zone -Name app -IPv4Address '192.0.2.10' -TimeToLive (New-TimeSpan -Minutes 5)}\nif(-not(Get-DnsServerResourceRecord -ZoneName $m.Zone -Name portal -RRType CNAME -ErrorAction SilentlyContinue)){Add-DnsServerResourceRecordCName -ZoneName $m.Zone -Name portal -HostNameAlias ('app.'+$m.Zone) -TimeToLive (New-TimeSpan -Minutes 5)}\nResolve-DnsName ('portal.'+$m.Zone) -Server 127.0.0.1 -Type CNAME -DnsOnly -NoHostsFile",
+    "probe": "$m=Get-SrvContext;(Test-SrvDnsRecord 'app' 'A' '192.0.2.10') -and (Test-SrvDnsRecord 'portal' 'CNAME' ('app.'+$m.Zone)) -and (Get-DnsServerResourceRecord -ZoneName $m.Zone -Name app -RRType A).TimeToLive.TotalSeconds -eq 300",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-zones-records-task-3-v1": {
+    "lab_id": "win-dnsdhcp-zones-records",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "$m=Get-SrvContext;$zone='2.0.192.in-addr.arpa';$file='reverse-'+$m.ZoneFile\nif(-not(Get-DnsServerZone $zone -ErrorAction SilentlyContinue)){Add-DnsServerPrimaryZone -NetworkId '192.0.2.0/24' -ZoneFile $file -DynamicUpdate None;Register-SrvObject 'ZONE' $zone}\nif(-not(Test-SrvOwned 'ZONE' $zone)){throw 'Reverse zone already belongs to another owner'}\nif(-not(Get-DnsServerResourceRecord -ZoneName $zone -Name 10 -RRType PTR -ErrorAction SilentlyContinue)){Add-DnsServerResourceRecordPtr -ZoneName $zone -Name 10 -PtrDomainName ('app.'+$m.Zone)}\nResolve-DnsName '10.2.0.192.in-addr.arpa' -Server 127.0.0.1 -Type PTR -DnsOnly -NoHostsFile",
+    "probe": "$m=Get-SrvContext;$z='2.0.192.in-addr.arpa';$q=@(Resolve-DnsName '10.2.0.192.in-addr.arpa' -Server 127.0.0.1 -Type PTR -DnsOnly -NoHostsFile);(Test-SrvOwned 'ZONE' $z) -and (Get-DnsServerZone $z).ZoneFile -eq ('reverse-'+$m.ZoneFile) -and @($q|Where-Object {$_.Type -eq 'PTR' -and $_.NameHost.TrimEnd('.') -eq ('app.'+$m.Zone)}).Count -eq 1",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-resolver-cache-task-1-v1": {
+    "lab_id": "win-dnsdhcp-resolver-cache",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null;New-SrvZone|Out-Null;$m=Get-SrvContext\nif(-not(Get-DnsServerResourceRecord -ZoneName $m.Zone -Name app -RRType A -ErrorAction SilentlyContinue)){Add-DnsServerResourceRecordA -ZoneName $m.Zone -Name app -IPv4Address '192.0.2.10' -TimeToLive (New-TimeSpan -Minutes 5)}\nWrite-Output ('CLIENT01: Resolve-DnsName app.'+$m.Zone+' -Type A')",
+    "probe": "Test-SrvDnsRecord 'app' 'A' '192.0.2.10'",
+    "client_probe": "@(Resolve-DnsName -Name ('app.'+$expectedZone) -Type A|Where-Object {$_.Type -eq 'A' -and $_.IPAddress -eq '192.0.2.10'}).Count -eq 1",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-dnsdhcp-resolver-cache-task-2-v1": {
+    "lab_id": "win-dnsdhcp-resolver-cache",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "$m=Get-SrvContext;Write-Output ('CLIENT01 Desktop: [Net.Dns]::GetHostAddresses(\"app.'+$m.Zone+'\"); Get-DnsClientCache')",
+    "probe": "Test-SrvDnsRecord 'app' 'A' '192.0.2.10'",
+    "client_probe": "@(Get-DnsClientCache|Where-Object {$_.Entry.TrimEnd('.') -eq ('app.'+$expectedZone) -and $_.Data -eq '192.0.2.10' -and $_.TimeToLive -gt 0 -and $_.TimeToLive -le 300}).Count -gt 0",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-dnsdhcp-resolver-cache-task-3-v1": {
+    "lab_id": "win-dnsdhcp-resolver-cache",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "$f=Get-DnsServerForwarder\nWrite-SrvObservation 'step3.json' @{Addresses=@($f.IPAddress|ForEach-Object {$_.IPAddressToString});Scope='ServerForwardersReadOnly';ExternalDnsProven=$false}",
+    "probe": "$d=Read-SrvObservation 'step3.json';$actual=@((Get-DnsServerForwarder).IPAddress|ForEach-Object {$_.IPAddressToString}|Sort-Object);$saved=@($d.Addresses|Sort-Object);$d.Scope -eq 'ServerForwardersReadOnly' -and $d.ExternalDnsProven -eq $false -and ($actual -join '|') -eq ($saved -join '|')",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-scope-options-task-1-v1": {
+    "lab_id": "win-dnsdhcp-scope-options",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null;New-SrvScope|Select-Object ScopeId,StartRange,EndRange,State,LeaseDuration",
+    "probe": "$m=Get-SrvContext;$s=Get-DhcpServerv4Scope -ScopeId '192.0.2.0';(Test-SrvOwned 'SCOPE' '192.0.2.0') -and $s.Name -eq ('LabEx-'+$m.Run) -and $s.State -eq 'Inactive' -and $s.StartRange.IPAddressToString -eq '192.0.2.20' -and $s.EndRange.IPAddressToString -eq '192.0.2.100' -and $s.SubnetMask.IPAddressToString -eq '255.255.255.0' -and $s.LeaseDuration.TotalHours -eq 8",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-scope-options-task-2-v1": {
+    "lab_id": "win-dnsdhcp-scope-options",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "$s=New-SrvScope\nif(-not(Get-DhcpServerv4ExclusionRange -ScopeId $s.ScopeId|Where-Object {$_.StartRange.IPAddressToString -eq '192.0.2.20' -and $_.EndRange.IPAddressToString -eq '192.0.2.24'})){Add-DhcpServerv4ExclusionRange -ScopeId $s.ScopeId -StartRange '192.0.2.20' -EndRange '192.0.2.24'}\nif(-not(Get-DhcpServerv4Reservation -ScopeId $s.ScopeId|Where-Object IPAddress -eq '192.0.2.25')){Add-DhcpServerv4Reservation -ScopeId $s.ScopeId -IPAddress '192.0.2.25' -ClientId '02-00-00-12-34-56' -Name ('LabEx-'+(Get-SrvContext).Run)}",
+    "probe": "$m=Get-SrvContext;$s=Get-DhcpServerv4Scope '192.0.2.0';$e=@(Get-DhcpServerv4ExclusionRange -ScopeId $s.ScopeId|Where-Object {$_.StartRange.IPAddressToString -eq '192.0.2.20' -and $_.EndRange.IPAddressToString -eq '192.0.2.24'});$r=@(Get-DhcpServerv4Reservation -ScopeId $s.ScopeId|Where-Object {$_.IPAddress.IPAddressToString -eq '192.0.2.25' -and ($_.ClientId -replace '[-:]','').ToLower() -eq '020000123456' -and $_.Name -eq ('LabEx-'+$m.Run)});(Test-SrvOwned 'SCOPE' '192.0.2.0') -and $s.State -eq 'Inactive' -and $e.Count -eq 1 -and $r.Count -eq 1",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-scope-options-task-3-v1": {
+    "lab_id": "win-dnsdhcp-scope-options",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "$s=New-SrvScope;Set-DhcpServerv4OptionValue -ScopeId $s.ScopeId -Router '192.0.2.1' -DnsServer '192.0.2.10' -DnsDomain 'training.test'",
+    "probe": "$m=Get-SrvContext;$s=Get-DhcpServerv4Scope '192.0.2.0';$r=Get-DhcpServerv4OptionValue -ScopeId $s.ScopeId -OptionId 3;$d=Get-DhcpServerv4OptionValue -ScopeId $s.ScopeId -OptionId 6;$n=Get-DhcpServerv4OptionValue -ScopeId $s.ScopeId -OptionId 15;(Test-SrvOwned 'SCOPE' '192.0.2.0') -and $s.State -eq 'Inactive' -and @($r.Value).Count -eq 1 -and $r.Value[0] -eq '192.0.2.1' -and @($d.Value).Count -eq 1 -and $d.Value[0] -eq '192.0.2.10' -and $n.Value[0] -eq 'training.test'",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-lease-audit-task-1-v1": {
+    "lab_id": "win-dnsdhcp-lease-audit",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null\n$a=@(Get-DhcpServerInDC|ForEach-Object {$_.DnsName+'|'+$_.IPAddress.IPAddressToString}|Sort-Object)\n$b=@(Get-DhcpServerv4Binding|ForEach-Object {$_.InterfaceAlias+'|'+$_.IPAddress.IPAddressToString+'|'+$_.BindingState}|Sort-Object)\nWrite-SrvObservation 'step1.json' @{Service=(Get-Service DHCPServer).Status.ToString();Authorization=$a;Bindings=$b}",
+    "probe": "$d=Read-SrvObservation 'step1.json';$a=@(Get-DhcpServerInDC|ForEach-Object {$_.DnsName+'|'+$_.IPAddress.IPAddressToString}|Sort-Object);$b=@(Get-DhcpServerv4Binding|ForEach-Object {$_.InterfaceAlias+'|'+$_.IPAddress.IPAddressToString+'|'+$_.BindingState}|Sort-Object);$d.Service -eq (Get-Service DHCPServer).Status.ToString() -and (@($d.Authorization|Sort-Object) -join ';') -eq ($a -join ';') -and (@($d.Bindings|Sort-Object) -join ';') -eq ($b -join ';')",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-lease-audit-task-2-v1": {
+    "lab_id": "win-dnsdhcp-lease-audit",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "Write-Output 'Blocked: configure isolated DHCP provider and real client before activation. Do not activate documentation scopes or synthesize leases.'",
+    "probe": null,
+    "client_probe": null,
+    "blocked_reason": "Cần client DHCP trong mạng cô lập/relay đã kiểm chứng; Azure VNet hiện tại không cấp lease từ DHCP Server này cho CLIENT01. Không dùng lease thêm bằng cmdlet thay giao dịch thật.",
+    "runtime": "isolated-dhcp"
+  },
+  "win-dnsdhcp-lease-audit-task-3-v1": {
+    "lab_id": "win-dnsdhcp-lease-audit",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "Write-Output 'Blocked: capture real isolated-client DHCP transaction and renewal; never release Azure management NIC.'",
+    "probe": null,
+    "client_probe": null,
+    "blocked_reason": "Cần client DHCP trong mạng cô lập/relay đã kiểm chứng; Azure VNet hiện tại không cấp lease từ DHCP Server này cho CLIENT01. Không dùng lease thêm bằng cmdlet thay giao dịch thật.",
+    "runtime": "isolated-dhcp"
+  },
+  "win-dnsdhcp-dns-incident-task-1-v1": {
+    "lab_id": "win-dnsdhcp-dns-incident",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "Initialize-SrvContext|Out-Null;New-SrvZone|Out-Null;$m=Get-SrvContext\n$r=@(Get-DnsServerResourceRecord -ZoneName $m.Zone -Name app -RRType A -ErrorAction SilentlyContinue);foreach($x in $r){Remove-DnsServerResourceRecord -ZoneName $m.Zone -InputObject $x -Force}\nAdd-DnsServerResourceRecordA -ZoneName $m.Zone -Name app -IPv4Address '192.0.2.99' -TimeToLive (New-TimeSpan -Minutes 5)\n$q=Resolve-DnsName ('app.'+$m.Zone) -Server 127.0.0.1 -Type A -DnsOnly -NoHostsFile\nWrite-SrvObservation 'step1.json' @{Before='192.0.2.99';Expected='192.0.2.10';Name=('app.'+$m.Zone)}",
+    "probe": "$m=Get-SrvContext;$d=Read-SrvObservation 'step1.json';(Test-SrvDnsRecord 'app' 'A' '192.0.2.99') -and $d.Before -eq '192.0.2.99' -and $d.Expected -eq '192.0.2.10' -and $d.Name -eq ('app.'+$m.Zone)",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-dns-incident-task-2-v1": {
+    "lab_id": "win-dnsdhcp-dns-incident",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "$m=Get-SrvContext;$before=Read-SrvObservation 'step1.json';if($before.Before -ne '192.0.2.99'){throw 'Run step 1 first'}\n$old=Get-DnsServerResourceRecord -ZoneName $m.Zone -Name app -RRType A;$new=$old.Clone();$new.RecordData.IPv4Address=[Net.IPAddress]::Parse('192.0.2.10');Set-DnsServerResourceRecord -ZoneName $m.Zone -OldInputObject $old -NewInputObject $new",
+    "probe": "$m=Get-SrvContext;$d=Read-SrvObservation 'step1.json';$d.Before -eq '192.0.2.99' -and $d.Expected -eq '192.0.2.10' -and (Test-SrvDnsRecord 'app' 'A' '192.0.2.10')",
+    "client_probe": null,
+    "blocked_reason": null,
+    "runtime": "server"
+  },
+  "win-dnsdhcp-dns-incident-task-3-v1": {
+    "lab_id": "win-dnsdhcp-dns-incident",
+    "target_vm": "server",
+    "modules": [
+      "DnsServer"
+    ],
+    "exercise": "Write-SrvObservation 'step3.json' @{Diagnosis='WrongAuthoritativeA';Change='OnlyOwnedAppRecord';NotTested='ApplicationConnectivity'}",
+    "probe": "$d=Read-SrvObservation 'step3.json';(Test-SrvDnsRecord 'app' 'A' '192.0.2.10') -and $d.Diagnosis -eq 'WrongAuthoritativeA' -and $d.Change -eq 'OnlyOwnedAppRecord' -and $d.NotTested -eq 'ApplicationConnectivity'",
+    "client_probe": "@(Resolve-DnsName -Name ('app.'+$expectedZone) -Type A|Where-Object {$_.Type -eq 'A' -and $_.IPAddress -eq '192.0.2.10'}).Count -eq 1",
+    "blocked_reason": "Cần đường mạng riêng Server–CLIENT01 và domain join đã kiểm thử. Hai VNet hiện tách biệt; chưa xác nhận kết nối/domain, không chấm bằng máy Server thay cho client.",
+    "runtime": "domain-client"
+  },
+  "win-dnsdhcp-dhcp-incident-task-1-v1": {
+    "lab_id": "win-dnsdhcp-dhcp-incident",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "Write-Output 'Blocked: real isolated DHCP client, baseline, ownership and recovery proof required before fault injection.'",
+    "probe": null,
+    "client_probe": null,
+    "blocked_reason": "Cần client DHCP trong mạng cô lập/relay đã kiểm chứng; Azure VNet hiện tại không cấp lease từ DHCP Server này cho CLIENT01. Không dùng lease thêm bằng cmdlet thay giao dịch thật.",
+    "runtime": "isolated-dhcp"
+  },
+  "win-dnsdhcp-dhcp-incident-task-2-v1": {
+    "lab_id": "win-dnsdhcp-dhcp-incident",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "Write-Output 'Blocked: do not renew Azure NIC. Restore owned-scope option only after isolated provider is ready.'",
+    "probe": null,
+    "client_probe": null,
+    "blocked_reason": "Cần client DHCP trong mạng cô lập/relay đã kiểm chứng; Azure VNet hiện tại không cấp lease từ DHCP Server này cho CLIENT01. Không dùng lease thêm bằng cmdlet thay giao dịch thật.",
+    "runtime": "isolated-dhcp"
+  },
+  "win-dnsdhcp-dhcp-incident-task-3-v1": {
+    "lab_id": "win-dnsdhcp-dhcp-incident",
+    "target_vm": "server",
+    "modules": [
+      "DhcpServer"
+    ],
+    "exercise": "Write-Output 'Blocked: verify DHCP baseline and actual client recovery before completing the incident.'",
+    "probe": null,
+    "client_probe": null,
+    "blocked_reason": "Cần client DHCP trong mạng cô lập/relay đã kiểm chứng; Azure VNet hiện tại không cấp lease từ DHCP Server này cho CLIENT01. Không dùng lease thêm bằng cmdlet thay giao dịch thật.",
+    "runtime": "isolated-dhcp"
+  }
+}

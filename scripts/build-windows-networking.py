@@ -1,0 +1,142 @@
+"""Authoritative Vietnamese networking curriculum. Does not start or configure VMs."""
+import json,re
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1];DATA=ROOT/'server/data'
+COURSE='windows-networking-fundamentals'
+guard=(ROOT/'server/runtime/windows/fundamentals-common.ps1').read_text(encoding='utf-8')
+guard=re.search(r'(?ms)^function Assert-FndWorkspace.*?(?=^function )',guard).group(0).strip()
+helpers=(ROOT/'server/runtime/windows/networking-common.ps1').read_text(encoding='utf-8')
+helper_functions={m.group(1):m.group(0).strip() for m in re.finditer(r'(?ms)^function ([\w-]+).*?(?=^function |\Z)',helpers)}
+def collector_helpers(code):
+    required=set(re.findall(r'\b(?:Get|Test)-Nwf[\w-]+',code))
+    pending=list(required)
+    while pending:
+        for name in re.findall(r'\b(?:Get|Test)-Nwf[\w-]+',helper_functions[pending.pop()]):
+            if name not in required:required.add(name);pending.append(name)
+    return '\n'.join(body for name,body in helper_functions.items() if name in required)
+lessons=[]
+def task(title,why,code,probe,expected,question):
+    return dict(title=title,why=why,code=code,probe=probe,expected=expected,question=question)
+def add(slug,title,module,theory,observe,tasks,refs):
+    lessons.append(dict(id='win-nwf-'+slug,title=title,module=module,theory=theory,observe=observe,tasks=tasks,refs=refs))
+MS='https://learn.microsoft.com/en-us/'
+
+add('ipv4-routing','IPv4, subnet và bảng định tuyến',1,
+ 'IP xác định địa chỉ ở lớp mạng; prefix /n cho biết n bit đầu thuộc mạng. Ví dụ 10.20.30.45/26 thuộc mạng 10.20.30.0, địa chỉ cuối 10.20.30.63; mạng IPv4 thông thường này có 62 địa chỉ host dùng được (.1–.62). Quy tắc trừ hai không áp dụng máy móc cho /31 và /32. Subnet mask /26 là 255.255.255.192. Thiết bị gửi trực tiếp tới đích cùng subnet; tới mạng khác cần route phù hợp. Windows ưu tiên route có prefix khớp dài nhất, rồi xét metric; metric hiệu lực còn gồm interface metric. Default route 0.0.0.0/0 là đường dự phòng, không tự chứng minh Internet hoạt động. Một máy có nhiều NIC/VPN có thể có nhiều default route. NextHop 0.0.0.0 thường chỉ route on-link, không phải địa chỉ gateway để ping. IPv6 tồn tại song song; bài này giới hạn IPv4, không tắt IPv6.',
+ 'Chạy `ipconfig /all`, `Get-NetIPConfiguration -All`, `route print -4` để quan sát. Mở Win+R → ncpa.cpl → adapter → Status → Details, chỉ đọc rồi đóng. Ghi interface index, IPv4/prefix, gateway; không chép địa chỉ ví dụ vào NIC thật.',[
+ task('Thu địa chỉ IPv4 đang có','Không giả định CLIENT01 luôn có một IP cố định. Ghi cả trạng thái và nguồn prefix để đối chiếu dữ liệu thực.',
+ "$data=[pscustomobject]@{Scope='IPv4AllInterfaces';Addresses=@(Get-NwfAddresses)}",
+ "$d=Read-FndReport 'step1.json'; $a=@(Get-NwfAddresses); $a.Count -gt 0 -and $d.Scope -eq 'IPv4AllInterfaces' -and (Same-FndItems @($d.Addresses) $a)",
+ 'Addresses có dòng interfaceIndex|IPv4|prefix|prefixOrigin|addressState khớp máy, gồm cả loopback; không coi loopback là NIC truy cập Internet.',
+ 'Nếu có IP 10.x thì có chắc truy cập được Internet không? Cần kiểm tra thêm những lớp nào?'),
+ task('Đọc route và tính một subnet /26','Tự tính network, địa chỉ cuối và số host cho 10.20.30.45/26 trước khi xem lời giải. Tìm default route trong bảng thật; không ép máy phải có gateway cụ thể.',
+ "$subnet=Get-NwfSubnet '10.20.30.45' 26\n$data=[pscustomobject]@{Routes=@(Get-NwfRoutes);Exercise=[pscustomobject]@{Address='10.20.30.45';Prefix=26;Network=$subnet.Network;LastAddress=$subnet.LastAddress;UsableHosts=62;GatewayExample='10.20.30.1';OtherSubnetExample='10.20.30.99'}}",
+ "$d=Read-FndReport 'step2.json'; $s=Get-NwfSubnet '10.20.30.45' 26; $e=$d.Exercise; (Same-FndItems @($d.Routes) @(Get-NwfRoutes)) -and $e.Address -eq '10.20.30.45' -and $e.Prefix -eq 26 -and $e.Network -eq $s.Network -and $e.LastAddress -eq $s.LastAddress -and $e.UsableHosts -eq 62 -and $e.GatewayExample -eq '10.20.30.1' -and $e.OtherSubnetExample -eq '10.20.30.99'",
+ 'Route khớp bảng hiện tại; bài tính ra network .0, cuối .63, 62 host. .1 là ví dụ cùng subnet, .99 ngoài subnet; không phải đề nghị đổi cấu hình VM.',
+ 'Vì sao route /24 có thể được chọn trước default route dù default route có metric thấp hơn?')],
+ [MS+'windows-server/administration/windows-commands/route_ws2008',MS+'powershell/module/nettcpip/get-netipaddress'])
+
+add('dhcp-apipa','DHCP, IP tĩnh và APIPA: đọc đúng dấu hiệu',1,
+ 'DHCP cung cấp lease và các option như gateway, DNS; địa chỉ động không đồng nghĩa địa chỉ public. Chu trình cơ bản gồm Discover, Offer, Request, Acknowledge. IP tĩnh là địa chỉ do quản trị cấu hình, không tự tạo ra kết nối. APIPA IPv4 link-local thuộc 169.254.0.0/16 thường xuất hiện khi host tự gán địa chỉ do chưa nhận được DHCP; cần điều tra adapter, liên kết, DHCP và phạm vi sự cố trước khi kết luận server DHCP hỏng. 127.0.0.0/8 là loopback, không phải APIPA. Các dải riêng RFC1918 là 10/8, 172.16/12, 192.168/16; không phải mọi 172.x đều private. Trên Azure, giữ cấu hình guest theo cơ chế cấp phát của Azure; thay IP/gateway thủ công hoặc release lease có thể mất kết nối quản trị.',
+ 'Xem DHCP Enabled trong ipconfig /all và cột Dhcp của Get-NetIPInterface -AddressFamily IPv4. DHCP server, lease time và DNS là các trường khác nhau; không đoán chúng từ riêng một địa chỉ. Không chạy ipconfig /release, /renew hoặc netsh reset để thử vận may.',[
+ task('Đối chiếu DHCP theo từng interface','Đọc ConnectionState và Dhcp cho mọi interface IPv4, không chỉ adapter mang tên Ethernet. Thu lại nếu VPN/NIC vừa thay đổi.',
+ "$data=[pscustomobject]@{Scope='IPv4Interfaces';Interfaces=@(Get-NwfDhcp)}",
+ "$d=Read-FndReport 'step1.json'; $a=@(Get-NwfDhcp); $a.Count -gt 0 -and $d.Scope -eq 'IPv4Interfaces' -and (Same-FndItems @($d.Interfaces) $a)",
+ 'Dòng interfaceIndex|Dhcp|ConnectionState khớp trạng thái thật. Không bắt buộc tất cả interface phải Enabled hay Connected.',
+ 'Một NIC DHCP Enabled nhưng đang Disconnected có đủ cơ sở kết luận DHCP server hỏng chưa?'),
+ task('Phân loại địa chỉ và chọn bước điều tra','Tự phân loại bốn địa chỉ dưới đây. Đây là bài tình huống, không giả vờ đã làm CLIENT01 mất DHCP.',
+ "$data=[pscustomobject]@{Apipa='169.254.12.34';Loopback='127.0.0.1';Private='172.16.5.8';NotRfc1918='172.32.5.8';NextCheck='LinkThenDhcpLease';InternetProven=$false;LiveAddresses=@(Get-NwfAddresses)}",
+ "$d=Read-FndReport 'step2.json'; $d.Apipa -eq '169.254.12.34' -and $d.Loopback -eq '127.0.0.1' -and $d.Private -eq '172.16.5.8' -and $d.NotRfc1918 -eq '172.32.5.8' -and $d.NextCheck -eq 'LinkThenDhcpLease' -and $d.InternetProven -eq $false -and (Same-FndItems @($d.LiveAddresses) @(Get-NwfAddresses))",
+ 'Bốn mẫu phân loại đúng, hướng kiểm tra link rồi DHCP/lease; không nhận định Internet tốt chỉ nhờ có địa chỉ.',
+ 'Nếu chỉ một máy APIPA nhưng các máy cùng mạng nhận lease, phạm vi và giả thuyết của bạn thay đổi thế nào?')],
+ [MS+'windows-server/administration/windows-commands/ipconfig',MS+'windows/win32/api/iptypes/ns-iptypes-ip_per_adapter_info_w2ksp1'])
+
+add('dns-resolution','DNS, resolver và lỗi truy cập bằng tên',2,
+ 'DNS ánh xạ tên sang bản ghi như A/AAAA; DNS server không đồng nghĩa default gateway. Resolver của hệ điều hành có thể dùng cache/hosts và nguồn tên khác, nên localhost phân giải được không chứng minh đã hỏi DNS server ngoài máy. Truy cập IP được nhưng tên không được là dấu hiệu cần điều tra phân giải tên, chưa phải kết luận chắc chắn: HTTPS còn phụ thuộc certificate, SNI và virtual host. NXDOMAIN (tên không tồn tại), timeout, sai bản ghi và lỗi transport là các tình huống khác nhau. Không đổi DNS sang một địa chỉ public theo phản xạ trên máy doanh nghiệp vì có thể làm hỏng phân giải domain nội bộ.',
+ 'Xem Get-DnsClientServerAddress -AddressFamily IPv4. Có thể đọc ipconfig /displaydns. Tự luyện không chấm: Resolve-DnsName learn.microsoft.com -Type A -DnsOnly; ghi chính xác thành công/NXDOMAIN/timeout, không cần Internet để qua bài. Không sửa hosts hệ thống, flush cache hay đổi DNS của NIC trong bài.',[
+ task('Ghi DNS server và thử resolver cục bộ','Đối chiếu danh sách DNS theo interface cùng kết quả localhost từ resolver Windows. DNS server trả mảng rỗng ở một interface là dữ liệu hợp lệ.',
+ "$data=[pscustomobject]@{DnsServers=@(Get-NwfDns);Name='localhost';Resolved=@(Get-NwfLocalNames);Scope='OSResolverNotExternalDnsProof'}",
+ "$d=Read-FndReport 'step1.json'; $names=@(Get-NwfLocalNames); $d.Name -eq 'localhost' -and $d.Scope -eq 'OSResolverNotExternalDnsProof' -and $names.Count -gt 0 -and (Same-FndItems @($d.DnsServers) @(Get-NwfDns)) -and (Same-FndItems @($d.Resolved) $names)",
+ 'DNS server và địa chỉ localhost khớp máy; kết quả này chỉ xác nhận resolver cục bộ, không được ghi DNS Internet đã tốt.',
+ 'Vì sao localhost phân giải tốt nhưng tên miền công ty vẫn có thể không phân giải được?'),
+ task('Đọc bằng chứng để chọn giả thuyết DNS','Tình huống cho trước: dịch vụ thử bằng IP/cổng đúng thành công, truy vấn tên trả NXDOMAIN. Chọn kiểm tra spelling, bản ghi và đúng DNS scope; không reset mạng hoặc bỏ qua certificate HTTPS.',
+ "$data=[pscustomobject]@{Scenario='NameFailsIpTcpWorks';NameResult='NXDOMAIN';Hypothesis='NameOrDnsRecord';NextCheck='SpellingRecordAndDnsScope';HttpsBypassSafe=$false;LocalResolver=@(Get-NwfLocalNames)}",
+ "$d=Read-FndReport 'step2.json'; $d.Scenario -eq 'NameFailsIpTcpWorks' -and $d.NameResult -eq 'NXDOMAIN' -and $d.Hypothesis -eq 'NameOrDnsRecord' -and $d.NextCheck -eq 'SpellingRecordAndDnsScope' -and $d.HttpsBypassSafe -eq $false -and (Same-FndItems @($d.LocalResolver) @(Get-NwfLocalNames))",
+ 'Bài tình huống chọn đúng lớp kiểm tra. Đây là đáp án cấu trúc cho dữ kiện đã cho, không phải bằng chứng đã nạp lỗi DNS thật vào VM.',
+ 'Nếu query trả timeout thay vì NXDOMAIN, bạn cần bổ sung phép kiểm tra nào trước khi sửa bản ghi?')],
+ [MS+'powershell/module/dnsclient/resolve-dnsname',MS+'powershell/module/dnsclient/get-dnsclientserveraddress'])
+
+add('tcp-http','TCP, firewall và kiểm tra ở lớp ứng dụng',2,
+ 'Một endpoint TCP gồm địa chỉ và cổng. TCP kết nối được chỉ cho biết bắt tay TCP thành công với endpoint đó, chưa chứng minh HTTP, đăng nhập hay nghiệp vụ tốt. Ping dùng ICMP; ping thất bại không tự chứng minh TCP bị lỗi. Firewall, Windows Firewall và Azure NSG nằm ở những phạm vi khác nhau; loopback không đi qua NSG. Connection refused thường gợi ý không có listener hoặc có hành vi reject; timeout có thể do filter, đường đi hoặc host không phản hồi. Không được kết luận firewall chặn chỉ từ một TcpTestSucceeded=False. Trong bài, helper tạo listener thật trên 127.0.0.1 với cổng OS tự chọn, kiểm thử rồi đóng; không mở cổng ra mạng.',
+ 'Đọc trước helper Test-NwfConnect/Get-NwfTcpExperiment/Get-NwfHttpExperiment trong khối lệnh. Khi listener đã đóng, thử lại cổng không còn là kiểm tra cùng trạng thái. Tự luyện đọc: Get-NetTCPConnection -State Listen; Test-NetConnection chỉ dùng với host/cổng bạn có quyền kiểm tra, không quét mạng.',[
+ task('So sánh cổng đang lắng nghe và đã đóng','Thực hiện phép thử socket TCP thật trong cùng request để tránh listener biến mất giữa hai request PowerShell web. Kết quả cổng đóng chỉ mô tả phép thử loopback này.',
+ "$data=Get-NwfTcpExperiment",
+ "$d=Read-FndReport 'step1.json'; $live=Get-NwfTcpExperiment; $d.Scope -eq 'LoopbackOnly' -and $d.Address -eq '127.0.0.1' -and $d.Transport -eq 'TCP' -and $d.OpenReachable -eq $true -and $d.ClosedReachable -eq $false -and $live.OpenReachable -and -not $live.ClosedReachable",
+ 'OpenReachable=true khi listener còn mở, ClosedReachable=false sau khi đóng. Nếu cổng vừa bị process khác dùng lại, bài báo lỗi và cần chạy lại, không giả kết quả.',
+ 'Một lần kết nối TCP thất bại có đủ để ra lệnh tắt firewall không? Cần xác minh gì tại host đích?'),
+ task('TCP thành công nhưng HTTP có thể trả 404','Gửi HTTP thật tới /health và /missing trên dịch vụ loopback ngắn hạn. Đọc status và body; cả hai vẫn kết nối TCP được, chỉ /health trả 200.',
+ "$data=[pscustomobject]@{Healthy=(Get-NwfHttpExperiment '/health');Missing=(Get-NwfHttpExperiment '/missing');Conclusion='TcpSuccessDoesNotProveApplicationHealth'}",
+ "$d=Read-FndReport 'step2.json'; $good=Get-NwfHttpExperiment '/health'; $bad=Get-NwfHttpExperiment '/missing'; $d.Conclusion -eq 'TcpSuccessDoesNotProveApplicationHealth' -and $d.Healthy.Scope -eq 'LoopbackOnly' -and $d.Healthy.TcpConnected -eq $true -and $d.Healthy.Status -eq $good.Status -and $d.Healthy.Body -eq 'NETLAB_OK' -and $d.Missing.TcpConnected -eq $true -and $d.Missing.Status -eq $bad.Status -and $d.Missing.Body -eq 'NETLAB_NOT_FOUND'",
+ 'Hai request TCP thành công; /health=200/NETLAB_OK, /missing=404/NETLAB_NOT_FOUND. Không biến 404 thành lỗi DNS hoặc firewall.',
+ 'Người dùng báo web lỗi nhưng TCP/443 thông: bạn sẽ kiểm tra TLS, HTTP status, authentication và nội dung theo thứ tự nào?')],
+ [MS+'powershell/module/nettcpip/test-netconnection',MS+'dotnet/api/system.net.sockets.tcplistener'])
+
+add('helpdesk-endpoint','Helpdesk: sửa đường dẫn dịch vụ và kiểm tra lại',3,
+ 'Ticket: “có kết nối nhưng ứng dụng báo không tìm thấy”. Phân lớp kiểm tra: phạm vi/triệu chứng → địa chỉ/route → phân giải tên nếu có → TCP → HTTP → nghiệp vụ. Lab này chủ động dùng IPv4 loopback, nên không viện lỗi Internet/DNS/NSG. Lỗi được cài trong client.json của riêng bài: đường dẫn /missing thay vì /health. Phải có phép thử trước sửa (TCP tốt, HTTP404), chỉ sửa đúng trường, rồi chạy lại cùng tiêu chí (HTTP200 và body đúng). Không tắt firewall, không đổi DNS, không restart dịch vụ Windows để sửa đường dẫn của ứng dụng. Dịch vụ thử là HTTP tối giản để học phân lớp, không phải web server production.',
+ 'Mở thư mục bài trong Explorer. Đọc client.json và before-config.json bằng Notepad. Task 1 khởi tạo lại dữ liệu của riêng bài; task 2 sửa client.json rồi thu bằng chứng. Không dùng nút nạp lỗi toàn máy; không chỉnh hosts, NIC hoặc rule firewall.',[
+ task('Tái hiện sự cố và lưu bằng chứng trước sửa','Tạo cấu hình lỗi trong workspace, lưu bản trước sửa, chạy request và ghi hash. Phải thấy HTTP404 thực trước khi tuyên bố tìm được vấn đề.',
+ "$config=Join-Path $labRoot 'client.json'\n[pscustomobject]@{Path='/missing'} | ConvertTo-Json | Set-Content -LiteralPath $config -Encoding UTF8\nCopy-Item -LiteralPath $config -Destination (Join-Path $labRoot 'before-config.json') -Force\n$result=Get-NwfHttpExperiment ((Get-Content -LiteralPath $config -Raw | ConvertFrom-Json).Path)\n$data=[pscustomobject]@{Result=$result;ConfigHash=(Get-FileHash -LiteralPath $config).Hash;Diagnosis='WrongApplicationPath'}",
+ "$d=Read-FndReport 'step1.json'; $file=Join-Path $labRoot 'client.json'; $before=Join-Path $labRoot 'before-config.json'; $c=Get-Content -LiteralPath $file -Raw|ConvertFrom-Json; $live=Get-NwfHttpExperiment $c.Path; $c.Path -eq '/missing' -and $d.Result.Path -eq '/missing' -and $d.Result.Scope -eq 'LoopbackOnly' -and $d.Result.TcpConnected -eq $true -and $d.Result.Status -eq $live.Status -and $live.Status -eq 404 -and $d.Result.Body -eq $live.Body -and $d.ConfigHash -eq (Get-FileHash -LiteralPath $file).Hash -and $d.ConfigHash -eq (Get-FileHash -LiteralPath $before).Hash -and $d.Diagnosis -eq 'WrongApplicationPath'",
+ 'Có cấu hình lỗi, bản sao và hash trùng, request thật TCP thành công/HTTP404. Làm và chấm task này trước task 2; sau sửa trạng thái task 1 không còn đúng để tái chấm.',
+ 'Bằng chứng nào cho phép bạn thu hẹp sang đường dẫn ứng dụng thay vì đổ lỗi mạng?'),
+ task('Sửa tối thiểu và xác minh đúng nội dung','Trong client.json chỉ đổi Path từ /missing sang /health. Nếu tự sửa bằng Notepad, bỏ dòng Set-Content trong lời giải và chạy phần thu báo cáo sau đó. Giữ nguyên bản trước sửa để có đường hoàn nguyên.',
+ "$config=Join-Path $labRoot 'client.json'; $before=Join-Path $labRoot 'before-config.json'\nif(-not(Test-Path -LiteralPath $before)){throw 'Run task 1 first'}\n[pscustomobject]@{Path='/health'} | ConvertTo-Json | Set-Content -LiteralPath $config -Encoding UTF8\n$result=Get-NwfHttpExperiment ((Get-Content -LiteralPath $config -Raw | ConvertFrom-Json).Path)\n$data=[pscustomobject]@{Result=$result;BeforeHash=(Get-FileHash -LiteralPath $before).Hash;AfterHash=(Get-FileHash -LiteralPath $config).Hash;Change='OnlyLabApplicationPath'}",
+ "$old=Read-FndReport 'step1.json'; $d=Read-FndReport 'step2.json'; $file=Join-Path $labRoot 'client.json'; $before=Join-Path $labRoot 'before-config.json'; $c=Get-Content -LiteralPath $file -Raw|ConvertFrom-Json; $b=Get-Content -LiteralPath $before -Raw|ConvertFrom-Json; $live=Get-NwfHttpExperiment $c.Path; $c.Path -eq '/health' -and $b.Path -eq '/missing' -and $old.Result.Status -eq 404 -and $old.Result.TcpConnected -eq $true -and $d.Result.Path -eq '/health' -and $d.Result.Scope -eq 'LoopbackOnly' -and $d.Result.Status -eq $live.Status -and $live.Status -eq 200 -and $d.Result.TcpConnected -eq $true -and $d.Result.Body -eq 'NETLAB_OK' -and $old.ConfigHash -eq $d.BeforeHash -and $d.BeforeHash -eq (Get-FileHash -LiteralPath $before).Hash -and $d.AfterHash -eq (Get-FileHash -LiteralPath $file).Hash -and $d.AfterHash -ne $d.BeforeHash -and $d.Change -eq 'OnlyLabApplicationPath'",
+ 'Cấu hình /health thật trả HTTP200/NETLAB_OK, hash trước/sau khác và khớp tệp thật. Chỉ có chữ “đã sửa” hoặc mở một TCP port không đủ đạt. Muốn diễn tập lại chạy task 1; muốn hoàn nguyên riêng cấu hình, copy before-config.json về client.json, không sửa hệ thống.',
+ 'Sau rollback cấu hình, bạn kỳ vọng phép thử HTTP nào thay đổi và nên ghi điều đó trong ticket ra sao?')],
+ [MS+'troubleshoot/windows-client/networking/networking-overview',MS+'powershell/module/microsoft.powershell.utility/get-filehash'])
+
+add('evidence-runbook','Sơ đồ kết nối, báo cáo và quy trình chẩn đoán',3,
+ 'Một ticket tốt có thời điểm, phạm vi, triệu chứng tái hiện được, bằng chứng, giả thuyết, thay đổi, phép thử xác minh và hoàn nguyên. Không ghi “mạng lỗi” nếu chỉ biết HTTP404. Sơ đồ thực tế của CLIENT01 khác sơ đồ ứng dụng loopback: CLIENT01 → route/gateway/DNS cấu hình hiện tại là quan sát hạ tầng; client thử → TCP127.0.0.1:cổng tạm → HTTP handler là phép thử trong cùng máy. Không dùng thử nghiệm loopback để khẳng định LAN/WAN, DHCP server, DNS ngoài máy, NSG hoặc firewall doanh nghiệp đã được kiểm thử. Báo cáo phải tách dữ kiện đo được, tình huống giả định và điều còn chưa biết.',
+ 'Vẽ lại hai đường đi bằng giấy hoặc ghi chú: (1) CLIENT01 → interface → route chọn theo đích → next-hop → dịch vụ đích; DNS là bước phân giải trước kết nối nếu dùng tên, không phải mọi gói đi qua DNS. (2) client loopback → TCP → HTTP handler. Đối chiếu với inventory thật; không lấy IP mẫu làm sơ đồ Azure thật.',[
+ task('Chụp cấu hình nền để bàn giao','Lưu địa chỉ, route, DNS vào một report có ngữ cảnh. Không chứa password, token, public IP người dùng hoặc thông tin ngoài mục tiêu kiểm tra.',
+ "$data=[pscustomobject]@{Scope='IPv4InfrastructureSnapshot';Addresses=@(Get-NwfAddresses);Routes=@(Get-NwfRoutes);Dns=@(Get-NwfDns);Topology='ClientInterface-SelectedRoute-NextHop-Destination';DnsRole='NameResolutionBeforeConnection'}",
+ "$d=Read-FndReport 'step1.json'; $d.Scope -eq 'IPv4InfrastructureSnapshot' -and $d.Topology -eq 'ClientInterface-SelectedRoute-NextHop-Destination' -and $d.DnsRole -eq 'NameResolutionBeforeConnection' -and (Same-FndItems @($d.Addresses) @(Get-NwfAddresses)) -and (Same-FndItems @($d.Routes) @(Get-NwfRoutes)) -and (Same-FndItems @($d.Dns) @(Get-NwfDns))",
+ 'Ba inventory khớp trạng thái hiện tại, sơ đồ không coi DNS là router. Route có thể thay đổi khi VPN/NIC đổi, khi đó thu lại.',
+ 'Nếu có hai NIC, vì sao không nên vẽ gateway chỉ dựa vào adapter xuất hiện đầu tiên trong ipconfig?'),
+ task('Tạo biên bản trước/sau bằng phép thử thật','Chạy lại hai request trên loopback rồi tạo ticket.md có dữ kiện, phạm vi và đường hoàn nguyên. Mẫu chỉ là khởi đầu; tự bổ sung giải thích nguyên nhân bằng lời của bạn. Bộ chấm kiểm dữ liệu và cấu trúc, không chứng nhận chất lượng giải thích tự do.',
+ "$before=Get-NwfHttpExperiment '/missing'; $after=Get-NwfHttpExperiment '/health'\n$ticket=Join-Path $labRoot 'ticket.md'\n@('Scope: LoopbackOnly','Before: TCP=True HTTP=404','Diagnosis: WrongApplicationPath','Change: /missing -> /health','After: HTTP=200 Body=NETLAB_OK','Rollback: restore /missing in lab config only','NotTested: LAN WAN external-DNS NSG') | Set-Content -LiteralPath $ticket -Encoding UTF8\n$data=[pscustomobject]@{Before=$before;After=$after;TicketHash=(Get-FileHash -LiteralPath $ticket).Hash;Diagnosis='WrongApplicationPath';ExternalNetworkProven=$false}",
+ "$d=Read-FndReport 'step2.json'; $file=Join-Path $labRoot 'ticket.md'; $text=Get-Content -LiteralPath $file -Raw; $before=Get-NwfHttpExperiment '/missing'; $after=Get-NwfHttpExperiment '/health'; $d.Before.Scope -eq 'LoopbackOnly' -and $d.After.Scope -eq 'LoopbackOnly' -and $d.Before.TcpConnected -eq $true -and $d.Before.Status -eq $before.Status -and $d.After.Status -eq $after.Status -and $d.After.Body -eq 'NETLAB_OK' -and $d.Diagnosis -eq 'WrongApplicationPath' -and $d.ExternalNetworkProven -eq $false -and $d.TicketHash -eq (Get-FileHash -LiteralPath $file).Hash -and $text.Contains('Scope: LoopbackOnly') -and $text.Contains('Before: TCP=True HTTP=404') -and $text.Contains('Diagnosis: WrongApplicationPath') -and $text.Contains('Change: /missing -> /health') -and $text.Contains('After: HTTP=200 Body=NETLAB_OK') -and $text.Contains('Rollback: restore /missing in lab config only') -and $text.Contains('NotTested: LAN WAN external-DNS NSG')",
+ 'ticket.md không rỗng, có đủ trước/sau/giả thuyết/thay đổi/hoàn nguyên/phạm vi chưa thử, hash đúng và request thật cho status/body đúng. Không được kết luận đã sửa Internet của VM.',
+ 'Khi nào nên chuyển ticket sang nhóm mạng, ứng dụng hoặc quản trị hệ thống? Bạn sẽ gửi bằng chứng gì thay cho một ảnh ping thất bại?')],
+ [MS+'powershell/module/nettcpip/get-netroute',MS+'troubleshoot/windows-client/networking/networking-overview'])
+
+rules={}
+for order,l in enumerate(lessons,1):
+    lid=l['id'];sections=[];steps=[]
+    intro=f"## {l['title']}\n\n### Bản chất và mục tiêu\n{l['theory']}\n\n### Quan sát trước thực hành\n{l['observe']}\n\n### Môi trường\nDùng CLIENT01 Windows 11 hiện có. Hoàn nguyên lab sự cố cũ trước khi học; không tự reset thay bài khác. PowerShell web chạy SYSTEM và mỗi request là process mới, nên chạy nguyên khối của từng task. Tệp nằm ở `C:\\LabEx\\Labs\\{lid}`. Chỉ đọc cấu hình mạng; các thay đổi chỉ ở tệp của bài. TCP/HTTP thử nghiệm chỉ bind 127.0.0.1, tự chọn cổng và đóng trong finally; không có daemon cần giữ chạy, không phải webserver production. Không đổi IP/DNS/gateway, không release DHCP, không reset mạng/tắt firewall/NSG. Không cần VM mới, Internet hay download để qua bài.\n\n### Cách học\nDự đoán kết quả trước khi chạy, đọc Data trong báo cáo JSON, ghi giải thích bằng lời rồi mới kiểm tra. Get-* đọc đối tượng; @() giữ danh sách kể cả rỗng; ConvertTo-Json lưu dữ liệu. Bài subnet/tình huống có lời giải trong hint, hãy tự làm trước. Điểm chấm dữ kiện/trạng thái, không chứng nhận hiểu bản chất. Mọi báo cáo phải đúng lab, đúng máy và không quá 24 giờ; nếu cấu hình/VM vừa thay đổi, thu lại."
+    sections.append(dict(id=lid+'-intro',title='Giới thiệu và chuẩn bị',title_vi='Giới thiệu và chuẩn bị',kind='introduction',position=0,need_verify=False,content=intro,content_vi=intro))
+    for n,t in enumerate(l['tasks'],1):
+        sid=f'{lid}-task-{n}-v1'
+        selected_helpers=collector_helpers(t['code'])
+        command=f"$ErrorActionPreference='Stop'\n$labId='{lid}'; $labRoot='C:\\LabEx\\Labs\\{lid}'\n{guard}\nAssert-FndWorkspace\nNew-Item -ItemType Directory -Path $labRoot -Force | Out-Null\n{selected_helpers}\n"+t['code']+f"\n[pscustomobject]@{{Schema=1;LabId=$labId;Computer=$env:COMPUTERNAME;CollectedAtUtc=[DateTimeOffset]::UtcNow.ToString('o');Data=$data}} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $labRoot 'step{n}.json') -Encoding UTF8\nWrite-Output 'Da ghi step{n}.json; xem Data trong thu muc bai.'"
+        assert len(command)<16000,(sid,len(command))
+        body=f"## {t['title']}\n\n### Vì sao làm bước này\n{t['why']}\n\n### Tự thực hành trước khi xem lời giải\n{l['observe']}\n\nTự ghi dự đoán, phép kiểm tra và kết luận có giới hạn. Dưới đây là khối lệnh đầy đủ cho PowerShell web; chạy nguyên khối, không chạy từng đoạn ở các request khác nhau. Helper là mã nguồn đọc được của phép thử; không phải công cụ bí mật.\n\n```powershell\n{command}\n```\n\n### Kết quả mong đợi\n{t['expected']}\n\n### Kiểm tra và xử lý khi chưa đạt\nMở step{n}.json tại thư mục bài, đối chiếu Data; bấm Kiểm tra kết quả. Task dùng dữ liệu bước trước thì làm bước trước trước. Sai lab/máy, quá hạn, báo cáo rỗng, tệp bị sửa hoặc inventory thay đổi sẽ không đạt; thu lại bằng khối lệnh thay vì sửa số liệu. Nếu loopback không kết nối được, đọc stderr và dừng; không tắt firewall để ép qua. Bộ chấm thực hiện lại phép thử loopback, không chỉ tin chữ thành công trong JSON.\n\n### Tự giải thích (không chấm tự động)\n{t['question']}\n\n### Làm lại và hoàn nguyên\nChạy lại task chỉ ghi lại tệp của bài. Listener được đóng tự động ngay cả khi lỗi. Các bài quan sát không thay cấu hình Windows; bài client.json có hướng dẫn hoàn nguyên riêng. Không xóa file hệ thống hay sửa NIC để làm lại."
+        step=dict(id=sid,title=t['title'],title_vi=t['title'],kind='task',position=n,need_verify=True,content=body,content_vi=body,task=t['expected'],task_vi=t['expected'],hint=command,hint_vi=command,verification={'kind':'windows-remote'})
+        steps.append(step);sections.append(step.copy());rules[sid]=dict(lab_id=lid,target_vm='client',report_file=f'step{n}.json',probe=t['probe'])
+    summary='## Tổng kết\n\n'+l['theory']+'\n\nTự trả lời câu hỏi từng task và ghi điều đã đo/điều chưa đo. Chỉ kết luận trong phạm vi bằng chứng. Giữ các tệp của bài để ôn, không cần thay cấu hình Windows để hoàn nguyên.'
+    sections.append(dict(id=lid+'-summary',title='Tổng kết và tự đánh giá',title_vi='Tổng kết và tự đánh giá',kind='summary',position=3,need_verify=False,content=summary,content_vi=summary))
+    lab=dict(id=lid,course_id=COURSE,order=order,title=l['title'],title_vi=l['title'],type='lab',difficulty='Beginner',estimated_time='35–45 mins',target_vm='client',curriculum_version=1,curriculum_origin='locally-authored-microsoft-references',curriculum_module=f'{COURSE}-module-{l["module"]}',overview=l['theory'],practice_mode='configuration-diagnostics',preparation=dict(mode='self-contained',requires_vm_start=True,target='client',fault_injection=False),references=[dict(title='Microsoft Learn',publisher='Microsoft',url=u,accessed_at='2026-10-22') for u in l['refs']],steps=steps,sections=sections)
+    (DATA/'labs'/f'{lid}.json').write_text(json.dumps(lab,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(DATA/'windows-networking-rules.json').write_text(json.dumps(rules,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+plan=json.loads((DATA/'windows-roadmap.json').read_text(encoding='utf-8'));c=next(c for c in plan['courses'] if c['id']==COURSE)
+c['practice_strategy']='Học 6 bài theo thứ tự; dự đoán và quan sát trước, đối chiếu bằng chứng, chỉ sửa tệp bài và dùng thử nghiệm TCP/HTTP loopback.'
+c['environment_plan']='CLIENT01 hiện có; không đổi NIC/DNS/route/firewall; loopback listener tự đóng, lỗi chỉ trong cấu hình ứng dụng của bài.'
+for i,m in enumerate(c['syllabus_modules'],1):
+    m['lab_ids']=[l['id'] for l in lessons if l['module']==i];m['planned_lessons']=[l['title'] for l in lessons if l['module']==i]
+plan['guidance']='Bắt đầu bằng Windows 11 nền tảng, sau đó mạng Windows và PowerShell trước khi luyện IT Support; các khóa đề cương còn lại chưa triển khai đủ bài. Thứ tự khuyến nghị, không khóa bài đã có.'
+plan['updated_at']='2026-10-22';(DATA/'windows-roadmap.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+catalog=json.loads((DATA/'courses.json').read_text(encoding='utf-8'));c=next(c for c in catalog if c['id']==COURSE)
+c.update(curriculum_status='implemented',curriculum_origin='locally-authored-microsoft-references',description='6 bài mạng Windows cho IT Support: IPv4/subnet/route, DHCP/APIPA, DNS, TCP/HTTP, sửa cấu hình ứng dụng loopback và báo cáo chẩn đoán. 12 nhiệm vụ kiểm tra dữ liệu thật, tình huống và phép thử socket có phạm vi rõ; không đổi cấu hình mạng VM.',skills=['IPv4 và subnet','Gateway và routing','DHCP/APIPA','DNS','TCP và HTTP','Chẩn đoán có bằng chứng'])
+(DATA/'courses.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print('Built networking: 6 lessons / 12 tasks; no VM start or system network mutation.')

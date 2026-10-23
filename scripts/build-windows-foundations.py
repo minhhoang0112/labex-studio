@@ -130,6 +130,8 @@ for i,module in enumerate(c['syllabus_modules'],1):
     module['planned_lessons']=[l['title'] for l in lessons if l['module']==i]
 plan['available_start_course_id']=COURSE
 plan['guidance']='Bắt đầu bằng 6 bài nền tảng Windows 11 trên CLIENT01; tiếp tục PowerShell và IT Support theo kỹ năng cần luyện. Khóa mạng và các khóa đề cương còn lại chưa có đủ bài; không coi đề cương là đã triển khai. Thứ tự là khuyến nghị, không khóa bài đã có.'
+if len(list((DATA/'labs').glob('win-nwf-*.json')))==6:
+    plan['guidance']='Bắt đầu bằng Windows 11 nền tảng, sau đó mạng Windows và PowerShell trước khi luyện IT Support; các khóa đề cương còn lại chưa triển khai đủ bài. Thứ tự khuyến nghị, không khóa bài đã có.'
 plan['updated_at']='2026-10-22';(DATA/'windows-roadmap.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 catalog=json.loads((DATA/'courses.json').read_text(encoding='utf-8'));c=next(c for c in catalog if c['id']==COURSE)
 c.update(curriculum_status='implemented',curriculum_origin='locally-authored-microsoft-references',description='6 bài nền tảng trên Windows 11 CLIENT01: khảo sát hệ điều hành/công cụ, process/service/startup, user/SID/UAC, tệp/profile/NTFS, chuẩn bị bảo trì phần mềm/driver/update và diễn tập thay đổi–hoàn nguyên trên tệp mẫu. Có 12 nhiệm vụ kiểm tra dữ liệu thực tế; không đổi cấu hình hệ thống để làm bài.',skills=['Windows 11','IT Support','Tài khoản và UAC','NTFS','Bảo trì','Baseline và rollback'])

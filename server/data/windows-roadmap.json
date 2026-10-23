@@ -4,12 +4,12 @@
   "title": "Lộ trình Windows: IT Support → System Administrator",
   "description": "Lộ trình từ máy trạm Windows 11, mạng và PowerShell đến hỗ trợ người dùng, quản trị Windows Server, vận hành, bảo mật và dự án doanh nghiệp. Nhánh Azure hybrid là tùy chọn.",
   "curriculum_origin": "locally-planned-microsoft-references",
-  "updated_at": "2026-10-22",
+  "updated_at": "2026-10-23",
   "start_course_id": "windows-11-fundamentals",
   "available_start_course_id": "windows-11-fundamentals",
   "prerequisites_advisory": true,
   "source_order": [],
-  "guidance": "Bắt đầu bằng 6 bài nền tảng Windows 11 trên CLIENT01; tiếp tục PowerShell và IT Support theo kỹ năng cần luyện. Khóa mạng và các khóa đề cương còn lại chưa có đủ bài; không coi đề cương là đã triển khai. Thứ tự là khuyến nghị, không khóa bài đã có.",
+  "guidance": "Bắt đầu bằng Windows 11 nền tảng, sau đó mạng Windows và PowerShell trước khi luyện IT Support; các khóa đề cương còn lại chưa triển khai đủ bài. Thứ tự khuyến nghị, không khóa bài đã có.",
   "stages": [
     {
       "id": "foundations",
@@ -148,7 +148,7 @@
         "Chẩn đoán theo lớp thay vì thử lệnh ngẫu nhiên"
       ],
       "optional": false,
-      "environment_plan": "CLIENT01 hiện có; bài thay đổi IP cần đường truy cập dự phòng",
+      "environment_plan": "CLIENT01 hiện có; không đổi NIC/DNS/route/firewall; loopback listener tự đóng, lỗi chỉ trong cấu hình ứng dụng của bài.",
       "references": [
         {
           "title": "Windows Server Networking",
@@ -159,30 +159,42 @@
           "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/networking-overview"
         }
       ],
-      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "practice_strategy": "Học 6 bài theo thứ tự; dự đoán và quan sát trước, đối chiếu bằng chứng, chỉ sửa tệp bài và dùng thử nghiệm TCP/HTTP loopback.",
       "syllabus_modules": [
         {
           "id": "windows-networking-fundamentals-module-1",
           "title": "Đọc cấu hình mạng",
           "planned_lessons": [
-            "Đọc IP, subnet mask, gateway và đường đi gói tin",
-            "Phân biệt IP tĩnh, DHCP và địa chỉ APIPA"
+            "IPv4, subnet và bảng định tuyến",
+            "DHCP, IP tĩnh và APIPA: đọc đúng dấu hiệu"
+          ],
+          "lab_ids": [
+            "win-nwf-ipv4-routing",
+            "win-nwf-dhcp-apipa"
           ]
         },
         {
           "id": "windows-networking-fundamentals-module-2",
           "title": "Phân giải tên và kết nối",
           "planned_lessons": [
-            "Phân biệt lỗi DNS với lỗi đường truyền",
-            "Kiểm tra TCP, firewall và kết nối ứng dụng"
+            "DNS, resolver và lỗi truy cập bằng tên",
+            "TCP, firewall và kiểm tra ở lớp ứng dụng"
+          ],
+          "lab_ids": [
+            "win-nwf-dns-resolution",
+            "win-nwf-tcp-http"
           ]
         },
         {
           "id": "windows-networking-fundamentals-module-3",
           "title": "Tình huống helpdesk",
           "planned_lessons": [
-            "Chẩn đoán có mạng nhưng không truy cập được dịch vụ",
-            "Lập sơ đồ mạng và báo cáo bằng chứng trước/sau"
+            "Helpdesk: sửa đường dẫn dịch vụ và kiểm tra lại",
+            "Sơ đồ kết nối, báo cáo và quy trình chẩn đoán"
+          ],
+          "lab_ids": [
+            "win-nwf-helpdesk-endpoint",
+            "win-nwf-evidence-runbook"
           ]
         }
       ],
@@ -337,37 +349,49 @@
         "Triển khai GPO và chẩn đoán xác thực/domain join"
       ],
       "optional": false,
-      "environment_plan": "Server + CLIENT01: phải khảo sát VNet/DNS/domain và baseline trước khi triển khai",
+      "environment_plan": "Windows Server hiện có; AD/DNS/GPO có namespace và manifest riêng. Client cần private path/domain; DHCP lease cần runtime cô lập. Chưa xác nhận live vì Azure thiếu capacity.",
       "references": [
         {
           "title": "Deploy and manage Active Directory Domain Services",
           "url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-active-directory-domain-services/"
         }
       ],
-      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "practice_strategy": "6 bài/18 nhiệm vụ đã có nội dung; xem readiness từng task. Phần domain/client và DHCP cô lập chưa đủ môi trường không được chấm giả.",
       "syllabus_modules": [
         {
           "id": "windows-active-directory-group-policy-module-1",
           "title": "Thiết kế danh tính",
           "planned_lessons": [
-            "Thiết kế OU, security group và quy tắc cấp quyền",
-            "Vòng đời tài khoản: onboarding, offboarding và delegation"
+            "Thiết kế OU, nhóm bảo mật và AGDLP",
+            "Vòng đời tài khoản và delegation tối thiểu"
+          ],
+          "lab_ids": [
+            "win-adg-ou-groups",
+            "win-adg-account-delegation"
           ]
         },
         {
           "id": "windows-active-directory-group-policy-module-2",
           "title": "Group Policy",
           "planned_lessons": [
-            "Thiết lập, liên kết và kiểm tra phạm vi áp dụng GPO",
-            "Đọc gpresult, xử lý xung đột và lỗi policy"
+            "Tạo GPO, marker và phạm vi liên kết",
+            "Chẩn đoán GPO bằng phạm vi và RSoP"
+          ],
+          "lab_ids": [
+            "win-adg-gpo-scope",
+            "win-adg-policy-diagnostics"
           ]
         },
         {
           "id": "windows-active-directory-group-policy-module-3",
           "title": "Máy trạm trong domain",
           "planned_lessons": [
-            "Domain join, DNS và đồng bộ thời gian",
-            "Chẩn đoán đăng nhập domain và secure channel"
+            "Domain join, DNS và kiểm tra secure channel",
+            "Điều tra đăng nhập domain và biên bản xử lý"
+          ],
+          "lab_ids": [
+            "win-adg-domain-join",
+            "win-adg-auth-runbook"
           ]
         }
       ],
@@ -389,37 +413,49 @@
         "Chẩn đoán sự cố cấp IP và phân giải tên theo bằng chứng"
       ],
       "optional": false,
-      "environment_plan": "DNS có thể dùng Server hiện có; DHCP cần mạng lab cô lập phù hợp, không thay DHCP của Azure VNet",
+      "environment_plan": "Windows Server hiện có; AD/DNS/GPO có namespace và manifest riêng. Client cần private path/domain; DHCP lease cần runtime cô lập. Chưa xác nhận live vì Azure thiếu capacity.",
       "references": [
         {
           "title": "Windows Server Networking",
           "url": "https://learn.microsoft.com/en-us/windows-server/networking/"
         }
       ],
-      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "practice_strategy": "6 bài/18 nhiệm vụ đã có nội dung; xem readiness từng task. Phần domain/client và DHCP cô lập chưa đủ môi trường không được chấm giả.",
       "syllabus_modules": [
         {
           "id": "windows-dns-dhcp-network-services-module-1",
           "title": "DNS nội bộ",
           "planned_lessons": [
-            "Tạo forward/reverse zone và bản ghi cần thiết",
-            "Kiểm tra client resolver, cache và forwarder"
+            "Forward zone, A/CNAME và reverse PTR",
+            "Resolver, cache, TTL và forwarder"
+          ],
+          "lab_ids": [
+            "win-dnsdhcp-zones-records",
+            "win-dnsdhcp-resolver-cache"
           ]
         },
         {
           "id": "windows-dns-dhcp-network-services-module-2",
           "title": "DHCP",
           "planned_lessons": [
-            "Thiết kế scope, exclusion, reservation và option",
-            "Đọc lease, authorization và nhật ký DHCP"
+            "DHCP scope inactive, exclusion, reservation và option",
+            "DHCP authorization, lease thật và nhật ký"
+          ],
+          "lab_ids": [
+            "win-dnsdhcp-scope-options",
+            "win-dnsdhcp-lease-audit"
           ]
         },
         {
           "id": "windows-dns-dhcp-network-services-module-3",
           "title": "Xử lý lỗi mạng doanh nghiệp",
           "planned_lessons": [
-            "Chẩn đoán DNS record sai hoặc dịch vụ dừng",
-            "Phân tích thiếu lease và sai tùy chọn mạng"
+            "Sửa record DNS sai bằng bằng chứng authoritative",
+            "Điều tra lease và option DHCP sai"
+          ],
+          "lab_ids": [
+            "win-dnsdhcp-dns-incident",
+            "win-dnsdhcp-dhcp-incident"
           ]
         }
       ],

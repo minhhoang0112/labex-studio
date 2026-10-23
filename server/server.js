@@ -10,6 +10,7 @@ import coursesRouter from "./routes/courses.js";
 import verifyRouter from "./routes/verify.js";
 import aiRouter from "./routes/ai.js";
 import { createCloudVmRouter } from "./routes/cloudVm.js";
+import { createWindowsEnterpriseRouter } from './routes/windowsEnterprise.js';
 import { createDesktopGateway } from "./services/desktopGateway.js";
 import { createLiveVoiceGateway } from "./services/liveVoiceGateway.js";
 import { createEnvironmentRouter } from "./routes/environment.js";
@@ -71,6 +72,7 @@ app.use("/api", createEnvironmentRouter({ disconnect: async (labId) => {
 } }));
 app.use("/api", verifyRouter);
 app.use("/api", createCloudVmRouter({ desktop: desktopGateway }));
+app.use('/api',createWindowsEnterpriseRouter());
 app.use("/api/ai", aiRouter);
 app.use("/api", (_req, res) => res.status(404).json({ error: "API không tồn tại." }));
 

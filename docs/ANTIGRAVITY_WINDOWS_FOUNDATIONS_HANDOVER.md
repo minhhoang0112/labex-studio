@@ -1,5 +1,7 @@
 # Bàn giao Windows 11 Fundamentals — 2026-10-22
 
+> Cập nhật sau khi bổ sung khóa mạng: xem `ANTIGRAVITY_WINDOWS_NETWORKING_HANDOVER.md` để lấy tổng số lộ trình mới và thay đổi xác nhận thực thi PowerShell. Số 46 bài/5 khóa trong bản bàn giao dưới đây là mốc trước khi thêm khóa mạng.
+
 ## Phạm vi đã triển khai
 
 Khóa `windows-11-fundamentals` có 6 bài thật / 12 nhiệm vụ có bộ chấm backend. Nội dung tiếng Việt tự biên soạn theo tài liệu Microsoft được dẫn ngay trong mỗi bài; không gắn nhãn bản sao LabEx hoặc chứng chỉ Microsoft. Không triển khai khóa mạng Windows trong đợt này.

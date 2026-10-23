@@ -38,7 +38,7 @@ test('PowerShell runs through the Azure agent and validates an unpredictable res
     script = input.script[0];
     const marker = script.match(/LABEX_RESULT_[a-f0-9]+:/)[0];
     return { pollUntilDone: async () => ({ value: [{ code: 'ComponentStatus/StdOut/succeeded',
-      message: marker + JSON.stringify({ exitCode: 0, stdout: 'REMOTE', stderr: '', computerName: 'VM01', identity: 'NT AUTHORITY\\SYSTEM', timedOut: false }) }] }) };
+      message: marker + JSON.stringify({ exitCode: 0, executionConfirmed:true, stdout: 'REMOTE', stderr: '', computerName: 'VM01', identity: 'NT AUTHORITY\\SYSTEM', timedOut: false }) }] }) };
   } } };
   const execute = createWindowsRemoteExecutor({ client: () => client, config: () => ({ resourceGroup: 'rg', vmName: 'vm' }) });
   const result = await execute('whoami', { labId: 'win-powershell-basics' });
@@ -46,9 +46,12 @@ test('PowerShell runs through the Azure agent and validates an unpredictable res
   assert.equal(result.target, 'vm');
   assert.match(script, /WorkingDirectory/);
   const encoded = script.match(/\$payload='([^']+)'/)[1];
-  assert.ok(Buffer.from(encoded, 'base64').toString('utf16le').endsWith('whoami'));
+  assert.ok(Buffer.from(encoded, 'base64').toString('utf16le').includes('whoami'));
+  assert.match(Buffer.from(encoded,'base64').toString('utf16le'),/finally.*LABEX_EXECUTED_/);
   const broken = createWindowsRemoteExecutor({ client: () => ({ virtualMachines: { runCommand: () => ({ pollUntilDone: async () => ({ value: [] }) }) } }), config: () => ({}) });
   await assert.rejects(broken('whoami'), error => error.code === 'CLOUD_REMOTE_PROTOCOL');
+  const empty = createWindowsRemoteExecutor({client:()=>({virtualMachines:{runCommand:(_rg,_vm,input)=>({pollUntilDone:async()=>({value:[{code:'StdOut',message:input.script[0].match(/LABEX_RESULT_[a-f0-9]+:/)[0]+JSON.stringify({exitCode:0,stdout:'',stderr:'',computerName:'VM01',timedOut:false})}]})})}}),config:()=>({})});
+  await assert.rejects(empty('Write-Output expected'),error=>error.code==='CLOUD_REMOTE_PROTOCOL');
 });
 
 test('remote GUI grading checks actual AD/IIS state, rejects failures and ignores local command history', async () => {
