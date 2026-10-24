@@ -169,9 +169,9 @@
         "command": "getent passwd joker >/dev/null && getent passwd batman >/dev/null && test \"$(getent passwd joker | cut -d: -f6)\" = /home/joker && test \"$(getent passwd batman | cut -d: -f6)\" = /home/gotham && test -d /home/joker && test -d /home/gotham"
       },
       "title_vi": "Tạo Các Tài Khoản Người Dùng",
-      "content_vi": "Trong bước này, bạn sẽ tạo các tài khoản người dùng với các đặc tả kỹ thuật khác nhau.\n\n### Nhiệm vụ\n\n1. Tạo một người dùng tên là `joker` không tự động tạo thư mục home.\n2. Tạo một người dùng tên là `batman` có tạo thư mục cá nhân `/home/batman`.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `useradd` kết hợp với `sudo`.\n- Dùng cờ `-m` cho người dùng `batman`.",
-      "task_vi": "Tạo tài khoản joker và tài khoản batman có thư mục home.",
-      "hint_vi": "Dùng sudo useradd joker và sudo useradd -m batman."
+      "content_vi": "Trong bước này, bạn sẽ tạo một số tài khoản người dùng với các thông số kỹ thuật khác nhau.\n\n### Nhiệm vụ (Tasks)\n\nHoàn thành các nhiệm vụ sau theo thứ tự:\n\n1. Tạo một người dùng có tên `joker`.\n2. Tạo một người dùng có tên `batman` với thư mục cá nhân tại `/home/gotham`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `useradd` cho tất cả các thao tác tạo người dùng.\n- Đảm bảo cả hai người dùng đều được tự động tạo thư mục cá nhân trong quá trình tạo tài khoản.\n- Người dùng `batman` có thư mục cá nhân khác với vị trí mặc định (`/home/gotham`).\n\n### Ví dụ (Example)\n\nSau khi hoàn thành các nhiệm vụ này, bạn có thể xác minh thông tin người dùng như sau:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nKết quả mẫu:\n\n```plaintext\njoker:x:5001:5001::/home/joker:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/sh\n```",
+      "task_vi": "Tạo người dùng joker và người dùng batman (thư mục /home/gotham) bằng useradd.",
+      "hint_vi": "Chạy sudo useradd -m joker và sudo useradd -m -d /home/gotham batman."
     },
     {
       "id": "source-270247-section-2",
@@ -189,9 +189,9 @@
         "command": "test \"$(sudo passwd -S joker | awk '{print $2}')\" = P && test \"$(sudo passwd -S batman | awk '{print $2}')\" = P"
       },
       "title_vi": "Quản Lý Mật Khẩu Người Dùng",
-      "content_vi": "Trong bước này, bạn sẽ kích hoạt tài khoản bằng cách đặt mật khẩu cho các người dùng vừa tạo.\n\n### Nhiệm vụ\n\n1. Đặt mật khẩu cho người dùng `joker`.\n2. Đặt mật khẩu cho người dùng `batman`.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `passwd` với quyền `sudo`.",
-      "task_vi": "Đặt mật khẩu cho người dùng joker và batman.",
-      "hint_vi": "Chạy sudo passwd joker và sudo passwd batman."
+      "content_vi": "Trong bước này, bạn sẽ thiết lập và thay đổi mật khẩu cho các tài khoản người dùng.\n\n### Nhiệm vụ (Tasks)\n\nHoàn thành các nhiệm vụ sau:\n\n1. Đặt mật khẩu cho người dùng `joker`.\n2. Đặt mật khẩu cho người dùng `batman`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `passwd` cho tất cả các thao tác xử lý mật khẩu.\n- Đối với thử thách này, hãy sử dụng các mật khẩu đơn giản như `password123`.\n\n### Ví dụ (Example)\n\nSau khi thiết lập mật khẩu, bạn có thể kiểm tra trạng thái mật khẩu bằng lệnh:\n\n```bash\nsudo passwd -S joker\nsudo passwd -S batman\n```\n\nKết quả mẫu:\n\n```plaintext\njoker P 01/19/2024 0 99999 7 -1\nbatman P 01/19/2024 0 99999 7 -1\n```\n\nTrong kết quả này, chữ `P` có nghĩa là tài khoản đã có một mật khẩu hợp lệ (Usable Password).",
+      "task_vi": "Thiết lập mật khẩu cho người dùng joker và batman bằng lệnh passwd.",
+      "hint_vi": "Chạy sudo passwd joker và sudo passwd batman (ví dụ đặt password123)."
     },
     {
       "id": "source-270247-section-3",
@@ -208,10 +208,10 @@
         "kind": "state",
         "command": "test \"$(getent passwd joker | cut -d: -f6)\" = /home/arkham && test \"$(getent passwd batman | cut -d: -f7)\" = /bin/bash"
       },
-      "title_vi": "Sửa Đổi Thuộc Tính Tài Khoản",
-      "content_vi": "Trong bước này, bạn sẽ chỉnh sửa thuộc tính của các tài khoản hiện có.\n\n### Nhiệm vụ\n\n1. Thay đổi shell đăng nhập mặc định của `joker` thành `/bin/bash`.\n2. Thêm người dùng `batman` vào nhóm quản trị `sudo`.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `usermod` kèm quyền `sudo`.\n- Dùng cờ `-s` để đổi shell và `-aG` để thêm nhóm.",
-      "task_vi": "Đổi shell của joker thành /bin/bash và thêm batman vào nhóm sudo.",
-      "hint_vi": "Sử dụng sudo usermod -s /bin/bash joker và sudo usermod -aG sudo batman."
+      "title_vi": "Sửa Đổi Tài Khoản Người Dùng",
+      "content_vi": "Trong bước này, bạn sẽ sửa đổi các tài khoản người dùng hiện có.\n\n### Nhiệm vụ (Tasks)\n\nHoàn thành các nhiệm vụ sau:\n\n1. Đổi thư mục cá nhân của người dùng `joker` thành `/home/arkham`.\n2. Đổi shell mặc định của người dùng `batman` thành `/bin/bash`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `usermod` cho tất cả các thao tác sửa đổi thuộc tính.\n\n### Ví dụ (Example)\n\nSau khi thực hiện các thay đổi này, bạn có thể xác minh lại bằng lệnh:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\n```\n\nKết quả mẫu:\n\n```plaintext\njoker:x:5001:5001::/home/arkham:/bin/sh\nbatman:x:5002:5002::/home/gotham:/bin/bash\n```",
+      "task_vi": "Đổi thư mục home của joker thành /home/arkham và shell của batman thành /bin/bash bằng usermod.",
+      "hint_vi": "Chạy sudo usermod -d /home/arkham joker và sudo usermod -s /bin/bash batman."
     },
     {
       "id": "source-270247-section-4",
@@ -249,9 +249,9 @@
         ]
       },
       "title_vi": "Xóa Tài Khoản Người Dùng",
-      "content_vi": "Trong bước kết thúc này, bạn sẽ dọn dẹp các tài khoản theo yêu cầu.\n\n### Nhiệm vụ\n\n1. Xóa người dùng `joker` khỏi hệ thống.\n2. Xóa người dùng `batman` cùng toàn bộ thư mục cá nhân của họ.\n\n### Yêu cầu\n\n- Sử dụng câu lệnh `userdel` kèm quyền `sudo`.\n- Đảm bảo dùng cờ `-r` khi xóa `batman` để dọn sạch thư mục cá nhân.",
-      "task_vi": "Xóa tài khoản joker và xóa batman kèm thư mục home.",
-      "hint_vi": "Dùng sudo userdel joker và sudo userdel -r batman."
+      "content_vi": "Trong bước cuối cùng này, bạn sẽ tiến hành xóa các tài khoản người dùng.\n\n### Nhiệm vụ (Tasks)\n\nHoàn thành các nhiệm vụ sau:\n\n1. Xóa người dùng `joker` nhưng **không xóa** thư mục cá nhân của người này.\n2. Xóa người dùng `batman` **cùng toàn bộ** thư mục cá nhân `/home/gotham` của người này.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `userdel` cho tất cả các thao tác xóa tài khoản.\n\n### Ví dụ (Example)\n\nSau khi xóa các người dùng này, bạn có thể kiểm tra xác minh:\n\n```bash\ngrep -w joker /etc/passwd\ngrep -w batman /etc/passwd\nls -ld /home/gotham\n```\n\nHai câu lệnh `grep` đều không được trả về kết quả nào. Đối với lệnh `ls -ld /home/gotham`, thông báo \"No such file or directory\" xác nhận rằng thư mục này đã được loại bỏ thành công.",
+      "task_vi": "Xóa joker (giữ nguyên thư mục home), và xóa batman cùng thư mục /home/gotham (userdel -r).",
+      "hint_vi": "Chạy sudo userdel joker rồi sudo userdel -r batman."
     }
   ],
   "title_vi": "Thử Thách Joker (The Joker's Trick)"

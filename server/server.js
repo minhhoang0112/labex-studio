@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { WebSocketServer } from "ws";
 import { spawn } from "node:child_process";
 import coursesRouter from "./routes/courses.js";
+import {createAssessmentRouter} from './routes/assessments.js';
 import verifyRouter from "./routes/verify.js";
 import aiRouter from "./routes/ai.js";
 import { createCloudVmRouter } from "./routes/cloudVm.js";
@@ -61,6 +62,7 @@ app.post("/api/system/shutdown", (_req, res) => {
   }, 400);
 });
 app.use("/api", coursesRouter);
+app.use('/api', createAssessmentRouter());
 app.use("/api", createEnvironmentRouter({ disconnect: async (labId) => {
   const clients = [...wss.clients].filter(client => client.labId === labId);
   await Promise.all(clients.map(client => new Promise(resolve => {

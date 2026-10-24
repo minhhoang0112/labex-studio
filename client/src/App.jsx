@@ -4,6 +4,7 @@ import SearchModal from './components/SearchModal';
 import CourseCatalog from './views/CourseCatalog';
 import CourseDetail from './views/CourseDetail';
 import LabWorkspace from './views/LabWorkspace';
+import CourseAssessment from './views/CourseAssessment';
 import LearningPath from './views/LearningPath';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
@@ -15,6 +16,7 @@ function routeFromPath() {
     if (parts[0] === 'paths' && parts[1]) return { view: 'path', id: decodeURIComponent(parts[1]) };
     if (parts[0] === 'courses' && parts[1]) return { view: 'course', id: decodeURIComponent(parts[1]) };
     if (parts[0] === 'labs' && parts[1]) return { view: 'lab', id: decodeURIComponent(parts[1]), courseId: new URLSearchParams(window.location.search).get('courseId') };
+    if (parts[0] === 'assessments' && parts[1]) return {view: 'assessment', id: decodeURIComponent(parts[1])};
   } catch { /* Fallback to catalog */ }
   return { view: 'catalog' };
 }
@@ -95,6 +97,7 @@ export default function App() {
             courseId={route.id}
             onBack={() => navigate('/learn')}
             onStartLab={id => startLab(id, route.id)}
+            onStartAssessment={id => navigate(`/assessments/${encodeURIComponent(id)}`)}
           />
         )}
         {route.view === 'lab' && (
@@ -104,8 +107,12 @@ export default function App() {
             courseId={route.courseId}
             onBackToCourse={id => id ? selectCourse(id) : navigate('/learn')}
             onStartLab={startLab}
+            onStartAssessment={id => navigate(`/assessments/${encodeURIComponent(id)}`)}
           />
         )}
+        {route.view === 'assessment' && <CourseAssessment key={route.id} assessmentId={route.id}
+          onBack={() => selectCourse('quick-start-with-linux')}
+          onOpenLab={id => startLab(id, 'quick-start-with-linux')}/>}
       </main>
 
       {route.view !== 'lab' && (

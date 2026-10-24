@@ -37,6 +37,7 @@ export default function LabWorkspace({
   courseId,
   onBackToCourse,
   onStartLab,
+  onStartAssessment,
 }) {
   const [lab, setLab] = useState(null);
   const [environment, setEnvironment] = useState(null);
@@ -1139,6 +1140,11 @@ export default function LabWorkspace({
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            {!next && lab.course_id === 'quick-start-with-linux' && onStartAssessment && <button
+              onClick={() => onStartAssessment('quick-start-linux-final')}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-bold">
+              Bài 11: Kiểm tra cuối khóa
+            </button>}
             <button
               onClick={() => setShowCompletionModal(false)}
               className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition"

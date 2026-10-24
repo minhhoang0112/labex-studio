@@ -694,4 +694,6 @@ def apply_all():
 
 if __name__ == "__main__":
     apply_all()
+    import runpy
+    runpy.run_path(str(Path(__file__).with_name('repair-quick-start-consistency.py')), run_name='__main__')
 

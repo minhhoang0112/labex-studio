@@ -6,6 +6,7 @@ import { getLinuxRoadmap, readLinuxIndex, readLinuxOutlines, courseReadiness, li
 import { getLabReadiness, getStepReadiness } from "../services/readiness.js";
 import { getVerificationDefinition } from "../services/verification.js";
 import { getWindowsRoadmap, readWindowsRoadmap } from "../services/windowsRoadmap.js";
+import {assessmentSummary} from '../services/courseAssessment.js';
 
 const router = express.Router();
 const readData = (file) => JSON.parse(fs.readFileSync(fileURLToPath(new URL(`../data/${file}`, import.meta.url)), "utf8"));
@@ -146,7 +147,8 @@ router.get("/courses/:id", (req, res, next) => {
           supported_steps_count: 0, total_steps_count: null, missing_capabilities: [],
           reasons: ["Đã có giáo trình nguồn; hướng dẫn và bộ kiểm tra local chưa được triển khai."] } };
     }) }));
-    res.json({ course, labs: stages ? stages.flatMap(stage => stage.labs) : imported.map(summary), ...(stages ? { stages } : {}) });
+    res.json({ course, labs: stages ? stages.flatMap(stage => stage.labs) : imported.map(summary), ...(stages ? { stages } : {}),
+      assessments: course.id === 'quick-start-with-linux' ? [assessmentSummary()] : [] });
   } catch (error) { next(error); }
 });
 router.get("/courses/:id/reference", (req, res, next) => {

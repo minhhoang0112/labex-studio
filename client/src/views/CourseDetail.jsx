@@ -7,7 +7,7 @@ import { labProgress, validPassedSteps, isLabCompleted } from '../lib/progress';
 import CourseSyllabus from '../components/CourseSyllabus';
 import CourseContentBadge from '../components/CourseContentBadge';
 
-export default function CourseDetail({ courseId, onBack, onStartLab }) {
+export default function CourseDetail({ courseId, onBack, onStartLab, onStartAssessment }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -322,6 +322,12 @@ export default function CourseDetail({ courseId, onBack, onStartLab }) {
             </p>
           </div>
         )}
+        {data.assessments?.map(exam => <section key={exam.id} className="mt-6 p-6 rounded-2xl bg-primary-50 dark:bg-primary-950 border border-primary-200 dark:border-primary-800 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center" aria-label="Bài kiểm tra cuối khóa">
+          <div className="space-y-2"><h3 className="text-xl font-bold">{exam.title}</h3>
+            <p className="text-sm">{exam.question_count} câu · Phủ {exam.covered_labs.length} bài lab · Đạt từ {exam.pass_percent}% · Có chấm điểm và giải thích đáp án.</p>
+            <p className="text-xs text-slate-500">Bài bổ sung local, không cần bật terminal. Sau khi nộp có thể ôn từng câu bằng thoại Labby.</p></div>
+          <button onClick={() => onStartAssessment(exam.id)} className="rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold px-5 py-3 shrink-0">Vào bài {exam.order}</button>
+        </section>)}
         {isWindows && course.syllabus_modules?.length>0 && <section className="mt-8 space-y-5" aria-label="Đề cương khóa học Windows">
           <div className="flex flex-wrap justify-between items-center gap-3">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{isPlanned?'Đề cương dự kiến':'Khung kiến thức của khóa'}</h2>

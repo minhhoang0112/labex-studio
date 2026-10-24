@@ -60,16 +60,19 @@
             ],
             "groups": [
               [
-                "^\\s*cat\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s*$"
+                "^\\s*cat\\s+(?:-n\\s+)?(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt(?:\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt)?\\s*$",
+                "^\\s*cat\\s+(?:-n\\s+)?(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s*$"
               ],
               [
-                "^\\s*head\\s+-n\\s*2\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+                "^\\s*head\\s+(?:-n\\s*2|--lines(?:=|\\s+)2|-2)\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s*$"
               ],
               [
-                "^\\s*tail\\s+-n\\s*1\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt(?:\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt)?\\s*$"
+                "^\\s*tail\\s+(?:-n\\s*1|--lines(?:=|\\s+)1|-1)\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt(?:\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt)?\\s*$",
+                "^\\s*tail\\s+(?:-n\\s*1|--lines(?:=|\\s+)1|-1)\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s*$"
               ],
               [
-                "^\\s*tail\\s+-n\\s*1\\s+(?:(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s+)?(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+                "^\\s*tail\\s+(?:-n\\s*1|--lines(?:=|\\s+)1|-1)\\s+(?:(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s+)?(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s*$",
+                "^\\s*tail\\s+(?:-n\\s*1|--lines(?:=|\\s+)1|-1)\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s*$"
               ]
             ]
           },
@@ -80,9 +83,9 @@
         ]
       },
       "title_vi": "Kiểm Tra Nội Dung Tệp Tin",
-      "content_vi": "Trong bước này, bạn sẽ sử dụng các lệnh `cat`, `head`, và `tail` để kiểm tra hai tệp tin bí ẩn.\n\n### Nhiệm vụ (Tasks)\n\n1. Sử dụng `cat` để xem toàn bộ nội dung của cả hai tệp: `/home/labex/project/manuscript_v1.txt` và `/home/labex/project/manuscript_v2.txt`.\n2. Sử dụng `head` để xem 3 dòng đầu tiên của mỗi tệp.\n3. Sử dụng `tail` để xem 3 dòng cuối cùng của mỗi tệp.\n\n### Yêu cầu (Requirements)\n\n- Thực hiện tất cả các lệnh từ thư mục làm việc hiện tại của bạn hoặc sử dụng đường dẫn tuyệt đối.\n- Quan sát nội dung cẩn thận để tìm bất kỳ sự khác biệt nào mà mắt thường có thể nhận thấy.\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, việc chạy lệnh `head`:\n\n```bash\nhead -n 3 /home/labex/project/manuscript_v1.txt\n```\n\nSẽ cho kết quả tương tự như sau:\n\n```plaintext\nThe old grandfather clock struck midnight.\nA shadow moved across the room.\nDetective Vance held his breath.\n```",
-      "task_vi": "Dùng cat, head, tail để kiểm tra hai tệp manuscript_v1.txt và manuscript_v2.txt trong ~/project.",
-      "hint_vi": "Chạy cat ~/project/manuscript_v1.txt, head -n 3 và tail -n 3 trên cả 2 tệp."
+      "content_vi": "Trong bước này, dùng `cat`, `head` và `tail` để kiểm tra hai tệp có sẵn. Không sửa nội dung tệp.\n\n### Nhiệm vụ\n\n1. Dùng `cat` xem toàn bộ `/home/labex/project/manuscript_v1.txt`.\n2. Dùng `head` xem **2 dòng đầu** của `/home/labex/project/manuscript_v2.txt`.\n3. Dùng `tail` xem **1 dòng cuối của cả hai tệp**.\n\n### Gợi ý thực hiện\n\n```bash\ncd ~/project\ncat manuscript_v1.txt\nhead -n 2 manuscript_v2.txt\ntail -n 1 manuscript_v1.txt manuscript_v2.txt\n```\n\nCó thể đọc hai tệp bằng hai lệnh `tail` riêng. `-n 2` chọn 2 dòng, `-n 1` chọn 1 dòng; đọc 3 dòng là một thao tác khác với yêu cầu này.\n\n### Đối chiếu dữ liệu local\n\nLệnh `cat manuscript_v1.txt` sẽ hiển thị:\n\n```text\nThe room fell silent.\nA shadow moved across the room.\nThe mystery continued.\n```\n\n`head -n 2 manuscript_v2.txt` hiển thị:\n\n```text\nThe room fell silent.\nA figure darted behind the curtains.\n```\n\nDòng cuối của mỗi tệp là `The mystery continued.`. Dòng 1 và 3 của dữ liệu thực hành được biên soạn local; chỉ dòng khác biệt thứ 2 đã được đối chiếu nguồn. Không cần sửa tệp để làm giống một ví dụ khác.",
+      "task_vi": "Dùng cat xem manuscript_v1.txt; head xem hai dòng đầu manuscript_v2.txt; tail xem dòng cuối cả hai file trong /home/labex/project.",
+      "hint_vi": "Chạy cat manuscript_v1.txt; head -n 2 manuscript_v2.txt; tail -n 1 manuscript_v1.txt manuscript_v2.txt trong ~/project."
     },
     {
       "id": "source-384742-section-2",
@@ -107,7 +110,7 @@
             ],
             "groups": [
               [
-                "^\\s*diff\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+                "^\\s*diff\\s+(?:(?:-u|--unified|-U\\s*3)\\s+)?(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s*$"
               ]
             ]
           },
@@ -118,7 +121,7 @@
         ]
       },
       "title_vi": "So Sánh Các Tệp Tin",
-      "content_vi": "Bây giờ bạn đã kiểm tra các tệp tin một cách riêng lẻ, đã đến lúc so sánh trực tiếp hai tệp này với nhau bằng công cụ chuyên dụng.\n\n### Nhiệm vụ (Tasks)\n\n1. Sử dụng lệnh `diff` để so sánh giữa `/home/labex/project/manuscript_v1.txt` và `/home/labex/project/manuscript_v2.txt`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `diff` như đã được hướng dẫn trong bài thực hành File Contents and Comparing.\n- Phân tích kết quả đầu ra để hiểu chính xác những điểm khác biệt giữa hai tệp.\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n2c2\n< A shadow moved across the room.\n---\n> A figure darted behind the curtains.\n```\n\nKết quả này chỉ ra rằng dòng thứ hai có sự khác biệt giữa hai phiên bản bản thảo.",
+      "content_vi": "Bây giờ bạn đã kiểm tra các tệp tin một cách riêng lẻ, đã đến lúc so sánh trực tiếp hai tệp này với nhau bằng công cụ chuyên dụng.\n\n### Nhiệm vụ (Tasks)\n\n1. Sử dụng lệnh `diff` để so sánh giữa `/home/labex/project/manuscript_v1.txt` và `/home/labex/project/manuscript_v2.txt`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `diff` như đã được hướng dẫn trong bài thực hành File Contents and Comparing.\n- Phân tích kết quả đầu ra để hiểu chính xác những điểm khác biệt giữa hai tệp.\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n2c2\n< A shadow moved across the room.\n---\n> A figure darted behind the curtains.\n```\n\nKết quả này chỉ ra rằng dòng thứ hai có sự khác biệt giữa hai phiên bản bản thảo.\n\nCó thể dùng `diff -u` để xem định dạng hợp nhất. Khi hai tệp khác nhau, `diff` trả mã 1 là kết quả so sánh hợp lệ; mã 2 là lỗi đọc tệp/cú pháp và không được chấm đạt.",
       "task_vi": "Dùng lệnh diff để so sánh hai tệp manuscript_v1.txt và manuscript_v2.txt.",
       "hint_vi": "Chạy diff /home/labex/project/manuscript_v1.txt /home/labex/project/manuscript_v2.txt."
     },
@@ -159,16 +162,19 @@
             ],
             "groups": [
               [
-                "^\\s*cat\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s*$"
+                "^\\s*cat\\s+(?:-n\\s+)?(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt(?:\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt)?\\s*$",
+                "^\\s*cat\\s+(?:-n\\s+)?(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s*$"
               ],
               [
-                "^\\s*head\\s+-n\\s*2\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+                "^\\s*head\\s+(?:-n\\s*2|--lines(?:=|\\s+)2|-2)\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s*$"
               ],
               [
-                "^\\s*tail\\s+-n\\s*1\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt(?:\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt)?\\s*$"
+                "^\\s*tail\\s+(?:-n\\s*1|--lines(?:=|\\s+)1|-1)\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt(?:\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt)?\\s*$",
+                "^\\s*tail\\s+(?:-n\\s*1|--lines(?:=|\\s+)1|-1)\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s*$"
               ],
               [
-                "^\\s*tail\\s+-n\\s*1\\s+(?:(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s+)?(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+                "^\\s*tail\\s+(?:-n\\s*1|--lines(?:=|\\s+)1|-1)\\s+(?:(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s+)?(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s*$",
+                "^\\s*tail\\s+(?:-n\\s*1|--lines(?:=|\\s+)1|-1)\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s*$"
               ]
             ]
           },
@@ -178,10 +184,10 @@
           }
         ]
       },
-      "title_vi": "Khám Phá Nội Dung Bản Thảo",
-      "content_vi": "Trong bước này, bạn sẽ sử dụng các lệnh `cat`, `head`, và `tail` để kiểm tra hai tệp văn bản bí ẩn.\n\n### Nhiệm vụ\n\n1. Sử dụng lệnh `cat` để xem toàn bộ nội dung của tệp `manuscript_page_v1.txt`.\n2. Sử dụng lệnh `head` để chỉ đọc 3 dòng đầu tiên của `manuscript_page_v2.txt`.\n3. Sử dụng lệnh `tail` để đọc 3 dòng cuối cùng của `manuscript_page_v1.txt`.\n\n### Hướng dẫn thực hiện\n\n```bash\ncat manuscript_page_v1.txt\nhead -n 3 manuscript_page_v2.txt\ntail -n 3 manuscript_page_v1.txt\n```\n\nHãy quan sát kỹ các chi tiết văn bản xuất hiện trên màn hình terminal để nắm bắt cốt truyện và phát hiện các manh mối.",
-      "task_vi": "Sử dụng cat, head và tail để kiểm tra nội dung hai tệp bản thảo.",
-      "hint_vi": "Chạy cat manuscript_page_v1.txt, head -n 3 và tail -n 3."
+      "title_vi": "Kiểm Tra Nội Dung Tệp Tin",
+      "content_vi": "Trong bước này, dùng `cat`, `head` và `tail` để kiểm tra hai tệp có sẵn. Không sửa nội dung tệp.\n\n### Nhiệm vụ\n\n1. Dùng `cat` xem toàn bộ `/home/labex/project/manuscript_v1.txt`.\n2. Dùng `head` xem **2 dòng đầu** của `/home/labex/project/manuscript_v2.txt`.\n3. Dùng `tail` xem **1 dòng cuối của cả hai tệp**.\n\n### Gợi ý thực hiện\n\n```bash\ncd ~/project\ncat manuscript_v1.txt\nhead -n 2 manuscript_v2.txt\ntail -n 1 manuscript_v1.txt manuscript_v2.txt\n```\n\nCó thể đọc hai tệp bằng hai lệnh `tail` riêng. `-n 2` chọn 2 dòng, `-n 1` chọn 1 dòng; đọc 3 dòng là một thao tác khác với yêu cầu này.\n\n### Đối chiếu dữ liệu local\n\nLệnh `cat manuscript_v1.txt` sẽ hiển thị:\n\n```text\nThe room fell silent.\nA shadow moved across the room.\nThe mystery continued.\n```\n\n`head -n 2 manuscript_v2.txt` hiển thị:\n\n```text\nThe room fell silent.\nA figure darted behind the curtains.\n```\n\nDòng cuối của mỗi tệp là `The mystery continued.`. Dòng 1 và 3 của dữ liệu thực hành được biên soạn local; chỉ dòng khác biệt thứ 2 đã được đối chiếu nguồn. Không cần sửa tệp để làm giống một ví dụ khác.",
+      "task_vi": "Dùng cat xem manuscript_v1.txt; head xem hai dòng đầu manuscript_v2.txt; tail xem dòng cuối cả hai file trong /home/labex/project.",
+      "hint_vi": "Chạy cat manuscript_v1.txt; head -n 2 manuscript_v2.txt; tail -n 1 manuscript_v1.txt manuscript_v2.txt trong ~/project."
     },
     {
       "id": "source-384742-section-2",
@@ -206,7 +212,7 @@
             ],
             "groups": [
               [
-                "^\\s*diff\\s+(?:/home/labex/project/|~/project/)?manuscript_v1\\.txt\\s+(?:/home/labex/project/|~/project/)?manuscript_v2\\.txt\\s*$"
+                "^\\s*diff\\s+(?:(?:-u|--unified|-U\\s*3)\\s+)?(?:/home/labex/project/|~/project/|\\./)?manuscript_v1\\.txt\\s+(?:/home/labex/project/|~/project/|\\./)?manuscript_v2\\.txt\\s*$"
               ]
             ]
           },
@@ -216,10 +222,10 @@
           }
         ]
       },
-      "title_vi": "So Sánh Hai Bản Thảo",
-      "content_vi": "Bây giờ bạn đã xem qua từng tệp riêng lẻ, đã đến lúc so sánh trực tiếp hai bản thảo để tìm ra sự khác biệt mấu chốt.\n\n### Nhiệm vụ\n\n1. Sử dụng câu lệnh `diff` ở định dạng hợp nhất (`-u`) để so sánh `manuscript_page_v1.txt` và `manuscript_page_v2.txt`.\n\n```bash\ndiff -u manuscript_page_v1.txt manuscript_page_v2.txt\n```\n\n### Phân tích kết quả\n\nHãy chú ý các dòng bắt đầu bằng dấu `-` (nội dung có trong bản v1 nhưng bị loại bỏ ở bản v2) và các dòng bắt đầu bằng dấu `+` (nội dung mới được tác giả đưa vào bản v2). Những thay đổi này chứa đựng lời giải cho bí ẩn của bản thảo!",
-      "task_vi": "Chạy lệnh diff -u manuscript_page_v1.txt manuscript_page_v2.txt để tìm điểm dị biệt.",
-      "hint_vi": "Sử dụng lệnh diff -u giữa 2 tệp bản thảo."
+      "title_vi": "So Sánh Các Tệp Tin",
+      "content_vi": "Bây giờ bạn đã kiểm tra các tệp tin một cách riêng lẻ, đã đến lúc so sánh trực tiếp hai tệp này với nhau bằng công cụ chuyên dụng.\n\n### Nhiệm vụ (Tasks)\n\n1. Sử dụng lệnh `diff` để so sánh giữa `/home/labex/project/manuscript_v1.txt` và `/home/labex/project/manuscript_v2.txt`.\n\n### Yêu cầu (Requirements)\n\n- Sử dụng lệnh `diff` như đã được hướng dẫn trong bài thực hành File Contents and Comparing.\n- Phân tích kết quả đầu ra để hiểu chính xác những điểm khác biệt giữa hai tệp.\n\n### Ví dụ (Example)\n\nSau khi hoàn thành nhiệm vụ, bạn sẽ thấy kết quả tương tự như sau:\n\n```bash\n2c2\n< A shadow moved across the room.\n---\n> A figure darted behind the curtains.\n```\n\nKết quả này chỉ ra rằng dòng thứ hai có sự khác biệt giữa hai phiên bản bản thảo.\n\nCó thể dùng `diff -u` để xem định dạng hợp nhất. Khi hai tệp khác nhau, `diff` trả mã 1 là kết quả so sánh hợp lệ; mã 2 là lỗi đọc tệp/cú pháp và không được chấm đạt.",
+      "task_vi": "Dùng lệnh diff để so sánh hai tệp manuscript_v1.txt và manuscript_v2.txt.",
+      "hint_vi": "Chạy diff /home/labex/project/manuscript_v1.txt /home/labex/project/manuscript_v2.txt."
     }
   ],
   "title_vi": "Bản Thảo Bí Ẩn (The Manuscript Mystery)"

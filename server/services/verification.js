@@ -77,7 +77,8 @@ export async function verifyDefinition(labId, definition, {
     }
     const result = await runCommand(labId, definition.command);
     return { supported: true, passed: result.exitCode === 0 && !result.timedOut,
-      timedOut: Boolean(result.timedOut), method: "filesystem-or-account-state" };
+      timedOut: Boolean(result.timedOut), method: "filesystem-or-account-state",
+      reason: result.exitCode === 0 && !result.timedOut ? undefined : "Trạng thái tệp hoặc tài khoản chưa khớp yêu cầu của bước này." };
   }
   if (definition.kind === "commands") {
     const groups = definition.groups;
@@ -148,7 +149,8 @@ export async function verifyDefinition(labId, definition, {
     const results = [];
     for (const check of definition.checks) results.push(await verifyDefinition(labId, check, { runCommand, readHistory: readSnapshot, acknowledged, stepIndex, allSteps }));
     return { supported: results.every(result => result.supported), passed: results.every(result => result.supported && result.passed),
-      timedOut: results.some(result => result.timedOut), method: "combined", reason: results.find(result => !result.supported)?.reason };
+      timedOut: results.some(result => result.timedOut), method: "combined",
+      reason: results.find(result => !result.supported)?.reason || results.find(result => !result.passed)?.reason };
   }
   return { supported: false, passed: false, reason: definition.reason || "Chưa hỗ trợ kiểm tra bước này." };
 }

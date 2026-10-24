@@ -338,3 +338,8 @@ update_lab6()
 update_lab8()
 update_lab10()
 
+# Legacy edits must not leave translations out of sync with task grading.
+import runpy
+from pathlib import Path
+runpy.run_path(str(Path(__file__).with_name('repair-quick-start-consistency.py')), run_name='__main__')
+
