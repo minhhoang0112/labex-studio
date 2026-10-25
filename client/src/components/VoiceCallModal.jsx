@@ -3,9 +3,9 @@ import { Mic, MicOff, PhoneOff, Volume2, Sparkles, RotateCcw, Bot, Briefcase, X,
 import useVoiceCall from '../hooks/useVoiceCall';
 import { cleanForSpeech } from '../lib/speechPlayer';
 
-export default function VoiceCallModal({ isOpen, onClose, lab, currentStep, lastTerminalOutput, initialPersona='tutor' }) {
+export default function VoiceCallModal({ isOpen, onClose, lab, currentStep, lastTerminalOutput, initialPersona='tutor', initialViewMode='dock' }) {
   const [persona,setPersona]=useState(initialPersona);
-  const [viewMode,setViewMode]=useState('dock');
+  const [viewMode,setViewMode]=useState(initialViewMode);
   const [showSubtitles,setShowSubtitles]=useState(true);
   const [showComposer,setShowComposer]=useState(false);
   const [draft,setDraft]=useState('');

@@ -29,9 +29,12 @@ export default function AiTutor({
   lastTerminalOutput,
   externalPrompt,
   onClearExternalPrompt,
+  voiceCallOpen,
+  onOpenVoice,
 }) {
   const [persona, setPersona] = useState('tutor'); // 'tutor' | 'interviewer'
-  const [isVoiceCallOpen, setIsVoiceCallOpen] = useState(false);
+  const [localVoiceCallOpen, setLocalVoiceCallOpen] = useState(false);
+  const isVoiceCallOpen = voiceCallOpen ?? localVoiceCallOpen;
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -109,6 +112,17 @@ export default function AiTutor({
     }
     setIsSpeaking(false);
   };
+
+  // A call can also start from the workspace shortcut while this panel is hidden.
+  useEffect(() => {
+    if (!isVoiceCallOpen) return;
+    stopSpeaking();
+    inFlight.current?.abort();
+    setIsLoading(false);
+    setAutoVoice(false);
+    try { recognitionRef.current?.abort(); } catch {}
+    setIsListening(false);
+  }, [isVoiceCallOpen]);
 
   // Speech-To-Text helper
   const toggleListening = () => {
@@ -319,7 +333,7 @@ export default function AiTutor({
           {/* Right Header Controls: Stop speech & Auto voice toggle & Voice Mode */}
           <div className="flex items-center gap-1.5">
             <button
-              onClick={() => { stopSpeaking(); inFlight.current?.abort(); setIsLoading(false); setAutoVoice(false); try { recognitionRef.current?.abort(); } catch {} setIsListening(false); setIsVoiceCallOpen(true); }}
+              onClick={() => onOpenVoice ? onOpenVoice(persona) : setLocalVoiceCallOpen(true)}
               disabled={isVoiceCallOpen}
               title="Mở chế độ giao tiếp giọng nói 2 chiều liên tục (như ChatGPT Voice Mode)"
               className="px-2 py-1 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-semibold flex items-center gap-1 shadow-xs transition hover:scale-[1.02] active:scale-[0.98]"
@@ -523,15 +537,15 @@ export default function AiTutor({
       </form>
 
       {/* Interactive Hands-free Voice Call Modal (ChatGPT Voice Mode) */}
-      <VoiceCallModal
+      {!onOpenVoice && <VoiceCallModal
         key={isVoiceCallOpen ? `voice-${persona}` : 'voice-closed'}
         isOpen={isVoiceCallOpen}
-        onClose={() => setIsVoiceCallOpen(false)}
+        onClose={() => setLocalVoiceCallOpen(false)}
         lab={lab}
         currentStep={currentStep}
         lastTerminalOutput={lastTerminalOutput}
         initialPersona={persona}
-      />
+      />}
     </div>
   );
 }

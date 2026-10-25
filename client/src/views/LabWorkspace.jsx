@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import LabGuide from "../components/LabGuide";
 import Terminal from "../components/Terminal";
 import AiTutor from "../components/AiTutor";
+import VoiceCallModal from "../components/VoiceCallModal";
 import Dialog from "../components/Dialog";
 import WindowsConsole from "../components/WindowsConsole";
 import {
   Server,
   ArrowLeft,
   Bot,
+  Mic,
   TerminalSquare,
   RefreshCw,
   CheckCircle2,
@@ -81,6 +83,12 @@ export default function LabWorkspace({
   const [lastTerminalOutput, setLastTerminalOutput] = useState("");
   const [aiExternalPrompt, setAiExternalPrompt] = useState(null);
   const [isAiOpen, setIsAiOpen] = useState(false);
+  const [voiceCallOpen, setVoiceCallOpen] = useState(false);
+  const [voicePersona, setVoicePersona] = useState('tutor');
+  const openVoice = (persona = 'tutor') => {
+    setVoicePersona(persona);
+    setVoiceCallOpen(true);
+  };
   const [activeEnvTab, setActiveEnvTab] = useState("terminal"); // 'terminal' | 'desktop' | 'webide' | 'web8080'
   const [webPreviewKey, setWebPreviewKey] = useState(0);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
@@ -1017,10 +1025,34 @@ export default function LabWorkspace({
               lastTerminalOutput={lastTerminalOutput}
               externalPrompt={aiExternalPrompt}
               onClearExternalPrompt={() => setAiExternalPrompt(null)}
+              voiceCallOpen={voiceCallOpen}
+              onOpenVoice={openVoice}
             />
           </div>
         </div>
       </div>
+
+      {!voiceCallOpen && (
+        <button
+          type="button"
+          aria-label="Mở Labby Voice"
+          title="Nói chuyện với Labby Voice"
+          onClick={() => openVoice()}
+          className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-950/30 ring-2 ring-white/20 transition hover:scale-105 hover:from-emerald-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300 active:scale-95"
+        >
+          <Mic className="h-6 w-6" aria-hidden="true" />
+        </button>
+      )}
+      <VoiceCallModal
+        key={voiceCallOpen ? `lab-voice-${voicePersona}` : 'lab-voice-closed'}
+        isOpen={voiceCallOpen}
+        onClose={() => setVoiceCallOpen(false)}
+        lab={lab}
+        currentStep={taskSteps.find((s) => s.id === currentSection?.id) || currentSection}
+        lastTerminalOutput={lastTerminalOutput}
+        initialPersona={voicePersona}
+        initialViewMode="minimized"
+      />
 
       {/* Reset Confirmation Modal */}
       {resetConfirmOpen && (
