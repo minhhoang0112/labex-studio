@@ -1,9 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
+import { needsVietnameseTranslation } from '../../scripts/lib/translation-quality.mjs';
 import { callGeminiWithFallback, sysPromptContent, sysPromptShort } from './gemini_translate_util.js';
 
 const REF_DIR = 'server/data/reference/commands-course';
 const LABS_DIR = 'server/data/labs';
+const REVIEWED_FILE = 'server/data/translations/commands-reviewed.vi.json';
 
 async function updateLabWithAuthentic(refFileName) {
   const refPath = path.join(REF_DIR, refFileName);
@@ -16,6 +19,8 @@ async function updateLabWithAuthentic(refFileName) {
 
   const refData = JSON.parse(fs.readFileSync(refPath, 'utf8'));
   const labData = JSON.parse(fs.readFileSync(labPath, 'utf8'));
+  const reviewed = fs.existsSync(REVIEWED_FILE)
+    ? JSON.parse(fs.readFileSync(REVIEWED_FILE, 'utf8'))[labData.id]?.sections || [] : [];
 
   console.log(`\n======================================================`);
   console.log(`Đồng bộ 100% nguyên bản: ${refFileName}`);
@@ -30,31 +35,44 @@ async function updateLabWithAuthentic(refFileName) {
 
     if (!sec) continue;
 
-    // Check if authentic content needs to be applied
-    if (sec.content !== rStep.text) {
+    const sourceChanged = sec.content !== rStep.text;
+    if (sourceChanged) {
       console.log(`[Mục ${i + 1}/${refData.steps.length}] "${rStep.title}"`);
       console.log(`  -> Cập nhật content gốc (từ ${sec.content.length} ký tự -> ${rStep.text.length} ký tự)`);
       sec.content = rStep.text;
       sec.title = rStep.title;
+      changed = true;
+    }
+
+    const override = reviewed.find(item => item.position === sec.position &&
+      item.source_content_sha256 === crypto.createHash('sha256').update(sec.content).digest('hex'));
+    if (override) {
+      for (const [key, value] of Object.entries(override)) {
+        if (key.endsWith('_vi') && typeof value === 'string' && sec[key] !== value) {
+          sec[key] = value;
+          changed = true;
+        }
+      }
+    } else if (sourceChanged || needsVietnameseTranslation(sec.content, sec.content_vi)) {
 
       // Translate authentic text to Vietnamese
       console.log(`  -> Đang dịch tiếng Việt chuẩn 100% qua Gemini...`);
       try {
         const vi = await callGeminiWithFallback(sysPromptContent, rStep.text);
+        if (needsVietnameseTranslation(rStep.text, vi)) throw new Error('Bản dịch vẫn chứa đoạn tiếng Anh chưa dịch.');
         sec.content_vi = vi;
+        changed = true;
         console.log(`  -> Dịch xong (${vi.length} ký tự)`);
       } catch (err) {
-        console.error(`  Lỗi dịch: ${err.message}, tạm dùng content gốc.`);
-        sec.content_vi = rStep.text;
+        console.error(`  Lỗi dịch: ${err.message}; giữ dữ liệu hiện có để thử dịch lại lần sau.`);
       }
+    }
 
-      if (!sec.title_vi || sec.title_vi === sec.title) {
+    if (!sec.title_vi || sec.title_vi === sec.title) {
         try {
           sec.title_vi = await callGeminiWithFallback(sysPromptShort, rStep.title);
+          changed = true;
         } catch (e) {}
-      }
-
-      changed = true;
     }
   }
 
