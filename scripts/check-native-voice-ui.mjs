@@ -16,7 +16,7 @@ try{
   let oldPipelineCalls=0;await page.route('**/api/ai/chat',r=>{oldPipelineCalls++;return r.abort();});await page.route('**/api/ai/tts?*',r=>{oldPipelineCalls++;return r.abort();});
   await page.route('**/api/environment',r=>r.fulfill({json:{available:false}}));await page.route('**/api/cloud-vm/**',r=>r.fulfill({json:{controlConfigured:false}}));
   await page.addInitScript(()=>{
-    const trace=window.__live={frames:0,streams:[],sockets:[],nodes:[],starts:[],clears:0,rates:[]};
+    const trace=window.__live={frames:0,streams:[],sockets:[],nodes:[],starts:[],clears:0,rates:[],texts:[]};
     const media=navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
     navigator.mediaDevices.getUserMedia=async c=>{if(trace.denied)throw new DOMException('Denied','NotAllowedError');const s=await media(c);trace.streams.push(s);if(trace.delayMic)await new Promise(resolve=>{trace.releaseMic=resolve;});return s;};
     const resume=AudioContext.prototype.resume;
@@ -28,7 +28,16 @@ try{
     window.WebSocket=class extends EventTarget{
       static OPEN=1;
       constructor(url){super();if(!String(url).endsWith('/ws/ai/live'))return new OriginalSocket(url);this.readyState=0;this.bufferedAmount=0;trace.sockets.push(this);setTimeout(()=>{this.readyState=1;this.onopen?.();},10);}
-      send(raw){const m=JSON.parse(raw);if(m.type==='start'){trace.starts.push(m);setTimeout(()=>this.receive({type:'ready',model:'fixture-live'}),10);}if(m.type==='audio')trace.frames++;if(m.type==='pause')trace.paused=true;}
+      send(raw){const m=JSON.parse(raw);if(m.type==='start'){trace.starts.push(m);setTimeout(()=>this.receive({type:'ready',model:'fixture-live'}),10);}if(m.type==='audio')trace.frames++;if(m.type==='pause')trace.paused=true;
+        if(m.type==='text'){
+          trace.texts.push(m);
+          const rejected=trace.rejectNextText;trace.rejectNextText=false;
+          setTimeout(()=>{
+            this.receive(rejected?{type:'text-error',id:m.id,message:'Tin nhắn chưa được gửi (kiểm thử).'}:{type:'text-sent',id:m.id});
+            if(!rejected)this.receive({type:'content',content:{outputTranscription:{text:'Đã nhận câu hỏi bằng chữ.'},turnComplete:true}});
+          },20);
+        }
+      }
       receive(data){this.onmessage?.({data:JSON.stringify(data)});}
       close(){this.readyState=3;this.onclose?.();}
     };
@@ -63,6 +72,32 @@ try{
   await call.getByRole('button',{name:'Kết nối lại',exact:true}).click();await page.waitForFunction(()=>window.__live.streams.length===2 && window.__live.sockets.length===2);
   assert.equal(await page.evaluate(()=>window.__live.streams[0].getAudioTracks()[0].readyState),'ended');
   await call.getByRole('status').filter({hasText:'Đang lắng nghe'}).waitFor();
+  await call.getByRole('button',{name:'Nhắn tin trong cuộc gọi',exact:true}).click();
+  const composer=call.getByRole('textbox',{name:'Tin nhắn cho Labby',exact:true});
+  await composer.waitFor();assert.equal(await composer.evaluate(el=>document.activeElement===el),true);
+  assert.equal(await call.getByRole('button',{name:'Gửi',exact:true}).isDisabled(),true);
+  await composer.fill('Giải thích ls -la');await composer.press('Enter');
+  await page.waitForFunction(()=>window.__live.texts.length===1);
+  await page.waitForFunction(()=>document.getElementById('live-voice-message').value==='');
+  assert.match(await call.textContent(),/Giải thích ls -la/);
+  assert.match(await call.textContent(),/Đã nhận câu hỏi bằng chữ/);
+  await composer.fill('Dòng một');await composer.press('Shift+Enter');await composer.press('X');
+  assert.equal(await composer.inputValue(),'Dòng một\nX');
+  assert.equal(await page.evaluate(()=>window.__live.texts.length),1);
+  await page.evaluate(()=>{window.__live.rejectNextText=true;});
+  await call.getByRole('button',{name:'Gửi',exact:true}).click();
+  await call.getByRole('alert').filter({hasText:'Tin nhắn chưa được gửi'}).waitFor();
+  assert.equal(await composer.inputValue(),'Dòng một\nX');
+  await call.getByRole('button',{name:'Tắt Micro',exact:true}).click();
+  await call.getByRole('button',{name:'Gửi',exact:true}).click();
+  await page.waitForFunction(()=>document.getElementById('live-voice-message').value==='');
+  assert.equal(await page.evaluate(()=>window.__live.texts.at(-1).text),'Dòng một\nX');
+  await call.getByRole('button',{name:'Bật lại Micro',exact:true}).click();
+  await call.getByRole('button',{name:'Bật tắt phụ đề',exact:true}).click();
+  assert.equal(await composer.isVisible(),true);
+  await call.getByRole('button',{name:'Bật tắt phụ đề',exact:true}).click();
+  await call.getByRole('button',{name:'Nhắn tin trong cuộc gọi',exact:true}).click();
+  report.checks.push('Typed messages autofocus, Enter sends, Shift+Enter adds a newline; rejected sends retain draft; text works with mic muted and captions remain independent.');
   await page.evaluate(()=>window.__live.sockets.at(-1).receive({type:'error',message:'Hạn mức thử nghiệm.'}));await call.getByRole('alert').filter({hasText:'Hạn mức'}).waitFor();
   assert.equal(await page.evaluate(()=>window.__live.streams.at(-1).getTracks()[0].readyState),'ended');
   assert.equal(await call.getByRole('button',{name:'Bắt đầu nghe',exact:true}).isDisabled(),true);

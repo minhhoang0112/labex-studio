@@ -133,7 +133,7 @@ async function runInteractive(ws, alias, instruction) {
   let position = ws.output.length;
   const markerStart = position;
   const previous = (await getCommandHistory(alias)).length;
-  ws.write(item.command + "\r");
+  ws.write(item.command + (item.append_enter === false ? '' : "\r"));
   const answers = item.input || [];
   for (let index = 0; index < answers.length; index += 1) {
     const answer = answers[index];
@@ -150,6 +150,7 @@ async function runInteractive(ws, alias, instruction) {
       position = found + prompt.length;
       return true;
     });
+    if(typeof answer==='object' && answer.delay_ms){assert.ok(answer.delay_ms>0 && answer.delay_ms<=2000);await wait(answer.delay_ms);}
     ws.write(text + (typeof answer === "object" && answer.raw ? "" : "\r"));
   }
   // A code block can contain several top-level commands. The first new shell
@@ -168,7 +169,8 @@ async function runInteractive(ws, alias, instruction) {
     if (ws.failure) throw ws.failure;
     return (await getCommandHistory(alias)).length > previous;
   }, commandTimeout);
-  ws.write(`printf '__LABEX_SMOKE_DONE_%s:%s__\\n' '${token}' "$?"\r`);
+  // Preserve $? for the next documented instruction (exit-status lessons).
+  ws.write(`__labex_smoke_status=$?; printf '__LABEX_SMOKE_DONE_%s:%s__\\n' '${token}' "$__labex_smoke_status"; (exit "$__labex_smoke_status")\r`);
   const status = await until(() => {
     if (ws.failure) throw ws.failure;
     const match = marker.exec(ws.output.slice(markerStart));

@@ -48,7 +48,8 @@
       "verification_by_provider": {
         "docker": {
           "kind": "state",
-          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
+          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')",
+          "failure_hint": "Cần lưu Hello, Linux vào /home/labex/project/first-commands/greeting.txt, không chỉ in ra màn hình."
         },
         "namespace": {
           "kind": "state",
@@ -68,7 +69,7 @@
         ]
       },
       "content_vi": "> **Mẹo:** Nếu bạn là người mới làm quen với LabEx, chúng tôi khuyên bạn nên bắt đầu với Lộ trình Học tập Linux (Linux Learning Path).\n\nTrong bước này, bạn sẽ học cách nhận diện dấu nhắc lệnh (terminal prompt), chạy một lệnh và đọc kết quả đầu ra của lệnh đó.\n\nCon trỏ nhấp nháy xuất hiện sau dấu nhắc lệnh. Dấu nhắc lệnh cho biết shell đã sẵn sàng nhận lệnh; bạn không cần gõ lại chính dấu nhắc lệnh đó. Hãy bắt đầu bằng cách di chuyển vào không gian làm việc đã được chuẩn bị cho phòng thực hành này:\n\n```bash\ncd /home/labex/project/first-commands\n```\n\n`cd` có nghĩa là “change directory” (thay đổi thư mục). Thư mục là tên gọi trong Linux dùng để chỉ một thư mục (folder). Các phòng thực hành sau sẽ khám phá chi tiết về các thư mục; hiện tại, lệnh này giúp tất cả các kết quả đã lưu của bạn có một vị trí cố định, dễ đoán.\n\nChạy `pwd`, có nghĩa là “print working directory” (in thư mục làm việc hiện tại):\n\n```bash\npwd\n```\n\nKết quả đầu ra sẽ là thư mục bạn vừa truy cập:\n\n```text\n/home/labex/project/first-commands\n```\n\nBây giờ, hãy sử dụng `echo` để yêu cầu shell in ra văn bản:\n\n```bash\necho \"Hello, Linux\"\n```\n\nBạn sẽ thấy:\n\n```text\nHello, Linux\n```\n\nCác dấu ngoặc kép giúp giữ các từ lại với nhau thành một giá trị văn bản duy nhất. Bây giờ, hãy lưu lời chào này vào một tệp. Ký hiệu `>` được gọi là **chuyển hướng đầu ra** (output redirection): shell tạo ra tệp có tên ở bên phải của nó và gửi kết quả đầu ra thông thường của lệnh vào đó thay vì hiển thị lên màn hình. Nếu tệp đã tồn tại, `>` sẽ thay thế nội dung trước đó của nó, vì vậy hãy kiểm tra đích đến trước khi sử dụng nó với dữ liệu quan trọng:\n\n```bash\necho \"Hello, Linux\" > greeting.txt\n```\n\nLệnh này không in gì trên màn hình vì đầu ra đã đi vào tệp `greeting.txt`.\n\nĐọc tệp đã lưu bằng lệnh `cat`:\n\n```bash\ncat greeting.txt\n```\n\nViệc nhìn thấy dòng chữ `Hello, Linux` một lần nữa chứng minh rằng văn bản hiện đã tồn tại trong `greeting.txt`, chứ không chỉ hiển thị trên màn hình terminal.",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/first-commands"
+      "hint_vi": "Cần lưu Hello, Linux vào /home/labex/project/first-commands/greeting.txt, không chỉ in ra màn hình."
     },
     {
       "id": "source-446315-section-2-v3",
@@ -110,28 +111,12 @@
         "shell"
       ],
       "content_vi": "Trong bước này, bạn sẽ yêu cầu Linux cung cấp thông tin thời gian và tìm hiểu rằng đầu ra của lệnh có thể thay đổi theo môi trường.\n\nChạy `date` không có tùy chọn nào:\n\n```bash\ndate\n```\n\nLinux in ra ngày trong tuần, ngày tháng, thời gian, múi giờ và năm hiện tại. Giá trị chính xác thay đổi theo từng giây, vì vậy đầu ra của bạn sẽ khác với các ví dụ bạn có thể thấy ở nơi khác.\n\nCác lệnh thường chấp nhận các tùy chọn làm thay đổi đầu ra của chúng. Định dạng `date` bắt đầu bằng `+` cho phép bạn chọn các trường ổn định. `%F` nghĩa là định dạng ngày ISO `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nLưu ngày ISO của hôm nay. Giống như trong bước trước, `>` chuyển hướng đầu ra vào một tệp và ghi đè tệp đó nếu nó đã tồn tại:\n\n```bash\ndate +%F > today.txt\n```\n\nLệnh `cal` hiển thị tháng hiện tại dưới dạng lịch:\n\n```bash\ncal\n```\n\nBố cục tháng và ngày trong tuần phụ thuộc vào ngày hiện tại và locale (vùng). Hãy lưu đầu ra đó lại:\n\n```bash\ncal > calendar.txt\n```\n\nKý hiệu `>` gửi đầu ra đến một tệp thay vì màn hình. Hiển thị lịch đã lưu để xác nhận nó đã được ghi:\n\n```bash\ncat calendar.txt\n```\n\nBạn sẽ tìm hiểu kỹ lưỡng về việc chuyển hướng sau. Hiện tại, hãy nhớ rằng đầu ra của terminal có thể được xem ngay lập tức hoặc được lưu lại để sử dụng sau.",
-      "hint_vi": "Chạy lệnh: date",
+      "hint_vi": "Trong /home/labex/project/first-commands, chạy date +%F > today.txt và cal > calendar.txt. Bộ chấm kiểm tra cả ngày hợp lệ và nội dung lịch; tệp cùng tên ở thư mục khác không thay thế kết quả của bước này.",
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "groups": [
-                [
-                  "(?:today\\.txt|date|cal)"
-                ]
-              ],
-              "allowed_status": [
-                0
-              ]
-            }
-          ]
+          "kind": "state",
+          "command": "python3 - <<'NOOBS_CHECK'\nfrom pathlib import Path\nimport datetime, subprocess\nroot=Path('/home/labex/project/first-commands/')\nsaved=datetime.date.fromisoformat((root/'today.txt').read_text().strip())\nassert abs((datetime.date.today()-saved).days)<=1\ncalendar=(root/'calendar.txt').read_text()\nexpected=subprocess.check_output(['cal',str(saved.month),str(saved.year)],text=True)\nassert calendar.strip()==expected.strip()\nNOOBS_CHECK",
+          "failure_hint": "Trong /home/labex/project/first-commands, chạy date +%F > today.txt và cal > calendar.txt. Bộ chấm kiểm tra cả ngày hợp lệ và nội dung lịch; tệp cùng tên ở thư mục khác không thay thế kết quả của bước này."
         },
         "namespace": {
           "kind": "all",
@@ -193,7 +178,8 @@
       "verification_by_provider": {
         "docker": {
           "kind": "state",
-          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
+          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')",
+          "failure_hint": "Cần calculation.txt chứa kết quả 42 tại /home/labex/project/first-commands. Tên đúng là calculation.txt (không thêm s)."
         },
         "namespace": {
           "kind": "state",
@@ -213,7 +199,7 @@
         ]
       },
       "content_vi": "Trong bước này, bạn sẽ sử dụng `expr` để thực hiện phép tính số học số nguyên và quan sát lý do tại sao khoảng trắng lại quan trọng trong các lệnh shell.\n\nShell tách một dòng lệnh thành các từ dựa trên khoảng trắng. `expr` mong đợi số thứ nhất, toán tử và số thứ hai là các đối số riêng biệt. Cộng hai số:\n\n```bash\nexpr 5 + 3\n```\n\nKết quả là:\n\n```text\n8\n```\n\nThử phép trừ và phép chia:\n\n```bash\nexpr 20 - 7\n```\n\n```bash\nexpr 24 / 6\n```\n\nPhép nhân cần thêm một chi tiết. Shell coi `*` là một ký tự đại diện (wildcard) tên tệp, vì vậy hãy thoát nó bằng dấu gạch chéo ngược để chuyển toán tử phép nhân theo nghĩa đen tới `expr`:\n\n```bash\nexpr 6 \\* 7\n```\n\nLưu kết quả phép nhân vào một tệp. Thao tác này sử dụng cùng một tính năng chuyển hướng đầu ra mà bạn đã luyện tập trước đó, do đó terminal sẽ giữ im lặng trong khi tệp `calculation.txt` nhận giá trị `42`:\n\n```bash\nexpr 6 \\* 7 > calculation.txt\n```\n\nHiển thị tệp:\n\n```bash\ncat calculation.txt\n```\n\nBạn sẽ thấy `42`. Việc giữ cho bài tập đầu tiên này đơn giản giúp bạn tập trung vào cấu trúc lệnh: tên lệnh, các đối số được phân tách bằng khoảng trắng và đích đầu ra tùy chọn.",
-      "hint_vi": "Chạy lệnh: expr 5 + 3"
+      "hint_vi": "Cần calculation.txt chứa kết quả 42 tại /home/labex/project/first-commands. Tên đúng là calculation.txt (không thêm s)."
     },
     {
       "id": "source-446315-section-4-v3",
@@ -306,7 +292,7 @@
           "package_management"
         ]
       },
-      "content_vi": "Trong bước này, bạn sẽ xóa đầu ra cũ và phân biệt giữa việc làm sạch màn hình và việc xóa tệp.\n\nSau một số lệnh, cửa sổ terminal có thể trở nên lộn xộn về mặt thị giác. Chạy:\n\n```bash\nclear\n```\n\n`clear` di chuyển đầu ra terminal cũ ra khỏi tầm nhìn. Nó không xóa các lệnh, tệp hoặc thư mục. Hầu hết các terminal cũng hỗ trợ `Ctrl+L` như một phím tắt để làm sạch trực quan tương tự.\n\nChứng minh rằng các tệp trước đó của bạn vẫn tồn tại bằng cách liệt kê không gian làm việc:\n\n```bash\nls\n```\n\nBạn vẫn sẽ thấy `greeting.txt`, `today.txt`, `calendar.txt`, `calculations.txt` và `labex-art.txt`.\n\nTạo một điểm đánh dấu cuối cùng sau khi làm sạch màn hình:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nHiển thị điểm đánh dấu để kiểm tra nó:\n\n```bash\ncat terminal-ready.txt\n```\n\nLệnh cuối cùng này củng cố một ý tưởng quan trọng: việc xóa màn hình chỉ thay đổi những gì bạn đang nhìn thấy, trong khi các tệp vẫn được lưu trữ trên đĩa.",
+      "content_vi": "Trong bước này, bạn sẽ xóa đầu ra cũ và phân biệt giữa việc làm sạch màn hình và việc xóa tệp.\n\nSau một số lệnh, cửa sổ terminal có thể trở nên lộn xộn về mặt thị giác. Chạy:\n\n```bash\nclear\n```\n\n`clear` di chuyển đầu ra terminal cũ ra khỏi tầm nhìn. Nó không xóa các lệnh, tệp hoặc thư mục. Hầu hết các terminal cũng hỗ trợ `Ctrl+L` như một phím tắt để làm sạch trực quan tương tự.\n\nChứng minh rằng các tệp trước đó của bạn vẫn tồn tại bằng cách liệt kê không gian làm việc:\n\n```bash\nls\n```\n\nBạn vẫn sẽ thấy `greeting.txt`, `today.txt`, `calendar.txt`, `calculation.txt` và `labex-art.txt`.\n\nTạo một điểm đánh dấu cuối cùng sau khi làm sạch màn hình:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nHiển thị điểm đánh dấu để kiểm tra nó:\n\n```bash\ncat terminal-ready.txt\n```\n\nLệnh cuối cùng này củng cố một ý tưởng quan trọng: việc xóa màn hình chỉ thay đổi những gì bạn đang nhìn thấy, trong khi các tệp vẫn được lưu trữ trên đĩa.",
       "hint_vi": "Chạy lệnh: clear"
     },
     {
@@ -349,7 +335,8 @@
       "verification_by_provider": {
         "docker": {
           "kind": "state",
-          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')"
+          "command": "cmp -s /home/labex/project/first-commands/greeting.txt <(printf %s 'Hello, Linux\n')",
+          "failure_hint": "Cần lưu Hello, Linux vào /home/labex/project/first-commands/greeting.txt, không chỉ in ra màn hình."
         },
         "namespace": {
           "kind": "state",
@@ -369,7 +356,7 @@
         ]
       },
       "content_vi": "> **Mẹo:** Nếu bạn là người mới làm quen với LabEx, chúng tôi khuyên bạn nên bắt đầu với Lộ trình Học tập Linux (Linux Learning Path).\n\nTrong bước này, bạn sẽ học cách nhận diện dấu nhắc lệnh (terminal prompt), chạy một lệnh và đọc kết quả đầu ra của lệnh đó.\n\nCon trỏ nhấp nháy xuất hiện sau dấu nhắc lệnh. Dấu nhắc lệnh cho biết shell đã sẵn sàng nhận lệnh; bạn không cần gõ lại chính dấu nhắc lệnh đó. Hãy bắt đầu bằng cách di chuyển vào không gian làm việc đã được chuẩn bị cho phòng thực hành này:\n\n```bash\ncd /home/labex/project/first-commands\n```\n\n`cd` có nghĩa là “change directory” (thay đổi thư mục). Thư mục là tên gọi trong Linux dùng để chỉ một thư mục (folder). Các phòng thực hành sau sẽ khám phá chi tiết về các thư mục; hiện tại, lệnh này giúp tất cả các kết quả đã lưu của bạn có một vị trí cố định, dễ đoán.\n\nChạy `pwd`, có nghĩa là “print working directory” (in thư mục làm việc hiện tại):\n\n```bash\npwd\n```\n\nKết quả đầu ra sẽ là thư mục bạn vừa truy cập:\n\n```text\n/home/labex/project/first-commands\n```\n\nBây giờ, hãy sử dụng `echo` để yêu cầu shell in ra văn bản:\n\n```bash\necho \"Hello, Linux\"\n```\n\nBạn sẽ thấy:\n\n```text\nHello, Linux\n```\n\nCác dấu ngoặc kép giúp giữ các từ lại với nhau thành một giá trị văn bản duy nhất. Bây giờ, hãy lưu lời chào này vào một tệp. Ký hiệu `>` được gọi là **chuyển hướng đầu ra** (output redirection): shell tạo ra tệp có tên ở bên phải của nó và gửi kết quả đầu ra thông thường của lệnh vào đó thay vì hiển thị lên màn hình. Nếu tệp đã tồn tại, `>` sẽ thay thế nội dung trước đó của nó, vì vậy hãy kiểm tra đích đến trước khi sử dụng nó với dữ liệu quan trọng:\n\n```bash\necho \"Hello, Linux\" > greeting.txt\n```\n\nLệnh này không in gì trên màn hình vì đầu ra đã đi vào tệp `greeting.txt`.\n\nĐọc tệp đã lưu bằng lệnh `cat`:\n\n```bash\ncat greeting.txt\n```\n\nViệc nhìn thấy dòng chữ `Hello, Linux` một lần nữa chứng minh rằng văn bản hiện đã tồn tại trong `greeting.txt`, chứ không chỉ hiển thị trên màn hình terminal.",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/first-commands"
+      "hint_vi": "Cần lưu Hello, Linux vào /home/labex/project/first-commands/greeting.txt, không chỉ in ra màn hình."
     },
     {
       "id": "source-446315-section-2-v3",
@@ -411,28 +398,12 @@
         "shell"
       ],
       "content_vi": "Trong bước này, bạn sẽ yêu cầu Linux cung cấp thông tin thời gian và tìm hiểu rằng đầu ra của lệnh có thể thay đổi theo môi trường.\n\nChạy `date` không có tùy chọn nào:\n\n```bash\ndate\n```\n\nLinux in ra ngày trong tuần, ngày tháng, thời gian, múi giờ và năm hiện tại. Giá trị chính xác thay đổi theo từng giây, vì vậy đầu ra của bạn sẽ khác với các ví dụ bạn có thể thấy ở nơi khác.\n\nCác lệnh thường chấp nhận các tùy chọn làm thay đổi đầu ra của chúng. Định dạng `date` bắt đầu bằng `+` cho phép bạn chọn các trường ổn định. `%F` nghĩa là định dạng ngày ISO `YYYY-MM-DD`:\n\n```bash\ndate +%F\n```\n\nLưu ngày ISO của hôm nay. Giống như trong bước trước, `>` chuyển hướng đầu ra vào một tệp và ghi đè tệp đó nếu nó đã tồn tại:\n\n```bash\ndate +%F > today.txt\n```\n\nLệnh `cal` hiển thị tháng hiện tại dưới dạng lịch:\n\n```bash\ncal\n```\n\nBố cục tháng và ngày trong tuần phụ thuộc vào ngày hiện tại và locale (vùng). Hãy lưu đầu ra đó lại:\n\n```bash\ncal > calendar.txt\n```\n\nKý hiệu `>` gửi đầu ra đến một tệp thay vì màn hình. Hiển thị lịch đã lưu để xác nhận nó đã được ghi:\n\n```bash\ncat calendar.txt\n```\n\nBạn sẽ tìm hiểu kỹ lưỡng về việc chuyển hướng sau. Hiện tại, hãy nhớ rằng đầu ra của terminal có thể được xem ngay lập tức hoặc được lưu lại để sử dụng sau.",
-      "hint_vi": "Chạy lệnh: date",
+      "hint_vi": "Trong /home/labex/project/first-commands, chạy date +%F > today.txt và cal > calendar.txt. Bộ chấm kiểm tra cả ngày hợp lệ và nội dung lịch; tệp cùng tên ở thư mục khác không thay thế kết quả của bước này.",
       "verification_by_provider": {
         "docker": {
-          "kind": "all",
-          "checks": [
-            {
-              "kind": "state",
-              "command": "test -f /home/labex/today.txt || test -f /home/labex/project/today.txt || test -f today.txt"
-            },
-            {
-              "kind": "commands",
-              "user": "labex",
-              "groups": [
-                [
-                  "(?:today\\.txt|date|cal)"
-                ]
-              ],
-              "allowed_status": [
-                0
-              ]
-            }
-          ]
+          "kind": "state",
+          "command": "python3 - <<'NOOBS_CHECK'\nfrom pathlib import Path\nimport datetime, subprocess\nroot=Path('/home/labex/project/first-commands/')\nsaved=datetime.date.fromisoformat((root/'today.txt').read_text().strip())\nassert abs((datetime.date.today()-saved).days)<=1\ncalendar=(root/'calendar.txt').read_text()\nexpected=subprocess.check_output(['cal',str(saved.month),str(saved.year)],text=True)\nassert calendar.strip()==expected.strip()\nNOOBS_CHECK",
+          "failure_hint": "Trong /home/labex/project/first-commands, chạy date +%F > today.txt và cal > calendar.txt. Bộ chấm kiểm tra cả ngày hợp lệ và nội dung lịch; tệp cùng tên ở thư mục khác không thay thế kết quả của bước này."
         },
         "namespace": {
           "kind": "all",
@@ -494,7 +465,8 @@
       "verification_by_provider": {
         "docker": {
           "kind": "state",
-          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')"
+          "command": "cmp -s /home/labex/project/first-commands/calculation.txt <(printf %s '42\n')",
+          "failure_hint": "Cần calculation.txt chứa kết quả 42 tại /home/labex/project/first-commands. Tên đúng là calculation.txt (không thêm s)."
         },
         "namespace": {
           "kind": "state",
@@ -514,7 +486,7 @@
         ]
       },
       "content_vi": "Trong bước này, bạn sẽ sử dụng `expr` để thực hiện phép tính số học số nguyên và quan sát lý do tại sao khoảng trắng lại quan trọng trong các lệnh shell.\n\nShell tách một dòng lệnh thành các từ dựa trên khoảng trắng. `expr` mong đợi số thứ nhất, toán tử và số thứ hai là các đối số riêng biệt. Cộng hai số:\n\n```bash\nexpr 5 + 3\n```\n\nKết quả là:\n\n```text\n8\n```\n\nThử phép trừ và phép chia:\n\n```bash\nexpr 20 - 7\n```\n\n```bash\nexpr 24 / 6\n```\n\nPhép nhân cần thêm một chi tiết. Shell coi `*` là một ký tự đại diện (wildcard) tên tệp, vì vậy hãy thoát nó bằng dấu gạch chéo ngược để chuyển toán tử phép nhân theo nghĩa đen tới `expr`:\n\n```bash\nexpr 6 \\* 7\n```\n\nLưu kết quả phép nhân vào một tệp. Thao tác này sử dụng cùng một tính năng chuyển hướng đầu ra mà bạn đã luyện tập trước đó, do đó terminal sẽ giữ im lặng trong khi tệp `calculation.txt` nhận giá trị `42`:\n\n```bash\nexpr 6 \\* 7 > calculation.txt\n```\n\nHiển thị tệp:\n\n```bash\ncat calculation.txt\n```\n\nBạn sẽ thấy `42`. Việc giữ cho bài tập đầu tiên này đơn giản giúp bạn tập trung vào cấu trúc lệnh: tên lệnh, các đối số được phân tách bằng khoảng trắng và đích đầu ra tùy chọn.",
-      "hint_vi": "Chạy lệnh: expr 5 + 3"
+      "hint_vi": "Cần calculation.txt chứa kết quả 42 tại /home/labex/project/first-commands. Tên đúng là calculation.txt (không thêm s)."
     },
     {
       "id": "source-446315-section-4-v3",
@@ -607,7 +579,7 @@
           "package_management"
         ]
       },
-      "content_vi": "Trong bước này, bạn sẽ xóa đầu ra cũ và phân biệt giữa việc làm sạch màn hình và việc xóa tệp.\n\nSau một số lệnh, cửa sổ terminal có thể trở nên lộn xộn về mặt thị giác. Chạy:\n\n```bash\nclear\n```\n\n`clear` di chuyển đầu ra terminal cũ ra khỏi tầm nhìn. Nó không xóa các lệnh, tệp hoặc thư mục. Hầu hết các terminal cũng hỗ trợ `Ctrl+L` như một phím tắt để làm sạch trực quan tương tự.\n\nChứng minh rằng các tệp trước đó của bạn vẫn tồn tại bằng cách liệt kê không gian làm việc:\n\n```bash\nls\n```\n\nBạn vẫn sẽ thấy `greeting.txt`, `today.txt`, `calendar.txt`, `calculations.txt` và `labex-art.txt`.\n\nTạo một điểm đánh dấu cuối cùng sau khi làm sạch màn hình:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nHiển thị điểm đánh dấu để kiểm tra nó:\n\n```bash\ncat terminal-ready.txt\n```\n\nLệnh cuối cùng này củng cố một ý tưởng quan trọng: việc xóa màn hình chỉ thay đổi những gì bạn đang nhìn thấy, trong khi các tệp vẫn được lưu trữ trên đĩa.",
+      "content_vi": "Trong bước này, bạn sẽ xóa đầu ra cũ và phân biệt giữa việc làm sạch màn hình và việc xóa tệp.\n\nSau một số lệnh, cửa sổ terminal có thể trở nên lộn xộn về mặt thị giác. Chạy:\n\n```bash\nclear\n```\n\n`clear` di chuyển đầu ra terminal cũ ra khỏi tầm nhìn. Nó không xóa các lệnh, tệp hoặc thư mục. Hầu hết các terminal cũng hỗ trợ `Ctrl+L` như một phím tắt để làm sạch trực quan tương tự.\n\nChứng minh rằng các tệp trước đó của bạn vẫn tồn tại bằng cách liệt kê không gian làm việc:\n\n```bash\nls\n```\n\nBạn vẫn sẽ thấy `greeting.txt`, `today.txt`, `calendar.txt`, `calculation.txt` và `labex-art.txt`.\n\nTạo một điểm đánh dấu cuối cùng sau khi làm sạch màn hình:\n\n```bash\necho \"Terminal ready\" > terminal-ready.txt\n```\n\nHiển thị điểm đánh dấu để kiểm tra nó:\n\n```bash\ncat terminal-ready.txt\n```\n\nLệnh cuối cùng này củng cố một ý tưởng quan trọng: việc xóa màn hình chỉ thay đổi những gì bạn đang nhìn thấy, trong khi các tệp vẫn được lưu trữ trên đĩa.",
       "hint_vi": "Chạy lệnh: clear"
     }
   ],
@@ -621,5 +593,11 @@
     "fixtures": "independently-reconstructed",
     "integration_status": "candidate-checks-require-Docker-smoke-report"
   },
-  "environment_setup": "server/data/environment-setups/linux-getting-started-with-linux-446315.json"
+  "environment_setup": "server/data/environment-setups/linux-getting-started-with-linux-446315.json",
+  "grading_audit": {
+    "date": "2026-10-24",
+    "scope": "Noobs instruction/fixture/grader consistency",
+    "image": "labex-local/noobs-ubuntu22:1",
+    "original_private_grader": "unknown"
+  }
 }

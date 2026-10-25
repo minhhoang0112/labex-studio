@@ -59,17 +59,8 @@
       "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab",
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:hostname|uname|ip|ifconfig)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
+          "kind": "state",
+          "command": "python3 - <<'NOOBS_CHECK'\nfrom pathlib import Path\nimport subprocess\nname=subprocess.check_output(['hostname'],text=True).strip()\naddresses=' '.join(subprocess.check_output(['hostname','-I'],text=True).split())\nassert Path('/home/labex/project/network-lab/host-identity.txt').read_text()==f'hostname={name}\\naddresses={addresses}\\n'\nNOOBS_CHECK"
         },
         "namespace": {
           "kind": "commands",
@@ -357,16 +348,24 @@
       "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'",
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:ss|netstat|lsof|curl)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "cmp -s /home/labex/project/network-lab/http-response.html <(curl -fsS http://127.0.0.1:8088/) && grep -Fq \"network demo ready\" /home/labex/project/network-lab/http-response.html"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*(?:sudo\\s+)?ss\\s+-ltnp\\s*\\|\\s*grep\\s+[\\x27\\x22]?:8088[\\x27\\x22]?\\s*$"
+                ]
+              ]
+            }
           ]
         },
         "namespace": {
@@ -571,17 +570,8 @@
       "hint_vi": "Chạy lệnh: cd /home/labex/project/network-lab",
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:hostname|uname|ip|ifconfig)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
-          ]
+          "kind": "state",
+          "command": "python3 - <<'NOOBS_CHECK'\nfrom pathlib import Path\nimport subprocess\nname=subprocess.check_output(['hostname'],text=True).strip()\naddresses=' '.join(subprocess.check_output(['hostname','-I'],text=True).split())\nassert Path('/home/labex/project/network-lab/host-identity.txt').read_text()==f'hostname={name}\\naddresses={addresses}\\n'\nNOOBS_CHECK"
         },
         "namespace": {
           "kind": "commands",
@@ -869,16 +859,24 @@
       "hint_vi": "Chạy lệnh: sudo ss -ltnp | grep ':8088'",
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:ss|netstat|lsof|curl)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "cmp -s /home/labex/project/network-lab/http-response.html <(curl -fsS http://127.0.0.1:8088/) && grep -Fq \"network demo ready\" /home/labex/project/network-lab/http-response.html"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*(?:sudo\\s+)?ss\\s+-ltnp\\s*\\|\\s*grep\\s+[\\x27\\x22]?:8088[\\x27\\x22]?\\s*$"
+                ]
+              ]
+            }
           ]
         },
         "namespace": {
@@ -1043,5 +1041,11 @@
     "fixtures": "independently-reconstructed",
     "integration_status": "candidate-checks-require-Docker-smoke-report"
   },
-  "environment_setup": "server/data/environment-setups/linux-linux-networking-and-firewall-basics-725414.json"
+  "environment_setup": "server/data/environment-setups/linux-linux-networking-and-firewall-basics-725414.json",
+  "grading_audit": {
+    "date": "2026-10-24",
+    "scope": "Noobs instruction/fixture/grader consistency",
+    "image": "labex-local/noobs-ubuntu22:1",
+    "original_private_grader": "unknown"
+  }
 }

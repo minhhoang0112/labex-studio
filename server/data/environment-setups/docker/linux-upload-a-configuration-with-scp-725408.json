@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "directories": [
+    {
+      "path": "/home/labex/project/remote-admin",
+      "owner": "labex:labex",
+      "mode": "0755"
+    },
+    {
+      "path": "/home/opsuser",
+      "owner": "opsuser:opsuser",
+      "mode": "0755"
+    },
+    {
+      "path": "/home/opsuser/incoming",
+      "owner": "opsuser:opsuser",
+      "mode": "0755"
+    }
+  ],
+  "files": [
+    {
+      "path": "/home/opsuser/.bashrc",
+      "owner": "opsuser:opsuser",
+      "content": "PS1='opsuser@labex:\\w\\$ '\n"
+    },
+    {
+      "path": "/home/labex/project/remote-admin/service.conf",
+      "owner": "labex:labex",
+      "content": "mode=training\nport=8080\n"
+    },
+    {
+      "path": "/home/labex/project/remote-admin/prepare-ssh.sh",
+      "owner": "labex:labex",
+      "mode": "0755",
+      "content": "#!/bin/bash\nset -eu\nsudo mkdir -p /run/sshd\nif ! sudo test -f /etc/ssh/labex_host_ed25519; then sudo ssh-keygen -q -t ed25519 -N '' -f /etc/ssh/labex_host_ed25519; fi\nsudo tee /etc/ssh/labex_sshd_config >/dev/null <<'CONFIG'\nPort 22\nListenAddress 127.0.0.1\nListenAddress ::1\nHostKey /etc/ssh/labex_host_ed25519\nPidFile /run/labex-sshd.pid\nPasswordAuthentication yes\nPubkeyAuthentication yes\nUsePAM no\nPermitRootLogin no\nLogLevel VERBOSE\nSubsystem sftp internal-sftp\nCONFIG\nprintf '%s\\n' 'opsuser:RemoteLab123!' | sudo chpasswd\nif [ ! -f '/home/labex/project/remote-admin/id_ed25519' ]; then ssh-keygen -q -t ed25519 -N '' -f '/home/labex/project/remote-admin/id_ed25519'; fi\nsudo install -d -m 700 -o opsuser -g opsuser /home/opsuser/.ssh\nsudo install -m 600 -o opsuser -g opsuser '/home/labex/project/remote-admin/id_ed25519.pub' /home/opsuser/.ssh/authorized_keys\nsudo /usr/sbin/sshd -t -f /etc/ssh/labex_sshd_config\nsudo /usr/sbin/sshd -f /etc/ssh/labex_sshd_config -E /var/log/labex/sshd.log\n"
+    }
+  ],
+  "accounts": [
+    {
+      "name": "opsuser",
+      "uid": 2000,
+      "group": "opsuser",
+      "shell": "/bin/bash",
+      "password_status": "unlocked"
+    }
+  ],
+  "groups": [
+    {
+      "name": "opsuser",
+      "gid": 2000
+    }
+  ],
+  "provenance": {
+    "fixture_fidelity": "unsupported-not-seeded"
+  },
+  "docker": {
+    "image": "labex-local/noobs-ubuntu22:1",
+    "startup": [
+      {
+        "script": "/home/labex/project/remote-admin/prepare-ssh.sh",
+        "user": "labex"
+      }
+    ]
+  }
+}

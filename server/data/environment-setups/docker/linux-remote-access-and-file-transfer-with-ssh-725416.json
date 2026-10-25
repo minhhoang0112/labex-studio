@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "directories": [
+    {
+      "path": "/home/labex/project/ssh-lab",
+      "owner": "labex:labex",
+      "mode": "0755"
+    },
+    {
+      "path": "/home/remoteuser",
+      "owner": "remoteuser:remoteuser",
+      "mode": "0755"
+    },
+    {
+      "path": "/home/remoteuser/incoming",
+      "owner": "remoteuser:remoteuser",
+      "mode": "0755"
+    }
+  ],
+  "files": [
+    {
+      "path": "/home/remoteuser/.bashrc",
+      "owner": "remoteuser:remoteuser",
+      "content": "PS1='remoteuser@labex:\\w\\$ '\n"
+    },
+    {
+      "path": "/home/labex/project/ssh-lab/prepare-ssh.sh",
+      "owner": "labex:labex",
+      "mode": "0755",
+      "content": "#!/bin/bash\nset -eu\nsudo mkdir -p /run/sshd\nif ! sudo test -f /etc/ssh/labex_host_ed25519; then sudo ssh-keygen -q -t ed25519 -N '' -f /etc/ssh/labex_host_ed25519; fi\nsudo tee /etc/ssh/labex_sshd_config >/dev/null <<'CONFIG'\nPort 22\nListenAddress 127.0.0.1\nListenAddress ::1\nHostKey /etc/ssh/labex_host_ed25519\nPidFile /run/labex-sshd.pid\nPasswordAuthentication yes\nPubkeyAuthentication yes\nUsePAM no\nPermitRootLogin no\nLogLevel VERBOSE\nSubsystem sftp internal-sftp\nCONFIG\nprintf '%s\\n' 'remoteuser:RemoteLab123!' | sudo chpasswd\nsudo /usr/sbin/sshd -t -f /etc/ssh/labex_sshd_config\nsudo /usr/sbin/sshd -f /etc/ssh/labex_sshd_config -E /var/log/labex/sshd.log\n"
+    }
+  ],
+  "accounts": [
+    {
+      "name": "remoteuser",
+      "uid": 2000,
+      "group": "remoteuser",
+      "shell": "/bin/bash",
+      "password_status": "unlocked"
+    }
+  ],
+  "groups": [
+    {
+      "name": "remoteuser",
+      "gid": 2000
+    }
+  ],
+  "provenance": {
+    "fixture_fidelity": "unsupported-not-seeded"
+  },
+  "docker": {
+    "image": "labex-local/noobs-ubuntu22:1",
+    "startup": [
+      {
+        "script": "/home/labex/project/ssh-lab/prepare-ssh.sh",
+        "user": "labex"
+      }
+    ]
+  }
+}

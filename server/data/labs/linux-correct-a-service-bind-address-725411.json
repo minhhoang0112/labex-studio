@@ -60,18 +60,8 @@
       "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:systemctl|service|netstat|ss|curl|sed|nano|vim)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1,
-            3
-          ]
+          "kind": "unsupported",
+          "reason": "Bài cần systemd và service thật trên Ubuntu Server VM. Runtime container hiện không có systemd PID 1; không chấm đạt chỉ vì đã gõ systemctl hoặc curl."
         },
         "namespace": {
           "kind": "commands",
@@ -152,18 +142,8 @@
       "hint_vi": "Đọc hướng dẫn và thực hành trên terminal.",
       "verification_by_provider": {
         "docker": {
-          "kind": "commands",
-          "user": "labex",
-          "groups": [
-            [
-              "(?:systemctl|service|netstat|ss|curl|sed|nano|vim)"
-            ]
-          ],
-          "allowed_status": [
-            0,
-            1,
-            3
-          ]
+          "kind": "unsupported",
+          "reason": "Bài cần systemd và service thật trên Ubuntu Server VM. Runtime container hiện không có systemd PID 1; không chấm đạt chỉ vì đã gõ systemctl hoặc curl."
         },
         "namespace": {
           "kind": "commands",
@@ -203,5 +183,11 @@
     "fixtures": "independently-reconstructed",
     "integration_status": "candidate-checks-require-Docker-smoke-report"
   },
-  "environment_setup": "server/data/environment-setups/linux-correct-a-service-bind-address-725411.json"
+  "environment_setup": "server/data/environment-setups/linux-correct-a-service-bind-address-725411.json",
+  "grading_audit": {
+    "date": "2026-10-24",
+    "scope": "Noobs instruction/fixture/grader consistency",
+    "image": "labex-local/noobs-ubuntu22:1",
+    "original_private_grader": "unknown"
+  }
 }

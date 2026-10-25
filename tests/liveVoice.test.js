@@ -49,6 +49,38 @@ test('Live gateway reports missing key and sanitizes upstream quota failures',as
   assert.match(f.messages.at(-1).message,/hạn mức/);assert.ok(!JSON.stringify(f.messages).includes('private-test-key'));
 });
 
+test('Live text joins the same conversation, acknowledges delivery, and leaves microphone audio available',async t=>{
+  const f=await fixture(t);
+  f.client.send(JSON.stringify({type:'text',id:'before-ready',text:'Xin chào'}));
+  await f.until(()=>f.messages.some(m=>m.type==='text-error' && m.id==='before-ready'));
+  assert.ok(!f.received.some(m=>m.realtimeInput?.text));
+  f.client.send(JSON.stringify({type:'start'}));await f.until(()=>f.messages.some(m=>m.type==='ready'));
+  f.client.send(JSON.stringify({type:'text',id:'typed-1',text:'  Giải thích lệnh ls -la bằng tiếng Việt  '}));
+  await f.until(()=>f.messages.some(m=>m.type==='text-sent' && m.id==='typed-1'));
+  assert.equal(f.received.find(m=>m.realtimeInput?.text).realtimeInput.text,'Giải thích lệnh ls -la bằng tiếng Việt');
+  // Muting/ending the audio stream must not disconnect text input.
+  f.client.send(JSON.stringify({type:'pause'}));
+  f.client.send(JSON.stringify({type:'text',id:'typed-muted',text:'Mic tắt, vẫn nhắn được'}));
+  await f.until(()=>f.messages.some(m=>m.type==='text-sent' && m.id==='typed-muted'));
+  f.client.send(JSON.stringify({type:'audio',data:'AQACAA=='}));
+  await f.until(()=>f.received.some(m=>m.realtimeInput?.audio));
+  f.upstream.send(JSON.stringify({serverContent:{outputTranscription:{text:'Đây là câu trả lời.'},turnComplete:true}}));
+  await f.until(()=>f.messages.some(m=>m.content?.outputTranscription?.text==='Đây là câu trả lời.'));
+  assert.ok(!JSON.stringify(f.messages).includes('private-test-key'));
+});
+
+test('Live text rejects empty, oversized and malformed messages without terminating the call',async t=>{
+  const f=await fixture(t);f.client.send(JSON.stringify({type:'start'}));await f.until(()=>f.messages.some(m=>m.type==='ready'));
+  for(const [id,text] of [['empty','   '],['long','x'.repeat(4001)],['object',{text:'x'}]]){
+    f.client.send(JSON.stringify({type:'text',id,text}));await f.until(()=>f.messages.some(m=>m.type==='text-error' && m.id===id));
+  }
+  assert.equal(f.received.filter(m=>m.realtimeInput?.text).length,0);
+  assert.equal(f.client.readyState,WebSocket.OPEN);
+  f.client.send(JSON.stringify({type:'text',id:'limit',text:'a'.repeat(4000)}));
+  await f.until(()=>f.messages.some(m=>m.type==='text-sent' && m.id==='limit'));
+  assert.equal(f.received.find(m=>m.realtimeInput?.text)?.realtimeInput.text.length,4000);
+});
+
 test('Malformed JSON values fail explicitly instead of throwing in a socket callback',async t=>{
   for(const value of [null,[],42]){
     const f=await fixture(t);f.client.send(JSON.stringify(value));await f.until(()=>f.messages.some(m=>m.type==='error'));

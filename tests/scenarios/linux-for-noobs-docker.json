@@ -3,7 +3,7 @@
   "course_id": "linux-for-noobs",
   "provider": "docker",
   "expected_tasks": 134,
-  "provenance": "Local audit of current Anti lesson bodies; source text preserved, fixture bytes reconstructed, private LabEx graders unknown.",
+  "provenance": "Reviewed against displayed instructions and actual isolated runtime; local graders, not original LabEx private checks.",
   "lessons": [
     {
       "lab_id": "linux-getting-started-with-linux-446315",
@@ -44,9 +44,62 @@
         },
         {
           "id": "source-446315-section-2-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài yêu cầu lệnh cal; image hiện chưa xác nhận ncal/cal. Không tự báo đạt chỉ từ lệnh date."
+          "commands": [
+            {
+              "command": "date",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "date +%F",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "date +%F > today.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cal",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cal > calendar.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cat calendar.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-446315-section-3-v3",
@@ -431,9 +484,66 @@
         },
         {
           "id": "source-18001-section-7-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Chưa kiểm chứng được các tương tác Up/Tab/Ctrl+C/Ctrl+L theo yêu cầu; marker file đơn lẻ không chứng minh các thao tác này."
+          "commands": [
+            "cd /home/labex/project/file-basics/workspace/docs",
+            "cat guide.txt",
+            {
+              "command": "# Recall previous command",
+              "input": [
+                {
+                  "wait_for": "",
+                  "text": "\u001b[A",
+                  "raw": true
+                },
+                {
+                  "wait_for": "",
+                  "text": "\r",
+                  "raw": true
+                }
+              ]
+            },
+            {
+              "command": "cat g",
+              "append_enter": false,
+              "input": [
+                {
+                  "wait_for": "",
+                  "text": "\t",
+                  "raw": true
+                },
+                {
+                  "wait_for": "",
+                  "text": "\r",
+                  "raw": true
+                }
+              ]
+            },
+            {
+              "command": "tail -f /dev/null",
+              "input": [
+                {
+                  "wait_for": "tail -f /dev/null",
+                  "text": "\u0003",
+                  "raw": true,
+                  "delay_ms": 150
+                }
+              ],
+              "allowed_status": [
+                130
+              ]
+            },
+            {
+              "command": "echo shortcuts",
+              "input": [
+                {
+                  "wait_for": "",
+                  "text": "\f",
+                  "raw": true
+                }
+              ]
+            },
+            "echo \"Shortcuts practiced\" > /home/labex/project/file-basics/shortcuts-complete.txt"
+          ]
         }
       ]
     },
@@ -525,6 +635,15 @@
                 2,
                 130
               ]
+            },
+            {
+              "command": "cat command-types.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
             }
           ]
         },
@@ -589,15 +708,78 @@
         },
         {
           "id": "source-18000-section-3-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+          "commands": [
+            {
+              "command": "man ls",
+              "input": [
+                {
+                  "wait_for": "LS(1)",
+                  "text": "q",
+                  "raw": true
+                }
+              ]
+            },
+            "man -P cat ls | col -b | head -n 20 > ls-man-excerpt.txt"
+          ]
         },
         {
           "id": "source-18000-section-4-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+          "commands": [
+            {
+              "command": "apropos password | head -n 15",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "apropos file | head -n 20",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "apropos \"copy files\"",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "apropos file | grep -i -m 5 'copy'",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "apropos password > password-topics.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "grep -E '^passwd|change.*password' password-topics.txt | head",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         }
       ]
     },
@@ -745,9 +927,62 @@
         },
         {
           "id": "source-18002-section-4-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Chưa dựng trạng thái mật khẩu ban đầu và kiểm chứng chuỗi khóa/mở/khóa tài khoản contractor."
+          "commands": [
+            {
+              "command": "sudo getent shadow contractor | cut -d: -f2 | cut -c1",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo usermod -L contractor",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo getent shadow contractor | cut -d: -f2 | cut -c1",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo usermod -U contractor",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo getent shadow contractor | cut -d: -f2 | cut -c1",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo usermod -L contractor",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-18002-section-5-v3",
@@ -863,9 +1098,17 @@
         },
         {
           "id": "source-18002-section-8-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Cần kiểm chứng newgrp mở subshell, group mới và thoát về shell ban đầu; chưa có bài kiểm tra tương tác phù hợp."
+          "commands": [
+            {
+              "command": "newgrp developers",
+              "input": [
+                {
+                  "wait_for": "labex@labex:",
+                  "text": "id\ntouch /home/labex/project/team-share/labex-note.txt\nstat -c 'owner=%U group=%G mode=%a' /home/labex/project/team-share/labex-note.txt\nexit"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1601,9 +1844,89 @@
         },
         {
           "id": "source-385274-section-5-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài yêu cầu Zsh thật; image hiện chưa có Zsh, không chấm Bash thay cho phiên Zsh."
+          "commands": [
+            {
+              "command": "cat >> \"$HOME/.zshrc\" <<'EOF'\n## LABEX_ENV_LAB_START\nexport PROJECT_DIR=\"$HOME/project\"\nexport PATH=\"$PATH:$HOME/bin\"\n## LABEX_ENV_LAB_END\nEOF",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "source \"$HOME/.zshrc\"",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "printf 'PROJECT_DIR=%s\\n' \"$PROJECT_DIR\"",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "zsh -ic 'printf \"PROJECT_DIR=%s\\n\" \"$PROJECT_DIR\"; command -v course-status' > /home/labex/project/environment-lab/future-shell.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cat /home/labex/project/environment-lab/future-shell.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "export TEMP_NOTE=\"remove me\"",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "printenv TEMP_NOTE",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "unset TEMP_NOTE",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "printenv TEMP_NOTE",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1614,9 +1937,11 @@
       "steps": [
         {
           "id": "source-437861-section-1-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài yêu cầu Zsh thật; image hiện chưa có Zsh, không chấm Bash thay cho phiên Zsh."
+          "commands": [
+            "printf '%s\\n' 'export PROJECT_DIR=\"$HOME/project\"' >> /home/labex/.zshrc",
+            "source /home/labex/.zshrc",
+            "printf '%s\\n' \"$PROJECT_DIR\" > /home/labex/project/project-variable.txt"
+          ]
         }
       ]
     },
@@ -1984,9 +2309,63 @@
       "steps": [
         {
           "id": "source-17999-section-1-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+          "commands": [
+            {
+              "command": "lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "findmnt -T /home/labex/project",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo blkid",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "mkdir -p /home/labex/project/storage-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cd /home/labex/project/storage-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "pwd",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ],
+          "allow_preexisting": false
         },
         {
           "id": "source-17999-section-2-v3",
@@ -2067,9 +2446,80 @@
         },
         {
           "id": "source-17999-section-3-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+          "commands": [
+            {
+              "command": "cd /home/labex/project/storage-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "truncate -s 128M virtual.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "ls -lh virtual.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "file virtual.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo mkfs.ext4 -F -L LABEXDATA virtual.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "file virtual.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo blkid -p virtual.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo blkid -s UUID -o value virtual.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-17999-section-4-v3",
@@ -2079,9 +2529,53 @@
         },
         {
           "id": "source-17999-section-5-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+          "commands": [
+            {
+              "command": "cd /home/labex/project/storage-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo fdisk -l virtual.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "truncate -s 64M partition-demo.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo fdisk -l partition-demo.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "sudo wipefs virtual.img partition-demo.img",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-17999-section-6-v3",
@@ -3529,9 +4023,41 @@
         },
         {
           "id": "source-725419-section-5-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bộ kiểm tra trước chỉ kiểm tra lệnh đầu hoặc xác nhận đã đọc. Chưa hoàn thành đối chiếu fixture và bài kiểm tra thực cho nhiệm vụ này."
+          "commands": [
+            "cd /home/labex/project/process-lab",
+            {
+              "command": "bash -c 'exec -a labex-job sleep 300'",
+              "input": [
+                {
+                  "wait_for": "sleep 300",
+                  "text": "\u001a",
+                  "raw": true,
+                  "delay_ms": 150
+                }
+              ],
+              "allowed_status": [
+                148
+              ]
+            },
+            "jobs -l",
+            "bg %1",
+            "jobs -l",
+            {
+              "command": "fg %1",
+              "input": [
+                {
+                  "wait_for": "fg %1",
+                  "text": "\u0003",
+                  "raw": true,
+                  "delay_ms": 150
+                }
+              ],
+              "allowed_status": [
+                130
+              ]
+            },
+            "touch job-control.done"
+          ]
         },
         {
           "id": "source-725419-section-6-v3",
@@ -4028,7 +4554,7 @@
           "id": "source-725413-section-1-v3",
           "commands": [],
           "unsupported": true,
-          "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+          "reason": "Bài cần systemd và service thật trên Ubuntu Server VM. Runtime container hiện không có systemd PID 1; không chấm đạt chỉ vì đã gõ systemctl hoặc curl."
         }
       ]
     },
@@ -4039,9 +4565,62 @@
       "steps": [
         {
           "id": "source-725414-section-1-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+          "commands": [
+            {
+              "command": "cd /home/labex/project/network-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "hostname",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cat /etc/hosts",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "hostname -I",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "printf 'hostname=%s\\naddresses=%s\\n' \"$(hostname)\" \"$(hostname -I | xargs)\" > host-identity.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cat host-identity.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-725414-section-2-v3",
@@ -4200,9 +4779,53 @@
         },
         {
           "id": "source-725414-section-6-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+          "commands": [
+            {
+              "command": "sudo ss -ltnp | grep ':8088'",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "curl -i http://127.0.0.1:8088/",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cd /home/labex/project/network-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "curl -s http://127.0.0.1:8088/ > http-response.html",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "grep 'network demo ready' http-response.html",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-725414-section-7-v3",
@@ -4301,7 +4924,7 @@
           "id": "source-725411-section-1-v3",
           "commands": [],
           "unsupported": true,
-          "reason": "Bài cần systemd PID 1, service unit và journal thật; Docker hiện dùng supervisor tối giản, chưa hỗ trợ đúng yêu cầu này."
+          "reason": "Bài cần systemd và service thật trên Ubuntu Server VM. Runtime container hiện không có systemd PID 1; không chấm đạt chỉ vì đã gõ systemctl hoặc curl."
         }
       ]
     },
@@ -4312,45 +4935,333 @@
       "steps": [
         {
           "id": "source-725416-section-1-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+          "commands": [
+            "cd /home/labex/project/ssh-lab",
+            "ssh -V 2>&1",
+            "sudo ss -ltnp | grep :22",
+            "ssh-keyscan -t ed25519 localhost 2>/dev/null | ssh-keygen -lf -",
+            "printf 'target=localhost\\nport=22\\nuser=remoteuser\\n' > ssh-target.txt"
+          ]
         },
         {
           "id": "source-725416-section-2-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+          "commands": [
+            {
+              "command": "ssh remoteuser@localhost",
+              "input": [
+                {
+                  "wait_for": "(yes/no/[fingerprint])?",
+                  "text": "yes"
+                },
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                },
+                {
+                  "wait_for": "remoteuser@labex:",
+                  "text": "whoami\nhostname\npwd\nmkdir -p ~/ssh-lab\nprintf 'connected as %s\\n' \"$(whoami)\" > ~/ssh-lab/connected.txt\nexit"
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "source-725416-section-3-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+          "commands": [
+            {
+              "command": "cd /home/labex/project/ssh-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "ssh remoteuser@localhost 'whoami; uname -srm; uptime'",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                }
+              ]
+            },
+            {
+              "command": "ssh remoteuser@localhost 'printf \"remote_user=%s\\nremote_home=%s\\n\" \"$(whoami)\" \"$HOME\"' > remote-context.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                }
+              ]
+            },
+            {
+              "command": "cat remote-context.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-725416-section-4-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+          "commands": [
+            {
+              "command": "cd /home/labex/project/ssh-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "printf 'mode=training\\nport=8080\\n' > app.conf",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "scp app.conf remoteuser@localhost:/home/remoteuser/incoming/app.conf",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                }
+              ]
+            },
+            {
+              "command": "ssh remoteuser@localhost 'cat /home/remoteuser/incoming/app.conf'",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                }
+              ]
+            },
+            {
+              "command": "scp remoteuser@localhost:/home/remoteuser/incoming/app.conf downloaded-app.conf",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                }
+              ]
+            },
+            {
+              "command": "cmp app.conf downloaded-app.conf && echo \"The files match\"",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-725416-section-5-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+          "commands": [
+            {
+              "command": "cd /home/labex/project/ssh-lab",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "mkdir -p site/assets",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "printf '<h1>SSH transfer practice</h1>\\n' > site/index.html",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "printf 'body { color: navy; }\\n' > site/assets/style.css",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "scp -r site remoteuser@localhost:/home/remoteuser/incoming/",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                }
+              ]
+            },
+            {
+              "command": "ssh remoteuser@localhost 'find /home/remoteuser/incoming/site -type f -printf \"%P\\n\" | sort'",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "source-725416-section-6-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+          "commands": [
+            {
+              "command": "mkdir -p ~/.ssh",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "chmod 700 ~/.ssh",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "ssh-keygen -t ed25519 -f ~/.ssh/labex_remote_ed25519 -N '' -C 'labex-remote-practice'",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "ls -l ~/.ssh/labex_remote_ed25519 ~/.ssh/labex_remote_ed25519.pub",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "ssh-keygen -lf ~/.ssh/labex_remote_ed25519.pub",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         },
         {
           "id": "source-725416-section-7-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+          "commands": [
+            {
+              "command": "ssh-copy-id -i ~/.ssh/labex_remote_ed25519.pub remoteuser@localhost",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ],
+              "input": [
+                {
+                  "wait_for": "password:",
+                  "text": "RemoteLab123!"
+                }
+              ]
+            },
+            {
+              "command": "ssh -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost 'printf \"key authentication works\\n\" > ~/ssh-lab/key-authenticated.txt; cat ~/ssh-lab/key-authenticated.txt'",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "scp -i ~/.ssh/labex_remote_ed25519 remoteuser@localhost:~/ssh-lab/key-authenticated.txt key-authenticated.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            },
+            {
+              "command": "cat key-authenticated.txt",
+              "allowed_status": [
+                0,
+                1,
+                2,
+                130
+              ]
+            }
+          ]
         }
       ]
     },
@@ -4361,9 +5272,18 @@
       "steps": [
         {
           "id": "source-725408-section-1-v3",
-          "commands": [],
-          "unsupported": true,
-          "reason": "Bài cần sshd, tài khoản remote và xác thực/key transfer thật; chưa dựng và kiểm chứng các fixture SSH."
+          "commands": [
+            "cd /home/labex/project/remote-admin",
+            {
+              "command": "scp -i id_ed25519 service.conf opsuser@localhost:/home/opsuser/incoming/service.conf",
+              "input": [
+                {
+                  "wait_for": "(yes/no/[fingerprint])?",
+                  "text": "yes"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

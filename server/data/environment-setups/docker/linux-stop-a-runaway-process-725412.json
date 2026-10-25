@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "directories": [
+    {
+      "path": "/home/labex/project/system-recovery"
+    }
+  ],
+  "files": [
+    {
+      "path": "/home/labex/project/system-recovery/start-runaway.sh",
+      "mode": "0755",
+      "content": "#!/bin/bash\nbash -c 'exec -a labex-runaway sleep 3600' &\nprintf '%s\\n' \"$!\" > /home/labex/project/system-recovery/runaway.pid\n"
+    }
+  ],
+  "accounts": [],
+  "groups": [],
+  "provenance": {
+    "fixture_fidelity": "independently-reconstructed-from-local-instructions",
+    "original_bytes_recovered": false
+  },
+  "docker": {
+    "startup": [
+      {
+        "script": "/home/labex/project/system-recovery/start-runaway.sh",
+        "user": "labex"
+      }
+    ],
+    "image": "labex-local/noobs-ubuntu22:1"
+  }
+}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { savedSpeechRate, clampSpeechRate, VOICE_RATE_KEY } from '../lib/speechPlayer';
 
-const initial={phase:'idle',muted:false,transcript:'',lastUserSpeech:'',aiSpeechText:'',error:'',notice:'',micLevel:0,micName:''};
+const initial={phase:'idle',muted:false,transcript:'',lastUserSpeech:'',aiSpeechText:'',error:'',notice:'',micLevel:0,micName:'',connected:false,textSending:false,textError:''};
 export default function useVoiceCall({isOpen,persona,lab,currentStep,lastTerminalOutput}) {
   const [state,setState]=useState(initial),[rate,setRate]=useState(savedSpeechRate),[attempt,setAttempt]=useState(0);
   const session=useRef(null),latest=useRef(null),rateRef=useRef(rate);
@@ -11,20 +11,41 @@ export default function useVoiceCall({isOpen,persona,lab,currentStep,lastTermina
     if(!isOpen)return;
     let disposed=false,stopped=false,stream,ctx,source,node,ws,ready=false,playing=false,complete=false,suppressed=false,responding=false;
     let input='',output='',newInput=true,newOutput=true,drainTimer,connectTimer,interruptedTurn=false;
+    let pendingText;
     const update=patch=>{if(!disposed)setState(value=>({...value,...patch}));};
     const send=message=>{if(ws?.readyState===WebSocket.OPEN)ws.send(JSON.stringify(message));};
     function release(){
       if(stopped)return;stopped=true;ready=false;clearTimeout(connectTimer);clearTimeout(drainTimer);
+      if(pendingText){clearTimeout(pendingText.timer);pendingText.resolve(false);pendingText=null;}
       if(node){node.port.onmessage=null;node.onprocessorerror=null;node.disconnect();}source?.disconnect();
       stream?.getTracks().forEach(track=>{track.onended=null;track.stop();});
       void ctx?.close().catch(()=>{});ws?.close();
     }
-    function fail(message){if(stopped || disposed)return;update({phase:'idle',error:message,micLevel:0,micName:'',notice:''});release();}
+    function fail(message){if(stopped || disposed)return;update({phase:'idle',error:message,micLevel:0,micName:'',notice:'',connected:false,textSending:false});release();}
     function clearPlayback(){node?.port.postMessage({type:'clear'});playing=false;clearTimeout(drainTimer);}
     const control={
       setRate:value=>node?.port.postMessage({type:'rate',rate:value}),
       setMuted:muted=>{stream?.getAudioTracks().forEach(track=>{track.enabled=!muted;});node?.port.postMessage({type:'mute',muted});if(muted)send({type:'pause'});update({muted,micLevel:0});},
       interrupt:()=>{if(!ready || stopped || disposed)return;suppressed=responding;clearPlayback();update({phase:'listening'});},
+      sendText:value=>{
+        const text=typeof value==='string' ? value.trim() : '';
+        if(!text || text.length>4000){update({textError:'Nhập tin nhắn từ 1 đến 4000 ký tự.'});return Promise.resolve(false);}
+        if(!ready || stopped || disposed || ws?.readyState!==WebSocket.OPEN){update({textError:'Cuộc gọi chưa kết nối. Hãy chờ hoặc kết nối lại.'});return Promise.resolve(false);}
+        if(pendingText)return Promise.resolve(false);
+        if(ws.bufferedAmount>64000){update({textError:'Đường truyền đang nghẽn. Tin nhắn chưa được gửi.'});return Promise.resolve(false);}
+        const id=crypto.randomUUID();
+        return new Promise(resolve=>{
+          pendingText={id,text,resolve,timer:setTimeout(()=>{
+            if(pendingText?.id!==id)return;
+            pendingText=null;update({textSending:false,textError:'Chưa nhận được xác nhận gửi. Nội dung vẫn được giữ để bạn kiểm tra trước khi gửi lại.'});resolve(false);
+          },8000)};
+          clearPlayback();newOutput=true;newInput=true;complete=false;input='';output='';
+          update({textSending:true,textError:'',phase:'thinking'});
+          try{send({type:'text',id,text});}catch{
+            clearTimeout(pendingText.timer);pendingText=null;update({textSending:false,textError:'Không gửi được tin nhắn. Hãy kết nối lại.'});resolve(false);
+          }
+        });
+      },
     };
     session.current=control;
     async function begin(){
@@ -65,7 +86,14 @@ export default function useVoiceCall({isOpen,persona,lab,currentStep,lastTermina
         ws.onmessage=({data})=>{
           if(stopped || disposed)return;
           let msg;try{msg=JSON.parse(data);}catch{return fail('Dữ liệu âm thanh không hợp lệ.');}
-          if(msg.type==='ready'){ready=true;clearTimeout(connectTimer);update({phase:'listening',notice:'Thoại trực tiếp · mic luôn nghe, có thể nói chen vào.'});}
+          if(msg.type==='ready'){ready=true;clearTimeout(connectTimer);update({phase:'listening',connected:true,notice:'Thoại trực tiếp · mic luôn nghe, có thể nói chen vào.'});}
+          if((msg.type==='text-sent' || msg.type==='text-error') && pendingText?.id===msg.id){
+            const pending=pendingText;pendingText=null;clearTimeout(pending.timer);
+            const sent=msg.type==='text-sent';
+            if(sent){update({lastUserSpeech:pending.text,transcript:'',textSending:false,textError:''});}
+            else update({textSending:false,textError:msg.message || 'Tin nhắn chưa được gửi.',phase:'listening'});
+            pending.resolve(sent);
+          }
           if(msg.type==='error')return fail(msg.message);
           if(msg.type==='notice')update({notice:msg.message});
           const content=msg.content;if(!content)return;
@@ -95,5 +123,6 @@ export default function useVoiceCall({isOpen,persona,lab,currentStep,lastTermina
     return()=>{disposed=true;release();if(session.current===control)session.current=null;};
   },[isOpen,persona,attempt,lessonId,stepId]);
   function changeRate(value){const speed=clampSpeechRate(value);rateRef.current=speed;setRate(speed);session.current?.setRate(speed);try{localStorage.setItem(VOICE_RATE_KEY,String(speed));}catch{}}
-  return {...state,rate,setRate:changeRate,setMuted:value=>session.current?.setMuted(value),interrupt:()=>session.current?.interrupt(),retry:()=>setAttempt(value=>value+1)};
+  return {...state,rate,setRate:changeRate,setMuted:value=>session.current?.setMuted(value),interrupt:()=>session.current?.interrupt(),
+    sendText:value=>session.current?.sendText(value) || Promise.resolve(false),retry:()=>setAttempt(value=>value+1)};
 }

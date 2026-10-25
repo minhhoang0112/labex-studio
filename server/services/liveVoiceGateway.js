@@ -58,6 +58,24 @@ export function createLiveVoiceGateway({env=process.env, connect=url=>new WebSoc
         });
         return;
       }
+      if(msg.type==='text') {
+        const id=typeof msg.id==='string' && /^[a-zA-Z0-9_-]{1,80}$/.test(msg.id) ? msg.id : null;
+        if(!id || typeof msg.text!=='string' || !msg.text.trim() || msg.text.length>4000) {
+          send({type:'text-error',id,message:'Tin nhắn cần có nội dung và tối đa 4000 ký tự.'});return;
+        }
+        if(!ready || upstream?.readyState!==WebSocket.OPEN) {
+          send({type:'text-error',id,message:'Cuộc gọi chưa kết nối. Hãy chờ hoặc kết nối lại rồi gửi.'});return;
+        }
+        if(upstream.bufferedAmount>256000) {
+          send({type:'text-error',id,message:'Đường truyền đang nghẽn. Tin nhắn chưa được gửi.'});return;
+        }
+        // Text belongs to the same live conversation as microphone input.
+        upstream.send(JSON.stringify({realtimeInput:{text:msg.text.trim()}}),error=>{
+          if(ended)return;
+          send(error ? {type:'text-error',id,message:'Không gửi được tin nhắn. Hãy thử kết nối lại.'} : {type:'text-sent',id});
+        });
+        return;
+      }
       if(!ready || upstream?.readyState!==WebSocket.OPEN)return;
       if(upstream.bufferedAmount>256000)return fail('Mạng gửi âm thanh quá chậm. Hãy kết nối lại.');
       if(msg.type==='audio' && typeof msg.data==='string' && msg.data.length<=8192 && /^[A-Za-z0-9+/]+={0,2}$/.test(msg.data)){

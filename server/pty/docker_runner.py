@@ -22,6 +22,7 @@ DOCKER = os.environ.get('LABEX_DOCKER_BIN', str(APP / 'versions/29.9.1/bin/docke
 SOCKET = os.environ.get('LABEX_DOCKER_SOCKET', str(APP / 'run/docker.sock'))
 IMAGE = os.environ.get('LABEX_DOCKER_IMAGE', 'labex-local/ubuntu22:1')
 COMMANDS_IMAGE = 'labex-local/commands-ubuntu22:1'
+NOOBS_IMAGE = 'labex-local/noobs-ubuntu22:1'
 LABEL = 'io.labex-local.provider'
 OWNER = 'ubuntu22-v1'
 BOOTSTRAP = ['/usr/bin/python3', '/opt/labex/containerbootstrap.py']
@@ -82,7 +83,7 @@ def create(name, lab_id, manifest_path=None):
     if not isinstance(runtime, dict):
         raise ValueError('Docker setup must be an object')
     requested_image = runtime.get('image')
-    if requested_image is not None and requested_image != COMMANDS_IMAGE:
+    if requested_image is not None and requested_image not in (COMMANDS_IMAGE, NOOBS_IMAGE):
         raise ValueError('Unsupported trusted course image override')
     image = requested_image or IMAGE
     docker('create', '--name', name, '--hostname', 'labex', '--label', f'{LABEL}={OWNER}',

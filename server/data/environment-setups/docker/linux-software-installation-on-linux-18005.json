@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "directories": [
+    {
+      "path": "/home/labex/project/package-lab"
+    },
+    {
+      "path": "/home/labex/project/package-lab/.package-source",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/package-lab/.package-source/labex-greeter",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/package-lab/.package-source/labex-greeter/DEBIAN",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/package-lab/.package-source/labex-greeter/usr",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/package-lab/.package-source/labex-greeter/usr/bin",
+      "owner": "labex:labex"
+    }
+  ],
+  "files": [
+    {
+      "path": "/home/labex/project/package-lab/.package-source/labex-greeter/DEBIAN/control",
+      "content": "Package: labex-greeter\nVersion: 1.0\nArchitecture: all\nMaintainer: Local Lab <lab@example.invalid>\nDescription: Independently reconstructed local course fixture\n"
+    },
+    {
+      "path": "/home/labex/project/package-lab/.package-source/labex-greeter/usr/bin/labex-greeter",
+      "mode": "0755",
+      "content": "#!/bin/bash\nprintf \"%s\\n\" 'hello from a local package'\n"
+    },
+    {
+      "path": "/home/labex/project/package-lab/build-fixture.sh",
+      "mode": "0755",
+      "content": "#!/bin/bash\nset -eu\ndpkg-deb --build /home/labex/project/package-lab/.package-source/labex-greeter /home/labex/project/package-lab/labex-greeter_1.0_all.deb >/dev/null\n"
+    }
+  ],
+  "accounts": [],
+  "groups": [],
+  "provenance": {
+    "fixture_fidelity": "independently-reconstructed-from-local-instructions",
+    "original_bytes_recovered": false
+  },
+  "docker": {
+    "startup": [
+      {
+        "script": "/home/labex/project/package-lab/build-fixture.sh",
+        "user": "labex"
+      }
+    ],
+    "image": "labex-local/noobs-ubuntu22:1"
+  }
+}

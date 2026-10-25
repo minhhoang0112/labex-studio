@@ -275,4 +275,8 @@ FE handoff: read the backend readiness counts/reasons and show partial lessons h
     print(f'Noobs: 37 lessons, {supported} Docker candidates, {blocked} explicit blocked tasks; {old_ack} acknowledgements removed, {weak_cd} navigation-only checks removed.')
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    main()
+    # Keep the newer instruction/runtime corrections after legacy regeneration.
+    import runpy
+    runpy.run_path(str(Path(__file__).with_name('repair-noobs-grading.py')),run_name='__main__')

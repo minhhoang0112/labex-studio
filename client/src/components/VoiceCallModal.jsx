@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Mic, MicOff, PhoneOff, Volume2, Sparkles, RotateCcw, Bot, Briefcase, X, MessageSquare, Minus, Maximize2, Minimize2, ChevronUp, BookOpen } from 'lucide-react';
 import useVoiceCall from '../hooks/useVoiceCall';
 import { cleanForSpeech } from '../lib/speechPlayer';
@@ -7,7 +7,18 @@ export default function VoiceCallModal({ isOpen, onClose, lab, currentStep, last
   const [persona,setPersona]=useState(initialPersona);
   const [viewMode,setViewMode]=useState('dock');
   const [showSubtitles,setShowSubtitles]=useState(true);
+  const [showComposer,setShowComposer]=useState(false);
+  const [draft,setDraft]=useState('');
+  const composerRef=useRef(null);
   const voice=useVoiceCall({isOpen,persona,lab,currentStep,lastTerminalOutput});
+  useEffect(()=>{if(isOpen && showComposer && viewMode!=='minimized')composerRef.current?.focus();},[isOpen,showComposer,viewMode]);
+  async function submitText(event){
+    event.preventDefault();
+    if(!draft.trim() || voice.textSending)return;
+    const sent=await voice.sendText(draft);
+    if(sent){setDraft('');setShowSubtitles(true);}
+    composerRef.current?.focus();
+  }
   if (!isOpen) return null;
   const status=voice.error ? 'Cuộc gọi đã ngắt' : voice.muted ? 'Mic đang tắt' : voice.phase==='connecting' ? 'Đang kết nối thoại…'
     : voice.phase==='listening' ? 'Đang lắng nghe…' : voice.phase==='thinking' ? 'Labby đang trả lời…'
@@ -74,10 +85,24 @@ export default function VoiceCallModal({ isOpen, onClose, lab, currentStep, last
         </div>
         <p className="text-[10px] leading-relaxed text-slate-500">Cứ nói để ngắt lời Labby, không cần bấm nút. Dùng tai nghe để giảm tiếng loa lọt vào mic. Nếu mức âm không lên, kiểm tra mic mặc định và quyền của trang.</p>
       </div>
+      {showComposer && <form onSubmit={submitText} className="px-3 py-3 border-t border-white/10 bg-slate-900 shrink-0 space-y-2" aria-label="Nhắn tin trong cuộc gọi">
+        <label htmlFor="live-voice-message" className="text-xs text-slate-300">Nhắn tin cho Labby trong cuộc gọi</label>
+        <div className="flex gap-2 items-end">
+          <textarea id="live-voice-message" ref={composerRef} value={draft} maxLength={4000} rows={2}
+            aria-label="Tin nhắn cho Labby" placeholder="Gõ câu hỏi hoặc dán lệnh cần giải thích…"
+            disabled={voice.textSending} onChange={event=>setDraft(event.target.value)}
+            onKeyDown={event=>{event.stopPropagation();if(event.key==='Enter' && !event.shiftKey && !event.nativeEvent.isComposing){event.preventDefault();event.currentTarget.form.requestSubmit();}}}
+            className="min-w-0 flex-1 resize-none rounded-lg bg-slate-950 border border-slate-600 focus:border-indigo-400 focus:outline-none px-3 py-2 text-sm text-white disabled:opacity-60"/>
+          <button type="submit" disabled={!draft.trim() || !voice.connected || voice.textSending} className="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-sm font-semibold">{voice.textSending?'Đang gửi…':'Gửi'}</button>
+        </div>
+        <p className="text-[10px] text-slate-400">Enter để gửi · Shift+Enter xuống dòng · Có thể gửi khi mic đang tắt.</p>
+        {voice.textError && <p role="alert" className="text-xs text-rose-300">{voice.textError}</p>}
+      </form>}
       <footer className="px-3 py-2.5 border-t border-white/10 flex items-center flex-wrap gap-2 bg-slate-900 shrink-0">
         {micButton}
         {talking && <button aria-label="Ngắt lời và nói" onClick={voice.interrupt} className="p-2 rounded-xl bg-amber-500 text-slate-950 flex items-center gap-1 text-xs"><RotateCcw size={14}/>Ngắt lời</button>}
-        <button aria-label="Bật tắt phụ đề" onClick={()=>setShowSubtitles(!showSubtitles)} aria-pressed={showSubtitles} className="p-2 rounded-xl bg-white/10"><MessageSquare size={15}/></button>
+        <button aria-label="Nhắn tin trong cuộc gọi" title="Nhắn tin trong cuộc gọi" onClick={()=>setShowComposer(!showComposer)} aria-expanded={showComposer} className={`p-2 rounded-xl ${showComposer?'bg-indigo-600':'bg-white/10'}`}><MessageSquare size={15}/></button>
+        <button aria-label="Bật tắt phụ đề" onClick={()=>setShowSubtitles(!showSubtitles)} aria-pressed={showSubtitles} className="p-2 rounded-xl bg-white/10 text-xs">Phụ đề</button>
         <div className="ml-auto">{endButton}</div>
       </footer>
     </div>

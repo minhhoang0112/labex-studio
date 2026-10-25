@@ -33,6 +33,7 @@ function unsupportedRule(rule) {
     return null;
   }
   if (rule.kind === "acknowledgement") return null;
+  if (rule.kind === 'terminal-input') return Array.isArray(rule.keys) && rule.keys.length && rule.keys.every(key=>['up','tab','ctrl-c','ctrl-l','ctrl-z'].includes(key)) ? null : 'Quy tắc phím terminal không hợp lệ.';
   if (rule.kind === "all") return rule.checks?.length ? rule.checks.map(unsupportedRule).find(Boolean) || null : "Thiếu điều kiện kiểm tra.";
   return "Loại kiểm tra chưa được hỗ trợ.";
 }

@@ -1,4 +1,5 @@
 import { execLabCommand, getCommandHistory } from "../pty/linuxEnvironment.js";
+import {terminalKeys} from './terminalEvidence.js';
 
 export function hasUnconditionalSuccess(command) {
   if (typeof command !== "string" || !command.trim()) return true;
@@ -61,6 +62,7 @@ export async function verifyDefinition(labId, definition, {
   acknowledged = false,
   stepIndex = 0,
   allSteps = [],
+  readTerminalKeys = terminalKeys,
 } = {}) {
   if (!definition || typeof definition !== "object") {
     return { supported: false, passed: false, reason: "Bước chưa có bộ kiểm tra được xác nhận." };
@@ -71,6 +73,13 @@ export async function verifyDefinition(labId, definition, {
     }
     return { supported: true, passed: acknowledged === true, method: "learner-acknowledgement" };
   }
+  if(definition.kind === 'terminal-input') {
+    const allowed=new Set(['up','tab','ctrl-c','ctrl-l','ctrl-z']);
+    if(!Array.isArray(definition.keys) || !definition.keys.length || definition.keys.some(key=>!allowed.has(key))) return {supported:false,passed:false,reason:'Thiếu quy tắc phím terminal hợp lệ.'};
+    const observed=await readTerminalKeys(labId);
+    const missing=definition.keys.filter(key=>!observed.includes(key));
+    return {supported:true,passed:!missing.length,method:'server-pty-shortcuts',reason:missing.length ? `Chưa ghi nhận phím ${missing.join(', ')} trong terminal của bài. Hãy thực hành lại phần phím tắt (cần làm lại sau khi backend khởi động lại).` : undefined};
+  }
   if (definition.kind === "state") {
     if (hasUnconditionalSuccess(definition.command)) {
       return { supported: false, passed: false, reason: "Bộ kiểm tra chứa nhánh tự động báo đạt." };
@@ -78,7 +87,7 @@ export async function verifyDefinition(labId, definition, {
     const result = await runCommand(labId, definition.command);
     return { supported: true, passed: result.exitCode === 0 && !result.timedOut,
       timedOut: Boolean(result.timedOut), method: "filesystem-or-account-state",
-      reason: result.exitCode === 0 && !result.timedOut ? undefined : "Trạng thái tệp hoặc tài khoản chưa khớp yêu cầu của bước này." };
+      reason: result.exitCode === 0 && !result.timedOut ? undefined : definition.failure_hint || "Trạng thái tệp hoặc tài khoản chưa khớp yêu cầu của bước này." };
   }
   if (definition.kind === "commands") {
     const groups = definition.groups;
@@ -147,7 +156,7 @@ export async function verifyDefinition(labId, definition, {
       return snapshot;
     };
     const results = [];
-    for (const check of definition.checks) results.push(await verifyDefinition(labId, check, { runCommand, readHistory: readSnapshot, acknowledged, stepIndex, allSteps }));
+    for (const check of definition.checks) results.push(await verifyDefinition(labId, check, { runCommand, readHistory: readSnapshot, acknowledged, stepIndex, allSteps, readTerminalKeys }));
     return { supported: results.every(result => result.supported), passed: results.every(result => result.supported && result.passed),
       timedOut: results.some(result => result.timedOut), method: "combined",
       reason: results.find(result => !result.supported)?.reason || results.find(result => !result.passed)?.reason };

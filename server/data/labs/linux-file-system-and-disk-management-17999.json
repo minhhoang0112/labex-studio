@@ -43,7 +43,34 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ kiểm tra mối quan hệ giữa các thiết bị khối, hệ thống tệp và các điểm gắn kết (mount point), sau đó chuẩn bị một không gian làm việc an toàn.\n\nLệnh `lsblk` có nghĩa là \"list block devices\" (liệt kê các thiết bị khối). Tùy chọn `-o` của nó dùng để chọn các cột cần hiển thị:\n\n```bash\nlsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS\n```\n\nĐọc đầu ra từ trái sang phải:\n\n- `NAME` xác định thiết bị hoặc phân vùng.\n- `TYPE` phân biệt đĩa, phân vùng và thiết bị loop.\n- `SIZE` hiển thị dung lượng.\n- `FSTYPE` hiển thị loại hệ thống tệp được phát hiện khi có tồn tại.\n- `MOUNTPOINTS` hiển thị nơi hệ thống tệp được gắn kết vào cây thư mục.\n\nMột ổ đĩa có thể chứa một hoặc nhiều phân vùng. Một hệ thống tệp như ext4 tổ chức các tệp bên trong một phân vùng hoặc đối tượng lưu trữ khác. Điểm gắn kết là một thư mục thông thường mà qua đó Linux hiển thị hệ thống tệp đó.\n\nSử dụng `findmnt` để xác định hệ thống tệp hiện đang chứa thư mục dự án. Tùy chọn `-T` chấp nhận bất kỳ đường dẫn nào và tìm hệ thống tệp được gắn kết của nó:\n\n```bash\nfindmnt -T /home/labex/project\n```\n\nThiết bị nguồn chính xác có thể khác nhau, nhưng đầu ra hiển thị nguồn, đích, loại hệ thống tệp và các tùy chọn gắn kết.\n\nLệnh `blkid` đọc các chữ ký (signature) của hệ thống tệp, nhãn (label) và UUID. Cần có quyền quản trị để kiểm tra mọi thiết bị khối khả dụng:\n\n```bash\nsudo blkid\n```\n\nUUID là một định danh hệ thống tệp được thiết kế để giữ nguyên ổn định ngay cả khi tên thiết bị thay đổi. Bạn sẽ sử dụng ý tưởng này sau khi học về việc gắn kết bền vững (persistent mounts).\n\nTạo và truy cập vào một không gian làm việc chuyên dụng:\n\n```bash\nmkdir -p /home/labex/project/storage-lab\n```\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\npwd\n```\n\nKết quả cuối cùng sẽ là `/home/labex/project/storage-lab`.",
       "task_vi": "Thực hiện hướng dẫn: Hiểu về các tầng lưu trữ Linux",
-      "hint_vi": "Chạy lệnh: lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS"
+      "hint_vi": "Chạy lệnh: lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*lsblk\\s+-o\\s+NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS\\s*$"
+                ],
+                [
+                  "^\\s*findmnt\\s+-T\\s+/home/labex/project\\s*$"
+                ]
+              ]
+            },
+            {
+              "kind": "state",
+              "command": "test -d /home/labex/project/storage-lab"
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "source-17999-section-2-v3",
@@ -145,7 +172,14 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ tạo một tệp ảnh đĩa ảo, định dạng nó với hệ thống tệp ext4 và kiểm tra siêu dữ liệu hệ thống tệp của nó mà không cần chạm vào đĩa thật.\n\nTạo một tệp ảnh 128 MiB. Tệp này sẽ đóng vai trò là bộ nhớ lưu trữ dùng một lần cho phần còn lại của phòng thực hành (lab):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\ntruncate -s 128M virtual.img\n```\n\nKiểm tra kích thước thực tế của nó:\n\n```bash\nls -lh virtual.img\n```\n\nTrước khi định dạng, lệnh `file` chỉ nhìn thấy dữ liệu chung hoặc một tệp trống:\n\n```bash\nfile virtual.img\n```\n\nLệnh `mkfs.ext4` tạo một hệ thống tệp ext4. Tùy chọn `-F` xác nhận rằng một tệp thông thường là mục tiêu có chủ đích và `-L` gán nhãn `LABEXDATA`:\n\n```bash\nsudo mkfs.ext4 -F -L LABEXDATA virtual.img\n```\n\nQuá trình định dạng tạo ra các cấu trúc hệ thống tệp bên trong tệp ảnh. Kiểm tra kết quả bằng hai công cụ:\n\n```bash\nfile virtual.img\n```\n\n```bash\nsudo blkid -p virtual.img\n```\n\nĐầu ra sẽ xác định ext4, hiển thị nhãn `LABEXDATA` và bao gồm một UUID được tạo tự động. Chỉ hiển thị UUID đó:\n\n```bash\nsudo blkid -s UUID -o value virtual.img\n```\n\nGiá trị UUID được tạo ra tại thời điểm định dạng và sẽ khác nhau giữa các học viên.",
       "task_vi": "Thực hiện hướng dẫn: Tạo và kiểm tra hệ thống tệp Ext4",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/storage-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/storage-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %s /home/labex/project/storage-lab/virtual.img)\" = 134217728 && test \"$(sudo blkid -s TYPE -o value /home/labex/project/storage-lab/virtual.img)\" = ext4 && test \"$(sudo blkid -s LABEL -o value /home/labex/project/storage-lab/virtual.img)\" = LABEXDATA"
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "source-17999-section-4-v3",
@@ -166,7 +200,14 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ gắn (attach) hệ thống tệp ảo vào cây thư mục Linux, ghi một tệp và ngắt kết nối nó một cách an toàn.\n\nĐiểm gắn (mount point) là thư mục nơi hệ thống tệp trở nên hiển thị. Hãy tạo một điểm gắn dưới `/mnt`, một vị trí tiêu chuẩn cho việc gắn kết quản trị tạm thời:\n\n```bash\nsudo mkdir -p /mnt/labex-virtual\n```\n\nGắn (mount) tệp ảnh. Tùy chọn `-o loop` yêu cầu Linux liên kết tệp thông thường với một thiết bị loop để nó có thể được xử lý giống như thiết bị lưu trữ khối (block storage):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo mount -o loop virtual.img /mnt/labex-virtual\n```\n\nKiểm tra điểm gắn đang hoạt động:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nNguồn (source) thường xuất hiện dưới dạng một thiết bị loop, đích (target) là `/mnt/labex-virtual` và loại hệ thống tệp là ext4. Bạn cũng có thể yêu cầu `df` cung cấp thông tin về hệ thống tệp cụ thể này:\n\n```bash\ndf -h /mnt/labex-virtual\n```\n\nGhi một tệp bên trong hệ thống tệp đã được gắn. `sudo sh -c` được sử dụng vì việc chuyển hướng (redirection) được thực hiện bởi shell và thư mục gốc được gắn thuộc quyền sở hữu của `root`:\n\n```bash\nsudo sh -c 'echo \"stored inside the virtual filesystem\" > /mnt/labex-virtual/welcome.txt'\n```\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nViệc ngắt kết nối (unmounting) sẽ xả (flush) các lệnh ghi đang chờ xử lý và tách hệ thống tệp khỏi điểm gắn của nó:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nXác nhận rằng nó không còn được gắn kết nữa:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nKhông có đầu ra nào được trả về và `findmnt` trả về một mã trạng thái khác không vì nó không tìm thấy điểm gắn hoạt động nào tại đích đó. Thư mục điểm gắn vẫn tồn tại, nhưng nội dung của tệp ảnh không còn có thể truy cập được thông qua nó cho đến khi tệp ảnh được gắn lại.",
       "task_vi": "Thực hiện hướng dẫn: Mount, Sử dụng và Unmount Filesystem",
-      "hint_vi": "Chạy lệnh: sudo mkdir -p /mnt/labex-virtual"
+      "hint_vi": "Chạy lệnh: sudo mkdir -p /mnt/labex-virtual",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "unsupported",
+          "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "source-17999-section-5-v3",
@@ -187,7 +228,34 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ sử dụng `fdisk` ở chế độ liệt kê chỉ đọc (read-only) và phân biệt bảng phân vùng (partition table) với chữ ký hệ thống tệp (filesystem signature).\n\nLiệt kê các đĩa và phân vùng nhìn thấy được của hệ thống:\n\n```bash\nsudo fdisk -l\n```\n\nTùy chọn `-l` có nghĩa là liệt kê (list). Nó báo cáo kích thước đĩa, kích thước cung đĩa (sector), các loại bảng phân vùng và các phân vùng mà không làm thay đổi chúng. Không bao giờ bắt đầu một phiên phân vùng tương tác trên một đĩa sản xuất (production disk) mà bạn không quen thuộc.\n\nBây giờ hãy kiểm tra ảnh ảo (virtual image):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo fdisk -l virtual.img\n```\n\nẢnh này có kích thước đĩa nhưng không có mục phân vùng nào. Trong ví dụ có kiểm soát này, ext4 được tạo trực tiếp trên toàn bộ ảnh. Trên một đĩa vật lý, bố cục phổ biến là:\n\n```text\ndisk device -> partition table -> partition -> filesystem -> mount point\n```\n\nTạo một ảnh trống thứ hai để so sánh:\n\n```bash\ntruncate -s 64M partition-demo.img\n```\n\n```bash\nsudo fdisk -l partition-demo.img\n```\n\nNó cũng không có bảng phân vùng nào. So sánh các chữ ký hệ thống tệp bằng `wipefs` ở chế độ chỉ đọc mặc định của nó:\n\n```bash\nsudo wipefs virtual.img partition-demo.img\n```\n\n`virtual.img` sẽ hiển thị chữ ký ext4, trong khi ảnh so sánh trống sẽ không hiển thị chữ ký hệ thống tệp nào. Không sử dụng tùy chọn hủy diệt `wipefs -a` trong bài Lab này.",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra bảng phân vùng an toàn",
-      "hint_vi": "Chạy lệnh: sudo fdisk -l"
+      "hint_vi": "Chạy lệnh: sudo fdisk -l",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(stat -c %s /home/labex/project/storage-lab/partition-demo.img)\" = 67108864 && test \"$(sudo blkid -s TYPE -o value /home/labex/project/storage-lab/virtual.img)\" = ext4 && ! sudo blkid -p /home/labex/project/storage-lab/partition-demo.img >/dev/null 2>&1"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+fdisk\\s+-l\\s+virtual\\.img\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+fdisk\\s+-l\\s+partition-demo\\.img\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "source-17999-section-6-v3",
@@ -208,7 +276,14 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ tìm hiểu sáu trường của một mục fstab và kiểm thử an toàn trên một tệp thực hành riêng biệt mà không sửa đổi `/etc/fstab`.\n\nHệ thống đọc `/etc/fstab` để quyết định những hệ thống tệp nào nên được gắn kết một cách nhất quán. Xem các dòng không phải là chú thích của tệp mà không cần chỉnh sửa tệp:\n\n```bash\ngrep -Ev '^\\s*(#|$)' /etc/fstab\n```\n\nMột mục fstab có sáu trường được phân tách bằng khoảng trắng:\n\n```text\nsource  mount-point  filesystem-type  options  dump  fsck-order\n```\n\nĐối với các phân vùng vật lý, `UUID=<value>` thường an toàn hơn so với một tên như `/dev/sdb1`, bởi vì tên thiết bị có thể thay đổi khi thứ tự nhận diện phần cứng thay đổi.\n\nLấy UUID của tệp ảnh của bạn và đặt một ví dụ UUID có chú thích vào tệp thực hành:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nuuid=$(sudo blkid -s UUID -o value virtual.img)\n```\n\n```bash\nprintf '## Real block device example: UUID=%s /mnt/data ext4 defaults,nofail 0 2\\n' \"$uuid\" > practice-fstab\n```\n\nVì bài thực hành này sử dụng một tệp thông thường thay vì một phân vùng vật lý, mục thực hành hoạt động của nó sử dụng đường dẫn tuyệt đối đến tệp ảnh và tùy chọn `loop`:\n\n```bash\nprintf '%s\\n' '/home/labex/project/storage-lab/virtual.img /mnt/labex-virtual ext4 loop,nofail 0 2' >> practice-fstab\n```\n\nHiển thị và kiểm tra tính hợp lệ của tệp thực hành. `--tab-file` báo cho `findmnt` biết không sử dụng tệp `/etc/fstab` thực:\n\n```bash\ncat practice-fstab\n```\n\n```bash\nfindmnt --verify --tab-file practice-fstab\n```\n\nBản tóm tắt cuối cùng sẽ báo cáo `0 parse errors` và `0 errors`. Nó cũng báo cáo một cảnh báo rằng nguồn là một tệp thông thường. Cảnh báo đó là điều được dự kiến ở đây bởi vì bài thực hành có kiểm soát này cố ý sử dụng một hệ thống tệp loop dựa trên tệp thay vì một thiết bị khối vật lý.\n\nSử dụng tệp thực hành cho một lần gắn kết có kiểm soát. Tùy chọn `-T` bảo `mount` đọc tệp fstab thay thế được chỉ định:\n\n```bash\nsudo mount -T practice-fstab /mnt/labex-virtual\n```\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nTệp `welcome.txt` được tạo trước đó vẫn phải tồn tại, chứng minh rằng việc gắn kết làm lộ ra dữ liệu được lưu trữ của hệ thống tệp:\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nGắn kết ngắt (unmount) nó lại để bài thực hành kết thúc ở trạng thái đã ngắt kết nối an toàn:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nBạn đã xác thực cú pháp gắn kết bền vững mà không thay đổi cấu hình khởi động của hệ thống. Một sai sót trong `/etc/fstab` thực tế có thể làm gián đoạn quá trình khởi động, vì vậy các quản trị viên thường xác thực các thay đổi trước khi khởi động lại.",
       "task_vi": "Thực hiện hướng dẫn: Xây dựng và Kiểm tra Fstab Thực hành",
-      "hint_vi": "Chạy lệnh: grep -Ev '^\\s*(#|$)' /etc/fstab"
+      "hint_vi": "Chạy lệnh: grep -Ev '^\\s*(#|$)' /etc/fstab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "unsupported",
+          "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "section-7",
@@ -244,7 +319,34 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ kiểm tra mối quan hệ giữa các thiết bị khối, hệ thống tệp và các điểm gắn kết (mount point), sau đó chuẩn bị một không gian làm việc an toàn.\n\nLệnh `lsblk` có nghĩa là \"list block devices\" (liệt kê các thiết bị khối). Tùy chọn `-o` của nó dùng để chọn các cột cần hiển thị:\n\n```bash\nlsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS\n```\n\nĐọc đầu ra từ trái sang phải:\n\n- `NAME` xác định thiết bị hoặc phân vùng.\n- `TYPE` phân biệt đĩa, phân vùng và thiết bị loop.\n- `SIZE` hiển thị dung lượng.\n- `FSTYPE` hiển thị loại hệ thống tệp được phát hiện khi có tồn tại.\n- `MOUNTPOINTS` hiển thị nơi hệ thống tệp được gắn kết vào cây thư mục.\n\nMột ổ đĩa có thể chứa một hoặc nhiều phân vùng. Một hệ thống tệp như ext4 tổ chức các tệp bên trong một phân vùng hoặc đối tượng lưu trữ khác. Điểm gắn kết là một thư mục thông thường mà qua đó Linux hiển thị hệ thống tệp đó.\n\nSử dụng `findmnt` để xác định hệ thống tệp hiện đang chứa thư mục dự án. Tùy chọn `-T` chấp nhận bất kỳ đường dẫn nào và tìm hệ thống tệp được gắn kết của nó:\n\n```bash\nfindmnt -T /home/labex/project\n```\n\nThiết bị nguồn chính xác có thể khác nhau, nhưng đầu ra hiển thị nguồn, đích, loại hệ thống tệp và các tùy chọn gắn kết.\n\nLệnh `blkid` đọc các chữ ký (signature) của hệ thống tệp, nhãn (label) và UUID. Cần có quyền quản trị để kiểm tra mọi thiết bị khối khả dụng:\n\n```bash\nsudo blkid\n```\n\nUUID là một định danh hệ thống tệp được thiết kế để giữ nguyên ổn định ngay cả khi tên thiết bị thay đổi. Bạn sẽ sử dụng ý tưởng này sau khi học về việc gắn kết bền vững (persistent mounts).\n\nTạo và truy cập vào một không gian làm việc chuyên dụng:\n\n```bash\nmkdir -p /home/labex/project/storage-lab\n```\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\npwd\n```\n\nKết quả cuối cùng sẽ là `/home/labex/project/storage-lab`.",
       "task_vi": "Thực hiện hướng dẫn: Hiểu về các tầng lưu trữ Linux",
-      "hint_vi": "Chạy lệnh: lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS"
+      "hint_vi": "Chạy lệnh: lsblk -o NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*lsblk\\s+-o\\s+NAME,TYPE,SIZE,FSTYPE,MOUNTPOINTS\\s*$"
+                ],
+                [
+                  "^\\s*findmnt\\s+-T\\s+/home/labex/project\\s*$"
+                ]
+              ]
+            },
+            {
+              "kind": "state",
+              "command": "test -d /home/labex/project/storage-lab"
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "source-17999-section-2-v3",
@@ -346,7 +448,14 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ tạo một tệp ảnh đĩa ảo, định dạng nó với hệ thống tệp ext4 và kiểm tra siêu dữ liệu hệ thống tệp của nó mà không cần chạm vào đĩa thật.\n\nTạo một tệp ảnh 128 MiB. Tệp này sẽ đóng vai trò là bộ nhớ lưu trữ dùng một lần cho phần còn lại của phòng thực hành (lab):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\ntruncate -s 128M virtual.img\n```\n\nKiểm tra kích thước thực tế của nó:\n\n```bash\nls -lh virtual.img\n```\n\nTrước khi định dạng, lệnh `file` chỉ nhìn thấy dữ liệu chung hoặc một tệp trống:\n\n```bash\nfile virtual.img\n```\n\nLệnh `mkfs.ext4` tạo một hệ thống tệp ext4. Tùy chọn `-F` xác nhận rằng một tệp thông thường là mục tiêu có chủ đích và `-L` gán nhãn `LABEXDATA`:\n\n```bash\nsudo mkfs.ext4 -F -L LABEXDATA virtual.img\n```\n\nQuá trình định dạng tạo ra các cấu trúc hệ thống tệp bên trong tệp ảnh. Kiểm tra kết quả bằng hai công cụ:\n\n```bash\nfile virtual.img\n```\n\n```bash\nsudo blkid -p virtual.img\n```\n\nĐầu ra sẽ xác định ext4, hiển thị nhãn `LABEXDATA` và bao gồm một UUID được tạo tự động. Chỉ hiển thị UUID đó:\n\n```bash\nsudo blkid -s UUID -o value virtual.img\n```\n\nGiá trị UUID được tạo ra tại thời điểm định dạng và sẽ khác nhau giữa các học viên.",
       "task_vi": "Thực hiện hướng dẫn: Tạo và kiểm tra hệ thống tệp Ext4",
-      "hint_vi": "Chạy lệnh: cd /home/labex/project/storage-lab"
+      "hint_vi": "Chạy lệnh: cd /home/labex/project/storage-lab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "state",
+          "command": "test \"$(stat -c %s /home/labex/project/storage-lab/virtual.img)\" = 134217728 && test \"$(sudo blkid -s TYPE -o value /home/labex/project/storage-lab/virtual.img)\" = ext4 && test \"$(sudo blkid -s LABEL -o value /home/labex/project/storage-lab/virtual.img)\" = LABEXDATA"
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "source-17999-section-4-v3",
@@ -367,7 +476,14 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ gắn (attach) hệ thống tệp ảo vào cây thư mục Linux, ghi một tệp và ngắt kết nối nó một cách an toàn.\n\nĐiểm gắn (mount point) là thư mục nơi hệ thống tệp trở nên hiển thị. Hãy tạo một điểm gắn dưới `/mnt`, một vị trí tiêu chuẩn cho việc gắn kết quản trị tạm thời:\n\n```bash\nsudo mkdir -p /mnt/labex-virtual\n```\n\nGắn (mount) tệp ảnh. Tùy chọn `-o loop` yêu cầu Linux liên kết tệp thông thường với một thiết bị loop để nó có thể được xử lý giống như thiết bị lưu trữ khối (block storage):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo mount -o loop virtual.img /mnt/labex-virtual\n```\n\nKiểm tra điểm gắn đang hoạt động:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nNguồn (source) thường xuất hiện dưới dạng một thiết bị loop, đích (target) là `/mnt/labex-virtual` và loại hệ thống tệp là ext4. Bạn cũng có thể yêu cầu `df` cung cấp thông tin về hệ thống tệp cụ thể này:\n\n```bash\ndf -h /mnt/labex-virtual\n```\n\nGhi một tệp bên trong hệ thống tệp đã được gắn. `sudo sh -c` được sử dụng vì việc chuyển hướng (redirection) được thực hiện bởi shell và thư mục gốc được gắn thuộc quyền sở hữu của `root`:\n\n```bash\nsudo sh -c 'echo \"stored inside the virtual filesystem\" > /mnt/labex-virtual/welcome.txt'\n```\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nViệc ngắt kết nối (unmounting) sẽ xả (flush) các lệnh ghi đang chờ xử lý và tách hệ thống tệp khỏi điểm gắn của nó:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nXác nhận rằng nó không còn được gắn kết nữa:\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nKhông có đầu ra nào được trả về và `findmnt` trả về một mã trạng thái khác không vì nó không tìm thấy điểm gắn hoạt động nào tại đích đó. Thư mục điểm gắn vẫn tồn tại, nhưng nội dung của tệp ảnh không còn có thể truy cập được thông qua nó cho đến khi tệp ảnh được gắn lại.",
       "task_vi": "Thực hiện hướng dẫn: Mount, Sử dụng và Unmount Filesystem",
-      "hint_vi": "Chạy lệnh: sudo mkdir -p /mnt/labex-virtual"
+      "hint_vi": "Chạy lệnh: sudo mkdir -p /mnt/labex-virtual",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "unsupported",
+          "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "source-17999-section-5-v3",
@@ -388,7 +504,34 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ sử dụng `fdisk` ở chế độ liệt kê chỉ đọc (read-only) và phân biệt bảng phân vùng (partition table) với chữ ký hệ thống tệp (filesystem signature).\n\nLiệt kê các đĩa và phân vùng nhìn thấy được của hệ thống:\n\n```bash\nsudo fdisk -l\n```\n\nTùy chọn `-l` có nghĩa là liệt kê (list). Nó báo cáo kích thước đĩa, kích thước cung đĩa (sector), các loại bảng phân vùng và các phân vùng mà không làm thay đổi chúng. Không bao giờ bắt đầu một phiên phân vùng tương tác trên một đĩa sản xuất (production disk) mà bạn không quen thuộc.\n\nBây giờ hãy kiểm tra ảnh ảo (virtual image):\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nsudo fdisk -l virtual.img\n```\n\nẢnh này có kích thước đĩa nhưng không có mục phân vùng nào. Trong ví dụ có kiểm soát này, ext4 được tạo trực tiếp trên toàn bộ ảnh. Trên một đĩa vật lý, bố cục phổ biến là:\n\n```text\ndisk device -> partition table -> partition -> filesystem -> mount point\n```\n\nTạo một ảnh trống thứ hai để so sánh:\n\n```bash\ntruncate -s 64M partition-demo.img\n```\n\n```bash\nsudo fdisk -l partition-demo.img\n```\n\nNó cũng không có bảng phân vùng nào. So sánh các chữ ký hệ thống tệp bằng `wipefs` ở chế độ chỉ đọc mặc định của nó:\n\n```bash\nsudo wipefs virtual.img partition-demo.img\n```\n\n`virtual.img` sẽ hiển thị chữ ký ext4, trong khi ảnh so sánh trống sẽ không hiển thị chữ ký hệ thống tệp nào. Không sử dụng tùy chọn hủy diệt `wipefs -a` trong bài Lab này.",
       "task_vi": "Thực hiện hướng dẫn: Kiểm tra bảng phân vùng an toàn",
-      "hint_vi": "Chạy lệnh: sudo fdisk -l"
+      "hint_vi": "Chạy lệnh: sudo fdisk -l",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "all",
+          "checks": [
+            {
+              "kind": "state",
+              "command": "test \"$(stat -c %s /home/labex/project/storage-lab/partition-demo.img)\" = 67108864 && test \"$(sudo blkid -s TYPE -o value /home/labex/project/storage-lab/virtual.img)\" = ext4 && ! sudo blkid -p /home/labex/project/storage-lab/partition-demo.img >/dev/null 2>&1"
+            },
+            {
+              "kind": "commands",
+              "user": "labex",
+              "allowed_status": [
+                0
+              ],
+              "groups": [
+                [
+                  "^\\s*sudo\\s+fdisk\\s+-l\\s+virtual\\.img\\s*$"
+                ],
+                [
+                  "^\\s*sudo\\s+fdisk\\s+-l\\s+partition-demo\\.img\\s*$"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {}
     },
     {
       "id": "source-17999-section-6-v3",
@@ -409,7 +552,14 @@
       "required_capabilities": [],
       "content_vi": "Trong bước này, bạn sẽ tìm hiểu sáu trường của một mục fstab và kiểm thử an toàn trên một tệp thực hành riêng biệt mà không sửa đổi `/etc/fstab`.\n\nHệ thống đọc `/etc/fstab` để quyết định những hệ thống tệp nào nên được gắn kết một cách nhất quán. Xem các dòng không phải là chú thích của tệp mà không cần chỉnh sửa tệp:\n\n```bash\ngrep -Ev '^\\s*(#|$)' /etc/fstab\n```\n\nMột mục fstab có sáu trường được phân tách bằng khoảng trắng:\n\n```text\nsource  mount-point  filesystem-type  options  dump  fsck-order\n```\n\nĐối với các phân vùng vật lý, `UUID=<value>` thường an toàn hơn so với một tên như `/dev/sdb1`, bởi vì tên thiết bị có thể thay đổi khi thứ tự nhận diện phần cứng thay đổi.\n\nLấy UUID của tệp ảnh của bạn và đặt một ví dụ UUID có chú thích vào tệp thực hành:\n\n```bash\ncd /home/labex/project/storage-lab\n```\n\n```bash\nuuid=$(sudo blkid -s UUID -o value virtual.img)\n```\n\n```bash\nprintf '## Real block device example: UUID=%s /mnt/data ext4 defaults,nofail 0 2\\n' \"$uuid\" > practice-fstab\n```\n\nVì bài thực hành này sử dụng một tệp thông thường thay vì một phân vùng vật lý, mục thực hành hoạt động của nó sử dụng đường dẫn tuyệt đối đến tệp ảnh và tùy chọn `loop`:\n\n```bash\nprintf '%s\\n' '/home/labex/project/storage-lab/virtual.img /mnt/labex-virtual ext4 loop,nofail 0 2' >> practice-fstab\n```\n\nHiển thị và kiểm tra tính hợp lệ của tệp thực hành. `--tab-file` báo cho `findmnt` biết không sử dụng tệp `/etc/fstab` thực:\n\n```bash\ncat practice-fstab\n```\n\n```bash\nfindmnt --verify --tab-file practice-fstab\n```\n\nBản tóm tắt cuối cùng sẽ báo cáo `0 parse errors` và `0 errors`. Nó cũng báo cáo một cảnh báo rằng nguồn là một tệp thông thường. Cảnh báo đó là điều được dự kiến ở đây bởi vì bài thực hành có kiểm soát này cố ý sử dụng một hệ thống tệp loop dựa trên tệp thay vì một thiết bị khối vật lý.\n\nSử dụng tệp thực hành cho một lần gắn kết có kiểm soát. Tùy chọn `-T` bảo `mount` đọc tệp fstab thay thế được chỉ định:\n\n```bash\nsudo mount -T practice-fstab /mnt/labex-virtual\n```\n\n```bash\nfindmnt /mnt/labex-virtual\n```\n\nTệp `welcome.txt` được tạo trước đó vẫn phải tồn tại, chứng minh rằng việc gắn kết làm lộ ra dữ liệu được lưu trữ của hệ thống tệp:\n\n```bash\ncat /mnt/labex-virtual/welcome.txt\n```\n\nGắn kết ngắt (unmount) nó lại để bài thực hành kết thúc ở trạng thái đã ngắt kết nối an toàn:\n\n```bash\nsudo umount /mnt/labex-virtual\n```\n\nBạn đã xác thực cú pháp gắn kết bền vững mà không thay đổi cấu hình khởi động của hệ thống. Một sai sót trong `/etc/fstab` thực tế có thể làm gián đoạn quá trình khởi động, vì vậy các quản trị viên thường xác thực các thay đổi trước khi khởi động lại.",
       "task_vi": "Thực hiện hướng dẫn: Xây dựng và Kiểm tra Fstab Thực hành",
-      "hint_vi": "Chạy lệnh: grep -Ev '^\\s*(#|$)' /etc/fstab"
+      "hint_vi": "Chạy lệnh: grep -Ev '^\\s*(#|$)' /etc/fstab",
+      "verification_by_provider": {
+        "docker": {
+          "kind": "unsupported",
+          "reason": "Chưa cấp thiết bị block/loop và mount filesystem riêng; không chạy fdisk hoặc mount trên thiết bị của máy chủ."
+        }
+      },
+      "required_capabilities_by_provider": {}
     }
   ],
   "curriculum_version": 3,
@@ -421,5 +571,11 @@
     "fixtures": "independently-reconstructed",
     "integration_status": "candidate-checks-require-Docker-smoke-report"
   },
-  "environment_setup": "server/data/environment-setups/linux-file-system-and-disk-management-17999.json"
+  "environment_setup": "server/data/environment-setups/linux-file-system-and-disk-management-17999.json",
+  "grading_audit": {
+    "date": "2026-10-24",
+    "scope": "Noobs instruction/fixture/grader consistency",
+    "image": "labex-local/noobs-ubuntu22:1",
+    "original_private_grader": "unknown"
+  }
 }

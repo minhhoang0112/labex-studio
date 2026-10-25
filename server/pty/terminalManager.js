@@ -1,6 +1,7 @@
 // Verified candidate; intended location: server/pty/terminalManager.js.
 import pty from "node-pty";
 import { getLabProcess, getEnvironment } from "./linuxEnvironment.js";
+import {recordTerminalInput} from '../services/terminalEvidence.js';
 
 function dimension(value, fallback, max) {
   return Number.isInteger(value) && value >= 2 && value <= max ? value : fallback;
@@ -52,7 +53,7 @@ export async function createTerminalSession(ws, options = {}) {
         // or focus response to Bash can leave "1;2c" at the command prompt.
         // Match whole reports only; cursor keys and ordinary input still pass.
         if (/^\x1b\[(?:[?>]?[0-9;]*c|[IO])$/.test(packet.data)) return;
-        try { terminal.write(packet.data); } catch { /* Ignore write after close */ }
+        try { terminal.write(packet.data); recordTerminalInput(options.labId,packet.data); } catch { /* Ignore write after close */ }
       } else if (packet.type === "resize" && Number.isInteger(packet.cols) && Number.isInteger(packet.rows)
         && packet.cols >= 2 && packet.cols <= 500 && packet.rows >= 2 && packet.rows <= 200) {
         try { terminal.resize(packet.cols, packet.rows); } catch { /* Ignore resize after close */ }

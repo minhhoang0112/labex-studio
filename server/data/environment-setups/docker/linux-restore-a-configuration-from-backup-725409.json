@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "directories": [
+    {
+      "path": "/home/labex/project/backup-automation"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/archive-source",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/backups"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/data",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/archive-source/config",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/archive-source/documents",
+      "owner": "labex:labex"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/data/config"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/data/documents",
+      "owner": "labex:labex"
+    }
+  ],
+  "files": [
+    {
+      "path": "/home/labex/project/backup-automation/archive-source/config/app.conf",
+      "content": "mode=production\nport=8080\n"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/archive-source/documents/runbook.txt",
+      "content": "Old runbook stored in archive.\n"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/data/documents/runbook.txt",
+      "content": "Current runbook: keep this file unchanged.\n"
+    },
+    {
+      "path": "/home/labex/project/backup-automation/prepare-archive.sh",
+      "content": "#!/bin/bash\nset -eu\ncd /home/labex/project/backup-automation\ntar -czf backups/manual-backup.tar.gz -C archive-source config/app.conf documents/runbook.txt\n"
+    }
+  ],
+  "accounts": [],
+  "groups": [],
+  "provenance": {
+    "fixture_fidelity": "reconstructed-from-local-instructions",
+    "original_bytes_recovered": false
+  },
+  "docker": {
+    "startup": [
+      {
+        "script": "/home/labex/project/backup-automation/prepare-archive.sh",
+        "user": "labex"
+      }
+    ],
+    "image": "labex-local/noobs-ubuntu22:1"
+  }
+}
