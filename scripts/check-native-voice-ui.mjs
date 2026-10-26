@@ -141,12 +141,16 @@ try{
   assert.equal(await page.evaluate(()=>window.__live.streams.length),0);
   assert.equal(await page.getByRole('complementary',{name:'Trợ lý Labby AI',exact:true}).isVisible(),false);
   const bounds=await launcher.boundingBox();assert.equal(bounds.width,bounds.height);
-  assert.ok(bounds.x>1300 && bounds.y>900);
+  const headerBounds=await page.locator('header').first().boundingBox();
+  assert.ok(bounds.y>=headerBounds.y && bounds.y+bounds.height<=headerBounds.y+headerBounds.height);
   await launcher.click();
   const compactCall=page.getByRole('region',{name:'Labby Voice thu nhỏ',exact:true});
   await compactCall.getByRole('status').filter({hasText:'Đang lắng nghe'}).waitFor();
   assert.equal(await call.count(),0);
   assert.ok((await compactCall.boundingBox()).height<90);
+  const compactBounds=await compactCall.boundingBox();
+  const contentPane=await page.locator('[data-testid="terminal-pane"]:visible, [data-testid="guide-pane"]:visible').first().boundingBox();
+  assert.ok(compactBounds.y+compactBounds.height<=contentPane.y);
   await compactCall.getByRole('button',{name:'Mở rộng khung trợ lý',exact:true}).click();
   await call.getByRole('status').filter({hasText:'Đang lắng nghe'}).waitFor();
   assert.equal(await page.evaluate(()=>window.__live.starts.at(-1).context.labId),'linux-linux-user-group-and-file-permissions-18002');

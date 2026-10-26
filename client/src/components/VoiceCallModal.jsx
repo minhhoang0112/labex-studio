@@ -3,7 +3,7 @@ import { Mic, MicOff, PhoneOff, Volume2, Sparkles, RotateCcw, Bot, Briefcase, X,
 import useVoiceCall from '../hooks/useVoiceCall';
 import { cleanForSpeech } from '../lib/speechPlayer';
 
-export default function VoiceCallModal({ isOpen, onClose, lab, currentStep, lastTerminalOutput, initialPersona='tutor', initialViewMode='dock' }) {
+export default function VoiceCallModal({ isOpen, onClose, lab, currentStep, lastTerminalOutput, initialPersona='tutor', initialViewMode='dock', inlineCompact=false }) {
   const [persona,setPersona]=useState(initialPersona);
   const [viewMode,setViewMode]=useState(initialViewMode);
   const [showSubtitles,setShowSubtitles]=useState(true);
@@ -32,7 +32,7 @@ export default function VoiceCallModal({ isOpen, onClose, lab, currentStep, last
     {voice.muted?<MicOff size={16}/>:<Mic size={16}/>}<span>{voice.muted?'Bật mic':'Tắt mic'}</span>
   </button>;
   const endButton=<button aria-label="Kết thúc đàm thoại" title="Kết thúc đàm thoại" onClick={onClose} className="rounded-xl px-3 py-2 bg-rose-600 hover:bg-rose-500 flex items-center gap-1 text-xs font-semibold"><PhoneOff size={15}/>Tắt</button>;
-  if(viewMode==='minimized') return <div role="region" aria-label="Labby Voice thu nhỏ" className="fixed bottom-5 right-5 z-50 flex items-center gap-2 p-2 rounded-full bg-slate-950 border border-slate-700 text-white shadow-2xl">
+  if(viewMode==='minimized') return <div role="region" aria-label="Labby Voice thu nhỏ" className={`${inlineCompact ? 'relative max-w-full' : 'fixed bottom-5 right-5'} z-50 flex items-center gap-2 p-2 rounded-full bg-slate-950 border border-slate-700 text-white shadow-2xl`}>
     <button aria-label="Ngắt lời và nói" disabled={voice.phase==='connecting' || !voice.micName || voice.muted} onClick={voice.interrupt} className={`p-2 rounded-full bg-gradient-to-tr ${color}`}><Mic size={16}/></button>
     <span role="status" className="text-xs max-w-32 truncate">{voice.error?'Kiểm tra mic / âm thanh':status}</span>
     <button aria-label="Mở rộng khung trợ lý" onClick={()=>setViewMode('dock')} className="p-1"><ChevronUp size={17}/></button>
@@ -40,7 +40,7 @@ export default function VoiceCallModal({ isOpen, onClose, lab, currentStep, last
   </div>;
   return <section role="region" aria-label="Labby Voice" className={viewMode==='fullscreen'
     ? 'fixed inset-0 z-50 bg-slate-950/95 text-white flex items-center justify-center backdrop-blur-xl p-4'
-    : 'fixed bottom-5 right-5 z-50 w-[92vw] sm:w-[400px] max-h-[85vh] bg-slate-950/95 text-white rounded-2xl border border-slate-700 shadow-2xl backdrop-blur-xl overflow-hidden flex flex-col'}>
+    : `fixed ${inlineCompact ? 'top-[var(--workspace-voice-top,64px)] left-3' : 'bottom-5 right-5'} z-50 w-[92vw] sm:w-[400px] max-h-[85vh] bg-slate-950/95 text-white rounded-2xl border border-slate-700 shadow-2xl backdrop-blur-xl overflow-hidden flex flex-col`}>
     <div className={viewMode==='fullscreen'?'w-full max-w-2xl max-h-[92vh] rounded-2xl border border-slate-700 bg-slate-950 flex flex-col overflow-hidden':'flex min-h-0 flex-col'}>
       <header className="px-3 py-2.5 bg-slate-900 border-b border-white/10 flex items-center justify-between gap-2 shrink-0">
         <div className="flex items-center gap-2"><Bot size={18} className="text-indigo-300"/><strong className="text-sm">Labby Voice</strong>

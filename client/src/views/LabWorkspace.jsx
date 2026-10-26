@@ -85,6 +85,16 @@ export default function LabWorkspace({
   const [isAiOpen, setIsAiOpen] = useState(false);
   const [voiceCallOpen, setVoiceCallOpen] = useState(false);
   const [voicePersona, setVoicePersona] = useState('tutor');
+  const workspaceHeader = useRef(null);
+  useEffect(() => {
+    const header = workspaceHeader.current;
+    if (!header) return;
+    const update = () => header.parentElement.style.setProperty('--workspace-voice-top', `${header.offsetHeight + 8}px`);
+    const observer = new ResizeObserver(update);
+    observer.observe(header);
+    update();
+    return () => observer.disconnect();
+  }, [lab?.id]);
   const openVoice = (persona = 'tutor') => {
     setVoicePersona(persona);
     setVoiceCallOpen(true);
@@ -431,9 +441,9 @@ export default function LabWorkspace({
     isDocFullscreen || desktopLayout || mobilePane === "guide";
 
   return (
-    <div className="h-dvh w-full flex flex-col bg-slate-950 overflow-hidden text-slate-100 select-none">
+    <div className="h-dvh w-full flex flex-col bg-slate-950 overflow-hidden text-slate-100">
       {/* Top Navbar matching authentic LabEx Workbench */}
-      <header className="min-h-12 bg-slate-950 border-b border-slate-800 px-2 sm:px-4 py-2 flex flex-wrap gap-2 items-center justify-between shrink-0 z-20">
+      <header ref={workspaceHeader} className="min-h-12 bg-slate-950 border-b border-slate-800 px-2 sm:px-4 py-1 flex flex-wrap gap-2 items-center justify-between shrink-0 z-20">
         {/* Left: Breadcrumb, Prev/Next & Title */}
         <div className="flex items-center gap-3 min-w-0">
           <button
@@ -514,7 +524,7 @@ export default function LabWorkspace({
           )}
 
           {/* Desktop Tab */}
-          <button
+          {(!isWindowsLab || caps.desktop) && <button
             onClick={() => caps.desktop && setActiveEnvTab("desktop")}
             disabled={!caps.desktop}
             title={
@@ -535,10 +545,10 @@ export default function LabWorkspace({
                 N/A
               </span>
             )}
-          </button>
+          </button>}
 
           {/* WebIDE Tab */}
-          <button
+          {(!isWindowsLab || caps.webide) && <button
             onClick={() => caps.webide && setActiveEnvTab("webide")}
             disabled={!caps.webide}
             title={
@@ -559,7 +569,7 @@ export default function LabWorkspace({
                 N/A
               </span>
             )}
-          </button>
+          </button>}
 
           {/* Terminal Tab */}
           <button
@@ -576,7 +586,7 @@ export default function LabWorkspace({
           </button>
 
           {/* Web 8080 Tab */}
-          <button
+          {(!isWindowsLab || canPreviewWeb) && <button
             onClick={() => canPreviewWeb && setActiveEnvTab("web8080")}
             disabled={!canPreviewWeb}
             title={
@@ -593,37 +603,29 @@ export default function LabWorkspace({
             <Globe className="w-3.5 h-3.5 text-blue-400" />
             <span>Web 8080</span>
             {!canPreviewWeb && <span className="text-[9px]">N/A</span>}
-          </button>
+          </button>}
         </div>
 
-        {/* Right: Split Presets, Reset Environment & AI Tutor Trigger */}
+        {/* Voice stays in the toolbar so it never covers the remote Desktop. */}
         <div className="flex items-center gap-2">
-          {/* Quick Split Controls */}
-          {!isDocFullscreen && (
-            <div className="hidden lg:flex items-center gap-0.5 bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-[11px] font-mono text-slate-400">
-              <button
-                onClick={() => setLeftWidthPercent(35)}
-                title="Rộng Terminal (35% Hướng dẫn / 65% Terminal)"
-                className={`px-2 py-0.5 rounded transition ${Math.round(leftWidthPercent) === 35 ? "bg-slate-800 text-primary-400 font-bold" : "hover:text-slate-200"}`}
-              >
-                35%
-              </button>
-              <button
-                onClick={() => setLeftWidthPercent(45)}
-                title="Cân bằng (45% Hướng dẫn / 55% Terminal)"
-                className={`px-2 py-0.5 rounded transition ${Math.round(leftWidthPercent) === 45 ? "bg-slate-800 text-primary-400 font-bold" : "hover:text-slate-200"}`}
-              >
-                45%
-              </button>
-              <button
-                onClick={() => setLeftWidthPercent(55)}
-                title="Rộng Hướng dẫn (55% Hướng dẫn / 45% Terminal)"
-                className={`px-2 py-0.5 rounded transition ${Math.round(leftWidthPercent) === 55 ? "bg-slate-800 text-primary-400 font-bold" : "hover:text-slate-200"}`}
-              >
-                55%
-              </button>
-            </div>
+          {!voiceCallOpen && (
+            <button type="button" aria-label="Mở Labby Voice" title="Nói chuyện với Labby Voice"
+              onClick={() => openVoice()}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md ring-1 ring-white/20 transition hover:scale-105 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300">
+              <Mic className="h-4 w-4" aria-hidden="true" />
+            </button>
           )}
+          <VoiceCallModal
+            key={voiceCallOpen ? `lab-voice-${voicePersona}` : 'lab-voice-closed'}
+            isOpen={voiceCallOpen}
+            onClose={() => setVoiceCallOpen(false)}
+            lab={lab}
+            currentStep={taskSteps.find((s) => s.id === currentSection?.id) || currentSection}
+            lastTerminalOutput={lastTerminalOutput}
+            initialPersona={voicePersona}
+            initialViewMode="minimized"
+            inlineCompact
+          />
 
           {/* Language Switcher */}
           <button
@@ -1031,28 +1033,6 @@ export default function LabWorkspace({
           </div>
         </div>
       </div>
-
-      {!voiceCallOpen && (
-        <button
-          type="button"
-          aria-label="Mở Labby Voice"
-          title="Nói chuyện với Labby Voice"
-          onClick={() => openVoice()}
-          className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-950/30 ring-2 ring-white/20 transition hover:scale-105 hover:from-emerald-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300 active:scale-95"
-        >
-          <Mic className="h-6 w-6" aria-hidden="true" />
-        </button>
-      )}
-      <VoiceCallModal
-        key={voiceCallOpen ? `lab-voice-${voicePersona}` : 'lab-voice-closed'}
-        isOpen={voiceCallOpen}
-        onClose={() => setVoiceCallOpen(false)}
-        lab={lab}
-        currentStep={taskSteps.find((s) => s.id === currentSection?.id) || currentSection}
-        lastTerminalOutput={lastTerminalOutput}
-        initialPersona={voicePersona}
-        initialViewMode="minimized"
-      />
 
       {/* Reset Confirmation Modal */}
       {resetConfirmOpen && (

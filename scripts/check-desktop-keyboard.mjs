@@ -18,7 +18,15 @@ assert.ok(playwright);
 const browser = await playwright.chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const messages = [], errors = [];
+await page.addInitScript(()=>{
+  window.__clipboard={read:'Tiếng Việt 🧪\r\nDòng thứ hai',writes:[],denied:false};
+  Object.defineProperty(navigator,'clipboard',{value:{
+    readText:async()=>{if(window.__clipboard.denied)throw new DOMException('Denied','NotAllowedError');return window.__clipboard.read;},
+    writeText:async text=>{window.__clipboard.writes.push(text);},
+  }});
+});
 let onSocket;
+let desktopSocket;
 const instruction = (...args) => args.map(value => `${String(value).length}.${value}`).join(',') + ';';
 const key = (keysym, down) => instruction('key', keysym, down);
 page.on('pageerror', error => errors.push(error.message));
@@ -33,6 +41,7 @@ await page.route('**/api/cloud-vm/**', route => {
   throw new Error('Unexpected VM operation: ' + url.pathname);
 });
 await page.routeWebSocket('**/ws/desktop*', socket => {
+  desktopSocket=socket;
   socket.onMessage(message => messages.push(message));
   socket.send(instruction('', 'keyboard-fixture') + instruction('size', 0, 900, 600) + instruction('sync', 1));
   onSocket?.();
@@ -70,6 +79,27 @@ try {
   assert.deepEqual(messages.filter(message => message.startsWith('3.key,')), [key(0xffeb, 1), key(0x72, 1), key(0x72, 0), key(0xffeb, 0)]);
   await page.getByRole('combobox', { name: 'Gửi phím vào máy ảo' }).selectOption('rename');
   assert.ok(messages.includes(key(0xffbf, 1)) && messages.includes(key(0xffbf, 0)));
+  // Real browser shortcuts + Guacamole streams, without reading the user's clipboard.
+  await desktop.click({position:{x:50,y:50}});messages.length=0;
+  await page.keyboard.press('Control+v');
+  await page.waitForFunction(()=>document.activeElement?.getAttribute('aria-label')==='Windows Desktop từ xa');
+  assert.ok(messages.some(m=>m.startsWith('9.clipboard,')));
+  const outgoing=messages.filter(m=>m.startsWith('4.blob,')).map(m=>m.match(/,\d+\.([A-Za-z0-9+/=]+);$/)?.[1]).join('');
+  assert.equal(Buffer.from(outgoing,'base64').toString('utf8'),'Tiếng Việt 🧪\r\nDòng thứ hai');
+  assert.equal(messages.filter(m=>m===key(0x76,1)).length,1,'Paste chord sent once');
+  await page.keyboard.press('Control+c');
+  const remote='Đã sao chép từ Windows 🧪\nDòng hai';
+  desktopSocket.send(instruction('clipboard',17,'text/plain')+instruction('blob',17,Buffer.from(remote).toString('base64'))+instruction('end',17));
+  await page.waitForFunction(expected=>window.__clipboard.writes.includes(expected),remote);
+  await page.evaluate(()=>{window.__clipboard.denied=true;});
+  await page.keyboard.press('Control+v');
+  await page.getByRole('region',{name:'Clipboard hai chiều',exact:true}).waitFor();
+  assert.ok((await page.getByRole('region',{name:'Clipboard hai chiều',exact:true}).innerText()).includes('Trình duyệt chưa cho đọc clipboard'));
+  await page.getByRole('textbox',{name:'Máy tính → VM',exact:true}).fill('Dán thủ công');
+  messages.length=0;await page.getByRole('button',{name:'Dán vào VM',exact:true}).click();
+  assert.ok(messages.some(m=>m.startsWith('9.clipboard,')));
+  assert.equal(await page.getByRole('textbox',{name:'VM → máy tính',exact:true}).inputValue(),remote);
+  await page.getByRole('button',{name:'Đóng Clipboard',exact:true}).click();
   // Reconnection must not duplicate keyboard handlers.
   const reconnected = new Promise(resolve => { onSocket = resolve; });
   await page.getByRole('button', { name: 'Kết nối lại', exact: true }).click();

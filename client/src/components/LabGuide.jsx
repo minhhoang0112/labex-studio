@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import GuideImage from './GuideImage';
 import remarkGfm from 'remark-gfm';
 import { sourceMarkdown } from '../lib/sourceMarkdown';
+import { taskHintPresentation } from '../lib/taskHint';
 import { 
   CheckCircle2, 
   XCircle, 
@@ -99,6 +100,8 @@ export default function LabGuide({
   const content = (!useSource && isVi && currentSection?.content_vi) ? currentSection.content_vi : (currentSection?.content || '');
   const activeTask = (isVi && matchingStep?.task_vi) ? matchingStep.task_vi : (matchingStep?.task || '');
   const activeHint = (isVi && matchingStep?.hint_vi) ? matchingStep.hint_vi : (matchingStep?.hint || '');
+  const displayedHint = taskHintPresentation(activeHint, content, isVi);
+  const isWindowsTask = Boolean(lab.target_vm) || lab.id?.startsWith('win-');
 
   const leadingHeading = content.match(/^\s*#{1,6}\s+(.+?)(?:\r?\n|$)/);
   const normalizeTitle = value => (value || '').replace(/^[\d.\s]+/, '').replace(/[*_`]/g, '').trim().toLowerCase();
@@ -210,7 +213,7 @@ export default function LabGuide({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm select-text">
       {/* Header Bar */}
       <div className="px-5 py-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-900/90 shrink-0">
         <div className="min-w-0 pr-3">
@@ -392,6 +395,8 @@ export default function LabGuide({
                       ? (isVi ? '✓ Nhiệm vụ này đã được hoàn thành!' : '✓ This task has been completed!') 
                       : isAcknowledgement 
                       ? (isVi ? 'Hoạt động đọc hiểu (Onboarding):' : 'Reading & Onboarding Activity:') 
+                      : isWindowsTask
+                      ? (isVi ? 'Nhiệm vụ trên máy ảo Windows:' : 'Windows VM task:')
                       : (isVi ? 'Nhiệm vụ cần thực hiện trên Terminal:' : 'Terminal Task to Perform:')}
                   </span>
                 </div>
@@ -403,7 +408,28 @@ export default function LabGuide({
                 {activeHint && (
                   <div className="flex items-start gap-2 text-xs text-blue-800 dark:text-blue-300 bg-white/90 dark:bg-slate-900/90 p-2.5 rounded-lg border border-blue-100 dark:border-blue-900/50 shadow-xs">
                     <Lightbulb className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
-                    <span><strong>{isVi ? 'Gợi ý:' : 'Hint:'}</strong> {activeHint}</span>
+                    <div className="min-w-0 flex-1" data-testid="task-hint">
+                      <p><strong>{isVi ? 'Gợi ý:' : 'Hint:'}</strong> {displayedHint.text}</p>
+                      {displayedHint.script && (
+                        <details key={matchingStep.id} className="mt-2">
+                          <summary className="cursor-pointer font-semibold py-1 focus-visible:outline-blue-500">
+                            {isVi ? 'Xem khối lệnh PowerShell đầy đủ' : 'Show the full PowerShell script'}
+                          </summary>
+                          <div className="mt-2 overflow-hidden rounded-lg border border-slate-700 bg-slate-950">
+                            <div className="flex items-center justify-between gap-2 border-b border-slate-700 px-3 py-2 text-slate-300">
+                              <span className="font-mono">PowerShell</span>
+                              <button type="button" onClick={() => handleCopy(displayedHint.script)}
+                                className="flex items-center gap-1 rounded px-2 py-1 hover:bg-slate-800 focus-visible:outline-blue-400"
+                                aria-label={isVi ? 'Sao chép lệnh gợi ý' : 'Copy hint script'}>
+                                {copiedCode === displayedHint.script ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                                {copiedCode === displayedHint.script ? (isVi ? 'Đã chép' : 'Copied') : (isVi ? 'Sao chép' : 'Copy')}
+                              </button>
+                            </div>
+                            <pre className="max-h-72 overflow-auto whitespace-pre p-3 font-mono text-xs leading-relaxed text-slate-100"><code>{displayedHint.script}</code></pre>
+                          </div>
+                        </details>
+                      )}
+                    </div>
                   </div>
                 )}
 
