@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "DNS phân giải tên; DHCP cấp cấu hình mạng như IP/gateway/DNS. Hai dịch vụ khác nhau. Bài nhập môn hiện chỉ quan sát phân giải localhost, chưa triển khai DNS zone hoặc DHCP scope. Không thay DNS/IP của VM Azure hay chạy DHCP server trên mạng đang dùng.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-dns-dhcp khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
-      "content_vi": "DNS phân giải tên; DHCP cấp cấu hình mạng như IP/gateway/DNS. Hai dịch vụ khác nhau. Bài nhập môn hiện chỉ quan sát phân giải localhost, chưa triển khai DNS zone hoặc DHCP scope. Không thay DNS/IP của VM Azure hay chạy DHCP server trên mạng đang dùng.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-dns-dhcp khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content": "DNS phân giải tên; DHCP cấp cấu hình mạng như IP/gateway/DNS. Hai dịch vụ khác nhau. Bài nhập môn hiện chỉ quan sát phân giải localhost, chưa triển khai DNS zone hoặc DHCP scope. Không thay DNS/IP của VM Azure hay chạy DHCP server trên mạng đang dùng.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-dns-dhcp khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nCấu hình Forward/Reverse Lookup Zones, tạo bản ghi A/CNAME/MX, quản lý DHCP Scopes, Address Reservations và phân giải tên miền.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nGet-NetIPConfiguration\nGet-NetRoute -AddressFamily IPv4 | Sort-Object RouteMetric\n```\n\n### Bản chất cần hiểu\nTách NIC/IP → route → DNS → TCP → HTTP/SMB. Ping thành công không chứng minh ứng dụng tốt; loopback không chứng minh đường CLIENT01–Server.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng hoặc chuyển nhóm\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
+      "content_vi": "DNS phân giải tên; DHCP cấp cấu hình mạng như IP/gateway/DNS. Hai dịch vụ khác nhau. Bài nhập môn hiện chỉ quan sát phân giải localhost, chưa triển khai DNS zone hoặc DHCP scope. Không thay DNS/IP của VM Azure hay chạy DHCP server trên mạng đang dùng.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-dns-dhcp khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nCấu hình Forward/Reverse Lookup Zones, tạo bản ghi A/CNAME/MX, quản lý DHCP Scopes, Address Reservations và phân giải tên miền.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nGet-NetIPConfiguration\nGet-NetRoute -AddressFamily IPv4 | Sort-Object RouteMetric\n```\n\n### Bản chất cần hiểu\nTách NIC/IP → route → DNS → TCP → HTTP/SMB. Ping thành công không chứng minh ứng dụng tốt; loopback không chứng minh đường CLIENT01–Server.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng hoặc chuyển nhóm\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -51,9 +51,51 @@
         "files",
         "shell"
       ],
-      "content": "### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
-      "content_vi": "### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
-      "translation_needs_review": false
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
+      "translation_needs_review": false,
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Resolve-DnsName|nslookup|ipconfig)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Resolve-DnsName|nslookup|ipconfig)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_version": 4,
@@ -62,8 +104,8 @@
       "id": "win-net-03-sec-1",
       "title": "Querying DNS Records with Resolve-DnsName",
       "title_vi": "Truy Vấn Bản Ghi DNS Với Resolve-DnsName",
-      "content": "### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
-      "content_vi": "### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nlocalhost là tên đặc biệt trên máy, không phải phép thử DNS doanh nghiệp hoặc Internet. Resolve-DnsName localhost giúp đọc Name, Type và IPAddress trước khi thử domain thật.\n\n### Hướng dẫn\n### Kiểm tra DNS\n\n```powershell\nResolve-DnsName localhost\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó địa chỉ loopback 127.0.0.1 hoặc ::1 tùy cấu hình. Kết quả này không chứng minh DNS nội bộ hay DHCP đã hoạt động.\n\n### Câu hỏi tự giải thích\nNếu localhost phân giải được nhưng tên domain công ty không được, cần kiểm tra gì tiếp?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xem ipconfig /all để phân biệt DNS server, DHCP server, default gateway; không sửa các địa chỉ.",
       "task": "Use Resolve-DnsName to query DNS records and test name resolution.",
       "task_vi": "Sử dụng Resolve-DnsName để kiểm tra bản ghi phân giải tên miền trên máy chủ.",
       "hint": "Resolve-DnsName localhost",
@@ -126,7 +168,9 @@
           "shell"
         ]
       },
-      "translation_needs_review": false
+      "translation_needs_review": false,
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_origin": "locally-authored-microsoft-references",
@@ -140,5 +184,11 @@
       "title": "Microsoft Learn: Windows Server",
       "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
-  ]
+  ],
+  "teaching_review": {
+    "version": 1,
+    "date": "2026-10-26",
+    "topic": "network",
+    "runtime_revalidated": false
+  }
 }

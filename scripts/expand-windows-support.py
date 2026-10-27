@@ -594,3 +594,6 @@ Viết câu trả lời theo mẫu: dấu hiệu → phép kiểm tra → kết 
 
 if __name__ == '__main__':
     main()
+    import runpy
+    runpy.run_path(str(ROOT/'scripts/build-it-support-practical.py'),run_name='__main__')
+    runpy.run_path(str(ROOT/'scripts/upgrade-windows-professional.py'),run_name='__main__')

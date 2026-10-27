@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { gzipSync } from 'node:zlib';
 import { executeWindowsRemote } from './windowsRemoteExecutor.js';
 import { cloudError, getVmTargetConfig } from './cloudConfig.js';
 import { azureClient } from './azureComputeClient.js';
@@ -16,14 +17,31 @@ export const faultScenarios = Object.freeze({
   'win-it-app-config-repair': 'appconfig',
   'win-it-deleted-file-restore': 'restorefile',
   'win-it-scheduled-backup-fix': 'taskbackup',
+  'win-it-scheduled-backup-permissions': 'taskacl',
+  'win-it-file-in-use': 'filelock',
+  'win-it-service-config-recovery': 'serviceconfig',
 });
 const script = fs.readFileSync(new URL('../runtime/windows/support-faults.ps1', import.meta.url), 'utf8');
 const practiceScript = fs.readFileSync(new URL('../runtime/windows/practice-faults.ps1', import.meta.url), 'utf8');
+const backupPermissionScript = fs.readFileSync(new URL('../runtime/windows/backup-permission-fault.ps1', import.meta.url), 'utf8');
+const fileLockScript = fs.readFileSync(new URL('../runtime/windows/file-lock-fault.ps1', import.meta.url), 'utf8');
+const serviceConfigScript = fs.readFileSync(new URL('../runtime/windows/service-config-fault.ps1', import.meta.url), 'utf8')
+  .replace('__LABEX_SERVICE_SOURCE_B64__', fs.readFileSync(new URL('../runtime/windows/document-agent.cs', import.meta.url)).toString('base64'));
 export function faultCommand(scenario, operation) {
   if (!Object.values(faultScenarios).includes(scenario) || !['Baseline', 'Inject', 'Faulted', 'Healthy', 'Reset'].includes(operation)) {
     throw cloudError('Kịch bản hoặc thao tác không hợp lệ.', 400, 'CLOUD_INVALID_SCENARIO');
   }
-  const source = ['spooler', 'hosts', 'disk'].includes(scenario) ? script : practiceScript;
+  const source = scenario === 'serviceconfig' ? serviceConfigScript : scenario === 'filelock' ? fileLockScript : scenario === 'taskacl' ? backupPermissionScript : ['spooler', 'hosts', 'disk'].includes(scenario) ? script : practiceScript;
+  if (scenario === 'serviceconfig') {
+    // Only server-owned curriculum is compressed, never browser-supplied code.
+    // Keep the remote executor's command-length limits unchanged.
+    const packed = gzipSync(Buffer.from(source, 'utf8')).toString('base64');
+    return `$labexPacked=[IO.MemoryStream]::new([Convert]::FromBase64String('${packed}'))
+$labexZip=[IO.Compression.GZipStream]::new($labexPacked,[IO.Compression.CompressionMode]::Decompress)
+$labexReader=[IO.StreamReader]::new($labexZip,[Text.Encoding]::UTF8)
+try{$labexCode=$labexReader.ReadToEnd()}finally{$labexReader.Dispose();$labexZip.Dispose();$labexPacked.Dispose()}
+& ([scriptblock]::Create($labexCode)) -Operation '${operation}' -Scenario '${scenario}'`;
+  }
   return `& {\n${source}\n} -Operation '${operation}' -Scenario '${scenario}'`;
 }
 
@@ -107,7 +125,14 @@ export function createWindowsFaultService({ execute = executeWindowsRemote, base
     return withVmLock('client', 'fault-verify', async () => {
       const passed = await run(labId, 'Healthy');
       save({ ...current, state: passed ? 'repaired' : 'active' });
-      return { supported: true, passed, method: 'windows-functional-probe', target: getVmTargetConfig('client').vmName };
+      return { supported: true, passed, method: 'windows-functional-probe', target: getVmTargetConfig('client').vmName,
+        ...(lastProbe?.timedOut ? { timedOut: true, reason: 'Phép kiểm trên Windows chưa hoàn tất. Chưa kết luận thao tác của bạn sai; thử lại khi VM sẵn sàng.' }
+          : !passed ? { reason: scenario(labId) === 'serviceconfig'
+            ? lastProbe?.exitCode === 2
+              ? 'Không đọc/kiểm tra được fixture dịch vụ hoặc cấu hình không hợp lệ. Kiểm tra XML, tài nguyên của bài và nhật ký; chưa coi đây là kết quả sửa lỗi đạt.'
+              : 'Chưa đạt: kiểm tra service Running dưới LOCAL SERVICE, cấu hình Data, dữ liệu gốc và một phiếu xử lý mới trong Outbox. Không chỉ nhìn trạng thái Running.'
+            : 'Chức năng trên Windows chưa phục hồi đúng tiêu chí. Kiểm tra lại trạng thái thực tế trong Desktop và yêu cầu của bài.' } : {}),
+      };
     });
   }
   async function reset(labId) {

@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "Chẩn đoán kết nối cần tách tên → IP → route → TCP → ứng dụng. Ping thành công không đảm bảo TCP mở; TCP mở không đảm bảo ứng dụng trả đúng nội dung. Bài này kiểm tra kết nối và đọc kết quả, không tự mở firewall hoặc sửa mạng Azure.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-network-connectivity khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
-      "content_vi": "Chẩn đoán kết nối cần tách tên → IP → route → TCP → ứng dụng. Ping thành công không đảm bảo TCP mở; TCP mở không đảm bảo ứng dụng trả đúng nội dung. Bài này kiểm tra kết nối và đọc kết quả, không tự mở firewall hoặc sửa mạng Azure.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-network-connectivity khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content": "Chẩn đoán kết nối cần tách tên → IP → route → TCP → ứng dụng. Ping thành công không đảm bảo TCP mở; TCP mở không đảm bảo ứng dụng trả đúng nội dung. Bài này kiểm tra kết nối và đọc kết quả, không tự mở firewall hoặc sửa mạng Azure.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-network-connectivity khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nSử dụng Test-NetConnection (thay thế ping/telnet), Get-NetTCPConnection, chẩn đoán quy tắc Windows Firewall và phân giải tên miền.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nGet-NetIPConfiguration\nGet-NetRoute -AddressFamily IPv4 | Sort-Object RouteMetric\n```\n\n### Bản chất cần hiểu\nTách NIC/IP → route → DNS → TCP → HTTP/SMB. Ping thành công không chứng minh ứng dụng tốt; loopback không chứng minh đường CLIENT01–Server.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng hoặc chuyển nhóm\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
+      "content_vi": "Chẩn đoán kết nối cần tách tên → IP → route → TCP → ứng dụng. Ping thành công không đảm bảo TCP mở; TCP mở không đảm bảo ứng dụng trả đúng nội dung. Bài này kiểm tra kết nối và đọc kết quả, không tự mở firewall hoặc sửa mạng Azure.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-network-connectivity khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nSử dụng Test-NetConnection (thay thế ping/telnet), Get-NetTCPConnection, chẩn đoán quy tắc Windows Firewall và phân giải tên miền.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nGet-NetIPConfiguration\nGet-NetRoute -AddressFamily IPv4 | Sort-Object RouteMetric\n```\n\n### Bản chất cần hiểu\nTách NIC/IP → route → DNS → TCP → HTTP/SMB. Ping thành công không chứng minh ứng dụng tốt; loopback không chứng minh đường CLIENT01–Server.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng hoặc chuyển nhóm\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -51,9 +51,51 @@
         "files",
         "shell"
       ],
-      "content": "### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
-      "content_vi": "### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
-      "translation_needs_review": false
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
+      "translation_needs_review": false,
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Test-NetConnection|tnc|Get-NetTCPConnection)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Test-NetConnection|tnc|Get-NetTCPConnection)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_version": 4,
@@ -62,8 +104,8 @@
       "id": "win-tr-03-sec-1",
       "title": "Testing TCP Port Reachability with Test-NetConnection",
       "title_vi": "Kiểm Tra Thông Cổng TCP Với Test-NetConnection",
-      "content": "### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
-      "content_vi": "### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nWin+R → ncpa.cpl: xác định NIC đang dùng, xem Status/Details; giữ nguyên cấu hình NIC quản trị.\n\n### Bài tập độc lập\nViết bảng: kiểm tra nào loại trừ nguyên nhân nào? So kết quả query DNS chỉ định với resolver mặc định, sau đó kiểm đúng cổng dịch vụ.\n\n### Điều kiện dừng\nKhông release IP, đổi DNS/VNet hay tắt firewall toàn máy từ phiên RDP. Thiếu private path phải xử lý hạ tầng trước.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nTest-NetConnection localhost -Port 80 chỉ kiểm tra dịch vụ local ở cổng 80; không phải Internet hoặc toàn bộ đường mạng client/server. Đọc RemoteAddress, RemotePort và TcpTestSucceeded.\n\n### Hướng dẫn\n### Kiểm tra Cổng Mạng\n\n```powershell\nTest-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTrue khi có listener phù hợp; False có thể hoàn toàn đúng nếu máy chưa có web server. Task không yêu cầu bật IIS để biến False thành True.\n\n### Câu hỏi tự giải thích\nNếu TCP mở nhưng website trả 500, lỗi đang ở lớp nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự so sánh một cổng đã biết với cổng không có listener bằng Get-NetTCPConnection -State Listen; không mở hoặc tắt firewall.",
       "task": "Use Test-NetConnection to test localhost TCP port 80 or 443.",
       "task_vi": "Sử dụng lệnh Test-NetConnection để kiểm tra tính khả dụng của cổng TCP trên máy chủ.",
       "hint": "Test-NetConnection -ComputerName localhost -Port 80 -WarningAction SilentlyContinue",
@@ -126,7 +168,9 @@
           "shell"
         ]
       },
-      "translation_needs_review": false
+      "translation_needs_review": false,
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_origin": "locally-authored-microsoft-references",
@@ -140,5 +184,11 @@
       "title": "Microsoft Learn: Windows Server",
       "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
-  ]
+  ],
+  "teaching_review": {
+    "version": 1,
+    "date": "2026-10-26",
+    "topic": "network",
+    "runtime_revalidated": false
+  }
 }

@@ -1,0 +1,90 @@
+{
+  "id": "win-it-file-in-use",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 27,
+  "title": "Ticket thực tế: file đang được tiến trình khác sử dụng",
+  "title_vi": "Ticket thực tế: file đang được tiến trình khác sử dụng",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "35–45 mins",
+  "target_vm": "client",
+  "curriculum_version": 4,
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "overview": "Xử lý sharing violation thật: Associated Handles → đúng process → giải phóng → kiểm ReadWrite và dữ liệu.",
+  "practice_mode": "fault-injection",
+  "preparation": {
+    "mode": "fault-injection",
+    "requires_vm_start": true,
+    "target": "client",
+    "fault_injection": true
+  },
+  "validation_status": "live-client-verified-2026-10-26",
+  "references": [
+    {
+      "title": "File sharing and file handles",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/fileio/creating-and-opening-files"
+    },
+    {
+      "title": "Stop-ScheduledTask",
+      "url": "https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/stop-scheduledtask"
+    }
+  ],
+  "sections": [
+    {
+      "id": "win-it-file-in-use-sec-0",
+      "title": "Ticket và phạm vi",
+      "title_vi": "Ticket và phạm vi",
+      "position": 0,
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Ticket HD-P02: không cập nhật được báo cáo dùng chung\nNhân viên lưu báo cáo thì Windows báo file đang được chương trình khác sử dụng. Bạn phải xác định đúng process đang giữ handle, giải phóng an toàn và giữ nguyên dữ liệu; không cấp thêm quyền hoặc reboot máy để né chẩn đoán.\n\n### Cơ chế thật và giới hạn\nChỉ cần CLIENT01. Nút **Chuẩn bị sự cố** tạo file CSV mẫu và tác vụ riêng `LabExSupportFileLock`. Một process Windows PowerShell mở file bằng FileShare.None, gây **sharing violation thật** ở Windows. Không phải Excel/Office; lab không giả có phần mềm chưa cài. Không chặn file người dùng, không đổi service hệ thống.\n\n### Trước khi thao tác\nHoàn nguyên kịch bản khác nếu đang học. Task không có lịch lặp và tự thoát sau 30 phút để tránh phiên bỏ quên; hết thời gian không được tính là tự sửa thành công. Học xong bấm **Hoàn nguyên kịch bản**. Không chạy lại script tạo file hoặc xóa tác vụ bằng tay.\n\nPhần chẩn đoán tự ghi nhận bằng lời; chỉ phần giải phóng và kiểm sử dụng file có nút chấm. Đã kiểm thử đầu-cuối trên CLIENT01 ngày 26/10/2026: lỗi khóa thật → chưa sửa trượt → sửa đúng đạt → hoàn nguyên sạch. Kết quả này không tự chứng nhận bạn đã làm bài.\n",
+      "content_vi": "## Ticket HD-P02: không cập nhật được báo cáo dùng chung\nNhân viên lưu báo cáo thì Windows báo file đang được chương trình khác sử dụng. Bạn phải xác định đúng process đang giữ handle, giải phóng an toàn và giữ nguyên dữ liệu; không cấp thêm quyền hoặc reboot máy để né chẩn đoán.\n\n### Cơ chế thật và giới hạn\nChỉ cần CLIENT01. Nút **Chuẩn bị sự cố** tạo file CSV mẫu và tác vụ riêng `LabExSupportFileLock`. Một process Windows PowerShell mở file bằng FileShare.None, gây **sharing violation thật** ở Windows. Không phải Excel/Office; lab không giả có phần mềm chưa cài. Không chặn file người dùng, không đổi service hệ thống.\n\n### Trước khi thao tác\nHoàn nguyên kịch bản khác nếu đang học. Task không có lịch lặp và tự thoát sau 30 phút để tránh phiên bỏ quên; hết thời gian không được tính là tự sửa thành công. Học xong bấm **Hoàn nguyên kịch bản**. Không chạy lại script tạo file hoặc xóa tác vụ bằng tay.\n\nPhần chẩn đoán tự ghi nhận bằng lời; chỉ phần giải phóng và kiểm sử dụng file có nút chấm. Đã kiểm thử đầu-cuối trên CLIENT01 ngày 26/10/2026: lỗi khóa thật → chưa sửa trượt → sửa đúng đạt → hoàn nguyên sạch. Kết quả này không tự chứng nhận bạn đã làm bài.\n"
+    },
+    {
+      "id": "win-it-file-in-use-sec-1",
+      "title": "Tìm handle và khoanh vùng",
+      "title_vi": "Tìm handle và khoanh vùng",
+      "position": 1,
+      "kind": "document",
+      "need_verify": false,
+      "content": "## Tìm đúng ứng dụng đang giữ file\n### Quan sát từ Desktop\n1. Bấm Chuẩn bị sự cố, chờ xác minh hoàn tất. Explorer mở `C:\\LabEx\\PracticeFaults\\filelock`. Thử mở shared.csv bằng Notepad: lỗi đọc/ghi có thể khác tùy cách ứng dụng mở file, không suy từ một thông báo duy nhất.\n2. Win+R → `resmon.exe` → CPU → **Associated Handles**. Nhập `shared.csv`, đối chiếu cả đường dẫn; có thể cần nâng quyền để thấy process SYSTEM. Đọc Image/PID, không End process theo tên powershell.exe chung.\n3. Task Manager → Details → Select columns → Command line. Đối chiếu PID vừa tìm với đường script `C:\\LabEx\\PracticeFaults\\filelock\\locker.ps1`. Process này do lab tạo; không phải cửa sổ PowerShell bạn đang gõ.\n4. Task Scheduler Library → LabExSupportFileLock → Actions/General, đối chiếu action và identity. Chưa dừng vội: ghi tại sao là lỗi giữ handle, không phải NTFS.\n\n### Tự tái hiện bằng thao tác mở độc quyền\n```powershell\n$s=[IO.File]::Open('C:\\LabEx\\PracticeFaults\\filelock\\shared.csv',[IO.FileMode]::Open,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)\n$s.Dispose()\n```\nKhi lỗi, dòng đầu ném IOException do file đang được giữ; dòng Dispose có thể báo biến null, không phải nguyên nhân mới. Trong .NET, FileShare.None không cho process khác mở tương thích cho đến khi handle đóng. Với ứng dụng thật phải yêu cầu người dùng lưu và đóng ứng dụng trước; kill có thể làm mất phần chưa lưu.\n\n### Tự giải thích\nGhi PID, command line và đường file thật. Vì sao cho Everyone Full control không giải phóng handle? Vì sao reboot có thể hết lỗi nhưng chưa chỉ ra nguồn gốc? Vì sao phải xác nhận người dùng trước khi đóng ứng dụng?\n",
+      "content_vi": "## Tìm đúng ứng dụng đang giữ file\n### Quan sát từ Desktop\n1. Bấm Chuẩn bị sự cố, chờ xác minh hoàn tất. Explorer mở `C:\\LabEx\\PracticeFaults\\filelock`. Thử mở shared.csv bằng Notepad: lỗi đọc/ghi có thể khác tùy cách ứng dụng mở file, không suy từ một thông báo duy nhất.\n2. Win+R → `resmon.exe` → CPU → **Associated Handles**. Nhập `shared.csv`, đối chiếu cả đường dẫn; có thể cần nâng quyền để thấy process SYSTEM. Đọc Image/PID, không End process theo tên powershell.exe chung.\n3. Task Manager → Details → Select columns → Command line. Đối chiếu PID vừa tìm với đường script `C:\\LabEx\\PracticeFaults\\filelock\\locker.ps1`. Process này do lab tạo; không phải cửa sổ PowerShell bạn đang gõ.\n4. Task Scheduler Library → LabExSupportFileLock → Actions/General, đối chiếu action và identity. Chưa dừng vội: ghi tại sao là lỗi giữ handle, không phải NTFS.\n\n### Tự tái hiện bằng thao tác mở độc quyền\n```powershell\n$s=[IO.File]::Open('C:\\LabEx\\PracticeFaults\\filelock\\shared.csv',[IO.FileMode]::Open,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)\n$s.Dispose()\n```\nKhi lỗi, dòng đầu ném IOException do file đang được giữ; dòng Dispose có thể báo biến null, không phải nguyên nhân mới. Trong .NET, FileShare.None không cho process khác mở tương thích cho đến khi handle đóng. Với ứng dụng thật phải yêu cầu người dùng lưu và đóng ứng dụng trước; kill có thể làm mất phần chưa lưu.\n\n### Tự giải thích\nGhi PID, command line và đường file thật. Vì sao cho Everyone Full control không giải phóng handle? Vì sao reboot có thể hết lỗi nhưng chưa chỉ ra nguồn gốc? Vì sao phải xác nhận người dùng trước khi đóng ứng dụng?\n"
+    },
+    {
+      "id": "win-it-file-in-use-sec-2",
+      "title": "Giải phóng khóa và thử chức năng",
+      "title_vi": "Giải phóng khóa và thử chức năng",
+      "position": 2,
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Giải phóng đúng process và thử lại\n### Can thiệp nhỏ nhất\nTrong phần mềm thật: lưu phần đang làm và đóng ứng dụng giữ file bằng chức năng thoát bình thường. Trong lab, process cố tình giữ file không có cửa sổ tương tác; dùng **Task Scheduler → LabExSupportFileLock → End** để kết thúc đúng tác vụ đã đối chiếu. Không chọn End task cho mọi powershell.exe.\n\nLệnh tương đương, chỉ tác động đúng task của bài:\n```powershell\nStop-ScheduledTask -TaskName LabExSupportFileLock\n```\nĐợi trạng thái không còn Running rồi thử mở file bằng Notepad. Nội dung vẫn phải có cột Order,Amount và dòng 1042,2500000. Không xóa/đổi tên/ghi đè file để hết thông báo.\n\n```powershell\n$s=[IO.File]::Open('C:\\LabEx\\PracticeFaults\\filelock\\shared.csv',[IO.FileMode]::Open,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)\n$s.Dispose()\nGet-Content 'C:\\LabEx\\PracticeFaults\\filelock\\shared.csv'\n```\nMở được handle ReadWrite mới và đóng sạch chứng minh file sử dụng được tại thời điểm thử; chưa chứng minh nghiệp vụ Excel hoặc SMB. Bấm **Kiểm tra kết quả**: backend tự mở lại file thật, đối chiếu nội dung gốc và ownership/action task. Task vẫn chạy, sửa nội dung file, thay action hoặc chờ quá hạn đều không đạt.\n\n### Bàn giao và hoàn nguyên\nTicket: sharing violation → PID/handle đúng script lab → kết thúc đúng task → mở lại file thành công, dữ liệu giữ nguyên. Hoàn nguyên trên web để xóa đúng task và thư mục do bài tạo; reset kiểm ownership, không kill process theo PID đoán và không xóa thư mục khác.\n",
+      "content_vi": "## Giải phóng đúng process và thử lại\n### Can thiệp nhỏ nhất\nTrong phần mềm thật: lưu phần đang làm và đóng ứng dụng giữ file bằng chức năng thoát bình thường. Trong lab, process cố tình giữ file không có cửa sổ tương tác; dùng **Task Scheduler → LabExSupportFileLock → End** để kết thúc đúng tác vụ đã đối chiếu. Không chọn End task cho mọi powershell.exe.\n\nLệnh tương đương, chỉ tác động đúng task của bài:\n```powershell\nStop-ScheduledTask -TaskName LabExSupportFileLock\n```\nĐợi trạng thái không còn Running rồi thử mở file bằng Notepad. Nội dung vẫn phải có cột Order,Amount và dòng 1042,2500000. Không xóa/đổi tên/ghi đè file để hết thông báo.\n\n```powershell\n$s=[IO.File]::Open('C:\\LabEx\\PracticeFaults\\filelock\\shared.csv',[IO.FileMode]::Open,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)\n$s.Dispose()\nGet-Content 'C:\\LabEx\\PracticeFaults\\filelock\\shared.csv'\n```\nMở được handle ReadWrite mới và đóng sạch chứng minh file sử dụng được tại thời điểm thử; chưa chứng minh nghiệp vụ Excel hoặc SMB. Bấm **Kiểm tra kết quả**: backend tự mở lại file thật, đối chiếu nội dung gốc và ownership/action task. Task vẫn chạy, sửa nội dung file, thay action hoặc chờ quá hạn đều không đạt.\n\n### Bàn giao và hoàn nguyên\nTicket: sharing violation → PID/handle đúng script lab → kết thúc đúng task → mở lại file thành công, dữ liệu giữ nguyên. Hoàn nguyên trên web để xóa đúng task và thư mục do bài tạo; reset kiểm ownership, không kill process theo PID đoán và không xóa thư mục khác.\n",
+      "task": "File mở ReadWrite độc quyền được, nội dung gốc giữ nguyên, đúng ownership và task không còn giữ khóa.",
+      "task_vi": "File mở ReadWrite độc quyền được, nội dung gốc giữ nguyên, đúng ownership và task không còn giữ khóa.",
+      "hint": "Tìm Associated Handles trước; chỉ End đúng LabExSupportFileLock.",
+      "hint_vi": "Tìm Associated Handles trước; chỉ End đúng LabExSupportFileLock.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-file-in-use-sec-2",
+      "title": "Giải phóng khóa và thử chức năng",
+      "title_vi": "Giải phóng khóa và thử chức năng",
+      "position": 2,
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Giải phóng đúng process và thử lại\n### Can thiệp nhỏ nhất\nTrong phần mềm thật: lưu phần đang làm và đóng ứng dụng giữ file bằng chức năng thoát bình thường. Trong lab, process cố tình giữ file không có cửa sổ tương tác; dùng **Task Scheduler → LabExSupportFileLock → End** để kết thúc đúng tác vụ đã đối chiếu. Không chọn End task cho mọi powershell.exe.\n\nLệnh tương đương, chỉ tác động đúng task của bài:\n```powershell\nStop-ScheduledTask -TaskName LabExSupportFileLock\n```\nĐợi trạng thái không còn Running rồi thử mở file bằng Notepad. Nội dung vẫn phải có cột Order,Amount và dòng 1042,2500000. Không xóa/đổi tên/ghi đè file để hết thông báo.\n\n```powershell\n$s=[IO.File]::Open('C:\\LabEx\\PracticeFaults\\filelock\\shared.csv',[IO.FileMode]::Open,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)\n$s.Dispose()\nGet-Content 'C:\\LabEx\\PracticeFaults\\filelock\\shared.csv'\n```\nMở được handle ReadWrite mới và đóng sạch chứng minh file sử dụng được tại thời điểm thử; chưa chứng minh nghiệp vụ Excel hoặc SMB. Bấm **Kiểm tra kết quả**: backend tự mở lại file thật, đối chiếu nội dung gốc và ownership/action task. Task vẫn chạy, sửa nội dung file, thay action hoặc chờ quá hạn đều không đạt.\n\n### Bàn giao và hoàn nguyên\nTicket: sharing violation → PID/handle đúng script lab → kết thúc đúng task → mở lại file thành công, dữ liệu giữ nguyên. Hoàn nguyên trên web để xóa đúng task và thư mục do bài tạo; reset kiểm ownership, không kill process theo PID đoán và không xóa thư mục khác.\n",
+      "content_vi": "## Giải phóng đúng process và thử lại\n### Can thiệp nhỏ nhất\nTrong phần mềm thật: lưu phần đang làm và đóng ứng dụng giữ file bằng chức năng thoát bình thường. Trong lab, process cố tình giữ file không có cửa sổ tương tác; dùng **Task Scheduler → LabExSupportFileLock → End** để kết thúc đúng tác vụ đã đối chiếu. Không chọn End task cho mọi powershell.exe.\n\nLệnh tương đương, chỉ tác động đúng task của bài:\n```powershell\nStop-ScheduledTask -TaskName LabExSupportFileLock\n```\nĐợi trạng thái không còn Running rồi thử mở file bằng Notepad. Nội dung vẫn phải có cột Order,Amount và dòng 1042,2500000. Không xóa/đổi tên/ghi đè file để hết thông báo.\n\n```powershell\n$s=[IO.File]::Open('C:\\LabEx\\PracticeFaults\\filelock\\shared.csv',[IO.FileMode]::Open,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)\n$s.Dispose()\nGet-Content 'C:\\LabEx\\PracticeFaults\\filelock\\shared.csv'\n```\nMở được handle ReadWrite mới và đóng sạch chứng minh file sử dụng được tại thời điểm thử; chưa chứng minh nghiệp vụ Excel hoặc SMB. Bấm **Kiểm tra kết quả**: backend tự mở lại file thật, đối chiếu nội dung gốc và ownership/action task. Task vẫn chạy, sửa nội dung file, thay action hoặc chờ quá hạn đều không đạt.\n\n### Bàn giao và hoàn nguyên\nTicket: sharing violation → PID/handle đúng script lab → kết thúc đúng task → mở lại file thành công, dữ liệu giữ nguyên. Hoàn nguyên trên web để xóa đúng task và thư mục do bài tạo; reset kiểm ownership, không kill process theo PID đoán và không xóa thư mục khác.\n",
+      "task": "File mở ReadWrite độc quyền được, nội dung gốc giữ nguyên, đúng ownership và task không còn giữ khóa.",
+      "task_vi": "File mở ReadWrite độc quyền được, nội dung gốc giữ nguyên, đúng ownership và task không còn giữ khóa.",
+      "hint": "Tìm Associated Handles trước; chỉ End đúng LabExSupportFileLock.",
+      "hint_vi": "Tìm Associated Handles trước; chỉ End đúng LabExSupportFileLock.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    }
+  ]
+}

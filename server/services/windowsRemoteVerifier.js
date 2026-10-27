@@ -14,6 +14,8 @@ const foundationsRules = JSON.parse(fs.readFileSync(new URL('../data/windows-fou
 const foundationsHelpers = fs.readFileSync(new URL('../runtime/windows/fundamentals-common.ps1', import.meta.url), 'utf8');
 const networkingRules = JSON.parse(fs.readFileSync(new URL('../data/windows-networking-rules.json', import.meta.url), 'utf8'));
 const networkingHelpers = fs.readFileSync(new URL('../runtime/windows/networking-common.ps1', import.meta.url), 'utf8');
+const professionalRules = JSON.parse(fs.readFileSync(new URL('../data/windows-professional-rules.json', import.meta.url), 'utf8'));
+const professionalHelpers = fs.readFileSync(new URL('../runtime/windows/professional-common.ps1', import.meta.url), 'utf8');
 
 // Trusted server-side criteria. Never use browser-supplied PowerShell as a grader.
 const rules = {
@@ -46,6 +48,7 @@ const rules = {
   ...foundationsRules,
   ...networkingRules,
   ...enterpriseRules,
+  ...professionalRules,
 };
 
 export function windowsStepReadiness(step, lab = {}) {
@@ -70,6 +73,19 @@ export async function verifyWindowsRemote(labId, step, { execute = executeWindow
   if (rule.lab_id && rule.lab_id !== labId) return { supported: false, passed: false, reason: 'Bộ kiểm tra không thuộc bài hiện tại.' };
   if (rule.target_vm && rule.target_vm!==vmTarget) return {supported:false,passed:false,reason:'Bộ kiểm tra không thuộc VM của bài học.'};
   if(enterpriseRules[step.id])return verifyEnterprise(labId,rule,{execute,faults});
+  if(professionalRules[step.id]){
+    const guard=(rule.modules || []).map(name=>`if(-not(Get-Module -ListAvailable ${name})){exit 42}; Import-Module ${name};`).join('\n');
+    const osGuard=vmTarget==='client'
+      ? "if($env:COMPUTERNAME -ne 'CLIENT01' -or (Get-CimInstance Win32_OperatingSystem).ProductType -ne 1){exit 43}"
+      : 'if((Get-CimInstance Win32_OperatingSystem).ProductType -lt 2){exit 43}';
+    const command=`$ErrorActionPreference='Stop'; $labRoot='${rule.root}';\n${guard}\n${osGuard}\n${professionalHelpers}\ntry{Assert-ProWorkspace;$value=& { ${rule.probe} };if($value -is [bool] -and $value){exit 0}else{exit 1}}catch{Write-Error $_ -ErrorAction Continue;exit 1}`;
+    const result=await execute(command,{labId,target:vmTarget});
+    if(result.timedOut)return {supported:true,passed:false,timedOut:true,method:'windows-professional',reason:'Phép kiểm tra chưa hoàn tất; không coi timeout là đạt.'};
+    if(result.exitCode===42)return {supported:false,passed:false,reason:'VM thiếu role/module: '+rule.modules.join(', ')+'. Cần chuẩn bị môi trường trước, không tự cài bằng nút chấm.'};
+    if(result.exitCode===43)return {supported:false,passed:false,reason:'Sai loại máy: bài cần đúng target Windows Client hoặc Server đã chỉ định.'};
+    return {supported:true,passed:result.exitCode===0,method:'windows-professional',target:result.target,
+      ...(result.exitCode===0?{}:{reason:'Dữ liệu hoặc chức năng thực chưa khớp tiêu chí. Đối chiếu từng file/phiên bản, đường dẫn và kết quả HTTP; không chỉ tạo report.'})};
+  }
   let historyOK = !rule.commands;
   if (rule.commands) {
     const target = getVmTargetConfig(vmTarget).vmName;

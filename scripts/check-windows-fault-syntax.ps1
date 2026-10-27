@@ -1,7 +1,7 @@
 $ErrorActionPreference='Stop'
 $tokens=$null
 $parseErrors=$null
-foreach ($filename in @('support-faults.ps1','practice-faults.ps1')) {
+foreach ($filename in @('support-faults.ps1','practice-faults.ps1','backup-permission-fault.ps1','file-lock-fault.ps1','service-config-fault.ps1','professional-common.ps1')) {
   $scriptPath=Join-Path $PSScriptRoot "..\server\runtime\windows\$filename"
   [void][System.Management.Automation.Language.Parser]::ParseFile($scriptPath,[ref]$tokens,[ref]$parseErrors)
   if ($parseErrors.Count) { $parseErrors | Select-Object Message,Extent | Format-List; exit 1 }
@@ -22,4 +22,4 @@ Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot '..\server\data\labs') -Filt
     }
   }
 }
-Write-Output "PowerShell syntax OK: 2 scenario scripts, $(@($rules.PSObject.Properties).Count) rules, $commands learner commands. Nothing executed."
+Write-Output "PowerShell syntax OK: 6 runtime scripts, $(@($rules.PSObject.Properties).Count) rules, $commands learner commands. Nothing executed."

@@ -1,5 +1,6 @@
 """Build six CLIENT01 foundation labs, their trusted probes, and course metadata."""
 import json,re
+from windows_beginner_learning import improve_lab
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];DATA=ROOT/'server/data';COURSE='windows-11-fundamentals'
 common=(ROOT/'server/runtime/windows/fundamentals-common.ps1').read_text(encoding='utf-8')
@@ -119,6 +120,7 @@ for order,l in enumerate(lessons,1):
     summary='## Tổng kết và tự đánh giá\n\n'+l['theory']+'\n\nTự giải thích hai câu hỏi trong bài trước khi chuyển tiếp. Điểm task xác nhận dữ liệu/trạng thái được kiểm tra, không tự chứng nhận hiểu bản chất. Giữ các file mẫu để ôn; không cần khôi phục cấu hình Windows vì bài không thay cấu hình máy.'
     sections.append(dict(id=lid+'-summary',title='Tổng kết và tự đánh giá',title_vi='Tổng kết và tự đánh giá',kind='summary',position=3,need_verify=False,content=summary,content_vi=summary))
     lab=dict(id=lid,course_id=COURSE,order=order,title=l['title'],title_vi=l['title'],type='lab',difficulty='Beginner',estimated_time='30–40 mins',target_vm='client',curriculum_version=1,curriculum_origin='locally-authored-microsoft-references',curriculum_module=f'{COURSE}-module-{l["module"]}',overview=l['theory'],practice_mode='configuration-diagnostics',preparation=dict(mode='self-contained',requires_vm_start=True,target='client',fault_injection=False),references=[dict(title='Microsoft Learn',url=url,publisher='Microsoft',accessed_at='2026-10-22') for url in l['refs']],sections=sections,steps=steps)
+    improve_lab(lab)
     (DATA/'labs'/f'{lid}.json').write_text(json.dumps(lab,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 (DATA/'windows-foundations-rules.json').write_text(json.dumps(rules,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 plan=json.loads((DATA/'windows-roadmap.json').read_text(encoding='utf-8')); c=next(c for c in plan['courses'] if c['id']==COURSE)

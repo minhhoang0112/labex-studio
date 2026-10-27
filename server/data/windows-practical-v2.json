@@ -1,0 +1,63 @@
+{
+  "revision": "2026-10-27",
+  "lessons": {
+    "win-it-scheduled-backup-permissions": {
+      "learning_order": 1,
+      "machine": "CLIENT01 · Windows 11",
+      "identity": "Dùng tài khoản quản trị lab để kiểm tra cấu hình. Tác vụ sao lưu chạy bằng LOCAL SERVICE, có quyền khác với bạn.",
+      "ticket": "Kế toán: Lịch sao lưu vẫn bật nhưng hôm nay không có bản sao mới. Chép tay bằng tài khoản quản trị thì được. Hãy khôi phục lịch sao lưu và giữ nguyên dữ liệu nguồn.",
+      "scope": "Bài dùng Task Scheduler và quyền NTFS thật trên dữ liệu mẫu. Đây là sao chép trên cùng VM, chưa phải backup chống hỏng ổ đĩa hoặc backup qua mạng.",
+      "tasks": [
+        "Bấm Chuẩn bị sự cố, chờ hoàn tất rồi mở Desktop CLIENT01.",
+        "Mở Task Scheduler và tìm LabExSupportBackupAcl. Xác định ai chạy tác vụ, chạy chương trình nào và kết quả lần chạy gần nhất.",
+        "Đọc nhật ký trong C:\\LabEx\\PracticeFaults\\taskacl\\Logs; đối chiếu quyền của tài khoản đó ở Source và Backup.",
+        "Sửa quyền tối thiểu bằng Properties → Security. Giữ nguyên tài khoản và chương trình của task.",
+        "Chạy lại task, kiểm tra bản sao mới rồi bấm Kiểm tra kết quả. Ghi ngắn nguyên nhân và cách xác nhận đã sửa."
+      ],
+      "acceptance": [
+        "Task ban đầu thực sự chạy được dưới LOCAL SERVICE và sao chép được tệp mới; không chỉ chép tay một tệp cũ.",
+        "Nội dung nguồn và bản sao khớp, dữ liệu nguồn không thay đổi.",
+        "Không chuyển task sang admin/SYSTEM; không cấp quyền ghi rộng cho Everyone/Users."
+      ],
+      "hints": [
+        {"title": "Tìm bằng chứng", "text": "Win+R → taskschd.msc. Đối chiếu General, Actions và Last Run Result. Ready chỉ có nghĩa task sẵn sàng chạy, không có nghĩa lần chạy trước thành công."},
+        {"title": "Phân biệt tài khoản", "text": "Task không dùng token của cửa sổ admin đang mở. Nhật ký last-run.txt và ACL của thư mục đích giúp xác định quyền của LOCAL SERVICE."},
+        {"title": "Thay đổi nhỏ nhất", "text": "Trong Security của đúng thư mục Backup, cấp Modify cho LOCAL SERVICE và kế thừa xuống tệp/thư mục con. Giữ SYSTEM và Administrators. Run lại task rồi Refresh."}
+      ],
+      "diagnosis": [
+        "Tái hiện: chạy task một lần và đọc kết quả thực tế.",
+        "Tìm ba bằng chứng: tài khoản chạy, đường dẫn không ghi được và quyền hiện tại.",
+        "Nêu giả thuyết trước khi thay đổi: vì sao admin chép được mà task không chép được?"
+      ]
+    },
+    "win-it-file-in-use": {
+      "learning_order": 2,
+      "machine": "CLIENT01 · Windows 11",
+      "identity": "Dùng tài khoản quản trị lab để xem tiến trình và dừng đúng tác vụ. Không kết thúc hàng loạt powershell.exe.",
+      "ticket": "Nhân viên không mở được tệp xuất dữ liệu vì đang có chương trình khác giữ tệp. Hãy tìm đúng tiến trình, giải phóng tệp và giữ nguyên nội dung, không khởi động lại cả máy.",
+      "scope": "Windows phát sinh sharing violation thật trên shared.csv. Lab dùng một task giữ handle để tái hiện lỗi; không mô phỏng đầy đủ Excel hoặc hệ thống SMB.",
+      "tasks": [
+        "Chuẩn bị sự cố rồi thử mở C:\\LabEx\\PracticeFaults\\filelock\\shared.csv bằng Notepad để thấy lỗi.",
+        "Mở Resource Monitor, tìm handle của shared.csv và ghi nhận PID/tên tiến trình đang giữ tệp.",
+        "Đối chiếu command line và tác vụ LabExSupportFileLock trước khi quyết định dừng.",
+        "Giải phóng đúng tác vụ qua Task Scheduler. Không xóa hoặc ghi đè tệp để né lỗi.",
+        "Mở lại tệp, kiểm tra dữ liệu và bấm Kiểm tra kết quả. Bàn giao nguyên nhân, hành động và kết quả thử lại."
+      ],
+      "acceptance": [
+        "Tệp được mở đọc/ghi độc quyền bằng một handle mới; tác vụ của bài không còn giữ khóa.",
+        "Nội dung CSV ban đầu còn nguyên; không đổi action của tác vụ hoặc xóa tài nguyên để né kiểm tra.",
+        "Chủ động giải quyết trong phiên thực hành. Chờ task tự hết hạn không được tính là sửa lỗi."
+      ],
+      "hints": [
+        {"title": "Tìm ai giữ tệp", "text": "Win+R → resmon → CPU → Associated Handles. Tìm shared.csv; PID giúp phân biệt các tiến trình cùng tên."},
+        {"title": "Đối chiếu trước khi dừng", "text": "Task Manager → Details có thể bật cột Command line. Đối chiếu đường dẫn script của bài và action trong Task Scheduler, không đoán từ tên powershell.exe."},
+        {"title": "Giải phóng đúng tác vụ", "text": "Trong bài này, Task Scheduler → LabExSupportFileLock → End. Với ứng dụng thực tế có cửa sổ, ưu tiên lưu dữ liệu và đóng bình thường trước khi buộc dừng."}
+      ],
+      "diagnosis": [
+        "Thử mở tệp để phân biệt lỗi đang được sử dụng với lỗi không tìm thấy tệp.",
+        "Dùng Associated Handles tìm PID; đối chiếu command line và action của task.",
+        "Chọn cách can thiệp ít ảnh hưởng nhất, không đóng các tiến trình không liên quan."
+      ]
+    }
+  }
+}

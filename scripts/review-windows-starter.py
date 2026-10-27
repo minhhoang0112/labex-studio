@@ -180,3 +180,5 @@ for course in catalog:
         course['curriculum_origin']='locally-authored-microsoft-references'
 catalog_path.write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 print(f'Reviewed {len(review)} existing Windows lessons; updated {len(newrules)} task IDs and criteria; no VM changes.')
+import runpy
+runpy.run_path(str(ROOT/'scripts/upgrade-windows-professional.py'),run_name='__main__')

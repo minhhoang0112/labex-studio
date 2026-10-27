@@ -3,8 +3,9 @@ import { api } from '../lib/api';
 import WindowsDesktop from './WindowsDesktop';
 import { Monitor, Terminal, PanelLeftClose, PanelLeftOpen, Power, MoreHorizontal } from 'lucide-react';
 
-export default function WindowsConsole({ labId, onActionComplete, onOutput, expanded = false, onToggleExpanded }) {
+export default function WindowsConsole({ labId, onActionComplete, onOutput, expanded = false, onToggleExpanded, evidenceRequest = 0 }) {
   const [tab, setTab] = useState('desktop');
+  useEffect(() => { if (evidenceRequest) setTab('powershell'); }, [evidenceRequest]);
   const [status, setStatus] = useState(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -105,7 +106,10 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
       <pre aria-label="Kết quả PowerShell VM" className="flex-1 min-h-0 overflow-auto whitespace-pre-wrap p-3 text-xs">{output.join('\n\n')}</pre>
       {executing && <div role="status" className="p-2 text-xs text-blue-300">Đang chờ VM thực thi PowerShell…</div>}
       <form onSubmit={run} className="p-3 flex gap-2 border-t border-slate-700">
-        <input aria-label="Lệnh PowerShell trên VM" value={command} onChange={event => setCommand(event.target.value)} disabled={executing || faultBusy || status?.isBusy} className="flex-1 min-w-0 bg-slate-900 p-2 rounded font-mono text-sm" placeholder="Get-Service" />
+        <textarea aria-label="Lệnh PowerShell trên VM" value={command} onChange={event => setCommand(event.target.value)} disabled={executing || faultBusy || status?.isBusy}
+          rows={3} onKeyDown={event => { if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }}
+          className="flex-1 min-w-0 min-h-20 max-h-56 resize-y bg-slate-900 p-2 rounded font-mono text-sm"
+          placeholder="Dán nguyên khối PowerShell tại đây. Ctrl+Enter hoặc bấm Chạy để gửi." />
         <button disabled={executing || faultBusy || status?.isBusy || !command.trim()} className="px-3 bg-blue-600 rounded disabled:opacity-40">Chạy</button>
       </form>
     </div>

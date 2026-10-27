@@ -6,12 +6,14 @@ import { api } from '../lib/api';
 import { labProgress, validPassedSteps, isLabCompleted } from '../lib/progress';
 import CourseSyllabus from '../components/CourseSyllabus';
 import CourseContentBadge from '../components/CourseContentBadge';
+import { usePageState } from '../lib/usePageState';
 
-export default function CourseDetail({ courseId, onBack, onStartLab, onStartAssessment }) {
+export default function CourseDetail({ courseId, onBack, backLabel, onStartLab, onStartAssessment }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [attempt, setAttempt] = useState(0);
+  const [lessonView, setLessonView] = usePageState('lessonView', 'practical');
   const [lang, setLang] = useState(() => {
     try { return localStorage.getItem('labex.language') || 'vi'; } catch { return 'vi'; }
   });
@@ -66,6 +68,8 @@ export default function CourseDetail({ courseId, onBack, onStartLab, onStartAsse
   const labs = syllabusLabs.filter(lab => lab.availability?.state !== 'reference-only' &&
     (lab.steps_count > 0 || lab.step_ids?.length > 0));
   const isComplete = lab => isLabCompleted(lab, labProgress(lab.id));
+  const practicalLabs = labs.filter(lab => lab.teaching_format === 'ticket-gui-v2');
+  const visibleLabs = practicalLabs.length && lessonView === 'practical' ? practicalLabs : labs;
 
   const completed = labs.filter(isComplete).length;
   const totalTasks = labs.reduce((sum, lab) => sum + (lab.steps_count || 0), 0);
@@ -76,14 +80,14 @@ export default function CourseDetail({ courseId, onBack, onStartLab, onStartAsse
   const isRefOnly = readiness === 'reference-only';
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 pb-20">
+    <div data-route-ready className="min-h-screen bg-slate-50 dark:bg-gray-950 pb-20">
       {/* Top Breadcrumb */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <button
-          onClick={onBack}
+          onClick={() => onBack(course)}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          Tất cả khóa học
+          {backLabel || (isWindows ? 'Trở về lộ trình Windows' : 'Tất cả khóa học')}
         </button>
       </div>
 
@@ -206,6 +210,14 @@ export default function CourseDetail({ courseId, onBack, onStartLab, onStartAsse
               </div>
             </div>
 
+            {practicalLabs.length > 0 && <div className="mb-6 rounded-xl border border-sky-200 bg-sky-50 p-4 dark:border-sky-900 dark:bg-sky-950">
+              <h2 className="font-bold">Bắt đầu bằng ticket thực hành GUI</h2>
+              <p className="mt-2 text-sm">{practicalLabs.length} bài đã chuyển sang đề bài → tự thực hành → gợi ý mở dần → kiểm tra chức năng. Phần còn lại đang được xây dựng lại; không cần học hết các bài kiểm kê cũ trước.</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button aria-pressed={lessonView === 'practical'} onClick={() => setLessonView('practical')} className="rounded-lg border px-3 py-2 font-semibold">Ticket GUI ({practicalLabs.length})</button>
+                <button aria-pressed={lessonView === 'all'} onClick={() => setLessonView('all')} className="rounded-lg border px-3 py-2">Tất cả bài / tài liệu cũ ({labs.length})</button>
+              </div>
+            </div>}
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -220,7 +232,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab, onStartAsse
             </div>
 
             <div className="space-y-4">
-              {labs.map((lab, index) => {
+              {visibleLabs.map((lab, index) => {
                 const labIsComplete = isComplete(lab);
                 const progress = labProgress(lab.id);
                 const passedCount = validPassedSteps(lab, progress).length;
@@ -240,6 +252,7 @@ export default function CourseDetail({ courseId, onBack, onStartLab, onStartAsse
                     
                     <div className="space-y-1.5 flex-1">
                       {lab.curriculum_group && <p className="text-xs font-semibold text-primary-600 dark:text-primary-300">{lab.curriculum_group} · {lab.practice_mode === 'fault-injection' ? 'Có nạp lỗi thực hành' : 'Cấu hình / chẩn đoán'}</p>}
+                      {lab.validation_status === 'pending-live-client-acceptance' && <p className="text-xs text-amber-700 dark:text-amber-300">Bài mới · Chờ nghiệm thu trên CLIENT01</p>}
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold flex items-center justify-center shrink-0">
                           {index + 1}

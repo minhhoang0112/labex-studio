@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "GPO có thiết lập User và Computer, phạm vi domain/site/OU và quy tắc ưu tiên. gpresult là công cụ đọc Resultant Set of Policy, không tạo hoặc liên kết GPO. PowerShell web chạy qua Agent bằng SYSTEM, không đại diện user đang đăng nhập Desktop. Cần chọn /scope computer khi xem policy máy từ web.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-group-policy khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
-      "content_vi": "GPO có thiết lập User và Computer, phạm vi domain/site/OU và quy tắc ưu tiên. gpresult là công cụ đọc Resultant Set of Policy, không tạo hoặc liên kết GPO. PowerShell web chạy qua Agent bằng SYSTEM, không đại diện user đang đăng nhập Desktop. Cần chọn /scope computer khi xem policy máy từ web.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-group-policy khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content": "GPO có thiết lập User và Computer, phạm vi domain/site/OU và quy tắc ưu tiên. gpresult là công cụ đọc Resultant Set of Policy, không tạo hoặc liên kết GPO. PowerShell web chạy qua Agent bằng SYSTEM, không đại diện user đang đăng nhập Desktop. Cần chọn /scope computer khi xem policy máy từ web.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-group-policy khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nCấu hình chính sách bảo mật máy tính, khóa màn hình, vô hiệu hóa USB, ép buộc cập nhật chính sách với gpupdate /force và kiểm tra với gpresult.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nADUC: bật Advanced Features, đối chiếu OU, Object GUID, Member Of và phạm vi nhóm; GPMC: Scope/Delegation/Results.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nGet-ADDomain | Select-Object DNSRoot,DistinguishedName,DomainSID\nGet-ADOrganizationalUnit -Filter * | Select-Object Name,DistinguishedName\n```\n\n### Bản chất cần hiểu\nOU tổ chức/delegation/GPO; security group cấp quyền. AGDLP là Accounts → Global → DomainLocal → Permissions. Tên giống không thay SID/GUID. GPO link không chứng minh đã áp trên client.\n\n### Bài tập độc lập\nVẽ user → nhóm vai trò → nhóm tài nguyên → quyền. Với GPO/domain join: ghi server-side và client-side riêng; thử dưới user mục tiêu, đối chiếu gpresult và secure channel.\n\n### Điều kiện dừng hoặc chuyển nhóm\nKhông dùng Domain Admin như cách chữa lỗi thường lệ. Chưa có domain/private path đã kiểm chứng thì dừng bước client; không dùng kết quả Server thay CLIENT01.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
+      "content_vi": "GPO có thiết lập User và Computer, phạm vi domain/site/OU và quy tắc ưu tiên. gpresult là công cụ đọc Resultant Set of Policy, không tạo hoặc liên kết GPO. PowerShell web chạy qua Agent bằng SYSTEM, không đại diện user đang đăng nhập Desktop. Cần chọn /scope computer khi xem policy máy từ web.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-group-policy khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nCấu hình chính sách bảo mật máy tính, khóa màn hình, vô hiệu hóa USB, ép buộc cập nhật chính sách với gpupdate /force và kiểm tra với gpresult.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nADUC: bật Advanced Features, đối chiếu OU, Object GUID, Member Of và phạm vi nhóm; GPMC: Scope/Delegation/Results.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nGet-ADDomain | Select-Object DNSRoot,DistinguishedName,DomainSID\nGet-ADOrganizationalUnit -Filter * | Select-Object Name,DistinguishedName\n```\n\n### Bản chất cần hiểu\nOU tổ chức/delegation/GPO; security group cấp quyền. AGDLP là Accounts → Global → DomainLocal → Permissions. Tên giống không thay SID/GUID. GPO link không chứng minh đã áp trên client.\n\n### Bài tập độc lập\nVẽ user → nhóm vai trò → nhóm tài nguyên → quyền. Với GPO/domain join: ghi server-side và client-side riêng; thử dưới user mục tiêu, đối chiếu gpresult và secure channel.\n\n### Điều kiện dừng hoặc chuyển nhóm\nKhông dùng Domain Admin như cách chữa lỗi thường lệ. Chưa có domain/private path đã kiểm chứng thì dừng bước client; không dùng kết quả Server thay CLIENT01.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -51,9 +51,51 @@
         "files",
         "shell"
       ],
-      "content": "### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
-      "content_vi": "### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
-      "translation_needs_review": false
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nADUC: bật Advanced Features, đối chiếu OU, Object GUID, Member Of và phạm vi nhóm; GPMC: Scope/Delegation/Results.\n\n### Bài tập độc lập\nVẽ user → nhóm vai trò → nhóm tài nguyên → quyền. Với GPO/domain join: ghi server-side và client-side riêng; thử dưới user mục tiêu, đối chiếu gpresult và secure channel.\n\n### Điều kiện dừng\nKhông dùng Domain Admin như cách chữa lỗi thường lệ. Chưa có domain/private path đã kiểm chứng thì dừng bước client; không dùng kết quả Server thay CLIENT01.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nADUC: bật Advanced Features, đối chiếu OU, Object GUID, Member Of và phạm vi nhóm; GPMC: Scope/Delegation/Results.\n\n### Bài tập độc lập\nVẽ user → nhóm vai trò → nhóm tài nguyên → quyền. Với GPO/domain join: ghi server-side và client-side riêng; thử dưới user mục tiêu, đối chiếu gpresult và secure channel.\n\n### Điều kiện dừng\nKhông dùng Domain Admin như cách chữa lỗi thường lệ. Chưa có domain/private path đã kiểm chứng thì dừng bước client; không dùng kết quả Server thay CLIENT01.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
+      "translation_needs_review": false,
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:gpresult|gpupdate)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:gpresult|gpupdate)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_version": 4,
@@ -62,8 +104,8 @@
       "id": "win-gpo-02-sec-1",
       "title": "Refreshing and Inspecting Applied Policies",
       "title_vi": "Làm Mới & Kiểm Tra Chính Sách Đã Áp Dụng",
-      "content": "### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
-      "content_vi": "### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nADUC: bật Advanced Features, đối chiếu OU, Object GUID, Member Of và phạm vi nhóm; GPMC: Scope/Delegation/Results.\n\n### Bài tập độc lập\nVẽ user → nhóm vai trò → nhóm tài nguyên → quyền. Với GPO/domain join: ghi server-side và client-side riêng; thử dưới user mục tiêu, đối chiếu gpresult và secure channel.\n\n### Điều kiện dừng\nKhông dùng Domain Admin như cách chữa lỗi thường lệ. Chưa có domain/private path đã kiểm chứng thì dừng bước client; không dùng kết quả Server thay CLIENT01.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nADUC: bật Advanced Features, đối chiếu OU, Object GUID, Member Of và phạm vi nhóm; GPMC: Scope/Delegation/Results.\n\n### Bài tập độc lập\nVẽ user → nhóm vai trò → nhóm tài nguyên → quyền. Với GPO/domain join: ghi server-side và client-side riêng; thử dưới user mục tiêu, đối chiếu gpresult và secure channel.\n\n### Điều kiện dừng\nKhông dùng Domain Admin như cách chữa lỗi thường lệ. Chưa có domain/private path đã kiểm chứng thì dừng bước client; không dùng kết quả Server thay CLIENT01.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nỞ PowerShell web dùng gpresult /scope computer /r; trong Desktop user có thể dùng gpresult /r. Không chạy gpupdate hoặc thay policy bảo mật chỉ để hoàn thành bài. Nếu chưa có RSoP, giữ nguyên lỗi để chuẩn bị môi trường, không kết luận có policy hoặc đánh dấu đạt giả.\n\n### Hướng dẫn\n```powershell\ngpresult /scope computer /r\n```\n\n### Kết quả và cách tự kiểm tra\nBáo cáo hiển thị phạm vi máy và policy đã áp dụng nếu có. GPO rỗng hoặc không có RSoP không phải bằng chứng đã triển khai domain policy.\n\n### Câu hỏi tự giải thích\nVì sao kết quả của SYSTEM có thể khác người dùng Desktop?\n\n### Bài tự làm thêm (không chấm tự động)\nTự xác định user/computer scope và tên policy trong output; chưa tạo hoặc chỉnh GPO.",
       "task": "Use gpresult to inspect the Resultant Set of Policy (RSoP) on the system.",
       "task_vi": "Sử dụng công cụ gpresult để kiểm tra các chính sách thực tế đang có hiệu lực trên máy tính.",
       "hint": "gpresult /scope computer /r",
@@ -126,7 +168,9 @@
           "shell"
         ]
       },
-      "translation_needs_review": false
+      "translation_needs_review": false,
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_origin": "locally-authored-microsoft-references",
@@ -140,5 +184,11 @@
       "title": "Microsoft Learn: Windows Server",
       "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
-  ]
+  ],
+  "teaching_review": {
+    "version": 1,
+    "date": "2026-10-26",
+    "topic": "ad",
+    "runtime_revalidated": false
+  }
 }

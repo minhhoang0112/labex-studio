@@ -1,0 +1,119 @@
+{
+  "id": "win-bkr-complete-restore",
+  "course_id": "windows-backup-disaster-recovery",
+  "order": 1,
+  "title": "Backup thiếu thư mục con: khôi phục tài liệu và kiểm toàn vẹn",
+  "title_vi": "Backup thiếu thư mục con: khôi phục tài liệu và kiểm toàn vẹn",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "45–60 mins",
+  "target_vm": "client",
+  "curriculum_version": 1,
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "curriculum_module": "windows-backup-disaster-recovery-module-2",
+  "overview": "Phòng kế toán có hóa đơn và hợp đồng trong thư mục con. Một bản sao chỉ lấy *.txt ở thư mục gốc bỏ sót hợp đồng. Bạn phải sao lưu đủ dữ liệu nghiệp vụ, bỏ cache rồi khôi phục hóa đơn bị xóa vào nơi kiểm chứng riêng.",
+  "practice_mode": "functional-state",
+  "validation_status": "awaiting-live-vm",
+  "references": [
+    {
+      "title": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy"
+    },
+    {
+      "title": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash"
+    }
+  ],
+  "sections": [
+    {
+      "id": "win-bkr-complete-restore-intro",
+      "title": "Ticket, môi trường và tiêu chuẩn bàn giao",
+      "title_vi": "Ticket, môi trường và tiêu chuẩn bàn giao",
+      "kind": "introduction",
+      "position": 0,
+      "need_verify": false,
+      "content": "## Ticket và mục tiêu\nPhòng kế toán có hóa đơn và hợp đồng trong thư mục con. Một bản sao chỉ lấy *.txt ở thư mục gốc bỏ sót hợp đồng. Bạn phải sao lưu đủ dữ liệu nghiệp vụ, bỏ cache rồi khôi phục hóa đơn bị xóa vào nơi kiểm chứng riêng.\n\n### Môi trường và giới hạn\nMáy **CLIENT01 Windows 11**, thư mục riêng `C:\\LabEx\\Labs\\win-bkr-complete-restore`. Không tạo hoặc resize VM. PowerShell Desktop giữ biến trong cửa sổ; PowerShell web chạy SYSTEM, mỗi lần gửi là process mới. Mỗi khối bên dưới khai báo lại `$p` để chạy độc lập. Không có script thu JSON bắt buộc.\n\nĐây là diễn tập file trên cùng VM: không thay backup offsite, VSS, system-state hoặc AD disaster recovery. RPO là mức mất dữ liệu chấp nhận theo thời gian; RTO là thời gian phục hồi mục tiêu. Tự đo thời gian restore và thời điểm phiên bản, không suy RPO/RTO từ exit code.\n\n### Cách học\nĐọc yêu cầu, dự đoán kết quả; thao tác GUI/lệnh cốt lõi, tự kiểm, sau cùng mới bấm chấm. Bài yêu cầu tên/đường dẫn cố định để xác định đúng tài nguyên; được đổi tên trong phần tự luyện, không đổi tài nguyên chấm mà chưa đổi hợp đồng bài.\n\n### An toàn khi làm lại\nLần đầu tạo thư mục bằng `New-Item` không `-Force` để không ghi đè dữ liệu cũ. Nếu đã tồn tại, đọc nội dung trước, không chạy lại phần tạo dữ liệu. Không dùng đường dẫn liên kết/junction. Chỉ dọn dữ liệu tự tạo sau khi kiểm đúng đường dẫn; không có thao tác xóa cả VM hoặc thư mục cha.\n\n### Trạng thái kiểm thử\nĐã có hướng dẫn và bộ chấm trạng thái; chưa xác nhận chạy đầu-cuối trên VM Azure. Thiếu role/quyền/môi trường phải báo thiếu, không coi là đã hoàn thành.\n",
+      "content_vi": "## Ticket và mục tiêu\nPhòng kế toán có hóa đơn và hợp đồng trong thư mục con. Một bản sao chỉ lấy *.txt ở thư mục gốc bỏ sót hợp đồng. Bạn phải sao lưu đủ dữ liệu nghiệp vụ, bỏ cache rồi khôi phục hóa đơn bị xóa vào nơi kiểm chứng riêng.\n\n### Môi trường và giới hạn\nMáy **CLIENT01 Windows 11**, thư mục riêng `C:\\LabEx\\Labs\\win-bkr-complete-restore`. Không tạo hoặc resize VM. PowerShell Desktop giữ biến trong cửa sổ; PowerShell web chạy SYSTEM, mỗi lần gửi là process mới. Mỗi khối bên dưới khai báo lại `$p` để chạy độc lập. Không có script thu JSON bắt buộc.\n\nĐây là diễn tập file trên cùng VM: không thay backup offsite, VSS, system-state hoặc AD disaster recovery. RPO là mức mất dữ liệu chấp nhận theo thời gian; RTO là thời gian phục hồi mục tiêu. Tự đo thời gian restore và thời điểm phiên bản, không suy RPO/RTO từ exit code.\n\n### Cách học\nĐọc yêu cầu, dự đoán kết quả; thao tác GUI/lệnh cốt lõi, tự kiểm, sau cùng mới bấm chấm. Bài yêu cầu tên/đường dẫn cố định để xác định đúng tài nguyên; được đổi tên trong phần tự luyện, không đổi tài nguyên chấm mà chưa đổi hợp đồng bài.\n\n### An toàn khi làm lại\nLần đầu tạo thư mục bằng `New-Item` không `-Force` để không ghi đè dữ liệu cũ. Nếu đã tồn tại, đọc nội dung trước, không chạy lại phần tạo dữ liệu. Không dùng đường dẫn liên kết/junction. Chỉ dọn dữ liệu tự tạo sau khi kiểm đúng đường dẫn; không có thao tác xóa cả VM hoặc thư mục cha.\n\n### Trạng thái kiểm thử\nĐã có hướng dẫn và bộ chấm trạng thái; chưa xác nhận chạy đầu-cuối trên VM Azure. Thiếu role/quyền/môi trường phải báo thiếu, không coi là đã hoàn thành.\n"
+    },
+    {
+      "id": "win-bkr-complete-restore-task-1-v1",
+      "title": "Chọn dữ liệu, sao lưu cả thư mục con",
+      "title_vi": "Chọn dữ liệu, sao lưu cả thư mục con",
+      "kind": "task",
+      "position": 1,
+      "need_verify": true,
+      "content": "## Chọn dữ liệu, sao lưu cả thư mục con\n\n### Bản chất và cách làm\nExplorer: tạo Source/Contracts và Source/Cache trong thư mục bài. Hợp đồng là dữ liệu nghiệp vụ; cache có thể tái tạo. /E lấy thư mục con kể cả rỗng; /XD loại thư mục; /R:1 /W:1 giới hạn retry. /MIR có thể xóa ở đích nên không dùng ở đây. Robocopy có exit code khác 0 khi vẫn sao chép thành công; từ 8 trở lên là có lỗi. Đọc log và đối chiếu tệp, không chỉ nhìn mã.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-bkr-complete-restore'\nNew-Item -ItemType Directory -Path \"$p\\Source\\Contracts\",\"$p\\Source\\Cache\" -ErrorAction Stop\nSet-Content \"$p\\Source\\invoice.txt\" 'Invoice 1042: total 2500000 VND' -Encoding UTF8\nSet-Content \"$p\\Source\\Contracts\\contract.txt\" 'Contract ACME: retain until 2030' -Encoding UTF8\nSet-Content \"$p\\Source\\Cache\\preview.tmp\" 'Rebuildable cache' -Encoding UTF8\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /XD \"$p\\Source\\Cache\" /R:1 /W:1 /LOG:\"$p\\backup.log\"\nif($LASTEXITCODE -ge 8){throw 'Backup co loi: doc backup.log'}\nGet-ChildItem \"$p\\Backup\" -Recurse -File\n```\n\n### Kết quả và cách tự kiểm tra\nBackup có invoice.txt và Contracts\\contract.txt đúng nội dung; không có Cache\\preview.tmp; dữ liệu nguồn còn nguyên.\n\n### Câu hỏi tự giải thích\nTại sao copy Source\\*.txt bỏ sót hợp đồng? Vì sao /MIR không phải cơ chế giữ lịch sử phiên bản?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "content_vi": "## Chọn dữ liệu, sao lưu cả thư mục con\n\n### Bản chất và cách làm\nExplorer: tạo Source/Contracts và Source/Cache trong thư mục bài. Hợp đồng là dữ liệu nghiệp vụ; cache có thể tái tạo. /E lấy thư mục con kể cả rỗng; /XD loại thư mục; /R:1 /W:1 giới hạn retry. /MIR có thể xóa ở đích nên không dùng ở đây. Robocopy có exit code khác 0 khi vẫn sao chép thành công; từ 8 trở lên là có lỗi. Đọc log và đối chiếu tệp, không chỉ nhìn mã.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-bkr-complete-restore'\nNew-Item -ItemType Directory -Path \"$p\\Source\\Contracts\",\"$p\\Source\\Cache\" -ErrorAction Stop\nSet-Content \"$p\\Source\\invoice.txt\" 'Invoice 1042: total 2500000 VND' -Encoding UTF8\nSet-Content \"$p\\Source\\Contracts\\contract.txt\" 'Contract ACME: retain until 2030' -Encoding UTF8\nSet-Content \"$p\\Source\\Cache\\preview.tmp\" 'Rebuildable cache' -Encoding UTF8\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /XD \"$p\\Source\\Cache\" /R:1 /W:1 /LOG:\"$p\\backup.log\"\nif($LASTEXITCODE -ge 8){throw 'Backup co loi: doc backup.log'}\nGet-ChildItem \"$p\\Backup\" -Recurse -File\n```\n\n### Kết quả và cách tự kiểm tra\nBackup có invoice.txt và Contracts\\contract.txt đúng nội dung; không có Cache\\preview.tmp; dữ liệu nguồn còn nguyên.\n\n### Câu hỏi tự giải thích\nTại sao copy Source\\*.txt bỏ sót hợp đồng? Vì sao /MIR không phải cơ chế giữ lịch sử phiên bản?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "task": "Backup có invoice.txt và Contracts\\contract.txt đúng nội dung; không có Cache\\preview.tmp; dữ liệu nguồn còn nguyên.",
+      "task_vi": "Backup có invoice.txt và Contracts\\contract.txt đúng nội dung; không có Cache\\preview.tmp; dữ liệu nguồn còn nguyên.",
+      "hint": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "hint_vi": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    },
+    {
+      "id": "win-bkr-complete-restore-task-2-v1",
+      "title": "Diễn tập mất tệp và restore ra vị trí riêng",
+      "title_vi": "Diễn tập mất tệp và restore ra vị trí riêng",
+      "kind": "task",
+      "position": 2,
+      "need_verify": true,
+      "content": "## Diễn tập mất tệp và restore ra vị trí riêng\n\n### Bản chất và cách làm\nChỉ sau khi task trước đạt, xóa đúng hóa đơn mẫu. Explorer: mở Backup và khôi phục vào Restore, không ghi đè thư mục đang làm việc. Get-FileHash kiểm byte; mở file để kiểm nội dung nghiệp vụ. Không xóa contract hoặc bản backup.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-bkr-complete-restore'\nRemove-Item -LiteralPath \"$p\\Source\\invoice.txt\" -ErrorAction Stop\nNew-Item -ItemType Directory -Path \"$p\\Restore\" -ErrorAction Stop\nCopy-Item -LiteralPath \"$p\\Backup\\invoice.txt\" -Destination \"$p\\Restore\\invoice.txt\"\nGet-FileHash \"$p\\Backup\\invoice.txt\",\"$p\\Restore\\invoice.txt\"\nGet-Content \"$p\\Restore\\invoice.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nHóa đơn nguồn đã bị xóa; bản restore đúng hash bản backup và đúng nội dung; hợp đồng nguồn/backup vẫn giữ. Đây là restore file mẫu, chưa phải cứu đĩa hỏng.\n\n### Câu hỏi tự giải thích\nNếu ổ C: mất cả Source và Backup thì bước này còn khôi phục được không? Retention và offsite cần bổ sung gì?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "content_vi": "## Diễn tập mất tệp và restore ra vị trí riêng\n\n### Bản chất và cách làm\nChỉ sau khi task trước đạt, xóa đúng hóa đơn mẫu. Explorer: mở Backup và khôi phục vào Restore, không ghi đè thư mục đang làm việc. Get-FileHash kiểm byte; mở file để kiểm nội dung nghiệp vụ. Không xóa contract hoặc bản backup.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-bkr-complete-restore'\nRemove-Item -LiteralPath \"$p\\Source\\invoice.txt\" -ErrorAction Stop\nNew-Item -ItemType Directory -Path \"$p\\Restore\" -ErrorAction Stop\nCopy-Item -LiteralPath \"$p\\Backup\\invoice.txt\" -Destination \"$p\\Restore\\invoice.txt\"\nGet-FileHash \"$p\\Backup\\invoice.txt\",\"$p\\Restore\\invoice.txt\"\nGet-Content \"$p\\Restore\\invoice.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nHóa đơn nguồn đã bị xóa; bản restore đúng hash bản backup và đúng nội dung; hợp đồng nguồn/backup vẫn giữ. Đây là restore file mẫu, chưa phải cứu đĩa hỏng.\n\n### Câu hỏi tự giải thích\nNếu ổ C: mất cả Source và Backup thì bước này còn khôi phục được không? Retention và offsite cần bổ sung gì?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "task": "Hóa đơn nguồn đã bị xóa; bản restore đúng hash bản backup và đúng nội dung; hợp đồng nguồn/backup vẫn giữ. Đây là restore file mẫu, chưa phải cứu đĩa hỏng.",
+      "task_vi": "Hóa đơn nguồn đã bị xóa; bản restore đúng hash bản backup và đúng nội dung; hợp đồng nguồn/backup vẫn giữ. Đây là restore file mẫu, chưa phải cứu đĩa hỏng.",
+      "hint": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "hint_vi": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    },
+    {
+      "id": "win-bkr-complete-restore-summary",
+      "title": "Bàn giao, giới hạn và làm lại",
+      "title_vi": "Bàn giao, giới hạn và làm lại",
+      "kind": "summary",
+      "position": 3,
+      "need_verify": false,
+      "content": "## Bàn giao\nViết bằng lời của bạn: yêu cầu → bằng chứng trước sửa → thay đổi nhỏ nhất → kết quả sau sửa → phần chưa thử → cách quay lui. Phần giải thích này không được tự chấm thay bằng một chuỗi “done”.\n\nGiữ tài nguyên riêng để ôn lại; không tự dọn khi bài khác đang sử dụng. Chỉ xóa đúng thư mục bài sau khi đã lưu tài liệu cần giữ; không xóa C:\\LabEx\\Labs hoặc dữ liệu bài khác. File backup, snapshot và backup ngoài máy có failure domain khác nhau.\n\nTự luyện: làm lại với dữ liệu do bạn tạo trong thư mục khác, giải thích từng tham số mà không xem khối mẫu. Chưa có lab VM live không được tự nhận đã diễn tập phục hồi production.\n",
+      "content_vi": "## Bàn giao\nViết bằng lời của bạn: yêu cầu → bằng chứng trước sửa → thay đổi nhỏ nhất → kết quả sau sửa → phần chưa thử → cách quay lui. Phần giải thích này không được tự chấm thay bằng một chuỗi “done”.\n\nGiữ tài nguyên riêng để ôn lại; không tự dọn khi bài khác đang sử dụng. Chỉ xóa đúng thư mục bài sau khi đã lưu tài liệu cần giữ; không xóa C:\\LabEx\\Labs hoặc dữ liệu bài khác. File backup, snapshot và backup ngoài máy có failure domain khác nhau.\n\nTự luyện: làm lại với dữ liệu do bạn tạo trong thư mục khác, giải thích từng tham số mà không xem khối mẫu. Chưa có lab VM live không được tự nhận đã diễn tập phục hồi production.\n"
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-bkr-complete-restore-task-1-v1",
+      "title": "Chọn dữ liệu, sao lưu cả thư mục con",
+      "title_vi": "Chọn dữ liệu, sao lưu cả thư mục con",
+      "kind": "task",
+      "position": 1,
+      "need_verify": true,
+      "content": "## Chọn dữ liệu, sao lưu cả thư mục con\n\n### Bản chất và cách làm\nExplorer: tạo Source/Contracts và Source/Cache trong thư mục bài. Hợp đồng là dữ liệu nghiệp vụ; cache có thể tái tạo. /E lấy thư mục con kể cả rỗng; /XD loại thư mục; /R:1 /W:1 giới hạn retry. /MIR có thể xóa ở đích nên không dùng ở đây. Robocopy có exit code khác 0 khi vẫn sao chép thành công; từ 8 trở lên là có lỗi. Đọc log và đối chiếu tệp, không chỉ nhìn mã.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-bkr-complete-restore'\nNew-Item -ItemType Directory -Path \"$p\\Source\\Contracts\",\"$p\\Source\\Cache\" -ErrorAction Stop\nSet-Content \"$p\\Source\\invoice.txt\" 'Invoice 1042: total 2500000 VND' -Encoding UTF8\nSet-Content \"$p\\Source\\Contracts\\contract.txt\" 'Contract ACME: retain until 2030' -Encoding UTF8\nSet-Content \"$p\\Source\\Cache\\preview.tmp\" 'Rebuildable cache' -Encoding UTF8\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /XD \"$p\\Source\\Cache\" /R:1 /W:1 /LOG:\"$p\\backup.log\"\nif($LASTEXITCODE -ge 8){throw 'Backup co loi: doc backup.log'}\nGet-ChildItem \"$p\\Backup\" -Recurse -File\n```\n\n### Kết quả và cách tự kiểm tra\nBackup có invoice.txt và Contracts\\contract.txt đúng nội dung; không có Cache\\preview.tmp; dữ liệu nguồn còn nguyên.\n\n### Câu hỏi tự giải thích\nTại sao copy Source\\*.txt bỏ sót hợp đồng? Vì sao /MIR không phải cơ chế giữ lịch sử phiên bản?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "content_vi": "## Chọn dữ liệu, sao lưu cả thư mục con\n\n### Bản chất và cách làm\nExplorer: tạo Source/Contracts và Source/Cache trong thư mục bài. Hợp đồng là dữ liệu nghiệp vụ; cache có thể tái tạo. /E lấy thư mục con kể cả rỗng; /XD loại thư mục; /R:1 /W:1 giới hạn retry. /MIR có thể xóa ở đích nên không dùng ở đây. Robocopy có exit code khác 0 khi vẫn sao chép thành công; từ 8 trở lên là có lỗi. Đọc log và đối chiếu tệp, không chỉ nhìn mã.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-bkr-complete-restore'\nNew-Item -ItemType Directory -Path \"$p\\Source\\Contracts\",\"$p\\Source\\Cache\" -ErrorAction Stop\nSet-Content \"$p\\Source\\invoice.txt\" 'Invoice 1042: total 2500000 VND' -Encoding UTF8\nSet-Content \"$p\\Source\\Contracts\\contract.txt\" 'Contract ACME: retain until 2030' -Encoding UTF8\nSet-Content \"$p\\Source\\Cache\\preview.tmp\" 'Rebuildable cache' -Encoding UTF8\nrobocopy \"$p\\Source\" \"$p\\Backup\" /E /XD \"$p\\Source\\Cache\" /R:1 /W:1 /LOG:\"$p\\backup.log\"\nif($LASTEXITCODE -ge 8){throw 'Backup co loi: doc backup.log'}\nGet-ChildItem \"$p\\Backup\" -Recurse -File\n```\n\n### Kết quả và cách tự kiểm tra\nBackup có invoice.txt và Contracts\\contract.txt đúng nội dung; không có Cache\\preview.tmp; dữ liệu nguồn còn nguyên.\n\n### Câu hỏi tự giải thích\nTại sao copy Source\\*.txt bỏ sót hợp đồng? Vì sao /MIR không phải cơ chế giữ lịch sử phiên bản?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "task": "Backup có invoice.txt và Contracts\\contract.txt đúng nội dung; không có Cache\\preview.tmp; dữ liệu nguồn còn nguyên.",
+      "task_vi": "Backup có invoice.txt và Contracts\\contract.txt đúng nội dung; không có Cache\\preview.tmp; dữ liệu nguồn còn nguyên.",
+      "hint": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "hint_vi": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    },
+    {
+      "id": "win-bkr-complete-restore-task-2-v1",
+      "title": "Diễn tập mất tệp và restore ra vị trí riêng",
+      "title_vi": "Diễn tập mất tệp và restore ra vị trí riêng",
+      "kind": "task",
+      "position": 2,
+      "need_verify": true,
+      "content": "## Diễn tập mất tệp và restore ra vị trí riêng\n\n### Bản chất và cách làm\nChỉ sau khi task trước đạt, xóa đúng hóa đơn mẫu. Explorer: mở Backup và khôi phục vào Restore, không ghi đè thư mục đang làm việc. Get-FileHash kiểm byte; mở file để kiểm nội dung nghiệp vụ. Không xóa contract hoặc bản backup.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-bkr-complete-restore'\nRemove-Item -LiteralPath \"$p\\Source\\invoice.txt\" -ErrorAction Stop\nNew-Item -ItemType Directory -Path \"$p\\Restore\" -ErrorAction Stop\nCopy-Item -LiteralPath \"$p\\Backup\\invoice.txt\" -Destination \"$p\\Restore\\invoice.txt\"\nGet-FileHash \"$p\\Backup\\invoice.txt\",\"$p\\Restore\\invoice.txt\"\nGet-Content \"$p\\Restore\\invoice.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nHóa đơn nguồn đã bị xóa; bản restore đúng hash bản backup và đúng nội dung; hợp đồng nguồn/backup vẫn giữ. Đây là restore file mẫu, chưa phải cứu đĩa hỏng.\n\n### Câu hỏi tự giải thích\nNếu ổ C: mất cả Source và Backup thì bước này còn khôi phục được không? Retention và offsite cần bổ sung gì?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "content_vi": "## Diễn tập mất tệp và restore ra vị trí riêng\n\n### Bản chất và cách làm\nChỉ sau khi task trước đạt, xóa đúng hóa đơn mẫu. Explorer: mở Backup và khôi phục vào Restore, không ghi đè thư mục đang làm việc. Get-FileHash kiểm byte; mở file để kiểm nội dung nghiệp vụ. Không xóa contract hoặc bản backup.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-bkr-complete-restore'\nRemove-Item -LiteralPath \"$p\\Source\\invoice.txt\" -ErrorAction Stop\nNew-Item -ItemType Directory -Path \"$p\\Restore\" -ErrorAction Stop\nCopy-Item -LiteralPath \"$p\\Backup\\invoice.txt\" -Destination \"$p\\Restore\\invoice.txt\"\nGet-FileHash \"$p\\Backup\\invoice.txt\",\"$p\\Restore\\invoice.txt\"\nGet-Content \"$p\\Restore\\invoice.txt\"\n```\n\n### Kết quả và cách tự kiểm tra\nHóa đơn nguồn đã bị xóa; bản restore đúng hash bản backup và đúng nội dung; hợp đồng nguồn/backup vẫn giữ. Đây là restore file mẫu, chưa phải cứu đĩa hỏng.\n\n### Câu hỏi tự giải thích\nNếu ổ C: mất cả Source và Backup thì bước này còn khôi phục được không? Retention và offsite cần bổ sung gì?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "task": "Hóa đơn nguồn đã bị xóa; bản restore đúng hash bản backup và đúng nội dung; hợp đồng nguồn/backup vẫn giữ. Đây là restore file mẫu, chưa phải cứu đĩa hỏng.",
+      "task_vi": "Hóa đơn nguồn đã bị xóa; bản restore đúng hash bản backup và đúng nội dung; hợp đồng nguồn/backup vẫn giữ. Đây là restore file mẫu, chưa phải cứu đĩa hỏng.",
+      "hint": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "hint_vi": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    }
+  ]
+}

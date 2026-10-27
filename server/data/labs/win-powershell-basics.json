@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "PowerShell truyền đối tượng có thuộc tính và phương thức qua pipeline, khác với chỉ ghép chuỗi văn bản. Cmdlet thường có tên Verb-Noun. Get-Help là tài liệu lệnh; Get-Member là tài liệu kiểu đối tượng, không phải danh sách các tiến trình. Phân biệt Windows PowerShell 5.1 và PowerShell 7: module Windows Server có thể chỉ hoạt động trong Windows PowerShell. Bài này chỉ đọc trạng thái, không thay dịch vụ.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-powershell-basics khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
-      "content_vi": "PowerShell truyền đối tượng có thuộc tính và phương thức qua pipeline, khác với chỉ ghép chuỗi văn bản. Cmdlet thường có tên Verb-Noun. Get-Help là tài liệu lệnh; Get-Member là tài liệu kiểu đối tượng, không phải danh sách các tiến trình. Phân biệt Windows PowerShell 5.1 và PowerShell 7: module Windows Server có thể chỉ hoạt động trong Windows PowerShell. Bài này chỉ đọc trạng thái, không thay dịch vụ.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-powershell-basics khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content": "PowerShell truyền đối tượng có thuộc tính và phương thức qua pipeline, khác với chỉ ghép chuỗi văn bản. Cmdlet thường có tên Verb-Noun. Get-Help là tài liệu lệnh; Get-Member là tài liệu kiểu đối tượng, không phải danh sách các tiến trình. Phân biệt Windows PowerShell 5.1 và PowerShell 7: module Windows Server có thể chỉ hoạt động trong Windows PowerShell. Bài này chỉ đọc trạng thái, không thay dịch vụ.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-powershell-basics khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nKhám phá kiến trúc Verb-Noun độc đáo của PowerShell, sử dụng Get-Command, Get-Help và làm việc với đối tượng thay vì chuỗi văn bản thuần túy.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nTest-Path -LiteralPath <duong-dan-trong-thong-bao>\nGet-Content -LiteralPath <tep-cau-hinh-cua-bai>\n```\n\n### Bản chất cần hiểu\nCú pháp hợp lệ vẫn có thể sai giá trị. PATH Process/User/Machine khác nhau. Một process mới chưa chắc nhận thay đổi của process cũ.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng hoặc chuyển nhóm\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
+      "content_vi": "PowerShell truyền đối tượng có thuộc tính và phương thức qua pipeline, khác với chỉ ghép chuỗi văn bản. Cmdlet thường có tên Verb-Noun. Get-Help là tài liệu lệnh; Get-Member là tài liệu kiểu đối tượng, không phải danh sách các tiến trình. Phân biệt Windows PowerShell 5.1 và PowerShell 7: module Windows Server có thể chỉ hoạt động trong Windows PowerShell. Bài này chỉ đọc trạng thái, không thay dịch vụ.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-powershell-basics khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nKhám phá kiến trúc Verb-Noun độc đáo của PowerShell, sử dụng Get-Command, Get-Help và làm việc với đối tượng thay vì chuỗi văn bản thuần túy.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nTest-Path -LiteralPath <duong-dan-trong-thong-bao>\nGet-Content -LiteralPath <tep-cau-hinh-cua-bai>\n```\n\n### Bản chất cần hiểu\nCú pháp hợp lệ vẫn có thể sai giá trị. PATH Process/User/Machine khác nhau. Một process mới chưa chắc nhận thay đổi của process cũ.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng hoặc chuyển nhóm\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -51,9 +51,51 @@
         "files",
         "shell"
       ],
-      "content": "### Bản chất và tình huống thực tế\nGet-Command tìm lệnh đã cài trên máy, không tải hoặc chạy các lệnh đó. Dấu * là wildcard. $PSVersionTable mô tả engine đang thực thi, không phải phiên bản Windows.\n\n### Hướng dẫn\n### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó các cmdlet như Get-Service; PSVersion có Major ít nhất 5. Tên và số lượng lệnh có thể khác theo module đã cài.\n\n### Câu hỏi tự giải thích\nVì sao cùng là PowerShell nhưng hai máy có danh sách cmdlet khác nhau?\n\n### Bài tự làm thêm (không chấm tự động)\nDùng Get-Help Get-Service -Examples, sau đó tự tìm cmdlet có Noun Process. Phần này tự luyện, không được chấm thành một task riêng.",
-      "content_vi": "### Bản chất và tình huống thực tế\nGet-Command tìm lệnh đã cài trên máy, không tải hoặc chạy các lệnh đó. Dấu * là wildcard. $PSVersionTable mô tả engine đang thực thi, không phải phiên bản Windows.\n\n### Hướng dẫn\n### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó các cmdlet như Get-Service; PSVersion có Major ít nhất 5. Tên và số lượng lệnh có thể khác theo module đã cài.\n\n### Câu hỏi tự giải thích\nVì sao cùng là PowerShell nhưng hai máy có danh sách cmdlet khác nhau?\n\n### Bài tự làm thêm (không chấm tự động)\nDùng Get-Help Get-Service -Examples, sau đó tự tìm cmdlet có Noun Process. Phần này tự luyện, không được chấm thành một task riêng.",
-      "translation_needs_review": false
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-Command tìm lệnh đã cài trên máy, không tải hoặc chạy các lệnh đó. Dấu * là wildcard. $PSVersionTable mô tả engine đang thực thi, không phải phiên bản Windows.\n\n### Hướng dẫn\n### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó các cmdlet như Get-Service; PSVersion có Major ít nhất 5. Tên và số lượng lệnh có thể khác theo module đã cài.\n\n### Câu hỏi tự giải thích\nVì sao cùng là PowerShell nhưng hai máy có danh sách cmdlet khác nhau?\n\n### Bài tự làm thêm (không chấm tự động)\nDùng Get-Help Get-Service -Examples, sau đó tự tìm cmdlet có Noun Process. Phần này tự luyện, không được chấm thành một task riêng.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-Command tìm lệnh đã cài trên máy, không tải hoặc chạy các lệnh đó. Dấu * là wildcard. $PSVersionTable mô tả engine đang thực thi, không phải phiên bản Windows.\n\n### Hướng dẫn\n### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó các cmdlet như Get-Service; PSVersion có Major ít nhất 5. Tên và số lượng lệnh có thể khác theo module đã cài.\n\n### Câu hỏi tự giải thích\nVì sao cùng là PowerShell nhưng hai máy có danh sách cmdlet khác nhau?\n\n### Bài tự làm thêm (không chấm tự động)\nDùng Get-Help Get-Service -Examples, sau đó tự tìm cmdlet có Noun Process. Phần này tự luyện, không được chấm thành một task riêng.",
+      "translation_needs_review": false,
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Command|PSVersionTable|get-command)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Command|PSVersionTable|get-command)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     },
     {
       "id": "win-ps-01-sec-2",
@@ -85,9 +127,51 @@
         "files",
         "shell"
       ],
-      "content": "### Bản chất và tình huống thực tế\nGet-Process trả các đối tượng Process. Get-Member cho biết các thuộc tính như Id, ProcessName và phương thức; Select-Object chọn cột, Where-Object lọc hàng. Format-Table chỉ nên dùng ở cuối khi trình bày, không đặt trước bộ lọc dữ liệu.\n\n### Hướng dẫn\n### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTypeName tương ứng System.Diagnostics.Process; thấy Property/Method. CPU ở Get-Process là số giây CPU tích lũy từ khi tiến trình khởi động, không phải phần trăm CPU tức thời.\n\n### Câu hỏi tự giải thích\nKhác biệt giữa Get-Process và Get-Process | Get-Member là gì?\n\n### Bài tự làm thêm (không chấm tự động)\nTự hiển thị 3 tiến trình với Id và ProcessName. Không dùng Stop-Process để thử trên tiến trình hệ thống.",
-      "content_vi": "### Bản chất và tình huống thực tế\nGet-Process trả các đối tượng Process. Get-Member cho biết các thuộc tính như Id, ProcessName và phương thức; Select-Object chọn cột, Where-Object lọc hàng. Format-Table chỉ nên dùng ở cuối khi trình bày, không đặt trước bộ lọc dữ liệu.\n\n### Hướng dẫn\n### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTypeName tương ứng System.Diagnostics.Process; thấy Property/Method. CPU ở Get-Process là số giây CPU tích lũy từ khi tiến trình khởi động, không phải phần trăm CPU tức thời.\n\n### Câu hỏi tự giải thích\nKhác biệt giữa Get-Process và Get-Process | Get-Member là gì?\n\n### Bài tự làm thêm (không chấm tự động)\nTự hiển thị 3 tiến trình với Id và ProcessName. Không dùng Stop-Process để thử trên tiến trình hệ thống.",
-      "translation_needs_review": false
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-Process trả các đối tượng Process. Get-Member cho biết các thuộc tính như Id, ProcessName và phương thức; Select-Object chọn cột, Where-Object lọc hàng. Format-Table chỉ nên dùng ở cuối khi trình bày, không đặt trước bộ lọc dữ liệu.\n\n### Hướng dẫn\n### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTypeName tương ứng System.Diagnostics.Process; thấy Property/Method. CPU ở Get-Process là số giây CPU tích lũy từ khi tiến trình khởi động, không phải phần trăm CPU tức thời.\n\n### Câu hỏi tự giải thích\nKhác biệt giữa Get-Process và Get-Process | Get-Member là gì?\n\n### Bài tự làm thêm (không chấm tự động)\nTự hiển thị 3 tiến trình với Id và ProcessName. Không dùng Stop-Process để thử trên tiến trình hệ thống.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-Process trả các đối tượng Process. Get-Member cho biết các thuộc tính như Id, ProcessName và phương thức; Select-Object chọn cột, Where-Object lọc hàng. Format-Table chỉ nên dùng ở cuối khi trình bày, không đặt trước bộ lọc dữ liệu.\n\n### Hướng dẫn\n### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTypeName tương ứng System.Diagnostics.Process; thấy Property/Method. CPU ở Get-Process là số giây CPU tích lũy từ khi tiến trình khởi động, không phải phần trăm CPU tức thời.\n\n### Câu hỏi tự giải thích\nKhác biệt giữa Get-Process và Get-Process | Get-Member là gì?\n\n### Bài tự làm thêm (không chấm tự động)\nTự hiển thị 3 tiến trình với Id và ProcessName. Không dùng Stop-Process để thử trên tiến trình hệ thống.",
+      "translation_needs_review": false,
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Member|get-member|Get-Process)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-Member|get-member|Get-Process)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_version": 4,
@@ -96,8 +180,8 @@
       "id": "win-ps-01-sec-1",
       "title": "Discovering Cmdlets with Get-Command",
       "title_vi": "Khám phá Lệnh với Get-Command",
-      "content": "### Bản chất và tình huống thực tế\nGet-Command tìm lệnh đã cài trên máy, không tải hoặc chạy các lệnh đó. Dấu * là wildcard. $PSVersionTable mô tả engine đang thực thi, không phải phiên bản Windows.\n\n### Hướng dẫn\n### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó các cmdlet như Get-Service; PSVersion có Major ít nhất 5. Tên và số lượng lệnh có thể khác theo module đã cài.\n\n### Câu hỏi tự giải thích\nVì sao cùng là PowerShell nhưng hai máy có danh sách cmdlet khác nhau?\n\n### Bài tự làm thêm (không chấm tự động)\nDùng Get-Help Get-Service -Examples, sau đó tự tìm cmdlet có Noun Process. Phần này tự luyện, không được chấm thành một task riêng.",
-      "content_vi": "### Bản chất và tình huống thực tế\nGet-Command tìm lệnh đã cài trên máy, không tải hoặc chạy các lệnh đó. Dấu * là wildcard. $PSVersionTable mô tả engine đang thực thi, không phải phiên bản Windows.\n\n### Hướng dẫn\n### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó các cmdlet như Get-Service; PSVersion có Major ít nhất 5. Tên và số lượng lệnh có thể khác theo module đã cài.\n\n### Câu hỏi tự giải thích\nVì sao cùng là PowerShell nhưng hai máy có danh sách cmdlet khác nhau?\n\n### Bài tự làm thêm (không chấm tự động)\nDùng Get-Help Get-Service -Examples, sau đó tự tìm cmdlet có Noun Process. Phần này tự luyện, không được chấm thành một task riêng.",
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-Command tìm lệnh đã cài trên máy, không tải hoặc chạy các lệnh đó. Dấu * là wildcard. $PSVersionTable mô tả engine đang thực thi, không phải phiên bản Windows.\n\n### Hướng dẫn\n### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó các cmdlet như Get-Service; PSVersion có Major ít nhất 5. Tên và số lượng lệnh có thể khác theo module đã cài.\n\n### Câu hỏi tự giải thích\nVì sao cùng là PowerShell nhưng hai máy có danh sách cmdlet khác nhau?\n\n### Bài tự làm thêm (không chấm tự động)\nDùng Get-Help Get-Service -Examples, sau đó tự tìm cmdlet có Noun Process. Phần này tự luyện, không được chấm thành một task riêng.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-Command tìm lệnh đã cài trên máy, không tải hoặc chạy các lệnh đó. Dấu * là wildcard. $PSVersionTable mô tả engine đang thực thi, không phải phiên bản Windows.\n\n### Hướng dẫn\n### Khám phá các Cmdlet\n\nChạy lệnh sau để tìm tất cả các lệnh quản lý Dịch vụ Windows:\n\n```powershell\nGet-Command *-Service\n```\n\nTiếp theo, hãy kiểm tra phiên bản PowerShell đang chạy:\n\n```powershell\n$PSVersionTable.PSVersion\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó các cmdlet như Get-Service; PSVersion có Major ít nhất 5. Tên và số lượng lệnh có thể khác theo module đã cài.\n\n### Câu hỏi tự giải thích\nVì sao cùng là PowerShell nhưng hai máy có danh sách cmdlet khác nhau?\n\n### Bài tự làm thêm (không chấm tự động)\nDùng Get-Help Get-Service -Examples, sau đó tự tìm cmdlet có Noun Process. Phần này tự luyện, không được chấm thành một task riêng.",
       "task": "Use Get-Command to discover cmdlets matching the Service noun, then find the PowerShell version.",
       "task_vi": "Sử dụng lệnh Get-Command để tìm các cmdlet liên quan đến Service, sau đó kiểm tra phiên bản PowerShell hiện tại.",
       "hint": "Get-Command *-Service",
@@ -160,14 +244,16 @@
           "shell"
         ]
       },
-      "translation_needs_review": false
+      "translation_needs_review": false,
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     },
     {
       "id": "win-ps-01-sec-2",
       "title": "Inspecting Objects with Get-Member",
       "title_vi": "Kiểm tra Thuộc tính Đối tượng với Get-Member",
-      "content": "### Bản chất và tình huống thực tế\nGet-Process trả các đối tượng Process. Get-Member cho biết các thuộc tính như Id, ProcessName và phương thức; Select-Object chọn cột, Where-Object lọc hàng. Format-Table chỉ nên dùng ở cuối khi trình bày, không đặt trước bộ lọc dữ liệu.\n\n### Hướng dẫn\n### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTypeName tương ứng System.Diagnostics.Process; thấy Property/Method. CPU ở Get-Process là số giây CPU tích lũy từ khi tiến trình khởi động, không phải phần trăm CPU tức thời.\n\n### Câu hỏi tự giải thích\nKhác biệt giữa Get-Process và Get-Process | Get-Member là gì?\n\n### Bài tự làm thêm (không chấm tự động)\nTự hiển thị 3 tiến trình với Id và ProcessName. Không dùng Stop-Process để thử trên tiến trình hệ thống.",
-      "content_vi": "### Bản chất và tình huống thực tế\nGet-Process trả các đối tượng Process. Get-Member cho biết các thuộc tính như Id, ProcessName và phương thức; Select-Object chọn cột, Where-Object lọc hàng. Format-Table chỉ nên dùng ở cuối khi trình bày, không đặt trước bộ lọc dữ liệu.\n\n### Hướng dẫn\n### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTypeName tương ứng System.Diagnostics.Process; thấy Property/Method. CPU ở Get-Process là số giây CPU tích lũy từ khi tiến trình khởi động, không phải phần trăm CPU tức thời.\n\n### Câu hỏi tự giải thích\nKhác biệt giữa Get-Process và Get-Process | Get-Member là gì?\n\n### Bài tự làm thêm (không chấm tự động)\nTự hiển thị 3 tiến trình với Id và ProcessName. Không dùng Stop-Process để thử trên tiến trình hệ thống.",
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-Process trả các đối tượng Process. Get-Member cho biết các thuộc tính như Id, ProcessName và phương thức; Select-Object chọn cột, Where-Object lọc hàng. Format-Table chỉ nên dùng ở cuối khi trình bày, không đặt trước bộ lọc dữ liệu.\n\n### Hướng dẫn\n### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTypeName tương ứng System.Diagnostics.Process; thấy Property/Method. CPU ở Get-Process là số giây CPU tích lũy từ khi tiến trình khởi động, không phải phần trăm CPU tức thời.\n\n### Câu hỏi tự giải thích\nKhác biệt giữa Get-Process và Get-Process | Get-Member là gì?\n\n### Bài tự làm thêm (không chấm tự động)\nTự hiển thị 3 tiến trình với Id và ProcessName. Không dùng Stop-Process để thử trên tiến trình hệ thống.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-Process trả các đối tượng Process. Get-Member cho biết các thuộc tính như Id, ProcessName và phương thức; Select-Object chọn cột, Where-Object lọc hàng. Format-Table chỉ nên dùng ở cuối khi trình bày, không đặt trước bộ lọc dữ liệu.\n\n### Hướng dẫn\n### Làm việc với Đối tượng\n\nChuyển tiếp danh sách tiến trình sang `Get-Member`:\n\n```powershell\nGet-Process | Get-Member\n```\n\nKết quả sẽ hiển thị `TypeName: System.Diagnostics.Process` cùng các thuộc tính như `CPU`, `Id`, `ProcessName` và các phương thức như `Kill()`.\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nTypeName tương ứng System.Diagnostics.Process; thấy Property/Method. CPU ở Get-Process là số giây CPU tích lũy từ khi tiến trình khởi động, không phải phần trăm CPU tức thời.\n\n### Câu hỏi tự giải thích\nKhác biệt giữa Get-Process và Get-Process | Get-Member là gì?\n\n### Bài tự làm thêm (không chấm tự động)\nTự hiển thị 3 tiến trình với Id và ProcessName. Không dùng Stop-Process để thử trên tiến trình hệ thống.",
       "task": "Pipe Get-Process to Get-Member to see available properties and methods.",
       "task_vi": "Chuyển tiếp kết quả Get-Process sang Get-Member để xem các thuộc tính (Properties) và phương thức (Methods) của tiến trình.",
       "hint": "Get-Process | Get-Member",
@@ -230,7 +316,9 @@
           "shell"
         ]
       },
-      "translation_needs_review": false
+      "translation_needs_review": false,
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "required_capabilities": [
@@ -247,5 +335,11 @@
       "title": "Microsoft Learn: Windows Server",
       "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
-  ]
+  ],
+  "teaching_review": {
+    "version": 1,
+    "date": "2026-10-26",
+    "topic": "configuration",
+    "runtime_revalidated": false
+  }
 }

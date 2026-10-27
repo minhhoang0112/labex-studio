@@ -1,0 +1,62 @@
+{
+  "win-bkr-complete-restore-task-1-v1": {
+    "lab_id": "win-bkr-complete-restore",
+    "target_vm": "client",
+    "modules": [],
+    "probe": "(Test-ProText 'Source\\invoice.txt' 'Invoice 1042: total 2500000 VND') -and (Test-ProText 'Source\\Contracts\\contract.txt' 'Contract ACME: retain until 2030') -and (Test-ProText 'Source\\Cache\\preview.tmp' 'Rebuildable cache') -and (Test-ProText 'Backup\\invoice.txt' 'Invoice 1042: total 2500000 VND') -and (Test-ProText 'Backup\\Contracts\\contract.txt' 'Contract ACME: retain until 2030') -and -not(Test-Path -LiteralPath (Join-Path $labRoot 'Backup\\Cache\\preview.tmp'))",
+    "root": "C:\\LabEx\\Labs\\win-bkr-complete-restore"
+  },
+  "win-bkr-complete-restore-task-2-v1": {
+    "lab_id": "win-bkr-complete-restore",
+    "target_vm": "client",
+    "modules": [],
+    "probe": "-not(Test-Path -LiteralPath (Join-Path $labRoot 'Source\\invoice.txt')) -and (Test-ProText 'Backup\\invoice.txt' 'Invoice 1042: total 2500000 VND') -and (Test-ProSame 'Backup\\invoice.txt' 'Restore\\invoice.txt') -and (Test-ProText 'Source\\Contracts\\contract.txt' 'Contract ACME: retain until 2030') -and (Test-ProText 'Backup\\Contracts\\contract.txt' 'Contract ACME: retain until 2030')",
+    "root": "C:\\LabEx\\Labs\\win-bkr-complete-restore"
+  },
+  "win-bkr-version-rollback-task-1-v1": {
+    "lab_id": "win-bkr-version-rollback",
+    "target_vm": "client",
+    "modules": [],
+    "probe": "(Test-ProJsonPort 'Versions\\config-v1.json' 8080) -and (Test-ProJsonPort 'Versions\\config-v2.json' 9999) -and (Test-ProJsonPort 'Working\\config.json' 9999) -and (Test-ProText 'Working\\orders.txt' 'New order 1043 must survive rollback')",
+    "root": "C:\\LabEx\\Labs\\win-bkr-version-rollback"
+  },
+  "win-bkr-version-rollback-task-2-v1": {
+    "lab_id": "win-bkr-version-rollback",
+    "target_vm": "client",
+    "modules": [],
+    "probe": "(Test-ProJsonPort 'Versions\\config-v1.json' 8080) -and (Test-ProJsonPort 'Versions\\config-v2.json' 9999) -and (Test-ProSame 'Versions\\config-v1.json' 'Working\\config.json') -and (Test-ProText 'Working\\orders.txt' 'New order 1043 must survive rollback')",
+    "root": "C:\\LabEx\\Labs\\win-bkr-version-rollback"
+  },
+  "win-bkr-archive-validation-task-1-v1": {
+    "lab_id": "win-bkr-archive-validation",
+    "target_vm": "client",
+    "modules": [],
+    "probe": "(Test-ProText 'Source\\handover.txt' 'Recovery document: revision 7') -and (Test-ProArchive) -and (Test-ProDamagedArchive)",
+    "root": "C:\\LabEx\\Labs\\win-bkr-archive-validation"
+  },
+  "win-bkr-archive-validation-task-2-v1": {
+    "lab_id": "win-bkr-archive-validation",
+    "target_vm": "client",
+    "modules": [],
+    "probe": "(Test-ProText 'Source\\handover.txt' 'Recovery document: revision 7') -and (Test-ProSame 'Source\\handover.txt' 'Restore\\handover.txt') -and (Test-ProArchive) -and (Test-ProDamagedArchive)",
+    "root": "C:\\LabEx\\Labs\\win-bkr-archive-validation"
+  },
+  "win-web-isolated-site-task-1-v1": {
+    "lab_id": "win-web-isolated-site",
+    "target_vm": "server",
+    "modules": [
+      "WebAdministration"
+    ],
+    "probe": "Test-ProWebsite",
+    "root": "C:\\LabEx\\Labs\\win-web-isolated-site"
+  },
+  "win-web-isolated-site-task-2-v1": {
+    "lab_id": "win-web-isolated-site",
+    "target_vm": "server",
+    "modules": [
+      "WebAdministration"
+    ],
+    "probe": "(Test-ProWebsite) -and (Test-ProHttp 'http://127.0.0.1:18081/handbook.html' '<h1>Finance handbook approved</h1>')",
+    "root": "C:\\LabEx\\Labs\\win-web-isolated-site"
+  }
+}

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { createNavigation, courseBackPath } from './lib/navigation';
 import Navbar from './components/Navbar';
 import SearchModal from './components/SearchModal';
 import CourseCatalog from './views/CourseCatalog';
@@ -22,21 +23,60 @@ function routeFromPath() {
 }
 
 export default function App() {
+  const navigation = useMemo(() => createNavigation(window), []);
   const [route, setRoute] = useState(routeFromPath);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     try { return localStorage.getItem('labex.theme') === 'dark'; } catch { return false; }
   });
 
-  const navigate = path => {
-    window.history.pushState({}, '', path);
+  const navigate = (path, options) => {
+    navigation.open(path, options);
     setRoute(routeFromPath());
-    window.scrollTo(0, 0);
+  };
+  const goBack = fallback => {
+    if (!navigation.back(fallback)) setRoute(routeFromPath());
   };
 
   const selectCourse = id => navigate(`/courses/${encodeURIComponent(id)}`);
   const selectPath = alias => navigate(`/paths/${encodeURIComponent(alias)}`);
-  const startLab = (id, courseId) => navigate(`/labs/${encodeURIComponent(id)}${courseId ? '?courseId=' + encodeURIComponent(courseId) : ''}`);
+  const startLab = (id, courseId) => navigate(`/labs/${encodeURIComponent(id)}${courseId ? '?courseId=' + encodeURIComponent(courseId) : ''}`, { sibling: route.view === 'lab' });
+
+  useEffect(() => {
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+    return () => { window.history.scrollRestoration = previous; };
+  }, []);
+
+  useEffect(() => {
+    const target = navigation.current()?.scroll || 0;
+    let restoring = true;
+    let frame;
+    const restore = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        if (!restoring) return;
+        const ready = document.querySelector('[data-route-ready]') || route.view === 'lab' || route.view === 'assessment';
+        if (!ready) return;
+        window.scrollTo({ top: target, behavior: 'instant' });
+        restoring = false;
+      });
+    };
+    const observer = new MutationObserver(restore);
+    observer.observe(document.querySelector('main'), { childList: true, subtree: true });
+    const cancel = () => { restoring = false; };
+    const save = () => { if (!restoring) navigation.save(); };
+    window.addEventListener('wheel', cancel, { passive: true });
+    window.addEventListener('touchstart', cancel, { passive: true });
+    window.addEventListener('scroll', save, { passive: true });
+    restore();
+    return () => {
+      observer.disconnect(); cancelAnimationFrame(frame);
+      window.removeEventListener('wheel', cancel);
+      window.removeEventListener('touchstart', cancel);
+      window.removeEventListener('scroll', save);
+    };
+  }, [route, navigation]);
 
   useEffect(() => {
     const onPop = () => setRoute(routeFromPath());
@@ -70,7 +110,8 @@ export default function App() {
           isDarkMode={isDarkMode}
           setIsDarkMode={setIsDarkMode}
           onSkillTrees={() => {
-            navigate('/paths/linux');
+            const parentPath = navigation.current()?.parent?.path;
+            navigate(route.view === 'path' ? `/paths/${route.id}` : parentPath?.startsWith('/paths/') ? parentPath : route.id?.startsWith('windows-') ? '/paths/windows' : '/paths/linux');
           }}
         />
       )}
@@ -87,7 +128,7 @@ export default function App() {
             key={route.id}
             pathAlias={route.id}
             onSelectPath={selectPath}
-            onBack={() => navigate('/learn')}
+            onBack={() => goBack('/learn')}
             onSelectCourse={selectCourse}
           />
         )}
@@ -95,7 +136,8 @@ export default function App() {
           <CourseDetail
             key={route.id}
             courseId={route.id}
-            onBack={() => navigate('/learn')}
+            onBack={course => goBack(courseBackPath(course))}
+            backLabel={navigation.current()?.parent?.path?.startsWith('/paths/') ? 'Trở về lộ trình' : navigation.current()?.parent?.path === '/learn' ? 'Tất cả khóa học' : undefined}
             onStartLab={id => startLab(id, route.id)}
             onStartAssessment={id => navigate(`/assessments/${encodeURIComponent(id)}`)}
           />
@@ -105,7 +147,7 @@ export default function App() {
             key={route.id + (route.courseId || '')}
             labId={route.id}
             courseId={route.courseId}
-            onBackToCourse={id => id ? selectCourse(id) : navigate('/learn')}
+            onBackToCourse={id => goBack(id ? `/courses/${encodeURIComponent(id)}` : '/learn')}
             onStartLab={startLab}
             onStartAssessment={id => navigate(`/assessments/${encodeURIComponent(id)}`)}
           />

@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "Registry là cơ sở dữ liệu cấu hình phân cấp; HKLM chứa cấu hình máy, HKCU phụ thuộc tài khoản đang thực thi. Bài hiện chỉ đọc CurrentVersion, chưa phải bài khôi phục Registry. Không xóa khóa hoặc Import .reg vào máy thật để thử.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-registry-recovery khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
-      "content_vi": "Registry là cơ sở dữ liệu cấu hình phân cấp; HKLM chứa cấu hình máy, HKCU phụ thuộc tài khoản đang thực thi. Bài hiện chỉ đọc CurrentVersion, chưa phải bài khôi phục Registry. Không xóa khóa hoặc Import .reg vào máy thật để thử.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-registry-recovery khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content": "Registry là cơ sở dữ liệu cấu hình phân cấp; HKLM chứa cấu hình máy, HKCU phụ thuộc tài khoản đang thực thi. Bài hiện chỉ đọc CurrentVersion, chưa phải bài khôi phục Registry. Không xóa khóa hoặc Import .reg vào máy thật để thử.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-registry-recovery khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nKhám phá cấu trúc HKLM, HKCU, truy vấn Registry keys với Get-ItemProperty, backup xuất khóa .reg an toàn và sửa các giá trị cấu hình hệ thống.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nTest-Path -LiteralPath <duong-dan-trong-thong-bao>\nGet-Content -LiteralPath <tep-cau-hinh-cua-bai>\n```\n\n### Bản chất cần hiểu\nCú pháp hợp lệ vẫn có thể sai giá trị. PATH Process/User/Machine khác nhau. Một process mới chưa chắc nhận thay đổi của process cũ.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng hoặc chuyển nhóm\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
+      "content_vi": "Registry là cơ sở dữ liệu cấu hình phân cấp; HKLM chứa cấu hình máy, HKCU phụ thuộc tài khoản đang thực thi. Bài hiện chỉ đọc CurrentVersion, chưa phải bài khôi phục Registry. Không xóa khóa hoặc Import .reg vào máy thật để thử.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-troubleshoot-registry-recovery khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nKhám phá cấu trúc HKLM, HKCU, truy vấn Registry keys với Get-ItemProperty, backup xuất khóa .reg an toàn và sửa các giá trị cấu hình hệ thống.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nTest-Path -LiteralPath <duong-dan-trong-thong-bao>\nGet-Content -LiteralPath <tep-cau-hinh-cua-bai>\n```\n\n### Bản chất cần hiểu\nCú pháp hợp lệ vẫn có thể sai giá trị. PATH Process/User/Machine khác nhau. Một process mới chưa chắc nhận thay đổi của process cũ.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng hoặc chuyển nhóm\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -51,9 +51,51 @@
         "files",
         "shell"
       ],
-      "content": "### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
-      "content_vi": "### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
-      "translation_needs_review": false
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
+      "translation_needs_review": false,
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-ItemProperty|Get-Item|HKLM|CurrentVersion)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-ItemProperty|Get-Item|HKLM|CurrentVersion)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_version": 4,
@@ -62,8 +104,8 @@
       "id": "win-tr-04-sec-1",
       "title": "Navigating and Querying Registry Keys",
       "title_vi": "Điều Hướng & Truy Vấn Khóa Registry",
-      "content": "### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
-      "content_vi": "### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer/Notepad: mở cấu hình đúng ứng dụng, đọc thông báo và đường dẫn thực trước khi sửa.\n\n### Bài tập độc lập\nLưu bản trước khi sửa; thay đúng một giá trị, chạy lại nghiệp vụ, so diff và thực hành rollback. Không dùng cài lại Windows thay cho việc khoanh vùng.\n\n### Điều kiện dừng\nChỉ sửa namespace bài; không ghi đè PATH máy, tắt UAC hoặc sửa registry hệ thống theo phỏng đoán.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-ItemProperty đọc giá trị, không đổi Registry. PowerShell web chạy SYSTEM nên HKCU không phải profile Desktop của bạn; bài này cố ý dùng HKLM.\n\n### Hướng dẫn\n### Truy vấn Registry\n\n```powershell\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nCó ProductName, CurrentBuild; ReleaseId có thể cũ/trống và không đủ xác định bản Windows hiện tại. Đối chiếu thêm DisplayVersion nếu có và Get-CimInstance Win32_OperatingSystem.\n\n### Câu hỏi tự giải thích\nExport một khóa Registry khác gì full backup hoặc system state?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc thêm DisplayVersion trong cùng khóa. Khi học phục hồi sau này phải có bản sao và phạm vi thử nghiệm riêng.",
       "task": "Query the Windows NT CurrentVersion registry key using Get-ItemProperty.",
       "task_vi": "Truy vấn thông tin phiên bản Windows trong nhánh Registry CurrentVersion bằng Get-ItemProperty.",
       "hint": "Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | Select-Object ProductName, CurrentBuild, ReleaseId",
@@ -126,7 +168,9 @@
           "shell"
         ]
       },
-      "translation_needs_review": false
+      "translation_needs_review": false,
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_origin": "locally-authored-microsoft-references",
@@ -140,5 +184,11 @@
       "title": "Microsoft Learn: Windows Server",
       "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
-  ]
+  ],
+  "teaching_review": {
+    "version": 1,
+    "date": "2026-10-26",
+    "topic": "configuration",
+    "runtime_revalidated": false
+  }
 }

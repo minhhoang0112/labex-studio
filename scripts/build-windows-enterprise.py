@@ -299,3 +299,5 @@ for cid in (AD,DNS):
 plan['updated_at']='2026-10-23'
 for path,value in [(DATA/'windows-roadmap.json',plan),(DATA/'courses.json',catalog)]:path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 print('Built 12 enterprise lessons / 36 task specifications. Blocked runtime tasks remain explicitly unsupported; no VM or domain changes performed.')
+import runpy
+runpy.run_path(str(ROOT/'scripts/upgrade-windows-professional.py'),run_name='__main__')

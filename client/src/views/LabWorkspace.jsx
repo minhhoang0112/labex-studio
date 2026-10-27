@@ -83,6 +83,7 @@ export default function LabWorkspace({
   const [lastTerminalOutput, setLastTerminalOutput] = useState("");
   const [aiExternalPrompt, setAiExternalPrompt] = useState(null);
   const [isAiOpen, setIsAiOpen] = useState(false);
+  const [evidenceConsoleRequest, setEvidenceConsoleRequest] = useState(0);
   const [voiceCallOpen, setVoiceCallOpen] = useState(false);
   const [voicePersona, setVoicePersona] = useState('tutor');
   const workspaceHeader = useRef(null);
@@ -449,7 +450,7 @@ export default function LabWorkspace({
           <button
             onClick={() => onBackToCourse(lab.course_id)}
             aria-label="Về khóa học"
-            title="Thoát bài thực hành và quay về danh sách khóa học"
+            title="Trở về khóa học đang học"
             className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 shadow-xs flex items-center gap-2 text-xs font-bold transition-all group"
           >
             <ArrowLeft className="w-4 h-4 text-primary-400 group-hover:-translate-x-0.5 transition-transform" />
@@ -833,6 +834,11 @@ export default function LabWorkspace({
             onVerified={verified}
             verificationEpoch={verificationEpoch}
             disabledVerification={isResetting}
+            onOpenEvidenceConsole={() => {
+              setActiveEnvTab('windows');
+              setMobilePane('terminal');
+              setEvidenceConsoleRequest(value => value + 1);
+            }}
             onUnverified={unverified}
             passedSteps={passed}
             lang={lang}
@@ -907,6 +913,7 @@ export default function LabWorkspace({
               <WindowsConsole
                 key={lab.id}
                 labId={lab.id}
+                evidenceRequest={evidenceConsoleRequest}
                 onActionComplete={() => setVerificationEpoch((v) => v + 1)}
               />
             </div>

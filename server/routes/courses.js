@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { isValidId, listLabs, loadLab } from "../data/catalog.js";
 import { getLinuxRoadmap, readLinuxIndex, readLinuxOutlines, courseReadiness, listCourseLabs } from "../services/linuxRoadmap.js";
 import { getLabReadiness, getStepReadiness } from "../services/readiness.js";
+import { compareLearningOrder } from '../services/windowsPracticalCurriculum.js';
 import { getVerificationDefinition } from "../services/verification.js";
 import { getWindowsRoadmap, readWindowsRoadmap } from "../services/windowsRoadmap.js";
 import {assessmentSummary} from '../services/courseAssessment.js';
@@ -52,6 +53,7 @@ export function getCourses() {
     const outline=windowsPlan.courses.find(item=>item.id===course.id);
     const plannedCount=outline && !outline.initially_implemented ? outline.syllabus_modules.reduce((n,m)=>n+m.planned_lessons.length,0) : 0;
     const planned=!!outline && !available.length;
+    const reviewIncomplete=Boolean(outline && course.curriculum_review_status==='in-progress');
     return { ...metadata, level: typeof course.level === "number" ? course.level : ({ beginner: 1, intermediate: 2, advanced: 3 }[String(course.level).toLowerCase()] || 1),
       level_label: course.level_label || (typeof course.level === "string" ? course.level : "Beginner"),
       cover: course.cover || course.cover_image, skills: course.skills || [], tags: course.tags || [],
@@ -61,12 +63,12 @@ export function getCourses() {
       source_url: source?.source_url, source_labs_count: source?.source_labs_count ?? null, ...readiness,
       practice_labs_count: practiceCount,
       runnable_labs_count: runnableCount,
-      ...(outline ? {curriculum_status:planned?'planned':plannedCount && available.length<plannedCount?'in-progress':'implemented',
+      ...(outline ? {curriculum_status:planned?'planned':reviewIncomplete || plannedCount && available.length<plannedCount?'in-progress':'implemented',
         syllabus_modules:outline.syllabus_modules,planned_lessons_count:plannedCount,prerequisites:outline.prerequisites,
         prerequisite_courses:outline.prerequisites.map(id=>({id,name:windowsPlan.courses.find(item=>item.id===id)?.name || id})),
         learning_outcomes:outline.learning_outcomes,environment_plan:outline.environment_plan,references:outline.references,
-        roadmap_alias:'windows',content_status:planned?'planned':plannedCount && available.length<plannedCount?'partial':readiness.content_status} : {}),
-      readiness: planned ? 'planned' : isReady && (!plannedCount || available.length>=plannedCount) ? "ready" : available.length ? "partial" : "reference-only",
+        roadmap_alias:'windows',content_status:planned?'planned':reviewIncomplete || plannedCount && available.length<plannedCount?'partial':readiness.content_status} : {}),
+      readiness: planned ? 'planned' : isReady && !reviewIncomplete && (!plannedCount || available.length>=plannedCount) ? "ready" : available.length ? "partial" : "reference-only",
       labs_count: available.length, available: practiceCount > 0 || ((course.topic === 'windows' || course.id.includes('windows')) && available.length > 0),
       lab_ids: available.map((lab) => lab.id),
       steps_count: available.reduce((sum, lab) => sum + lab.steps.length, 0) };
@@ -121,13 +123,15 @@ router.get("/courses/:id", (req, res, next) => {
     if (!isValidId(req.params.id)) return res.status(400).json({ error: "Mã khóa học không hợp lệ." });
     const course = getCourses().find((item) => item.id === req.params.id || item.alias === req.params.id);
     if (!course) return res.status(404).json({ error: "Không tìm thấy khóa học." });
-    const imported = listCourseLabs(course.id).sort((a, b) => (a.order ?? 999) - (b.order ?? 999) || a.id.localeCompare(b.id));
+    const imported = listCourseLabs(course.id).sort(compareLearningOrder);
     const summary = lab => {
       const { id, title, title_vi, difficulty, estimated_time, overview, steps, sections, order, type, source, source_lab_id, source_url } = lab;
       const availability = getLabReadiness(lab);
       return {
         id, title, title_vi, difficulty, estimated_time, overview, order, type,
         curriculum_group: lab.curriculum_group, practice_mode: lab.practice_mode,
+        teaching_format: lab.teaching_format, teaching_revision: lab.teaching_revision, learning_order: lab.learning_order,
+        validation_status: lab.validation_status,
         ...(lab.preparation ? {preparation:lab.preparation,target_vm:lab.target_vm,curriculum_module:lab.curriculum_module} : {}),
         source, source_lab_id, source_url, availability, sections_count: sections?.length || steps.length,
         steps_count: steps.length, step_ids: steps.map((step) => step.id),

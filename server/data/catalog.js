@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { applySourceContent } from '../services/sourceContent.js';
+import { applyWindowsPracticalCurriculum } from '../services/windowsPracticalCurriculum.js';
 
 const labsDirectory = fileURLToPath(new URL("./labs/", import.meta.url));
 
@@ -12,7 +13,7 @@ export function loadLab(id) {
   if (!isValidId(id)) return null;
   try {
     const lab = JSON.parse(fs.readFileSync(`${labsDirectory}/${id}.json`, "utf8"));
-    return lab.id === id ? synchronizeTaskPresentation(applySourceContent(lab)) : null;
+    return lab.id === id ? synchronizeTaskPresentation(applyWindowsPracticalCurriculum(applySourceContent(lab))) : null;
   } catch (error) {
     if (error.code === "ENOENT") return null;
     throw error;

@@ -5,13 +5,14 @@ import {
   Sparkles, ChevronRight, Play
 } from 'lucide-react';
 import { api } from '../lib/api';
+import { usePageState } from '../lib/usePageState';
 
 export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCourse, onSelectPath }) {
   const [roadmap, setRoadmap] = useState(null);
   const [attempt, setAttempt] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [viewMode, setViewMode] = useState('recommended'); // 'recommended' | 'source'
+  const [viewMode, setViewMode] = usePageState('roadmapMode', 'recommended');
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
@@ -89,7 +90,7 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
   const stages = roadmap?.stages || [];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 pb-20 transition-colors">
+    <div data-route-ready className="min-h-screen bg-slate-50 dark:bg-gray-950 pb-20 transition-colors">
       {/* Top Navigation */}
       <div className="border-b bg-white dark:bg-gray-900 dark:border-gray-800 sticky top-16 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-14 py-2 flex flex-wrap gap-2 items-center justify-between">
@@ -167,14 +168,14 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
             <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10 w-full lg:w-80 shrink-0 space-y-4">
               <div className="text-xs uppercase tracking-wider text-slate-400 font-bold">Bắt đầu lộ trình</div>
               <div className="text-sm text-slate-200">
-                {isWindows?'Bắt đầu bằng đề cương Nền tảng Windows 11. Bạn cũng có thể vào khóa IT Support đã có 25 bài để thực hành ngay.':<>Khởi đầu với <strong>Quick Start with Linux</strong> (10 bài thực hành chuẩn) để nắm vững các lệnh nền tảng.</>}
+                {isWindows?'Ưu tiên thực hành IT Support: nhận ticket, tự chẩn đoán trên Desktop, sửa và kiểm tra chức năng. Các khóa đang được xây dựng lại theo lộ trình công việc.':<>Khởi đầu với <strong>Quick Start with Linux</strong> (10 bài thực hành chuẩn) để nắm vững các lệnh nền tảng.</>}
               </div>
               <button
                 onClick={() => onSelectCourse(firstCourse)}
                 className="w-full py-3 px-4 rounded-xl bg-primary-600 hover:bg-primary-500 font-semibold text-white shadow-lg shadow-primary-500/30 flex items-center justify-center gap-2 transition-all">
                 <Play className="w-4 h-4 fill-current" /> {isWindows?'Xem khóa đầu tiên':'Bắt đầu Quick Start'}
               </button>
-              {isWindows && <button onClick={()=>onSelectCourse(roadmap.available_start_course_id)} className="text-sm text-sky-200 underline">Mở 25 bài IT Support đã có →</button>}
+              {isWindows && <button onClick={()=>onSelectCourse('windows-11-it-support-troubleshooting')} className="text-sm text-sky-200 underline">Mở ticket IT Support thực hành →</button>}
             </div>
           </div>
         </div>
@@ -249,6 +250,7 @@ function CourseRoadmapCard({ course, onSelectCourse }) {
   return (
     <div
       onClick={handleClick}
+      data-course-id={course.id}
       role="button"
       tabIndex={0}
       onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleClick(); } }}

@@ -8,11 +8,11 @@ import { windowsStepReadiness, verifyWindowsRemote } from '../server/services/wi
 import { faultScenarios, faultCommand, createWindowsFaultService } from '../server/services/windowsFaults.js';
 
 const labs = listLabs().filter(lab=>lab.course_id === 'windows-11-it-support-troubleshooting');
-test('Windows support has 25 ordered lessons, 50 tasks, references and complete reviewed graders', () => {
-  assert.equal(labs.length, 25);
-  assert.equal(labs.reduce((count,lab)=>count+lab.steps.length,0), 50);
-  assert.deepEqual(labs.map(lab=>lab.order).sort((a,b)=>a-b), Array.from({length:25},(_,i)=>i+1));
-  assert.equal(labs.filter(lab=>faultScenarios[lab.id]).length, 7);
+test('Windows support preserves existing lessons and adds the practical backup-permission incident', () => {
+  assert.equal(labs.length, 28);
+  assert.equal(labs.reduce((count,lab)=>count+lab.steps.length,0), 53);
+  assert.deepEqual(labs.map(lab=>lab.order).sort((a,b)=>a-b), Array.from({length:28},(_,i)=>i+1));
+  assert.equal(labs.filter(lab=>faultScenarios[lab.id]).length, 10);
   for (const lab of labs) {
     assert.equal(lab.target_vm, 'client');
     for (const step of lab.steps) {
@@ -48,7 +48,7 @@ test('additional graders read the actual CLIENT01 state and reject failures, tim
 });
 
 test('new fault scenarios retain baseline, ownership, broken-state and functional repair gates', async t => {
-  for (const id of ['win-it-file-extension-fix','win-it-app-config-repair','win-it-deleted-file-restore','win-it-scheduled-backup-fix']) {
+  for (const id of ['win-it-file-extension-fix','win-it-app-config-repair','win-it-deleted-file-restore','win-it-scheduled-backup-fix','win-it-scheduled-backup-permissions','win-it-file-in-use']) {
     const folder=fs.mkdtempSync(path.join(os.tmpdir(),'labex-expanded-fault-'));
     t.after(()=>fs.rmSync(folder,{recursive:true,force:true}));
     const operations=[];

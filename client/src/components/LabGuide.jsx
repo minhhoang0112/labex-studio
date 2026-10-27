@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { api } from '../lib/api';
 import ReactMarkdown from 'react-markdown';
 import GuideImage from './GuideImage';
+import PracticeBrief from './PracticeBrief';
 import remarkGfm from 'remark-gfm';
 import { sourceMarkdown } from '../lib/sourceMarkdown';
 import { taskHintPresentation } from '../lib/taskHint';
@@ -33,7 +34,8 @@ export default function LabGuide({
   nextLab,
   lang = 'vi',
   verificationEpoch = 0,
-  disabledVerification = false
+  disabledVerification = false,
+  onOpenEvidenceConsole,
 }) {
   const [copiedCode, setCopiedCode] = useState(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -65,6 +67,7 @@ export default function LabGuide({
   const isTask = currentSection?.kind === 'task';
   const isIntro = currentSection?.kind === 'introduction';
   const isSummary = currentSection?.kind === 'summary';
+  const isDocument = currentSection?.kind === 'document';
 
   // Join task metadata by id
   const matchingStep = isTask
@@ -102,6 +105,7 @@ export default function LabGuide({
   const activeHint = (isVi && matchingStep?.hint_vi) ? matchingStep.hint_vi : (matchingStep?.hint || '');
   const displayedHint = taskHintPresentation(activeHint, content, isVi);
   const isWindowsTask = Boolean(lab.target_vm) || lab.id?.startsWith('win-');
+  const coreCommandsFirst = matchingStep?.learning_flow === 'core-commands-first';
 
   const leadingHeading = content.match(/^\s*#{1,6}\s+(.+?)(?:\r?\n|$)/);
   const normalizeTitle = value => (value || '').replace(/^[\d.\s]+/, '').replace(/[*_`]/g, '').trim().toLowerCase();
@@ -304,6 +308,8 @@ export default function LabGuide({
                 ? '📖 Intro: ' 
                 : item.kind === 'summary' 
                 ? '🏁 Summary: ' 
+                : item.kind === 'document'
+                ? (isVi ? '📄 Hướng dẫn: ' : '📄 Guide: ')
                 : itemPassed 
                 ? '✓ ' 
                 : '⚡ Task: ';
@@ -329,6 +335,8 @@ export default function LabGuide({
                     ? (isVi ? 'Giới thiệu' : 'Introduction') 
                     : isSummary 
                     ? (isVi ? 'Tổng kết' : 'Summary') 
+                    : isDocument
+                    ? (isVi ? 'Tự chẩn đoán · không chấm tự động' : 'Diagnosis practice · ungraded')
                     : (isVi ? `Nhiệm vụ (${matchingStep?.position || currentSectionIndex})` : `Task (${matchingStep?.position || currentSectionIndex})`)}
                 </span>
               </div>
@@ -347,6 +355,8 @@ export default function LabGuide({
                 <p className="mt-2">{useSource ? 'Đang đọc tài liệu tiếng Anh đã đối chiếu trực tiếp với nguồn.' : 'Bản dịch local; dùng Bản gốc EN để đối chiếu đầy đủ.'}{currentSection.translation_needs_review && ' Bản dịch cần cập nhật theo tài liệu gốc vừa bổ sung.'}</p>
               </div>}
               <div className="prose-lab text-slate-800 dark:text-slate-200">
+                {lab.validation_status === 'pending-live-client-acceptance' && <p role="status" className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:bg-amber-950 dark:text-amber-200">Bài mới: đã kiểm tra mã và chức năng xử lý tệp, còn chờ nghiệm thu toàn bộ trên CLIENT01. Chưa xác nhận sẵn sàng học ổn định.</p>}
+                <PracticeBrief key={currentSection.id} practice={currentSection.practice_brief}>
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
                   components={{
@@ -382,6 +392,7 @@ export default function LabGuide({
                   }}>
                   {sourceMarkdown(guideContent)}
                 </ReactMarkdown>
+                </PracticeBrief>
               </div>
             </div>
 
@@ -395,6 +406,8 @@ export default function LabGuide({
                       ? (isVi ? '✓ Nhiệm vụ này đã được hoàn thành!' : '✓ This task has been completed!') 
                       : isAcknowledgement 
                       ? (isVi ? 'Hoạt động đọc hiểu (Onboarding):' : 'Reading & Onboarding Activity:') 
+                      : coreCommandsFirst
+                      ? (isVi ? 'Bằng chứng hệ thống dùng để chấm:' : 'Evidence required for verification:')
                       : isWindowsTask
                       ? (isVi ? 'Nhiệm vụ trên máy ảo Windows:' : 'Windows VM task:')
                       : (isVi ? 'Nhiệm vụ cần thực hiện trên Terminal:' : 'Terminal Task to Perform:')}
@@ -413,8 +426,14 @@ export default function LabGuide({
                       {displayedHint.script && (
                         <details key={matchingStep.id} className="mt-2">
                           <summary className="cursor-pointer font-semibold py-1 focus-visible:outline-blue-500">
-                            {isVi ? 'Xem khối lệnh PowerShell đầy đủ' : 'Show the full PowerShell script'}
+                            {coreCommandsFirst
+                              ? (isVi ? 'Ghi bằng chứng để chấm (sau khi tự thực hành)' : 'Collect grading evidence (after practicing)')
+                              : (isVi ? 'Xem khối lệnh PowerShell đầy đủ' : 'Show the full PowerShell script')}
                           </summary>
+                          {coreCommandsFirst && <div className="my-2 space-y-2 leading-relaxed">
+                            <p>{isVi ? 'Phần này kiểm tra đường dẫn và tạo báo cáo cho bộ chấm; bạn không cần học thuộc script. Chỉ chạy ở PowerShell của web qua Azure Agent (SYSTEM), khác cửa sổ PowerShell trong Desktop. Các lệnh để học nằm ở hướng dẫn phía trên.' : 'This helper creates the verification report. Run it in the web PowerShell console (Azure Agent / SYSTEM), separate from Desktop PowerShell. Practice the core commands in the guide first.'}</p>
+                            {onOpenEvidenceConsole && <button type="button" onClick={onOpenEvidenceConsole} className="rounded bg-blue-600 px-3 py-2 font-semibold text-white hover:bg-blue-700">{isVi ? 'Mở PowerShell của web để ghi bằng chứng' : 'Open web PowerShell for evidence'}</button>}
+                          </div>}
                           <div className="mt-2 overflow-hidden rounded-lg border border-slate-700 bg-slate-950">
                             <div className="flex items-center justify-between gap-2 border-b border-slate-700 px-3 py-2 text-slate-300">
                               <span className="font-mono">PowerShell</span>

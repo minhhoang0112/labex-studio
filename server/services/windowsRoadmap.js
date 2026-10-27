@@ -11,11 +11,13 @@ export function getWindowsRoadmap(catalog){
     const {initially_implemented,...details}=outline;
     const plannedCount=initially_implemented?0:outline.syllabus_modules.reduce((n,m)=>n+m.planned_lessons.length,0);
     const complete=implemented && (!plannedCount || current.imported_labs_count>=plannedCount);
-    const status=!implemented?'planned':complete && current.runnable_labs_count===current.imported_labs_count?'ready':'partial';
+    const reviewIncomplete=current.curriculum_review_status==='in-progress';
+    const status=!implemented?'planned':!reviewIncomplete && complete && current.runnable_labs_count===current.imported_labs_count?'ready':'partial';
     return {...current,...details,name:current.name,alias:current.alias || current.id,order:index+1,status,
       planned_lessons_count:plannedCount,
       reason:!implemented?'Đã có đề cương; chưa có nội dung hướng dẫn, môi trường thực hành hoặc bộ chấm cho khóa này.'
-        :`${current.imported_labs_count} bài đã có nội dung local. Xem khả năng thực hành và chấm điểm trong từng bài.`};
+        :reviewIncomplete?'Đang nâng cấp giáo trình thực tế; có bài đã kiểm chức năng, các bài kiểm kê/báo cáo chưa thay cho diễn tập sửa lỗi.'
+          :`${current.imported_labs_count} bài đã có nội dung local. Xem khả năng thực hành và chấm điểm trong từng bài.`};
   });
   return {...plan,courses,order_kind:'recommended-local',
     totals:{courses:courses.length,implemented_courses:courses.filter(c=>c.imported_labs_count>0).length,

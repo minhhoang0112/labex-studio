@@ -1,5 +1,6 @@
 """Authoritative Vietnamese networking curriculum. Does not start or configure VMs."""
 import json,re
+from windows_beginner_learning import improve_lab
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];DATA=ROOT/'server/data'
 COURSE='windows-networking-fundamentals'
@@ -127,6 +128,7 @@ for order,l in enumerate(lessons,1):
     summary='## Tổng kết\n\n'+l['theory']+'\n\nTự trả lời câu hỏi từng task và ghi điều đã đo/điều chưa đo. Chỉ kết luận trong phạm vi bằng chứng. Giữ các tệp của bài để ôn, không cần thay cấu hình Windows để hoàn nguyên.'
     sections.append(dict(id=lid+'-summary',title='Tổng kết và tự đánh giá',title_vi='Tổng kết và tự đánh giá',kind='summary',position=3,need_verify=False,content=summary,content_vi=summary))
     lab=dict(id=lid,course_id=COURSE,order=order,title=l['title'],title_vi=l['title'],type='lab',difficulty='Beginner',estimated_time='35–45 mins',target_vm='client',curriculum_version=1,curriculum_origin='locally-authored-microsoft-references',curriculum_module=f'{COURSE}-module-{l["module"]}',overview=l['theory'],practice_mode='configuration-diagnostics',preparation=dict(mode='self-contained',requires_vm_start=True,target='client',fault_injection=False),references=[dict(title='Microsoft Learn',publisher='Microsoft',url=u,accessed_at='2026-10-22') for u in l['refs']],steps=steps,sections=sections)
+    improve_lab(lab)
     (DATA/'labs'/f'{lid}.json').write_text(json.dumps(lab,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 (DATA/'windows-networking-rules.json').write_text(json.dumps(rules,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 plan=json.loads((DATA/'windows-roadmap.json').read_text(encoding='utf-8'));c=next(c for c in plan['courses'] if c['id']==COURSE)

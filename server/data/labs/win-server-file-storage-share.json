@@ -17,8 +17,8 @@
       "kind": "introduction",
       "layout": "doc-fullscreen",
       "need_verify": false,
-      "content": "SMB cung cấp chia sẻ qua mạng, NTFS áp dụng trên filesystem. Khi truy cập SMB phải xét cả quyền share lẫn NTFS. Bài này khảo sát các share có sẵn, chưa tạo file server theo phòng ban hoặc phân quyền nghiệp vụ. Share quản trị như C$ không phải thư mục nên cấp cho người dùng thường.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-file-storage-share khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
-      "content_vi": "SMB cung cấp chia sẻ qua mạng, NTFS áp dụng trên filesystem. Khi truy cập SMB phải xét cả quyền share lẫn NTFS. Bài này khảo sát các share có sẵn, chưa tạo file server theo phòng ban hoặc phân quyền nghiệp vụ. Share quản trị như C$ không phải thư mục nên cấp cho người dùng thường.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-file-storage-share khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.",
+      "content": "SMB cung cấp chia sẻ qua mạng, NTFS áp dụng trên filesystem. Khi truy cập SMB phải xét cả quyền share lẫn NTFS. Bài này khảo sát các share có sẵn, chưa tạo file server theo phòng ban hoặc phân quyền nghiệp vụ. Share quản trị như C$ không phải thư mục nên cấp cho người dùng thường.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-file-storage-share khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nCấu hình thư mục chia sẻ SMB (`New-SmbShare`), cấp quyền Share Permissions kết hợp phân quyền NTFS, thiết lập hạn ngạch dung lượng Quota.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nExplorer → Properties → Security → Advanced → Effective Access; đối chiếu account thực hiện thao tác.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nwhoami /user\nwhoami /groups\nGet-Acl -LiteralPath <thu-muc-cua-bai> | Format-List Owner,AccessToString\n```\n\n### Bản chất cần hiểu\nToken của người dùng/service quyết định quyền; administrator đọc được không chứng minh nhân viên đọc được. Qua SMB cần cả share và NTFS. Đổi tên user không đổi SID.\n\n### Bài tập độc lập\nDự đoán Read so với Modify cho phép thao tác nào. Thử đọc/tạo/sửa/xóa dưới identity cần phục vụ nếu bài cung cấp identity thử; không dùng SYSTEM làm bằng chứng thay người dùng.\n\n### Điều kiện dừng hoặc chuyển nhóm\nKhông cấp Everyone Full control, không thêm user vào Administrators để chữa Access denied. User local có trên client, còn AD là quản trị domain trên Server.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
+      "content_vi": "SMB cung cấp chia sẻ qua mạng, NTFS áp dụng trên filesystem. Khi truy cập SMB phải xét cả quyền share lẫn NTFS. Bài này khảo sát các share có sẵn, chưa tạo file server theo phòng ban hoặc phân quyền nghiệp vụ. Share quản trị như C$ không phải thư mục nên cấp cho người dùng thường.\n\n### Môi trường thực hành\nDùng Windows VM của bài. PowerShell web chạy qua Azure Agent, quyền SYSTEM; mỗi lần gửi là process mới, nhưng tệp trong thư mục bài vẫn giữ lại. Không dựa vào biến của lần gửi trước. Dùng đường dẫn C:\\LabEx\\Labs\\win-server-file-storage-share khi thao tác từ Desktop.\n\n### Phạm vi thay đổi\nChỉ tạo/sửa dữ liệu của bài; các task quan sát không yêu cầu sửa cấu hình máy. Bản ghi lệnh web chứng minh đã chạy lệnh thành công, bộ chấm không đánh giá thay cho việc hiểu kết quả.\n\n<!-- professional-runbook-v1 -->\n## Quy trình thực hành và ra quyết định\n### Tình huống cần giải quyết\nCấu hình thư mục chia sẻ SMB (`New-SmbShare`), cấp quyền Share Permissions kết hợp phân quyền NTFS, thiết lập hạn ngạch dung lượng Quota.\n\n### Tự làm trước khi xem khối lệnh tham khảo\nExplorer → Properties → Security → Advanced → Effective Access; đối chiếu account thực hiện thao tác.\n\nLệnh dưới đây để đọc dữ kiện, không tự sửa máy. Chỗ `<...>` là tham số bạn phải thay bằng tài nguyên thuộc bài; không dán nguyên dấu ngoặc. Nếu module chưa có, kiểm đúng máy/role thay vì tải ngẫu nhiên.\n```powershell\nwhoami /user\nwhoami /groups\nGet-Acl -LiteralPath <thu-muc-cua-bai> | Format-List Owner,AccessToString\n```\n\n### Bản chất cần hiểu\nToken của người dùng/service quyết định quyền; administrator đọc được không chứng minh nhân viên đọc được. Qua SMB cần cả share và NTFS. Đổi tên user không đổi SID.\n\n### Bài tập độc lập\nDự đoán Read so với Modify cho phép thao tác nào. Thử đọc/tạo/sửa/xóa dưới identity cần phục vụ nếu bài cung cấp identity thử; không dùng SYSTEM làm bằng chứng thay người dùng.\n\n### Điều kiện dừng hoặc chuyển nhóm\nKhông cấp Everyone Full control, không thêm user vào Administrators để chữa Access denied. User local có trên client, còn AD là quản trị domain trên Server.\n\n### Cách đánh giá\nNút chấm xác nhận đúng các tiêu chí ghi ở nhiệm vụ, không tự chứng nhận phần giải thích miệng hoặc việc bạn đã tự làm. Task kiểm kê/báo cáo là bài chẩn đoán; có báo cáo đúng chưa chứng minh đã sửa một sự cố. Chỉ bài có tái hiện lỗi và phép thử chức năng sau sửa mới được xem là diễn tập xử lý lỗi.\n",
       "hint": "Thực hiện theo yêu cầu và kiểm tra kết quả trên hệ thống."
     },
     {
@@ -51,9 +51,51 @@
         "files",
         "shell"
       ],
-      "content": "### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
-      "content_vi": "### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
-      "translation_needs_review": false
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer → Properties → Security → Advanced → Effective Access; đối chiếu account thực hiện thao tác.\n\n### Bài tập độc lập\nDự đoán Read so với Modify cho phép thao tác nào. Thử đọc/tạo/sửa/xóa dưới identity cần phục vụ nếu bài cung cấp identity thử; không dùng SYSTEM làm bằng chứng thay người dùng.\n\n### Điều kiện dừng\nKhông cấp Everyone Full control, không thêm user vào Administrators để chữa Access denied. User local có trên client, còn AD là quản trị domain trên Server.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer → Properties → Security → Advanced → Effective Access; đối chiếu account thực hiện thao tác.\n\n### Bài tập độc lập\nDự đoán Read so với Modify cho phép thao tác nào. Thử đọc/tạo/sửa/xóa dưới identity cần phục vụ nếu bài cung cấp identity thử; không dùng SYSTEM làm bằng chứng thay người dùng.\n\n### Điều kiện dừng\nKhông cấp Everyone Full control, không thêm user vào Administrators để chữa Access denied. User local có trên client, còn AD là quản trị domain trên Server.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
+      "translation_needs_review": false,
+      "verification_by_provider": {
+        "docker": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-SmbShare|net\\s+share|get-smbshare)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        },
+        "namespace": {
+          "kind": "commands",
+          "user": "labex",
+          "groups": [
+            [
+              "(?:Get-SmbShare|net\\s+share|get-smbshare)"
+            ]
+          ],
+          "allowed_status": [
+            0,
+            1
+          ]
+        }
+      },
+      "required_capabilities_by_provider": {
+        "docker": [
+          "terminal",
+          "files",
+          "shell"
+        ],
+        "namespace": [
+          "terminal",
+          "files",
+          "shell"
+        ]
+      },
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_version": 4,
@@ -62,8 +104,8 @@
       "id": "win-fs-04-sec-1",
       "title": "Inspecting SMB Shares with Get-SmbShare",
       "title_vi": "Kiểm Tra Các Thư Mục Chia Sẻ SMB",
-      "content": "### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
-      "content_vi": "### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
+      "content": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer → Properties → Security → Advanced → Effective Access; đối chiếu account thực hiện thao tác.\n\n### Bài tập độc lập\nDự đoán Read so với Modify cho phép thao tác nào. Thử đọc/tạo/sửa/xóa dưới identity cần phục vụ nếu bài cung cấp identity thử; không dùng SYSTEM làm bằng chứng thay người dùng.\n\n### Điều kiện dừng\nKhông cấp Everyone Full control, không thêm user vào Administrators để chữa Access denied. User local có trên client, còn AD là quản trị domain trên Server.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
+      "content_vi": "<!-- professional-runbook-v1 -->\n### Tự thực hành trước khi mở lời giải\nExplorer → Properties → Security → Advanced → Effective Access; đối chiếu account thực hiện thao tác.\n\n### Bài tập độc lập\nDự đoán Read so với Modify cho phép thao tác nào. Thử đọc/tạo/sửa/xóa dưới identity cần phục vụ nếu bài cung cấp identity thử; không dùng SYSTEM làm bằng chứng thay người dùng.\n\n### Điều kiện dừng\nKhông cấp Everyone Full control, không thêm user vào Administrators để chữa Access denied. User local có trên client, còn AD là quản trị domain trên Server.\n\n### Phạm vi điểm số\nTask kiểm kê/báo cáo chỉ chứng minh đúng tiêu chí đó; có báo cáo đúng chưa chứng minh đã sửa sự cố. Xem bản chất và quy trình ở phần Giới thiệu; giải thích và xác nhận của người dùng không được tự chấm thay bằng file.\n\n\n---\n\n### Bản chất và tình huống thực tế\nGet-SmbShare liệt kê Name, Path và Description. Dấu $ làm share ẩn khỏi browse thông thường, không phải cơ chế mã hóa hay bảo mật. Không xóa hoặc đổi quyền các share có sẵn.\n\n### Hướng dẫn\n### Danh sách Thư mục Chia sẻ\n\n```powershell\nGet-SmbShare\n```\n\n\n\n\n\n\n\n\n\n### Kết quả và cách tự kiểm tra\nThấy share thực tế của máy; tên/số lượng tùy cấu hình. Chỉ liệt kê được share không chứng minh người dùng khác đọc/ghi được.\n\n### Câu hỏi tự giải thích\nNgười dùng thấy share nhưng nhận Access Denied: cần kiểm tra những lớp quyền nào?\n\n### Bài tự làm thêm (không chấm tự động)\nTự đọc Get-SmbShareAccess -Name <ten-share-thuc-te> trên một share bạn đã xác định; chỉ quan sát.",
       "task": "Query all active SMB shares on the server using Get-SmbShare.",
       "task_vi": "Truy vấn danh sách tất cả các thư mục đang được chia sẻ mạng bằng Get-SmbShare.",
       "hint": "Get-SmbShare",
@@ -126,7 +168,9 @@
           "shell"
         ]
       },
-      "translation_needs_review": false
+      "translation_needs_review": false,
+      "learning_flow": "practice-before-reference",
+      "assessment_scope": "criteria-only-not-understanding"
     }
   ],
   "curriculum_origin": "locally-authored-microsoft-references",
@@ -140,5 +184,11 @@
       "title": "Microsoft Learn: Windows Server",
       "url": "https://learn.microsoft.com/en-us/windows-server/"
     }
-  ]
+  ],
+  "teaching_review": {
+    "version": 1,
+    "date": "2026-10-26",
+    "topic": "permission",
+    "runtime_revalidated": false
+  }
 }

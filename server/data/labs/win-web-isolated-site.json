@@ -1,0 +1,119 @@
+{
+  "id": "win-web-isolated-site",
+  "course_id": "windows-iis-web-services",
+  "order": 1,
+  "title": "Triển khai IIS: binding, application pool và quyền đọc tối thiểu",
+  "title_vi": "Triển khai IIS: binding, application pool và quyền đọc tối thiểu",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "45–60 mins",
+  "target_vm": "server",
+  "curriculum_version": 1,
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "curriculum_module": "windows-iis-web-services-module-1",
+  "overview": "Triển khai portal tĩnh trên Server bằng site/pool riêng. Dịch vụ phải trả đúng nội dung qua HTTP thật; không dùng Default Web Site, không mở cổng public.",
+  "practice_mode": "functional-state",
+  "validation_status": "awaiting-live-vm",
+  "references": [
+    {
+      "title": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/iis/manage/configuring-security/application-pool-identities"
+    },
+    {
+      "title": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/troubleshoot-404-file-not-found-error"
+    }
+  ],
+  "sections": [
+    {
+      "id": "win-web-isolated-site-intro",
+      "title": "Ticket, môi trường và tiêu chuẩn bàn giao",
+      "title_vi": "Ticket, môi trường và tiêu chuẩn bàn giao",
+      "kind": "introduction",
+      "position": 0,
+      "need_verify": false,
+      "content": "## Ticket và mục tiêu\nTriển khai portal tĩnh trên Server bằng site/pool riêng. Dịch vụ phải trả đúng nội dung qua HTTP thật; không dùng Default Web Site, không mở cổng public.\n\n### Môi trường và giới hạn\nMáy **Windows Server**, thư mục riêng `C:\\LabEx\\Labs\\win-web-isolated-site`. Không tạo hoặc resize VM. PowerShell Desktop giữ biến trong cửa sổ; PowerShell web chạy SYSTEM, mỗi lần gửi là process mới. Mỗi khối bên dưới khai báo lại `$p` để chạy độc lập. Không có script thu JSON bắt buộc.\n\nCần IIS với Static Content và module WebAdministration đã cài bởi quản trị. Không tự cài role hoặc đổi firewall bằng nút chấm. Chỉ bind loopback; bài chưa kiểm DNS, HTTPS hoặc truy cập từ CLIENT01. Không sửa Default Web Site hay website của bài khác.\n\n### Cách học\nĐọc yêu cầu, dự đoán kết quả; thao tác GUI/lệnh cốt lõi, tự kiểm, sau cùng mới bấm chấm. Bài yêu cầu tên/đường dẫn cố định để xác định đúng tài nguyên; được đổi tên trong phần tự luyện, không đổi tài nguyên chấm mà chưa đổi hợp đồng bài.\n\n### An toàn khi làm lại\nLần đầu tạo thư mục bằng `New-Item` không `-Force` để không ghi đè dữ liệu cũ. Nếu đã tồn tại, đọc nội dung trước, không chạy lại phần tạo dữ liệu. Không dùng đường dẫn liên kết/junction. Chỉ dọn dữ liệu tự tạo sau khi kiểm đúng đường dẫn; không có thao tác xóa cả VM hoặc thư mục cha.\n\n### Trạng thái kiểm thử\nĐã có hướng dẫn và bộ chấm trạng thái; chưa xác nhận chạy đầu-cuối trên VM Azure. Thiếu role/quyền/môi trường phải báo thiếu, không coi là đã hoàn thành.\n",
+      "content_vi": "## Ticket và mục tiêu\nTriển khai portal tĩnh trên Server bằng site/pool riêng. Dịch vụ phải trả đúng nội dung qua HTTP thật; không dùng Default Web Site, không mở cổng public.\n\n### Môi trường và giới hạn\nMáy **Windows Server**, thư mục riêng `C:\\LabEx\\Labs\\win-web-isolated-site`. Không tạo hoặc resize VM. PowerShell Desktop giữ biến trong cửa sổ; PowerShell web chạy SYSTEM, mỗi lần gửi là process mới. Mỗi khối bên dưới khai báo lại `$p` để chạy độc lập. Không có script thu JSON bắt buộc.\n\nCần IIS với Static Content và module WebAdministration đã cài bởi quản trị. Không tự cài role hoặc đổi firewall bằng nút chấm. Chỉ bind loopback; bài chưa kiểm DNS, HTTPS hoặc truy cập từ CLIENT01. Không sửa Default Web Site hay website của bài khác.\n\n### Cách học\nĐọc yêu cầu, dự đoán kết quả; thao tác GUI/lệnh cốt lõi, tự kiểm, sau cùng mới bấm chấm. Bài yêu cầu tên/đường dẫn cố định để xác định đúng tài nguyên; được đổi tên trong phần tự luyện, không đổi tài nguyên chấm mà chưa đổi hợp đồng bài.\n\n### An toàn khi làm lại\nLần đầu tạo thư mục bằng `New-Item` không `-Force` để không ghi đè dữ liệu cũ. Nếu đã tồn tại, đọc nội dung trước, không chạy lại phần tạo dữ liệu. Không dùng đường dẫn liên kết/junction. Chỉ dọn dữ liệu tự tạo sau khi kiểm đúng đường dẫn; không có thao tác xóa cả VM hoặc thư mục cha.\n\n### Trạng thái kiểm thử\nĐã có hướng dẫn và bộ chấm trạng thái; chưa xác nhận chạy đầu-cuối trên VM Azure. Thiếu role/quyền/môi trường phải báo thiếu, không coi là đã hoàn thành.\n"
+    },
+    {
+      "id": "win-web-isolated-site-task-1-v1",
+      "title": "Xuất bản site tĩnh trong namespace riêng",
+      "title_vi": "Xuất bản site tĩnh trong namespace riêng",
+      "kind": "task",
+      "position": 1,
+      "need_verify": true,
+      "content": "## Xuất bản site tĩnh trong namespace riêng\n\n### Bản chất và cách làm\nIIS Manager → Application Pools → Add LabExCoursePortal; identity ApplicationPoolIdentity. Tạo site LabExCoursePortal, đường site trong bài, binding 127.0.0.1:18081. Anonymous Authentication → Edit → Application pool identity. Explorer Security cấp Read & execute cho IIS AppPool\\LabExCoursePortal. Không dùng LocalSystem hoặc Everyone Full control. Lệnh mẫu tương đương, phải kiểm chưa có site/pool cùng tên trước khi tạo.\n\n### Thực hành từng khối\n```powershell\nImport-Module WebAdministration\n$p='C:\\LabEx\\Labs\\win-web-isolated-site'\nif((Test-Path 'IIS:\\Sites\\LabExCoursePortal') -or (Test-Path 'IIS:\\AppPools\\LabExCoursePortal')){throw 'Ten da ton tai: kiem ownership truoc'}\nNew-Item -ItemType Directory -Path \"$p\\site\" -ErrorAction Stop\n'<h1>Finance portal revision 1</h1>' | Set-Content \"$p\\site\\index.html\" -Encoding UTF8\nNew-WebAppPool -Name LabExCoursePortal\nSet-ItemProperty 'IIS:\\AppPools\\LabExCoursePortal' -Name processModel.identityType -Value 4\nNew-Website -Name LabExCoursePortal -Port 18081 -IPAddress 127.0.0.1 -PhysicalPath \"$p\\site\" -ApplicationPool LabExCoursePortal\nSet-WebConfigurationProperty -PSPath 'IIS:\\' -Location LabExCoursePortal -Filter 'system.webServer/security/authentication/anonymousAuthentication' -Name userName -Value ''\nicacls \"$p\\site\" /grant 'IIS AppPool\\LabExCoursePortal:(OI)(CI)RX'\nif($LASTEXITCODE -ne 0){throw 'Cap quyen khong thanh cong'}\nInvoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/index.html\n```\n\n### Kết quả và cách tự kiểm tra\nSite/pool riêng, đúng physical path và binding loopback duy nhất; identity ít quyền; HTTP /index.html trả 200 và đúng Finance portal revision 1.\n\n### Câu hỏi tự giải thích\nTại sao site Started vẫn có thể trả lỗi? Anonymous identity khác account bạn dùng IIS Manager như thế nào?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "content_vi": "## Xuất bản site tĩnh trong namespace riêng\n\n### Bản chất và cách làm\nIIS Manager → Application Pools → Add LabExCoursePortal; identity ApplicationPoolIdentity. Tạo site LabExCoursePortal, đường site trong bài, binding 127.0.0.1:18081. Anonymous Authentication → Edit → Application pool identity. Explorer Security cấp Read & execute cho IIS AppPool\\LabExCoursePortal. Không dùng LocalSystem hoặc Everyone Full control. Lệnh mẫu tương đương, phải kiểm chưa có site/pool cùng tên trước khi tạo.\n\n### Thực hành từng khối\n```powershell\nImport-Module WebAdministration\n$p='C:\\LabEx\\Labs\\win-web-isolated-site'\nif((Test-Path 'IIS:\\Sites\\LabExCoursePortal') -or (Test-Path 'IIS:\\AppPools\\LabExCoursePortal')){throw 'Ten da ton tai: kiem ownership truoc'}\nNew-Item -ItemType Directory -Path \"$p\\site\" -ErrorAction Stop\n'<h1>Finance portal revision 1</h1>' | Set-Content \"$p\\site\\index.html\" -Encoding UTF8\nNew-WebAppPool -Name LabExCoursePortal\nSet-ItemProperty 'IIS:\\AppPools\\LabExCoursePortal' -Name processModel.identityType -Value 4\nNew-Website -Name LabExCoursePortal -Port 18081 -IPAddress 127.0.0.1 -PhysicalPath \"$p\\site\" -ApplicationPool LabExCoursePortal\nSet-WebConfigurationProperty -PSPath 'IIS:\\' -Location LabExCoursePortal -Filter 'system.webServer/security/authentication/anonymousAuthentication' -Name userName -Value ''\nicacls \"$p\\site\" /grant 'IIS AppPool\\LabExCoursePortal:(OI)(CI)RX'\nif($LASTEXITCODE -ne 0){throw 'Cap quyen khong thanh cong'}\nInvoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/index.html\n```\n\n### Kết quả và cách tự kiểm tra\nSite/pool riêng, đúng physical path và binding loopback duy nhất; identity ít quyền; HTTP /index.html trả 200 và đúng Finance portal revision 1.\n\n### Câu hỏi tự giải thích\nTại sao site Started vẫn có thể trả lỗi? Anonymous identity khác account bạn dùng IIS Manager như thế nào?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "task": "Site/pool riêng, đúng physical path và binding loopback duy nhất; identity ít quyền; HTTP /index.html trả 200 và đúng Finance portal revision 1.",
+      "task_vi": "Site/pool riêng, đúng physical path và binding loopback duy nhất; identity ít quyền; HTTP /index.html trả 200 và đúng Finance portal revision 1.",
+      "hint": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "hint_vi": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    },
+    {
+      "id": "win-web-isolated-site-task-2-v1",
+      "title": "HTTP 404: sửa đúng tài nguyên thay vì đổi firewall",
+      "title_vi": "HTTP 404: sửa đúng tài nguyên thay vì đổi firewall",
+      "kind": "task",
+      "position": 2,
+      "need_verify": true,
+      "content": "## HTTP 404: sửa đúng tài nguyên thay vì đổi firewall\n\n### Bản chất và cách làm\nTrên trình duyệt Server mở /handbook.html trước khi tạo file để thấy 404; /index.html vẫn trả 200. Đây là tình huống thiếu tài nguyên thật, không nạp lỗi NIC. IIS logs xem đúng site ID, status/substatus và URI; log có thể ghi trễ. Sau đó xuất bản đúng trang, không đổi binding hay mở port public.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-web-isolated-site'\ntry { Invoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/handbook.html -ErrorAction Stop } catch { $_.Exception.Response.StatusCode }\n'<h1>Finance handbook approved</h1>' | Set-Content \"$p\\site\\handbook.html\" -Encoding UTF8\nInvoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/handbook.html\n```\n\n### Kết quả và cách tự kiểm tra\nSite/pool/identity/binding ban đầu còn đúng; index và handbook đều trả 200 với nội dung tương ứng. Phần quan sát 404 tự giải thích, không tự chứng nhận bằng file report.\n\n### Câu hỏi tự giải thích\nNếu TCP thành công nhưng URL sai trả 404, đổi DNS hoặc tắt firewall có sửa được đường dẫn file không?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "content_vi": "## HTTP 404: sửa đúng tài nguyên thay vì đổi firewall\n\n### Bản chất và cách làm\nTrên trình duyệt Server mở /handbook.html trước khi tạo file để thấy 404; /index.html vẫn trả 200. Đây là tình huống thiếu tài nguyên thật, không nạp lỗi NIC. IIS logs xem đúng site ID, status/substatus và URI; log có thể ghi trễ. Sau đó xuất bản đúng trang, không đổi binding hay mở port public.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-web-isolated-site'\ntry { Invoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/handbook.html -ErrorAction Stop } catch { $_.Exception.Response.StatusCode }\n'<h1>Finance handbook approved</h1>' | Set-Content \"$p\\site\\handbook.html\" -Encoding UTF8\nInvoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/handbook.html\n```\n\n### Kết quả và cách tự kiểm tra\nSite/pool/identity/binding ban đầu còn đúng; index và handbook đều trả 200 với nội dung tương ứng. Phần quan sát 404 tự giải thích, không tự chứng nhận bằng file report.\n\n### Câu hỏi tự giải thích\nNếu TCP thành công nhưng URL sai trả 404, đổi DNS hoặc tắt firewall có sửa được đường dẫn file không?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "task": "Site/pool/identity/binding ban đầu còn đúng; index và handbook đều trả 200 với nội dung tương ứng. Phần quan sát 404 tự giải thích, không tự chứng nhận bằng file report.",
+      "task_vi": "Site/pool/identity/binding ban đầu còn đúng; index và handbook đều trả 200 với nội dung tương ứng. Phần quan sát 404 tự giải thích, không tự chứng nhận bằng file report.",
+      "hint": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "hint_vi": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    },
+    {
+      "id": "win-web-isolated-site-summary",
+      "title": "Bàn giao, giới hạn và làm lại",
+      "title_vi": "Bàn giao, giới hạn và làm lại",
+      "kind": "summary",
+      "position": 3,
+      "need_verify": false,
+      "content": "## Bàn giao\nViết bằng lời của bạn: yêu cầu → bằng chứng trước sửa → thay đổi nhỏ nhất → kết quả sau sửa → phần chưa thử → cách quay lui. Phần giải thích này không được tự chấm thay bằng một chuỗi “done”.\n\nGiữ tài nguyên riêng để ôn lại; không tự dọn khi bài khác đang sử dụng. IIS Manager: chỉ xóa site/pool có đúng tên và physical path của bài sau khi kiểm chúng không được site khác dùng; dừng khi phát hiện khác biệt. Không xóa binding/site mặc định.\n\nTự luyện: làm lại với dữ liệu do bạn tạo trong thư mục khác, giải thích từng tham số mà không xem khối mẫu. Chưa có lab VM live không được tự nhận đã diễn tập phục hồi production.\n",
+      "content_vi": "## Bàn giao\nViết bằng lời của bạn: yêu cầu → bằng chứng trước sửa → thay đổi nhỏ nhất → kết quả sau sửa → phần chưa thử → cách quay lui. Phần giải thích này không được tự chấm thay bằng một chuỗi “done”.\n\nGiữ tài nguyên riêng để ôn lại; không tự dọn khi bài khác đang sử dụng. IIS Manager: chỉ xóa site/pool có đúng tên và physical path của bài sau khi kiểm chúng không được site khác dùng; dừng khi phát hiện khác biệt. Không xóa binding/site mặc định.\n\nTự luyện: làm lại với dữ liệu do bạn tạo trong thư mục khác, giải thích từng tham số mà không xem khối mẫu. Chưa có lab VM live không được tự nhận đã diễn tập phục hồi production.\n"
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-web-isolated-site-task-1-v1",
+      "title": "Xuất bản site tĩnh trong namespace riêng",
+      "title_vi": "Xuất bản site tĩnh trong namespace riêng",
+      "kind": "task",
+      "position": 1,
+      "need_verify": true,
+      "content": "## Xuất bản site tĩnh trong namespace riêng\n\n### Bản chất và cách làm\nIIS Manager → Application Pools → Add LabExCoursePortal; identity ApplicationPoolIdentity. Tạo site LabExCoursePortal, đường site trong bài, binding 127.0.0.1:18081. Anonymous Authentication → Edit → Application pool identity. Explorer Security cấp Read & execute cho IIS AppPool\\LabExCoursePortal. Không dùng LocalSystem hoặc Everyone Full control. Lệnh mẫu tương đương, phải kiểm chưa có site/pool cùng tên trước khi tạo.\n\n### Thực hành từng khối\n```powershell\nImport-Module WebAdministration\n$p='C:\\LabEx\\Labs\\win-web-isolated-site'\nif((Test-Path 'IIS:\\Sites\\LabExCoursePortal') -or (Test-Path 'IIS:\\AppPools\\LabExCoursePortal')){throw 'Ten da ton tai: kiem ownership truoc'}\nNew-Item -ItemType Directory -Path \"$p\\site\" -ErrorAction Stop\n'<h1>Finance portal revision 1</h1>' | Set-Content \"$p\\site\\index.html\" -Encoding UTF8\nNew-WebAppPool -Name LabExCoursePortal\nSet-ItemProperty 'IIS:\\AppPools\\LabExCoursePortal' -Name processModel.identityType -Value 4\nNew-Website -Name LabExCoursePortal -Port 18081 -IPAddress 127.0.0.1 -PhysicalPath \"$p\\site\" -ApplicationPool LabExCoursePortal\nSet-WebConfigurationProperty -PSPath 'IIS:\\' -Location LabExCoursePortal -Filter 'system.webServer/security/authentication/anonymousAuthentication' -Name userName -Value ''\nicacls \"$p\\site\" /grant 'IIS AppPool\\LabExCoursePortal:(OI)(CI)RX'\nif($LASTEXITCODE -ne 0){throw 'Cap quyen khong thanh cong'}\nInvoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/index.html\n```\n\n### Kết quả và cách tự kiểm tra\nSite/pool riêng, đúng physical path và binding loopback duy nhất; identity ít quyền; HTTP /index.html trả 200 và đúng Finance portal revision 1.\n\n### Câu hỏi tự giải thích\nTại sao site Started vẫn có thể trả lỗi? Anonymous identity khác account bạn dùng IIS Manager như thế nào?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "content_vi": "## Xuất bản site tĩnh trong namespace riêng\n\n### Bản chất và cách làm\nIIS Manager → Application Pools → Add LabExCoursePortal; identity ApplicationPoolIdentity. Tạo site LabExCoursePortal, đường site trong bài, binding 127.0.0.1:18081. Anonymous Authentication → Edit → Application pool identity. Explorer Security cấp Read & execute cho IIS AppPool\\LabExCoursePortal. Không dùng LocalSystem hoặc Everyone Full control. Lệnh mẫu tương đương, phải kiểm chưa có site/pool cùng tên trước khi tạo.\n\n### Thực hành từng khối\n```powershell\nImport-Module WebAdministration\n$p='C:\\LabEx\\Labs\\win-web-isolated-site'\nif((Test-Path 'IIS:\\Sites\\LabExCoursePortal') -or (Test-Path 'IIS:\\AppPools\\LabExCoursePortal')){throw 'Ten da ton tai: kiem ownership truoc'}\nNew-Item -ItemType Directory -Path \"$p\\site\" -ErrorAction Stop\n'<h1>Finance portal revision 1</h1>' | Set-Content \"$p\\site\\index.html\" -Encoding UTF8\nNew-WebAppPool -Name LabExCoursePortal\nSet-ItemProperty 'IIS:\\AppPools\\LabExCoursePortal' -Name processModel.identityType -Value 4\nNew-Website -Name LabExCoursePortal -Port 18081 -IPAddress 127.0.0.1 -PhysicalPath \"$p\\site\" -ApplicationPool LabExCoursePortal\nSet-WebConfigurationProperty -PSPath 'IIS:\\' -Location LabExCoursePortal -Filter 'system.webServer/security/authentication/anonymousAuthentication' -Name userName -Value ''\nicacls \"$p\\site\" /grant 'IIS AppPool\\LabExCoursePortal:(OI)(CI)RX'\nif($LASTEXITCODE -ne 0){throw 'Cap quyen khong thanh cong'}\nInvoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/index.html\n```\n\n### Kết quả và cách tự kiểm tra\nSite/pool riêng, đúng physical path và binding loopback duy nhất; identity ít quyền; HTTP /index.html trả 200 và đúng Finance portal revision 1.\n\n### Câu hỏi tự giải thích\nTại sao site Started vẫn có thể trả lỗi? Anonymous identity khác account bạn dùng IIS Manager như thế nào?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "task": "Site/pool riêng, đúng physical path và binding loopback duy nhất; identity ít quyền; HTTP /index.html trả 200 và đúng Finance portal revision 1.",
+      "task_vi": "Site/pool riêng, đúng physical path và binding loopback duy nhất; identity ít quyền; HTTP /index.html trả 200 và đúng Finance portal revision 1.",
+      "hint": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "hint_vi": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    },
+    {
+      "id": "win-web-isolated-site-task-2-v1",
+      "title": "HTTP 404: sửa đúng tài nguyên thay vì đổi firewall",
+      "title_vi": "HTTP 404: sửa đúng tài nguyên thay vì đổi firewall",
+      "kind": "task",
+      "position": 2,
+      "need_verify": true,
+      "content": "## HTTP 404: sửa đúng tài nguyên thay vì đổi firewall\n\n### Bản chất và cách làm\nTrên trình duyệt Server mở /handbook.html trước khi tạo file để thấy 404; /index.html vẫn trả 200. Đây là tình huống thiếu tài nguyên thật, không nạp lỗi NIC. IIS logs xem đúng site ID, status/substatus và URI; log có thể ghi trễ. Sau đó xuất bản đúng trang, không đổi binding hay mở port public.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-web-isolated-site'\ntry { Invoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/handbook.html -ErrorAction Stop } catch { $_.Exception.Response.StatusCode }\n'<h1>Finance handbook approved</h1>' | Set-Content \"$p\\site\\handbook.html\" -Encoding UTF8\nInvoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/handbook.html\n```\n\n### Kết quả và cách tự kiểm tra\nSite/pool/identity/binding ban đầu còn đúng; index và handbook đều trả 200 với nội dung tương ứng. Phần quan sát 404 tự giải thích, không tự chứng nhận bằng file report.\n\n### Câu hỏi tự giải thích\nNếu TCP thành công nhưng URL sai trả 404, đổi DNS hoặc tắt firewall có sửa được đường dẫn file không?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "content_vi": "## HTTP 404: sửa đúng tài nguyên thay vì đổi firewall\n\n### Bản chất và cách làm\nTrên trình duyệt Server mở /handbook.html trước khi tạo file để thấy 404; /index.html vẫn trả 200. Đây là tình huống thiếu tài nguyên thật, không nạp lỗi NIC. IIS logs xem đúng site ID, status/substatus và URI; log có thể ghi trễ. Sau đó xuất bản đúng trang, không đổi binding hay mở port public.\n\n### Thực hành từng khối\n```powershell\n$p='C:\\LabEx\\Labs\\win-web-isolated-site'\ntry { Invoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/handbook.html -ErrorAction Stop } catch { $_.Exception.Response.StatusCode }\n'<h1>Finance handbook approved</h1>' | Set-Content \"$p\\site\\handbook.html\" -Encoding UTF8\nInvoke-WebRequest -UseBasicParsing http://127.0.0.1:18081/handbook.html\n```\n\n### Kết quả và cách tự kiểm tra\nSite/pool/identity/binding ban đầu còn đúng; index và handbook đều trả 200 với nội dung tương ứng. Phần quan sát 404 tự giải thích, không tự chứng nhận bằng file report.\n\n### Câu hỏi tự giải thích\nNếu TCP thành công nhưng URL sai trả 404, đổi DNS hoặc tắt firewall có sửa được đường dẫn file không?\n\n### Khi chưa đạt\nXác nhận đúng VM, đúng thư mục, dữ liệu và bước trước; đọc lỗi thực. Không thay dữ liệu trong report để qua bài. Bộ chấm đọc file/cấu hình và thử chức năng, không chạy script do người học cung cấp.\n",
+      "task": "Site/pool/identity/binding ban đầu còn đúng; index và handbook đều trả 200 với nội dung tương ứng. Phần quan sát 404 tự giải thích, không tự chứng nhận bằng file report.",
+      "task_vi": "Site/pool/identity/binding ban đầu còn đúng; index và handbook đều trả 200 với nội dung tương ứng. Phần quan sát 404 tự giải thích, không tự chứng nhận bằng file report.",
+      "hint": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "hint_vi": "Tự đối chiếu kết quả theo từng tiêu chí ở phần hướng dẫn.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    }
+  ]
+}

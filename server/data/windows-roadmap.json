@@ -4,7 +4,7 @@
   "title": "Lộ trình Windows: IT Support → System Administrator",
   "description": "Lộ trình từ máy trạm Windows 11, mạng và PowerShell đến hỗ trợ người dùng, quản trị Windows Server, vận hành, bảo mật và dự án doanh nghiệp. Nhánh Azure hybrid là tùy chọn.",
   "curriculum_origin": "locally-planned-microsoft-references",
-  "updated_at": "2026-10-23",
+  "updated_at": "2026-10-27",
   "start_course_id": "windows-11-fundamentals",
   "available_start_course_id": "windows-11-fundamentals",
   "prerequisites_advisory": true,
@@ -269,7 +269,7 @@
           "url": "https://learn.microsoft.com/en-us/windows/security/"
         }
       ],
-      "practice_strategy": "Đã có bài local; học theo danh sách bài và kiểm tra khả năng hỗ trợ từng nhiệm vụ.",
+      "practice_strategy": "Ưu tiên ticket vận hành HD-P01; chẩn đoán theo principal/log/ACL, sửa tối thiểu rồi kiểm thử chức năng. Các bài cũ giữ để tham khảo, đang được nâng cấp theo cùng tiêu chuẩn.",
       "syllabus_modules": [
         {
           "id": "windows-11-it-support-troubleshooting-module-1",
@@ -282,7 +282,21 @@
           "id": "windows-11-it-support-troubleshooting-module-2",
           "title": "Sửa lỗi và khôi phục",
           "planned_lessons": [
-            "25 bài đã có; gồm 7 kịch bản nạp lỗi và các bài chẩn đoán/cấu hình"
+            "25 bài cũ để tham khảo: 7 kịch bản nạp lỗi cùng các bài cấu hình/chẩn đoán; chưa đồng nghĩa toàn bộ là ticket doanh nghiệp."
+          ]
+        },
+        {
+          "id": "windows-11-it-support-troubleshooting-practical-v2",
+          "title": "Ticket vận hành đang nâng cấp",
+          "planned_lessons": [
+            "Backup LOCAL SERVICE lỗi quyền NTFS",
+            "Sharing violation: tìm đúng process đang giữ file",
+            "Dịch vụ không khởi động sau đổi cấu hình: Services, Event Viewer và thử yêu cầu mới (đã nghiệm thu CLIENT01)"
+          ],
+          "lab_ids": [
+            "win-it-scheduled-backup-permissions",
+            "win-it-file-in-use",
+            "win-it-service-config-recovery"
           ]
         }
       ],
@@ -536,7 +550,7 @@
           "url": "https://learn.microsoft.com/en-us/iis/"
         }
       ],
-      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "practice_strategy": "1 bài thực hành có bộ chấm trạng thái/chức năng; chưa kiểm thử đầu-cuối trên Azure. Các mục nâng cao trong đề cương chưa triển khai đầy đủ.",
       "syllabus_modules": [
         {
           "id": "windows-iis-web-services-module-1",
@@ -544,6 +558,9 @@
           "planned_lessons": [
             "Tạo website thử nghiệm và application pool riêng",
             "Cấu hình binding, tên miền nội bộ và truy cập từ client"
+          ],
+          "lab_ids": [
+            "win-web-isolated-site"
           ]
         },
         {
@@ -552,7 +569,8 @@
           "planned_lessons": [
             "Phân tích HTTP status, IIS log và lỗi quyền thư mục",
             "Xử lý app pool dừng và website không phản hồi"
-          ]
+          ],
+          "lab_ids": []
         },
         {
           "id": "windows-iis-web-services-module-3",
@@ -560,7 +578,8 @@
           "planned_lessons": [
             "Lập kế hoạch HTTPS và chứng chỉ trong lab",
             "Backup cấu hình IIS, thay đổi và rollback"
-          ]
+          ],
+          "lab_ids": []
         }
       ],
       "initially_implemented": false
@@ -687,7 +706,7 @@
           "url": "https://learn.microsoft.com/en-us/training/paths/monitor-troubleshoot-windows-server-environments/"
         }
       ],
-      "practice_strategy": "Xem đề cương trước. Hướng dẫn, dữ liệu thực hành và bộ chấm sẽ được bổ sung sau.",
+      "practice_strategy": "3 bài thực hành có bộ chấm trạng thái/chức năng; chưa kiểm thử đầu-cuối trên Azure. Các mục nâng cao trong đề cương chưa triển khai đầy đủ.",
       "syllabus_modules": [
         {
           "id": "windows-backup-disaster-recovery-module-1",
@@ -695,7 +714,8 @@
           "planned_lessons": [
             "Xác định dữ liệu quan trọng, lịch backup, RPO/RTO và retention",
             "Phân biệt file backup, system state và snapshot"
-          ]
+          ],
+          "lab_ids": []
         },
         {
           "id": "windows-backup-disaster-recovery-module-2",
@@ -703,6 +723,11 @@
           "planned_lessons": [
             "Sao lưu và restore dữ liệu vào thư mục kiểm chứng riêng",
             "Thử phục hồi cấu hình và quyền truy cập sau lỗi"
+          ],
+          "lab_ids": [
+            "win-bkr-complete-restore",
+            "win-bkr-version-rollback",
+            "win-bkr-archive-validation"
           ]
         },
         {
@@ -711,7 +736,8 @@
           "planned_lessons": [
             "Lập runbook mất máy chủ và khôi phục từng dịch vụ",
             "Thiết kế diễn tập system state/AD restore trên bản sao cô lập"
-          ]
+          ],
+          "lab_ids": []
         }
       ],
       "initially_implemented": false

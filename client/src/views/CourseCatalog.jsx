@@ -6,16 +6,17 @@ import {
   ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { api } from '../lib/api';
+import { usePageState } from '../lib/usePageState';
 
 export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
   const [courses, setCourses] = useState([]);
   const [topics, setTopics] = useState([]);
-  const [selectedTopic, setSelectedTopic] = useState('all');
-  const [selectedLevel, setSelectedLevel] = useState('all');
-  const [onlyReady, setOnlyReady] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [topicSearch, setTopicSearch] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedTopic, setSelectedTopic] = usePageState('topic', 'all');
+  const [selectedLevel, setSelectedLevel] = usePageState('level', 'all');
+  const [onlyReady, setOnlyReady] = usePageState('ready', false);
+  const [searchTerm, setSearchTerm] = usePageState('search', '');
+  const [topicSearch, setTopicSearch] = usePageState('topicSearch', '');
+  const [currentPage, setCurrentPage] = usePageState('page', 1);
   const PAGE_SIZE = 9;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -70,9 +71,14 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
     return () => controller.abort();
   }, [selectedTopic, selectedLevel, searchTerm, attempt]);
 
+  const filterKey = JSON.stringify([selectedTopic, selectedLevel, searchTerm, onlyReady]);
+  const [previousFilters, setPreviousFilters] = useState(filterKey);
   useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedTopic, selectedLevel, searchTerm, onlyReady]);
+    if (previousFilters !== filterKey) {
+      setCurrentPage(1);
+      setPreviousFilters(filterKey);
+    }
+  }, [filterKey, previousFilters]);
 
   const handleSelectTopic = (alias) => {
     setSelectedTopic(alias);
@@ -101,7 +107,7 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 transition-colors">
+    <div data-route-ready={!loading || undefined} className="min-h-screen bg-slate-50 dark:bg-gray-950 transition-colors">
       {/* 1. Hero Section - Multi-Platform (Linux & Windows Cloud) */}
       <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-indigo-950 to-gray-950 text-white pt-20 pb-20 border-b border-gray-800">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]"></div>

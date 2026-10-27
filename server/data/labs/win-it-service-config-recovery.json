@@ -1,0 +1,86 @@
+{
+  "id": "win-it-service-config-recovery",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 28,
+  "title": "Dịch vụ không khởi động sau thay đổi cấu hình",
+  "title_vi": "Dịch vụ không khởi động sau thay đổi cấu hình",
+  "type": "lab",
+  "difficulty": "Intermediate",
+  "estimated_time": "45–60 mins",
+  "target_vm": "client",
+  "curriculum_version": 5,
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "practice_mode": "fault-injection",
+  "validation_status": "live-client-verified-2026-10-27",
+  "overview": "Nhận ticket ứng dụng không xử lý tài liệu; dùng Services, Event Viewer và nhật ký ứng dụng để sửa cấu hình, khởi động lại đúng service và thử yêu cầu mới dưới LOCAL SERVICE.",
+  "preparation": { "mode": "fault-injection", "requires_vm_start": true, "target": "client", "fault_injection": true },
+  "references": [
+    { "title": "Microsoft: Service application architecture", "url": "https://learn.microsoft.com/en-us/dotnet/framework/windows-services/service-application-programming-architecture" },
+    { "title": "Microsoft: LocalService account", "url": "https://learn.microsoft.com/en-us/windows/win32/services/localservice-account" },
+    { "title": "Microsoft: Event Viewer and Services", "url": "https://support.microsoft.com/en-au/windows/experience/system-configuration-tools-in-windows" }
+  ],
+  "practice_ticket": {
+    "learning_order": 3,
+    "machine": "CLIENT01 · Windows 11",
+    "identity": "Bạn dùng tài khoản quản trị lab để chỉnh cấu hình. LabEx Document Agent chạy bằng LOCAL SERVICE, không phải tài khoản đang mở Desktop.",
+    "ticket": "Sau lần sửa cấu hình sáng nay, ứng dụng tiếp nhận tài liệu không tạo phiếu xử lý. Nhân viên đã thử mở lại nhưng không được. Khôi phục dịch vụ, giữ dữ liệu và chứng minh yêu cầu mới được xử lý.",
+    "scope": "Đây là Windows Service thật, được cài riêng cho bài. Ứng dụng mẫu chỉ xử lý tệp trong C:\\LabEx\\PracticeFaults\\serviceconfig; không dùng phần mềm kế toán thương mại, không thay dịch vụ hệ thống.",
+    "tasks": [
+      "Chuẩn bị sự cố rồi mở Desktop. Trong Services, tìm LabEx Document Agent (Practice), thử Start và ghi nhận thông báo.",
+      "Đọc Event Viewer → Windows Logs → Application và Logs\\agent.log trong thư mục bài; tìm lỗi gốc thay vì chỉ đoán từ mã lỗi Services.",
+      "Đối chiếu agent.config với thư mục dữ liệu thật, sao lưu file cấu hình rồi sửa bằng Notepad chạy quyền quản trị.",
+      "Start lại đúng dịch vụ. Tạo một tệp yêu cầu mới trong Inbox bằng Notepad, kiểm tra tệp .receipt tương ứng trong Outbox.",
+      "Bấm Kiểm tra kết quả; bàn giao nguyên nhân, thay đổi và bằng chứng yêu cầu mới được xử lý."
+    ],
+    "acceptance": [
+      "Service giữ đúng binary, tài khoản LOCAL SERVICE và kiểu khởi động Manual của lab; trạng thái Running.",
+      "Cấu hình trỏ về thư mục Data thật và catalog.txt ban đầu không bị sửa.",
+      "Yêu cầu mới tạo ra phiếu xử lý đúng nội dung; phiếu cũ có sẵn không đủ đạt.",
+      "Không chuyển service sang SYSTEM hoặc mở quyền ghi cho Everyone/Users để né lỗi."
+    ],
+    "hints": [
+      { "title": "Tìm đúng nhật ký", "text": "Win+R → services.msc để xem lỗi khởi động. Sau đó eventvwr.msc → Application → Filter Current Log, chọn source LabExDocumentAgentV2. Nếu Event Viewer hiển thị thiếu mô tả nguồn, mở tab Details hoặc Logs\\agent.log." },
+      { "title": "Đối chiếu cấu hình với thực tế", "text": "DirectoryNotFoundException khác Access denied. Kiểm tra giá trị dataDirectory trong agent.config và tên thư mục thực tế trong Explorer. Không cấp thêm quyền khi nguyên nhân là đường dẫn sai." },
+      { "title": "Sửa và thử chức năng", "text": "Giá trị đúng là C:\\LabEx\\PracticeFaults\\serviceconfig\\Data. Lưu cấu hình đúng XML, Start service, tạo Inbox\\request-01.txt rồi kiểm tra Outbox\\request-01.receipt. Dùng tên yêu cầu mới mỗi lần thử." }
+    ],
+    "diagnosis": [
+      "Tái hiện lỗi Start một lần và ghi lại thời điểm để lọc sự kiện liên quan.",
+      "Đọc nhật ký ứng dụng để phân biệt thư mục không tồn tại, thiếu quyền hoặc XML sai cú pháp.",
+      "Xác định thay đổi nhỏ nhất cần làm, chưa sửa tài khoản dịch vụ hay ACL khi chưa có bằng chứng."
+    ]
+  },
+  "sections": [
+    {
+      "id": "win-it-service-config-recovery-sec-0", "position": 0,
+      "title": "Nhận ticket và chuẩn bị môi trường", "kind": "introduction", "need_verify": false,
+      "content": "## Việc cần khôi phục\nỨng dụng có một tiến trình chạy nền do Service Control Manager quản lý. Bạn không cần tự viết hoặc biên dịch service; nút **Chuẩn bị sự cố** làm phần thiết lập. Hệ thống thử xử lý yêu cầu khi cấu hình tốt trước, sau đó đổi cấu hình và xác nhận lỗi khởi động thật.\n\nChỉ cần CLIENT01. Thư mục bài là `C:\\LabEx\\PracticeFaults\\serviceconfig`. Mở Desktop và tự điều tra trước khi mở gợi ý. Không chạy đoạn tạo báo cáo JSON để lấy điểm.\n\n**Bản chất:** trạng thái dịch vụ cho biết tiến trình có hoạt động, nhưng ứng dụng còn phải đọc đúng dữ liệu và tạo được đầu ra. Người đang mở Desktop có quyền admin không có nghĩa service cũng chạy bằng admin.\n\nBài giữ startup type **Manual** để không để ứng dụng thực hành tự chạy sau lần bật máy tiếp theo. Đây là lựa chọn cho lab, không phải quy định mọi dịch vụ doanh nghiệp phải để Manual."
+    },
+    {
+      "id": "win-it-service-config-recovery-sec-1", "position": 1,
+      "title": "Điều tra bằng Services và nhật ký", "kind": "document", "need_verify": false,
+      "content": "## Tìm nguyên nhân trước khi sửa\n1. Win+R → `services.msc`. Tìm **LabEx Document Agent (Practice)**. Xem trạng thái, tab General và Log On. Service name là `LabExDocumentAgentV2`.\n2. Bấm Start một lần. Ghi nhận lỗi và thời điểm. Thông báo của Services có thể chỉ nói dịch vụ không khởi động được; chưa đủ để kết luận cần cài lại ứng dụng.\n3. Win+R → `eventvwr.msc` → Windows Logs → Application. Lọc nguồn **LabExDocumentAgentV2**, xem sự kiện Error cùng thời điểm. Với service mẫu, ID 1001 là sự kiện do ứng dụng định nghĩa; không dùng ID đó để suy đoán mọi ứng dụng.\n4. Mở `Logs\\agent.log` trong thư mục bài. Đọc tên exception và đường dẫn được báo. Lỗi **DirectoryNotFoundException** chỉ ra thư mục cấu hình không tồn tại.\n5. Explorer → thư mục bài. Bật View → Show → File name extensions để thấy đúng `agent.config`. Mở bằng Notepad để đọc `dataDirectory`, so sánh với thư mục chứa `catalog.txt`.\n\n**Tự trả lời trước khi mở gợi ý sửa:** dịch vụ dùng account nào, lỗi xảy ra ở thao tác nào, bằng chứng nào loại trừ việc cần cấp thêm quyền? Phần điều tra không tự chấm chỉ vì lỗi đang tồn tại."
+    },
+    {
+      "id": "win-it-service-config-recovery-sec-2", "position": 2,
+      "title": "Sửa cấu hình và thử yêu cầu mới", "kind": "task", "need_verify": true,
+      "content": "## Khôi phục bằng giao diện\n1. Trong Explorer, sao chép `agent.config` thành `agent.config.bak` trước khi sửa. Chỉ sao lưu trong thư mục bài.\n2. Mở Notepad bằng **Run as administrator** → File → Open → chọn All files để mở `C:\\LabEx\\PracticeFaults\\serviceconfig\\agent.config`.\n3. Sửa duy nhất giá trị `dataDirectory` thành `C:\\LabEx\\PracticeFaults\\serviceconfig\\Data`. Giữ cấu trúc XML:\n```xml\n<settings>\n  <dataDirectory>C:\\LabEx\\PracticeFaults\\serviceconfig\\Data</dataDirectory>\n</settings>\n```\n4. Lưu đúng file `.config`, không tạo nhầm `.config.txt`. Quay lại Services, Start service và Refresh. Không đổi Log On sang Local System.\n5. Mở Notepad, viết một yêu cầu ngắn như “Xuất phiếu cho đơn hàng 1042”; lưu `Inbox\\request-01.txt` bằng UTF-8. Tên này chỉ là ví dụ: bạn có thể chọn tên khác, miễn là `.txt`.\n6. Sau vài giây, mở `Outbox\\request-01.receipt` bằng Notepad. Nó phải bắt đầu bằng `PROCESSED|`. Phần sau là dấu kiểm nội dung, không cần học thuộc. Đổi tên yêu cầu mới khi thử lại vì ứng dụng không ghi đè phiếu đã có.\n7. Bấm **Kiểm tra kết quả**. Hệ thống tạo một yêu cầu ngẫu nhiên mới và kiểm tra phiếu sinh ra từ dữ liệu đó. Chỉ tạo một file .receipt bằng tay hoặc chỉ để service Running không đủ đạt.\n\nNếu XML lưu sai, đọc lỗi mới và khôi phục từ `.bak`, không tắt cơ chế chấm. Nếu Start thành công nhưng không có phiếu, kiểm tra tên đuôi `.txt`, nhật ký và quyền ghi Outbox. Không sửa `Data\\catalog.txt`.\n\nLệnh ngắn để đối chiếu, không bắt buộc phải dùng:\n```powershell\nGet-Service LabExDocumentAgentV2\n```\nGUI và lệnh dùng cùng Service Control Manager; kết quả chấm không phụ thuộc bạn chọn cách nào.",
+      "task": "Khôi phục Windows Service bằng cấu hình đúng; một yêu cầu mới được xử lý thật dưới LOCAL SERVICE, giữ dữ liệu và quyền ban đầu.",
+      "hint": "Đọc agent.log, so sánh dataDirectory với Data; sửa cấu hình rồi Start lại service và thử tệp .txt mới trong Inbox.",
+      "verification": { "kind": "windows-remote" }
+    },
+    {
+      "id": "win-it-service-config-recovery-sec-3", "position": 3,
+      "title": "Bàn giao và hoàn nguyên", "kind": "summary", "need_verify": false,
+      "content": "## Đóng ticket\nGhi ngắn: triệu chứng → lỗi gốc trong log → giá trị cấu hình đã sửa → yêu cầu mới và phiếu nhận được. Giải thích vì sao tăng quyền account không sửa được đường dẫn không tồn tại.\n\nBấm **Hoàn nguyên kịch bản** sau khi học. Hệ thống dừng và gỡ đúng service của bài, xóa nguồn sự kiện riêng và thư mục fixture. Không xóa Application log hoặc đổi service Windows khác. Đóng cửa sổ Properties của service nếu Windows báo đang chờ xóa rồi thử hoàn nguyên lại.\n\n**Giới hạn đã học:** xử lý lỗi cấu hình của một service trên máy trạm. Chưa kiểm tra database, dịch vụ domain, lỗi ứng dụng bên thứ ba hoặc dependency liên máy. Kiến thức có thể áp dụng khi đọc log dịch vụ thật, nhưng cần đối chiếu tài liệu của từng ứng dụng."
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-service-config-recovery-sec-2",
+      "title": "Sửa cấu hình và thử yêu cầu mới",
+      "task": "Khôi phục Windows Service bằng cấu hình đúng; một yêu cầu mới được xử lý thật dưới LOCAL SERVICE, giữ dữ liệu và quyền ban đầu.",
+      "hint": "Đọc agent.log, so sánh dataDirectory với Data; sửa cấu hình rồi Start lại service và thử tệp .txt mới trong Inbox.",
+      "verification": { "kind": "windows-remote" }
+    }
+  ]
+}
