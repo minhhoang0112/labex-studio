@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-13",
+  "course_id": "linux-upskill-challenge",
+  "order": 14,
+  "title": "Ngày 13: User, group và sudo có giới hạn",
+  "title_vi": "Ngày 13: User, group và sudo có giới hạn",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "Tài khoản, group và quyền sudo là các khái niệm khác nhau. User hỗ trợ không cần thành quản trị viên đầy đủ; visudo kiểm tra cú pháp trước khi chấp nhận cấu hình.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/13/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/13/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-13-intro",
+      "position": 0,
+      "title": "Ngày 13: User, group và sudo có giới hạn",
+      "title_vi": "Ngày 13: User, group và sudo có giới hạn",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nTài khoản, group và quyền sudo là các khái niệm khác nhau. User hỗ trợ không cần thành quản trị viên đầy đủ; visudo kiểm tra cú pháp trước khi chấp nhận cấu hình.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/13/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nTài khoản, group và quyền sudo là các khái niệm khác nhau. User hỗ trợ không cần thành quản trị viên đầy đủ; visudo kiểm tra cú pháp trước khi chấp nhận cấu hình.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/13/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-13-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 13 - Users and Groups\n\n* [Lesson video](https://youtu.be/mBcExazxLU8)\n* Complementary video: [Users and groups](https://www.youtube.com/live/2lYo_FJxQR8?t=4960s)\n\n## INTRO\n\nToday you're going to set-up another user on your system. You're going to imagine that this is a help-desk person that you trust to do just a few simple tasks:\n\n* check that the system is running\n* check disk space with: `df -h`\n\n...but you also want them to be able to reboot the system, because you believe that \"turning it off and on again\" resolves most problems :-)\n\nYou'll be covering a several new areas, so have fun!\n\n## YOUR TASKS TODAY\n\n* Create a new user\n* Create a new group\n* Create a new user and add to an existing group\n* Make a new user a sudoer\n\nFollow [this demo](https://asciinema.org/a/631680)\n\n## ADDING A NEW USER\nChoose a name for your new user - we'll use \"helen\" in the examples, so to add this new user:\n\n`sudo adduser helen`\n\n(Names are case-sensitive in Linux, so \"Helen\" would be a completely different user)\n\nThe \"adduser\" command works very slightly differently in each distro - if it didn't ask you for a password for your new user, then set it manually now by:\n\n`sudo passwd helen`\n\nYou will now have a new entry in the simple text database of users: `/etc/passwd` (check it out with: `less`), and a group of the same name in the file: `/etc/group`. A hash of the password for the user is in: `/etc/shadow` (you can read this too if you use \"sudo\" - check the permissions to see how they're set. For obvious reasons it's not readable to just everyone).\n\nIf you're used to other operating systems it may be hard to believe, but these simple text files are the whole Linux user database and you could even create your users and groups by directly editing these files - although this isn’t normally recommended.\n\nAdditionally, `adduser` will have created a home directory, `/home/helen` for example, with the correct permissions.\n\n**ATTENTION!** `useradd` is not the same as `adduser`. They both create a new user, but they interact very differently. Check the link in the EXTENSION section to see those differences.\n\n## ADDING A NEW GROUP\n\nLet's say we want to all of the developers in my organization to have their own group, so they can have access to the same things.\n\n`sudo groupadd developers`\n\nOn most modern Linux systems there is a group created for each user, so user \"ubuntu\" is a member of the group \"ubuntu\". But if you want, you can create a new user directly into an existing group, using the `ingroup` flag. So a new user `fred` would be created like this:\n\n`sudo adduser --ingroup developers fred`\n\n## ADDING AN USER TO GROUPS\n\nUsers can also be part of more than one group, and groups can be added as required.\n\nTo see what groups you're a member of, simply type: `groups`\n\nOn an Ubuntu system the first user created (in your case `ubuntu`), should be a member of the groups: `ubuntu`, `sudo` and `admin` - and if you list the `/var/log` folder you'll see your membership of the `sudo` group is why you can use `less` to read and view the contents of `/var/log/auth.log`\n\nThe \"root\" user can add a user to an existing group with the command:\n\n`usermod -a -G group user`\n\nso your `ubuntu` user can do the same simply by prefixing the command with `sudo`.\n\nBecause the new user `helen` is not the first user created in the system, they don't have the power to run `sudo` - which _your_ user has by being a member of the group `sudo`.\n\nSo, to check which groups `helen` is a member of, you can \"become helen\" by switching users like this:\n\n`sudo su helen`\n\nThen:\n\n`groups`\n\nIf you try to do stuff only a sudo user can do, i.e. read the contents of `/var/log/auth.log`, even using the prefix `sudo` won't work. Helen is not a sudo and has no permissions to perform this action.\n\nNow type \"exit\" to return to your normal user, and you can add `helen` to this group with:\n\n`sudo usermod -a -G sudo helen`\n\nInstead of switching users again, simply run the `groups helen` to check. Try that with `fred` too and check how everything works.\n\nSee if any of your new users can `sudo reboot`.\n\n## CLEVER SUDO TRICKS\n\nYour new user is just an ordinary user and so can't use `sudo` to run commands with elevated privileges - until we set them up. We could simply add them to a group that's pre-defined to be able to use sudo to do _anything_ as root (like we did with `helen`) - but we don't want to give `fred` quite that same amount of power.\n\nUse `ls -l` to look at the permissions for the file: `/etc/sudoers`  This is where the magic is defined, and you'll see that it's tightly controlled, but you should be able to view it with: `sudo less /etc/sudoers`  You want to add a new entry in there for your new user, and for this you need to run a special utility: `visudo`\n\nTo run this, you can temporarily \"become root\" by running:\n\n`sudo -i`\n\nNotice that your prompt has changed to a `#`\n\nNow simply run `visudo` to begin editing `/etc/sudoers` - typically this will use `nano`.\n\nAll lines in `/etc/sudoers` beginning with \"#\" are optional comments. You'll want to add some lines like this:\n\n\t# Allow user \"fred\" to run \"sudo reboot\"\n\t# ...and don't prompt for a password\n\t#\n\tfred ALL = NOPASSWD:/sbin/reboot\n\nYou can add these line in wherever seems reasonable. The `visudo` command will automatically check your syntax, and won't allow you to save if there are mistakes - because a corrupt sudoers file could lock you out of your server!\n\nType `exit` to remove your magic hat and become your normal user again - and notice that your prompt reverts to: `$`\n\n## TESTING\n\nTest by logging in as your test user and typing: `sudo reboot`\nNote that you can \"become\" helen by:\n\n`sudo su helen`\n\nIf your ssh config allows login only with public keys, you'll need to setup `/home/helen/.ssh/authorized_keys` - including getting the owner and permissions correct. A little challenge of your understanding of this area!\n\n## EXTENSION\n\nIf you find this all pretty familiar, then you might like to check and update your knowledge on a couple of related areas:\n\n* [Restricting shell access](http://www.cyberciti.biz/tips/howto-linux-shell-restricting-access.html)\n* [Linux Password & Shadow File Formats](https://www.tldp.org/LDP/lame/LAME/linux-admin-made-easy/shadow-file-formats.html)\n* [What's the difference between 'useradd' and 'adduser'?](https://serverfault.com/questions/218993/whats-the-difference-between-useradd-and-adduser)\n* [How to create users and groups in Linux from the command line](https://www.techrepublic.com/article/how-to-create-users-and-groups-in-linux-from-the-command-line/)\n* [Learn how to use the $EDITOR environmental variable to set your default editor to `vim`](https://www.a2hosting.com/kb/developer-corner/linux/setting-the-default-text-editor-in-linux). With this done, `visudo` will use `vim` rather than `nano` for editing.\n\n## RESOURCES\n\n* [How To Edit the Sudoers File](https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file)\n* [Sudo – An Advanced Howto](https://centoshelp.org/security/sudo-an-advanced-howto/)\n* [A cartoon that should now make sense!](http://xkcd.com/149/ )\n* [Basic Linux Permissions: sudo and sudoers](http://www.youtube.com/watch?v=YSSIm0g00m4)   (video)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nTài khoản, group và quyền sudo là các khái niệm khác nhau. User hỗ trợ không cần thành quản trị viên đầy đủ; visudo kiểm tra cú pháp trước khi chấp nhận cấu hình.\n\n## Thực hành từng bước\nTạo tài khoản thực hành không đăng nhập SSH bằng mật khẩu:\n```bash\nsudo adduser --disabled-password --gecos '' luc-helper\nsudo groupadd -f luc-ops\nsudo usermod -aG luc-ops luc-helper\nid luc-helper\n```\nKhông chạy adduser lần nữa nếu tài khoản đã có. Trong bài sudo nâng cao, dùng `sudo visudo -f /etc/sudoers.d/luc-helper` để cấp **chỉ** quyền xem trạng thái Apache theo ví dụ nguồn; không cấp ALL. Kiểm tra bằng `sudo -l -U luc-helper` và `sudo -u luc-helper -H bash` rồi exit.\nBộ chấm chính kiểm tra user/home/group và không thuộc sudo hoặc adm; việc giới hạn sudoers là phần tự kiểm tra riêng. Không thay tài khoản luc đang dùng để backend kết nối.\n\n## Tự giải thích\nusermod -G khác usermod -aG ở đâu? Vì sao phải dùng visudo?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/13/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/13/",
+      "source_sha256": "d3640fd90af18cb185d34b7d59d5327e153e22bd0c49fab9f5a5d1b4f995f4a0",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-13-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nluc-helper có home đúng owner, thuộc luc-ops, không thuộc sudo/adm.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "luc-helper có home đúng owner, thuộc luc-ops, không thuộc sudo/adm.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. usermod -G khác usermod -aG ở đâu? Vì sao phải dùng visudo?",
+      "verification": {
+        "kind": "state",
+        "command": "id luc-helper >/dev/null && test -d /home/luc-helper && test \"$(stat -c %U /home/luc-helper)\" = luc-helper && id -nG luc-helper | tr ' ' '\n' | grep -qx luc-ops && ! id -nG luc-helper | tr ' ' '\n' | grep -Eq '^(sudo|adm)$' "
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-13-task",
+      "title": "Kiểm tra kết quả",
+      "task": "luc-helper có home đúng owner, thuộc luc-ops, không thuộc sudo/adm.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. usermod -G khác usermod -aG ở đâu? Vì sao phải dùng visudo?",
+      "verification": {
+        "kind": "state",
+        "command": "id luc-helper >/dev/null && test -d /home/luc-helper && test \"$(stat -c %U /home/luc-helper)\" = luc-helper && id -nG luc-helper | tr ' ' '\n' | grep -qx luc-ops && ! id -nG luc-helper | tr ' ' '\n' | grep -Eq '^(sudo|adm)$' "
+      }
+    }
+  ]
+}

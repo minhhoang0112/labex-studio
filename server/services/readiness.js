@@ -3,6 +3,7 @@ import { windowsStepReadiness } from './windowsRemoteVerifier.js';
 import { getVmTargetConfig } from './cloudConfig.js';
 import { labVmTarget, isWindowsLab } from './vmTargets.js';
 import { hasUnconditionalSuccess, isUnboundedCommandPattern, getVerificationDefinition } from "./verification.js";
+import {isUpskillLab,upskillConfigured} from '../pty/upskillSsh.js';
 
 // Curriculum support for the current namespace provider. Live startup health is
 // reported separately by /api/environment; catalog reads never start a VM.
@@ -39,6 +40,11 @@ function unsupportedRule(rule) {
 }
 
 export function getStepReadiness(step, lab = {}) {
+  if(isUpskillLab(lab.id)) {
+    const reason=unsupportedRule(getVerificationDefinition(step));
+    const configured=upskillConfigured();
+    return {ready:configured&&!reason,missing_capabilities:configured?[]:['ubuntu-server-ssh'],reasons:[...(!configured?['Cần kết nối VM Ubuntu Server riêng qua SSH; xem Ngày 0.']:[]),...(reason?[reason]:[])]};
+  }
   const provider = process.env.LABEX_RUNTIME_PROVIDER || "namespace";
   const available = providerCapabilities(provider);
   const requirements = [...new Set([...(lab.course_id === "docker-for-beginners" ? ["docker"] : []),
@@ -67,7 +73,7 @@ export function getLabReadiness(lab) {
   return { state: !steps.length ? "reference-only" : supported === steps.length ? "ready" : supported ? "partial" : "blocked",
     // A missing automatic grader must not prevent reading a Linux lesson or
     // practicing commands in its private shell. Task readiness remains strict.
-    can_open: Boolean(steps.length), can_start_terminal: !windows && steps.length > 0,
+    can_open: Boolean(steps.length), can_start_terminal: !windows && steps.length > 0 && (!isUpskillLab(lab.id)||upskillConfigured()),
     ...(windows ? { can_start_windows: Boolean(vm.subscriptionId && vm.publicIp && vm.password), target_vm: labVmTarget(lab) } : {}),
     can_grade: supported === steps.length && supported > 0,
     supported_steps_count: supported, total_steps_count: steps.length,

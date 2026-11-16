@@ -1,0 +1,40 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { gunzipSync } from 'node:zlib';
+import { loadLab } from '../server/data/catalog.js';
+import { createWindowsFaultService, faultCommand } from '../server/services/windowsFaults.js';
+const labId = 'win-it-cpu-process-diagnosis';
+test('CPU ticket has one genuine functional grading task and a complete bounded runtime payload', () => {
+  const lab = loadLab(labId);
+  assert.equal(lab.target_vm, 'client');
+  assert.equal(lab.teaching_format, 'ticket-gui-v2');
+  assert.equal(lab.steps.length, 1);
+  assert.equal(lab.steps[0].id, lab.sections.find(s => s.need_verify).id);
+  assert.equal(lab.steps[0].verification.kind, 'windows-remote');
+  const command = faultCommand('cpuincident', 'Healthy');
+  assert.ok(command.length < 16000);
+  assert.ok(Buffer.from(command + 'x'.repeat(300), 'utf16le').toString('base64').length < 31000);
+  const packed = command.match(/FromBase64String\('([^']+)'\)/)[1];
+  const source = gunzipSync(Buffer.from(packed, 'base64')).toString('utf8');
+  assert.ok(!source.includes('__LABEX_PERF_SOURCE_B64__'));
+  assert.ok(source.includes(fs.readFileSync(new URL('../server/runtime/windows/performance-worker.cs', import.meta.url)).toString('base64')));
+});
+test('CPU incident cannot pass unprepared, while runtime rejects repair, or on timeout', async t => {
+  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'labex-cpu-test-'));
+  t.after(()=>fs.rmSync(directory,{recursive:true,force:true}));
+  let result={exitCode:0};const operations=[];
+  const faults=createWindowsFaultService({journal:path.join(directory,'journal.json'),baseline:async()=>{},execute:async(command,options)=>{
+    assert.equal(options.target,'client');operations.push(command.match(/-Operation '([A-Za-z]+)' -Scenario/)[1]);return result;
+  }});
+  assert.equal((await faults.verify(labId)).supported,false);
+  await faults.prepare(labId);
+  assert.deepEqual(operations,['Baseline','Healthy','Inject','Faulted']);
+  result={exitCode:1};assert.equal((await faults.verify(labId)).passed,false);
+  result={exitCode:2};assert.equal((await faults.verify(labId)).passed,false);
+  result={exitCode:0,timedOut:true};assert.equal((await faults.verify(labId)).passed,false);
+  result={exitCode:0};assert.equal((await faults.verify(labId)).passed,true);
+  await faults.reset(labId);assert.equal((await faults.verify(labId)).supported,false);
+});

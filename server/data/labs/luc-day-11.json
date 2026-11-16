@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-11",
+  "course_id": "linux-upskill-challenge",
+  "order": 12,
+  "title": "Ngày 11: Tìm tệp và chương trình",
+  "title_vi": "Ngày 11: Tìm tệp và chương trình",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "find tìm trên filesystem hiện tại; locate dùng chỉ mục có thể chưa cập nhật; command -v cho biết shell sẽ chạy chương trình nào. grep tìm trong nội dung, không thay thế tìm tên tệp.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/11/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/11/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-11-intro",
+      "position": 0,
+      "title": "Ngày 11: Tìm tệp và chương trình",
+      "title_vi": "Ngày 11: Tìm tệp và chương trình",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nfind tìm trên filesystem hiện tại; locate dùng chỉ mục có thể chưa cập nhật; command -v cho biết shell sẽ chạy chương trình nào. grep tìm trong nội dung, không thay thế tìm tên tệp.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/11/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nfind tìm trên filesystem hiện tại; locate dùng chỉ mục có thể chưa cập nhật; command -v cho biết shell sẽ chạy chương trình nào. grep tìm trong nội dung, không thay thế tìm tên tệp.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/11/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-11-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 11 - Finding things...\n\n* [Lesson video](https://youtu.be/gQ9nP9PN8KA)\n* Complementary video: [Finding things](https://www.youtube.com/live/2lYo_FJxQR8?t=530s)\n\n## INTRO\n\nToday we’ll look at how you find files, and text inside these files, quickly and efficiently.\n\nIt can be very frustrating to know that a file or setting exists, but not be able to track it down! Master today’s commands and you’ll be much more confident as you administer your systems.\n\nToday you’ll look at some useful tools:\n\n* `locate`\n* `find`\n* `grep`\n* `which`\n\n## YOUR TASKS TODAY\n\n* Find all files that have the word \"Permission\" in it\n\n## INSTRUCTIONS\n\n### _locate_\n\nIf you're looking for a file called `access.log` then the quickest approach is to use \"locate\" like this:\n\n\t$ locate access.log\n\t/var/log/apache2/access.log\n\t/var/log/apache2/access.log.1\n\t/var/log/apache2/access.log.2.gz\n\n(If `locate` is not installed, do so with `sudo apt install plocate`)\n\nAs you can see, by default it treats a search for _\"something\"_ as a search for _\"\\*something\\*\"_. It’s very fast because it searches an index, but if this index is out of date or missing it may not give you the answer you’re looking for.  This is because the index is created by the `updatedb` command - typically run only nightly by `cron`.  It may therefore be out of date for recently added files, so it can be worthwhile updating the index by manually running: `sudo updatedb`.\n\n### _find_\n\nThe `find` command searches down through a directory structure looking for files which match some criteria - which could be name, but also size, or when last updated etc. Try these examples:\n\n\tfind /var -name access.log\n\tfind /home -mtime -3\n\nThe first searches for files with the name \"access.log\", the second for any file under `/home` with a last-modified date in the last 3 days.\n\nThese will take longer than `locate` did because they search through the filesystem directly rather from an index. Also, because `find` uses the permissions of the logged-in user you’ll get “permission denied” messages for many directories if you search the whole system. Starting the command with `sudo` of course will run it as *root* - or you could filter the errors with `grep` like this: `find /var -name access.log 2>&1 | grep -vi \"Permission denied\"`.\n\nThese examples are just the tip of a very large iceberg, check the articles in the RESOURCES section and work through as many examples as you can - time spent getting really comfortable with `find` is not wasted.\n\n### _grep -R_\n\nRather than asking \"grep\" to search for text within a specific file, you can give it a whole directory structure, and ask it to recursively search down through it, including following all symbolic links (which `-r` does not).\nThis trick is particularly handy when you \"just know\" that an item appears \"somewhere\" - but are not sure where.\n\nAs an example, you know that “PermitRootLogin” is an ssh parameter in a config file somewhere under /etc, but can’t recall exactly where it is kept:\n\n `grep -R -i \"PermitRootLogin\" /etc/*`\n\nBecause this only works on plain text files, it's most useful for the `/etc` and `/var/log` folders. (Notice the `-i` which makes the search “case insensitive”, finding the setting even if it’s been entered as “Permitrootlogin”\n\nYou may now have logs like `/var/log/access.log.2.gz` - these are older logs that have been compressed to save disk space - so you can't read them with `less`, or search them with `grep`. However, there are `zless` and `zgrep`, which do work, and on ordinary as well as compressed files.\n\n### _which_\n\nIt's sometimes useful to know where a command is being run from. If you type `nano`, and it starts, where is the `nano` binary coming from? The general rule is that the system will search through the locations setup in your \"path\". To see this type:\n\n`echo $PATH`\n\nTo see where `nano` comes from, type:\n\n`which nano`\n\nTry this for `grep`, `vi` and `service` and `reboot`. You'll notice that they’re typically always in subfolders named `bin`, but that there are several different ones.\n\n## EXTENSION\n\nThe `-exec` feature of the `find` command is extremely powerful.\n\nBut \"finding things\" can go so much further than that! You can not only track down the content of a file, but also its **usage** with commands like `lsof` and `fuser`.\n\nTest some examples of this from the RESOURCES links.\n\n## RESOURCES\n\n* [25 find command examples...](https://www.linuxtechi.com/25-find-command-examples-for-linux-beginners/)\n* [10 Tips for using \"find\"](https://www.linux.com/tutorials/10-tips-using-gnu-find/)\n* [Five simple recipes for \"grep\"](http://arstechnica.com/open-source/news/2009/05/command-line-made-easy-five-simple-recipes-for-grep.ars)\n* [How to use the lsof command to troubleshoot Linux](https://www.redhat.com/sysadmin/analyze-processes-lsof)\n* [Learn \"fuser\", a little-known Linux workhorse command!](https://youtu.be/xF8uttDarG0)\n\n## TROUBLESHOOT AND MAKE A SAD SERVER HAPPY!\n\nPractice what you've learned with some challenges at [SadServers.com](https://sadservers.com/):\n\n* [\"Saint John\": what is writing to this log file?](https://sadservers.com/scenario/saint-john)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nfind tìm trên filesystem hiện tại; locate dùng chỉ mục có thể chưa cập nhật; command -v cho biết shell sẽ chạy chương trình nào. grep tìm trong nội dung, không thay thế tìm tên tệp.\n\n## Thực hành từng bước\nTạo vài tệp rồi thử điều kiện:\n```bash\nmkdir -p ~/luc-course/day11/inputs\nprintf 'old\\n' > ~/luc-course/day11/inputs/a.log\nprintf 'keep\\n' > ~/luc-course/day11/inputs/b.txt\nfind ~/luc-course/day11/inputs -type f -name '*.log' -print\ncommand -v bash\n```\nLưu kết quả tìm vào ngoài thư mục inputs để không tự tìm thấy file đầu ra:\n```bash\nfind ~/luc-course/day11/inputs -type f -name '*.log' -printf '%f\\n' | sort > ~/luc-course/day11/log-files.txt\n```\nThử tìm theo -mtime hoặc -size nhưng quan sát bằng -print trước. Không ghép -delete lên cây hệ thống để luyện. Bộ chấm đối chiếu danh sách với các tệp .log thật, nên bạn có thể thêm tệp .log tên khác rồi chạy lại.\n\n## Tự giải thích\nVì sao locate không thấy tệp mới nhưng find lại thấy?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/11/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/11/",
+      "source_sha256": "742cadce73d229f95435962b9f87034c6f3afcc5b465b634aab3581746eb2811",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-11-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nlog-files.txt liệt kê đầy đủ tệp .log thực có trong inputs.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "log-files.txt liệt kê đầy đủ tệp .log thực có trong inputs.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Vì sao locate không thấy tệp mới nhưng find lại thấy?",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path.home()/'luc-course/day11'\nexpected=sorted(x.name for x in (p/'inputs').rglob('*.log') if x.is_file())\nassert expected and sorted((p/'log-files.txt').read_text().splitlines())==expected\nPY"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-11-task",
+      "title": "Kiểm tra kết quả",
+      "task": "log-files.txt liệt kê đầy đủ tệp .log thực có trong inputs.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Vì sao locate không thấy tệp mới nhưng find lại thấy?",
+      "verification": {
+        "kind": "state",
+        "command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path.home()/'luc-course/day11'\nexpected=sorted(x.name for x in (p/'inputs').rglob('*.log') if x.is_file())\nassert expected and sorted((p/'log-files.txt').read_text().splitlines())==expected\nPY"
+      }
+    }
+  ]
+}

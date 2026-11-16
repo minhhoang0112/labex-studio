@@ -1,0 +1,152 @@
+{
+  "id": "win-it-user-folder-permissions",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 29,
+  "title": "Nhân viên đọc được nhưng không lưu được tài liệu",
+  "title_vi": "Nhân viên đọc được nhưng không lưu được tài liệu",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "40–60 mins",
+  "target_vm": "client",
+  "curriculum_version": 5,
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "practice_mode": "fault-injection",
+  "validation_status": "live-client-verified-2026-10-28",
+  "overview": "Điều tra và sửa NTFS bằng GUI, kiểm tra I/O thật dưới hai user thường; không dùng admin hoặc tệp báo cáo để thay thế việc chấm.",
+  "preparation": {
+    "mode": "fault-injection",
+    "requires_vm_start": true,
+    "target": "client",
+    "fault_injection": true
+  },
+  "practice_ticket": {
+    "learning_order": 2.5,
+    "machine": "CLIENT01 · Windows 11 · hai user local thường",
+    "identity": "Bạn là IT Support dùng admin để chỉnh quyền; LabExWriterV2 là nhân viên cần lưu tài liệu, LabExVisitorV2 là người ngoài phạm vi. Không dùng quyền admin để chứng minh nhân viên đã làm việc được.",
+    "ticket": "Nhân viên đọc được tài liệu tham khảo nhưng khi lưu bản ghi công việc vào thư mục Documents thì bị Access denied. Khôi phục quyền làm việc của nhân viên, giữ người ngoài không truy cập được và giữ nguyên tài liệu tham khảo.",
+    "scope": "Chỉ thay quyền của C:\\LabEx\\PracticeFaults\\useracl\\Documents. Hai tài khoản và ứng dụng soạn thảo nhỏ do lab tạo để tái hiện truy cập NTFS thật; không phải bài sửa Office, AD hoặc SMB.",
+    "tasks": [
+      "Bấm Chuẩn bị sự cố. Mở ứng dụng bằng tài khoản nhân viên và tái hiện lỗi lưu; ghi lại tên user, đường dẫn và thông báo.",
+      "Dùng Properties → Security → Advanced để đối chiếu quyền với nhu cầu đọc/sửa/lưu. Tìm thay đổi nhỏ nhất.",
+      "Sửa quyền trong Documents bằng tài khoản admin. Không thêm quyền quản trị cho nhân viên và không cấp Everyone/Users quyền truy cập.",
+      "Thử lại bằng nhân viên: đọc, lưu bản sao và sửa bản sao đó. Thử tài khoản đối chứng: vẫn không đọc/ghi được.",
+      "Bấm Kiểm tra kết quả rồi giải thích nguyên nhân, quyền đã sửa và bằng chứng; đóng ứng dụng thử trước khi hoàn nguyên."
+    ],
+    "acceptance": [
+      "Nhân viên là user thường, đọc tài liệu và tạo/sửa/đổi tên/xóa tệp làm việc mới được trong Documents.",
+      "Tài khoản đối chứng không liệt kê, đọc hoặc ghi được dữ liệu trong Documents.",
+      "reference.txt giữ nguyên; không cấp Change permissions/Take ownership cho nhân viên hoặc quyền truy cập cho nhóm rộng.",
+      "Hệ thống thử I/O mới dưới đúng hai danh tính; tệp cũ do admin tạo không đủ đạt."
+    ],
+    "diagnosis": [
+      "Tái hiện bằng LabExWriterV2, không chạy ứng dụng dưới admin.",
+      "Đọc thông báo, xác định đường dẫn và phân biệt thiếu quyền với tệp đang được ứng dụng khác giữ.",
+      "Quan sát ACL và ghi lại quyền hiện tại trước khi sửa; nêu vì sao không cần thay tài khoản hay tắt UAC."
+    ],
+    "hints": [
+      {
+        "title": "Xác định danh tính thật",
+        "text": "Tên trên thanh tiêu đề ứng dụng phải là CLIENT01\\LabExWriterV2. Đọc Private\\credentials.txt bằng admin; chạy LabExWriterV2.cmd, nhập mật khẩu lab khi runas hỏi. Không đăng xuất Desktop hoặc dùng mật khẩu Azure."
+      },
+      {
+        "title": "So sánh nhu cầu với quyền",
+        "text": "Nhân viên đọc được nhưng không lưu được. Mở Properties của Documents, Security → Advanced, tìm LabExWriterV2. Read & execute không cho phép tạo và sửa tài liệu."
+      },
+      {
+        "title": "Thay đổi tối thiểu",
+        "text": "Sửa entry Allow của LabExWriterV2 thành Modify, áp dụng This folder, subfolders and files. Giữ quyền SYSTEM và Administrators; không thêm Everyone/Users. Modify phục vụ làm việc với tệp, không cần Full Control. Thử lại cả hai user."
+      }
+    ],
+    "prerequisites": "Biết mở File Explorer và Properties. Bài hướng dẫn cách chạy ứng dụng bằng user lab; chưa cần viết PowerShell.",
+    "concepts": [
+      {
+        "title": "Quyền thuộc về danh tính đang chạy ứng dụng",
+        "text": "Admin đang mở Desktop và nhân viên chạy ứng dụng là hai danh tính khác nhau. Thanh tiêu đề ứng dụng cho biết bạn đang thử đúng người hay chưa."
+      },
+      {
+        "title": "Đủ quyền làm việc, không cần quản lý quyền",
+        "text": "Read cho đọc; Modify cho làm việc với tệp, gồm sửa và xóa. Full Control còn cho thay quyền. Phạm vi kế thừa quyết định tệp con nhận quyền gì; sửa một tệp mẫu chưa đảm bảo tệp mới hoạt động."
+      }
+    ],
+    "investigation_questions": [
+      "Người nào thực hiện thao tác và thông báo lỗi cụ thể là gì?",
+      "Vì sao đọc được nhưng không lưu được? Entry nào đang áp dụng cho thư mục và tệp con?",
+      "Bạn sẽ kiểm tra người được phép và người ngoài bằng thao tác nào?"
+    ],
+    "reflection": [
+      "Vì sao thử bằng admin có thể kết luận sai?",
+      "Vì sao chọn Modify thay vì Full Control hoặc Everyone?",
+      "Nếu thư mục nằm trên server, cần điều tra thêm lớp quyền nào?"
+    ],
+    "sources": [
+      {
+        "title": "Microsoft: quyền truy cập tệp",
+        "url": "https://learn.microsoft.com/en-us/windows/win32/fileio/file-security-and-access-rights"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "win-it-user-folder-permissions-sec-0",
+      "position": 0,
+      "title": "Nhận ticket và mở môi trường",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Một lỗi quyền trong công việc hằng ngày\nBạn hỗ trợ người dùng đọc được tài liệu nhưng không lưu được bản làm việc. Bài này tập trung vào **danh tính → quyền → thao tác thực**, không yêu cầu viết script hoặc xuất JSON.\n\n1. Bật CLIENT01, kết nối Desktop rồi bấm **Chuẩn bị sự cố**. Chờ hoàn tất trước khi thao tác. Nếu đang có sự cố của bài khác, hoàn nguyên bài đó trước.\n2. Mở `C:\\LabEx\\PracticeFaults\\useracl`. Trong `Private`, mở `credentials.txt` bằng tài khoản admin hiện tại. Đây là mật khẩu tạm của hai user lab, không phải tài khoản Azure; không gửi mật khẩu vào AI/chat.\n3. Nhấp đúp `LabExWriterV2.cmd`. Cửa sổ runas yêu cầu mật khẩu của user này; gõ hoặc dán mật khẩu tương ứng rồi Enter. Khi gõ, ký tự không hiện là bình thường. Không dùng `/savecred`.\n4. Ứng dụng **Employee document editor** phải hiện `CLIENT01\\LabExWriterV2` trên thanh tiêu đề. Ứng dụng nhỏ này dùng Windows File I/O thật để giúp bạn tái hiện quyền mà không cần cài Office.\n5. Bấm **Open reference**, thêm một dòng ghi chú, **Save as…** vào `Documents` với tên riêng như `work-note.txt`. Đọc lỗi lưu, không sửa `reference.txt`.\n\nNếu ứng dụng không mở, kiểm tra runas báo sai mật khẩu hay tài khoản hết hạn. User lab hết hạn sau hai ngày; hoàn nguyên và chuẩn bị lại để tạo phiên mới. Lỗi đăng nhập không phải bằng chứng lỗi NTFS. Không thay policy đăng nhập hoặc tài khoản thật để vượt qua.\n",
+      "content_vi": "## Một lỗi quyền trong công việc hằng ngày\nBạn hỗ trợ người dùng đọc được tài liệu nhưng không lưu được bản làm việc. Bài này tập trung vào **danh tính → quyền → thao tác thực**, không yêu cầu viết script hoặc xuất JSON.\n\n1. Bật CLIENT01, kết nối Desktop rồi bấm **Chuẩn bị sự cố**. Chờ hoàn tất trước khi thao tác. Nếu đang có sự cố của bài khác, hoàn nguyên bài đó trước.\n2. Mở `C:\\LabEx\\PracticeFaults\\useracl`. Trong `Private`, mở `credentials.txt` bằng tài khoản admin hiện tại. Đây là mật khẩu tạm của hai user lab, không phải tài khoản Azure; không gửi mật khẩu vào AI/chat.\n3. Nhấp đúp `LabExWriterV2.cmd`. Cửa sổ runas yêu cầu mật khẩu của user này; gõ hoặc dán mật khẩu tương ứng rồi Enter. Khi gõ, ký tự không hiện là bình thường. Không dùng `/savecred`.\n4. Ứng dụng **Employee document editor** phải hiện `CLIENT01\\LabExWriterV2` trên thanh tiêu đề. Ứng dụng nhỏ này dùng Windows File I/O thật để giúp bạn tái hiện quyền mà không cần cài Office.\n5. Bấm **Open reference**, thêm một dòng ghi chú, **Save as…** vào `Documents` với tên riêng như `work-note.txt`. Đọc lỗi lưu, không sửa `reference.txt`.\n\nNếu ứng dụng không mở, kiểm tra runas báo sai mật khẩu hay tài khoản hết hạn. User lab hết hạn sau hai ngày; hoàn nguyên và chuẩn bị lại để tạo phiên mới. Lỗi đăng nhập không phải bằng chứng lỗi NTFS. Không thay policy đăng nhập hoặc tài khoản thật để vượt qua.\n"
+    },
+    {
+      "id": "win-it-user-folder-permissions-sec-1",
+      "position": 1,
+      "title": "Điều tra quyền bằng giao diện",
+      "kind": "document",
+      "need_verify": false,
+      "content": "## Hiểu trước khi sửa\n**User và admin:** quyền của tài khoản đang chạy ứng dụng mới quyết định thao tác có được phép. Admin lưu được không chứng minh nhân viên lưu được.\n\n**Read, Modify, Full Control:** Read cho đọc; Modify phục vụ đọc, tạo, sửa và xóa tệp; Full Control còn cho thay quyền. Nhân viên cần làm việc với tài liệu, không cần quản lý ACL. Đây là quyền NTFS trên máy local, chưa có quyền share qua mạng.\n\n**Kế thừa:** quyền áp dụng từ thư mục xuống tệp con tùy phạm vi entry. Chỉ sửa một tệp mẫu có thể khiến lần tạo tệp tiếp theo vẫn lỗi.\n\nTrong Explorer bằng admin, chuột phải `Documents` → **Properties → Security → Advanced**. Ghi lại principal, Type, Access, Applies to và Inherited from của entry nhân viên. Không bấm thay quyền hàng loạt ở ổ C: hoặc thư mục LabEx cha.\n\nTrước khi mở gợi ý cuối, tự trả lời: tại sao đọc được nhưng lưu không được; cần thêm quyền gì; sẽ thử người ngoài thế nào? Bạn không phải gõ các câu trả lời vào tệp để lấy điểm.\n",
+      "content_vi": "## Hiểu trước khi sửa\n**User và admin:** quyền của tài khoản đang chạy ứng dụng mới quyết định thao tác có được phép. Admin lưu được không chứng minh nhân viên lưu được.\n\n**Read, Modify, Full Control:** Read cho đọc; Modify phục vụ đọc, tạo, sửa và xóa tệp; Full Control còn cho thay quyền. Nhân viên cần làm việc với tài liệu, không cần quản lý ACL. Đây là quyền NTFS trên máy local, chưa có quyền share qua mạng.\n\n**Kế thừa:** quyền áp dụng từ thư mục xuống tệp con tùy phạm vi entry. Chỉ sửa một tệp mẫu có thể khiến lần tạo tệp tiếp theo vẫn lỗi.\n\nTrong Explorer bằng admin, chuột phải `Documents` → **Properties → Security → Advanced**. Ghi lại principal, Type, Access, Applies to và Inherited from của entry nhân viên. Không bấm thay quyền hàng loạt ở ổ C: hoặc thư mục LabEx cha.\n\nTrước khi mở gợi ý cuối, tự trả lời: tại sao đọc được nhưng lưu không được; cần thêm quyền gì; sẽ thử người ngoài thế nào? Bạn không phải gõ các câu trả lời vào tệp để lấy điểm.\n"
+    },
+    {
+      "id": "win-it-user-folder-permissions-sec-2",
+      "position": 2,
+      "title": "Khôi phục quyền và thử hai người dùng",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Tự sửa trước khi mở lời giải\nMục tiêu: nhân viên làm việc được trong `Documents`, người ngoài vẫn bị chặn. Thử chọn thay đổi nhỏ nhất từ bằng chứng vừa thu thập.\n\n### Hướng dẫn GUI khi cần\n1. Explorer bằng admin → `Documents` → Properties → Security → Advanced. Chọn entry Allow của **LabExWriterV2** → Edit. Nếu Windows yêu cầu nâng quyền quản trị để chỉnh ACL, xác nhận bằng tài khoản admin lab.\n2. Chọn **Modify**, phạm vi **This folder, subfolders and files**; Apply. Giữ SYSTEM và Administrators. Không chọn Full Control, không thêm Everyone/Users và không thêm user vào Administrators.\n3. Quay lại ứng dụng đang chạy dưới LabExWriterV2. Open reference, viết nội dung riêng, Save as thành một tệp `.txt` mới trong Documents. Bạn tự chọn tên. Thử sửa/lưu lại bản sao; giữ nguyên reference.txt.\n4. Mở `LabExVisitorV2.cmd`, nhập mật khẩu thứ hai. Kiểm tra tên user trên thanh tiêu đề; thử Open reference và Save as. Người này phải vẫn bị từ chối. Không yêu cầu đăng xuất hay cấp quyền RDP cho hai user.\n5. Bấm **Kiểm tra kết quả**. Bộ chấm đăng nhập hai user, thử tệp ngẫu nhiên mới, đối chiếu tài liệu gốc và quyền. Nó không đọc lịch sử lệnh và không chấm theo tên tệp bạn chọn.\n\nNếu đã chỉnh entry mà vẫn lỗi, kiểm tra đường dẫn, danh tính ứng dụng, phạm vi kế thừa và entry Deny. Không xóa mọi ACL để thử. Đóng hộp thoại lỗi và thử lại để không nhầm kết quả trước khi sửa.\n\n**Tự giải thích sau bài:** vì sao admin lưu được nhưng nhân viên không; Modify khác Full Control ở đâu; bằng chứng nào cho thấy vừa khôi phục chức năng vừa giữ bảo mật?\n",
+      "content_vi": "## Tự sửa trước khi mở lời giải\nMục tiêu: nhân viên làm việc được trong `Documents`, người ngoài vẫn bị chặn. Thử chọn thay đổi nhỏ nhất từ bằng chứng vừa thu thập.\n\n### Hướng dẫn GUI khi cần\n1. Explorer bằng admin → `Documents` → Properties → Security → Advanced. Chọn entry Allow của **LabExWriterV2** → Edit. Nếu Windows yêu cầu nâng quyền quản trị để chỉnh ACL, xác nhận bằng tài khoản admin lab.\n2. Chọn **Modify**, phạm vi **This folder, subfolders and files**; Apply. Giữ SYSTEM và Administrators. Không chọn Full Control, không thêm Everyone/Users và không thêm user vào Administrators.\n3. Quay lại ứng dụng đang chạy dưới LabExWriterV2. Open reference, viết nội dung riêng, Save as thành một tệp `.txt` mới trong Documents. Bạn tự chọn tên. Thử sửa/lưu lại bản sao; giữ nguyên reference.txt.\n4. Mở `LabExVisitorV2.cmd`, nhập mật khẩu thứ hai. Kiểm tra tên user trên thanh tiêu đề; thử Open reference và Save as. Người này phải vẫn bị từ chối. Không yêu cầu đăng xuất hay cấp quyền RDP cho hai user.\n5. Bấm **Kiểm tra kết quả**. Bộ chấm đăng nhập hai user, thử tệp ngẫu nhiên mới, đối chiếu tài liệu gốc và quyền. Nó không đọc lịch sử lệnh và không chấm theo tên tệp bạn chọn.\n\nNếu đã chỉnh entry mà vẫn lỗi, kiểm tra đường dẫn, danh tính ứng dụng, phạm vi kế thừa và entry Deny. Không xóa mọi ACL để thử. Đóng hộp thoại lỗi và thử lại để không nhầm kết quả trước khi sửa.\n\n**Tự giải thích sau bài:** vì sao admin lưu được nhưng nhân viên không; Modify khác Full Control ở đâu; bằng chứng nào cho thấy vừa khôi phục chức năng vừa giữ bảo mật?\n",
+      "task": "Khôi phục quyền làm việc của user nhân viên; giữ user đối chứng không truy cập và giữ tài liệu gốc.",
+      "hint": "Đối chiếu danh tính, entry Modify và phạm vi kế thừa trong Documents; thử cả hai user.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    },
+    {
+      "id": "win-it-user-folder-permissions-sec-3",
+      "position": 3,
+      "title": "Bàn giao và hoàn nguyên",
+      "kind": "summary",
+      "need_verify": false,
+      "content": "## Đóng ticket\nGhi ngắn: user bị ảnh hưởng → đường dẫn → thao tác thất bại → quyền trước/sau → kết quả thử nhân viên và người đối chứng. Không ghi mật khẩu vào báo cáo.\n\nĐóng cả hai ứng dụng Employee document editor và cửa sổ runas trước khi bấm **Hoàn nguyên kịch bản**. Reset xóa hai tài khoản tạm và workspace của bài; tài liệu bạn lưu trong workspace cũng bị xóa. Nếu muốn giữ ghi chú học, sao chép ra ngoài trước. Reset không phải khôi phục snapshot toàn VM và không xóa hồ sơ người dùng bên ngoài workspace.\n\nBạn vừa thực hành NTFS trên một Client. Với thư mục mạng, còn phải xét quyền SMB, danh tính trên server và nhóm domain; sẽ học riêng sau. Chưa coi bài này là kinh nghiệm triển khai file server doanh nghiệp.\n",
+      "content_vi": "## Đóng ticket\nGhi ngắn: user bị ảnh hưởng → đường dẫn → thao tác thất bại → quyền trước/sau → kết quả thử nhân viên và người đối chứng. Không ghi mật khẩu vào báo cáo.\n\nĐóng cả hai ứng dụng Employee document editor và cửa sổ runas trước khi bấm **Hoàn nguyên kịch bản**. Reset xóa hai tài khoản tạm và workspace của bài; tài liệu bạn lưu trong workspace cũng bị xóa. Nếu muốn giữ ghi chú học, sao chép ra ngoài trước. Reset không phải khôi phục snapshot toàn VM và không xóa hồ sơ người dùng bên ngoài workspace.\n\nBạn vừa thực hành NTFS trên một Client. Với thư mục mạng, còn phải xét quyền SMB, danh tính trên server và nhóm domain; sẽ học riêng sau. Chưa coi bài này là kinh nghiệm triển khai file server doanh nghiệp.\n"
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-user-folder-permissions-sec-2",
+      "title": "Khôi phục quyền và thử hai người dùng",
+      "task": "Khôi phục quyền làm việc của user nhân viên; giữ user đối chứng không truy cập và giữ tài liệu gốc.",
+      "hint": "Đối chiếu danh tính, entry Modify và phạm vi kế thừa trong Documents; thử cả hai user.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    }
+  ],
+  "references": [
+    {
+      "title": "Microsoft: File Security and Access Rights",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/fileio/file-security-and-access-rights"
+    },
+    {
+      "title": "Microsoft: LogonUserW",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-logonuserw"
+    }
+  ]
+}

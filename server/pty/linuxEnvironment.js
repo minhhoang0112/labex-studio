@@ -2,6 +2,7 @@ import { execFile } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import os from "node:os";
 import path from "node:path";
+import {isUpskillLab,sshProcess,execUpskill,upskillEnvironment} from './upskillSsh.js';
 
 const COMMAND_TIMEOUT = 7000;
 const HISTORY_TIMEOUT = 15000;
@@ -119,7 +120,9 @@ export function createEnvironmentProbe({ probe = runRuntimeProbe, now = Date.now
   return environment;
 }
 
-export const getEnvironment = createEnvironmentProbe();
+const localEnvironment = createEnvironmentProbe();
+export function getEnvironment(labId) {return isUpskillLab(labId)?upskillEnvironment(labId):localEnvironment();}
+getEnvironment.invalidate=localEnvironment.invalidate;
 
 function validateLab(labId) {
   if (typeof labId !== "string" || !/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,119}$/.test(labId)) throw new TypeError("Invalid lab ID");
@@ -139,6 +142,7 @@ async function labInvocation(labId, mode, command) {
 
 export async function getLabProcess(labId, command) {
   validateLab(labId);
+  if(isUpskillLab(labId)) return sshProcess(labId,command);
   if (command !== undefined && (typeof command !== "string" || !command.trim())) throw new TypeError("A verification command is required");
   return labInvocation(labId, command === undefined ? "interactive" : "command", command);
 }
@@ -164,6 +168,7 @@ export function recordWindowsCommand(labId, command, status = 0, evidence = {}) 
 
 export async function execLabCommand(labId, command) {
   if (typeof command !== "string" || !command.trim()) throw new TypeError("A verification command is required");
+  if(isUpskillLab(labId)) return execUpskill(labId,command);
   if (typeof labId === "string" && (labId.startsWith("win-") || labId.includes("windows"))) {
     throw unavailable('Bài Windows phải được kiểm tra trên Windows VM qua remote verifier.');
   }
@@ -175,6 +180,7 @@ export async function execLabCommand(labId, command) {
 }
 
 export async function getCommandHistory(labId) {
+  if(isUpskillLab(labId)) return []; // No fabricated local/container history for the shared VM.
   if (typeof labId === "string" && (labId.startsWith("win-") || labId.includes("windows"))) {
     return windowsLabHistory.get(labId) || [];
   }
@@ -190,12 +196,14 @@ export async function getCommandHistory(labId) {
 }
 
 export async function resetLabEnvironment(labId) {
+  if(isUpskillLab(labId)) throw unavailable('VM dùng chung cả khóa; không reset tự động từng bài. Khôi phục snapshot VM riêng khi cần, theo Ngày 0.');
   const result = await runLabOperation(labId, "reset", undefined, 15000);
   if (result.exitCode !== 0) throw unavailable("Không khởi tạo lại được môi trường thực hành.");
   return JSON.parse(result.stdout);
 }
 
 export async function getLabEnvironmentStatus(labId) {
+  if(isUpskillLab(labId)) return {provider:'upskill-ssh',shared:true,reset_supported:false,initialized:false,reset_required:false,reason:'Một VM xuyên suốt khóa; dữ liệu và dịch vụ được giữ giữa các ngày.'};
   const result = await runLabOperation(labId, "status");
   if (result.exitCode !== 0) throw unavailable("Không đọc được trạng thái khởi tạo của môi trường thực hành.");
   return JSON.parse(result.stdout);

@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-16",
+  "course_id": "linux-upskill-challenge",
+  "order": 17,
+  "title": "Ngày 16: Sao lưu, nén và thử phục hồi",
+  "title_vi": "Ngày 16: Sao lưu, nén và thử phục hồi",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "Tar gom tệp, gzip nén dữ liệu; có archive chưa đồng nghĩa phục hồi được. Trước giải nén xem danh sách và chọn thư mục đích riêng, tránh ghi đè dữ liệu đang dùng.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/16/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/16/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-16-intro",
+      "position": 0,
+      "title": "Ngày 16: Sao lưu, nén và thử phục hồi",
+      "title_vi": "Ngày 16: Sao lưu, nén và thử phục hồi",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nTar gom tệp, gzip nén dữ liệu; có archive chưa đồng nghĩa phục hồi được. Trước giải nén xem danh sách và chọn thư mục đích riêng, tránh ghi đè dữ liệu đang dùng.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/16/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nTar gom tệp, gzip nén dữ liệu; có archive chưa đồng nghĩa phục hồi được. Trước giải nén xem danh sách và chọn thư mục đích riêng, tránh ghi đè dữ liệu đang dùng.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/16/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-16-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 16 - Archiving and compressing\n\n* [Lesson video](https://youtu.be/r2Rfg6x-5MQ)\n* Complementary video: [Archive Files](https://www.youtube.com/live/5oGwnrd44BI?t=1800s)\n\n## INTRO\n\nAs a system administrator, you need to be able to confidently work with compressed “archives” of files. In particular two of your key responsibilities; installing new software, and managing backups, often require this.\n\nOn other operating systems, applications like WinZip, and `pkzip` before it, have long been used to gather a series of files and folders into one compressed file - with a `.zip` extension.\n\nArchiving and compressing, however, are actually distinct processes that are frequently used together. Archiving consolidates multiple files into one \"box\" while preserving their structure and attributes, but it does not change the total data size. Compression uses sophisticated algorithms to encode data efficiently, saving storage space by shrinking that file.\n\n## YOUR TASKS TODAY\n\n* Compress a file and compare sizes\n* Archive the contents of a folder\n* Create a compressed \"tarball\"\n* Extract files from a tarball\n\nCheck out the [demo](https://asciinema.org/a/765120)\n\n_Help maintain the course by purchasing the [reference card](https://buymeacoffee.com/livialima/e/493808) for this lesson._\n\n## COMPRESSING FILES\n\nThe goal of compression is to reduce file size. Smaller files use less bandwidth and can be transmitted over networks faster. Different tools use different algorithms to actually shrink that data.\n\nYou can compress a file with GZip like this:\n\n`gzip my-big-file`\n\n...which will create `my-big-file.gz` but it will replace the original file. If you want to preserve the uncompressed file, try:\n\n`gzip -vk my-big-file`\n\nThis uses the `-v` to make the command \"verbose\" and `-k` to keep the original file.\n\nWhen it's time to decompress, do it with the `-d` switch, like this:\n\n`gzip -d my-big-file.gz`\n\nPopular Tools:\n\n* [gzip](https://www.gnu.org/software/gzip/manual/gzip.html): Very common and fast.\n* [bzip2](https://manned.org/bzip2): Slower but generally creates smaller files.\n* [xz](https://manned.org/xz): Currently the most space-efficient tool in Linux.\n\nText usually compress well regardless of the tool. JPEG/MP4 files may not shrink as much, but those formats are already somewhat compressed.\n\n## CREATING ARCHIVES\n\nSo, you could create a \"snapshot\" of the current files in your _/etc/init.d_ folder like this:\n\n`tar -cvf myinits.tar /etc/init.d/`\n\nThis creates _myinits.tar_ in your current directory.\n\n**Note 1:** The `-f` switch specifies that _“the output should go to the filename which follows”_ - so in this case the order of the switches is important. **VERY IMPORTANT**: `tar` considers anything after `-f` as the name of the archive that needs to be created. So, we should always use `-f` as the last flag while creating an archive.\n\n**Note 2:** The `-v` switch (verbose) is included to give some feedback - traditionally many utilities provide no feedback unless they fail.\n\n(The cryptic “tar” name? - originally short for \"tape archive\")\n\nYou could then compress this file with GnuZip like this:\n\n`gzip myinits.tar`\n\n...which will create `myinits.tar.gz`. A compressed tar archive like this is known as a \"tarball\". You will also sometimes see tarballs with a  _.tgz_ extension - at the Linux commandline this doesn't have any meaning to the system, but is simply helpful to humans.\n\nIn practice you can do the two steps in one with the `-z` switch, like this:\n\n`tar -cvzf myinits.tgz /etc/init.d/`\n\nThis uses the `-c` switch to say that we're creating an archive; `-v` to make the command \"verbose\"; `-z` to compress the result - and `-f` to specify the output file.\n\n## EXTRACTING ARCHIVES\n\nTo \"explode\" an archive and retrieve your files, use the `-x` (extract) flag:\n\n`tar -xvf archive.tar.gz`\n\n**Safety First:** Before extracting, it is a good practice to preview the contents using the `-t` (list) flag:\n\n`tar -tf archive.tar.gz`\n\nThat gives you an idea of how the file structure will look like after extracting. If the list shows many files without a common prefix (like folder/file), you have found a _tarbomb_. No, not [this one](https://xkcd.com/1168/). Extracting this may spew files directly into your current directory, potentially overwriting existing files.\n\nYou can use the `-C` flag to extract files into a specified target directory to keep things tidy.\n\n`tar -xvf archive.tar.gz -C target_dir/`\n\n## EXTENSION\n\nYou might notice that some tutorials write `tar cvf` rather than `tar -cvf` with the switch character - do you know why? [Hint](https://unix.stackexchange.com/questions/28403/tar-cvf-or-tar-cvf): It’s related to old \"tape archive\" styles and modern compatibility.\n\nA note about **compression levels** - Most tools allow you to adjust the balance between speed and size, using a numeric scale (1–9):\n\n* Level 1: Fast, but provides low compression.\n* Level 6: The default setting; a balance of speed and size.\n* Level 9: Best compression (smallest file size) but takes the longest time.\n\nHowever, when calling a compression tool while creating a tarball, `tar` will only use the default level 6.\n\n## RESOURCES\n\n* [18 Tar Command Examples in Linux](https://www.tecmint.com/18-tar-command-examples-in-linux/)\n* [Linux TAR Command](http://linuxbasiccommands.wordpress.com/2008/04/04/linux-tar-command/)\n* [Linux tar command tutorial](https://www.youtube.com/watch?v=CUdwDEKlDrw) (video)\n* [Between xz, gzip, and bzip2, which compression algorithim is the most efficient?](https://superuser.com/questions/581035/between-xz-gzip-and-bzip2-which-compression-algorithim-is-the-most-efficient)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nTar gom tệp, gzip nén dữ liệu; có archive chưa đồng nghĩa phục hồi được. Trước giải nén xem danh sách và chọn thư mục đích riêng, tránh ghi đè dữ liệu đang dùng.\n\n## Thực hành từng bước\nTạo dữ liệu nhỏ, sao lưu rồi phục hồi sang nơi khác:\n```bash\nmkdir -p ~/luc-course/day16/source ~/luc-course/day16/restored\nprintf 'restore-me\\n' > ~/luc-course/day16/source/important.txt\ntar -czf ~/luc-course/day16/backup.tar.gz -C ~/luc-course/day16/source .\ntar -tzf ~/luc-course/day16/backup.tar.gz\ntar -xzf ~/luc-course/day16/backup.tar.gz -C ~/luc-course/day16/restored\ndiff -r ~/luc-course/day16/source ~/luc-course/day16/restored\n```\nThử gzip -k trên một tệp riêng và so kích thước; dữ liệu quá nhỏ có thể nén xong còn lớn hơn do header. Chưa cần xóa bản gốc để chứng minh phục hồi. Không giải nén archive lạ bằng sudo vào / hoặc /etc.\n\n## Tự giải thích\nVì sao cần thử restore chứ không chỉ nhìn backup.tar.gz tồn tại?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/16/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/16/",
+      "source_sha256": "2546866ac56026692091364a26ef15d4da1ddf35eea36357e77c30e2168f081f",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-16-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nArchive đọc được và important.txt phục hồi đúng nội dung từ source.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "Archive đọc được và important.txt phục hồi đúng nội dung từ source.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Vì sao cần thử restore chứ không chỉ nhìn backup.tar.gz tồn tại?",
+      "verification": {
+        "kind": "state",
+        "command": "tar -tzf \"$HOME/luc-course/day16/backup.tar.gz\" >/dev/null && test \"$(cat \"$HOME/luc-course/day16/source/important.txt\")\" = restore-me && cmp -s \"$HOME/luc-course/day16/source/important.txt\" \"$HOME/luc-course/day16/restored/important.txt\""
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-16-task",
+      "title": "Kiểm tra kết quả",
+      "task": "Archive đọc được và important.txt phục hồi đúng nội dung từ source.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Vì sao cần thử restore chứ không chỉ nhìn backup.tar.gz tồn tại?",
+      "verification": {
+        "kind": "state",
+        "command": "tar -tzf \"$HOME/luc-course/day16/backup.tar.gz\" >/dev/null && test \"$(cat \"$HOME/luc-course/day16/source/important.txt\")\" = restore-me && cmp -s \"$HOME/luc-course/day16/source/important.txt\" \"$HOME/luc-course/day16/restored/important.txt\""
+      }
+    }
+  ]
+}

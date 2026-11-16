@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-12",
+  "course_id": "linux-upskill-challenge",
+  "order": 13,
+  "title": "Ngày 12: Truyền tệp bằng SFTP",
+  "title_vi": "Ngày 12: Truyền tệp bằng SFTP",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "SFTP truyền tệp qua SSH; không dùng FTP thường. Tệp tải lên nằm trên VM, tệp tải xuống nằm trên Windows. Có terminal SSH hoạt động chưa chứng minh bạn đã thử truyền tệp hai chiều.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/12/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/12/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-12-intro",
+      "position": 0,
+      "title": "Ngày 12: Truyền tệp bằng SFTP",
+      "title_vi": "Ngày 12: Truyền tệp bằng SFTP",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nSFTP truyền tệp qua SSH; không dùng FTP thường. Tệp tải lên nằm trên VM, tệp tải xuống nằm trên Windows. Có terminal SSH hoạt động chưa chứng minh bạn đã thử truyền tệp hai chiều.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/12/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nSFTP truyền tệp qua SSH; không dùng FTP thường. Tệp tải lên nằm trên VM, tệp tải xuống nằm trên Windows. Có terminal SSH hoạt động chưa chứng minh bạn đã thử truyền tệp hai chiều.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/12/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-12-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 12 - Transferring files\n\n* [Lesson video](https://youtu.be/qjd5eazfoC0)\n* Complementary video: [Transfer files](https://www.youtube.com/live/2lYo_FJxQR8?t=2276s)\n* Complementary video: [Tying everything together and back to rsync](https://www.youtube.com/live/2lYo_FJxQR8?t=8168s)\n\n## INTRO\n\nYou've now had a working Internet server of your own for some time, and seen how you can create and edit small files there. You've created a web server where you've been able to edit a simple web page.\n\nToday we'll be looking at how you can move files between your other systems and this server - tasks like:\n\n* Taking a copy of some files from your server onto your desktop machine\n* Copying up some text to your server to put on your webpage\n* Uploading some photos and logos for your webpage\n\n## YOUR TASKS TODAY\n\n* Upload a file to the server\n* Download a file from the server\n* Synchronize a backup\n\n## PROTOCOLS\n\nThere are a wide range of ways a Linux server can share files, including:\n\n* SMB: Microsoft's file sharing, useful on a local network of Windows machines\n* AFP: Apple’s file sharing, useful on a local network of Apple machines\n* WebDAV: Sharing over web (http) protocols\n* FTP: Traditional Internet sharing protocol\n* scp: Simple support for copying files\n* rsync: Fast, very efficient file copying\n* SFTP: file access and copying over the SSH protocol (Despite the name, the SFTP protocol at a technical level is completely unrelated to traditional FTP)\n\nEach of these have their place, but for copying files back and forth from your local desktop to your server, SFTP has a number of key advantages:\n\n* No extra setup is required on your server\n* Top quality security\n* Allows browsing through the directory structure\n* You can create and delete folders\n\nIf you’re successfully logging in via _ssh_ from your home, work or a cybercafe then you'll also be able to use SFTP from this same location because the same underlying protocol is being used.\n\nBy contrast, setting up your server for any of the other protocols will require extra work. Not only that, enabling extra protocols also increases the \"attack surface\" - and there's always a chance that you’ll mis-configure something in a way that allows an attacker in. It's also very likely that restrictive firewall policies at a workplace will interfere with or block these protocols. Finally, while old-style FTP is still very commonly used, it sends login credentials \"in clear\", so that your flatmates, cafe buddies or employer may be able to grab them off the network by \"packet sniffing\". Not a big issue with your \"classroom\" server - but it's an unacceptable risk if you're remotely administering production servers.\n\n## SFTP client software\n\nWhat’s required to use SFTP is some client software. A command-line client (unsurprisingly called _sftp_) comes standard on every Apple OSX or Linux system. If you're using a Linux desktop, you also have a built-in GUI client via your file manager. This will allow you to easily attach to remote servers via SFTP. (For the Nautilus file manager for example, press ctrl + L to bring up the 'location window\" and type: _sftp://username@myserver-address_).\n\nAlthough Windows and Apple macOS have no built-in GUI client there are  a wide range of third-party options available, both free and commercial. If you don't already have such a client installed, then choose one such as:\n\n* WinSCP or FileZilla  - for Windows users\n* CyberDuck or FileZilla  - for macOS users\n\nDownload locations are under the RESOURCES section.\n\nConfiguring and using your choice of these should be straightforward. The only real potential for confusion is that these clients generally support a wide range of protocols such as scp and FTP that we're not going to use. When you're asked for SERVER, give your server's IP address, PORT will be 22, and PROTOCOL will be SFTP or SSH.\n\n## INSTRUCTIONS\n\n* Configure your chosen SFTP client to login to your server as your username\n* Copy some files from your server down to your local desktop (try files from your \"home\" folder, and from `/var/log`)\n* Create an \"`images`\" folder under your \"home\" folder on the server, and upload some images to it from your desktop machine\n* Go up to the root directory. You should see `/etc`, `/bin` and other folders. Try to create an \"`images`\" folder here too - this should fail because you are logging in as an ordinary use, so you won't have permission to create new files or folders. In your own \"home\" directory you of course have full permission.\n\nOnce the files are uploaded you can login via _ssh_ and use `sudo` to give yourself the necessary power to move files about.\n\n## RESOURCES\n\n* [CyberDuck](http://cyberduck.io/)\n* [FileZilla](http://filezilla-project.org/download.php?type=client)\n* [SFTP – SSH Secure File Transfer Program](https://www.ssh.com/ssh/sftp/)\n* [sftp File From One Server To Another](http://www.cyberciti.biz/faq/sftp-file-from-server-to-another-in-unix-linux/)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nSFTP truyền tệp qua SSH; không dùng FTP thường. Tệp tải lên nằm trên VM, tệp tải xuống nằm trên Windows. Có terminal SSH hoạt động chưa chứng minh bạn đã thử truyền tệp hai chiều.\n\n## Thực hành từng bước\nTrong VM tạo nơi nhận:\n```bash\nmkdir -p ~/luc-course/day12\n```\nTrên **PowerShell Windows**, tạo một tệp văn bản có dòng `LUC transfer test`, sau đó mở `sftp -i DUONG_DAN_KEY luc@IP_VM` (dùng đúng user/key lab). Trong SFTP:\n```text\nput upload.txt luc-course/day12/upload.txt\nget luc-course/day12/upload.txt download.txt\nbye\n```\nTrên Windows dùng `Get-FileHash upload.txt` và `Get-FileHash download.txt` để đối chiếu. Cũng có thể dùng WinSCP với cùng key và fingerprint đã xác nhận.\nBộ chấm ở bài này xác nhận tệp nhận trên VM có nội dung đúng. Nó **không xác minh đường truyền SFTP hoặc bản tải xuống Windows**; bạn cần tự đối chiếu hash hai phía. Không coi việc cp một tệp trong VM là đã thực hành truyền tệp.\n\n## Tự giải thích\nSFTP dùng cổng nào và khác SCP/FTP ở đâu? Bằng chứng nào xác nhận truyền hai chiều?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/12/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/12/",
+      "source_sha256": "53ea5d8e10f5c3c2eccbca1bbc3ff73ebf09442a35e37b173145ac8144b4555c",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-12-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nupload.txt trên VM chứa dòng LUC transfer test; tự xác nhận hash bản tải xuống Windows.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "upload.txt trên VM chứa dòng LUC transfer test; tự xác nhận hash bản tải xuống Windows.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. SFTP dùng cổng nào và khác SCP/FTP ở đâu? Bằng chứng nào xác nhận truyền hai chiều?",
+      "verification": {
+        "kind": "state",
+        "command": "grep -qx \"LUC transfer test\" \"$HOME/luc-course/day12/upload.txt\""
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-12-task",
+      "title": "Kiểm tra kết quả",
+      "task": "upload.txt trên VM chứa dòng LUC transfer test; tự xác nhận hash bản tải xuống Windows.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. SFTP dùng cổng nào và khác SCP/FTP ở đâu? Bằng chứng nào xác nhận truyền hai chiều?",
+      "verification": {
+        "kind": "state",
+        "command": "grep -qx \"LUC transfer test\" \"$HOME/luc-course/day12/upload.txt\""
+      }
+    }
+  ]
+}

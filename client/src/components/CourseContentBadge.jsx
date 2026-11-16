@@ -1,6 +1,10 @@
 import { BookOpen, CheckCircle } from 'lucide-react';
 
 export default function CourseContentBadge({ course }) {
+  if(course.learning_mode === 'portfolio-review') return <span
+    title="Bài học tiếng Việt, câu hỏi và tình huống tự ôn; không tự chấm thao tác trên máy ảo."
+    className="px-2.5 py-1 rounded-md text-[11px] font-semibold inline-flex items-center gap-1 bg-blue-600 text-white"
+  ><BookOpen className="w-3 h-3" />Ôn lab CV · Phỏng vấn</span>;
   if (course.curriculum_status === 'planned' || course.status === 'planned') return <span
     title="Đã có đề cương và mục tiêu học; chưa có bài thực hành hoặc bộ chấm."
     className="px-2.5 py-1 rounded-md text-[11px] font-semibold inline-flex items-center gap-1 bg-slate-700 text-white"

@@ -20,6 +20,8 @@ export const faultScenarios = Object.freeze({
   'win-it-scheduled-backup-permissions': 'taskacl',
   'win-it-file-in-use': 'filelock',
   'win-it-service-config-recovery': 'serviceconfig',
+  'win-it-user-folder-permissions': 'useracl',
+  'win-it-cpu-process-diagnosis': 'cpuincident',
 });
 const script = fs.readFileSync(new URL('../runtime/windows/support-faults.ps1', import.meta.url), 'utf8');
 const practiceScript = fs.readFileSync(new URL('../runtime/windows/practice-faults.ps1', import.meta.url), 'utf8');
@@ -27,12 +29,17 @@ const backupPermissionScript = fs.readFileSync(new URL('../runtime/windows/backu
 const fileLockScript = fs.readFileSync(new URL('../runtime/windows/file-lock-fault.ps1', import.meta.url), 'utf8');
 const serviceConfigScript = fs.readFileSync(new URL('../runtime/windows/service-config-fault.ps1', import.meta.url), 'utf8')
   .replace('__LABEX_SERVICE_SOURCE_B64__', fs.readFileSync(new URL('../runtime/windows/document-agent.cs', import.meta.url)).toString('base64'));
+const userAclScript = fs.readFileSync(new URL('../runtime/windows/ntfs-user-fault.ps1', import.meta.url), 'utf8')
+  .replace('__LABEX_NTFS_PROBE_B64__', fs.readFileSync(new URL('../runtime/windows/ntfs-user-probe.cs', import.meta.url)).toString('base64'))
+  .replace('__LABEX_NTFS_EDITOR_B64__', fs.readFileSync(new URL('../runtime/windows/ntfs-ticket-editor.ps1', import.meta.url)).toString('base64'));
+const performanceScript = fs.readFileSync(new URL('../runtime/windows/performance-fault.ps1', import.meta.url), 'utf8')
+  .replace('__LABEX_PERF_SOURCE_B64__', fs.readFileSync(new URL('../runtime/windows/performance-worker.cs', import.meta.url)).toString('base64'));
 export function faultCommand(scenario, operation) {
   if (!Object.values(faultScenarios).includes(scenario) || !['Baseline', 'Inject', 'Faulted', 'Healthy', 'Reset'].includes(operation)) {
     throw cloudError('Kịch bản hoặc thao tác không hợp lệ.', 400, 'CLOUD_INVALID_SCENARIO');
   }
-  const source = scenario === 'serviceconfig' ? serviceConfigScript : scenario === 'filelock' ? fileLockScript : scenario === 'taskacl' ? backupPermissionScript : ['spooler', 'hosts', 'disk'].includes(scenario) ? script : practiceScript;
-  if (scenario === 'serviceconfig') {
+  const source = scenario === 'cpuincident' ? performanceScript : scenario === 'useracl' ? userAclScript : scenario === 'serviceconfig' ? serviceConfigScript : scenario === 'filelock' ? fileLockScript : scenario === 'taskacl' ? backupPermissionScript : ['spooler', 'hosts', 'disk'].includes(scenario) ? script : practiceScript;
+  if (['serviceconfig', 'useracl', 'cpuincident'].includes(scenario)) {
     // Only server-owned curriculum is compressed, never browser-supplied code.
     // Keep the remote executor's command-length limits unchanged.
     const packed = gzipSync(Buffer.from(source, 'utf8')).toString('base64');
@@ -131,7 +138,15 @@ export function createWindowsFaultService({ execute = executeWindowsRemote, base
             ? lastProbe?.exitCode === 2
               ? 'Không đọc/kiểm tra được fixture dịch vụ hoặc cấu hình không hợp lệ. Kiểm tra XML, tài nguyên của bài và nhật ký; chưa coi đây là kết quả sửa lỗi đạt.'
               : 'Chưa đạt: kiểm tra service Running dưới LOCAL SERVICE, cấu hình Data, dữ liệu gốc và một phiếu xử lý mới trong Outbox. Không chỉ nhìn trạng thái Running.'
-            : 'Chức năng trên Windows chưa phục hồi đúng tiêu chí. Kiểm tra lại trạng thái thực tế trong Desktop và yêu cầu của bài.' } : {}),
+            : scenario(labId) === 'useracl'
+              ? lastProbe?.exitCode === 2
+                ? 'Không kiểm tra được tài khoản hoặc dữ liệu lab. Kiểm tra user còn hạn, reference.txt còn nguyên và môi trường bài chưa bị thay đổi ngoài phạm vi; chưa kết luận thao tác sửa quyền của bạn sai.'
+                : 'Chưa đạt: nhân viên cần đọc và sửa tệp thật bằng user thường, người đối chứng vẫn phải bị chặn. Kiểm tra Modify và kế thừa trong Documents; không cấp Full Control hoặc quyền rộng cho Everyone/Users.'
+              : scenario(labId) === 'cpuincident'
+                ? lastProbe?.exitCode === 2
+                  ? 'Không đo/kiểm tra được môi trường bài CPU. Kiểm tra dữ liệu và task của lab còn nguyên; chưa kết luận thao tác của bạn sai.'
+                  : 'Chưa đạt: dừng đúng worker gây tải, giữ helper ban đầu hoạt động và notes.txt nguyên vẹn. Nếu đã reboot, tắt nhầm helper hoặc hết 30 phút, hãy hoàn nguyên rồi chuẩn bị lại.'
+                : 'Chức năng trên Windows chưa phục hồi đúng tiêu chí. Kiểm tra lại trạng thái thực tế trong Desktop và yêu cầu của bài.' } : {}),
       };
     });
   }

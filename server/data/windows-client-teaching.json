@@ -1,0 +1,32 @@
+{
+  "win-it-file-in-use": {
+    "prerequisites": "Biết mở File Explorer, Task Manager và tìm đúng đường dẫn tệp. Chưa cần biết viết script.",
+    "concepts": [
+      {"title":"Tệp đang mở khác với thiếu quyền", "text":"Ứng dụng giữ một handle khi mở tệp. Nếu chế độ chia sẻ của handle không cho phép thao tác khác, đổi tên hoặc ghi tệp có thể thất bại dù tài khoản có quyền. Đọc thông báo lỗi trước khi đổi quyền."},
+      {"title":"Đóng đúng ứng dụng", "text":"Xác định ứng dụng đang dùng đúng tệp, lưu công việc rồi đóng bình thường trước. Kết thúc tiến trình có thể mất dữ liệu; khởi động lại máy có thể che nguyên nhân và ảnh hưởng người khác."}
+    ],
+    "investigation_questions": ["Thao tác nào thất bại và đường dẫn chính xác là gì?", "Thông báo nói tệp đang được dùng hay quyền truy cập bị từ chối?", "Bằng chứng nào nối tiến trình nghi ngờ với tệp này?"],
+    "reflection": ["Vì sao có quyền ghi mà vẫn không đổi tên được tệp?", "Khi nào nên đóng ứng dụng, khi nào mới cân nhắc kết thúc tiến trình?", "Sau sửa, bạn làm thao tác nào để chứng minh người dùng làm việc được mà dữ liệu còn nguyên?"],
+    "sources": [{"title":"Microsoft: mở tệp và chế độ chia sẻ", "url":"https://learn.microsoft.com/en-us/windows/desktop/FileIO/creating-and-opening-files"}]
+  },
+  "win-it-scheduled-backup-permissions": {
+    "prerequisites": "Biết mở Task Scheduler, xem Properties của thư mục và phân biệt đọc với ghi. Nếu chưa biết, mở hướng dẫn GUI trước khi chuẩn bị sự cố.",
+    "concepts": [
+      {"title":"Tác vụ chạy dưới danh tính nào?", "text":"Trigger quyết định lúc chạy, Action quyết định việc chạy, còn tài khoản của tác vụ quyết định quyền truy cập. Bạn chép được tệp bằng tài khoản đăng nhập không chứng minh tác vụ nền cũng chép được."},
+      {"title":"Quyền vừa đủ và kết quả thật", "text":"Đối chiếu tài khoản chạy với quyền tại nguồn và đích. Không cấp Everyone Full Control để thử. Trạng thái chạy xong chưa đủ: cần một bản sao mới có nội dung đúng, đồng thời tài khoản ngoài phạm vi không được thêm quyền."}
+    ],
+    "investigation_questions": ["Lần chạy gần nhất lỗi ở đâu, vào lúc nào?", "Tác vụ chạy dưới tài khoản nào, đọc nguồn nào và ghi đích nào?", "Quyền nào đang thiếu và thay đổi tối thiểu dự kiến là gì?"],
+    "reflection": ["Vì sao chạy thủ công được nhưng tác vụ theo lịch lại thất bại?", "Vì sao nâng quyền chạy không thay thế việc kiểm tra danh tính và ACL?", "Làm sao phân biệt bản sao cũ với bản sao do lần chạy vừa rồi tạo ra?"],
+    "sources": [{"title":"Microsoft: thành phần của tác vụ", "url":"https://learn.microsoft.com/en-us/windows/win32/taskschd/tasks"}, {"title":"Microsoft: ngữ cảnh bảo mật của tác vụ", "url":"https://learn.microsoft.com/en-us/windows/win32/taskschd/security-contexts-for-running-tasks"}]
+  },
+  "win-it-service-config-recovery": {
+    "prerequisites": "Biết mở Services, Event Viewer và trình soạn thảo văn bản. Phân biệt tệp cấu hình với tệp dữ liệu cần giữ nguyên.",
+    "concepts": [
+      {"title":"Service phục vụ công việc nền", "text":"Service có thể hoạt động khi người dùng không mở cửa sổ ứng dụng. Services cho biết trạng thái; nhật ký giúp tìm lý do không khởi động được. Tài khoản chạy service có thể khác tài khoản đang đăng nhập."},
+      {"title":"Running chưa có nghĩa là hết lỗi", "text":"Service có thể chạy nhưng không xử lý được dữ liệu. Trong bài này phải gửi yêu cầu mới và kiểm tra kết quả mới; tệp kết quả cũ không chứng minh hệ thống đã phục hồi. Đây là ứng dụng thực hành, không đại diện mọi lỗi của phần mềm doanh nghiệp."}
+    ],
+    "investigation_questions": ["Người dùng mất chức năng nào, từ thời điểm nào?", "Lỗi trong nhật ký chỉ tới cấu hình, đường dẫn hay quyền?", "Bạn sẽ giữ bản cấu hình trước sửa và kiểm tra lại chức năng bằng cách nào?"],
+    "reflection": ["Services và Event Viewer trả lời hai câu hỏi khác nhau nào?", "Vì sao chỉ bấm Start hoặc nhìn trạng thái Running chưa đủ?", "Nếu sửa cấu hình không giải quyết được, bạn hoàn nguyên và báo lại những bằng chứng gì?"],
+    "sources": [{"title":"Microsoft: tổng quan Windows Services", "url":"https://learn.microsoft.com/en-us/windows/win32/services/about-services"}]
+  }
+}

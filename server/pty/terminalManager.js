@@ -64,7 +64,7 @@ export async function createTerminalSession(ws, options = {}) {
   ws.on("error", cleanup);
   try {
     const spec = await getLabProcess(options.labId);
-    const environment = await getEnvironment();
+    const environment = await getEnvironment(options.labId);
     if (disposed || ws.readyState !== 1) { cleanup(); return null; }
     terminal = pty.spawn(spec.file, spec.args, {
       name: "xterm-256color",

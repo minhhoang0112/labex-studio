@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-14",
+  "course_id": "linux-upskill-challenge",
+  "order": 15,
+  "title": "Ngày 14: Quyền tệp, thư mục và group",
+  "title_vi": "Ngày 14: Quyền tệp, thư mục và group",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "Quyền r/w/x trên thư mục khác tệp. x cho đi qua thư mục, w cho thay đổi mục trong thư mục. SGID trên thư mục giúp tệp con kế thừa group, không tự cấp quyền truy cập cho mọi người.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/14/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/14/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-14-intro",
+      "position": 0,
+      "title": "Ngày 14: Quyền tệp, thư mục và group",
+      "title_vi": "Ngày 14: Quyền tệp, thư mục và group",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nQuyền r/w/x trên thư mục khác tệp. x cho đi qua thư mục, w cho thay đổi mục trong thư mục. SGID trên thư mục giúp tệp con kế thừa group, không tự cấp quyền truy cập cho mọi người.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/14/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nQuyền r/w/x trên thư mục khác tệp. x cho đi qua thư mục, w cho thay đổi mục trong thư mục. SGID trên thư mục giúp tệp con kế thừa group, không tự cấp quyền truy cập cho mọi người.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/14/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-14-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 14 -  Who has permission?\n\n* [Lesson video](https://youtu.be/mBcExazxLU8)\n* Complementary video: [Permissions](https://www.youtube.com/live/2lYo_FJxQR8?t=6290s)\n\n## INTRO\n\nFiles on a Linux system always have associated \"permissions\" - controlling who has access and what sort of access. You'll have bumped into this in various ways already - as an example, yesterday while logged in as your \"ordinary\" user, you could not upload files directly into _/var/www_ or create a new folder at _/_.\n\nThe Linux permission system is quite simple, but it does have some quirky and subtle aspects, so today is simply an introduction to some of the basic concepts.\n\nThis time you really _do_ need to work your way through the material in the RESOURCES section!\n\n## YOUR TASKS TODAY\n\n* Change the ownership of a file to root\n* Change file permissions\n\n## OWNERSHIP\n\nFirst let's look at \"ownership\". All files are tagged with both the name of the user and the group that owns them, so if we type `ls -l` and see a file listing like this:\n\n\t-rw------- \t1 steve  staff  \t4478979  6 Feb  2011 private.txt\n\t-rw-rw-r-- \t1 steve  staff  \t4478979  6 Feb  2011 press.txt\n\t-rwxr-xr-x \t1 steve  staff  \t4478979  6 Feb  2011 upload.bin\n\nThen these files are owned by user \"steve\", and the group \"staff\". Anyone that is not \"steve\" or is not part of the group \"staff\" is considered \"other\". Others may still have permissions to handle these files, but they do not have any ownership.\n\nIf you want to change the ownership of a file, use the `chown` utility. This will change the user owner of _file_ to a new user:\n\n`sudo chown user file`\n\nYou can also change user and group at the same time:\n\n`sudo chown user:group file`\n\nIf you only need to change the group owner, you can use `chgrp` command instead:\n\n`sudo chgrp group file`\n\nSince you created new users in the previous lesson, switch logins and create a few files to their home directories for testing. See how they show with `ls -l`\n\n## PERMISSIONS (SYMBOLIC NOTATION)\n\nLooking at the `-rw-r--r--` at the start of a directory listing line, (ignore the first \"-\" for now), and see these as potentially three groups of \"rwx\": the permission granted to the \"user\" who owns the file, the \"group\", and \"other people\" - we like to call that [UGO](https://acronym24.com/ugo-meaning-in-linux/).\n\nFor the example list above:\n\n* _private.txt_   - Steve has `rw` (ie Read and Write) permission, but neither the group \"staff\" nor \"other people\" have any permission at all\n* _press.txt_  - Steve can Read and Write to this file too, but so can any member of the group \"staff\" and _anyone_, i.e. \"other people\", can read it\n* _upload.bin_  - Steve has `rwx`, he can read, write and execute - i.e. run this program - but the group and others can only read and execute it\n\nYou can change the permissions on any file with the `chmod` utility. Create a simple text file in your home directory with `vim` (e.g. _tuesday.txt_) and check that you can list its contents by typing: `cat tuesday.txt` or `less tuesday.txt`.\n\nNow look at its permissions by doing: `ls -ltr tuesday.txt`\n\n\t-rw-rw-r-- 1 ubuntu ubuntu   12 Nov 19 14:48 tuesday.txt\n\nSo, the file is owned by the user \"ubuntu\", and group \"ubuntu\", who are the only ones that can write to the file - but any other user can only read it.\n\n## CHANGING PERMISSIONS\n\nNow let’s remove the permission of the user and \"ubuntu\" group to write their own file:\n\n`chmod u-w tuesday.txt`\n\n`chmod g-w tuesday.txt`\n\n...and remove the permission for \"others\" to read the file:\n\n`chmod o-r tuesday.txt`\n\nDo a listing to check the result:\n\n\t-r--r----- 1 ubuntu ubuntu   12 Nov 19 14:48 tuesday.txt\n\n...and confirm by trying to edit the file with `nano` or `vim`. You'll find that you appear to be able to edit it - but can't save any changes. (In this case, as the owner, you have \"permission to override permissions\", so can can write with `:w!`). You can of course easily give yourself back the permission to write to the file by:\n\n`chmod u+w tuesday.txt`\n\n## POSTING YOUR PROGRESS\n\nJust for fun, create a file: _secret.txt_ in your home folder, take away all permissions from it for the user, group and others - and see what happens when you try to edit it with `vim`.\n\n## EXTENSION\n\nIf all of this is old news to you, you may want to look into Linux ACLs:\n\n* [How to manage ACLs on Linux](https://linuxconfig.org/how-to-manage-acls-on-linux)\n* [Linux Access Control Lists](https://www.redhat.com/sysadmin/linux-access-control-lists)\n\nAlso, SELinux and AppArmour:\n\n* [SELinux man page](https://manpages.ubuntu.com/manpages/impish/en/man8/selinux.8.html)\n* [SELinux User's and Administrator's Guide](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/pdf/selinux_users_and_administrators_guide/red_hat_enterprise_linux-7-selinux_users_and_administrators_guide-en-us.pdf)\n* [SELinux For Mere Mortals](https://craigmbooth.com/blog/selinux-for-mortals/)\n* [Securing Ubuntu 18 04 with Apparmor](https://www.youtube.com/watch?v=lJFxexGZ-DY)\n\n## RESOURCES\n\n* [How to Use the chown Command to Change the Owner of a File in Linux](https://www.hostinger.com/tutorials/linux-chown-command/)\n* [If chown can change groups, why was chgrp created?](https://unix.stackexchange.com/questions/136987/if-chown-can-change-groups-why-was-chgrp-created)\n* [Linux file permissions explained](https://www.redhat.com/sysadmin/linux-file-permissions-explained)\n* [File permissions and attributes](https://wiki.archlinux.org/title/File_permissions_and_attributes)\n* [File Security](http://tldp.org/LDP/intro-linux/html/sect_03_04.html)\n* [chmod Tutorial](http://catcode.com/teachmod/)\n* [File and Directory Permissions](http://www.youtube.com/watch?v=vKTg1ATHl4E)\n* [What is \"umask\" and how does it work?](https://askubuntu.com/questions/44542/what-is-umask-and-how-does-it-work)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nQuyền r/w/x trên thư mục khác tệp. x cho đi qua thư mục, w cho thay đổi mục trong thư mục. SGID trên thư mục giúp tệp con kế thừa group, không tự cấp quyền truy cập cho mọi người.\n\n## Thực hành từng bước\nDùng group/user từ ngày 13:\n```bash\nsudo mkdir -p /srv/luc-shared\nsudo chown \"$USER\":luc-ops /srv/luc-shared\nsudo chmod 2770 /srv/luc-shared\nprintf 'team notes\\n' > /srv/luc-shared/report.txt\nchmod 660 /srv/luc-shared/report.txt\nsudo -u luc-helper cat /srv/luc-shared/report.txt\nsudo -u nobody cat /srv/luc-shared/report.txt\n```\nLệnh cuối phải bị từ chối. Thử tạo tệp bằng luc-helper rồi kiểm tra group bằng ls -l. Không chmod 777 để né lỗi. Dùng /srv thay vì thư mục home riêng để tránh quyền traverse của thư mục cha che nguyên nhân.\nBộ chấm thực sự thử đọc/ghi bằng luc-helper và kiểm tra nobody không đọc được, ngoài việc nhìn số quyền.\n\n## Tự giải thích\nVì sao chmod 660 cho file vẫn không đủ nếu thiếu x trên thư mục cha?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/14/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/14/",
+      "source_sha256": "3333a63c8f631ebc987d148f9e22d3e6b9940ddab0a17e4b6a54d78edbfc157a",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-14-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nGroup làm việc đọc/ghi được trong /srv/luc-shared; người ngoài không đọc được report.txt.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "Group làm việc đọc/ghi được trong /srv/luc-shared; người ngoài không đọc được report.txt.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Vì sao chmod 660 cho file vẫn không đủ nếu thiếu x trên thư mục cha?",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c %G /srv/luc-shared)\" = luc-ops && test \"$(stat -c %a /srv/luc-shared)\" = 2770 && sudo -n -u luc-helper test -r /srv/luc-shared/report.txt && ! sudo -n -u nobody test -r /srv/luc-shared/report.txt && p=$(sudo -n -u luc-helper mktemp /srv/luc-shared/probe.XXXXXX) && sudo -n -u luc-helper sh -c 'printf checked > \"$1\"; test \"$(cat \"$1\")\" = checked; rm -- \"$1\"' sh \"$p\""
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-14-task",
+      "title": "Kiểm tra kết quả",
+      "task": "Group làm việc đọc/ghi được trong /srv/luc-shared; người ngoài không đọc được report.txt.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Vì sao chmod 660 cho file vẫn không đủ nếu thiếu x trên thư mục cha?",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(stat -c %G /srv/luc-shared)\" = luc-ops && test \"$(stat -c %a /srv/luc-shared)\" = 2770 && sudo -n -u luc-helper test -r /srv/luc-shared/report.txt && ! sudo -n -u nobody test -r /srv/luc-shared/report.txt && p=$(sudo -n -u luc-helper mktemp /srv/luc-shared/probe.XXXXXX) && sudo -n -u luc-helper sh -c 'printf checked > \"$1\"; test \"$(cat \"$1\")\" = checked; rm -- \"$1\"' sh \"$p\""
+      }
+    }
+  ]
+}

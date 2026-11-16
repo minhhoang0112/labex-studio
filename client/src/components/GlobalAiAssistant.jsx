@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { api } from '../lib/api';
 import VoiceCallModal from './VoiceCallModal';
+import {savedPortfolioContext,PORTFOLIO_ID} from '../lib/portfolioCoachContext';
 import { createSpeechPlayer } from '../lib/speechPlayer';
 import { recognitionErrorMessage } from '../lib/voiceSession';
 import {
@@ -116,6 +117,7 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
           message: textToSend,
           persona,
           context: {
+            ...savedPortfolioContext(currentId),
             page: currentView,
             targetId: currentId,
             platform: 'all',
@@ -141,7 +143,12 @@ export default function GlobalAiAssistant({ currentView, currentId }) {
     }
   };
 
-  const quickPrompts = persona === 'tutor' ? [
+  const quickPrompts = currentId===PORTFOLIO_ID ? [
+    {label:'Hiểu dự án của tôi',text:'Giải thích dự án của tôi từ phần tôi đang học, mỗi lần một ý rồi hỏi tôi hiểu chưa.'},
+    {label:'Luyện giới thiệu',text:'Cho tôi luyện giới thiệu bản thân xin thực tập. Hỏi một câu rồi chờ tôi nói.'},
+    {label:'Phỏng vấn lab CV',text:'Phỏng vấn tôi về chính lab trong CV. Chỉ hỏi một câu và chờ tôi trả lời, chưa đưa đáp án.'},
+    {label:'Tình huống sự cố',text:'Đưa một tình huống từ lab của tôi, hỏi tôi kiểm tra gì trước rồi chờ trả lời.'},
+  ] : persona === 'tutor' ? [
     { label: '🧭 Lộ trình học Linux cho người mới?', text: 'Tư vấn cho tôi lộ trình học Linux bài bản từ con số 0 đến tự tin đi làm.' },
     { label: '⚖️ Nên học Linux hay Windows Server?', text: 'Nên học Linux hay Windows Server trước cho mục tiêu SysAdmin / Cloud?' },
     { label: '🏆 Chứng chỉ CompTIA Linux+ có tác dụng gì?', text: 'Chứng chỉ CompTIA Linux+ cần ôn tập những kiến thức trọng tâm nào?' },

@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-18",
+  "course_id": "linux-upskill-challenge",
+  "order": 19,
+  "title": "Ngày 18: Journal và logrotate",
+  "title_vi": "Ngày 18: Journal và logrotate",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "Log giúp điều tra theo thời gian; logrotate quản lý kích thước/số bản lưu, không phải công cụ tự sửa lỗi ứng dụng. Debug cấu hình không làm xoay log thật.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/18/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/18/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-18-intro",
+      "position": 0,
+      "title": "Ngày 18: Journal và logrotate",
+      "title_vi": "Ngày 18: Journal và logrotate",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nLog giúp điều tra theo thời gian; logrotate quản lý kích thước/số bản lưu, không phải công cụ tự sửa lỗi ứng dụng. Debug cấu hình không làm xoay log thật.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/18/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nLog giúp điều tra theo thời gian; logrotate quản lý kích thước/số bản lưu, không phải công cụ tự sửa lỗi ứng dụng. Debug cấu hình không làm xoay log thật.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/18/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-18-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 18 - Logs, monitoring and troubleshooting\n\n* [Lesson video](https://youtu.be/sd5NFUo5JYM)\n* Complementary video: [Log rotation](https://www.youtube.com/live/5oGwnrd44BI?t=670s)\n\n## INTRO\n\nWhen you’re administering a remote server, logs are your best friend, but disk space problems can be your worst enemy - so while Linux applications are generally very good at generating logs, they need to be controlled.\n\nThe `logrotate` application keeps your logs in check. Using this, you can define how many days of logs you wish to keep; split them into manageable files; compress them to save space, or even keep them on a totally separate server.\n\nGood sysadmins love automation - having the computer automatically do the boring repetitive stuff Just Makes Sense.\n\n## YOUR TASKS TODAY\n\n* Check the logs for _apache2_ that are Severity 3\n* Edit logrotate configuration for _apache2_ to rotate daily\n\n## ARE YOUR LOGS ROTATING?\n\nLook into your logs directories - _/var/log_, and subdirectories like _/var/log/apache2_. Can you see that your logs are already being rotated? You should see a _/var/log/syslog_ file, but also a series of older compressed versions with names like _/var/log/syslog.1.gz_\n\n## WHEN DO THEY ROTATE?\n\nYou will recall that `cron` is generally setup to run scripts in _/etc/cron.daily_ - so look in there and you should see a script called `logrotate` - or possibly _00logrotate_ to force it to be the first task to run.\n\n## CONFIGURING LOGROTATE\n\nThe overall configuration is set in _/etc/logrotate.conf_ - have a look at that, but then also look at the files under the directory _/etc/logrotate.d_, as the contents of these are merged in to create the full configuration.\nYou will probably see one called _apache2_, with contents like this:\n\n     /var/log/apache2/*.log {\n     weekly\n     missingok\n     rotate 52\n     compress\n     delaycompress\n     notifempty\n     create 640 root adm\n     }\n\nMuch of this is fairly clear: any apache2 .log file will be rotated each week, with 52 compressed copies being kept.\n\nTypically when you install an application a suitable logrotate “recipe” is installed for you, so you’ll not normally be creating these from scratch. However, the default settings won’t always match your requirements, so it’s perfectly reasonable for you as the sysadmin to edit these - for example, the default _apache2_ recipe above creates 52 weekly logs, but you might find it more useful to have logs rotated daily, a copy automatically emailed to an auditor, and just 30 days worth kept on the server.\n\n## RESOURCES\n\n* [The Ultimate Logrotate Command Tutorial](http://www.thegeekstuff.com/2010/07/logrotate-examples/)\n* [LINUX: openSUSE and logrotate](http://www.youtube.com/watch?v=UoHmj3ef3Is)\n* [Use logrotate to Manage Log Files](http://library.linode.com/linux-tools/utilities/logrotate)\n\n## TROUBLESHOOT AND MAKE A SAD SERVER HAPPY!\n\nPractice what you've learned with some challenges at [SadServers.com](https://sadservers.com/):\n\n* [\"Manhattan\": can't write data into database.](https://sadservers.com/scenario/manhattan)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nLog giúp điều tra theo thời gian; logrotate quản lý kích thước/số bản lưu, không phải công cụ tự sửa lỗi ứng dụng. Debug cấu hình không làm xoay log thật.\n\n## Thực hành từng bước\nQuan sát:\n```bash\nsudo journalctl -u apache2 -p err --since today --no-pager\nsudo less /etc/logrotate.d/apache2\nsudo logrotate -d /etc/logrotate.conf\n```\nKhông có dòng error không tự động là lỗi. Tìm weekly trong block Apache, sao lưu file đó rồi dùng sudoedit đổi sang daily, giữ các chỉ thị khác. Debug lại cấu hình trước khi áp dụng.\nTập xoay một log riêng bằng user thường, không ép xoay mọi log hệ thống:\n```bash\nmkdir -p ~/luc-course/day18\nprintf 'LUC rotation test\\n' > ~/luc-course/day18/application.log\nnano ~/luc-course/day18/rotate.conf\n```\nNội dung rotate.conf dùng **đường dẫn tuyệt đối tới application.log của bạn**, kèm block `{`, `size 1`, `rotate 2`, `copytruncate`, `}` trên các dòng riêng. Chạy `logrotate -s ~/luc-course/day18/state -f ~/luc-course/day18/rotate.conf`. Kiểm tra application.log.1 có dòng gốc. Không xóa log Windows/Linux để giấu lỗi.\n\n## Tự giải thích\nVì sao logrotate -d không tạo archive? Nếu file vẫn mở, copytruncate có giới hạn gì?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/18/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/18/",
+      "source_sha256": "bff652c6bf7936aa3efe424fd8ada2ea70eb25a9d1bc5120a14b932406d0029a",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-18-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nApache cấu hình daily hợp lệ và bản log riêng đã xoay giữ được nội dung.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "Apache cấu hình daily hợp lệ và bản log riêng đã xoay giữ được nội dung.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Vì sao logrotate -d không tạo archive? Nếu file vẫn mở, copytruncate có giới hạn gì?",
+      "verification": {
+        "kind": "state",
+        "command": "sudo -n grep -Eq '^[[:space:]]*daily[[:space:]]*$' /etc/logrotate.d/apache2 && sudo -n logrotate -d /etc/logrotate.conf >/dev/null 2>&1 && grep -qx 'LUC rotation test' \"$HOME/luc-course/day18/application.log.1\""
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-18-task",
+      "title": "Kiểm tra kết quả",
+      "task": "Apache cấu hình daily hợp lệ và bản log riêng đã xoay giữ được nội dung.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Vì sao logrotate -d không tạo archive? Nếu file vẫn mở, copytruncate có giới hạn gì?",
+      "verification": {
+        "kind": "state",
+        "command": "sudo -n grep -Eq '^[[:space:]]*daily[[:space:]]*$' /etc/logrotate.d/apache2 && sudo -n logrotate -d /etc/logrotate.conf >/dev/null 2>&1 && grep -qx 'LUC rotation test' \"$HOME/luc-course/day18/application.log.1\""
+      }
+    }
+  ]
+}

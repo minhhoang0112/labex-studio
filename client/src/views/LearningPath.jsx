@@ -1,3 +1,4 @@
+import PortfolioReviewEntry from '../components/PortfolioReviewEntry';
 import React, { useState, useEffect } from 'react';
 import CourseContentBadge from '../components/CourseContentBadge';
 import { 
@@ -184,6 +185,7 @@ export default function LearningPath({ pathAlias = 'linux', onBack, onSelectCour
       {/* Main Roadmap Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 space-y-12">
         {isWindows && <p className="rounded-xl border border-sky-200 dark:border-sky-900 bg-sky-50 dark:bg-sky-950 p-4 text-sm text-sky-900 dark:text-sky-100">{roadmap.guidance}</p>}
+        <PortfolioReviewEntry onSelectCourse={onSelectCourse} />
         {/* Stages view in Recommended Mode */}
         {viewMode === 'recommended' && stages.length > 0 ? (
           stages.map((stage, sIdx) => {

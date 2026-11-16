@@ -95,11 +95,21 @@ export function getLinuxRoadmap() {
         : status === "partial" ? "Đã có nội dung local; xem trạng thái từng bài và nhiệm vụ trước khi thực hành."
           : "Đã đối chiếu giáo trình nguồn; nội dung thực hành local chưa được triển khai." };
   });
+  const upskill=courseReadiness('linux-upskill-challenge',labs,index);
+  courses.splice(3,0,{id:'linux-upskill-challenge',alias:'linux-upskill-challenge',name:'Linux Upskill Challenge — Quản trị Ubuntu Server',
+    prerequisites:[ORDER[0]],prerequisite_skills:['Lệnh Linux nhập môn','Sẵn sàng dùng một VM lab riêng'],
+    learning_outcomes:['Quản trị Ubuntu Server qua SSH, dịch vụ, mạng, quyền và log','Sao lưu/khôi phục và tự động hóa trên một server xuyên suốt'],
+    practice_strategy:'Có thể bắt đầu sau Quick Start; dùng Linux for Noobs để bổ sung lệnh còn thiếu. VM lab tách biệt VM dự án CV; không reset giữa các ngày.',
+    ...upskill,source_url:'https://linuxupskillchallenge.org/',source_labs_count:22,source_sections_count:22,source_tasks_count:21,
+    status:upskill.runnable_labs_count===22?'ready':'partial',
+    reason:'Đã có Ngày 0–21, toàn văn EN nguồn và hướng dẫn VI biên soạn. Terminal/chấm dùng VM Ubuntu riêng qua SSH; phần mở rộng cần tự kiểm tra.'});
+  courses.forEach((course,i)=>{course.order=i+1;});
   return { id: "linux-system-administrator", title: "Lộ trình Linux cho System Administrator",
     source: { url: index.source_url, observed_at: index.observed_at }, order_kind: "recommended-local", source_order: index.source_order,
     prerequisites_advisory: true,
     courses, stages: [
       { id: "foundations", name: "Nền tảng Linux", description: "Học terminal, tệp, quyền và tài khoản; luyện lệnh song song.", course_ids: ORDER.slice(0, 3) },
+      { id:'server-practice',name:'Ubuntu Server thực tế',description:'Một VM xuyên suốt: SSH, dịch vụ, mạng, quyền, log và tự động hóa.',course_ids:['linux-upskill-challenge']},
       { id: "operations", name: "Shell và vận hành hệ thống", description: "Viết script rồi áp dụng vào các tình huống quản trị.", course_ids: ORDER.slice(3, 5) },
       { id: "administration", name: "Quản trị và bảo mật", description: "Củng cố quản trị hệ thống và kiểm tra cấu hình bảo mật.", course_ids: ORDER.slice(5, 7) },
       { id: "practice", name: "Luyện tập xuyên suốt", description: "Chọn thử thách theo kỹ năng đã học; không cần chờ hoàn tất mọi khóa.", course_ids: [ORDER[7]] },

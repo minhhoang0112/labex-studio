@@ -3,6 +3,7 @@ import fs from 'node:fs';
 // Separate authored layer: legacy import/build scripts cannot overwrite this
 // lesson format. Grading contracts and step IDs remain owned by the original lab.
 const plan = JSON.parse(fs.readFileSync(new URL('../data/windows-practical-v2.json', import.meta.url), 'utf8'));
+const teaching = JSON.parse(fs.readFileSync(new URL('../data/windows-client-teaching.json', import.meta.url), 'utf8'));
 
 export function applyWindowsPracticalCurriculum(lab) {
   const brief = plan.lessons[lab.id] || lab.practice_ticket;
@@ -10,6 +11,8 @@ export function applyWindowsPracticalCurriculum(lab) {
   const sections = lab.sections.map(section => ({ ...section,
     ...(section.kind !== 'summary' ? { practice_brief: {
       ...brief,
+      ...teaching[lab.id],
+      phase: section.kind,
       ...(section.kind === 'document' ? { tasks: brief.diagnosis, acceptance: [
         'Nêu được triệu chứng, bằng chứng và giả thuyết trước khi sửa. Phần quan sát không tự động tính điểm.',
       ] } : {}),

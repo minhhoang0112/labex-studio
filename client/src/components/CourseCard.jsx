@@ -80,13 +80,13 @@ export default function CourseCard({ course, onSelectCourse }) {
           <div className="flex items-center gap-1.5">
             <Terminal className="w-3.5 h-3.5 text-primary-500" />
             <span>
-            {course.curriculum_status==='planned' ? `${course.planned_lessons_count} bài dự kiến · Chưa triển khai` : isReady || isPartial
+            {course.learning_mode==='portfolio-review' ? `${course.journey_steps_count || 5} bước ôn · ${course.study_unit_count || 9} chủ đề` : course.curriculum_status==='planned' ? `${course.planned_lessons_count} bài dự kiến · Chưa triển khai` : isReady || isPartial
                 ? `${course.practice_labs_count ?? 0} bài mở terminal · ${course.runnable_labs_count ?? 0} bài chấm đủ`
                 : `${course.source_labs_count || course.labs_count || 0} bài tại nguồn`}
             </span>
           </div>
           <div className="flex items-center gap-1 text-[11px] text-slate-400">
-            <span>{course.topic==='windows'?'Windows':`${course.source_verified_labs_count || 0} bài đối chiếu`}</span>
+            <span>{course.learning_mode==='portfolio-review'?'Đọc & tự ôn':course.topic==='windows'?'Windows':`${course.source_verified_labs_count || 0} bài đối chiếu`}</span>
           </div>
         </div>
       </div>

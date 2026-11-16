@@ -35,7 +35,7 @@ try {
   assert.ok(roadmapScroll > 200);
   await card.click();
   await page.getByRole('heading', { name: 'Bắt đầu bằng ticket thực hành GUI', exact: true }).waitFor();
-  assert.equal(await page.locator('.btn-start-lab').count(), 3);
+  assert.equal(await page.locator('.btn-start-lab').count(), 5);
   await page.locator('.btn-start-lab').first().scrollIntoViewIfNeeded();
   const courseScroll = await page.evaluate(() => window.scrollY);
   await page.locator('.btn-start-lab').first().click();
@@ -63,7 +63,23 @@ try {
   await page.goto(base + '/courses/windows-11-fundamentals');
   await page.getByRole('button', { name: 'Trở về lộ trình Windows', exact: true }).click();
   await page.waitForURL('**/paths/windows');
+  await page.goto(base + '/labs/win-it-user-folder-permissions?courseId=windows-11-it-support-troubleshooting');
+  await page.locator('[data-practice-brief]').waitFor();
+  await page.getByRole('combobox', { name: 'Chọn mục bài học', exact: true }).selectOption('1');
+  await page.locator('[data-practice-foundations]').waitFor();
+  assert.ok((await page.locator('[data-practice-foundations]').innerText()).includes('danh tính'));
+  await page.getByRole('combobox', { name: 'Chọn mục bài học', exact: true }).selectOption('2');
+  assert.equal(await page.locator('[data-practice-brief] details[open]').count(), 0);
+  assert.ok((await page.locator('[data-practice-brief]').innerText()).includes('đối chứng'));
+  await page.goto(base + '/labs/win-it-cpu-process-diagnosis?courseId=windows-11-it-support-troubleshooting');
+  await page.locator('[data-practice-brief]').waitFor();
+  await page.getByRole('combobox', { name: 'Chọn mục bài học', exact: true }).selectOption('1');
+  await page.locator('[data-practice-foundations]').waitFor();
+  assert.ok((await page.locator('[data-practice-foundations]').innerText()).includes('CPU khác RAM'));
+  await page.getByRole('combobox', { name: 'Chọn mục bài học', exact: true }).selectOption('2');
+  assert.equal(await page.locator('[data-practice-brief] details[open]').count(), 0);
+  assert.ok((await page.locator('[data-practice-brief]').innerText()).includes('Task Manager'));
   assert.deepEqual(errors, []);
   assert.equal(mutations, 0);
-  console.log('PASS: real course API, 3 GUI tickets first, hints collapsed/reset, course/roadmap scroll restored, reload/back/forward and direct links. No VM mutations.');
+  console.log('PASS: real course API, 5 GUI tickets first, hints collapsed/reset, course/roadmap scroll restored, reload/back/forward and direct links. No VM mutations.');
 } finally { await browser.close(); server.close(); }

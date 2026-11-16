@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-05",
+  "course_id": "linux-upskill-challenge",
+  "order": 6,
+  "title": "Ngày 5: Đọc văn bản, dotfile và nano",
+  "title_vi": "Ngày 5: Đọc văn bản, dotfile và nano",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "less cho cuộn/tìm nội dung mà không sửa; nano là trình soạn thảo. Tệp bắt đầu bằng dấu chấm thường bị ls thông thường ẩn đi, không phải cơ chế bảo mật.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/05/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/05/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-05-intro",
+      "position": 0,
+      "title": "Ngày 5: Đọc văn bản, dotfile và nano",
+      "title_vi": "Ngày 5: Đọc văn bản, dotfile và nano",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nless cho cuộn/tìm nội dung mà không sửa; nano là trình soạn thảo. Tệp bắt đầu bằng dấu chấm thường bị ls thông thường ẩn đi, không phải cơ chế bảo mật.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/05/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nless cho cuộn/tìm nội dung mà không sửa; nano là trình soạn thảo. Tệp bắt đầu bằng dấu chấm thường bị ls thông thường ẩn đi, không phải cơ chế bảo mật.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/05/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-05-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 5 - More or less...\n\n* [Lesson video](https://youtu.be/SdvrCmhsm2M)\n* Complementary video: [Tab Completion and other command line tricks](https://www.youtube.com/live/WtcX60n-ui0?t=1132s)\n* Complementary video: [Less and More](https://www.youtube.com/live/mI0nfnkr0J0?t=11160s)\n\n## INTRO\n\nToday we'll end with a bang - with a quick introduction to five different topics. Mastery isn't required today - you'll be getting plenty of practice with all these in the sessions to come!\n\nDon’t be misled by how simplistic some of these commands may seem - they all have hidden depths and many sysadmins will be using several of these every day.\n\n## YOUR TASKS TODAY\n\n* Use tab completion\n* Search in the command history\n* Read a dot file using more and less\n* Change / customize your prompt\n\nUse the links in the Resources section to complete these tasks:\n\n* Get familiar with using `more` and `less` for viewing files, including being able to get to the top or bottom of a file in `less`, and searching for some text\n\n* Test how “tab completion” works - this is a handy feature that helps you enter commands correctly. It helps find both the command and also file name parameters, so typing `les` then hitting “Tab” will complete the command `less`, but also typing `less /etc/serv` and pressing “Tab” will complete to `less /etc/services`. Try typing `less /etc/s` then pressing “Tab”, and again, to see how the feature handles ambiguity.\n\n* Now that you've typed in quite a few commands, try pressing the “Up arrow” to scroll back through them. What you should notice is that not only can you see your most recent commands - but even those from the last time you logged in. Now try the `history`  command - this lists out the whole of your cached command history - often 100 or more entries. There are number of clever things that can be done with this. The simplest is to repeat a command - pick one line to repeat (say number 20)  and repeat it by typing !20 and pressing “Enter”. Later when you'll  be typing long, complex, commands this can be *very* handy. You can also press `Ctrl + r`, then start typing any part of the command that you are looking for. You'll see an autocomplete of a past command at your prompt. If you keep typing, you'll get more specific options appear.  You can either run it by pressing return, or editing it first by pressing arrows or other movement keys.  You can also keep pressing `Ctrl + r` to see other instances of the same command you used with different options.\n\n* Look for “hidden” files in your home directory. In Linux the convention is simply that any file starting with a \".\" character is hidden. So, type `cd` to return to your \"home directory\" then `ls -l` to show what files are there. Now type `ls -la` or `ls -ltra` (the \"a\" is for \"all\") to show all the files - including those starting with a dot. By far the most common use of \"dot files\" is to keep personal settings in a home directory. So use your new skills with `less` to look at the contents of  `.bashrc` ,  `.bash_history` and others.\n\n* Finally, use the `nano` editor to create a file in your home directory and type up a summary of how the last five days have worked for you.\n\n## EXTENSION\n\nWe're using `bash` as our terminal shell for now (it is standard in many distros) but it is not the only one out there. If you want to test out [zsh](https://www.geeksforgeeks.org/how-to-install-z-shellzsh-on-linux/), [fish](https://fishshell.com/) or [oh-my-zsh](https://ohmyz.sh/), you will see that there are a few differences and the features are usually the main differentiator. Try that, poke around.\n\nAfter that, you can go up a notch and try to have several shell sessions open at the same time in the same terminal window with a **terminal multiplexer**. Try [screen](https://linuxize.com/post/how-to-use-linux-screen/) - that's a little simpler and maybe too terse in the beginning - or [tmux](https://github.com/tmux/tmux/wiki), that have many features and colors. There are so much material out there on \"how to customize your tmux\", have fun.\n\n## RESOURCES\n\n* [Unix Less Command: 10 Tips for Effective Navigation](http://www.thegeekstuff.com/2010/02/unix-less-command-10-tips-for-effective-navigation/)\n* [How To Use Bash History Commands and Expansions...](https://www.digitalocean.com/community/tutorials/how-to-use-bash-history-commands-and-expansions-on-a-linux-vps)\n* [BASH Shell commands less](http://www.youtube.com/watch?v=ZQTt0LEoj3k)\n* [Tab completion](https://www.youtube.com/watch?v=7V-fovVlCvA)\n* [What are dotfiles?](http://thegeekyway.com/what-are-dotfiles/)\n* [Nano editor tutorials](http://www.debianadmin.com/nano-editor-tutorials.html)\n* [Bash Shell: Take Control of PS1, PS2, PS3, PS4 and PROMPT_COMMAND](http://www.thegeekstuff.com/2008/09/bash-shell-take-control-of-ps1-ps2-ps3-ps4-and-prompt_command/)\n* [Bash Shell PS1: 10 Examples to Make Your Linux Prompt like Angelina Jolie](http://www.thegeekstuff.com/2008/09/bash-shell-ps1-10-examples-to-make-your-linux-prompt-like-angelina-jolie/)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nless cho cuộn/tìm nội dung mà không sửa; nano là trình soạn thảo. Tệp bắt đầu bằng dấu chấm thường bị ls thông thường ẩn đi, không phải cơ chế bảo mật.\n\n## Thực hành từng bước\nDùng `less /etc/services`, tìm bằng /ssh rồi q. Thử `ls -a ~`, phím Tab và phím mũi tên lên trong shell.\n```bash\nmkdir -p ~/luc-course/day05\nnano ~/luc-course/day05/notes.txt\n```\nViết ít nhất ba dòng bằng lời của bạn: less dùng làm gì, dotfile là gì, và cách thoát/lưu nano. Trong nano: Ctrl+O, Enter để lưu; Ctrl+X để thoát. Đọc lại bằng `cat -n` và `less`. Chấm chỉ xác nhận tệp có ít nhất ba dòng không rỗng, không tự đánh giá đúng/sai phần giải thích.\n\n## Tự giải thích\nless, cat và nano khác nhau thế nào?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/05/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/05/",
+      "source_sha256": "ab5dcfc5cdcbdb4acdd4b429f77c2fcd92dfab803cefc7cdb918e5bd4da1d7ed",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-05-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nTự soạn notes.txt có ít nhất ba dòng không rỗng và đọc lại.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "Tự soạn notes.txt có ít nhất ba dòng không rỗng và đọc lại.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. less, cat và nano khác nhau thế nào?",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(grep -c \"[^[:space:]]\" \"$HOME/luc-course/day05/notes.txt\")\" -ge 3"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-05-task",
+      "title": "Kiểm tra kết quả",
+      "task": "Tự soạn notes.txt có ít nhất ba dòng không rỗng và đọc lại.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. less, cat và nano khác nhau thế nào?",
+      "verification": {
+        "kind": "state",
+        "command": "test \"$(grep -c \"[^[:space:]]\" \"$HOME/luc-course/day05/notes.txt\")\" -ge 3"
+      }
+    }
+  ]
+}

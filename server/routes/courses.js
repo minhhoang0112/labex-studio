@@ -9,6 +9,8 @@ import { getVerificationDefinition } from "../services/verification.js";
 import { getWindowsRoadmap, readWindowsRoadmap } from "../services/windowsRoadmap.js";
 import {assessmentSummary} from '../services/courseAssessment.js';
 
+import {portfolioReviewCourse,readPortfolioReview} from '../services/portfolioReview.js';
+
 const router = express.Router();
 const readData = (file) => JSON.parse(fs.readFileSync(fileURLToPath(new URL(`../data/${file}`, import.meta.url)), "utf8"));
 
@@ -22,10 +24,12 @@ function publicPath(path) {
   const courses = getCourses();
   const index = readLinuxIndex();
   const local = index.courses.map(source => courses.find(course => course.id === source.id));
+  const extra=courses.find(course=>course.id==='linux-upskill-challenge');
+  if(extra)local.push(extra);
   const { followers_count, hours, ...metadata } = path;
   return { ...metadata, has_cert: false, source_url: index.source_url, source_observed_at: index.observed_at,
     source_statistics: { followers_count, hours, labs_count: path.labs_count, has_cert: path.has_cert },
-    course_count: index.courses.length, source_labs_count: index.courses.reduce((n, c) => n + c.source_labs_count, 0),
+    course_count: index.courses.length+(extra?1:0), source_labs_count: index.courses.reduce((n, c) => n + c.source_labs_count, 0)+(extra?.source_labs_count || 0),
     labs_count: local.reduce((n, c) => n + (c?.imported_labs_count || 0), 0),
     runnable_labs_count: local.reduce((n, c) => n + (c?.runnable_labs_count || 0), 0),
     roadmap_url: "/api/roadmaps/linux-system-administrator",
@@ -42,7 +46,8 @@ export function getCourses() {
   const labs = listLabs();
   const index = readLinuxIndex();
   const windowsPlan = readWindowsRoadmap();
-  return readData("courses.json").map((course) => {
+  return [...readData("courses.json"),portfolioReviewCourse()].map((course) => {
+    if(course.learning_mode === 'portfolio-review') return course;
     const available = listCourseLabs(course.id, labs, index);
     const source = index.courses.find(item => item.id === course.id);
     const readiness = courseReadiness(course.id, labs, index);
@@ -60,7 +65,7 @@ export function getCourses() {
       ...(course.id === "quick-start-with-linux" ? { description: "Làm quen Linux qua terminal, thao tác tệp, đọc và so sánh nội dung, quyền sở hữu và quản lý tài khoản." } : {}),
       ...(course.id === "linux-commands-practice-online" ? { name: "Linux Commands Practice — Local Exercises", source_equivalent: false } : {}),
       has_cert: false, source_statistics: { user_count, rating, has_cert },
-      source_url: source?.source_url, source_labs_count: source?.source_labs_count ?? null, ...readiness,
+      source_url: source?.source_url || course.source_url, source_labs_count: source?.source_labs_count ?? course.source_labs_count ?? null, ...readiness,
       practice_labs_count: practiceCount,
       runnable_labs_count: runnableCount,
       ...(outline ? {curriculum_status:planned?'planned':reviewIncomplete || plannedCount && available.length<plannedCount?'in-progress':'implemented',
@@ -69,7 +74,7 @@ export function getCourses() {
         learning_outcomes:outline.learning_outcomes,environment_plan:outline.environment_plan,references:outline.references,
         roadmap_alias:'windows',content_status:planned?'planned':reviewIncomplete || plannedCount && available.length<plannedCount?'partial':readiness.content_status} : {}),
       readiness: planned ? 'planned' : isReady && !reviewIncomplete && (!plannedCount || available.length>=plannedCount) ? "ready" : available.length ? "partial" : "reference-only",
-      labs_count: available.length, available: practiceCount > 0 || ((course.topic === 'windows' || course.id.includes('windows')) && available.length > 0),
+      labs_count: available.length, available: practiceCount > 0 || (course.runtime_required === 'upskill-ssh' && available.length > 0) || ((course.topic === 'windows' || course.id.includes('windows')) && available.length > 0),
       lab_ids: available.map((lab) => lab.id),
       steps_count: available.reduce((sum, lab) => sum + lab.steps.length, 0) };
   });
@@ -123,6 +128,7 @@ router.get("/courses/:id", (req, res, next) => {
     if (!isValidId(req.params.id)) return res.status(400).json({ error: "Mã khóa học không hợp lệ." });
     const course = getCourses().find((item) => item.id === req.params.id || item.alias === req.params.id);
     if (!course) return res.status(404).json({ error: "Không tìm thấy khóa học." });
+    if(course.learning_mode === 'portfolio-review') return res.json({course,labs:[],study:readPortfolioReview()});
     const imported = listCourseLabs(course.id).sort(compareLearningOrder);
     const summary = lab => {
       const { id, title, title_vi, difficulty, estimated_time, overview, steps, sections, order, type, source, source_lab_id, source_url } = lab;

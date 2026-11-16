@@ -6,9 +6,10 @@ import { recordWindowsCommand } from '../pty/linuxEnvironment.js';
 import { isValidId, loadLab } from '../data/catalog.js';
 import { resolveVmTarget } from '../services/vmTargets.js';
 import { windowsFaults, faultScenarios } from '../services/windowsFaults.js';
+import { syncClientNetwork } from '../services/clientNetworkSync.js';
 
 export function createCloudVmRouter({ desktop, status = getAzureVmStatus, start = startAzureVm,
-  stop = stopAzureVm, execute = executeWindowsRemote, findLab = loadLab, faults = windowsFaults } = {}) {
+  stop = stopAzureVm, execute = executeWindowsRemote, findLab = loadLab, faults = windowsFaults, syncNetwork = syncClientNetwork } = {}) {
   const router = Router();
   const endpoint = fn => async (req, res) => {
     res.set('Cache-Control', 'no-store');
@@ -42,6 +43,7 @@ export function createCloudVmRouter({ desktop, status = getAzureVmStatus, start 
     if (!desktop) return res.status(503).json({ error: 'Desktop gateway chưa được khởi tạo.' });
     const target = options(req);
     faults.assertAccess(labId, target.target);
+    await syncNetwork(target);
     res.json(await desktop.issue(labId, { width, height, dpi, ...target }));
   }));
   router.post('/cloud-vm/powershell', endpoint(async (req, res) => {

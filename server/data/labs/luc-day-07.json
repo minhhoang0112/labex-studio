@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-07",
+  "course_id": "linux-upskill-challenge",
+  "order": 8,
+  "title": "Ngày 7: Apache, dịch vụ, cấu hình và log",
+  "title_vi": "Ngày 7: Apache, dịch vụ, cấu hình và log",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "Service chạy nền không phụ thuộc cửa sổ terminal. Trạng thái active chưa đủ chứng minh HTTP phục vụ đúng nội dung; cần truy cập thật và đọc log. systemd là lý do khóa dùng VM đầy đủ.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/07/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/07/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-07-intro",
+      "position": 0,
+      "title": "Ngày 7: Apache, dịch vụ, cấu hình và log",
+      "title_vi": "Ngày 7: Apache, dịch vụ, cấu hình và log",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nService chạy nền không phụ thuộc cửa sổ terminal. Trạng thái active chưa đủ chứng minh HTTP phục vụ đúng nội dung; cần truy cập thật và đọc log. systemd là lý do khóa dùng VM đầy đủ.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/07/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nService chạy nền không phụ thuộc cửa sổ terminal. Trạng thái active chưa đủ chứng minh HTTP phục vụ đúng nội dung; cần truy cập thật và đọc log. systemd là lý do khóa dùng VM đầy đủ.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/07/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-07-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 7 - The server and its services\n\n* [Lesson video](https://youtu.be/VzXwO0qq-bg)\n* Complementary video: [Apache and System Services](https://www.youtube.com/live/WtcX60n-ui0?t=9150s)\n\n## INTRO\n\nToday you'll install a common server application - the Apache2 web server - also known as *httpd* - the \"Hyper Text Transport Protocol Daemon\"!\n\nIf you’re a website professional then you might do things slightly differently, but our focus with this is not on Apache itself, or the website content, but to get a better understanding of:\n\n* application installation\n* configuration files\n* services\n* logs\n\n## YOUR TASKS TODAY\n\n* Install and run apache, transforming your server into a _web server_\n\n## INSTRUCTIONS\n\n* Refresh your list of available packages (apps) by: `sudo apt update` - this takes a moment or two, but ensures that you'll be getting the latest versions.\n* Install Apache from the repository with a simple:  `sudo apt install apache2`\n* Confirm that it’s running by browsing to _http://[external IP of your server]_  - where you should see a confirmation page.\n* Apache is installed as a \"service\" - a program that starts automatically when the server starts and keeps running whether anyone is logged in or not. Try stopping it with the command: `sudo systemctl stop apache2` - check that the webpage goes dead - then re-start it with `sudo systemctl start apache2` - and check its status with: `systemctl status apache2`.\n* As with the vast majority of Linux software, configuration is controlled by files under the _/etc_ directory - check the configuration files under `/etc/apache2`  especially `/etc/apache2/apache2.conf` - you can use `less` to simply view them, or the `vim` editor to view and edit as you wish.\n* In `/etc/apache2/apache2.conf` there's the line with the text: \"IncludeOptional conf-enabled/\\*.conf\". This tells Apache that the \\*.conf files in the subdirectory *conf-enabled* should be merged in with those from `/etc/apache2/apache2.conf` at load. This approach of lots of small specific config files is common.\n* If you're familiar with configuring web servers, then go crazy, setup some virtual hosts, or add in some mods etc.\n* The location of the default webpage is defined by the *DocumentRoot* parameter in the file `/etc/apache2/sites-enabled/000-default.conf`.\n* Use `less` or `vim` to view the code of the default page - normally at `/var/www/html/index.html`. This uses fairly complex modern web design - so in your ssh session `sudo vim /var/www/html/index.html`, first delete the existing content (use the vim tricks you learned yesterday) and then replace it with a simpler code. You can just put plain text there and it will work, you're not obligated to add HTML tags to display simple text. But you might like to browse to our sample server [http://142.93.60.184/](http://142.93.60.184/) and use our sample code. View the result with your workstation browser by again going to _http://[external IP of your server]_\n* As with most Linux services, Apache keeps its logs under the `/var/log` directory - look at the logs in `/var/log/apache2` - in the `access.log` file you should be able to see your session from when you browsed to the test page. Notice that there's an overwhelming amount of detail - this is typical, but in a later lesson you'll learn how to filter out just what you want. Notice the `error.log` file too - hopefully this one will be empty!\n\n### Note for AWS/Azure/GCP/OCI users\n\nDon't forget to add port 80 to your instance security group to allow inbound traffic to your server.\n\n* [AWS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html)\n* [Azure](https://learn.microsoft.com/en-us/answers/questions/1190066/how-can-i-open-a-port-in-azure-so-that-a-constant)\n* [GCP](https://cloud.google.com/firewall/docs/using-firewalls#listing-rules-vm)\n* [Oracle Cloud Infrastructure](https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/apache-on-oracle-linux/01-summary.htm#add-ingress-rules)\n\n## POSTING YOUR PROGRESS\n\nPractice your text-editing skills, and allow your \"classmates\" to judge your progress by editing `/var/www/html/index.html` with `vim` and posting the URL to access it to the forum. (It doesn’t have to be pretty!)\n\n## SECURITY\n\n* As the sysadmin of this server, responsible for its security, you need to be very aware that you've now increased the \"attack surface\" of your server. In addition to *ssh* on port 22, you are now also exposing the *apache2* code on port 80. Over time the logs may reveal access from a wide range of visiting search engines, and attackers - and that’s perfectly normal.\n* If you run the commands: `sudo apt update`, then `sudo apt upgrade`, and accept the suggested upgrades, then you'll have all the latest security updates, and be secure enough for a test environment - but you should re-run this regularly.\n\n## EXTENSION\n\nRead up on:\n\n* [Using *systemctl* to manage services](https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units)\n\n## RESOURCES\n\n* [HTTPD - Apache2 Web Server](https://ubuntu.com/server/docs/how-to-install-apache2)\n* [The Apache HTTP Server](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/deploying_web_servers_and_reverse_proxies/setting-apache-http-server_deploying-web-servers-and-reverse-proxies#doc-wrapper)\n\n## TROUBLESHOOT AND MAKE A SAD SERVER HAPPY!\n\nPractice what you've learned with some challenges at [SadServers.com](https://sadservers.com/):\n\n* [\"Cape Town\": Borked Nginx](https://sadservers.com/scenario/capetown)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nService chạy nền không phụ thuộc cửa sổ terminal. Trạng thái active chưa đủ chứng minh HTTP phục vụ đúng nội dung; cần truy cập thật và đọc log. systemd là lý do khóa dùng VM đầy đủ.\n\n## Thực hành từng bước\nCài và quan sát:\n```bash\nsudo apt install -y apache2 curl\nsystemctl status apache2 --no-pager\ncurl -I http://127.0.0.1/\n```\nTự stop Apache rồi thử curl (phải thất bại); start lại và thử lại. Sau đó tạo trang riêng, giữ trang mặc định:\n```bash\nprintf 'LUC service is working\\n' | sudo tee /var/www/html/luc.html\ncurl -fsS http://127.0.0.1/luc.html\nsudo tail -n 5 /var/log/apache2/access.log\n```\nXem DocumentRoot trong /etc/apache2/sites-enabled/000-default.conf; xem cấu hình include trong /etc/apache2/apache2.conf. Truy cập `http://IP_VM/luc.html` từ trình duyệt máy chính khi mạng/firewall cho phép. Không nhầm 127.0.0.1 của VM với 127.0.0.1 của Windows.\n\n## Tự giải thích\nNếu service active nhưng trình duyệt không mở được, còn những lớp nào cần kiểm tra?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/07/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/07/",
+      "source_sha256": "bca8031d15d00538a74b9729d87c3d5a79c6bd792b2f98836a158da653956415",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-07-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nApache active và truy cập HTTP thật trả nội dung trang luc.html.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "Apache active và truy cập HTTP thật trả nội dung trang luc.html.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Nếu service active nhưng trình duyệt không mở được, còn những lớp nào cần kiểm tra?",
+      "verification": {
+        "kind": "state",
+        "command": "systemctl is-active --quiet apache2 && test \"$(curl -fsS --max-time 3 http://127.0.0.1/luc.html)\" = 'LUC service is working' && sudo -n grep -q '/luc.html' /var/log/apache2/access.log"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-07-task",
+      "title": "Kiểm tra kết quả",
+      "task": "Apache active và truy cập HTTP thật trả nội dung trang luc.html.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Nếu service active nhưng trình duyệt không mở được, còn những lớp nào cần kiểm tra?",
+      "verification": {
+        "kind": "state",
+        "command": "systemctl is-active --quiet apache2 && test \"$(curl -fsS --max-time 3 http://127.0.0.1/luc.html)\" = 'LUC service is working' && sudo -n grep -q '/luc.html' /var/log/apache2/access.log"
+      }
+    }
+  ]
+}

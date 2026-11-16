@@ -349,10 +349,10 @@ export default function LabGuide({
               {currentSection?.source_text_verified && <div className="mb-4 rounded-lg border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/40 p-3 text-xs text-blue-900 dark:text-blue-200">
                 <div className="flex flex-wrap items-center gap-2">
                   <button type="button" aria-pressed={Boolean(useSource)} onClick={()=>setReadingChoice({id:currentSection.id,source:true})} className={`rounded-md px-3 py-1.5 ${useSource ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800'}`}>Bản gốc EN</button>
-                  {currentSection.content_vi && <button type="button" aria-pressed={!useSource} onClick={()=>setReadingChoice({id:currentSection.id,source:false})} className={`rounded-md px-3 py-1.5 ${!useSource ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800'}`}>Bản dịch VI</button>}
-                  <a href={currentSection.source_url} target="_blank" rel="noreferrer" className="underline">Đối chiếu LabEx ↗</a>
+                  {currentSection.content_vi && <button type="button" aria-pressed={!useSource} onClick={()=>setReadingChoice({id:currentSection.id,source:false})} className={`rounded-md px-3 py-1.5 ${!useSource ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800'}`}>{currentSection.translation_kind==='adaptation'?'Hướng dẫn VI':'Bản dịch VI'}</button>}
+                  <a href={currentSection.source_url} target="_blank" rel="noreferrer" className="underline">{currentSection.translation_kind==='adaptation'?'Đối chiếu nguồn ↗':'Đối chiếu LabEx ↗'}</a>
                 </div>
-                <p className="mt-2">{useSource ? 'Đang đọc tài liệu tiếng Anh đã đối chiếu trực tiếp với nguồn.' : 'Bản dịch local; dùng Bản gốc EN để đối chiếu đầy đủ.'}{currentSection.translation_needs_review && ' Bản dịch cần cập nhật theo tài liệu gốc vừa bổ sung.'}</p>
+                <p className="mt-2">{useSource ? 'Đang đọc tài liệu tiếng Anh đã đối chiếu trực tiếp với nguồn.' : currentSection.translation_kind==='adaptation' ? 'Hướng dẫn tiếng Việt biên soạn theo nguồn, có bài tập và điều chỉnh riêng cho web; bản EN giữ toàn văn gốc.' : 'Bản dịch local; dùng Bản gốc EN để đối chiếu đầy đủ.'}{currentSection.translation_needs_review && ' Bản dịch cần cập nhật theo tài liệu gốc vừa bổ sung.'}</p>
               </div>}
               <div className="prose-lab text-slate-800 dark:text-slate-200">
                 {lab.validation_status === 'pending-live-client-acceptance' && <p role="status" className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:bg-amber-950 dark:text-amber-200">Bài mới: đã kiểm tra mã và chức năng xử lý tệp, còn chờ nghiệm thu toàn bộ trên CLIENT01. Chưa xác nhận sẵn sàng học ổn định.</p>}

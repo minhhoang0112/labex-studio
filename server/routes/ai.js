@@ -1,6 +1,8 @@
 import express from "express";
 import { createTextToSpeech } from '../services/textToSpeech.js';
 
+import {portfolioCoachInstructions,portfolioOfflineReply} from '../services/portfolioCoach.js';
+
 const router = express.Router();
 
 const hasKey = value => typeof value === 'string' && value.trim() && !/^(your_|replace_|placeholder)/i.test(value.trim());
@@ -17,6 +19,8 @@ router.get('/status', (_req, res) => {
 });
 
 export function getOfflineTutorResponse(message, context = {}, persona = 'tutor') {
+  const portfolioOffline=portfolioOfflineReply(context,persona);
+  if(portfolioOffline)return portfolioOffline;
   const cleanMsg = message.toLowerCase().trim();
 
   // Quick greetings in voice/text
@@ -78,7 +82,8 @@ export async function getTutorReply({ message, context = {}, history = [], perso
   const voiceHint = voiceMode
     ? "\nLƯU Ý ĐẶC BIỆT: Đây là cuộc gọi đàm thoại giọng nói (Live Voice Mode). Hãy trả lời cực kỳ ngắn gọn, tự nhiên, thân thiện (1 đến 2 câu súc tích), không dùng ký tự markdown hay bảng biểu để dễ phát âm."
     : "";
-  const instructions = (isInterviewer
+  const coaching=portfolioCoachInstructions(context,persona);
+  const instructions = coaching ? coaching + voiceHint : (isInterviewer
     ? "Bạn là Senior Technical Interviewer & Tech Lead chuyên phỏng vấn tuyển dụng các vị trí Linux System Administrator, DevOps, SRE, Cloud (Azure/AWS) và Windows Server.\n" +
       "Phong cách phỏng vấn:\n" +
       "1. Trực tiếp, chuyên nghiệp, đàm thoại tự nhiên như một buổi phỏng vấn trực tiếp thật sự.\n" +

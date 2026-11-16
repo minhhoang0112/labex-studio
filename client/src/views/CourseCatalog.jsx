@@ -1,3 +1,4 @@
+import PortfolioReviewEntry from '../components/PortfolioReviewEntry';
 import React, { useState, useEffect } from 'react';
 import CourseCard from '../components/CourseCard';
 import { 
@@ -205,6 +206,8 @@ export default function CourseCatalog({ onSelectCourse, onSelectPath }) {
           </div>
         </div>
       </section>
+
+      <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:px-8"><PortfolioReviewEntry onSelectCourse={onSelectCourse} /></div>
 
       {/* 2. Featured Skill Trees */}
       <section id="skill-trees" className="scroll-mt-20 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

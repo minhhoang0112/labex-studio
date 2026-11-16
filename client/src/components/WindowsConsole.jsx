@@ -13,6 +13,8 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
   const [command, setCommand] = useState('');
   const [output, setOutput] = useState([]);
   const [faultBusy, setFaultBusy] = useState(false);
+  const hasFault = Boolean(status?.faultSession && status.faultSession.state !== 'reset');
+  const ownFault = hasFault && status.faultSession.labId === labId;
   const faultLab = Boolean(status?.faultScenario) || ['win-it-printer-spooler-fix', 'win-it-network-dns-troubleshoot', 'win-it-disk-cleanup-recovery'].includes(labId);
   const controller = useRef(null);
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
     finally { setExecuting(false); }
   }
   async function fault(action) {
+    if (action === 'prepare' && hasFault) return;
     if (!confirm(action === 'prepare' ? 'Nạp sự cố thực hành lên CLIENT01? Chỉ thực hiện khi không có công việc khác trên VM.' : 'Hoàn nguyên các thay đổi do kịch bản tạo? Đây không phải khôi phục toàn bộ VM.')) return;
     setFaultBusy(true); setError('');
     try {
@@ -96,9 +99,9 @@ export default function WindowsConsole({ labId, onActionComplete, onOutput, expa
     {(error || status?.error || status?.operationError) && <div role="alert" className="p-3 bg-red-950 text-red-200 text-xs">{error || status.error || status.operationError}</div>}
     {faultLab && <div className="flex flex-wrap items-center gap-2 border-b border-slate-700 px-3 py-2 text-xs">
       <span role="status">Sự cố: {faultBusy ? 'đang xử lý, có thể mất vài phút' : status?.faultSession?.state || 'chưa nạp'}</span>
-      <button disabled={faultBusy || executing || status?.isBusy || status?.powerStateCode !== 'PowerState/running'} onClick={() => fault('prepare')} className="rounded bg-amber-700 px-2 py-1 disabled:opacity-40">Chuẩn bị sự cố</button>
+      <button disabled={hasFault || faultBusy || executing || status?.isBusy || status?.powerStateCode !== 'PowerState/running'} onClick={() => fault('prepare')} className="rounded bg-amber-700 px-2 py-1 disabled:opacity-40">{ownFault && ['active', 'repaired'].includes(status.faultSession.state) ? 'Sự cố đã được nạp' : 'Chuẩn bị sự cố'}</button>
       <button disabled={faultBusy || executing || status?.isBusy || !status?.faultSession || status.faultSession.state === 'reset'} onClick={() => fault('reset')} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Hoàn nguyên kịch bản</button>
-      <span className="text-slate-400">Cần baseline và kiểm thử khôi phục trước khi nạp lỗi.</span>
+      <span className="text-slate-400">{ownFault && status.faultSession.state === 'active' ? 'Tiếp tục thực hành; không cần nạp lại sự cố.' : hasFault && !ownFault ? 'VM đang có sự cố của bài khác. Về bài đó để hoàn nguyên trước.' : 'Hoàn nguyên kịch bản khi kết thúc bài.'}</span>
     </div>}
     <div className={`flex-1 min-h-0 ${tab === 'desktop' ? '' : 'hidden'}`}><WindowsDesktop labId={labId} /></div>
     <div className={`flex-1 min-h-0 flex-col ${tab === 'powershell' ? 'flex' : 'hidden'}`}>

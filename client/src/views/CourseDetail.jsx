@@ -5,6 +5,7 @@ import {
 import { api } from '../lib/api';
 import { labProgress, validPassedSteps, isLabCompleted } from '../lib/progress';
 import CourseSyllabus from '../components/CourseSyllabus';
+import PortfolioReview from './PortfolioReview';
 import CourseContentBadge from '../components/CourseContentBadge';
 import { usePageState } from '../lib/usePageState';
 
@@ -63,6 +64,7 @@ export default function CourseDetail({ courseId, onBack, backLabel, onStartLab, 
   }
 
   const { course, labs: syllabusLabs = [] } = data;
+  if(course.learning_mode === 'portfolio-review') return <PortfolioReview study={data.study} onBack={() => onBack(course)} />;
   const isWindows = course.topic === 'windows';
   const isPlanned=course.curriculum_status === 'planned';
   const labs = syllabusLabs.filter(lab => lab.availability?.state !== 'reference-only' &&
@@ -91,6 +93,12 @@ export default function CourseDetail({ courseId, onBack, backLabel, onStartLab, 
         </button>
       </div>
 
+      {course.runtime_required === 'upskill-ssh' && <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-4"><div className="rounded-xl border border-sky-300 bg-sky-50 p-4 text-sky-950 dark:bg-sky-950 dark:text-sky-100">
+        <strong>Một VM Ubuntu Server riêng cho toàn khóa</strong>
+        <p className="mt-1">Hướng dẫn có Ngày 0, 20 ngày thực hành và Ngày 21 tổng kết. Terminal web kết nối SSH vào VM lab local; giữ dữ liệu giữa các ngày. Không dùng VM dự án CV và không reset từng bài.</p>
+        <p className="mt-1 text-sm">{course.practice_labs_count ? 'Đã có cấu hình SSH; VM cần được bật để kết nối. Trạng thái và kết quả thật được kiểm tra khi mở bài.' : 'Chưa cấu hình SSH tới VM: bạn vẫn đọc được bài, terminal và chấm thực hành sẽ mở sau khi thiết lập Ngày 0.'} Bộ chấm kiểm tra bài tập trọng tâm; các mục mở rộng và giải thích cần tự thực hành thêm.</p>
+        <a href={course.source_url} target="_blank" rel="noreferrer" className="mt-2 inline-block underline">Linux Upskill Challenge gốc · CC BY 4.0 ↗</a>
+      </div></div>}
       {/* Course Header Banner */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/60 shadow-sm flex flex-col md:flex-row gap-8 items-center">

@@ -5,6 +5,7 @@ import AiTutor from "../components/AiTutor";
 import VoiceCallModal from "../components/VoiceCallModal";
 import Dialog from "../components/Dialog";
 import WindowsConsole from "../components/WindowsConsole";
+import UpskillVmControls from '../components/UpskillVmControls';
 import {
   Server,
   ArrowLeft,
@@ -218,7 +219,7 @@ export default function LabWorkspace({
     setEnvironmentLoading(true);
     setLabEnvInfo(null);
     setSetupError("");
-    api("/api/environment", { signal: controller.signal })
+    api("/api/environment?labId=" + encodeURIComponent(labId), { signal: controller.signal })
       .then((data) => {
         if (!controller.signal.aborted) setEnvironment(data);
       })
@@ -651,10 +652,12 @@ export default function LabWorkspace({
           </button>
 
           {/* Reset Environment Button */}
+          {lab.runtime?.kind === 'upskill-ssh' && <UpskillVmControls connected={environment?.provider==='upskill-ssh'&&environment.available===true} checking={environmentLoading} onChange={()=>setEnvironmentAttempt(value=>value+1)} />}
           <button
             onClick={() => setResetConfirmOpen(true)}
+            disabled={labEnvInfo?.reset_supported === false}
             aria-label="Khởi động lại Lab"
-            title="Khởi tạo lại môi trường bài thực hành này"
+            title={labEnvInfo?.reset_supported === false ? 'VM dùng chung: không reset riêng từng bài' : 'Khởi tạo lại môi trường bài thực hành này'}
             className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg transition"
           >
             <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
@@ -717,6 +720,7 @@ export default function LabWorkspace({
           >
             <span>
               {environmentError ||
+                environment?.error ||
                 environment?.reason ||
                 setupError ||
                 "Môi trường Linux chưa sẵn sàng."}
@@ -944,7 +948,7 @@ export default function LabWorkspace({
                           "Bài này chưa hỗ trợ mở terminal.",
                         ]
                       ).join(" ")
-                    : environmentError || "Môi trường Linux chưa sẵn sàng."}
+                    : environmentError || environment?.error || "Môi trường Linux chưa sẵn sàng."}
                 {!environmentLoading &&
                   lab.availability?.can_start_terminal === true && (
                     <button

@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-19",
+  "course_id": "linux-upskill-challenge",
+  "order": 20,
+  "title": "Ngày 19: Inode, hard link và symlink",
+  "title_vi": "Ngày 19: Inode, hard link và symlink",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "Hard link là tên khác của cùng inode trên cùng filesystem; symlink lưu đường dẫn đích. Symlink có thể trỏ tới đích không còn; hard link không dùng cho thư mục bình thường. Không thử hard link tới /etc/passwd từ home như ví dụ cũ vì thường khác quyền/thiết lập bảo vệ.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/19/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/19/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-19-intro",
+      "position": 0,
+      "title": "Ngày 19: Inode, hard link và symlink",
+      "title_vi": "Ngày 19: Inode, hard link và symlink",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nHard link là tên khác của cùng inode trên cùng filesystem; symlink lưu đường dẫn đích. Symlink có thể trỏ tới đích không còn; hard link không dùng cho thư mục bình thường. Không thử hard link tới /etc/passwd từ home như ví dụ cũ vì thường khác quyền/thiết lập bảo vệ.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/19/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nHard link là tên khác của cùng inode trên cùng filesystem; symlink lưu đường dẫn đích. Symlink có thể trỏ tới đích không còn; hard link không dùng cho thư mục bình thường. Không thử hard link tới /etc/passwd từ home như ví dụ cũ vì thường khác quyền/thiết lập bảo vệ.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/19/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-19-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 19 - Inodes, symlinks and other shortcuts\n\n* [Lesson video](https://youtu.be/3WrBVRaNCqQ)\n* Complementary video: [Links and shortcuts](https://www.youtube.com/live/5oGwnrd44BI?t=3620s)\n\n## INTRO\n\nToday's topic gives a peek “under the covers” at the technical detail of how files are stored.\n\nLinux supports a large number of different “filesystems” - although on a server you’ll typically be dealing with just _ext3_ or _ext4_  and perhaps _btrfs_ - but today we’ll not be dealing with any of these; instead with the layer of Linux that sits _above_ all of these - the Linux Virtual Filesystem.\n\nThe VFS is a key part of Linux, and an overview of it and some of the surrounding concepts is very useful in confidently administering a system.\n\n## YOUR TASKS TODAY\n\n* Create a hard link\n* Create a soft link\n* Create aliases\n\n## THE NEXT LAYER DOWN\n\nLinux has an extra layer between the filename and the file's actual data on the disk - this is the _inode_. This has a numerical value which you can see most easily in two ways:\n\nThe `-i` switch on the `ls` command:\n\n     ls -li /etc/hosts\n     35356766 -rw------- 1 root root 260 Nov 25 04:59 /etc/hosts\n\nThe `stat` command:\n\n     stat /etc/hosts\n     File: `/etc/hosts'\n     Size: 260           Blocks: 8           IO Block: 4096   regular file\n     Device: 2ch/44d     Inode: 35356766     Links: 1\n     Access: (0600/-rw-------)  Uid: (  0/   root)   Gid: (\t0/\troot)\n     Access: 2012-11-28 13:09:10.000000000 +0400\n     Modify: 2012-11-25 04:59:55.000000000 +0400\n     Change: 2012-11-25 04:59:55.000000000 +0400\n\nEvery file name \"points\" to an inode, which in turn points to the actual data on the disk. This means that several filenames could point to the same inode - and hence have exactly the same contents. In fact this is a standard technique - called a \"hard link\". The other important thing to note is that when we view the permissions, ownership and dates of filenames, these attributes are actually kept at the inode level, _not_ the filename. Much of the time this distinction is just theoretical, but it can be very important.\n\n## TWO SORTS OF LINKS\n\nWork through the steps below to get familiar with hard and soft linking:\n\nFirst move to your home directory with:\n\n`cd`\n\nThen use the `ln` (\"link\") command to create a “hard link”, like this:\n\n`ln /etc/passwd link1`\n\nand now a \"symbolic link\" (or “symlink”), like this:\n\n`ln -s /etc/passwd link2`\n\nNow use `ls -li` to view the resulting files, and `less` or `cat` to view them.\n\nNote that the permissions on a symlink generally show as allowing everthing - but what matters is the permission of the file it points to.\n\nBoth hard and symlinks are widely used in Linux, but symlinks are especially common - for example:\n\n`ls -ltr /etc/rc2.d/*`\n\nThis directory holds all the scripts that start when your machine changes to “runlevel 2” (its normal running state) - but you'll see that in fact most of them are symlinks to the real scripts in _/etc/init.d_\n\nIt's also very common to have something like :\n\n     prog\n     prog-v3\n     prog-v4\n\nwhere the program \"prog\", is a symlink - originally to v3, but now points to v4 (and could be pointed back if required)\n\nRead up in the resources provided, and test on your server to gain a better understanding. In particular, see how permissions and file sizes work with symbolic links versus hard links or simple files\n\n## The Differences\n\nHard links:\n\n* Only link to a file, not a directory\n* Can't reference a file on a different disk/volume\n* Links will reference a file even if it is moved\n* Links reference inode/physical locations on the disk\n\nSymbolic (soft) links:\n\n* Can link to directories\n* Can reference a file/folder on a different hard disk/volume\n* Links remain if the original file is deleted\n* Links will NOT reference the file anymore if it is moved\n* Links reference abstract filenames/directories and NOT physical locations.\n* They have their own inode\n\n## EXTENSION\n\n* [Anatomy of the Linux file system](https://developer.ibm.com/tutorials/l-linux-filesystem/)\n\n## RESOURCES\n\n* [Hard and soft links](http://linuxgazette.net/105/pitcher.html)\n* [Linux inodes Explained](https://youtu.be/6KjMlm8hhFA)\n* [Everything You Ever Wanted to Know About inodes on Linux](https://www.howtogeek.com/465350/everything-you-ever-wanted-to-know-about-inodes-on-linux/)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nHard link là tên khác của cùng inode trên cùng filesystem; symlink lưu đường dẫn đích. Symlink có thể trỏ tới đích không còn; hard link không dùng cho thư mục bình thường. Không thử hard link tới /etc/passwd từ home như ví dụ cũ vì thường khác quyền/thiết lập bảo vệ.\n\n## Thực hành từng bước\nThử trên file do bạn sở hữu:\n```bash\nmkdir -p ~/luc-course/day19\ncd ~/luc-course/day19\nprintf 'linked-data\\n' > original.txt\nln original.txt hard.txt\nln -s original.txt soft.txt\nls -li\nstat original.txt hard.txt soft.txt\n```\nSửa original rồi cat hard/soft để thấy liên hệ. Có thể đổi tên original để quan sát soft bị đứt, nhưng đổi lại trước khi chấm. Tự thử alias trong shell; alias không phải tệp symlink.\n\n## Tự giải thích\nXóa một tên hard link có xóa ngay dữ liệu không? Symlink khác alias thế nào?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/19/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/19/",
+      "source_sha256": "4026b196345cd126fd450e04f07c72a5e763d56be230ae085d14fec879cb1b10",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-19-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nhard.txt cùng inode với original.txt; soft.txt thực sự là symlink trỏ đúng đích.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "hard.txt cùng inode với original.txt; soft.txt thực sự là symlink trỏ đúng đích.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Xóa một tên hard link có xóa ngay dữ liệu không? Symlink khác alias thế nào?",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/luc-course/day19/original.txt\" && test \"$HOME/luc-course/day19/original.txt\" -ef \"$HOME/luc-course/day19/hard.txt\" && test -L \"$HOME/luc-course/day19/soft.txt\" && test \"$HOME/luc-course/day19/original.txt\" -ef \"$HOME/luc-course/day19/soft.txt\""
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-19-task",
+      "title": "Kiểm tra kết quả",
+      "task": "hard.txt cùng inode với original.txt; soft.txt thực sự là symlink trỏ đúng đích.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Xóa một tên hard link có xóa ngay dữ liệu không? Symlink khác alias thế nào?",
+      "verification": {
+        "kind": "state",
+        "command": "test -f \"$HOME/luc-course/day19/original.txt\" && test \"$HOME/luc-course/day19/original.txt\" -ef \"$HOME/luc-course/day19/hard.txt\" && test -L \"$HOME/luc-course/day19/soft.txt\" && test \"$HOME/luc-course/day19/original.txt\" -ef \"$HOME/luc-course/day19/soft.txt\""
+      }
+    }
+  ]
+}

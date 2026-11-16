@@ -1,0 +1,3418 @@
+{
+  "schema_version": 3,
+  "id": "portfolio-infrastructure-review",
+  "name": "Ôn lab CV — Hạ tầng Windows, Network & Linux",
+  "description": "Lộ trình 5 bước cho Hoàng Công Minh: giới thiệu bản thân, kể dự án, hiểu 9 chủ đề bằng ví dụ, tập trả lời từng câu và luyện phỏng vấn với AI.",
+  "topic": "windows",
+  "tags": [
+    "windows",
+    "linux",
+    "network",
+    "phỏng vấn",
+    "CV",
+    "IT Support",
+    "portfolio"
+  ],
+  "skills": [
+    "Active Directory",
+    "DNS/DHCP",
+    "GPO",
+    "SMB/NTFS",
+    "VLAN/ACL/NAT",
+    "Ubuntu",
+    "Troubleshooting"
+  ],
+  "learning_mode": "portfolio-review",
+  "level": 1,
+  "level_label": "Ôn nền tảng → thực tập",
+  "cover": "/covers/portfolio-review.svg",
+  "readiness": "ready",
+  "available": true,
+  "has_cert": false,
+  "labs_count": 0,
+  "steps_count": 0,
+  "practice_labs_count": 0,
+  "runnable_labs_count": 0,
+  "lesson_count": 12,
+  "question_count": 60,
+  "incident_count": 16,
+  "quiz_count": 24,
+  "revision": "2026-11-05",
+  "project_facts": "Dự án: Enterprise Network & Windows Server Infrastructure Lab.\nPacket Tracer: R1-EDGE, SW-CORE/USERS/SERVER; VLAN10 IT,20 Staff,30 Server,40 Guest,99 Management; router-on-a-stick; Guest ACL inbound G0/0.40; NAT/PAT G0/1 203.0.113.1, next-hop203.0.113.2 mô phỏng.\nVMware: VMnet2 Host-only 192.168.30.0/24; SERVER01 .10 Windows Server2022, corp.local, AD/DNS/DHCP/GPO/SMB; CLIENT01 .20 reservation Windows10 Pro; UBUNTU01 .30 static, DNS .10/search corp.local, exclusion .30; host .1 không phải router; không default gateway.\nOU CORP: Computers,Groups,Servers,Users(IT/HR/Accounting/Sales). Groups GG_IT/GG_HR/GG_Accounting/GG_Sales. User ví dụ an.nguyen thuộc GG_IT.\nShare D:\\CORP-DATA = \\\\SERVER01\\CORP-DATA; department Modify theo group; GPO map I/H/A/S và Public P, item-level targeting. GPO-CLIENT-BASELINE link Computers; GPO-USER-BASELINE link Users.\nUbuntu: sysadmin SSH; labmember thuộc labops, labguest không thuộc; team root:labops2770, file0660/umask007; UFW deny incoming/allow outgoing và TCP22; Python8088 chỉ test tạm rồi dừng; systemd oneshot logger RemainAfterExit=yes có active(exited), kiểm tra sau reboot.\nBằng chứng lịch sử ở README, configs, 16 ảnh và docs/evidence ngày2026-10-30; khóa học không chạy lại VM.\nGIỚI HẠN: Packet Tracer và VMware chưa nối trực tiếp; Ubuntu chưa join AD; chưa backup/restore, monitoring, HA hay production deployment; lỗi console login Ubuntu chưa chốt nguyên nhân. Không biến giả thuyết thành sự cố đã quan sát.",
+  "prompt": "Bạn là người phỏng vấn thực tập IT Support/System/Network, đồng thời là người hướng dẫn kiên nhẫn. Dùng NGỮ CẢNH DỰ ÁN và NGÂN HÀNG CÂU HỎI/TICKET đính kèm; không tự truy cập máy của tôi.\n1. Hỏi tôi chọn vòng: giải thích dự án / kiến thức / tình huống / thực hành bằng lời, rồi hỏi MỘT câu mỗi lượt và chờ tôi trả lời. Bắt đầu dễ; không đưa đáp án trước.\n2. Chấp nhận tôi tra cú pháp nếu tôi nêu đúng mục tiêu và cách đọc kết quả. Không đòi thuộc toàn bộ lệnh hoặc coi thực tập như vị trí senior.\n3. Khi trả lời chưa đủ, hỏi gợi mở một câu trước khi giải thích. Sau đó phân biệt: điểm đúng, điểm sai cụ thể, thiếu bằng chứng nào, câu trả lời tốt hơn trong30–60 giây và một câu hỏi đào sâu.\n4. Với ticket, cung cấp dữ kiện theo bước tôi yêu cầu. Nếu mô phỏng output, ghi rõ DỮ KIỆN GIẢ LẬP; giữ kịch bản nhất quán. Không nói tôi đã sửa VM thật.\n5. Chấm mỗi lượt trên10: hiểu nguyên lý0–3, chọn kiểm tra/đọc kết quả0–3, cách sửa/xác minh phù hợp0–2, rõ ràng/trung thực phạm vi0–2. Đây là rubric luyện tập, không phải dự báo tuyển dụng.\n6. Không gợi ý tắt toàn bộ firewall, Everyone Full Control, chmod777 hoặc thao tác phá domain làm bước đầu. Yêu cầu xác định phạm vi, rollback và ca được phép/bị chặn.\n7. Sau5 câu, tổng hợp điểm cần ôn theo mã Lxx/Qxx/Txx; sau20 phút đề xuất ba bài ôn. Không tự khẳng định tôi làm production, tích hợp hai môi trường, AD-join Ubuntu hoặc backup/monitoring.\n8. Nếu tôi nêu kiến thức khác đáp án gợi ý nhưng có lập luận đúng, hãy chấp nhận. Nếu tình huống chưa đủ dữ kiện, chấp nhận việc tôi hỏi thêm thay vì buộc đoán nguyên nhân.\nHãy bắt đầu bằng hỏi tôi muốn vòng nào, chưa đọc đáp án cho tôi.\n\nTHÔNG TIN ỨNG VIÊN DO NGƯỜI HỌC CUNG CẤP\n{\"name\": \"Hoàng Công Minh\", \"birth_date\": \"01/12/2005\", \"major\": \"Công nghệ thông tin\", \"university\": \"Trường Đại học Giao thông vận tải\", \"year\": \"Sinh viên năm 4\", \"target\": \"Thực tập IT Support / System / Network\"}\nBắt đầu bằng phần giới thiệu bản thân rồi yêu cầu kể ngắn dự án. Sau đó hỏi theo chủ đề người học vừa ôn. Không gán GPA, chứng chỉ, kinh nghiệm công ty, lịch đi làm hoặc thành tích chưa được cung cấp. Ngày sinh trong hồ sơ không bắt buộc đọc đầy đủ khi giới thiệu.\nCó thêm phần Hiểu toàn bộ dự án theo P01–P18. Nếu Minh nói đã quên hoặc làm theo AI, hãy dạy lại một chặng: hỏi mục tiêu, giải thích thao tác, cho đọc bằng chứng và nhờ nói lại. Không biến việc đã có repo/ảnh thành kết luận hiện tự làm được hoặc tự chấm VM.",
+  "lessons": [
+    {
+      "id": "L01",
+      "title": "Bắt đầu: học để hiểu và kể lại dự án",
+      "minutes": 30,
+      "body": "Bạn đã dựng một lab mô phỏng hạ tầng doanh nghiệp nhỏ. Người dùng thuộc IT, HR, Accounting và Sales cần tài khoản, địa chỉ mạng, chính sách máy tính và thư mục đúng quyền. Khách chỉ cần kết nối bên ngoài, không được truy cập mạng nội bộ. Đây là câu chuyện xuyên suốt để giải thích từng cấu hình.\n\nMỗi buổi có bốn lượt: đọc để hiểu → đóng tài liệu và giải thích bằng lời → đối chiếu kết quả trên lab nếu có máy → trả lời câu hỏi không nhìn đáp án. Đọc lại mà thấy quen chưa chứng minh mình đã nhớ. Không cần thuộc chính xác mọi cú pháp: cần biết lệnh nhằm kiểm tra điều gì và kết quả nào sẽ thay đổi hướng chẩn đoán.\n\nHọc 12 bài theo thứ tự, mỗi buổi khoảng 30–60 phút; bài dài có thể tách đôi. Sau một ngày, ba ngày và một tuần, tự trả lời lại các câu đã sai. Đây là lịch gợi ý, không phải cam kết học xong sẽ đậu phỏng vấn. Nếu cần gửi CV sớm, học L01–L02, L05–L09 trước, rồi tiếp tục ôn phần mạng và Ubuntu.\n\nBa mức tự đánh giá: (1) giải thích bằng ví dụ của chính lab, (2) chọn được lệnh và đọc kết quả, (3) tự kiểm chứng trên máy và viết lại kết luận. Nút đánh dấu đã đọc chỉ lưu tiến độ đọc, không xác nhận đã thực hành.\n\nTrong khóa này, “đã ghi nhận” nghĩa là tài liệu dự án có bằng chứng lịch sử. Không có thao tác tự động nào kết nối, sửa lỗi hay chạy lệnh trên VMware/Packet Tracer của bạn. Mọi bài mở rộng đều được phân biệt với phần đã có trong CV.",
+      "commands": "Không cần chạy lệnh ở bài này.",
+      "exercise": "Viết 5 câu: dự án giải quyết nhu cầu gì; ai sử dụng; có những máy nào; bạn đã kiểm tra gì; giới hạn nào chưa làm. Không xem README trong lượt đầu.",
+      "expected": "Bạn nói được câu chuyện bằng lời của mình, nhận ra điểm chưa nhớ và đánh dấu bài cần ôn; không dùng các từ “production”, “HA”, “backup” nếu chưa có bằng chứng.",
+      "mistakes": [
+        "Học thuộc nguyên đoạn README rồi coi như hiểu.",
+        "Nghĩ quên cú pháp đồng nghĩa không có năng lực.",
+        "Gọi kết quả quiz là bằng chứng đã vận hành hệ thống."
+      ],
+      "source_ids": []
+    },
+    {
+      "id": "L02",
+      "title": "Bản đồ lab: phân biệt thiết kế và máy chạy thật",
+      "minutes": 40,
+      "body": "Có hai môi trường bổ trợ cho cùng ý tưởng thiết kế, nhưng chưa nối trực tiếp với nhau. Cisco Packet Tracer mô phỏng R1-EDGE, SW-CORE, SW-USERS, SW-SERVER và VLAN. VMware chạy SERVER01, CLIENT01 và UBUNTU01 trên VMnet2 Host-only.\n\nTrong VMware, SERVER01 là Windows Server 2022 tại 192.168.30.10/24, cung cấp AD DS, DNS, DHCP, GPO và SMB. CLIENT01 nhận DHCP reservation .20. UBUNTU01 dùng IP tĩnh .30, DNS .10 và tài khoản Linux local. Windows host có địa chỉ VMnet2 .1; trong cấu hình hiện có, nó KHÔNG phải router. VMnet2 không có default gateway.\n\nTrong Packet Tracer, VLAN 10/20/30/40/99 lần lượt là IT/Staff/Server/Guest/Management. R1-EDGE có gateway .1 cho từng subnet. Vì cùng dùng dải 192.168.30.0/24 nên nhìn giống nhau, nhưng địa chỉ trùng về thiết kế không tạo kết nối giữa hai ứng dụng.\n\nVí dụ đường đi khi CLIENT01 mở thư mục: client tìm SERVER01 bằng DNS → kết nối SMB tới .10 → hệ thống kiểm tra danh tính và quyền. Vì .20 và .10 cùng /24, không cần router để liên lạc. Ví dụ khác: máy Staff VLAN20 trong Packet Tracer đi tới Server VLAN30 phải qua router. Đừng trộn hai đường đi thành một kết quả đã kiểm thử.\n\nUbuntu dùng DNS Windows không có nghĩa là đã join AD. Dịch vụ systemd của lab chỉ chạy logger một lần, không phải web server. Các giới hạn này giúp bạn trả lời đúng hơn và tránh bị hỏi sâu vào phần chưa làm.",
+      "commands": "[CLIENT01 / Windows PowerShell]\nipconfig /all\nhostname\nwhoami\n\n[UBUNTU01 / Bash]\nip -br -4 address\nip route\nhostnamectl",
+      "exercise": "Vẽ hai khung Packet Tracer và VMware riêng. Điền ba IP .10/.20/.30 trong VMware; ghi rõ không có default route. Đối chiếu topology trong khóa và sơ đồ tự vẽ.",
+      "expected": "Client dùng .20, DNS .10 nếu VM còn đúng trạng thái đã ghi nhận; Ubuntu có connected route 192.168.30.0/24 và không có default via. Nếu kết quả khác, ghi là trạng thái mới, không chỉnh cho giống tài liệu ngay.",
+      "mistakes": [
+        "Cho rằng VMnet2 .1 là gateway chỉ vì đó là địa chỉ host.",
+        "Nói Guest VLAN40 đã truy cập máy Windows VMware.",
+        "Cho rằng ping không được Internet là lỗi bắt buộc phải sửa."
+      ],
+      "source_ids": []
+    },
+    {
+      "id": "L03",
+      "title": "VLAN, trunk và inter-VLAN: đọc đường đi của gói tin",
+      "minutes": 45,
+      "body": "Một VLAN chia miền broadcast ở lớp 2. Cổng access của máy người dùng thuộc một VLAN; trunk 802.1Q mang nhiều VLAN trên cùng liên kết. Thiết bị ở các VLAN khác nhau cần chức năng định tuyến để trao đổi IP. Trong lab, R1-EDGE dùng router-on-a-stick: mỗi subinterface phục vụ một VLAN với encapsulation dot1Q và IP gateway riêng.\n\nVí dụ Staff-PC thuộc VLAN20, IP 192.168.20.x/24. Khi gửi tới Server 192.168.30.x, nó nhận ra đích ngoài subnet, tìm MAC của gateway 192.168.20.1 rồi gửi frame qua switch và trunk. Router định tuyến sang VLAN30, đóng frame mới để đến server. Trunk không tự tạo khả năng định tuyến.\n\nAllowed VLAN phải phù hợp từng đường: router–core cho 10,20,30,40,99; core–users cho 10,20,40,99; core–server cho 30,99. Cấu hình file không thể hiện toàn bộ trạng thái hoạt động; cần xem VLAN tồn tại, cổng up và trunk đang chuyển tiếp VLAN đó. Với Packet Tracer, một số lệnh phụ thuộc model/IOS mô phỏng.\n\nVLAN99 có IP quản trị switch .2/.3/.4 trong cấu hình lưu. Điều này chưa chứng minh đã harden SSH, xác thực hay giới hạn nguồn quản trị. Thiết kế mạng và chính sách truy cập là hai lớp cần xem riêng.",
+      "commands": "[SW-USERS / privileged EXEC]\nshow vlan brief\nshow interfaces trunk\nshow interfaces status\n\n[R1-EDGE / privileged EXEC]\nshow ip interface brief\nshow ip route\nshow running-config",
+      "exercise": "Chỉ đọc trước: chọn một PC Staff, giải thích từng chặng đến Server. Nếu muốn bài sửa lỗi, Save As file .pkt riêng rồi bỏ VLAN20 khỏi đúng một trunk thử nghiệm; ghi lại cấu hình cũ và khôi phục sau kiểm tra.",
+      "expected": "Bạn tìm được access VLAN, các trunk liên quan và subinterface G0/0.20/G0/0.30. Trong bản sao có lỗi, mất đường VLAN20 phải tương ứng với triệu chứng và hết sau khi khôi phục allowed VLAN.",
+      "mistakes": [
+        "Trunk nghĩa là mọi VLAN tự động được phép.",
+        "Cùng IP subnet nhưng khác VLAN vẫn mặc nhiên liên lạc được.",
+        "Thấy up/up rồi kết luận định tuyến và ACL đều đúng."
+      ],
+      "source_ids": [
+        "S07"
+      ]
+    },
+    {
+      "id": "L04",
+      "title": "ACL, Guest isolation và NAT/PAT: cho phép có chủ đích",
+      "minutes": 45,
+      "body": "GUEST-ISOLATION được gắn inbound trên G0/0.40: lưu lượng Guest vào router sẽ được xét trước khi đi tiếp. ACL xét theo thứ tự và dừng tại điều kiện khớp đầu tiên; cuối danh sách có implicit deny. Quy tắc permit rộng đặt trước deny nội bộ sẽ làm các dòng deny phía sau mất tác dụng với gói đã khớp.\n\nTrong lab, Guest bị chặn tới subnet 10,20,30,99 và được phép đi đích còn lại. Dòng cho phép UDP bootpc→bootps phục vụ lưu lượng DHCP ban đầu, nhưng không tự chứng minh Windows DHCP của VMware phục vụ Guest trong Packet Tracer. Đó vẫn là hai môi trường khác nhau.\n\nMột câu hỏi thiết kế cần hiểu: nếu Guest dùng DNS tại 192.168.30.10 thì deny cả subnet Server sẽ chặn DNS Guest. Có thể thiết kế DNS riêng hoặc cho phép đúng DNS TCP/UDP 53 đến đúng host trước dòng deny. Chỉ chọn phương án sau khi xác định yêu cầu; khóa không tự sửa ACL của bạn.\n\nNAT/PAT của lab dùng overload qua G0/1 tại 203.0.113.1, default route tới 203.0.113.2. Đây là địa chỉ tài liệu dùng cho mô phỏng; không phải bằng chứng máy đã truy cập Internet thật. PAT phân biệt nhiều luồng bằng địa chỉ/port. ACL chọn địa chỉ để NAT không có cùng vai trò với ACL gắn vào interface để lọc gói.\n\nĐể chứng minh Guest isolation cần cả ca bị chặn tới nội bộ và ca được phép ra đích ngoài mô phỏng. Đối chiếu counter ACL cùng thời điểm tạo traffic; NAT translation cần có traffic thì mới hữu ích để quan sát.",
+      "commands": "[R1-EDGE / privileged EXEC]\nshow access-lists\nshow ip interface GigabitEthernet0/0.40\nshow ip nat translations\nshow ip nat statistics\nshow ip route",
+      "exercise": "Đọc GUEST-ISOLATION trong cấu hình; dự đoán kết quả Guest→Server, Guest→Management, Guest→Public server mô phỏng. Kiểm tra trên bản sao .pkt, ghi cả kết quả đúng và sai dự đoán.",
+      "expected": "Giải thích được interface/direction/first match. Không suy “NAT có entry” thành “DNS, HTTP và mọi chiều kết nối đều thành công”.",
+      "mistakes": [
+        "Có NAT thì tự có Internet.",
+        "ACL dùng trong NAT là firewall chặn mọi nguồn không nằm trong nó.",
+        "Cho phép ping là đủ cho DNS hoặc SMB."
+      ],
+      "source_ids": [
+        "S08",
+        "S09"
+      ]
+    },
+    {
+      "id": "L05",
+      "title": "Active Directory: user, computer, OU và group",
+      "minutes": 45,
+      "body": "Domain corp.local là ranh giới quản lý danh tính trong lab. SERVER01 giữ vai trò domain controller. User có danh tính miền; computer account biểu diễn máy thành viên. Đăng nhập local và đăng nhập domain là hai ngữ cảnh khác nhau, dù tên hiển thị có thể giống nhau.\n\nOU tổ chức đối tượng, hỗ trợ áp GPO và ủy quyền quản trị. Security group tập hợp danh tính để cấp quyền. Đặt user vào OU IT không tự cho phép mở thư mục IT; trong lab, quyền được cấp thông qua GG_IT. Ngược lại, user có GG_IT nhưng nằm sai OU vẫn có thể có quyền file mà chưa nhận đúng user GPO.\n\nCấu trúc CORP có Computers, Groups, Servers, Users; Users chia IT/HR/Accounting/Sales. Các nhóm GG_IT/GG_HR/GG_Accounting/GG_Sales kiểm soát quyền và drive map. Tài khoản an.nguyen thuộc GG_IT; kỳ vọng I: và P:. Đây là mẫu lab, không phải khẳng định đã triển khai vòng đời nhân sự của doanh nghiệp thật.\n\nKhi thêm người vào nhóm, phiên đăng nhập đang dùng có thể còn token cũ. Kiểm tra whoami /groups và đăng nhập lại trước khi kết luận group không hoạt động. Quyền quản trị không được cấp chỉ để giải quyết lỗi truy cập thư mục.\n\nGom nhiều vai trò vào một SERVER01 tiết kiệm tài nguyên học tập nhưng tạo điểm lỗi tập trung. Chưa có DC dự phòng hay tách file server. Khi bị hỏi cải tiến, trình bày đây là đề xuất, không kể như đã thực hiện.",
+      "commands": "[CLIENT01 / Command Prompt, bằng user domain]\nwhoami\nwhoami /groups\necho %LOGONSERVER%\n\n[CLIENT01 / PowerShell]\n$env:LOGONSERVER\nnltest /dsgetdc:corp.local\n\n[SERVER01 / PowerShell có module ActiveDirectory]\nGet-ADUser an.nguyen -Properties MemberOf\nGet-ADGroupMember GG_IT",
+      "exercise": "Mở AD Users and Computers để tìm OU của user và computer. So sánh group trong AD với whoami /groups ở phiên CLIENT01. Chỉ quan sát, chưa di chuyển đối tượng thật.",
+      "expected": "Nói được user được xác thực ở đâu, group dùng cho quyền gì và OU dùng cho GPO nào. Biết echo %LOGONSERVER% là cú pháp CMD, không dán nguyên vào PowerShell.",
+      "mistakes": [
+        "OU và security group là một.",
+        "Mọi user cần Domain Admin để dùng share.",
+        "Đổi group xong mọi phiên đang mở tự cập nhật ngay."
+      ],
+      "source_ids": [
+        "S01",
+        "S02"
+      ]
+    },
+    {
+      "id": "L06",
+      "title": "DNS và domain join: vì sao ping IP vẫn chưa đủ",
+      "minutes": 45,
+      "body": "DNS biến tên thành thông tin để client tìm đúng dịch vụ. A: tên→IPv4; PTR: IP→tên; SRV: vị trí dịch vụ, quan trọng khi client tìm domain controller. A/PTR của UBUNTU01 không tạo tài khoản máy trong AD.\n\nCLIENT01 và Ubuntu dùng DNS 192.168.30.10. Nếu client trỏ 8.8.8.8, tên Internet có thể phân giải nhưng corp.local và bản ghi dịch vụ AD không được biết bởi DNS public. Trong môi trường này, sửa đúng resolver nội bộ trước; thêm DNS public làm “dự phòng” không phải cách giải quyết việc tìm DC.\n\nMột lỗi lab đã ghi nhận: nslookup hiển thị DNS server Unknown do thiếu PTR. Bổ sung reverse zone/PTR làm tên server hiển thị đúng hơn. Tuy nhiên, Unknown không tự chứng minh mọi truy vấn DNS đang hỏng; cần đọc kết quả truy vấn đích.\n\nKhi join domain thất bại, hãy kiểm tra IP/subnet, resolver, bản ghi tìm DC, kết nối, thời gian và quyền tham gia miền. Netsetup.log ở C:\\Windows\\Debug\\Netsetup.log giúp phân biệt nguyên nhân. Không cần unjoin/rejoin hoặc reset toàn bộ DNS ngay từ đầu.\n\nUbuntu đã từng ping .10 được nhưng resolvectl không giải corp.local. Tài liệu ghi nhận cấu hình search domain giúp resolver xử lý tên miền này và còn hiệu lực sau reboot. Với .local, cần chú ý tương tác resolver/mDNS thay vì cho rằng tên đuôi .local luôn hoạt động như nhau ở mọi hệ điều hành.",
+      "commands": "[CLIENT01 / PowerShell]\nGet-DnsClientServerAddress -AddressFamily IPv4\nResolve-DnsName SERVER01.corp.local -Server 192.168.30.10\nResolve-DnsName -Type SRV _ldap._tcp.dc._msdcs.corp.local -Server 192.168.30.10\nTest-NetConnection SERVER01.corp.local -Port 445\n\n[UBUNTU01 / Bash]\nresolvectl status ens33\nresolvectl query SERVER01.corp.local\nresolvectl query 192.168.30.30",
+      "exercise": "Chạy truy vấn tên máy, PTR và SRV rồi ghi khác biệt về loại kết quả. Nếu muốn tạo lỗi DNS client, dùng bản sao CLIENT01 hoặc adapter thử, ghi resolver cũ và có console để khôi phục; không đổi DNS của SERVER01.",
+      "expected": "Tên SERVER01 ra .10; UBUNTU01 ra .30; SRV chỉ ra DC/dịch vụ đúng nếu AD DNS còn khỏe. Một TCP test 445 không đại diện cho toàn bộ port cần cho join AD.",
+      "mistakes": [
+        "PTR là điều kiện duy nhất để join AD.",
+        "Ping IP thành công nghĩa là DNS đúng.",
+        "Ubuntu có A record là đã join domain."
+      ],
+      "source_ids": [
+        "S03",
+        "S04"
+      ]
+    },
+    {
+      "id": "L07",
+      "title": "DHCP: lease, reservation, exclusion và gateway",
+      "minutes": 40,
+      "body": "DHCP giúp client nhận cấu hình IP tự động. Chuỗi DORA là Discover, Offer, Request, Acknowledge; học để hiểu client đang ở bước nào khi không nhận IP, không cần thuộc nội dung từng trường gói tin.\n\nLease là việc cho thuê địa chỉ theo thời gian. Reservation gắn địa chỉ dự kiến với client identifier để client vẫn dùng DHCP nhưng nhận IP ổn định. Exclusion ngăn DHCP cấp động một khoảng địa chỉ. Gán IP tĩnh trên Ubuntu là thao tác phía máy, không phải reservation.\n\nScope lab .20–.100, CLIENT01 reservation .20, Ubuntu tĩnh .30 và có exclusion .30–.30. Loại trừ .30 tránh DHCP tự cấp cùng địa chỉ cho máy khác; nó không phát hiện hoặc ngăn tất cả người dùng tự gõ IP trùng. Cũng không chứng minh từng có sự cố trùng IP: tài liệu nói chưa quan sát một outage thực sự.\n\nOption 006 cung cấp DNS .10, 015 cung cấp domain suffix corp.local. Option 003 không cấu hình vì VMnet2 hiện không có router. Máy trong cùng subnet có thể giao tiếp mà không cần default gateway. Với mạng routed thực tế, cần thiết kế gateway và có thể dùng DHCP relay ở router.\n\nNếu client nhận 169.254.x.x, hãy coi đó là dấu hiệu chưa có cấu hình DHCP dùng được, rồi kiểm tra adapter/VMnet, dịch vụ, scope và đường truyền. Một lỗi cũ của lab là client vẫn đặt IP tĩnh, vì vậy “đã cấu hình DHCP server” không có nghĩa client đang yêu cầu DHCP.",
+      "commands": "[CLIENT01 / PowerShell]\nipconfig /all\nGet-NetIPConfiguration\n\n[SERVER01 / PowerShell có module DhcpServer]\nGet-DhcpServerv4Scope\nGet-DhcpServerv4Lease -ScopeId 192.168.30.0\nGet-DhcpServerv4Reservation -ScopeId 192.168.30.0\nGet-DhcpServerv4ExclusionRange -ScopeId 192.168.30.0\nGet-DhcpServerv4OptionValue -ScopeId 192.168.30.0",
+      "exercise": "So sánh lease, reservation và exclusion bằng GUI hoặc lệnh. Kiểm tra DHCP Enabled và adapter đúng VMnet2. Không release IP trong phiên điều khiển từ xa duy nhất.",
+      "expected": "Giải thích vì sao .20 dùng reservation và .30 dùng exclusion. Không cần thêm gateway giả để “đủ ba dòng IP–gateway–DNS”.",
+      "mistakes": [
+        "Reservation nghĩa là cấu hình static trên client.",
+        "Có exclusion thì không ai có thể đặt IP trùng.",
+        "Không có gateway nghĩa là DHCP sai trong mọi môi trường."
+      ],
+      "source_ids": [
+        "S05"
+      ]
+    },
+    {
+      "id": "L08",
+      "title": "Group Policy: đúng đối tượng, đúng phạm vi, đúng bằng chứng",
+      "minutes": 45,
+      "body": "GPO quản lý thiết lập cho user và computer. Trong cấu hình thông thường không dùng loopback, User Configuration đi theo vị trí user; Computer Configuration đi theo vị trí computer. Domain-joined chưa đủ: đối tượng phải nằm trong phạm vi link và được phép áp chính sách.\n\nLab có GPO-CLIENT-BASELINE link CORP\\Computers, GPO-USER-BASELINE link CORP\\Users. Các bài đã ghi nhận hạn chế Control Panel/CMD/Registry Editor và drive maps có item-level targeting theo group.\n\nThứ tự thông thường là Local→Site→Domain→OU, OU con xử lý sau; đây chỉ là nền tảng. Enforced, block inheritance, filtering, loại thiết lập và loopback có thể làm kết quả khác mô tả “OU gần nhất luôn thắng”. Security filtering và quyền Read/Apply cũng cần xem khi một GPO không áp.\n\nĐừng dùng gpupdate /force như thuốc chữa mọi lỗi. Nếu link sai OU, cập nhật bao nhiêu lần vẫn sai phạm vi. Đọc gpresult và GroupPolicy/Operational để biết GPO có được áp, bị loại vì sao, và lỗi ở giai đoạn nào. Trong lab từng có Access Denied khi xem computer scope từ shell chưa nâng quyền.\n\nDrive map có hai lớp: policy ánh xạ và quyền truy cập SMB. Có I: không tự chứng minh user có quyền; không có I: cũng chưa chứng minh NTFS sai. Một số thay đổi cần sign out/sign in hoặc reboot theo loại thiết lập; thông báo cần đăng nhập lại không nhất thiết là lỗi.",
+      "commands": "[CLIENT01 / PowerShell, user đang cần kiểm tra]\ngpresult /r /scope user\ngpresult /h \"$env:TEMP\\corp-gpresult.html\"\n\n[CLIENT01 / PowerShell Run as Administrator]\ngpresult /r /scope computer\nGet-WinEvent -LogName Microsoft-Windows-GroupPolicy/Operational -MaxEvents 15",
+      "exercise": "Mở báo cáo và chỉ ra hai GPO, user/computer nào đang được kiểm tra. Kiểm tra item-level targeting của I: theo GG_IT. Nếu đăng nhập admin bằng tài khoản khác, nhớ báo cáo user scope có thể không còn là an.nguyen.",
+      "expected": "Bạn phân biệt được “policy chưa tới máy/user” và “policy tới nhưng thao tác drive thất bại”. Chỉ dùng gpupdate /force sau khi đã xác định/thay đổi cấu hình và muốn cập nhật lại.",
+      "mistakes": [
+        "Link GPO vào OU Groups sẽ áp cho toàn bộ thành viên group.",
+        "gpupdate thành công nghĩa là mọi setting đều đúng.",
+        "Computer scope Access Denied là GPO hỏng."
+      ],
+      "source_ids": [
+        "S06",
+        "S10"
+      ]
+    },
+    {
+      "id": "L09",
+      "title": "SMB và NTFS: đăng nhập được chưa chắc được phép",
+      "minutes": 45,
+      "body": "Authentication trả lời bạn là ai; authorization trả lời bạn được làm gì. Với SMB, truy cập qua mạng chịu cả share permissions và NTFS permissions. Ví dụ chỉ có Allow: share Read và NTFS Modify thì truy cập qua share vẫn chỉ đọc. Truy cập local không đi qua lớp share permissions.\n\nLab có D:\\CORP-DATA chia IT/HR/Accounting/Sales/Public. GG_IT có Modify trong thư mục IT; an.nguyen kỳ vọng dùng I: và P:. Thiết kế theo group giúp thêm/bớt nhân viên mà không phải cấp từng ACL cá nhân. Modify khác Full Control ở khả năng thay đổi quyền và sở hữu; không cần Full Control chỉ để làm việc với file.\n\nKhi lỗi: thử đường UNC, kiểm tra tên/IP và TCP445, kiểm tra phiên user/token, xem cả share ACL và NTFS ACL, kế thừa và các group liên quan. Không kết luận quyền chỉ từ một dòng Allow của GG_IT: user có thể thuộc nhiều nhóm, thư mục con có ACL riêng hoặc đang dùng credential khác.\n\nVề Deny: không học khẩu quyết “Deny luôn thắng mọi trường hợp” rồi bỏ qua thứ tự ACE, explicit/inherited và cách Windows tính effective access. Ở mức thực tập, cần biết phải xem Effective Access và kiểm thử bằng đúng tài khoản, đúng đường UNC.\n\nKhông sửa bằng Everyone Full Control hoặc tắt firewall toàn bộ. Chỉ cấp quyền tối thiểu theo yêu cầu đã xác nhận, thử ca được phép và ca không được phép. ABE nếu có chỉ ẩn thứ người dùng không thấy quyền, không thay thế ACL; dự án chưa có bằng chứng đã bật ABE.",
+      "commands": "[CLIENT01 / PowerShell bằng user domain]\nwhoami /groups\nTest-NetConnection SERVER01.corp.local -Port 445\nGet-ChildItem \\\\SERVER01\\CORP-DATA\\IT\n\n[SERVER01 / PowerShell có quyền đọc cấu hình share]\nGet-SmbShareAccess -Name CORP-DATA\nicacls D:\\CORP-DATA\\IT",
+      "exercise": "Đọc ảnh NTFS trong khóa. Dùng an.nguyen thử mở IT và một thư mục phòng khác; ghi rõ ca được phép và bị từ chối. Dùng file mẫu, không sửa ACL của dữ liệu cần giữ.",
+      "expected": "IT truy cập đúng theo ACL đang có; ca phòng khác phải đối chiếu yêu cầu trước khi kết luận. Kiểm tra bằng admin không thay thế kiểm tra bằng user thường.",
+      "mistakes": [
+        "Mapped drive tự cấp quyền.",
+        "Ping được thì SMB phải hoạt động.",
+        "Đổi ACL đệ quy toàn bộ D: để sửa một thư mục."
+      ],
+      "source_ids": [
+        "S11",
+        "S12"
+      ]
+    },
+    {
+      "id": "L10",
+      "title": "Ubuntu networking và SSH: tìm đúng lớp bị lỗi",
+      "minutes": 40,
+      "body": "UBUNTU01 có ens33, IP tĩnh 192.168.30.30/24, DNS .10, search corp.local, cùng VMnet2 với Windows. Netplan mô tả cấu hình bằng YAML; thay đổi sai indentation có thể làm cấu hình không sinh được. File mẫu chứa interface/MAC riêng của máy, không sao chép sang VM khác mà bỏ qua ip link.\n\nip route kiểm tra đường IP. resolvectl status kiểm tra lựa chọn DNS theo link/domain. Dòng Default Route: yes trong resolvectl nói về lựa chọn định tuyến DNS, không chứng minh có default gateway IP.\n\nSSH cần cả đường mạng, listener và xác thực. Timeout có thể do đường/firewall hoặc host không trả lời; connection refused thường gợi ý đã đến một thiết bị trả RST nhưng không có dịch vụ nhận trên port đó. Đây là manh mối để chọn bước tiếp theo, không phải nguyên nhân chắc chắn từ một thông báo.\n\nLab đã ghi nhận SSH password login từ Windows host .1, kể cả sau reboot. Console login có vấn đề nhưng nguyên nhân keyboard layout mới là giả thuyết; không kể rằng đã sửa. Không đổi password hoặc sshd_config trước khi xem log và xác định đúng tài khoản.\n\nNếu phải sửa Netplan, sao lưu cấu hình, giữ console và đọc YAML hiện có; netplan generate kiểm tra sinh cấu hình, netplan try cho thử và có cơ chế hoàn nguyên khi không xác nhận. Vẫn kiểm tra lại trạng thái thực tế và cấu hình trên đĩa sau khi thử; không coi rollback là bảo đảm cho mọi thao tác.",
+      "commands": "[UBUNTU01 / Bash]\nip -br -4 address\nip route\nresolvectl status ens33\nresolvectl query SERVER01.corp.local\nsudo ss -lntp\nsystemctl status ssh.service ssh.socket --no-pager\nsudo journalctl -u ssh.service -b -n 20 --no-pager\n\n[Windows host / PowerShell]\nTest-NetConnection 192.168.30.30 -Port 22\nssh sysadmin@192.168.30.30",
+      "exercise": "Từ Windows host kiểm tra TCP22 rồi SSH. Trong Ubuntu ghi lại IP, route, DNS và listener. Không dùng LabEx Linux sandbox thay cho UBUNTU01: không cùng mạng và không chắc có systemd/UFW.",
+      "expected": "Đọc được bốn lớp IP→route→port/service→authentication; không thêm route giả trong VMnet2 chỉ để apt chạy.",
+      "mistakes": [
+        "SSH chạy nghĩa là console keyboard/password chắc chắn đúng.",
+        "netplan generate thành công nghĩa là đã áp lên interface.",
+        "Copy MAC từ repo sang mọi VM."
+      ],
+      "source_ids": [
+        "S13",
+        "S14"
+      ]
+    },
+    {
+      "id": "L11",
+      "title": "Linux permissions, UFW và systemd: đọc đúng ý nghĩa kết quả",
+      "minutes": 50,
+      "body": "Thư mục /srv/system-lab/team thuộc root:labops, mode 2770. Owner/group có rwx, others không có quyền; setgid giúp mục mới kế thừa group thư mục. Quyền group write của file vẫn phụ thuộc mode/umask/ACL, không tự được bảo đảm bởi setgid. Thực hành đã dùng umask 007 và file mode 0660.\n\nlabmember thuộc labops, labguest không thuộc nhóm. Ca labguest bị Permission denied là kết quả đúng của chính sách, không phải lỗi cần chmod 777. Kiểm thử bằng root có thể bỏ qua rào cản mà user thường gặp.\n\nUFW đang deny incoming, allow outgoing và cho TCP22. Firewall và listener là hai thứ độc lập: cho phép 8088 không tạo tiến trình ở port8088; xóa rule cũng không dừng Python. Bài gốc dùng listener tạm, quan sát TCP False→True→False rồi dừng tiến trình. Không phải một web service triển khai thường trực.\n\nsystem-lab-demo.service có Type=oneshot, ExecStart=logger, RemainAfterExit=yes. active (exited) ở đây có thể là trạng thái đúng vì lệnh đã chạy xong thành công. Với loại dịch vụ khác, cùng chữ active không đủ chứng minh ứng dụng đáp ứng yêu cầu; kiểm tra cả chức năng cần phục vụ.\n\nstart là chạy bây giờ, enable là cấu hình kích hoạt khi boot phù hợp. Sau sửa unit cần daemon-reload trước khi kiểm tra thay đổi. journalctl -b tập trung boot hiện tại. df -h xem dung lượng; systemctl --failed và dpkg --audit hỗ trợ xem sức khỏe, nhưng audit trống không có nghĩa đã cài toàn bộ cập nhật mới nhất.",
+      "commands": "[UBUNTU01 / Bash]\nid labmember\nid labguest\nls -ld /srv/system-lab/team\nsudo -u labmember cat /srv/system-lab/team/member.txt\nsudo -u labguest cat /srv/system-lab/team/member.txt\nsudo ufw status numbered\nss -lnt 'sport = :8088'\nsystemctl status system-lab-demo.service --no-pager\njournalctl -t system-lab-demo -b -n 5 --no-pager\ndf -h\nsystemctl --failed",
+      "exercise": "Chạy hai ca đọc file bằng đúng danh tính, giải thích ca bị từ chối. Đối chiếu unit file với trạng thái. Bài UFW 8088 chỉ làm lại khi có console và thư mục test riêng, giữ SSH hiện tại và thử phiên mới trước khi đóng phiên cũ.",
+      "expected": "Đọc được 2770/0660, phân biệt firewall với process, giải thích active (exited) đúng với unit của mình. Không biến SSH mở mọi nguồn trong lab thành baseline bảo mật production.",
+      "mistakes": [
+        "Dùng chmod 777 để ca nonmember cũng Pass.",
+        "enable nghĩa là service đang chạy.",
+        "Xóa firewall rule nghĩa là đã dừng listener."
+      ],
+      "source_ids": [
+        "S15",
+        "S16",
+        "S17"
+      ]
+    },
+    {
+      "id": "L12",
+      "title": "Tổng hợp: xử lý ticket và kể dự án khi phỏng vấn",
+      "minutes": 50,
+      "body": "Khi người dùng báo lỗi, đừng bắt đầu bằng một danh sách lệnh thuộc lòng. Hỏi ai bị ảnh hưởng, từ khi nào, một máy hay nhiều máy, vừa thay đổi gì, lỗi chính xác ở đâu và nghiệp vụ nào đang bị gián đoạn. Sau đó chia hệ thống thành các lớp để thu hẹp phạm vi.\n\nKhung xử lý: triệu chứng → phạm vi → giả thuyết → kiểm tra phân biệt → thay đổi nhỏ được phép → xác minh → hoàn nguyên/bàn giao. Mỗi lệnh phải có lý do: kết quả A sẽ dẫn đến bước gì, kết quả B loại trừ điều gì. Thấy ping fail không đủ kết luận host tắt vì ICMP có thể bị chặn.\n\nVí dụ người IT không thấy I:: thử UNC trước. Nếu UNC vào được, ưu tiên xem GPO/drive mapping. Nếu tên không giải nhưng IP kết nối được, xem DNS. Nếu port445 được nhưng Access denied, xem danh tính, token và ACL. Đó là ba nhánh khác nhau của cùng một mô tả “không vào được thư mục”.\n\nMẫu giới thiệu 90 giây: “Em xây lab hạ tầng doanh nghiệp nhỏ với phần mạng Cisco mô phỏng và phần dịch vụ Windows/Linux trên VMware. Em đã cấu hình AD, DNS, DHCP, GPO và file share theo phòng ban; kiểm tra domain login, địa chỉ client, policy và quyền truy cập. Phần Ubuntu kiểm tra SSH, DNS, quyền nhóm, firewall và systemd sau reboot. Hai môi trường chưa nối trực tiếp; em chưa triển khai backup/restore hoặc monitoring.” Điều chỉnh theo việc bạn tự xác nhận lại, không đọc như kịch bản cứng.\n\nVới câu hỏi chưa biết: nói điều chắc chắn, nêu giả thuyết có điều kiện, chọn bước kiểm tra và nguồn tra. Có thể nói “em cần tra cú pháp, nhưng muốn kiểm tra resolver client trước vì…” thay vì bịa đã xử lý sự cố production.\n\nĐề xuất mở rộng: bài backup có restore; PowerShell tạo user CSV có xử lý trùng; giám sát và cảnh báo. Những phần này CHƯA được kiểm chứng trong dự án hiện tại. Snapshot có ích khi thử nghiệm nhưng không thay thế chiến lược backup độc lập; kiểm tra khôi phục mới chứng minh dữ liệu dùng lại được.",
+      "commands": "Dùng bảng lệnh tra cứu theo triệu chứng ở các bài trước. Không có lệnh “sửa mọi lỗi”.",
+      "exercise": "Chọn 3 ticket trong tab Tình huống, trả lời thành tiếng trước khi mở gợi ý. Viết bàn giao gồm ảnh hưởng, bằng chứng, thay đổi, xác minh, rollback và việc cần theo dõi. Sau đó dùng bộ ngữ cảnh AI để luyện vòng 20 phút.",
+      "expected": "Câu trả lời có chuỗi suy luận, phân biệt dữ kiện với giả thuyết và trung thực về phạm vi. Hoàn thành quiz chỉ chứng minh nắm câu hỏi trong khóa; thực hành và giao tiếp cần kiểm chứng riêng.",
+      "mistakes": [
+        "Sửa một lúc nhiều thứ nên không biết nguyên nhân.",
+        "Tắt firewall/reset toàn hệ thống trước khi thu thập bằng chứng.",
+        "Nhận đã làm backup/monitoring vì mới đọc kế hoạch."
+      ],
+      "source_ids": []
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q01",
+      "lesson_id": "L02",
+      "question": "Em giới thiệu dự án trong 90 giây thế nào?",
+      "answer": "Nêu nhu cầu doanh nghiệp nhỏ; tách Packet Tracer với VMware; kể AD/DNS/DHCP/GPO/file share và Ubuntu; đưa một kiểm chứng cụ thể; kết thúc bằng giới hạn chưa nối hai môi trường và chưa có backup/monitoring.",
+      "followup": "Chọn một phần em tự tin demo lại nhất và nói vì sao."
+    },
+    {
+      "id": "Q02",
+      "lesson_id": "L02",
+      "question": "Packet Tracer và VMware có kết nối thật không?",
+      "answer": "Chưa. Cùng sơ đồ địa chỉ chỉ là sự tương ứng thiết kế. Các kết quả VLAN/NAT thuộc mô phỏng; kết quả domain login/SMB thuộc VMware.",
+      "followup": "Em cần bổ sung gì để kiểm chứng một luồng routed tới máy Windows thật?"
+    },
+    {
+      "id": "Q03",
+      "lesson_id": "L02",
+      "question": "Tại sao máy VMware không có default gateway vẫn liên lạc?",
+      "answer": ".10/.20/.30 cùng subnet /24 nên có connected route, có thể ARP và gửi trực tiếp. Đi ngoài subnet mới cần route thích hợp.",
+      "followup": "Địa chỉ host .1 có tự trở thành router không?"
+    },
+    {
+      "id": "Q04",
+      "lesson_id": "L02",
+      "question": "Ubuntu đã là thành viên AD chưa?",
+      "answer": "Chưa. Máy chỉ dùng DNS Windows, A/PTR trong corp.local và tài khoản local. Domain membership cần cấu hình xác thực/tài khoản máy khác.",
+      "followup": "Tên miền DNS và directory domain khác nhau ở đâu?"
+    },
+    {
+      "id": "Q05",
+      "lesson_id": "L12",
+      "question": "Điểm yếu hiện tại của dự án là gì?",
+      "answer": "Một server gom nhiều vai trò, chưa có dự phòng/backup-restore/monitoring, hai môi trường chưa nối; Ubuntu chỉ có service minh họa. Nêu rõ đây là giới hạn phạm vi và cách sẽ kiểm thử nếu mở rộng.",
+      "followup": "Nếu chỉ bổ sung một phần, em chọn phần nào?"
+    },
+    {
+      "id": "Q06",
+      "lesson_id": "L03",
+      "question": "VLAN giải quyết vấn đề gì?",
+      "answer": "Tách miền broadcast lớp2 và tổ chức lưu lượng theo nhóm; muốn kiểm soát truy cập giữa VLAN còn cần chính sách routing/ACL/firewall.",
+      "followup": "Tách VLAN có tự bảo mật hoàn toàn không?"
+    },
+    {
+      "id": "Q07",
+      "lesson_id": "L03",
+      "question": "Access port khác trunk thế nào?",
+      "answer": "Access phục vụ một VLAN thông thường cho endpoint; trunk 802.1Q mang nhiều VLAN giữa thiết bị mạng. Cần kiểm tra allowed VLAN và trạng thái forwarding.",
+      "followup": "Một VLAN bị loại khỏi trunk sẽ tạo triệu chứng nào?"
+    },
+    {
+      "id": "Q08",
+      "lesson_id": "L03",
+      "question": "Router-on-a-stick hoạt động thế nào?",
+      "answer": "Một interface vật lý có các subinterface gắn VLAN ID và IP gateway; switch mang traffic VLAN qua trunk tới router để định tuyến.",
+      "followup": "Nếu gateway PC sai, ping trong cùng VLAN còn có thể thành công không?"
+    },
+    {
+      "id": "Q09",
+      "lesson_id": "L03",
+      "question": "VLAN tồn tại trên một switch là đủ chưa?",
+      "answer": "Chưa; kiểm tra VLAN trên các switch cần đi qua, access assignment, allowed/active VLAN trên trunk và subinterface router.",
+      "followup": "Em dùng lệnh nào để phân biệt các lớp đó?"
+    },
+    {
+      "id": "Q10",
+      "lesson_id": "L03",
+      "question": "VLAN99 trong lab đã chứng minh quản trị an toàn chưa?",
+      "answer": "Chưa. Có IP quản trị switch không tự chứng minh SSH, tài khoản, ACL quản trị và logging đã được harden.",
+      "followup": "Em sẽ kiểm tra read-only điều gì trước?"
+    },
+    {
+      "id": "Q11",
+      "lesson_id": "L04",
+      "question": "ACL xử lý theo thứ tự nào?",
+      "answer": "Từ trên xuống, dừng khi khớp đầu tiên; cuối có implicit deny. Cần đúng interface và chiều áp dụng.",
+      "followup": "Nếu permit ip any any đứng đầu thì deny sau có tác dụng với gói đã khớp không?"
+    },
+    {
+      "id": "Q12",
+      "lesson_id": "L04",
+      "question": "Inbound G0/0.40 nghĩa là gì?",
+      "answer": "Gói từ Guest đi vào router qua subinterface VLAN40 được xét tại điểm đó; không hiểu inbound là “từ Internet vào toàn mạng”.",
+      "followup": "Lưu lượng khởi tạo từ VLAN10 sang Guest có được xét theo cùng chiều đó không?"
+    },
+    {
+      "id": "Q13",
+      "lesson_id": "L04",
+      "question": "Guest ping public IP được nhưng không phân giải tên thì sao?",
+      "answer": "Tách routing/NAT với DNS; kiểm tra resolver Guest và liệu ACL chặn đường tới DNS nội bộ. Đề xuất exception DNS hẹp hoặc resolver khác theo thiết kế.",
+      "followup": "Nếu cho phép DNS nội bộ, dòng permit phải nằm ở đâu?"
+    },
+    {
+      "id": "Q14",
+      "lesson_id": "L04",
+      "question": "NAT khác PAT thế nào?",
+      "answer": "NAT là họ kỹ thuật dịch địa chỉ; PAT/overload cho nhiều luồng dùng chung địa chỉ ngoài nhờ phân biệt port/luồng. Trong lab có overload qua G0/1.",
+      "followup": "Có translation đã chứng minh HTTP trả dữ liệu chưa?"
+    },
+    {
+      "id": "Q15",
+      "lesson_id": "L04",
+      "question": "ACL chọn NAT có phải ACL chặn traffic không?",
+      "answer": "ACL được tham chiếu bởi NAT xác định nguồn/luồng cần dịch. Chính sách lọc interface là chức năng riêng; cần đọc vị trí sử dụng thay vì chỉ thấy tên ACL.",
+      "followup": "Luồng không khớp ACL NAT có thể đi như thế nào tùy routing/chính sách?"
+    },
+    {
+      "id": "Q16",
+      "lesson_id": "L05",
+      "question": "AD DS và domain controller là gì trong lab?",
+      "answer": "AD DS cung cấp directory và danh tính miền; SERVER01 là DC cho corp.local. Client dùng dịch vụ miền để tìm DC/xác thực và nhận quản lý.",
+      "followup": "Máy client local user khác domain user ở điểm nào?"
+    },
+    {
+      "id": "Q17",
+      "lesson_id": "L05",
+      "question": "OU khác security group thế nào?",
+      "answer": "OU tổ chức đối tượng, phạm vi GPO/ủy quyền; security group dùng tập hợp danh tính để cấp quyền. OU IT không tự cấp NTFS cho user.",
+      "followup": "Tại sao user đúng group vẫn có thể chưa nhận GPO?"
+    },
+    {
+      "id": "Q18",
+      "lesson_id": "L05",
+      "question": "Tại sao cấp quyền theo group?",
+      "answer": "Dễ quản lý theo vai trò, thêm/bớt người bằng membership và giảm ACL cá nhân rải rác. Cần kiểm tra token và các nhóm khác của user.",
+      "followup": "Nhân viên chuyển từ HR sang IT thì kiểm tra quyền cũ ra sao?"
+    },
+    {
+      "id": "Q19",
+      "lesson_id": "L05",
+      "question": "Thêm GG_IT nhưng whoami /groups chưa có thì sao?",
+      "answer": "So sánh AD membership với token phiên hiện tại; đăng xuất/đăng nhập lại theo điều kiện phù hợp và kiểm tra lại. Không cấp admin để né lỗi.",
+      "followup": "gpupdate /force có luôn làm mới logon token không?"
+    },
+    {
+      "id": "Q20",
+      "lesson_id": "L05",
+      "question": "Tại sao không dùng Domain Admin hàng ngày?",
+      "answer": "Quyền vượt nhu cầu làm tăng ảnh hưởng khi thao tác sai hoặc tài khoản bị chiếm. Dùng user thường và elevation cho tác vụ quản trị được phép.",
+      "followup": "User cần sửa file IT có cần đổi ownership không?"
+    },
+    {
+      "id": "Q21",
+      "lesson_id": "L06",
+      "question": "A, PTR, SRV dùng để làm gì?",
+      "answer": "A ánh xạ tên sang IPv4; PTR tra ngược IP sang tên; SRV chỉ dịch vụ và host/port, dùng trong tìm DC.",
+      "followup": "Vì sao chỉ tạo A record chưa đủ chứng minh AD khỏe?"
+    },
+    {
+      "id": "Q22",
+      "lesson_id": "L06",
+      "question": "Tại sao client AD không trỏ DNS public?",
+      "answer": "DNS public không biết zone/bản ghi dịch vụ nội bộ của corp.local. Client cần resolver nội bộ phục vụ hoặc phân giải được namespace AD.",
+      "followup": "DNS public làm secondary có chữa việc chọn sai resolver không?"
+    },
+    {
+      "id": "Q23",
+      "lesson_id": "L06",
+      "question": "nslookup báo Server Unknown là DNS hỏng à?",
+      "answer": "Chưa chắc; có thể thiếu PTR của DNS server. Đọc câu trả lời truy vấn đích và kiểm tra reverse record riêng.",
+      "followup": "Nếu tên SERVER01 vẫn ra .10 thì kết luận được gì?"
+    },
+    {
+      "id": "Q24",
+      "lesson_id": "L06",
+      "question": "Ping .10 được nhưng join domain không được, em kiểm tra gì?",
+      "answer": "Resolver, SRV tìm DC, tên domain, thời gian, kết nối dịch vụ và quyền join; đọc Netsetup.log. Ping chỉ là một tín hiệu mạng.",
+      "followup": "Một Test-NetConnection port445 có kiểm tra đủ mọi port AD không?"
+    },
+    {
+      "id": "Q25",
+      "lesson_id": "L06",
+      "question": "Flush DNS có phải bước sửa đầu tiên không?",
+      "answer": "Chỉ hữu ích với vấn đề cache sau khi xác định/đổi record hoặc resolver. Không sửa được zone sai, DNS không reachable hoặc cấu hình client sai.",
+      "followup": "Làm sao so sánh truy vấn trực tiếp DNS .10 với resolver mặc định?"
+    },
+    {
+      "id": "Q26",
+      "lesson_id": "L07",
+      "question": "DORA là gì?",
+      "answer": "Discover→Offer→Request→Acknowledge, mô tả vòng nhận lease ban đầu. Dùng để đặt câu hỏi client có yêu cầu và server có phản hồi chưa.",
+      "followup": "Nếu client cấu hình static thì có chờ DORA để lấy IP không?"
+    },
+    {
+      "id": "Q27",
+      "lesson_id": "L07",
+      "question": "Lease, reservation và exclusion khác nhau thế nào?",
+      "answer": "Lease là IP đang cho thuê; reservation giữ IP dự kiến cho client DHCP; exclusion ngăn cấp động địa chỉ/khoảng. Static IP là cấu hình ở endpoint.",
+      "followup": "Trong lab .20 và .30 dùng cách nào?"
+    },
+    {
+      "id": "Q28",
+      "lesson_id": "L07",
+      "question": "Vì sao loại .30 khỏi scope?",
+      "answer": "Ubuntu đặt static .30 nằm trong scope .20–.100, nên exclusion tránh DHCP cấp động .30 cho máy khác. Chưa có bằng chứng đã từng bị duplicate-IP outage.",
+      "followup": "Exclusion có ngăn người khác tự đặt .30 không?"
+    },
+    {
+      "id": "Q29",
+      "lesson_id": "L07",
+      "question": "Option003,006,015 dùng cho gì?",
+      "answer": "003 router/default gateway, 006 DNS servers, 015 domain name/suffix. VMnet2 chưa có router nên không có 003 trong cấu hình đã ghi nhận.",
+      "followup": "Em sẽ nói gì nếu người phỏng vấn hỏi gateway .1?"
+    },
+    {
+      "id": "Q30",
+      "lesson_id": "L07",
+      "question": "Client nhận 169.254.x.x thì xử lý sao?",
+      "answer": "Xác định adapter/VMnet và DHCP enabled; xem server/scope/lease và đường truyền. Chưa kết luận chỉ từ IP rằng DHCP server chắc chắn chết.",
+      "followup": "Nếu chỉ một client lỗi, em ưu tiên kiểm tra lớp nào?"
+    },
+    {
+      "id": "Q31",
+      "lesson_id": "L08",
+      "question": "User Configuration và Computer Configuration khác nhau gì?",
+      "answer": "Thông thường user settings theo user object, computer settings theo computer object; loopback là ngoại lệ có chủ đích.",
+      "followup": "Link user GPO vào OU chỉ chứa computer có luôn tác động user không?"
+    },
+    {
+      "id": "Q32",
+      "lesson_id": "L08",
+      "question": "Link GPO vào OU Groups có áp cho thành viên nhóm không?",
+      "answer": "Không tự động. GPO theo phạm vi đối tượng user/computer; group membership phục vụ security filtering hoặc targeting khi cấu hình đúng.",
+      "followup": "Trong lab GG_IT được dùng cho drive map như thế nào?"
+    },
+    {
+      "id": "Q33",
+      "lesson_id": "L08",
+      "question": "GPO không áp, em kiểm tra thứ tự nào?",
+      "answer": "Đúng user/computer→OU/link→filter/permissions→DNS/DC/connectivity→gpresult/log→setting cần logon/reboot hay không. Ưu tiên dựa trên bằng chứng.",
+      "followup": "gpresult ghi Denied vì security filtering thì bước tiếp là gì?"
+    },
+    {
+      "id": "Q34",
+      "lesson_id": "L08",
+      "question": "gpupdate /force khác gpresult thế nào?",
+      "answer": "gpupdate yêu cầu xử lý lại policy; gpresult báo kết quả/phạm vi áp dụng. Chạy cập nhật không thay thế đọc báo cáo.",
+      "followup": "Có phải mọi policy áp ngay không cần sign in lại?"
+    },
+    {
+      "id": "Q35",
+      "lesson_id": "L08",
+      "question": "Computer scope Access Denied trong lab đã sửa ra sao?",
+      "answer": "Lệnh từng chạy chưa nâng quyền; mở PowerShell Administrator và kiểm tra lại. Đây không tự chứng minh GPO cấu hình sai.",
+      "followup": "Nếu dùng tài khoản admin khác, user scope phản ánh user nào?"
+    },
+    {
+      "id": "Q36",
+      "lesson_id": "L09",
+      "question": "Authentication khác authorization thế nào?",
+      "answer": "Xác thực danh tính khác quyết định quyền. Đăng nhập domain thành công chưa có nghĩa được đọc mọi share.",
+      "followup": "Access denied sau khi port445 được có gợi ý lớp nào?"
+    },
+    {
+      "id": "Q37",
+      "lesson_id": "L09",
+      "question": "Share Read, NTFS Modify thì quyền qua mạng là gì?",
+      "answer": "Trong ví dụ Allow đơn giản, qua share chỉ Read vì phải thỏa cả hai lớp. Truy cập local dựa vào NTFS.",
+      "followup": "Nếu muốn sửa file qua mạng cần kiểm tra cả hai lớp thế nào?"
+    },
+    {
+      "id": "Q38",
+      "lesson_id": "L09",
+      "question": "Modify khác Full Control?",
+      "answer": "Modify phục vụ đọc/ghi/sửa/xóa; Full Control còn bao gồm khả năng thay đổi quyền/ownership theo cơ chế Windows. Không cấp Full Control khi chỉ cần làm việc với dữ liệu.",
+      "followup": "Quyền xóa file có luôn chỉ do quyền trên chính file quyết định không?"
+    },
+    {
+      "id": "Q39",
+      "lesson_id": "L09",
+      "question": "Có I: rồi có chắc có quyền IT không?",
+      "answer": "Không. Drive mapping tạo điểm truy cập; NTFS/share và danh tính quyết định quyền thực tế. Thử UNC bằng đúng user.",
+      "followup": "Nếu UNC vào được nhưng I: không hiện, em chuyển hướng thế nào?"
+    },
+    {
+      "id": "Q40",
+      "lesson_id": "L09",
+      "question": "Deny có luôn thắng mọi Allow không?",
+      "answer": "Cần xét thứ tự ACE, explicit/inherited và quyền hiệu lực; không dùng khẩu quyết tuyệt đối. Đọc Effective Access và thử bằng user trên đúng UNC.",
+      "followup": "Tại sao kiểm tra bằng admin có thể gây kết luận sai?"
+    },
+    {
+      "id": "Q41",
+      "lesson_id": "L10",
+      "question": "Static IP Ubuntu và DNS hiện tại là gì?",
+      "answer": "192.168.30.30/24 trên ens33; DNS .10, search corp.local; không có default route trong VMnet2 Host-only. Cần đối chiếu máy hiện tại trước khi kể kết quả mới.",
+      "followup": "Đâu là lệnh xem đường IP chứ không phải DNS routing?"
+    },
+    {
+      "id": "Q42",
+      "lesson_id": "L10",
+      "question": "netplan generate, try và apply khác nhau gì?",
+      "answer": "generate sinh cấu hình backend; try thử áp có cơ chế xác nhận/hoàn nguyên; apply áp cấu hình. Kiểm tra lại IP/route/DNS và giữ console khi thay đổi.",
+      "followup": "Một file YAML hợp lệ có chắc tên interface đúng không?"
+    },
+    {
+      "id": "Q43",
+      "lesson_id": "L10",
+      "question": "SSH timeout khác connection refused thế nào?",
+      "answer": "Timeout hướng tới kiểm tra reachability/firewall/host; refused thường có thiết bị trả từ chối, xem listener/port. Đây là gợi ý cần kiểm chứng, không kết luận chắc chắn.",
+      "followup": "TCP22 thành công nhưng Permission denied thì em xem gì?"
+    },
+    {
+      "id": "Q44",
+      "lesson_id": "L10",
+      "question": "SSH password được nhưng console không được thì sao?",
+      "answer": "Xác nhận user, layout/input và log riêng; chưa reset password khi chưa có bằng chứng. Trong lab nguyên nhân console chưa chốt.",
+      "followup": "Em có được nói đã sửa lỗi keyboard layout trong CV không?"
+    },
+    {
+      "id": "Q45",
+      "lesson_id": "L10",
+      "question": "resolvectl Default Route: yes chứng minh có gateway IP không?",
+      "answer": "Không. Nó liên quan lựa chọn route DNS. Dùng ip route để xem default via thực tế.",
+      "followup": "Có thể resolve corp.local khi không có default gateway không?"
+    },
+    {
+      "id": "Q46",
+      "lesson_id": "L11",
+      "question": "2770 nghĩa là gì?",
+      "answer": "setgid và rwx cho owner/group, không quyền cho others. Setgid kế thừa group cho mục mới; quyền ghi còn phụ thuộc file mode/umask/ACL.",
+      "followup": "Vì sao file có thể vẫn không group-write dù thư mục setgid?"
+    },
+    {
+      "id": "Q47",
+      "lesson_id": "L11",
+      "question": "Tại sao labguest Permission denied lại là Pass?",
+      "answer": "Mục tiêu là nonmember không truy cập team. Đây là ca âm đúng chính sách; không chmod777 để làm mọi thao tác thành công.",
+      "followup": "Em sẽ dùng danh tính nào kiểm chứng ca dương?"
+    },
+    {
+      "id": "Q48",
+      "lesson_id": "L11",
+      "question": "UFW allow8088 xong có chắc cổng mở không?",
+      "answer": "Cần listener trên đúng địa chỉ và đường mạng; firewall permit không khởi động ứng dụng. Dùng ss và TCP test phía client.",
+      "followup": "Xóa rule8088 có dừng process Python không?"
+    },
+    {
+      "id": "Q49",
+      "lesson_id": "L11",
+      "question": "active (exited) có phải service bị lỗi không?",
+      "answer": "Với oneshot logger + RemainAfterExit=yes của lab, có thể đúng khi đã chạy thành công. Phải đọc Type/exit status/log và mục tiêu service.",
+      "followup": "Nếu đó là web server cần chạy liên tục thì kiểm chứng thêm gì?"
+    },
+    {
+      "id": "Q50",
+      "lesson_id": "L11",
+      "question": "start khác enable thế nào?",
+      "answer": "start chạy ngay; enable thiết lập kích hoạt theo boot/target phù hợp. Kiểm tra riêng trạng thái hiện tại và cấu hình boot.",
+      "followup": "Sau sửa unit file cần làm gì trước khi thử lại?"
+    },
+    {
+      "id": "Q51",
+      "lesson_id": "L11",
+      "question": "dpkg --audit trống có nghĩa là đã cập nhật hết không?",
+      "answer": "Không. Nó hỗ trợ phát hiện trạng thái package chưa hoàn chỉnh; trạng thái cập nhật cần nguồn/thời điểm kiểm tra riêng. VM hiện không có Internet route.",
+      "followup": "Vì sao không chỉ thêm gateway .1 để apt chạy?"
+    },
+    {
+      "id": "Q52",
+      "lesson_id": "L12",
+      "question": "Người dùng nói “mạng hỏng”, câu hỏi đầu tiên của em là gì?",
+      "answer": "Hỏi dịch vụ nào lỗi, phạm vi một/nhiều máy, từ khi nào, thông báo cụ thể và thay đổi gần đây. Dùng thông tin đó chọn phép kiểm tra.",
+      "followup": "Một máy không in được có nghĩa toàn mạng hỏng không?"
+    },
+    {
+      "id": "Q53",
+      "lesson_id": "L12",
+      "question": "Lúc chưa nhớ lệnh, em trả lời thế nào?",
+      "answer": "Nói mục tiêu kiểm tra và cách diễn giải; thừa nhận cần tra cú pháp từ tài liệu/help. Không bịa kết quả đã chạy.",
+      "followup": "Đưa ví dụ với việc kiểm tra DNS client."
+    },
+    {
+      "id": "Q54",
+      "lesson_id": "L12",
+      "question": "Vì sao kiểm tra sau sửa phải có cả ca bị chặn?",
+      "answer": "Để xác nhận chức năng cần được phép và rào cản cần được giữ. Sửa được IT nhưng mở luôn HR cho mọi người là hồi quy bảo mật.",
+      "followup": "Nêu một ca âm ở Windows và Linux của lab."
+    },
+    {
+      "id": "Q55",
+      "lesson_id": "L12",
+      "question": "Snapshot có thay thế backup không?",
+      "answer": "Không nên coi snapshot cùng hệ thống là bản backup độc lập. Cần bản sao, retention, nơi lưu và kiểm tra restore theo mục tiêu. Lab chưa triển khai phần này.",
+      "followup": "Em sẽ thiết kế bài restore file mẫu như thế nào?"
+    },
+    {
+      "id": "Q56",
+      "lesson_id": "L12",
+      "question": "Em có monitoring chưa?",
+      "answer": "Chưa có hệ thống giám sát/cảnh báo đã kiểm chứng. Xem Event Viewer/journal thủ công là thu thập bằng chứng, không đồng nghĩa đã triển khai monitoring.",
+      "followup": "Nếu làm thêm em sẽ đo gì trước?"
+    },
+    {
+      "id": "Q57",
+      "lesson_id": "L12",
+      "question": "Máy user chậm, có phải cài lại Windows ngay không?",
+      "answer": "Hỏi phạm vi và thời điểm; xem CPU/RAM/disk/process/log và ứng dụng liên quan; xác định bottleneck trước khi thay đổi. Đây là tình huống mở rộng, chưa phải incident đã làm trong lab.",
+      "followup": "Một process CPU cao có chắc là malware không?"
+    },
+    {
+      "id": "Q58",
+      "lesson_id": "L12",
+      "question": "Nhận yêu cầu reset mật khẩu, em cần làm gì trước?",
+      "answer": "Xác minh danh tính người yêu cầu theo quy trình, phạm vi được ủy quyền và tác động. Không yêu cầu người dùng gửi mật khẩu cũ. Sau thao tác xác minh đăng nhập và bàn giao phù hợp.",
+      "followup": "Nếu chưa được cấp quyền AD thì sao?"
+    },
+    {
+      "id": "Q59",
+      "lesson_id": "L12",
+      "question": "Bàn giao ticket đã xử lý gồm gì?",
+      "answer": "Triệu chứng/ảnh hưởng, bằng chứng nguyên nhân, thay đổi chính xác, ca kiểm tra, rollback, thời điểm và việc theo dõi. Bảo vệ thông tin nhạy cảm trong log.",
+      "followup": "Nếu chỉ khắc phục tạm thời thì ghi thế nào?"
+    },
+    {
+      "id": "Q60",
+      "lesson_id": "L12",
+      "question": "Nếu nghi sự cố vượt quyền hoặc chưa biết xử lý thì sao?",
+      "answer": "Giữ bằng chứng, giảm tác động trong phạm vi được phép, nêu đã kiểm tra gì và chuyển người phụ trách. Không tùy ý sửa DC hoặc tắt hàng loạt bảo vệ.",
+      "followup": "Em sẽ gửi những thông tin nào cho senior để họ không kiểm tra lại từ đầu?"
+    }
+  ],
+  "incidents": [
+    {
+      "id": "T01",
+      "title": "Ping IP được nhưng không mở share bằng tên",
+      "lesson_id": "L06",
+      "symptom": "CLIENT01 ping .10 được nhưng SERVER01.corp.local không phân giải.",
+      "scope": "VMware; giả lập trên bản sao client nếu cần.",
+      "hypotheses": [
+        "Client trỏ resolver sai.",
+        "Record sai/thiếu hoặc DNS không trả lời.",
+        "Cache chứa kết quả cũ."
+      ],
+      "checks": [
+        "ipconfig /all: DNS có .10 không?",
+        "Resolve-DnsName SERVER01.corp.local -Server 192.168.30.10: nếu thành công nhưng mặc định fail, tập trung cấu hình/resolver client.",
+        "Nếu truy vấn trực tiếp fail, kiểm tra DNS server/zone/log; ping không kiểm tra dịch vụ DNS."
+      ],
+      "repair": "Chỉ sửa DNS adapter hoặc record đã xác nhận sai. Flush cache sau khi sửa nếu cần. Không đổi DNS DC thành public.",
+      "verify": [
+        "Tên giải đúng .10.",
+        "UNC IT hoạt động bằng đúng user.",
+        "Tên không tồn tại vẫn không giải tùy chính sách, tránh dùng hosts để che lỗi."
+      ],
+      "rollback": "Ghi resolver cũ; nếu thay record, lưu giá trị trước. Khôi phục adapter thử sau bài.",
+      "pitfall": "Tắt firewall toàn bộ hoặc thêm 8.8.8.8 rồi coi domain đã khỏe."
+    },
+    {
+      "id": "T02",
+      "title": "Không join được corp.local",
+      "lesson_id": "L06",
+      "symptom": "Client báo không tìm thấy domain controller.",
+      "scope": "VMware; ưu tiên đọc log, không unjoin máy đang dùng.",
+      "hypotheses": [
+        "DNS/SRV sai.",
+        "Kết nối dịch vụ hoặc thời gian sai.",
+        "Quyền join hoặc computer account tồn tại có hạn chế."
+      ],
+      "checks": [
+        "Xác nhận phiên bản Windows hỗ trợ domain join, IP và resolver.",
+        "Query SRV _ldap._tcp.dc._msdcs.corp.local; nltest /dsgetdc:corp.local.",
+        "Đọc C:\\Windows\\Debug\\Netsetup.log và lỗi cụ thể; Test-NetConnection một port không đủ bao phủ AD."
+      ],
+      "repair": "Sửa đúng nguyên nhân. Với account reuse/hardening, tra hướng dẫn Microsoft hiện hành và dùng quyền được ủy quyền; không hạ bảo mật để né lỗi.",
+      "verify": [
+        "Join/login bằng tài khoản lab hợp lệ.",
+        "whoami và logon server đúng.",
+        "DNS và GPO sau sign in còn hoạt động."
+      ],
+      "rollback": "Nếu cần thử join, dùng bản sao máy và computer name riêng; lưu trạng thái ban đầu.",
+      "pitfall": "Xóa computer account hoặc reset domain hàng loạt trước khi đọc lỗi."
+    },
+    {
+      "id": "T03",
+      "title": "CLIENT01 không nhận lease DHCP",
+      "lesson_id": "L07",
+      "symptom": "Client có địa chỉ tự động 169.254.x.x hoặc vẫn dùng static.",
+      "scope": "VMware; tránh release adapter của phiên remote duy nhất.",
+      "hypotheses": [
+        "Adapter không đúng VMnet2/disconnected.",
+        "DHCP trên client chưa bật.",
+        "Scope/server không phục vụ hoặc đường truyền lỗi."
+      ],
+      "checks": [
+        "ipconfig /all: đúng adapter, DHCP Enabled, subnet?",
+        "Kiểm tra VMnet của SERVER01 và CLIENT01.",
+        "Kiểm tra scope active, lease, reservation/client ID và dịch vụ DHCP; xem có DHCP VMware cạnh tranh không."
+      ],
+      "repair": "Sửa adapter hoặc bật DHCP cho đúng client sau khi ghi cấu hình. Nếu server lỗi, xử lý scope/service theo bằng chứng.",
+      "verify": [
+        "Client nhận .20 theo reservation và DNS .10.",
+        "Đăng nhập domain/resolve tên vẫn đúng."
+      ],
+      "rollback": "Lưu IP/DNS ban đầu và có console để khôi phục.",
+      "pitfall": "Gõ static .20 rồi nhận đã sửa được DHCP."
+    },
+    {
+      "id": "T04",
+      "title": "Ubuntu tĩnh .30 nằm trong pool DHCP",
+      "lesson_id": "L07",
+      "symptom": "Phát hiện .30 có thể bị cấp động cho máy khác; chưa có outage xác nhận.",
+      "scope": "VMware; đây là nguy cơ đã được xử lý trong tài liệu.",
+      "hypotheses": [
+        "Scope thiếu exclusion.",
+        "Có static IP khác chưa được thống kê."
+      ],
+      "checks": [
+        "So IP Ubuntu và scope .20–.100.",
+        "Đọc lease/reservation/exclusion trước khi thay đổi.",
+        "Nếu có xung đột thực tế, đối chiếu ARP/MAC và xác định chủ sở hữu; không xóa lease đoán mò."
+      ],
+      "repair": "Thêm/kiểm tra exclusion đúng .30 khi được phép; phối hợp xử lý client đang dùng trùng nếu có.",
+      "verify": [
+        "Exclusion xuất hiện.",
+        "Ubuntu và CLIENT01 vẫn liên lạc được.",
+        "Không khẳng định đã sửa duplicate-IP outage nếu chỉ xử lý nguy cơ."
+      ],
+      "rollback": "Ghi exclusion trước/sau; không xóa reservation .20.",
+      "pitfall": "Cho rằng exclusion sẽ đổi IP trên một máy đã đặt static sai."
+    },
+    {
+      "id": "T05",
+      "title": "User IT không có ổ I: nhưng UNC mở được",
+      "lesson_id": "L08",
+      "symptom": "an.nguyen vào \\\\SERVER01\\CORP-DATA\\IT được, nhưng thiếu I:.",
+      "scope": "VMware; phiên user thường.",
+      "hypotheses": [
+        "GPO user không trong phạm vi.",
+        "Item-level targeting/group token chưa đúng.",
+        "Ký tự ổ đĩa bị dùng hoặc preference lỗi."
+      ],
+      "checks": [
+        "whoami /groups có GG_IT?",
+        "gpresult user: GPO-USER-BASELINE có áp không?",
+        "Đọc Drive Maps, targeting và log preference; kiểm tra ổ I: đã bị chiếm chưa."
+      ],
+      "repair": "Chỉnh đúng link/target hoặc xung đột drive sau xác nhận. Làm mới policy/sign in lại khi cần.",
+      "verify": [
+        "I: map đúng UNC.",
+        "User IT truy cập đúng và không mở được phòng không được cấp."
+      ],
+      "rollback": "Lưu GPO/setting trước sửa; ưu tiên đối tượng thử nghiệm.",
+      "pitfall": "Thay NTFS dù UNC đã hoạt động, hoặc map tay rồi coi GPO đã sửa."
+    },
+    {
+      "id": "T06",
+      "title": "Có I: nhưng Access denied",
+      "lesson_id": "L09",
+      "symptom": "Ổ I: xuất hiện, mở báo Access denied.",
+      "scope": "VMware; không thử bằng Domain Admin thay user.",
+      "hypotheses": [
+        "User/token không thuộc group cần.",
+        "Share ACL hoặc NTFS ACL hạn chế.",
+        "Thư mục con/credential khác gây kết quả khác."
+      ],
+      "checks": [
+        "whoami và whoami /groups.",
+        "Thử UNC, TCP445 và đọc lỗi cụ thể.",
+        "Get-SmbShareAccess, icacls và Effective Access bằng đúng user/path."
+      ],
+      "repair": "Cấp/sửa đúng group hoặc quyền tối thiểu đã xác nhận. Không mở Everyone Full Control.",
+      "verify": [
+        "User được cấp đọc/sửa file mẫu theo yêu cầu.",
+        "User phòng khác vẫn bị chặn."
+      ],
+      "rollback": "Lưu ACL trước; chỉ khôi phục đúng phạm vi nếu cần, không reset đệ quy toàn ổ.",
+      "pitfall": "Xem drive mapping là bằng chứng đủ quyền."
+    },
+    {
+      "id": "T07",
+      "title": "GPO user áp sai hoặc không áp",
+      "lesson_id": "L08",
+      "symptom": "User HR không nhận restriction trong khi IT nhận.",
+      "scope": "VMware; so sánh hai user, không thay toàn domain.",
+      "hypotheses": [
+        "OU/link/filter khác nhau.",
+        "User Configuration/Computer Configuration bị nhầm.",
+        "Cần sign in lại hoặc có GPO khác ảnh hưởng."
+      ],
+      "checks": [
+        "Xác định user và OU thật.",
+        "So gpresult của hai user, GPO applied/denied.",
+        "Đọc filter, link, setting và GroupPolicy log; kiểm tra loopback chỉ nếu đã bật."
+      ],
+      "repair": "Sửa đúng scope/filter/setting sau đối chiếu; không cấp quyền admin làm workaround.",
+      "verify": [
+        "User HR nhận policy dự kiến.",
+        "User IT không bị thay đổi ngoài ý muốn."
+      ],
+      "rollback": "Backup GPO hoặc ghi setting cũ; dùng OU/user thử.",
+      "pitfall": "Gõ gpupdate nhiều lần mà không xem phạm vi."
+    },
+    {
+      "id": "T08",
+      "title": "gpresult computer báo Access Denied",
+      "lesson_id": "L08",
+      "symptom": "gpresult /r /scope computer không đọc được.",
+      "scope": "Sự cố quyền chạy lệnh từng được ghi nhận.",
+      "hypotheses": [
+        "Shell chưa elevated.",
+        "Tài khoản không đủ quyền đọc kết quả."
+      ],
+      "checks": [
+        "Kiểm tra elevation/identity.",
+        "Chạy lại từ PowerShell Administrator được phép.",
+        "Nếu vẫn lỗi, ghi error và kiểm tra quyền thay vì kết luận policy hỏng."
+      ],
+      "repair": "Dùng shell/quyền phù hợp; không sửa GPO chỉ vì lệnh đọc bị từ chối.",
+      "verify": [
+        "Đọc được computer scope.",
+        "User scope vẫn được xem ở đúng danh tính cần kiểm tra."
+      ],
+      "rollback": "Đóng shell elevated sau bài; không để phiên admin cho tác vụ thường.",
+      "pitfall": "Nhầm quyền chạy công cụ với quyền áp chính sách."
+    },
+    {
+      "id": "T09",
+      "title": "Guest không ra đích ngoài mô phỏng",
+      "lesson_id": "L04",
+      "symptom": "Guest không tới public server Packet Tracer.",
+      "scope": "Chỉ Packet Tracer, không suy sang Internet VMware.",
+      "hypotheses": [
+        "Access/trunk/gateway sai.",
+        "ACL chặn sai thứ tự/chiều.",
+        "NAT inside/outside hoặc default route sai."
+      ],
+      "checks": [
+        "Đi từ PC IP/gateway → access VLAN40 → trunk → G0/0.40.",
+        "Đọc ACL và counter khi tạo traffic.",
+        "Xem route default, NAT translations/statistics và return path của phía ISP/public server."
+      ],
+      "repair": "Sửa một cấu hình đã xác định sai trên bản sao .pkt, rồi kiểm tra lại.",
+      "verify": [
+        "Guest tới đích public mô phỏng.",
+        "Guest vẫn bị chặn Server/Management."
+      ],
+      "rollback": "Save As trước; ghi config ban đầu của interface/ACL/NAT.",
+      "pitfall": "Xóa ACL để traffic chạy rồi coi Guest isolation đã hoàn thành."
+    },
+    {
+      "id": "T10",
+      "title": "Guest ra IP ngoài nhưng DNS không được",
+      "lesson_id": "L04",
+      "symptom": "Truy cập bằng IP mô phỏng được, tên không giải.",
+      "scope": "Bài phân tích thiết kế, không tuyên bố lỗi thực tế đã quan sát.",
+      "hypotheses": [
+        "Resolver không đúng.",
+        "DNS nằm trong subnet bị ACL chặn.",
+        "DNS service/record không tồn tại ở môi trường mô phỏng."
+      ],
+      "checks": [
+        "Xem DNS được cấp cho Guest.",
+        "Đối chiếu đường tới resolver với ACL first match.",
+        "Thử truy vấn DNS, không dùng ping để chứng minh port53."
+      ],
+      "repair": "Chọn resolver phù hợp hoặc exception TCP/UDP53 tới đúng DNS trước deny nội bộ; chỉ thực hiện khi môi trường có dịch vụ đó.",
+      "verify": [
+        "Tên giải đúng.",
+        "Guest không mở SMB/RDP/internal ngoài exception."
+      ],
+      "rollback": "Lưu ACL sequence và khôi phục nếu bài thử thất bại.",
+      "pitfall": "Permit cả subnet Server chỉ để DNS hoạt động."
+    },
+    {
+      "id": "T11",
+      "title": "Ubuntu ping DNS được nhưng corp.local không giải",
+      "lesson_id": "L10",
+      "symptom": "resolvectl query trả No appropriate name servers or networks for name found.",
+      "scope": "Tình huống được ghi nhận trong lab Ubuntu.",
+      "hypotheses": [
+        "DNS routing/search domain sai.",
+        "Resolver .local đi nhánh không mong muốn.",
+        "Record đích thiếu."
+      ],
+      "checks": [
+        "ip route và resolvectl status ens33.",
+        "So DNS .10/search corp.local với cấu hình Netplan.",
+        "Kiểm tra record Windows DNS; phân biệt giải SERVER01 và UBUNTU01."
+      ],
+      "repair": "Chỉnh đúng cấu hình nameservers/search sau backup; netplan generate, try rồi xác nhận. Không ghép hai YAML thành một chuỗi.",
+      "verify": [
+        "Resolve tên .10/.30 và PTR .30 đúng.",
+        "Sau reboot vẫn đúng; SSH không mất."
+      ],
+      "rollback": "Có console và bản backup /etc/netplan; kiểm tra trạng thái thực tế nếu try hoàn nguyên.",
+      "pitfall": "Thêm gateway giả hoặc sửa hosts để che nguyên nhân resolver."
+    },
+    {
+      "id": "T12",
+      "title": "SSH timeout/refused/Permission denied",
+      "lesson_id": "L10",
+      "symptom": "SSH tới .30 có thể fail ở ba lớp khác nhau.",
+      "scope": "VMware; giữ console và phiên SSH còn sống.",
+      "hypotheses": [
+        "Đường VMnet/IP/firewall.",
+        "Không có listener đúng port/address.",
+        "Sai identity hoặc xác thực bị từ chối."
+      ],
+      "checks": [
+        "Test-NetConnection .30 -Port22 từ Windows.",
+        "Trong console Ubuntu xem ip, ss, ssh.service/ssh.socket.",
+        "Nếu kết nối TCP được nhưng auth fail, xem journal và user/input; không reset password ngay."
+      ],
+      "repair": "Sửa đúng lớp đã kiểm chứng; kiểm tra cấu hình SSH trước reload nếu thay đổi. Không tự bật root password login.",
+      "verify": [
+        "Mở được phiên mới bằng sysadmin.",
+        "Quy tắc UFW cần thiết còn đúng."
+      ],
+      "rollback": "Khôi phục config đã backup bằng console nếu khóa remote.",
+      "pitfall": "Kết luận mọi timeout đều do UFW."
+    },
+    {
+      "id": "T13",
+      "title": "labguest không đọc được team",
+      "lesson_id": "L11",
+      "symptom": "Nonmember Permission denied khi đọc file team.",
+      "scope": "Đây là kết quả dự kiến, không phải ticket cần mở quyền.",
+      "hypotheses": [
+        "Chính sách đang hoạt động đúng.",
+        "Nếu labmember cũng fail thì membership/path/mode cần xem."
+      ],
+      "checks": [
+        "id labmember, id labguest.",
+        "ls -ld thư mục cha và team, ls -l file.",
+        "Thử đọc bằng từng user, không dùng root để thay ca user."
+      ],
+      "repair": "Không sửa quyền khi nonmember bị chặn đúng yêu cầu. Nếu member sai, sửa membership/mode tối thiểu sau xác minh.",
+      "verify": [
+        "labmember đọc được.",
+        "labguest vẫn bị từ chối.",
+        "File mới có group/mode phù hợp; setgid không tự bảo đảm group write."
+      ],
+      "rollback": "Ghi owner/mode trước; dùng file mẫu.",
+      "pitfall": "chmod777 để biến tất cả kiểm tra thành thành công."
+    },
+    {
+      "id": "T14",
+      "title": "UFW và listener cho kết quả tưởng mâu thuẫn",
+      "lesson_id": "L11",
+      "symptom": "Rule8088 đã xóa nhưng ss vẫn có listener; hoặc đã allow mà client vẫn fail.",
+      "scope": "Bài thực hành kiểm soát; không phục vụ thư mục cá nhân.",
+      "hypotheses": [
+        "Rule và process là hai trạng thái độc lập.",
+        "App bind localhost thay vì interface cần.",
+        "Traffic bị chặn ở lớp khác."
+      ],
+      "checks": [
+        "ss -lntp xem listener/address/process.",
+        "ufw status numbered xem rule hiện hành.",
+        "TCP test từ Windows khi listener còn chạy; đối chiếu IP và route."
+      ],
+      "repair": "Dừng đúng process thử hoặc chỉnh đúng bind/rule theo mục tiêu. Giữ SSH trước khi thay firewall.",
+      "verify": [
+        "Listener chạy: blocked→allowed→blocked theo rule.",
+        "Kết thúc: dừng process, không còn listener8088, rule thử đã xóa."
+      ],
+      "rollback": "Chỉ xóa rule và process đã tạo cho bài; không reset toàn UFW.",
+      "pitfall": "Tắt UFW hoặc kill mọi tiến trình Python."
+    },
+    {
+      "id": "T15",
+      "title": "systemd active (exited), có cần sửa không?",
+      "lesson_id": "L11",
+      "symptom": "Service demo active (exited) thay vì running.",
+      "scope": "Đối chiếu unit Type=oneshot hiện có.",
+      "hypotheses": [
+        "Hoạt động đúng do oneshot + RemainAfterExit.",
+        "Nếu exit lỗi/log thiếu mới cần phân tích."
+      ],
+      "checks": [
+        "Đọc unit và systemctl status.",
+        "Xem exit status và journal tag system-lab-demo.",
+        "Kiểm tra boot hiện tại khi đánh giá chạy sau reboot."
+      ],
+      "repair": "Nếu logger đã thành công, không biến oneshot thành loop vô hạn. Nếu unit sửa thật, verify cấu hình và daemon-reload rồi thử.",
+      "verify": [
+        "Có log Lab-service-started.",
+        "Stop/start và boot phản ánh đúng lifecycle nếu tự làm lại."
+      ],
+      "rollback": "Backup unit; không chỉnh vendor unit không liên quan vì warning.",
+      "pitfall": "Coi mọi exited là crash hoặc nói service này là web app."
+    },
+    {
+      "id": "T16",
+      "title": "Yêu cầu mới: khôi phục file bị xóa",
+      "lesson_id": "L12",
+      "symptom": "Người dùng xóa nhầm file mẫu, muốn lấy lại.",
+      "scope": "MỞ RỘNG CHƯA TRIỂN KHAI trong lab CV.",
+      "hypotheses": [
+        "Có backup/version đủ cũ và truy cập được.",
+        "Chưa có backup hoặc file chưa từng được lưu."
+      ],
+      "checks": [
+        "Xác nhận file/path/thời điểm/phạm vi và quyền yêu cầu.",
+        "Kiểm tra bản backup hiện có, không hứa phục hồi khi chưa có bản sao.",
+        "Phục hồi vào vị trí kiểm tra riêng và xác minh nội dung/quyền trước đưa vào dùng."
+      ],
+      "repair": "Nếu có backup hợp lệ, restore có kiểm soát; nếu chưa có, báo giới hạn và chuyển hỗ trợ thích hợp. Khi học, chỉ dùng dữ liệu giả.",
+      "verify": [
+        "Nội dung đúng phiên bản.",
+        "Đúng user đọc/sửa được, người không được cấp vẫn bị chặn.",
+        "Ghi thời gian đo thực tế, không bịa RTO/RPO."
+      ],
+      "rollback": "Không ghi đè bản tốt đang còn; giữ bản kiểm tra và lịch sử thao tác.",
+      "pitfall": "Gọi snapshot là backup độc lập hoặc hứa chắc lấy lại được mọi file."
+    }
+  ],
+  "quiz": [
+    {
+      "id": "C01",
+      "lesson_id": "L02",
+      "prompt": "Hai ứng dụng cùng dùng 192.168.30.0/24 chứng minh điều gì?",
+      "options": [
+        "Chúng đã nối mạng thật",
+        "Thiết kế địa chỉ tương ứng, chưa chứng minh kết nối",
+        "Ubuntu đã join AD",
+        "Guest đã dùng Windows DHCP"
+      ],
+      "correct": 1,
+      "explanation": "Cần kết nối và kiểm thử thực tế; trùng sơ đồ IP không tạo bridge."
+    },
+    {
+      "id": "C02",
+      "lesson_id": "L02",
+      "prompt": "VMnet2 hiện không có router. Máy .20 liên lạc .10/24 thế nào?",
+      "options": [
+        "Bắt buộc qua Internet",
+        "Trực tiếp cùng subnet qua mạng ảo",
+        "Phải thêm gateway .1",
+        "Phải bật NAT trong Packet Tracer"
+      ],
+      "correct": 1,
+      "explanation": "Connected subnet cho phép liên lạc nội bộ mà không cần default gateway."
+    },
+    {
+      "id": "C03",
+      "lesson_id": "L03",
+      "prompt": "Muốn VLAN20 đi qua trunk, cần kiểm tra gì?",
+      "options": [
+        "Chỉ hostname switch",
+        "VLAN tồn tại, được phép và hoạt động trên đường trunk",
+        "Chỉ DNS public",
+        "Chỉ IP quản trị VLAN99"
+      ],
+      "correct": 1,
+      "explanation": "Đọc trạng thái VLAN/access/trunk/subinterface, không chỉ config một đầu."
+    },
+    {
+      "id": "C04",
+      "lesson_id": "L03",
+      "prompt": "Router-on-a-stick dùng gì để tách VLAN trên router?",
+      "options": [
+        "Một DNS record cho mỗi VLAN",
+        "Subinterface với encapsulation dot1Q và IP gateway",
+        "GPO user",
+        "DHCP exclusion"
+      ],
+      "correct": 1,
+      "explanation": "Subinterface ánh xạ VLAN ID tới lớp3."
+    },
+    {
+      "id": "C05",
+      "lesson_id": "L04",
+      "prompt": "ACL permit rộng trước deny hẹp sẽ thế nào?",
+      "options": [
+        "Router luôn ưu tiên deny hẹp",
+        "Gói khớp permit đầu tiên không xét deny sau",
+        "Chỉ dòng cuối tác dụng",
+        "ACL tự sắp theo subnet"
+      ],
+      "correct": 1,
+      "explanation": "ACL first match; thứ tự là một phần chính sách."
+    },
+    {
+      "id": "C06",
+      "lesson_id": "L04",
+      "prompt": "Guest dùng DNS .30.10 nhưng ACL deny subnet Server: ưu tiên gì?",
+      "options": [
+        "Xóa mọi deny",
+        "Kiểm tra đường DNS và thiết kế exception hẹp/resolver phù hợp",
+        "Tắt DNS client",
+        "Đổi mọi VLAN thành VLAN1"
+      ],
+      "correct": 1,
+      "explanation": "Nhu cầu DNS khác quyền truy cập toàn subnet Server."
+    },
+    {
+      "id": "C07",
+      "lesson_id": "L05",
+      "prompt": "Đặt user vào OU IT tự cấp Modify cho thư mục IT?",
+      "options": [
+        "Có",
+        "Chỉ khi restart DC",
+        "Không; cần group/ACL phù hợp",
+        "Chỉ nếu user dùng DHCP"
+      ],
+      "correct": 2,
+      "explanation": "OU và group có vai trò khác nhau."
+    },
+    {
+      "id": "C08",
+      "lesson_id": "L05",
+      "prompt": "AD membership đổi nhưng token cũ chưa có GG_IT, nên làm gì?",
+      "options": [
+        "Cấp Domain Admin",
+        "Kiểm tra phiên và đăng nhập lại khi phù hợp",
+        "chmod777 trên server",
+        "Xóa domain"
+      ],
+      "correct": 1,
+      "explanation": "Đối chiếu membership AD với token phiên đang kiểm tra."
+    },
+    {
+      "id": "C09",
+      "lesson_id": "L06",
+      "prompt": "PTR phục vụ chủ yếu việc gì?",
+      "options": [
+        "IP→tên",
+        "Cấp IP DHCP",
+        "Chặn Guest",
+        "Tạo user AD"
+      ],
+      "correct": 0,
+      "explanation": "PTR là reverse lookup; không thay thế SRV/A."
+    },
+    {
+      "id": "C10",
+      "lesson_id": "L06",
+      "prompt": "Ping IP DC thành công đủ chứng minh join domain được?",
+      "options": [
+        "Đủ",
+        "Không, còn DNS/SRV, kết nối dịch vụ, quyền và điều kiện khác",
+        "Đủ nếu /24",
+        "Đủ khi user có I:"
+      ],
+      "correct": 1,
+      "explanation": "Ping chỉ kiểm tra một tín hiệu mạng."
+    },
+    {
+      "id": "C11",
+      "lesson_id": "L07",
+      "prompt": "Ubuntu static .30 trong pool .20–.100 cần gì để DHCP không cấp động .30?",
+      "options": [
+        "Exclusion .30",
+        "PTR duy nhất",
+        "GPO cấm CMD",
+        "NAT overload"
+      ],
+      "correct": 0,
+      "explanation": "Exclusion ngăn cấp động; không ngăn mọi cấu hình static trùng."
+    },
+    {
+      "id": "C12",
+      "lesson_id": "L07",
+      "prompt": "CLIENT01 dùng reservation nghĩa là gì?",
+      "options": [
+        "Client vẫn dùng DHCP, server dành IP cho client phù hợp",
+        "Client phải dùng static",
+        "Không có lease",
+        "Không cần DNS"
+      ],
+      "correct": 0,
+      "explanation": "Reservation giữ tính quản lý DHCP với IP dự kiến ổn định."
+    },
+    {
+      "id": "C13",
+      "lesson_id": "L08",
+      "prompt": "GPO user thông thường đi theo đâu khi không loopback?",
+      "options": [
+        "OU chứa user và phạm vi áp dụng",
+        "Chỉ OU chứa group",
+        "Chỉ hostname router",
+        "Bất kỳ computer cùng VLAN"
+      ],
+      "correct": 0,
+      "explanation": "Cần phân biệt user object và computer object."
+    },
+    {
+      "id": "C14",
+      "lesson_id": "L08",
+      "prompt": "gpupdate /force thành công chứng minh gì?",
+      "options": [
+        "Mọi ACL đúng",
+        "Đã yêu cầu/xử lý cập nhật policy, còn phải đọc kết quả và setting",
+        "Đã join Ubuntu",
+        "Đã reset token mọi user"
+      ],
+      "correct": 1,
+      "explanation": "Không thay cho gpresult và kiểm chứng chức năng."
+    },
+    {
+      "id": "C15",
+      "lesson_id": "L09",
+      "prompt": "Share Read và NTFS Modify, ví dụ chỉ Allow: quyền từ xa?",
+      "options": [
+        "Full Control",
+        "Modify",
+        "Read",
+        "Không giới hạn"
+      ],
+      "correct": 2,
+      "explanation": "Truy cập mạng phải được cả hai lớp cho phép."
+    },
+    {
+      "id": "C16",
+      "lesson_id": "L09",
+      "prompt": "UNC IT vào được nhưng I: thiếu, nên ưu tiên?",
+      "options": [
+        "Xóa ACL IT",
+        "GPO/Drive Maps/targeting/drive letter",
+        "Cài lại DC",
+        "Mở Everyone Full Control"
+      ],
+      "correct": 1,
+      "explanation": "Chức năng truy cập UNC đã giúp thu hẹp sang mapping."
+    },
+    {
+      "id": "C17",
+      "lesson_id": "L10",
+      "prompt": "resolvectl Default Route: yes là default gateway IP?",
+      "options": [
+        "Luôn đúng",
+        "Không; cần xem ip route",
+        "Chỉ đúng với .local",
+        "Có nếu UFW bật"
+      ],
+      "correct": 1,
+      "explanation": "Đây là hai ngữ cảnh routing khác nhau."
+    },
+    {
+      "id": "C18",
+      "lesson_id": "L10",
+      "prompt": "Lỗi YAML Netplan nên bắt đầu thế nào?",
+      "options": [
+        "Ghép config mới vào cuối file",
+        "Đọc file và backup, kiểm tra indentation/interface rồi generate",
+        "Đổi MAC theo repo ngay",
+        "Xóa mọi file network"
+      ],
+      "correct": 1,
+      "explanation": "Sửa có kiểm soát và kiểm tra trước khi áp."
+    },
+    {
+      "id": "C19",
+      "lesson_id": "L11",
+      "prompt": "Setgid trên directory bảo đảm mọi file mới group-write?",
+      "options": [
+        "Có",
+        "Không, còn mode/umask/ACL",
+        "Chỉ với root",
+        "Chỉ sau reboot"
+      ],
+      "correct": 1,
+      "explanation": "Setgid kế thừa group, không tự thêm mọi quyền ghi."
+    },
+    {
+      "id": "C20",
+      "lesson_id": "L11",
+      "prompt": "labguest bị chặn trong ca nonmember là gì?",
+      "options": [
+        "Lỗi phải sửa bằng 777",
+        "Bằng chứng chính sách đúng nếu ca member vẫn thành công",
+        "Lỗi DHCP",
+        "Lỗi systemd"
+      ],
+      "correct": 1,
+      "explanation": "Ca âm là một phần kiểm thử quyền."
+    },
+    {
+      "id": "C21",
+      "lesson_id": "L11",
+      "prompt": "Xóa UFW rule8088 sẽ tự dừng Python listener?",
+      "options": [
+        "Có",
+        "Không",
+        "Chỉ khi dùng sudo",
+        "Chỉ trên Host-only"
+      ],
+      "correct": 1,
+      "explanation": "Rule và vòng đời tiến trình độc lập."
+    },
+    {
+      "id": "C22",
+      "lesson_id": "L11",
+      "prompt": "active (exited) của oneshot logger có thể đúng không?",
+      "options": [
+        "Có, khi lệnh thành công và RemainAfterExit=yes",
+        "Không bao giờ",
+        "Nghĩa là web app chạy",
+        "Nghĩa là port8088 mở"
+      ],
+      "correct": 0,
+      "explanation": "Đọc Type/exit status/log theo mục tiêu unit."
+    },
+    {
+      "id": "C23",
+      "lesson_id": "L12",
+      "prompt": "Chưa chạy lại VM nhưng tài liệu cũ Pass, em nên nói gì?",
+      "options": [
+        "Đã kiểm chứng hôm nay",
+        "Có bằng chứng lịch sử, chưa xác nhận trạng thái hiện tại",
+        "Đã triển khai production",
+        "Không cần kiểm tra nữa"
+      ],
+      "correct": 1,
+      "explanation": "Phân biệt thời điểm bằng chứng và trạng thái hiện tại."
+    },
+    {
+      "id": "C24",
+      "lesson_id": "L12",
+      "prompt": "Cách sửa tốt nhất cho lỗi chưa rõ nguyên nhân?",
+      "options": [
+        "Thay nhiều thứ cùng lúc",
+        "Thu hẹp phạm vi, chọn kiểm tra phân biệt rồi sửa nhỏ có xác minh",
+        "Tắt mọi bảo vệ",
+        "Cài lại ngay"
+      ],
+      "correct": 1,
+      "explanation": "Giữ được chuỗi bằng chứng và khả năng rollback."
+    }
+  ],
+  "sources": [
+    {
+      "id": "S01",
+      "title": "Microsoft — Reviewing OU design concepts",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/reviewing-ou-design-concepts"
+    },
+    {
+      "id": "S02",
+      "title": "Microsoft — Active Directory security groups",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-groups"
+    },
+    {
+      "id": "S03",
+      "title": "Microsoft — Domain join troubleshooting",
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/identity/active-directory-domain-join-troubleshooting-guidance"
+    },
+    {
+      "id": "S04",
+      "title": "Microsoft — DNS queries and lookups",
+      "url": "https://learn.microsoft.com/en-us/windows-server/networking/dns/queries-lookups"
+    },
+    {
+      "id": "S05",
+      "title": "Microsoft — DHCP scopes",
+      "url": "https://learn.microsoft.com/windows-server/networking/technologies/dhcp/dhcp-scopes"
+    },
+    {
+      "id": "S06",
+      "title": "Microsoft — Group Policy processing",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-processing"
+    },
+    {
+      "id": "S07",
+      "title": "Cisco — Configure VLAN trunking",
+      "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/c9000/lyr2-fwd/vlan/vlan-configuration-guide/configure-vlan-trunks.html"
+    },
+    {
+      "id": "S08",
+      "title": "Cisco — IP access list overview",
+      "url": "https://www.cisco.com/en/US/docs/ios-xml/ios/sec_data_acl/configuration/15-1s/sec-access-list-ov.html"
+    },
+    {
+      "id": "S09",
+      "title": "Cisco — NAT troubleshooting FAQ",
+      "url": "https://www.cisco.com/c/en/us/support/docs/ip/network-address-translation-nat/218012-troubleshoot-network-address-translation.html"
+    },
+    {
+      "id": "S10",
+      "title": "Microsoft — Applying Group Policy troubleshooting",
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/group-policy/applying-group-policy-troubleshooting-guidance"
+    },
+    {
+      "id": "S11",
+      "title": "Microsoft — Access control overview",
+      "url": "https://learn.microsoft.com/windows/security/identity-protection/access-control/access-control"
+    },
+    {
+      "id": "S12",
+      "title": "Microsoft — Evaluate effective permissions",
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/access-checks-windows-apis-return-incorrect-results"
+    },
+    {
+      "id": "S13",
+      "title": "Ubuntu — Configuring networks",
+      "url": "https://ubuntu.com/server/docs/configuring-networks/"
+    },
+    {
+      "id": "S14",
+      "title": "Ubuntu — OpenSSH server",
+      "url": "https://ubuntu.com/server/docs/how-to/security/openssh-server/"
+    },
+    {
+      "id": "S15",
+      "title": "Ubuntu — Firewall",
+      "url": "https://ubuntu.com/server/docs/how-to/security/firewalls/"
+    },
+    {
+      "id": "S16",
+      "title": "systemd — Service unit reference",
+      "url": "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html"
+    },
+    {
+      "id": "S17",
+      "title": "Ubuntu project evidence — Local permissions and umask",
+      "url": "project:docs/ubuntu-server-lab.md"
+    },
+    {
+      "id": "S18",
+      "title": "Canonical Netplan — CLI and try",
+      "url": "https://github.com/canonical/netplan/blob/main/doc/cli.md"
+    },
+    {
+      "id": "S19",
+      "title": "Microsoft — Group Policy overview",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-overview"
+    }
+  ],
+  "guided_units": [
+    {
+      "id": "U01",
+      "title": "Tài khoản công ty và phòng ban",
+      "lesson_id": "L05",
+      "goal": "Giải thích được AD, OU và group khác nhau ở đâu.",
+      "need": "Công ty cần quản lý nhân viên bằng tài khoản tập trung, thay vì tạo riêng tài khoản trên từng máy.",
+      "scene": "Trong lab, an.nguyen là nhân viên IT. Người này đăng nhập CLIENT01 bằng tài khoản corp.local và thuộc nhóm GG_IT.",
+      "terms": [
+        {
+          "term": "Domain",
+          "meaning": "Miền quản lý danh tính; lab dùng corp.local."
+        },
+        {
+          "term": "AD / Domain Controller",
+          "meaning": "AD quản lý đối tượng và danh tính; SERVER01 giữ vai trò máy chủ miền."
+        },
+        {
+          "term": "OU",
+          "meaning": "Nơi tổ chức user/computer và xác định phạm vi GPO."
+        },
+        {
+          "term": "Security group",
+          "meaning": "Nhóm danh tính để cấp quyền, ví dụ GG_IT."
+        }
+      ],
+      "flow": [
+        "Tạo user của nhân viên trong AD trên SERVER01.",
+        "Đưa user vào OU phù hợp để tổ chức và áp chính sách.",
+        "Thêm user vào nhóm công việc, ví dụ GG_IT.",
+        "Đăng nhập CLIENT01 rồi kiểm tra đúng tài khoản và nhóm."
+      ],
+      "example": {
+        "question": "User nằm trong OU IT nhưng chưa thuộc GG_IT. Có tự được vào thư mục IT không?",
+        "steps": [
+          "OU trả lời “đối tượng được tổ chức ở đâu?”.",
+          "Quyền thư mục IT trong lab được cấp cho GG_IT.",
+          "Vì chưa có nhóm được cấp quyền, chỉ nằm trong OU IT chưa đủ chứng minh truy cập được."
+        ],
+        "conclusion": "Đặt đúng OU và cấp đúng group là hai việc riêng."
+      },
+      "spoken_answer": "Trong lab, em dùng Active Directory để quản lý tài khoản tập trung. Em tổ chức user bằng OU và dùng security group để cấp quyền theo phòng ban. Ví dụ an.nguyen thuộc GG_IT; OU và group có vai trò khác nhau.",
+      "recall": {
+        "question": "Nếu user đúng OU nhưng không vào được thư mục phòng ban, em cần kiểm tra thêm điều gì?",
+        "answer": "Kiểm tra group của user và quyền trên share/NTFS; không kết luận chỉ từ vị trí OU."
+      },
+      "commands": [
+        {
+          "machine": "CLIENT01 · PowerShell",
+          "command": "whoami",
+          "purpose": "Biết phiên hiện tại đang dùng danh tính nào.",
+          "read": "Kỳ vọng dạng corp\\an.nguyen khi kiểm tra user IT."
+        },
+        {
+          "machine": "CLIENT01 · PowerShell",
+          "command": "whoami /groups",
+          "purpose": "Xem các nhóm có trong token của phiên đăng nhập.",
+          "read": "Tìm GG_IT; nếu AD vừa đổi membership, có thể cần đăng nhập lại để token cập nhật."
+        }
+      ],
+      "question_ids": [
+        "Q16",
+        "Q17",
+        "Q18",
+        "Q19"
+      ],
+      "ticket_ids": [
+        "T06"
+      ],
+      "minutes": 15
+    },
+    {
+      "id": "U02",
+      "title": "Thư mục dùng chung và quyền truy cập",
+      "lesson_id": "L09",
+      "goal": "Phân biệt được đăng nhập thành công với được phép mở/sửa file.",
+      "need": "Nhân viên IT cần sửa tài liệu IT, nhưng không vì thế được mở tài liệu HR.",
+      "scene": "SERVER01 chia sẻ D:\\CORP-DATA thành đường mạng \\\\SERVER01\\CORP-DATA. GG_IT có quyền Modify ở thư mục IT; user IT có ổ I: để truy cập thuận tiện.",
+      "terms": [
+        {
+          "term": "SMB / share",
+          "meaning": "Cách cung cấp thư mục qua mạng, dùng đường UNC \\\\server\\share."
+        },
+        {
+          "term": "Share permission",
+          "meaning": "Quyền ở lớp chia sẻ qua mạng."
+        },
+        {
+          "term": "NTFS permission",
+          "meaning": "Quyền trên thư mục/file của ổ NTFS."
+        },
+        {
+          "term": "Mapped drive",
+          "meaning": "Tên ổ thuận tiện như I:, không tự cấp quyền."
+        }
+      ],
+      "flow": [
+        "Máy client tìm tên SERVER01 và kết nối dịch vụ SMB.",
+        "Hệ thống xác định user đang truy cập là ai.",
+        "Share và NTFS kiểm tra user/group được phép làm gì.",
+        "GPO có thể gắn đường UNC thành ổ I: cho user."
+      ],
+      "example": {
+        "question": "an.nguyen thấy I: nhưng mở ra báo Access denied. Em có sửa drive mapping trước không?",
+        "steps": [
+          "I: đã hiện nghĩa là có ánh xạ; chưa chứng minh được phép đọc thư mục.",
+          "Xác nhận đang dùng đúng user và GG_IT có trong token.",
+          "Kiểm tra cả share permission và NTFS permission.",
+          "Thử lại bằng user IT, rồi kiểm tra user không được cấp vẫn bị chặn."
+        ],
+        "conclusion": "Ánh xạ ổ đĩa và quyền truy cập là hai lớp khác nhau."
+      },
+      "spoken_answer": "Em chia sẻ dữ liệu theo phòng ban và cấp quyền bằng group. Với truy cập qua mạng, em kiểm tra cả share permission và NTFS. Mapped drive giúp người dùng truy cập thuận tiện, còn quyền thật do danh tính và ACL quyết định.",
+      "recall": {
+        "question": "Share chỉ cho Read, NTFS cho Modify: qua mạng có sửa file được không?",
+        "answer": "Trong ví dụ chỉ có các quyền Allow này, quyền qua mạng bị giới hạn ở Read vì phải được cả hai lớp cho phép."
+      },
+      "commands": [
+        {
+          "machine": "CLIENT01 · PowerShell",
+          "command": "Test-NetConnection SERVER01.corp.local -Port 445",
+          "purpose": "Kiểm tra có kết nối TCP tới SMB không.",
+          "read": "TcpTestSucceeded=True chỉ xác nhận TCP; chưa xác nhận user có quyền file."
+        },
+        {
+          "machine": "SERVER01 · PowerShell",
+          "command": "Get-SmbShareAccess -Name CORP-DATA",
+          "purpose": "Xem quyền lớp share.",
+          "read": "Đối chiếu thêm NTFS/Effective Access và thử đúng user, không chỉ nhìn một dòng Allow."
+        }
+      ],
+      "question_ids": [
+        "Q36",
+        "Q37",
+        "Q38",
+        "Q39"
+      ],
+      "ticket_ids": [
+        "T06"
+      ],
+      "minutes": 15
+    },
+    {
+      "id": "U03",
+      "title": "Chính sách máy tính và ổ I: tự hiện",
+      "lesson_id": "L08",
+      "goal": "Biết GPO làm gì và vì sao phải kiểm tra đúng user/computer.",
+      "need": "IT muốn áp cùng một cấu hình cho nhiều người/máy mà không sửa thủ công từng máy.",
+      "scene": "Lab có GPO-USER-BASELINE cho Users và GPO-CLIENT-BASELINE cho Computers. Drive Maps dùng nhóm GG_IT để chọn người nhận ổ I:.",
+      "terms": [
+        {
+          "term": "GPO",
+          "meaning": "Tập thiết lập chính sách cho user hoặc computer."
+        },
+        {
+          "term": "Link / scope",
+          "meaning": "GPO được liên kết vào đâu và tác động tới đối tượng nào."
+        },
+        {
+          "term": "Item-level targeting",
+          "meaning": "Điều kiện để một mục preference như drive map áp dụng."
+        },
+        {
+          "term": "gpresult",
+          "meaning": "Công cụ xem chính sách thực tế đã áp vào phiên/máy."
+        }
+      ],
+      "flow": [
+        "User/computer phải nằm trong phạm vi của GPO.",
+        "Kiểm tra loại thiết lập: User Configuration hay Computer Configuration.",
+        "Client xử lý chính sách và điều kiện targeting.",
+        "Xem gpresult và kiểm tra hành vi thực tế."
+      ],
+      "example": {
+        "question": "User IT mở UNC được nhưng I: không hiện. Em kiểm tra gì?",
+        "steps": [
+          "UNC mở được giúp thu hẹp: đường truy cập và quyền file có thể đang ổn.",
+          "Xem GPO user có áp không bằng gpresult.",
+          "Nếu chưa áp, xem OU/link/filter; nếu đã áp, xem Drive Maps/targeting và ký tự ổ."
+        ],
+        "conclusion": "Ưu tiên nhánh GPO/ánh xạ; không vội sửa NTFS."
+      },
+      "spoken_answer": "Em dùng Group Policy để triển khai chính sách và map ổ theo nhóm. Khi GPO không áp, em kiểm tra đúng user/computer, OU, link và filtering, rồi xem gpresult. gpupdate chỉ yêu cầu cập nhật policy, không tự sửa một link sai.",
+      "recall": {
+        "question": "Đưa security group vào một OU rồi link GPO vào OU đó có tự áp cho toàn bộ thành viên nhóm không?",
+        "answer": "Không. Phạm vi áp GPO gắn với đối tượng user/computer; group dùng để lọc/targeting khi thiết lập phù hợp."
+      },
+      "commands": [
+        {
+          "machine": "CLIENT01 · PowerShell của user cần kiểm tra",
+          "command": "gpresult /r /scope user",
+          "purpose": "Xem GPO áp cho user hiện tại.",
+          "read": "Tìm GPO-USER-BASELINE và lý do denied nếu có."
+        },
+        {
+          "machine": "CLIENT01 · PowerShell Administrator",
+          "command": "gpresult /r /scope computer",
+          "purpose": "Đọc kết quả chính sách computer.",
+          "read": "Nếu Access Denied, kiểm tra quyền/elevation trước khi kết luận GPO sai."
+        }
+      ],
+      "question_ids": [
+        "Q31",
+        "Q32",
+        "Q33",
+        "Q34"
+      ],
+      "ticket_ids": [
+        "T05",
+        "T07",
+        "T08"
+      ],
+      "minutes": 15
+    },
+    {
+      "id": "U04",
+      "title": "DNS: máy tìm tên SERVER01 bằng cách nào?",
+      "lesson_id": "L06",
+      "goal": "Giải thích được vì sao ping IP được nhưng dùng tên/domain vẫn lỗi.",
+      "need": "Người dùng nhớ tên máy chủ; client AD còn cần tìm dịch vụ miền, không chỉ một địa chỉ IP.",
+      "scene": "Trong VMware, CLIENT01 dùng DNS 192.168.30.10. SERVER01.corp.local phải ra .10; UBUNTU01.corp.local phải ra .30 khi record còn đúng.",
+      "terms": [
+        {
+          "term": "A record",
+          "meaning": "Tên máy → địa chỉ IPv4."
+        },
+        {
+          "term": "PTR record",
+          "meaning": "Địa chỉ IP → tên máy."
+        },
+        {
+          "term": "SRV record",
+          "meaning": "Vị trí dịch vụ, ví dụ dịch vụ giúp client tìm DC."
+        },
+        {
+          "term": "Resolver",
+          "meaning": "DNS server/cơ chế mà máy đang dùng để truy vấn."
+        }
+      ],
+      "flow": [
+        "Người dùng nhập tên SERVER01.corp.local.",
+        "Client gửi truy vấn tới DNS đang cấu hình.",
+        "DNS trả địa chỉ .10 nếu có record đúng.",
+        "Client dùng địa chỉ đó để kết nối dịch vụ cần dùng."
+      ],
+      "example": {
+        "question": "Ping .10 được nhưng SERVER01.corp.local không giải được. Có phải mạng đã hoàn toàn đúng không?",
+        "steps": [
+          "Ping IP chỉ kiểm tra được một phần kết nối.",
+          "Xem DNS client có là .10 hay không.",
+          "So truy vấn dùng resolver mặc định với truy vấn trực tiếp DNS .10.",
+          "Nếu trực tiếp .10 thành công nhưng mặc định lỗi, ưu tiên resolver client; nếu cả hai lỗi, kiểm tra server/record/đường DNS."
+        ],
+        "conclusion": "Tách lỗi mạng IP, resolver và record; chưa cần reset domain."
+      },
+      "spoken_answer": "DNS trong lab không chỉ đổi tên máy ra IP mà còn giúp tìm dịch vụ Active Directory. Vì vậy client domain dùng DNS nội bộ .10. Ping IP thành công chưa chứng minh tên miền và các dịch vụ AD đều hoạt động.",
+      "recall": {
+        "question": "nslookup báo Server Unknown nhưng truy vấn SERVER01 vẫn ra .10: kết luận DNS hỏng hoàn toàn được không?",
+        "answer": "Không. Có thể thiếu PTR cho tên hiển thị của DNS server; cần đọc kết quả truy vấn đích riêng."
+      },
+      "commands": [
+        {
+          "machine": "CLIENT01 · PowerShell",
+          "command": "Get-DnsClientServerAddress -AddressFamily IPv4",
+          "purpose": "Xem DNS thực tế của từng adapter.",
+          "read": "Tìm đúng adapter VMnet2 và resolver .10."
+        },
+        {
+          "machine": "CLIENT01 · PowerShell",
+          "command": "Resolve-DnsName SERVER01.corp.local -Server 192.168.30.10",
+          "purpose": "Hỏi trực tiếp DNS .10 về tên máy chủ.",
+          "read": "Kết quả A mong đợi .10; so với resolver mặc định để phân biệt lỗi client và server."
+        }
+      ],
+      "question_ids": [
+        "Q21",
+        "Q22",
+        "Q23",
+        "Q24"
+      ],
+      "ticket_ids": [
+        "T01",
+        "T02"
+      ],
+      "minutes": 15
+    },
+    {
+      "id": "U05",
+      "title": "DHCP: client nhận IP từ đâu?",
+      "lesson_id": "L07",
+      "goal": "Phân biệt được lease, reservation, exclusion và IP tĩnh.",
+      "need": "Máy người dùng cần nhận IP/DNS tự động; địa chỉ của server cần ổn định và không bị cấp trùng.",
+      "scene": "Scope .20–.100, CLIENT01 nhận .20 bằng reservation. Ubuntu tự đặt .30 và có exclusion .30 để DHCP không cấp động địa chỉ đó.",
+      "terms": [
+        {
+          "term": "Lease",
+          "meaning": "Địa chỉ đang cho client thuê."
+        },
+        {
+          "term": "Reservation",
+          "meaning": "Client vẫn dùng DHCP nhưng được dành địa chỉ theo client identifier."
+        },
+        {
+          "term": "Exclusion",
+          "meaning": "Dải/địa chỉ DHCP không cấp động."
+        },
+        {
+          "term": "Static IP",
+          "meaning": "IP được cấu hình cố định tại endpoint."
+        }
+      ],
+      "flow": [
+        "Client yêu cầu cấu hình DHCP.",
+        "Server cấp/ghi nhận lease và các option.",
+        "Reservation giúp CLIENT01 nhận .20 ổn định khi yêu cầu DHCP.",
+        "Exclusion .30 bảo vệ địa chỉ Ubuntu khỏi cấp động trong pool."
+      ],
+      "example": {
+        "question": "Đã cấu hình DHCP server nhưng client vẫn ghi DHCP Enabled: No. Em bắt đầu từ đâu?",
+        "steps": [
+          "Đọc trạng thái adapter client: nó đang dùng static chứ chưa nhận cấu hình từ DHCP.",
+          "Ghi cấu hình hiện tại và có console trước khi đổi.",
+          "Bật DHCP trên đúng adapter, rồi kiểm tra lease/IP/DNS nhận được."
+        ],
+        "conclusion": "Server có DHCP không có nghĩa mọi client đang sử dụng DHCP."
+      },
+      "spoken_answer": "Em dùng DHCP để client nhận cấu hình tự động. CLIENT01 có reservation .20; Ubuntu đặt tĩnh .30 nên em loại .30 khỏi scope bằng exclusion. VMnet2 hiện không có router, vì vậy không cấu hình gateway giả chỉ để đủ thông số.",
+      "recall": {
+        "question": "Reservation cho CLIENT01 có nghĩa là gõ IP static .20 trên client không?",
+        "answer": "Không. Client vẫn yêu cầu DHCP; reservation là cấu hình dành địa chỉ ở phía server."
+      },
+      "commands": [
+        {
+          "machine": "CLIENT01 · PowerShell",
+          "command": "ipconfig /all",
+          "purpose": "Xem DHCP Enabled, IP, DNS và DHCP server.",
+          "read": "Đối chiếu đúng adapter; lab kỳ vọng client .20 và DNS .10."
+        },
+        {
+          "machine": "SERVER01 · PowerShell",
+          "command": "Get-DhcpServerv4Lease -ScopeId 192.168.30.0",
+          "purpose": "Xem lease đã cấp trong scope.",
+          "read": "Đừng nhầm lease đang tồn tại với reservation hoặc exclusion."
+        }
+      ],
+      "question_ids": [
+        "Q26",
+        "Q27",
+        "Q28",
+        "Q29"
+      ],
+      "ticket_ids": [
+        "T03",
+        "T04"
+      ],
+      "minutes": 15
+    },
+    {
+      "id": "U06",
+      "title": "VLAN: tách nhân viên và khách",
+      "lesson_id": "L03",
+      "goal": "Kể được vì sao cần VLAN và vì sao khác VLAN cần routing.",
+      "need": "Máy IT, Staff, Server và Guest cần được chia mạng rõ ràng, thay vì dồn vào một miền broadcast.",
+      "scene": "Packet Tracer có VLAN10 IT,20 Staff,30 Server,40 Guest,99 Management. R1-EDGE làm gateway cho từng VLAN bằng subinterface.",
+      "terms": [
+        {
+          "term": "VLAN",
+          "meaning": "Phân chia mạng lớp2 thành các miền broadcast riêng."
+        },
+        {
+          "term": "Access port",
+          "meaning": "Cổng nối endpoint thuộc một VLAN thông thường."
+        },
+        {
+          "term": "Trunk",
+          "meaning": "Liên kết mang nhiều VLAN, với allowed VLAN phù hợp."
+        },
+        {
+          "term": "Inter-VLAN routing",
+          "meaning": "Định tuyến giữa các mạng VLAN khác nhau."
+        }
+      ],
+      "flow": [
+        "PC Staff đi vào access port VLAN20.",
+        "Traffic VLAN20 đi qua các trunk được phép.",
+        "Đến gateway subinterface của VLAN20 trên R1-EDGE.",
+        "Router chọn đường sang VLAN30 nếu đích là Server và chính sách cho phép."
+      ],
+      "example": {
+        "question": "VLAN20 có trên SW-USERS nhưng bị bỏ khỏi trunk lên core. PC Staff còn tới gateway được không?",
+        "steps": [
+          "Access port đúng mới chỉ là đầu đường.",
+          "VLAN20 phải được mang trên mọi trunk cần đi qua.",
+          "Dùng show interfaces trunk để kiểm tra đường thiếu thay vì chỉ xem IP PC."
+        ],
+        "conclusion": "Phải đọc cả tuyến đường VLAN, không chỉ cấu hình một switch."
+      },
+      "spoken_answer": "Em chia VLAN theo nhóm người dùng và dịch vụ. Access port nối máy vào VLAN; trunk mang nhiều VLAN giữa thiết bị mạng. Trong lab router-on-a-stick, mỗi subinterface trên router làm gateway cho một VLAN.",
+      "recall": {
+        "question": "Trunk có tự làm routing giữa VLAN10 và VLAN20 không?",
+        "answer": "Không. Trunk mang traffic nhiều VLAN; trao đổi IP giữa VLAN cần chức năng routing phù hợp."
+      },
+      "commands": [
+        {
+          "machine": "SW-USERS · privileged EXEC",
+          "command": "show vlan brief",
+          "purpose": "Xem VLAN và cổng access.",
+          "read": "Đối chiếu cổng PC Staff thuộc VLAN20."
+        },
+        {
+          "machine": "SW-CORE/SW-USERS · privileged EXEC",
+          "command": "show interfaces trunk",
+          "purpose": "Xem trunk và trạng thái VLAN được mang.",
+          "read": "Tìm VLAN20 ở liên kết cần đi qua; lệnh/model có thể khác trong mô phỏng."
+        }
+      ],
+      "question_ids": [
+        "Q06",
+        "Q07",
+        "Q08",
+        "Q09"
+      ],
+      "ticket_ids": [
+        "T09"
+      ],
+      "minutes": 15
+    },
+    {
+      "id": "U07",
+      "title": "ACL và NAT: khách được đi đâu?",
+      "lesson_id": "L04",
+      "goal": "Phân biệt kiểm soát truy cập với dịch địa chỉ.",
+      "need": "Khách cần dùng kết nối ngoài nhưng không được truy cập tài nguyên nội bộ.",
+      "scene": "ACL Guest gắn inbound G0/0.40. NAT/PAT overload dùng G0/1 ra mạng public mô phỏng; Packet Tracer chưa nối trực tiếp VMware.",
+      "terms": [
+        {
+          "term": "ACL",
+          "meaning": "Danh sách điều kiện cho/chặn lưu lượng tại vị trí áp dụng."
+        },
+        {
+          "term": "First match",
+          "meaning": "Gói khớp dòng nào đầu tiên thì dùng quyết định của dòng đó."
+        },
+        {
+          "term": "NAT/PAT",
+          "meaning": "Dịch địa chỉ/port cho các luồng đi qua cấu hình NAT."
+        },
+        {
+          "term": "Inbound",
+          "meaning": "Chiều gói đi vào interface đang xét."
+        }
+      ],
+      "flow": [
+        "Gói Guest đi vào G0/0.40.",
+        "ACL chặn đích nội bộ theo các dòng deny.",
+        "Traffic được phép có route phù hợp tới đích ngoài mô phỏng.",
+        "NAT/PAT dịch nguồn theo cấu hình khi luồng khớp."
+      ],
+      "example": {
+        "question": "Nếu thêm permit ip any any ở đầu ACL, các deny nội bộ phía sau có còn bảo vệ gói đã khớp không?",
+        "steps": [
+          "Đọc ACL theo thứ tự từ trên xuống.",
+          "Gói đã khớp permit đầu sẽ không xét các deny sau.",
+          "Chính sách có thể bị mở rộng ngoài ý muốn dù vẫn còn dòng deny trong config."
+        ],
+        "conclusion": "Thứ tự, interface và chiều áp ACL đều quan trọng."
+      },
+      "spoken_answer": "Em dùng ACL để cô lập Guest khỏi mạng nội bộ và NAT/PAT cho kết nối ngoài mô phỏng. ACL lọc traffic và ACL dùng chọn traffic NAT là hai mục đích khác nhau. Em kiểm tra cả ca được phép lẫn ca phải bị chặn.",
+      "recall": {
+        "question": "Có NAT translation nghĩa là DNS và HTTP chắc chắn thành công chưa?",
+        "answer": "Chưa. Translation chỉ là một bằng chứng dịch địa chỉ; cần kiểm tra route, chính sách và chức năng dịch vụ riêng."
+      },
+      "commands": [
+        {
+          "machine": "R1-EDGE · privileged EXEC",
+          "command": "show access-lists",
+          "purpose": "Đọc thứ tự rule và counter khi tạo traffic.",
+          "read": "Đối chiếu gói cần đi có khớp permit/deny nào."
+        },
+        {
+          "machine": "R1-EDGE · privileged EXEC",
+          "command": "show ip nat translations",
+          "purpose": "Xem bản dịch của traffic đã phát sinh.",
+          "read": "Không coi một entry NAT là bằng chứng mọi dịch vụ chạy đúng."
+        }
+      ],
+      "question_ids": [
+        "Q11",
+        "Q12",
+        "Q13",
+        "Q14"
+      ],
+      "ticket_ids": [
+        "T09",
+        "T10"
+      ],
+      "minutes": 15
+    },
+    {
+      "id": "U08",
+      "title": "Ubuntu: IP, DNS và điều khiển bằng SSH",
+      "lesson_id": "L10",
+      "goal": "Biết kiểm tra lần lượt IP, DNS, port và đăng nhập.",
+      "need": "Quản trị viên cần kết nối Ubuntu từ Windows mà không luôn mở màn hình console.",
+      "scene": "UBUNTU01 có IP .30/24 và dùng DNS Windows .10. Người dùng sysadmin đăng nhập SSH; Ubuntu hiện chưa join AD.",
+      "terms": [
+        {
+          "term": "SSH",
+          "meaning": "Kết nối dòng lệnh từ xa; lab dùng TCP22."
+        },
+        {
+          "term": "Listener",
+          "meaning": "Tiến trình đang chờ nhận kết nối ở địa chỉ/port."
+        },
+        {
+          "term": "Netplan",
+          "meaning": "Cấu hình mạng Ubuntu bằng YAML."
+        },
+        {
+          "term": "Route",
+          "meaning": "Quy tắc chọn đường IP; khác với lựa chọn DNS của resolver."
+        }
+      ],
+      "flow": [
+        "Kiểm tra IP/subnet của Ubuntu và Windows host.",
+        "Nếu dùng tên, kiểm tra DNS giải đúng .30.",
+        "Kiểm tra TCP22 có listener và đường kết nối được phép.",
+        "Khi đã kết nối TCP, kiểm tra đúng user và xác thực."
+      ],
+      "example": {
+        "question": "SSH báo Permission denied nhưng TCP22 đã kết nối được. Có ưu tiên sửa VLAN không?",
+        "steps": [
+          "TCP đã kết nối giúp thu hẹp khỏi một số lỗi đường/port.",
+          "Xem user, đầu vào mật khẩu và log xác thực.",
+          "Chưa reset password hoặc bật root login nếu chưa có bằng chứng cần thiết."
+        ],
+        "conclusion": "Thông báo lỗi giúp chọn lớp kiểm tra; không gộp mọi lỗi SSH thành “mạng hỏng”."
+      },
+      "spoken_answer": "Em đặt IP tĩnh và DNS cho Ubuntu rồi dùng SSH quản trị từ Windows. Khi lỗi, em kiểm tra IP/route, DNS nếu dùng tên, listener TCP22 và cuối cùng là xác thực. Ubuntu dùng DNS của domain không có nghĩa là đã join AD.",
+      "recall": {
+        "question": "resolvectl có Default Route: yes: có chắc ip route có default gateway không?",
+        "answer": "Không. Đó là hai ngữ cảnh khác nhau; xem ip route để kết luận đường IP."
+      },
+      "commands": [
+        {
+          "machine": "Windows host · PowerShell",
+          "command": "Test-NetConnection 192.168.30.30 -Port 22",
+          "purpose": "Kiểm tra kết nối TCP22 trước khi xem đăng nhập SSH.",
+          "read": "True không có nghĩa mật khẩu đúng; False chưa đủ biết chính xác nguyên nhân."
+        },
+        {
+          "machine": "UBUNTU01 · Bash",
+          "command": "ip route",
+          "purpose": "Xem route IP thực tế.",
+          "read": "VMnet2 lab có connected route /24; không tự đặt .1 làm router."
+        }
+      ],
+      "question_ids": [
+        "Q41",
+        "Q42",
+        "Q43",
+        "Q45"
+      ],
+      "ticket_ids": [
+        "T11",
+        "T12"
+      ],
+      "minutes": 15
+    },
+    {
+      "id": "U09",
+      "title": "Ubuntu: quyền nhóm, firewall và service",
+      "lesson_id": "L11",
+      "goal": "Đọc đúng ba kết quả dễ nhầm: Permission denied, cổng đóng, active (exited).",
+      "need": "Lab cần giới hạn dữ liệu cho nhóm, kiểm soát kết nối vào máy và quản lý một tác vụ khi boot.",
+      "scene": "labmember thuộc labops; labguest không thuộc. Thư mục team có 2770. UFW cho TCP22; service demo chỉ chạy logger một lần.",
+      "terms": [
+        {
+          "term": "2770 / setgid",
+          "meaning": "Owner/group có rwx, others không có quyền; mục mới kế thừa group."
+        },
+        {
+          "term": "UFW",
+          "meaning": "Công cụ quản lý rule firewall; không tự khởi động/dừng ứng dụng."
+        },
+        {
+          "term": "systemd service",
+          "meaning": "Unit mô tả cách hệ thống chạy/quản lý một dịch vụ/tác vụ."
+        },
+        {
+          "term": "oneshot",
+          "meaning": "Loại tác vụ chạy xong; có thể active (exited) với RemainAfterExit."
+        }
+      ],
+      "flow": [
+        "Dùng đúng user để kiểm tra quyền: member được, nonmember bị chặn.",
+        "Đọc cả listener và firewall khi kiểm tra cổng mạng.",
+        "Đọc Type/exit status/log để hiểu service demo.",
+        "Kiểm tra lại sau reboot nếu muốn chứng minh cấu hình bền vững."
+      ],
+      "example": {
+        "question": "labguest không đọc được file team. Có cần chmod777 để sửa không?",
+        "steps": [
+          "Xác định yêu cầu: nonmember phải bị chặn.",
+          "Thử member vẫn đọc được để có ca đối chiếu.",
+          "Nếu đúng chính sách thì giữ quyền, không mở rộng để mọi thao tác đều thành công."
+        ],
+        "conclusion": "Một lần từ chối có thể là kết quả đúng của bài kiểm tra bảo mật."
+      },
+      "spoken_answer": "Em đã thử quyền file bằng member và nonmember, kiểm tra UFW tách biệt với listener và đọc trạng thái systemd theo loại unit. Service logger oneshot có active (exited) là phù hợp nếu lệnh và log thành công; đây chưa phải ứng dụng web chạy thường trực.",
+      "recall": {
+        "question": "Xóa UFW allow8088 có tự dừng Python listener không?",
+        "answer": "Không. Rule firewall và tiến trình là hai trạng thái riêng; cần dừng đúng process thử rồi kiểm tra ss."
+      },
+      "commands": [
+        {
+          "machine": "UBUNTU01 · Bash",
+          "command": "sudo -u labguest cat /srv/system-lab/team/member.txt",
+          "purpose": "Kiểm tra bằng danh tính không thuộc group.",
+          "read": "Permission denied là dự kiến; đối chiếu ca labmember thành công."
+        },
+        {
+          "machine": "UBUNTU01 · Bash",
+          "command": "systemctl status system-lab-demo.service --no-pager",
+          "purpose": "Xem unit demo đã chạy thế nào.",
+          "read": "Đối chiếu Type=oneshot, exit status và log; không suy exited luôn là crash."
+        }
+      ],
+      "question_ids": [
+        "Q46",
+        "Q47",
+        "Q48",
+        "Q49",
+        "Q50"
+      ],
+      "ticket_ids": [
+        "T13",
+        "T14",
+        "T15"
+      ],
+      "minutes": 15
+    }
+  ],
+  "profile": {
+    "name": "Hoàng Công Minh",
+    "birth_date": "01/12/2005",
+    "major": "Công nghệ thông tin",
+    "university": "Trường Đại học Giao thông vận tải",
+    "year": "Sinh viên năm 4",
+    "target": "Thực tập IT Support / System / Network"
+  },
+  "introduction": {
+    "short": "Em chào anh/chị. Em là Hoàng Công Minh, sinh viên năm 4 ngành Công nghệ thông tin tại Trường Đại học Giao thông vận tải. Em đang tìm vị trí thực tập IT Support hoặc System/Network. Em đã thực hành một lab mạng, Windows Server và Ubuntu để làm quen với quản lý tài khoản, dịch vụ mạng và phân quyền dữ liệu. Em mong được học hỏi thêm và áp dụng những kiến thức này vào công việc thực tế.",
+    "chunks": [
+      {
+        "cue": "Tôi là ai?",
+        "label": "Tên · trường · năm học",
+        "text": "Em chào anh/chị. Em là Hoàng Công Minh, sinh năm 2005, hiện là sinh viên năm 4 ngành Công nghệ thông tin tại Trường Đại học Giao thông vận tải."
+      },
+      {
+        "cue": "Tôi muốn làm gì?",
+        "label": "Vị trí thực tập đang tìm",
+        "text": "Em đang tìm cơ hội thực tập theo hướng IT Support hoặc System/Network để học cách hỗ trợ người dùng và vận hành hệ thống trong thực tế."
+      },
+      {
+        "cue": "Tôi đã chuẩn bị gì?",
+        "label": "Một dự án liên quan",
+        "text": "Trong quá trình học, em đã thực hành xây dựng một lab hạ tầng mạng và Windows Server, gồm quản lý tài khoản, DNS, DHCP, chính sách máy tính và chia sẻ dữ liệu theo phòng ban. Em cũng có phần thực hành quản trị Ubuntu cơ bản."
+      },
+      {
+        "cue": "Tôi mong đợi gì?",
+        "label": "Điều muốn học tại công ty",
+        "text": "Thông qua lab, em có cơ hội làm quen với việc cấu hình, kiểm tra kết quả và tìm nguyên nhân một số lỗi cơ bản. Em mong được áp dụng nền tảng đó vào công việc thực tập và tiếp tục học quy trình làm việc từ anh/chị trong đội IT."
+      }
+    ],
+    "full": "Em chào anh/chị. Em là Hoàng Công Minh, sinh năm 2005, hiện là sinh viên năm 4 ngành Công nghệ thông tin tại Trường Đại học Giao thông vận tải. Em đang tìm cơ hội thực tập theo hướng IT Support hoặc System/Network để học cách hỗ trợ người dùng và vận hành hệ thống trong thực tế. Trong quá trình học, em đã thực hành xây dựng một lab hạ tầng mạng và Windows Server, gồm quản lý tài khoản, DNS, DHCP, chính sách máy tính và chia sẻ dữ liệu theo phòng ban. Em cũng có phần thực hành quản trị Ubuntu cơ bản. Thông qua lab, em có cơ hội làm quen với việc cấu hình, kiểm tra kết quả và tìm nguyên nhân một số lỗi cơ bản. Em mong được áp dụng nền tảng đó vào công việc thực tập và tiếp tục học quy trình làm việc từ anh/chị trong đội IT.",
+    "memory_cues": [
+      "Tôi là ai?",
+      "Tôi muốn làm gì?",
+      "Tôi đã chuẩn bị gì?",
+      "Tôi mong đợi gì?"
+    ],
+    "target_seconds": "Khoảng 45–75 giây, tùy tốc độ nói",
+    "guidance": "Nhớ 4 ý rồi nói tự nhiên. Nếu nhà tuyển dụng yêu cầu ngắn, dùng bản 30 giây. Chỉ nêu phần bạn có thể tự giải thích; đổi tên vị trí theo tin tuyển dụng.",
+    "fallback": "Nếu quên một ý, em dừng ngắn rồi chuyển sang: “Về phần em đã thực hành, em có một lab hạ tầng IT…” Không cần xin lỗi nhiều lần hoặc bắt đầu lại từ đầu."
+  },
+  "project_story": {
+    "chunks": [
+      {
+        "cue": "Dự án làm cho ai?",
+        "text": "Dự án của em mô phỏng hạ tầng IT cho một doanh nghiệp nhỏ có các phòng IT, nhân sự, kế toán và kinh doanh."
+      },
+      {
+        "cue": "Nhu cầu cần giải quyết?",
+        "text": "Mục tiêu là để nhân viên dùng tài khoản công ty, nhận cấu hình mạng tự động và truy cập đúng thư mục của phòng mình; đồng thời tách mạng khách khỏi mạng nội bộ."
+      },
+      {
+        "cue": "Em đã triển khai gì?",
+        "text": "Em dùng Windows Server trên VMware để thực hành AD, DNS, DHCP, GPO và file sharing; Cisco Packet Tracer để mô phỏng VLAN, định tuyến, ACL và NAT. Phần Ubuntu giúp em thực hành SSH, quyền nhóm, firewall và systemd."
+      },
+      {
+        "cue": "Em kiểm tra và giới hạn ra sao?",
+        "text": "Em đã có các kiểm tra đăng nhập domain, nhận IP, áp chính sách và truy cập thư mục theo quyền. Phần mạng Packet Tracer và VMware hiện vẫn là hai môi trường tách biệt. Đây là lab học tập, chưa phải hệ thống triển khai thực tế."
+      }
+    ],
+    "full": "Dự án của em mô phỏng hạ tầng IT cho một doanh nghiệp nhỏ có các phòng IT, nhân sự, kế toán và kinh doanh. Mục tiêu là để nhân viên dùng tài khoản công ty, nhận cấu hình mạng tự động và truy cập đúng thư mục của phòng mình; đồng thời tách mạng khách khỏi mạng nội bộ. Em dùng Windows Server trên VMware để thực hành AD, DNS, DHCP, GPO và file sharing; Cisco Packet Tracer để mô phỏng VLAN, định tuyến, ACL và NAT. Phần Ubuntu giúp em thực hành SSH, quyền nhóm, firewall và systemd. Em đã có các kiểm tra đăng nhập domain, nhận IP, áp chính sách và truy cập thư mục theo quyền. Phần mạng Packet Tracer và VMware hiện vẫn là hai môi trường tách biệt. Đây là lab học tập, chưa phải hệ thống triển khai thực tế.",
+    "simple": "Một nhân viên IT đăng nhập máy công ty, nhận IP tự động và mở đúng thư mục IT. Đằng sau thao tác đó là tài khoản, DNS/DHCP, chính sách và quyền dữ liệu.",
+    "flow": [
+      {
+        "title": "Đăng nhập",
+        "service": "AD",
+        "meaning": "Xác định nhân viên là ai."
+      },
+      {
+        "title": "Nhận IP và tìm máy chủ",
+        "service": "DHCP + DNS",
+        "meaning": "Có cấu hình mạng và tìm đúng SERVER01."
+      },
+      {
+        "title": "Nhận thiết lập",
+        "service": "GPO",
+        "meaning": "Áp chính sách và map ổ theo đối tượng."
+      },
+      {
+        "title": "Mở thư mục",
+        "service": "SMB + NTFS",
+        "meaning": "Kiểm tra nhân viên được làm gì với dữ liệu."
+      }
+    ],
+    "bridge": "Nếu anh/chị muốn, em xin trình bày kỹ hơn cách em quản lý tài khoản và phân quyền thư mục trong lab.",
+    "limits": "Packet Tracer và VMware chưa nối trực tiếp; Ubuntu chưa join AD; chưa có backup/restore hoặc monitoring được kiểm chứng. Không kể các phần này như đã triển khai."
+  },
+  "journey": [
+    {
+      "id": "intro",
+      "title": "Giới thiệu tôi",
+      "goal": "Tập nói tôi là ai, muốn thực tập gì và đã chuẩn bị gì."
+    },
+    {
+      "id": "project",
+      "title": "Hiểu dự án",
+      "goal": "Đi lại toàn bộ lab theo từng chặng, hiểu việc đã làm và bằng chứng; sau đó mới tập kể ngắn."
+    },
+    {
+      "id": "learn",
+      "title": "Hiểu từng phần",
+      "goal": "Học từng chủ đề qua một nhu cầu và một ví dụ cụ thể."
+    },
+    {
+      "id": "practice",
+      "title": "Tập trả lời",
+      "goal": "Trả lời từng câu; sau đó luyện cách xử lý một tình huống."
+    },
+    {
+      "id": "review",
+      "title": "Ôn & luyện AI",
+      "goal": "Tự kiểm tra ngắn và đưa ngữ cảnh đã học cho AI hỏi tiếp."
+    }
+  ],
+  "study_unit_count": 9,
+  "journey_steps_count": 5,
+  "teaching_sources": [
+    {
+      "title": "IES — Worked examples, concrete examples, retrieval and spaced practice",
+      "url": "https://ies.ed.gov/ncee/wwc/PracticeGuide/1"
+    },
+    {
+      "title": "MIT CAPD — Interview primer",
+      "url": "https://capd.mit.edu/resources/interview-primer/"
+    },
+    {
+      "title": "NN/g — Progressive disclosure",
+      "url": "https://www.nngroup.com/articles/progressive-disclosure/"
+    }
+  ],
+  "study_plan": [
+    "Buổi đầu: tập giới thiệu bản thân và kể dự án, chưa cần mở máy ảo.",
+    "Mỗi buổi sau: học một chủ đề trong 10–20 phút, xem ví dụ rồi tự trả lời câu nhớ lại.",
+    "Sau mỗi chủ đề: tập một câu phỏng vấn liên quan; chưa nhớ thì quay lại đúng chủ đề đó.",
+    "Sau vài chủ đề: xem một tình huống mẫu rồi tự xử lý tình huống khác.",
+    "Buổi sau nhắc lại phần đã học trước khi mở đáp án; chỉ chuyển bài khi tự nói được ý chính."
+  ],
+  "project_walkthrough": {
+    "title": "Hiểu toàn bộ dự án từ đầu đến cuối",
+    "introduction": "Đây là bản giải thích lại chính lab Minh đã thực hành với AI hướng dẫn. Đi từng chặng để hiểu nhu cầu → thao tác → kết quả → bằng chứng. Chưa cần cố nhớ câu lệnh hay luyện lời giới thiệu ở phần này.",
+    "sequence_note": "Thứ tự dưới đây được sắp để học và dựng lại theo quan hệ phụ thuộc. Nó không phải nhật ký chính xác từng ngày bạn đã thao tác. Các ảnh/kết quả là bằng chứng lịch sử trong repo; lần biên soạn này chưa chạy lại VM hoặc Packet Tracer.",
+    "evidence_note": "Cấu hình lưu cho biết đã thiết lập gì; ảnh/output lịch sử cho biết một kiểm tra từng cho kết quả nào. Cả hai không tự xác nhận hôm nay bạn đã tự làm lại hoặc hệ thống hiện vẫn cùng trạng thái.",
+    "environments": [
+      {
+        "name": "Cisco Packet Tracer",
+        "items": [
+          "R1-EDGE: gateway, routing, Guest ACL, NAT/PAT",
+          "SW-CORE / SW-USERS / SW-SERVER: access/trunk, VLAN",
+          "PC/AP/server mô phỏng: tạo và kiểm tra traffic"
+        ],
+        "boundary": "Mạng mô phỏng riêng, chưa nối trực tiếp VMware."
+      },
+      {
+        "name": "VMware · VMnet2 Host-only",
+        "items": [
+          "SERVER01 .10: AD DS, DNS, DHCP, GPO, SMB",
+          "CLIENT01 .20: máy nhân viên để đăng nhập và kiểm chứng",
+          "UBUNTU01 .30: Linux local accounts, SSH, DNS client, UFW/systemd"
+        ],
+        "boundary": "Cùng subnet /24, chưa có router/default gateway; host .1 không phải gateway."
+      }
+    ],
+    "inventory": [
+      {
+        "task": "Thiết kế mạng 5 VLAN",
+        "status": "Đã có cấu hình và ảnh kiểm tra trong Packet Tracer.",
+        "chapter_id": "P04"
+      },
+      {
+        "task": "Routing, Guest isolation, NAT/PAT",
+        "status": "Đã có trong mô phỏng; chưa chứng minh kết nối thật sang VMware.",
+        "chapter_id": "P05"
+      },
+      {
+        "task": "Domain corp.local trên SERVER01",
+        "status": "Đã triển khai trong VMware theo repo.",
+        "chapter_id": "P07"
+      },
+      {
+        "task": "OU, user và group theo phòng ban",
+        "status": "Đã có đối tượng và membership mẫu.",
+        "chapter_id": "P08"
+      },
+      {
+        "task": "DNS forward/reverse và DHCP client",
+        "status": "Đã có cấu hình và kết quả lịch sử; bổ sung Ubuntu ghi ngày2026-10-30.",
+        "chapter_id": "P09"
+      },
+      {
+        "task": "CLIENT01 join và đăng nhập domain",
+        "status": "Đã có kiểm tra user IT phía client.",
+        "chapter_id": "P11"
+      },
+      {
+        "task": "Share/NTFS và ổ đĩa theo nhóm",
+        "status": "Đã cấu hình; I:/P: và kiểm tra IT có bằng chứng, không suy đã thử mọi user.",
+        "chapter_id": "P12"
+      },
+      {
+        "task": "GPO baseline/restriction",
+        "status": "Đã cấu hình/link và có kiểm tra client.",
+        "chapter_id": "P13"
+      },
+      {
+        "task": "Ubuntu networking, SSH, quyền, UFW, systemd",
+        "status": "Đã ghi nhận kiểm tra cơ bản và sau reboot; không phải triển khai web app/AD Linux.",
+        "chapter_id": "P14"
+      }
+    ],
+    "not_implemented": [
+      "Nối trực tiếp Packet Tracer với VMware.",
+      "Join Ubuntu vào Active Directory hoặc xác thực user AD trên Linux.",
+      "Backup và kiểm thử restore; monitoring/cảnh báo; HA/DC dự phòng.",
+      "Web/app Linux chạy thường trực; Internet route của VMnet2.",
+      "Harden toàn bộ máy/network cho production; xác nhận console login Ubuntu đã sửa."
+    ],
+    "chapters": [
+      {
+        "id": "P01",
+        "title": "Dự án này giải quyết việc gì?",
+        "area": "Bức tranh tổng thể",
+        "goal": "Nói được dự án phục vụ ai và kết quả người dùng nhận được, trước khi nhớ tên công nghệ.",
+        "why": "Hãy tưởng tượng doanh nghiệp nhỏ có IT, HR, kế toán và kinh doanh. Nhân viên cần đăng nhập máy, có cấu hình mạng, mở tài liệu đúng phòng và nhận các thiết lập chung. Khách cần kết nối riêng. Lab của Minh mô phỏng những nhu cầu đó để luyện System/Network/IT Support.",
+        "before": "Chưa có miền quản lý tài khoản tập trung, chưa có quy tắc chung về mạng, quyền dữ liệu hay chính sách người dùng trong mô hình lab.",
+        "after": "Có một thiết kế mạng chia VLAN và một môi trường máy ảo chạy dịch vụ. Các kiểm tra lịch sử cho thấy client đăng nhập miền, nhận IP/DNS, nhận GPO và dùng share theo quyền; Ubuntu được quản trị bằng SSH và kiểm tra quyền/firewall/service.",
+        "actions": [
+          {
+            "where": "Khi lập kế hoạch lab",
+            "action": "Chọn bốn phòng ban và một nhóm khách.",
+            "reason": "Tạo ra nhu cầu cụ thể để mỗi cấu hình có lý do tồn tại."
+          },
+          {
+            "where": "README và sơ đồ",
+            "action": "Chọn nhóm công nghệ mạng Cisco mô phỏng, Windows Server và Ubuntu.",
+            "reason": "Luyện các mảng khác nhau của công việc hạ tầng, thay vì coi mọi công nghệ là một hệ thống production đã tích hợp."
+          }
+        ],
+        "flow": [
+          "Nhu cầu nhân viên → tài khoản và quyền → dịch vụ tìm tên/cấp IP → chính sách → kiểm tra sử dụng được.",
+          "Nhu cầu khách → mạng Guest → chính sách cô lập → kiểm tra truy cập được phép/bị chặn."
+        ],
+        "without": "Nếu chỉ nhớ danh sách AD, VLAN, DNS mà không biết ai cần dùng chúng, bạn sẽ khó giải thích vì sao cấu hình như vậy.",
+        "evidence": [
+          {
+            "kind": "document",
+            "file": "README.md",
+            "read": "Đọc Objectives để nhận ra các nhóm công việc đã đưa vào phạm vi.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "## Objectives\n\n- Design a segmented enterprise network using VLANs.\n- Configure 802.1Q trunking, inter-VLAN routing, ACL-based Guest isolation, and NAT/PAT.\n- Deploy Windows Server 2022 as `SERVER01`.\n- Configure Active Directory Domain Services for the `corp.local` domain.\n- Implement DNS, DHCP, Group Policy, SMB file sharing, and NTFS permissions.\n- Join `CLIENT01` to the domain and validate user login, DNS, DHCP, GPO, and mapped drives.\n- Configure `UBUNTU01` with a static IP, Windows-hosted DNS, SSH, local user/group permissions, UFW, and a systemd demonstration service.\n- Document the lab clearly for an intern System / Network / IT Support portfolio.\n\n## Architecture Overview\n\nThe lab has the following components:\n\n| Layer | Environment | Purpose |"
+          }
+        ],
+        "recall": {
+          "question": "Nếu không dùng tên công nghệ, em mô tả kết quả dự án bằng một câu được không?",
+          "answer": "Em dựng lab để thực hành quản lý tài khoản nhân viên, tự cấp cấu hình mạng, áp chính sách và chia sẻ dữ liệu đúng quyền; kèm phần mô phỏng tách mạng khách."
+        },
+        "revisit": "Tự kể ba việc một nhân viên làm trên máy công ty. Chưa cần bật VM.",
+        "unit_id": null
+      },
+      {
+        "id": "P02",
+        "title": "Đặt từng thiết bị vào đúng môi trường",
+        "area": "Bức tranh tổng thể",
+        "goal": "Nhìn tên máy là biết nó chạy ở đâu và có vai trò gì.",
+        "why": "Có hai môi trường dễ bị nhầm vì dùng tên/địa chỉ tương ứng. Cần tách chúng trước khi kể luồng kết nối.",
+        "before": "Một sơ đồ ý tưởng chưa tạo máy ảo thật và chưa tạo đường truyền giữa hai ứng dụng.",
+        "after": "Packet Tracer có router/switch/PC/server mô phỏng. VMware có SERVER01, CLIENT01, UBUNTU01 cùng VMnet2 Host-only. Hai môi trường chưa nối trực tiếp.",
+        "actions": [
+          {
+            "where": "Cisco Packet Tracer",
+            "action": "Đặt R1-EDGE, SW-CORE, SW-USERS, SW-SERVER và các endpoint lên topology.",
+            "reason": "Mô phỏng mạng và đường đi VLAN/ACL/NAT."
+          },
+          {
+            "where": "VMware Workstation",
+            "action": "Dùng SERVER01 làm Windows Server, CLIENT01 làm máy nhân viên, UBUNTU01 làm Linux server.",
+            "reason": "Có hệ điều hành để cài dịch vụ, đăng nhập và kiểm chứng chức năng thật trong VM."
+          },
+          {
+            "where": "VMnet2 Host-only",
+            "action": "Đặt ba VM vào cùng mạng ảo 192.168.30.0/24.",
+            "reason": "Windows và Ubuntu có thể liên lạc trong lab; host .1 chưa giữ vai trò router."
+          }
+        ],
+        "flow": [
+          "Packet Tracer: endpoint → switch access → switch core → R1-EDGE → mạng ngoài mô phỏng.",
+          "VMware: CLIENT01 .20 ↔ SERVER01 .10 và UBUNTU01 .30 trên cùng mạng ảo.",
+          "Server-PT mang tên UBUNTU01 trên hình không chính là tiến trình Ubuntu đang chạy trong VMware."
+        ],
+        "without": "Nếu trộn hai khung, bạn có thể kể sai rằng Guest mô phỏng đã truy cập Windows thật, hoặc coi NAT mô phỏng là Internet của VM.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/01-network-topology.png",
+            "url": "/portfolio-review/01-network-topology.png",
+            "read": "Tìm router, ba switch và các nhóm màu VLAN. Hình này mô tả Packet Tracer, không chứng minh bridge sang VMware.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "docs/project-notes.md",
+            "read": "Đối chiếu nguyên tắc không nối trực tiếp hai môi trường.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "## Important Accuracy Rule\nDo NOT claim that Cisco Packet Tracer and VMware are directly connected.\nThey are complementary lab environments representing the network layer and system-services layer of the same enterprise design.\n"
+          }
+        ],
+        "recall": {
+          "question": "SERVER01 trong VMware và Server-PT trên hình có tự là cùng một máy vì trùng tên/IP không?",
+          "answer": "Không. Đó là các đối tượng ở hai môi trường. Trùng tên/IP chỉ thể hiện sự tương ứng thiết kế; muốn kết nối thật phải triển khai và kiểm thử riêng."
+        },
+        "revisit": "Vẽ hai khung riêng trên giấy. Điền SERVER01/CLIENT01/UBUNTU01 vào VMware; router/switch vào Packet Tracer.",
+        "unit_id": null
+      },
+      {
+        "id": "P03",
+        "title": "Hiểu sơ đồ IP trước khi xem cấu hình",
+        "area": "Chuẩn bị nền tảng",
+        "goal": "Giải thích được .10, .20, .30 và .1 có ý nghĩa gì ở từng khung.",
+        "why": "IP là địa chỉ để các máy trao đổi; subnet giúp máy chọn gửi trực tiếp hay tìm router. DNS là địa chỉ dịch vụ phân giải tên, không phải gateway.",
+        "before": "Chưa quy hoạch IP thì khó giữ server ổn định và dễ cấp trùng địa chỉ.",
+        "after": "VMware dùng SERVER01 .10, CLIENT01 .20, UBUNTU01 .30, DNS .10, subnet /24. Packet Tracer dùng gateway .1 cho mỗi VLAN; host VMnet2 .1 không phải gateway triển khai.",
+        "actions": [
+          {
+            "where": "Bảng VLAN trong README",
+            "action": "Chọn các subnet 192.168.10/20/30/40/99.0/24 cho mô phỏng.",
+            "reason": "Mỗi VLAN có mạng IP riêng và gateway tương ứng trên router."
+          },
+          {
+            "where": "Adapter SERVER01",
+            "action": "Gán địa chỉ ổn định 192.168.30.10/24.",
+            "reason": "Client và Ubuntu cần tìm đúng máy cung cấp DNS/dịch vụ miền."
+          },
+          {
+            "where": "Adapter VM và DHCP",
+            "action": "Dùng .20 cho client DHCP, .30 cho Ubuntu static và loại .30 khỏi cấp động.",
+            "reason": "Tách địa chỉ cấp động khỏi địa chỉ đặt cố định."
+          },
+          {
+            "where": "VMnet2 hiện tại",
+            "action": "Để default gateway trống vì chưa có router.",
+            "reason": "Các máy cùng /24 vẫn trao đổi trực tiếp; không gõ .1 chỉ vì đó là địa chỉ host."
+          }
+        ],
+        "flow": [
+          "CLIENT01 .20 → SERVER01 .10: cùng /24, gửi trực tiếp trong mạng ảo.",
+          "Staff 192.168.20.x → Server 192.168.30.x trong Packet Tracer: khác subnet, đi gateway và routing."
+        ],
+        "without": "DNS đúng không thay được route; gateway không thay được DNS. Nhầm hai thông số sẽ làm các bước join domain hay SSH khó chẩn đoán.",
+        "evidence": [
+          {
+            "kind": "document",
+            "file": "README.md",
+            "read": "Bảng này thuộc VMware; đừng gán gateway mô phỏng .1 cho nó.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "### SERVER01\n\n| Item | Value |\n|---|---|\n| Server name | `SERVER01` |\n| Operating system | Windows Server 2022 |\n| IP address | `192.168.30.10/24` |\n| DNS server | `192.168.30.10` |\n| Domain | `corp.local` |\n| Client computer | `CLIENT01` |\n| Client OS | Windows 10 Pro |\n"
+          },
+          {
+            "kind": "document",
+            "file": "configs/ubuntu/00-installer-config.yaml",
+            "read": "Tìm addresses và nameservers; không có default route trong cấu hình lưu.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "network:\n  version: 2\n  ethernets:\n    ens33:\n      dhcp4: false\n      dhcp6: false\n      addresses:\n        - 192.168.30.30/24\n      nameservers:\n        addresses:\n          - 192.168.30.10\n        search:\n          - corp.local\n      match:\n        macaddress: 00:0c:29:d7:6a:f7\n      set-name: ens33"
+          }
+        ],
+        "recall": {
+          "question": "CLIENT01 mở share .10 khi gateway trống có mâu thuẫn không?",
+          "answer": "Không. .20 và .10 cùng subnet nên không cần default gateway để liên lạc nội bộ."
+        },
+        "revisit": "Chỉ đọc ipconfig /all trên client và ip route trên Ubuntu khi VM sẵn sàng; ghi lại đúng adapter.",
+        "unit_id": "U05"
+      },
+      {
+        "id": "P04",
+        "title": "Dựng mạng mô phỏng: access port và trunk",
+        "area": "Mạng Packet Tracer",
+        "goal": "Biết bạn đã phân chia cổng switch và nối các VLAN qua đâu.",
+        "why": "PC của các nhóm cần thuộc đúng mạng. Các switch cần mang nhiều VLAN qua liên kết chung mà vẫn phân biệt được từng VLAN.",
+        "before": "Nối dây đơn thuần chưa phản ánh thiết kế IT/Staff/Server/Guest/Management.",
+        "after": "Cổng PC được gán access VLAN; các uplink là trunk với allowed VLAN phù hợp. Switch có địa chỉ quản lý ở VLAN99.",
+        "actions": [
+          {
+            "where": "SW-USERS",
+            "action": "Gán Fa0/1–2 vào VLAN10, Fa0/3–5 vào VLAN20, Fa0/10 vào VLAN40 trong cấu hình lưu.",
+            "reason": "Máy cắm vào cổng đó tham gia VLAN tương ứng."
+          },
+          {
+            "where": "SW-SERVER",
+            "action": "Gán Fa0/1–2 vào VLAN30.",
+            "reason": "Đặt server mô phỏng vào mạng Server."
+          },
+          {
+            "where": "Các uplink switch",
+            "action": "Đặt trunk và allowed VLAN: router–core 10,20,30,40,99; core–users 10,20,40,99; core–server 30,99.",
+            "reason": "Mang đúng VLAN cần thiết qua từng đường, không nhầm trunk là routing."
+          },
+          {
+            "where": "Interface Vlan99",
+            "action": "Gán .2/.3/.4 cho các switch và ip default-gateway .99.1.",
+            "reason": "Tạo địa chỉ quản trị trong mô phỏng; chưa chứng minh đã harden SSH hoặc xác thực."
+          }
+        ],
+        "flow": [
+          "PC Staff phát frame → access VLAN20 → trunk cho VLAN20 → core/router.",
+          "Một VLAN cần tồn tại, được phép và hoạt động trên các chặng cần đi qua."
+        ],
+        "without": "Nếu access VLAN sai hoặc trunk không mang VLAN đó, router có cấu hình đúng vẫn không phục vụ được máy ở đường bị đứt.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/02-vlan-trunk-validation.png",
+            "url": "/portfolio-review/02-vlan-trunk-validation.png",
+            "read": "Nhìn VLAN và trunk trong ảnh, đối chiếu tên/cổng với cấu hình.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "configs/sw-users-config.txt",
+            "read": "Đây là một cổng Staff được gán access VLAN20.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "interface FastEthernet0/3\n switchport access vlan 20\n switchport mode access\n!"
+          },
+          {
+            "kind": "document",
+            "file": "configs/sw-core-config.txt",
+            "read": "Đây là trunk xuống nhánh Server, chỉ mang 30 và 99.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "interface FastEthernet0/24\n switchport trunk allowed vlan 30,99\n switchport mode trunk\n!"
+          }
+        ],
+        "recall": {
+          "question": "Access port và trunk khác nhau thế nào ngay trên sơ đồ của em?",
+          "answer": "Access nối PC vào VLAN của nhóm; trunk nối các thiết bị mạng để mang nhiều VLAN qua một đường uplink."
+        },
+        "revisit": "Mở file .pkt để xem show vlan brief và show interfaces trunk; chưa sửa cổng đang đúng.",
+        "unit_id": "U06"
+      },
+      {
+        "id": "P05",
+        "title": "Cho các VLAN trao đổi qua R1-EDGE",
+        "area": "Mạng Packet Tracer",
+        "goal": "Biết gateway của PC đến từ subinterface nào và routing làm gì.",
+        "why": "Máy khác VLAN/subnet không tự trao đổi IP chỉ nhờ trunk; cần một thiết bị làm định tuyến.",
+        "before": "Các nhóm đã được tách nhưng chưa có đường lớp3 đúng giữa chúng.",
+        "after": "R1-EDGE có G0/0.10/.20/.30/.40/.99, mỗi subinterface gắn dot1Q VLAN ID và địa chỉ .1 của subnet đó.",
+        "actions": [
+          {
+            "where": "R1-EDGE G0/0.x",
+            "action": "Tạo subinterface và encapsulation dot1Q đúng VLAN.",
+            "reason": "Router biết traffic gắn VLAN nào thuộc mạng IP nào."
+          },
+          {
+            "where": "IP của subinterface",
+            "action": "Đặt ví dụ G0/0.20 = 192.168.20.1/24.",
+            "reason": "PC Staff dùng nó làm default gateway trong mô phỏng."
+          },
+          {
+            "where": "Bảng route",
+            "action": "Kiểm tra các mạng trực tiếp xuất hiện và interface up/up.",
+            "reason": "Có cấu hình chưa đủ; cần xem trạng thái hoạt động và đường đi."
+          },
+          {
+            "where": "ip helper-address trong file",
+            "action": "Nhận diện dòng .30.10 ở một số VLAN là cấu hình relay dự kiến.",
+            "reason": "Nó không tạo cầu nối tới Windows DHCP VMware, nên không nhận là đã kiểm thử DHCP xuyên hai môi trường."
+          }
+        ],
+        "flow": [
+          "Staff thấy đích .30.x khác subnet → gửi gateway .20.1.",
+          "R1-EDGE chọn route Server → gửi qua subinterface VLAN30, nếu chính sách cho phép.",
+          "Traffic về cũng cần địa chỉ/gateway/đường trả phù hợp."
+        ],
+        "without": "PC có thể liên lạc cùng VLAN nhưng không tới mạng khác; đây là triệu chứng để xem gateway, trunk và subinterface thay vì chỉ DNS.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/03-routing-validation.png",
+            "url": "/portfolio-review/03-routing-validation.png",
+            "read": "Đối chiếu subinterface up/up và route trực tiếp. Đừng suy chỉ từ up/up rằng mọi ACL/dịch vụ đều đúng.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "configs/r1-edge-config.txt",
+            "read": "G0/0.20 gắn tag20 và làm gateway .20.1.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "interface GigabitEthernet0/0.20\n encapsulation dot1Q 20\n ip address 192.168.20.1 255.255.255.0\n ip helper-address 192.168.30.10\n ip nat inside\n!"
+          }
+        ],
+        "recall": {
+          "question": "Tại sao phải vừa trunk vừa có subinterface trên router?",
+          "answer": "Trunk mang các VLAN đến router; subinterface gắn tag với mạng lớp3 để làm gateway và định tuyến. Hai việc bổ trợ nhau."
+        },
+        "revisit": "Tự lần đường Staff→Server bằng sơ đồ, rồi đối chiếu show ip route.",
+        "unit_id": "U06"
+      },
+      {
+        "id": "P06",
+        "title": "Cô lập Guest và dịch địa chỉ ra ngoài mô phỏng",
+        "area": "Mạng Packet Tracer",
+        "goal": "Phân biệt được phần chặn nội bộ với phần cho luồng đi ngoài bằng NAT/PAT.",
+        "why": "Khách không nên được truy cập dữ liệu nhân viên chỉ vì có kết nối mạng. Đi ngoài và truy cập nội bộ phải có chính sách riêng.",
+        "before": "Routing có thể tạo đường giữa VLAN nhưng chưa tự thực hiện chính sách Guest isolation.",
+        "after": "GUEST-ISOLATION gắn inbound G0/0.40; deny các subnet nội bộ, permit đích còn lại. NAT overload dịch nguồn qua G0/1 .113.1 và route ngoài tới .113.2 trong mô phỏng.",
+        "actions": [
+          {
+            "where": "ACL GUEST-ISOLATION",
+            "action": "Cho DHCP ban đầu theo dòng UDP trong file, rồi deny Guest tới các mạng10/20/30/99, cuối permit đích còn lại.",
+            "reason": "ACL xét first match; vị trí dòng quyết định chính sách."
+          },
+          {
+            "where": "G0/0.40",
+            "action": "Gắn ip access-group GUEST-ISOLATION in.",
+            "reason": "Đọc traffic Guest khi nó đi vào router qua subinterface này."
+          },
+          {
+            "where": "NAT inside/outside",
+            "action": "Gắn inside cho VLAN10/20/30/40 và outside cho G0/1; dùng overload.",
+            "reason": "Dịch địa chỉ/port cho traffic phù hợp, không thay vai trò ACL lọc interface."
+          },
+          {
+            "where": "Default route mô phỏng",
+            "action": "Chỉ next-hop 203.0.113.2.",
+            "reason": "Gửi đích không có route cụ thể về ISP mô phỏng, không phải Internet thật của VMware."
+          }
+        ],
+        "flow": [
+          "Guest→Server: cần bị chặn bởi ACL.",
+          "Guest→public server mô phỏng: kiểm tra route/NAT và kết nối đích.",
+          "Nếu DNS Guest đặt trong Server VLAN, phải xem chính sách DNS riêng; ping ngoài thành công chưa chứng minh DNS hoạt động."
+        ],
+        "without": "Bỏ ACL có thể mở nội bộ cho khách; thiếu NAT/route có thể làm luồng ngoài không chạy. Xóa ACL để kết nối được không phải hoàn thành bảo mật.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/04-guest-acl-validation.png",
+            "url": "/portfolio-review/04-guest-acl-validation.png",
+            "read": "Đọc ca kiểm tra Guest và ACL; ca chặn nội bộ quan trọng như ca ra ngoài.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "image",
+            "file": "images/05-nat-pat-on-r1-edge.png",
+            "url": "/portfolio-review/05-nat-pat-on-r1-edge.png",
+            "read": "Xem một luồng được dịch; không suy NAT entry chứng minh mọi dịch vụ/Internet hoạt động.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "configs/r1-edge-config.txt",
+            "read": "Các dòng này là chính sách lọc Guest, không phải toàn bộ cấu hình NAT.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "ip access-list extended GUEST-ISOLATION\n permit udp any eq bootpc any eq bootps\n deny ip 192.168.40.0 0.0.0.255 192.168.10.0 0.0.0.255\n deny ip 192.168.40.0 0.0.0.255 192.168.20.0 0.0.0.255\n deny ip 192.168.40.0 0.0.0.255 192.168.30.0 0.0.0.255\n deny ip 192.168.40.0 0.0.0.255 192.168.99.0 0.0.0.255\n permit ip 192.168.40.0 0.0.0.255 any\naccess-list 1 permit 192.168.10.0 0.0.0.255\naccess-list 1 permit 192.168.20.0 0.0.0.255"
+          }
+        ],
+        "recall": {
+          "question": "Nếu đề nghị mở cả subnet Server để Guest dùng DNS, có phải luôn là cách sửa phù hợp?",
+          "answer": "Không. Cần xác định resolver và chỉ cho đúng dịch vụ/đích cần thiết hoặc dùng resolver riêng; mở cả subnet sẽ vượt mục tiêu."
+        },
+        "revisit": "Chỉ đọc ACL/counter/NAT trước. Nếu muốn tạo lỗi, dùng Save As bản .pkt riêng và giữ cấu hình cũ.",
+        "unit_id": "U07"
+      },
+      {
+        "id": "P07",
+        "title": "Biến SERVER01 thành máy chủ miền corp.local",
+        "area": "Windows trên VMware",
+        "goal": "Hiểu khác biệt giữa cài Windows Server và triển khai Active Directory.",
+        "why": "Cần một nơi quản lý tài khoản/đối tượng miền để client đăng nhập bằng danh tính công ty.",
+        "before": "Một máy Windows Server mới cài chưa tự là domain controller; các máy khác chưa mặc nhiên là thành viên miền.",
+        "after": "SERVER01 là Windows Server2022, IP .10/24 và giữ vai trò AD DS/domain controller cho corp.local; nó cũng chạy DNS và các dịch vụ lab khác.",
+        "actions": [
+          {
+            "where": "VMware và Windows Server",
+            "action": "Chuẩn bị VM SERVER01, tên máy và IP ổn định .10 trên VMnet2.",
+            "reason": "Các máy khác cần tìm dịch vụ tại địa chỉ có thể dự đoán được."
+          },
+          {
+            "where": "Server Manager / AD DS",
+            "action": "Cài role và triển khai domain corp.local theo cấu hình ghi trong repo.",
+            "reason": "Tạo nền tảng directory và xác thực miền."
+          },
+          {
+            "where": "DNS trên SERVER01",
+            "action": "Dùng .10 phục vụ namespace miền.",
+            "reason": "Client cần tìm DC/dịch vụ AD qua DNS."
+          },
+          {
+            "where": "Ghi tài liệu",
+            "action": "Ghi vai trò và IP SERVER01 trong README.",
+            "reason": "Phân biệt trạng thái role đã triển khai với khả năng tự làm lại hiện tại."
+          }
+        ],
+        "flow": [
+          "Có DC và domain → có thể tổ chức user/group/computer.",
+          "Client cần cấu hình mạng/DNS đúng và join domain trước khi dùng tài khoản miền theo cách đã kiểm tra."
+        ],
+        "without": "Nếu mới có hệ điều hành mà chưa triển khai domain, bạn chưa có nền tảng quản lý tài khoản công ty như lab yêu cầu.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/06-active-directory-ou-structure.png",
+            "url": "/portfolio-review/06-active-directory-ou-structure.png",
+            "read": "Cây corp.local/CORP cho thấy directory và OU đã được dựng trong ảnh, không phải bằng chứng riêng về toàn bộ bước cài role.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "README.md",
+            "read": "Vai trò SERVER01, domain và IP được ghi trong mục Windows.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "### SERVER01\n\n| Item | Value |\n|---|---|\n| Server name | `SERVER01` |\n| Operating system | Windows Server 2022 |\n| IP address | `192.168.30.10/24` |\n| DNS server | `192.168.30.10` |\n| Domain | `corp.local` |\n| Client computer | `CLIENT01` |\n| Client OS | Windows 10 Pro |\n"
+          }
+        ],
+        "recall": {
+          "question": "Cài Windows Server có đồng nghĩa mọi máy trong cùng mạng đã join domain không?",
+          "answer": "Không. SERVER01 phải có role/domain phù hợp; CLIENT01 còn cần DNS/kết nối/quyền và thao tác join riêng."
+        },
+        "revisit": "Nếu VM sẵn sàng, chỉ mở Server Manager và AD Users and Computers để nhận diện role/cây domain; không chạy lại promote domain.",
+        "unit_id": "U01"
+      },
+      {
+        "id": "P08",
+        "title": "Tạo OU, tài khoản và nhóm của bốn phòng ban",
+        "area": "Windows trên VMware",
+        "goal": "Nhìn lại được user nào thuộc nhóm nào và vì sao phải có cả OU lẫn group.",
+        "why": "Một domain trống chưa mô tả nhân viên và vai trò. Tổ chức đối tượng và cấp quyền là hai nhu cầu khác nhau.",
+        "before": "Chưa có các đối tượng mô phỏng nhân viên/phòng ban cần dùng để kiểm thử.",
+        "after": "Có CORP với Computers/Groups/Servers/Users; Users chia IT/HR/Accounting/Sales. Có GG_IT, GG_HR, GG_Accounting, GG_Sales và user mẫu tương ứng.",
+        "actions": [
+          {
+            "where": "Active Directory Users and Computers",
+            "action": "Tạo cây OU CORP và các OU bên dưới.",
+            "reason": "Tổ chức đối tượng, chuẩn bị phạm vi GPO/ủy quyền."
+          },
+          {
+            "where": "Users theo phòng ban",
+            "action": "Có an.nguyen, lan.tran, hoa.le, nam.pham theo bảng README.",
+            "reason": "Dùng danh tính đại diện cho từng nhóm công việc."
+          },
+          {
+            "where": "Security groups",
+            "action": "Đưa user mẫu vào group phòng ban phù hợp; ví dụ an.nguyen→GG_IT.",
+            "reason": "Cấp quyền qua group thay vì rải ACL cá nhân."
+          },
+          {
+            "where": "Kiểm tra membership",
+            "action": "Mở thuộc tính nhóm và đối chiếu token khi user đăng nhập client.",
+            "reason": "Danh sách trong AD và token của phiên cũ có thể chưa giống nhau ngay sau thay đổi."
+          }
+        ],
+        "flow": [
+          "OU IT giúp xác định user ở đâu và thuộc scope policy nào.",
+          "GG_IT là danh tính nhóm dùng trong quyền thư mục và điều kiện drive map.",
+          "Đúng OU chưa tự có quyền file; đúng group chưa tự chứng minh đã nhận GPO đúng."
+        ],
+        "without": "Không có group/membership phù hợp thì không thể diễn giải quyền phòng ban hoặc drive targeting một cách rõ ràng.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/06-active-directory-ou-structure.png",
+            "url": "/portfolio-review/06-active-directory-ou-structure.png",
+            "read": "Tìm CORP và các OU; đừng đọc cây OU thành bảng quyền file.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "image",
+            "file": "images/07-security-group-membership.png",
+            "url": "/portfolio-review/07-security-group-membership.png",
+            "read": "Đối chiếu membership được chụp với bảng user/group.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          }
+        ],
+        "recall": {
+          "question": "Em đã dùng OU IT và GG_IT cho hai mục đích nào?",
+          "answer": "OU tổ chức user và phạm vi GPO; GG_IT tập hợp người để cấp quyền và targeting. Chúng không thay thế nhau."
+        },
+        "revisit": "Tự tìm an.nguyen và GG_IT trong AD, rồi giải thích mối quan hệ mà không xem câu mẫu.",
+        "unit_id": "U01"
+      },
+      {
+        "id": "P09",
+        "title": "Cấu hình DNS để tìm tên máy và dịch vụ",
+        "area": "Windows trên VMware",
+        "goal": "Biết bạn đã tạo loại record nào và nó giúp kết nối ra sao.",
+        "why": "Client và Ubuntu cần tìm SERVER01 bằng tên; AD còn dựa vào bản ghi dịch vụ để tìm DC.",
+        "before": "IP có thể reachable nhưng tên hoặc reverse lookup chưa đúng, khiến việc kiểm tra hoặc tìm dịch vụ gặp lỗi.",
+        "after": "Có forward zone corp.local và reverse zone .30.0/24; SERVER01 có record và PTR. UBUNTU01 A/PTR được bổ sung/kiểm tra ngày2026-10-30.",
+        "actions": [
+          {
+            "where": "DNS Manager trên SERVER01",
+            "action": "Cấu hình forward lookup cho corp.local và record máy chủ.",
+            "reason": "Tên SERVER01.corp.local trỏ về .10."
+          },
+          {
+            "where": "Reverse Lookup Zone",
+            "action": "Tạo zone cho subnet .30 và PTR SERVER01.",
+            "reason": "Địa chỉ .10 có tên trả về; giải thích lỗi hiển thị Server Unknown từng gặp."
+          },
+          {
+            "where": "Khi bổ sung Ubuntu",
+            "action": "Thêm UBUNTU01→.30 và PTR tương ứng.",
+            "reason": "Windows DNS biết tên Ubuntu; không có nghĩa Ubuntu đã join AD."
+          },
+          {
+            "where": "Kiểm tra từ client/Ubuntu",
+            "action": "Tra tên, IP và record dịch vụ thích hợp.",
+            "reason": "Phân biệt DNS đang hoạt động với chỉ ping IP được."
+          }
+        ],
+        "flow": [
+          "Client dùng resolver .10 → hỏi SERVER01.corp.local → nhận .10.",
+          "AD tìm DC dùng record dịch vụ, không chỉ record A/PTR của tên máy.",
+          "Ubuntu dùng DNS Windows nhưng vẫn là máy Linux dùng local accounts trong phạm vi đã kiểm chứng."
+        ],
+        "without": "Tên có thể không phân giải, domain join/GPO có thể gặp lỗi; thiếu PTR riêng không đồng nghĩa mọi truy vấn đích đều hỏng.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/09-dns-forward-reverse.png",
+            "url": "/portfolio-review/09-dns-forward-reverse.png",
+            "read": "Đọc forward/reverse của Windows trong ảnh; phần Ubuntu bổ sung dựa vào bản ghi ngày2026-10-30.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "docs/evidence/ubuntu-validation-2026-10-30.md",
+            "read": "Đây là hai kết quả forward/reverse Ubuntu đã ghi nhận.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "UBUNTU01.corp.local: 192.168.30.30 -- link: ens33\n192.168.30.30: UBUNTU01.corp.local -- link: ens33"
+          }
+        ],
+        "recall": {
+          "question": "Có A/PTR UBUNTU01 rồi có được nói đã tích hợp xác thực AD cho Ubuntu chưa?",
+          "answer": "Chưa. Đây là cấu hình phân giải tên; AD join/xác thực là phần khác và chưa có trong lab."
+        },
+        "revisit": "Thử Resolve-DnsName hoặc resolvectl query đúng tên, rồi giải thích đầu vào/đầu ra của A và PTR.",
+        "unit_id": "U04"
+      },
+      {
+        "id": "P10",
+        "title": "Cấp IP bằng DHCP và giữ địa chỉ cần ổn định",
+        "area": "Windows trên VMware",
+        "goal": "Biết scope, reservation và exclusion trong lab gắn với những máy nào.",
+        "why": "Client cần nhận IP/DNS tự động; Ubuntu static không được bị DHCP cấp động cùng địa chỉ cho máy khác.",
+        "before": "Client từng còn static; .30 nằm trong pool nhưng ban đầu chưa có exclusion.",
+        "after": "Scope .20–.100; CLIENT01 có reservation .20; DNS option .10/domain corp.local; .30 có exclusion bổ sung ngày2026-10-30. Không cấu hình Option003 vì VMnet2 chưa có router.",
+        "actions": [
+          {
+            "where": "DHCP Manager",
+            "action": "Tạo scope 192.168.30.20–192.168.30.100.",
+            "reason": "Định nghĩa phạm vi cấp động cho mạng lab."
+          },
+          {
+            "where": "Reservation cho CLIENT01",
+            "action": "Dành .20 cho đúng client identifier.",
+            "reason": "Client vẫn dùng DHCP nhưng nhận địa chỉ dự kiến ổn định."
+          },
+          {
+            "where": "Scope Options",
+            "action": "Cung cấp DNS .10 và domain suffix corp.local.",
+            "reason": "Client có thể tìm dịch vụ miền; không cần tự gõ DNS trên mọi máy."
+          },
+          {
+            "where": "Exclusion .30–.30",
+            "action": "Loại IP tĩnh Ubuntu khỏi cấp động.",
+            "reason": "Giảm nguy cơ cấp trùng. Tài liệu chưa ghi nhận đã xảy ra outage trùng IP thực tế."
+          },
+          {
+            "where": "Adapter CLIENT01",
+            "action": "Chuyển sang DHCP và kiểm tra lease.",
+            "reason": "DHCP server có cấu hình nhưng client static thì chưa sử dụng dịch vụ đó."
+          }
+        ],
+        "flow": [
+          "DHCP cấp lease/cấu hình → CLIENT01 .20 biết DNS .10.",
+          "Ubuntu tự giữ .30; exclusion bảo vệ khỏi cấp động, không ngăn người khác tự gõ static trùng."
+        ],
+        "without": "Client có thể không nhận cấu hình đúng; thiếu exclusion tạo nguy cơ xung đột; thêm gateway giả không làm router xuất hiện.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/08-dhcp-reservation-options.png",
+            "url": "/portfolio-review/08-dhcp-reservation-options.png",
+            "read": "Ảnh Windows thể hiện reservation/options trước khi thêm exclusion Ubuntu; không dùng ảnh này làm bằng chứng mới cho .30.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "image",
+            "file": "images/10-client-dhcp-dns-validation.png",
+            "url": "/portfolio-review/10-client-dhcp-dns-validation.png",
+            "read": "Đọc DHCP Enabled, địa chỉ client, DNS và DHCP server đúng adapter.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "docs/evidence/ubuntu-validation-2026-10-30.md",
+            "read": "Dòng ghi nhận loại .30 và giữ reservation .20.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "| DHCP protection | .30 was not leased; exclusion .30–.30 added within scope .20–.100; CLIENT01 .20 reservation retained | DHCP Manager screenshots |"
+          }
+        ],
+        "recall": {
+          "question": "CLIENT01 .20 và UBUNTU01 .30 đều ổn định nhưng vì sao cấu hình khác nhau?",
+          "answer": "CLIENT01 nhận .20 qua DHCP reservation; Ubuntu đặt static .30 tại máy và DHCP có exclusion cho .30."
+        },
+        "revisit": "Chỉ xem lease/reservation/exclusion và ipconfig /all. Không release adapter của phiên remote duy nhất.",
+        "unit_id": "U05"
+      },
+      {
+        "id": "P11",
+        "title": "Đưa CLIENT01 vào domain và kiểm tra đăng nhập",
+        "area": "Windows trên VMware",
+        "goal": "Nhìn rõ vai trò client: đây là máy kiểm thử dịch vụ từ phía nhân viên.",
+        "why": "Thấy cấu hình trên server chưa đủ chứng minh một người dùng dùng được hệ thống. Cần kiểm tra từ máy client.",
+        "before": "Máy chưa là thành viên corp.local hoặc chưa kiểm tra đăng nhập bằng tài khoản miền.",
+        "after": "CLIENT01 Windows10 Pro được join corp.local; ảnh kiểm tra có corp\\an.nguyen, hostname CLIENT01, logon server SERVER01, IP .20 và DNS .10.",
+        "actions": [
+          {
+            "where": "Network adapter CLIENT01",
+            "action": "Kiểm tra VMnet2, DHCP và DNS .10 trước join.",
+            "reason": "Client cần tìm được domain/controller."
+          },
+          {
+            "where": "Thiết lập domain trên Windows client",
+            "action": "Join corp.local bằng quyền lab phù hợp.",
+            "reason": "Tạo quan hệ máy thành viên với domain; đây là bước riêng với việc cài server."
+          },
+          {
+            "where": "Phiên đăng nhập client",
+            "action": "Đăng nhập bằng tài khoản miền đã chuẩn bị.",
+            "reason": "Kiểm thử danh tính công ty thay cho user local."
+          },
+          {
+            "where": "whoami/hostname/logonserver",
+            "action": "Đọc danh tính, tên máy và thông tin server đăng nhập cùng các kiểm tra mạng.",
+            "reason": "Có bằng chứng từ client thay vì chỉ chụp cấu hình server."
+          }
+        ],
+        "flow": [
+          "Mạng/DNS đúng hỗ trợ client tìm DC.",
+          "Sau join, đăng nhập miền và kiểm tra đúng user/client.",
+          "Đăng nhập được chưa tự cấp quyền tất cả tài nguyên; kiểm tra GPO/share ở các chặng sau."
+        ],
+        "without": "Một cấu hình đẹp trên SERVER01 có thể chưa phục vụ được client. Đăng nhập local trùng tên cũng không thay thế bằng chứng domain login.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/15-client-domain-validation.png",
+            "url": "/portfolio-review/15-client-domain-validation.png",
+            "read": "Tìm corp\\an.nguyen, CLIENT01 và logon server; đây là bằng chứng lịch sử từ phía client.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "image",
+            "file": "images/10-client-dhcp-dns-validation.png",
+            "url": "/portfolio-review/10-client-dhcp-dns-validation.png",
+            "read": "Đối chiếu IP/DNS nhận được từ cấu hình lab.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          }
+        ],
+        "recall": {
+          "question": "Tại sao cần CLIENT01 dù đã có SERVER01?",
+          "answer": "CLIENT01 là góc nhìn người dùng để kiểm tra DHCP/DNS, đăng nhập miền, policy và truy cập dữ liệu; quản trị trên server chưa thay thế các kiểm tra đó."
+        },
+        "revisit": "Đăng nhập user lab khi máy sẵn sàng, đọc whoami/hostname. Nếu CMD bị GPO chặn, dùng PowerShell được phép; không tắt policy chỉ để chụp ảnh.",
+        "unit_id": "U01"
+      },
+      {
+        "id": "P12",
+        "title": "Tạo nơi lưu dữ liệu và cấp quyền theo nhóm",
+        "area": "Windows trên VMware",
+        "goal": "Giải thích được thư mục local, đường share và quyền phòng ban nối với nhau ra sao.",
+        "why": "User cần một chỗ dùng chung, nhưng IT và HR không nên mặc nhiên sửa mọi dữ liệu của nhau.",
+        "before": "Có user/group chưa tạo thư mục chia sẻ hoặc cấp quyền dữ liệu cho các nhóm đó.",
+        "after": "D:\\CORP-DATA có IT/HR/Accounting/Sales/Public; share qua \\\\SERVER01\\CORP-DATA; các group phòng ban nhận Modify trên thư mục tương ứng.",
+        "actions": [
+          {
+            "where": "File Explorer / SERVER01",
+            "action": "Tạo cấu trúc thư mục dưới D:\\CORP-DATA.",
+            "reason": "Tách vùng dữ liệu theo nhu cầu phòng ban."
+          },
+          {
+            "where": "Sharing / SMB",
+            "action": "Chia sẻ gốc với tên CORP-DATA.",
+            "reason": "Client truy cập qua UNC thay vì cần ngồi tại ổ D: của server."
+          },
+          {
+            "where": "Security / Advanced",
+            "action": "Cấp quyền NTFS theo group, ví dụ GG_IT Modify trên IT, giữ quyền quản trị/hệ thống thích hợp.",
+            "reason": "User được hưởng quyền qua membership; Modify phục vụ làm việc với file, không cần cấp mọi người Full Control."
+          },
+          {
+            "where": "Client dùng user thường",
+            "action": "Kiểm tra truy cập IT và ca hạn chế chéo phòng theo tài liệu.",
+            "reason": "Phải thử danh tính thực tế; admin truy cập được không thay thế ca user."
+          }
+        ],
+        "flow": [
+          "UNC xác định share và thư mục → kết nối SMB → xác định user/token → tính quyền share và NTFS.",
+          "Đường I: ở chặng GPO chỉ là lối tắt thuận tiện tới cùng UNC; không tự cấp thêm quyền."
+        ],
+        "without": "Có thể đăng nhập domain nhưng chưa có file để dùng hoặc bị Access denied. Mở Everyone Full Control chỉ che lỗi và phá mục tiêu phân quyền.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/13-file-server-ntfs-permission.png",
+            "url": "/portfolio-review/13-file-server-ntfs-permission.png",
+            "read": "Đọc GG_IT→Modify và phạm vi áp trên thư mục IT; ảnh không thay thế kiểm tra share ACL hoặc mọi thư mục con.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "README.md",
+            "read": "Đối chiếu vị trí local và tên share; đây là hai cách nhìn cùng dữ liệu.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "### File Server\n\nThe file server data folder was created on `SERVER01` and shared using SMB.\n\n| Item | Value |\n|---|---|\n| Local path | `D:\\CORP-DATA` |\n| SMB share | `\\\\SERVER01\\CORP-DATA` |\n| Folders | `IT`, `HR`, `Accounting`, `Sales`, `Public` |\n\nDepartment groups receive Modify permission to their own department folder.\n\n| Folder | Group with Modify permission |\n|---|---|\n| `IT` | `GG_IT` |\n| `HR` | `GG_HR` |\n| `Accounting` | `GG_Accounting` |\n| `Sales` | `GG_Sales` |\n"
+          }
+        ],
+        "recall": {
+          "question": "D:\\CORP-DATA\\IT và \\\\SERVER01\\CORP-DATA\\IT khác nhau thế nào?",
+          "answer": "Đường đầu là local trên SERVER01; đường sau là truy cập qua share mạng từ client. Qua mạng còn chịu lớp share permission cùng NTFS."
+        },
+        "revisit": "Dùng file mẫu và đúng user IT thử UNC; đối chiếu cả ca được phép/bị chặn. Chưa cần sửa ACL.",
+        "unit_id": "U02"
+      },
+      {
+        "id": "P13",
+        "title": "Dùng GPO đưa chính sách và ổ đĩa tới user",
+        "area": "Windows trên VMware",
+        "goal": "Biết bạn đã quản lý tập trung những thiết lập nào và client nhận chúng thế nào.",
+        "why": "Không muốn chỉnh tay các thiết lập và gắn ổ dữ liệu trên từng máy; chính sách phải đúng người/máy.",
+        "before": "User có thể truy cập UNC đúng quyền nhưng chưa tự nhận các hạn chế hoặc ổ theo phòng ban.",
+        "after": "GPO-CLIENT-BASELINE link Computers, GPO-USER-BASELINE link Users; đã ghi nhận restriction và drive map I:/P: cho user IT. Các map phòng ban khác có trong cấu hình thiết kế.",
+        "actions": [
+          {
+            "where": "Group Policy Management",
+            "action": "Tạo/link hai GPO vào đúng OU computer/user.",
+            "reason": "User Configuration và Computer Configuration theo đối tượng/phạm vi khác nhau trong cấu hình thông thường."
+          },
+          {
+            "where": "User restriction",
+            "action": "Cấu hình các hạn chế Control Panel, CMD, Registry Editor đã ghi trong repo.",
+            "reason": "Thực hành quản lý thiết lập tập trung, không phải tuyên bố endpoint hardening hoàn chỉnh."
+          },
+          {
+            "where": "Group Policy Preferences / Drive Maps",
+            "action": "Map I/H/A/S theo group tương ứng và P cho Public, có item-level targeting.",
+            "reason": "Cho người dùng đường truy cập thuận tiện theo vai trò."
+          },
+          {
+            "where": "CLIENT01 / gpresult và hành vi",
+            "action": "Kiểm tra policy nhận được, restriction và I:/P: trong phiên user IT.",
+            "reason": "Đọc kết quả phía client; gpupdate không tự sửa link/filter sai."
+          }
+        ],
+        "flow": [
+          "User/computer trong scope → xử lý GPO → targeting của drive map → hiện ký tự ổ.",
+          "Mở ổ còn phải qua quyền share/NTFS; nhận policy đúng không chứng minh mọi quyền dữ liệu đều đúng."
+        ],
+        "without": "Có thể UNC dùng được nhưng I: không hiện, hoặc policy không áp vì đối tượng sai OU/filter. Cần phân biệt hai nhánh này khi tìm lỗi.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/11-group-policy-management.png",
+            "url": "/portfolio-review/11-group-policy-management.png",
+            "read": "Đọc GPO và vị trí link trong cây quản lý.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "image",
+            "file": "images/12-gpo-restriction-validation.png",
+            "url": "/portfolio-review/12-gpo-restriction-validation.png",
+            "read": "Ảnh kiểm chứng restriction ở client, không phải toàn bộ baseline bảo mật.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "image",
+            "file": "images/14-client-drive-mapping.png",
+            "url": "/portfolio-review/14-client-drive-mapping.png",
+            "read": "Đối chiếu I: và P: trong phiên IT; không nhận ảnh này là đã thử mọi user phòng ban.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "image",
+            "file": "images/16-gpo-applied-validation.png",
+            "url": "/portfolio-review/16-gpo-applied-validation.png",
+            "read": "Tìm policy đã áp; lưu ý user/computer scope và quyền chạy công cụ.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          }
+        ],
+        "recall": {
+          "question": "Thấy I: xuất hiện có đủ để nói user sửa file IT được chưa?",
+          "answer": "Chưa. Map drive và quyền file là hai lớp; phải truy cập/thử thao tác dữ liệu mẫu bằng đúng user."
+        },
+        "revisit": "Đọc gpresult user và computer với quyền phù hợp, thử một restriction đã ghi. Không cấp admin để làm restriction biến mất.",
+        "unit_id": "U03"
+      },
+      {
+        "id": "P14",
+        "title": "Đưa Ubuntu vào cùng mạng và dùng Windows DNS",
+        "area": "Ubuntu trên VMware",
+        "goal": "Hiểu Ubuntu đã tích hợp đến mức nào với phần Windows.",
+        "why": "Luyện quản trị Linux và cho máy Linux tìm tên nội bộ, đồng thời tránh xung đột IP với DHCP Windows.",
+        "before": "Ubuntu từng ở setup NAT/DHCP học riêng; khi trở về VMnet2 cần sửa lại IP/DNS và record nội bộ.",
+        "after": "ens33 .30/24, DNS .10, search corp.local; có A/PTR UBUNTU01 và exclusion .30 ở DHCP. Ubuntu vẫn dùng tài khoản local, chưa join AD.",
+        "actions": [
+          {
+            "where": "VMware adapter Ubuntu",
+            "action": "Đặt lại vào VMnet2 Host-only.",
+            "reason": "Cùng mạng ảo với SERVER01/CLIENT01."
+          },
+          {
+            "where": "/etc/netplan/00-installer-config.yaml",
+            "action": "Sao lưu rồi giữ một YAML hoàn chỉnh cho IP .30 và DNS .10/search corp.local.",
+            "reason": "Cấu hình bền qua reboot; interface/MAC trong file là riêng của VM, không copy mù sang máy khác."
+          },
+          {
+            "where": "Windows DNS/DHCP",
+            "action": "Thêm A/PTR Ubuntu và exclusion .30.",
+            "reason": "Tên máy giải được, địa chỉ static không bị cấp động trong pool."
+          },
+          {
+            "where": "resolvectl/ip và reboot check",
+            "action": "Kiểm tra forward/reverse, địa chỉ và route sau boot.",
+            "reason": "Phân biệt cấu hình trên đĩa và kết quả đang hoạt động."
+          }
+        ],
+        "flow": [
+          "Ubuntu hỏi DNS .10 về SERVER01/UBUNTU01 → nhận .10/.30.",
+          "Cấu hình DNS nội bộ không tạo quan hệ xác thực domain cho Ubuntu.",
+          "ip route không có default via; Default Route: yes trong resolvectl là ngữ cảnh DNS khác."
+        ],
+        "without": "Ubuntu có thể ping DNS nhưng resolver không chọn đúng domain, hoặc .30 chưa được bảo vệ khỏi cấp động. Đây là các vấn đề đã có ghi nhận xử lý trong repo.",
+        "evidence": [
+          {
+            "kind": "document",
+            "file": "configs/ubuntu/00-installer-config.yaml",
+            "read": "Đọc IP, DNS và search domain; không thêm gateway chỉ để giống mạng NAT.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "network:\n  version: 2\n  ethernets:\n    ens33:\n      dhcp4: false\n      dhcp6: false\n      addresses:\n        - 192.168.30.30/24\n      nameservers:\n        addresses:\n          - 192.168.30.10\n        search:\n          - corp.local\n      match:\n        macaddress: 00:0c:29:d7:6a:f7\n      set-name: ens33"
+          },
+          {
+            "kind": "document",
+            "file": "docs/evidence/ubuntu-validation-2026-10-30.md",
+            "read": "Bảng ghi rõ các kiểm tra và loại bằng chứng được người dùng cung cấp.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "| VMware placement | SERVER01 and Ubuntu use VMnet2 Host-only, subnet 192.168.30.0/24 | VMware settings screenshots and subsequent network output |\n| Server connectivity | 4 packets transmitted, 4 received, 0% loss to 192.168.30.10 | Ubuntu ping screenshot |\n| DHCP protection | .30 was not leased; exclusion .30–.30 added within scope .20–.100; CLIENT01 .20 reservation retained | DHCP Manager screenshots |\n| SERVER01 DNS | SERVER01.corp.local -> 192.168.30.10 | resolvectl text, repeated after reboot |\n| Ubuntu A record | UBUNTU01.corp.local -> 192.168.30.30 | DNS Manager screenshot and resolvectl text |\n| Ubuntu PTR | 192.168.30.30 -> UBUNTU01.corp.local | resolvectl text |\n| Member permissions | Create/read/append/copy/delete sample data succeeded | User-supplied terminal text |"
+          }
+        ],
+        "recall": {
+          "question": "Phần Windows và Linux đã liên hệ với nhau ở điểm nào, và chưa liên hệ ở điểm nào?",
+          "answer": "Cùng VMnet2, Ubuntu dùng DNS Windows, có record và exclusion; chưa có AD join/xác thực miền cho Ubuntu và chưa nối Packet Tracer với VMware."
+        },
+        "revisit": "Chỉ đọc ip -br -4 address, ip route và resolvectl. Không áp lại YAML nếu chưa cần thay cấu hình.",
+        "unit_id": "U08"
+      },
+      {
+        "id": "P15",
+        "title": "Tạo user/group Linux và kiểm tra quyền thật",
+        "area": "Ubuntu trên VMware",
+        "goal": "Giải thích được vì sao một user đọc được file còn user khác bị từ chối.",
+        "why": "Muốn thực hành quyền POSIX bằng ca được phép/bị chặn, không chỉ đọc số chmod.",
+        "before": "Chưa có nhóm/tài khoản kiểm thử riêng hoặc thư mục chia sẻ local theo group.",
+        "after": "labmember thuộc labops, labguest không thuộc; /srv/system-lab/team root:labops 2770; member.txt 0660 được tạo dưới umask007 và kiểm thử quyền.",
+        "actions": [
+          {
+            "where": "Local users/groups Ubuntu",
+            "action": "Tạo labmember, labguest, labops và thêm member vào group.",
+            "reason": "Có hai danh tính để thử chính sách, không cấp sudo cho chúng qua bài này."
+          },
+          {
+            "where": "/srv/system-lab/team",
+            "action": "Đặt owner/group root:labops và mode2770.",
+            "reason": "Owner/group dùng được, others không có quyền; setgid giúp mục mới kế thừa group."
+          },
+          {
+            "where": "File mẫu / umask",
+            "action": "Tạo member.txt với quyền phù hợp trong group, dùng umask007 trong bài.",
+            "reason": "Setgid không tự bảo đảm group-write cho mọi file mới; cần đọc cả mode/umask/ACL."
+          },
+          {
+            "where": "Thử bằng từng user",
+            "action": "Member tạo/đọc/sửa/copy/xóa bản tạm; nonmember bị chặn đọc/tạo.",
+            "reason": "Chứng minh bằng danh tính thật, không lấy root đọc được làm ca user thành công."
+          }
+        ],
+        "flow": [
+          "Danh tính → membership/token → quyền thư mục cha/team và file → thao tác được cho phép hoặc bị từ chối.",
+          "sysadmin unprivileged bị từ chối ở thư mục chỉ cho labops có thể là đúng chính sách, không phải cần mở777."
+        ],
+        "without": "Chỉ chạy ls bằng root sẽ che mất câu hỏi user thường có dùng được không. chmod777 để ai cũng đọc được sẽ phá mục tiêu bài.",
+        "evidence": [
+          {
+            "kind": "document",
+            "file": "docs/evidence/ubuntu-validation-2026-10-30.md",
+            "read": "Đọc membership và drwxrws---; so user member với guest.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "labops:x:1005:\nuid=1006(labmember) gid=1006(labmember) groups=1006(labmember),100(users),1005(labops)\nuid=1007(labguest) gid=1007(labguest) groups=1007(labguest),100(users)\ndrwxr-xr-x 3 root root   4096 Oct 30 05:34 /srv/system-lab\ndrwxrws--- 2 root labops 4096 Oct 30 05:34 /srv/system-lab/team\n-rw-rw---- 1 labmember labops 33 Oct 30 05:38 member.txt\n```"
+          },
+          {
+            "kind": "document",
+            "file": "docs/evidence/ubuntu-validation-2026-10-30.md",
+            "read": "Đây là ca âm dự kiến, không phải lỗi đã sửa bằng cách mở quyền.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "cat: /srv/system-lab/team/member.txt: Permission denied"
+          }
+        ],
+        "recall": {
+          "question": "Nonmember bị Permission denied có nghĩa dự án thất bại không?",
+          "answer": "Không, nếu yêu cầu là chặn nonmember và member vẫn dùng được. Ca âm đúng là một phần bằng chứng quyền hoạt động."
+        },
+        "revisit": "Thử hai lệnh cat bằng sudo -u labmember và labguest khi VM sẵn sàng; không đổi quyền để cả hai cùng Pass.",
+        "unit_id": "U09"
+      },
+      {
+        "id": "P16",
+        "title": "SSH, UFW và systemd: ba phần đã thực hành ra sao?",
+        "area": "Ubuntu trên VMware",
+        "goal": "Phân biệt truy cập từ xa, kiểm soát cổng và chạy tác vụ khi boot.",
+        "why": "Quản trị cần vào được Ubuntu từ Windows, kiểm soát traffic vào máy và biết tác vụ chạy/thất bại qua log.",
+        "before": "Có hệ điều hành chưa chứng minh SSH, firewall và lifecycle một service hoạt động đúng.",
+        "after": "SSH sysadmin từ host .1 chạy được, kể cả sau reboot; UFW deny incoming/allow outgoing, cho TCP22; listener8088 chỉ dùng thử; service logger oneshot được enable và có log sau boot.",
+        "actions": [
+          {
+            "where": "OpenSSH / Windows host",
+            "action": "Mở phiên SSH tới sysadmin@192.168.30.30 và xem log.",
+            "reason": "Kiểm chứng đường remote và xác thực; console password issue là câu chuyện khác chưa chốt nguyên nhân."
+          },
+          {
+            "where": "UFW và listener Python tạm",
+            "action": "Giữ SSH, kiểm tra TCP8088 blocked→allowed→blocked trong lúc listener chạy.",
+            "reason": "Phân biệt firewall rule với ứng dụng; listener chỉ phục vụ dữ liệu mẫu của bài."
+          },
+          {
+            "where": "Kết thúc test8088",
+            "action": "Xóa rule thử và dừng đúng process, xem ss không còn listener.",
+            "reason": "Đảm bảo dọn cả rule lẫn ứng dụng; xóa rule không tự dừng process."
+          },
+          {
+            "where": "system-lab-demo.service",
+            "action": "Dùng Type=oneshot, logger, RemainAfterExit=yes, enable và kiểm tra journal sau reboot.",
+            "reason": "Học unit/lifecycle/log. active (exited) phù hợp với demo; không phải web app thường trực."
+          }
+        ],
+        "flow": [
+          "SSH: IP/route → TCP22/listener/firewall → xác thực sysadmin.",
+          "Firewall test: ứng dụng đang lắng nghe + rule phù hợp mới tạo điều kiện kết nối; còn kiểm tra cả đường mạng.",
+          "Service: systemd chạy logger một lần → log xuất hiện → giữ trạng thái active theo cấu hình."
+        ],
+        "without": "Thấy UFW active chưa chứng minh rule đúng; thấy service enabled chưa chứng minh đã chạy; thấy exited chưa đủ kết luận crash.",
+        "evidence": [
+          {
+            "kind": "document",
+            "file": "configs/ubuntu/system-lab-demo.service",
+            "read": "Đọc từng dòng Type/ExecStart/RemainAfterExit để giải thích active (exited).",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "[Unit]\nDescription=System lab service demonstration\n\n[Service]\nType=oneshot\nExecStart=/usr/bin/logger -t system-lab-demo Lab-service-started\nRemainAfterExit=yes\n\n[Install]\nWantedBy=multi-user.target"
+          },
+          {
+            "kind": "document",
+            "file": "docs/evidence/ubuntu-validation-2026-10-30.md",
+            "read": "Bảng ghi kiểm tra remote/firewall/service và cleanup.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "| SSH and journal | New password login from 192.168.30.1, including after UFW/reboot | Screenshots and journal output |\n| UFW control test | TCP 8088 False -> True -> False while listener running | Windows Test-NetConnection screenshots/text |\n| Cleanup | Rule 8088 deleted; Python exited; no listener 8088 | UFW and ss screenshots/text |\n| Service lifecycle | Stop -> inactive; start -> active; boot -> log message | Terminal text; final boot also in report |\n| Health | dpkg --audit empty; 0 failed units; root 36% used | Terminal text and report |"
+          }
+        ],
+        "recall": {
+          "question": "Em đã triển khai web server Linux thường trực chưa?",
+          "answer": "Chưa. Python8088 là listener thử tạm đã dừng; service logger là oneshot minh họa. Phần đã làm là quản trị SSH, firewall, service/log cơ bản."
+        },
+        "revisit": "Chỉ đọc ss, ufw status, systemctl status và journal trước. Muốn tạo lỗi firewall phải có console/phiên dự phòng và chỉ sửa rule thử.",
+        "unit_id": "U09"
+      },
+      {
+        "id": "P17",
+        "title": "Ghép các phần: chuyện gì xảy ra khi nhân viên sử dụng?",
+        "area": "Đọc hệ thống đầu–cuối",
+        "goal": "Liên kết công nghệ thành những luồng công việc, không chỉ nhớ các mục độc lập.",
+        "why": "Nhà tuyển dụng hoặc chính bạn cần hiểu vì sao một thao tác “mở ổ I:” có thể liên quan nhiều lớp khác nhau.",
+        "before": "Biết từng tên công nghệ nhưng chưa biết đầu vào/đầu ra và chỗ phụ thuộc.",
+        "after": "Có thể mô tả riêng ba luồng: nhân viên Windows dùng tài nguyên; Guest trong mô phỏng bị cô lập; quản trị viên SSH vào Ubuntu. Không ghép thành luồng đã chạy xuyên Packet Tracer–VMware.",
+        "actions": [
+          {
+            "where": "Luồng Windows VMware",
+            "action": "Theo dõi cấu hình DHCP/DNS, tìm DC/đăng nhập, policy và quyền share.",
+            "reason": "Phân biệt một máy dùng được dữ liệu với chỉ một cấu hình server đã tồn tại."
+          },
+          {
+            "where": "Luồng Guest Packet Tracer",
+            "action": "Theo access/trunk/gateway, ACL, route/NAT đến public server mô phỏng.",
+            "reason": "Đánh giá đường được phép và rào cản phải giữ."
+          },
+          {
+            "where": "Luồng SSH VMware",
+            "action": "Theo IP/route, listener TCP22/UFW và xác thực.",
+            "reason": "Không nhầm mọi lỗi Permission denied là lỗi mạng."
+          }
+        ],
+        "flow": [
+          "Windows: client nhận IP/DNS theo cấu hình → tìm dịch vụ miền → dùng tài khoản → xử lý policy/targeting → kết nối SMB → quyền share/NTFS quyết định thao tác. Đây là sơ đồ vai trò, không khẳng định tất cả bước lặp đúng thứ tự trong mọi lần đăng nhập.",
+          "Nếu I: thiếu nhưng UNC dùng được: ưu tiên GPO/mapping. Nếu tên lỗi nhưng IP được: xem DNS. Nếu port445 được nhưng Access denied: xem danh tính/token/ACL.",
+          "Guest mô phỏng: traffic tới Server phải bị chặn; traffic ra public cần route/NAT và kiểm chứng đích.",
+          "Ubuntu: kết nối TCP được nhưng auth fail thì xem identity/log thay vì sửa VLAN ngay."
+        ],
+        "without": "Nếu chỉ ghi nhớ “lỗi share→gpupdate” hoặc “SSH fail→tắt UFW”, bạn bỏ qua cơ hội phân biệt nguyên nhân và dễ sửa nhầm lớp.",
+        "evidence": [
+          {
+            "kind": "image",
+            "file": "images/14-client-drive-mapping.png",
+            "url": "/portfolio-review/14-client-drive-mapping.png",
+            "read": "Ổ hiện là một phần kết quả phía user, vẫn cần thử quyền file.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "image",
+            "file": "images/15-client-domain-validation.png",
+            "url": "/portfolio-review/15-client-domain-validation.png",
+            "read": "Danh tính/client/logon server là một phần chuỗi kiểm chứng, không thay cho mọi dịch vụ.",
+            "limit": "Ảnh lịch sử trong repo; chưa chạy lại môi trường ở lần biên soạn này."
+          },
+          {
+            "kind": "document",
+            "file": "docs/evidence/ubuntu-validation-2026-10-30.md",
+            "read": "Luồng SSH có bằng chứng riêng trong VMware.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "| SSH and journal | New password login from 192.168.30.1, including after UFW/reboot | Screenshots and journal output |"
+          }
+        ],
+        "recall": {
+          "question": "Người IT không mở I: được: em cần hỏi thêm điều gì để chọn đúng lớp kiểm tra?",
+          "answer": "I: không xuất hiện hay xuất hiện nhưng lỗi? UNC có vào được không? Lỗi phân giải tên, kết nối hay Access denied? Các kết quả này dẫn đến GPO, DNS/network hoặc quyền khác nhau."
+        },
+        "revisit": "Tự vẽ ba luồng riêng và chọn một điểm lỗi giả lập trên giấy. Nói bạn sẽ kiểm tra gì trước khi xem đáp án.",
+        "unit_id": null
+      },
+      {
+        "id": "P18",
+        "title": "Dự án đã chứng minh gì và tôi cần tự làm lại gì?",
+        "area": "Tổng kết trung thực",
+        "goal": "Tự phân biệt sản phẩm đã có, sự hiểu biết hiện tại và phần mở rộng chưa làm.",
+        "why": "Bạn đã thực hành với AI hướng dẫn và hiện quên nhiều chi tiết. Cách ôn có ích là đối chiếu lại sản phẩm, giải thích lý do và tự kiểm tra từng phần; không coi repo tồn tại là bằng chứng hiện đã tự thao tác thành thạo.",
+        "before": "Có thể nhớ đã hoàn thành lab nhưng chưa giải thích được quyết định hoặc đọc kết quả một cách độc lập.",
+        "after": "Có danh sách công việc và bằng chứng lịch sử để ôn lại. Bạn tự ghi “chưa nhớ / giải thích được / đã tự kiểm tra lại” cho từng chặng; đây là tự đánh giá, không phải chấm máy.",
+        "actions": [
+          {
+            "where": "Dự án mạng",
+            "action": "Nhận diện VLAN/trunk/router-on-a-stick/Guest ACL/NAT và các ảnh kiểm tra.",
+            "reason": "Đây là thành quả mô phỏng mạng, không phải vận hành mạng doanh nghiệp thật."
+          },
+          {
+            "where": "Dự án Windows",
+            "action": "Nhận diện domain/user/group/DNS/DHCP/GPO/SMB và kiểm tra client.",
+            "reason": "Đây là phần dịch vụ trong VMware; thử user IT rõ hơn việc suy đã thử mọi phòng ban."
+          },
+          {
+            "where": "Dự án Ubuntu",
+            "action": "Nhận diện IP/DNS/SSH/permissions/UFW/oneshot/log và kiểm tra sau reboot.",
+            "reason": "Không nâng phạm vi thành AD join Linux hoặc web server triển khai thường trực."
+          },
+          {
+            "where": "Cách học lại với AI",
+            "action": "Trước lệnh: hỏi tác động và dự đoán; sau lệnh: đọc kết quả, giải thích và kiểm tra lại bằng lời của mình.",
+            "reason": "Chuyển từ làm theo chỉ dẫn sang hiểu nguyên nhân; nếu chưa nhớ cú pháp thì tra nhưng phải biết mục tiêu."
+          }
+        ],
+        "flow": [
+          "Theo tài liệu: gpresult computer từng Access Denied do chưa elevated; client từng static nên chưa dùng DHCP; PTR thiếu từng làm nslookup hiển thị Unknown.",
+          "Theo tài liệu Ubuntu: YAML bị ghép sai, resolver corp.local chưa chọn đúng, thiếu A/PTR, .30 cần exclusion; các kết quả và giới hạn đã được ghi.",
+          "Chưa chốt: console login Ubuntu; không khẳng định đã sửa keyboard layout. Chưa triển khai: backup/restore, monitoring, HA, nối hai môi trường, AD join Ubuntu.",
+          "Cách nói trung thực: “Em có dùng AI để gợi ý và giải thích trong lúc dựng lab. Em đã thực hành các cấu hình trong repo và đang ôn bằng cách tự giải thích, đọc bằng chứng và kiểm tra lại từng phần.” Điều chỉnh theo phần bạn thật sự tự xác nhận."
+        ],
+        "without": "Học thuộc lời giới thiệu mà không tự đọc được một bằng chứng sẽ làm bạn khó đi tiếp khi được hỏi “em kiểm tra bằng cách nào?”.",
+        "evidence": [
+          {
+            "kind": "document",
+            "file": "docs/troubleshooting.md",
+            "read": "Những tình huống Windows này đã được ghi nhận trong quá trình lab. Không biến thành sự cố production.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "## CLIENT01 could not retrieve computer GPO result\n\nProblem:\n`gpresult /r /scope computer` returned Access Denied.\n\nCause:\nThe command was executed from a non-elevated shell.\n\nSolution:\nOpened PowerShell as Administrator using an administrative account and reran the command.\n\n---\n\n## CLIENT01 was still using a static IP\n\nProblem:\nDHCP was configured on SERVER01 but CLIENT01 showed `DHCP Enabled: No`.\n\nSolution:\nEnabled DHCP on the Ethernet adapter, reset DNS server configuration, and renewed the lease.\n\nResult:\nCLIENT01 received `192.168.30.20` from SERVER01.\n\n---\n\n## DNS server displayed as Unknown\n"
+          },
+          {
+            "kind": "document",
+            "file": "docs/evidence/ubuntu-validation-2026-10-30.md",
+            "read": "Giới hạn kết luận và các phần chưa triển khai.",
+            "limit": "Tài liệu/cấu hình đã lưu, không phải phép đo trạng thái máy đang chạy hôm nay.",
+            "excerpt": "## Remaining boundaries\n\nThese results establish the basic Ubuntu scope only. No AD join, permanent application deployment, backup recovery, monitoring, latest-update status, comprehensive Windows retest, or Packet Tracer retest is asserted. Console keyboard/password login behavior remains undiagnosed; SSH access was successful."
+          }
+        ],
+        "recall": {
+          "question": "Em đã làm được lab nghĩa là hiện tại có thể tự xử lý mọi sự cố liên quan chưa?",
+          "answer": "Không tự động. Lab có sản phẩm và bằng chứng đã thực hành; năng lực hiện tại cần tự giải thích, chọn kiểm tra và làm lại. Nêu rõ phần biết, phần cần tra và phần chưa triển khai."
+        },
+        "revisit": "Chọn ba chặng còn mơ hồ nhất, tự đọc ảnh/lệnh, nói lại mục tiêu–thao tác–kết quả rồi thử trên lab khi sẵn sàng.",
+        "unit_id": null
+      }
+    ],
+    "memory_frame": [
+      "Nhu cầu: bước này cần để ai làm được việc gì?",
+      "Thao tác: đã cấu hình trên máy/công cụ nào?",
+      "Kết quả: điều gì thay đổi sau cấu hình?",
+      "Bằng chứng: nhìn ảnh/output nào, nó chứng minh đến đâu?",
+      "Tự kiểm tra: tôi đã giải thích được hay mới nhận ra tên gọi?"
+    ]
+  },
+  "project_chapter_count": 18
+}

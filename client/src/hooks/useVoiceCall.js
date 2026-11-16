@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import {savedPortfolioContext} from '../lib/portfolioCoachContext';
 import { savedSpeechRate, clampSpeechRate, VOICE_RATE_KEY } from '../lib/speechPlayer';
 
 const initial={phase:'idle',muted:false,transcript:'',lastUserSpeech:'',aiSpeechText:'',error:'',notice:'',micLevel:0,micName:'',connected:false,textSending:false,textError:''};
@@ -80,7 +81,7 @@ export default function useVoiceCall({isOpen,persona,lab,currentStep,lastTermina
         connectTimer=setTimeout(()=>fail('Kết nối AI quá thời gian chờ. Hãy thử lại.'),17000);
         ws.onopen=()=>{
           const {lab:lesson={},currentStep:step={},lastTerminalOutput:terminal=''}=latest.current || {};
-          send({type:'start',persona,context:{labId:lesson?.id,labTitle:lesson?.title_vi || lesson?.title,stepTitle:step?.title_vi || step?.title,
+          send({type:'start',persona,context:{...savedPortfolioContext(lesson?.id),...(lesson?.portfolioFocus?{portfolioFocus:lesson.portfolioFocus}:{}),labId:lesson?.id,labTitle:lesson?.title_vi || lesson?.title,stepTitle:step?.title_vi || step?.title,
             task:step?.task_vi || step?.task,content:String(step?.content_vi || step?.content || '').slice(0,2500),terminalOutput:String(terminal).slice(-1200)}});
         };
         ws.onmessage=({data})=>{

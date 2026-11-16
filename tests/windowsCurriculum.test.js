@@ -9,10 +9,10 @@ import { faultScenarios, faultCommand, createWindowsFaultService } from '../serv
 
 const labs = listLabs().filter(lab=>lab.course_id === 'windows-11-it-support-troubleshooting');
 test('Windows support preserves existing lessons and adds the practical backup-permission incident', () => {
-  assert.equal(labs.length, 28);
-  assert.equal(labs.reduce((count,lab)=>count+lab.steps.length,0), 53);
-  assert.deepEqual(labs.map(lab=>lab.order).sort((a,b)=>a-b), Array.from({length:28},(_,i)=>i+1));
-  assert.equal(labs.filter(lab=>faultScenarios[lab.id]).length, 10);
+  assert.equal(labs.length, 30);
+  assert.equal(labs.reduce((count,lab)=>count+lab.steps.length,0), 55);
+  assert.deepEqual(labs.map(lab=>lab.order).sort((a,b)=>a-b), Array.from({length:30},(_,i)=>i+1));
+  assert.equal(labs.filter(lab=>faultScenarios[lab.id]).length, 12);
   for (const lab of labs) {
     assert.equal(lab.target_vm, 'client');
     for (const step of lab.steps) {

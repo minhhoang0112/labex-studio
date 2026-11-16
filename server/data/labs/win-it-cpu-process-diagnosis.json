@@ -1,0 +1,159 @@
+{
+  "id": "win-it-cpu-process-diagnosis",
+  "course_id": "windows-11-it-support-troubleshooting",
+  "order": 30,
+  "title": "Máy chậm: điều tra tiến trình gây tải CPU",
+  "title_vi": "Máy chậm: điều tra tiến trình gây tải CPU",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "25–35 mins",
+  "target_vm": "client",
+  "curriculum_version": 5,
+  "curriculum_origin": "locally-authored-microsoft-references",
+  "practice_mode": "fault-injection",
+  "validation_status": "live-client-verified-2026-10-28",
+  "overview": "Dùng Task Manager để tìm tiến trình gây tải CPU thật có giới hạn, phục hồi đúng phạm vi và kiểm tra công việc khác vẫn hoạt động.",
+  "preparation": {
+    "mode": "fault-injection",
+    "requires_vm_start": true,
+    "target": "client",
+    "fault_injection": true
+  },
+  "practice_ticket": {
+    "learning_order": 4,
+    "machine": "CLIENT01 · Windows 11",
+    "identity": "Bạn là IT Support, dùng Task Manager bằng quyền quản trị để xem tiến trình của lab. Chỉ được dừng ứng dụng lập chỉ mục thử nghiệm đã xác định; giữ ứng dụng ghi chú và dịch vụ hệ thống.",
+    "ticket": "Sau khi chạy công cụ lập chỉ mục, nhân viên thấy máy phản hồi kém và công cụ không hoàn tất. Xác định tài nguyên đang bị sử dụng, tiến trình liên quan và dừng tác vụ thử nghiệm bị kẹt mà không làm mất công việc khác.",
+    "scope": "Tải giới hạn trên một luồng, BelowNormal, không cấp phát RAM tăng dần và không làm đầy đĩa. Tỷ lệ CPU phụ thuộc VM; có thể thấy tải rõ mà Desktop không chậm nhiều. Đây là điều tra CPU của một ứng dụng lab, không phải mô phỏng mọi nguyên nhân máy chậm.",
+    "tasks": [
+      "Chuẩn bị sự cố rồi mở Task Manager bằng nút Win+R của web → taskmgr; quan sát CPU, Memory và Disk trước khi quyết định.",
+      "Sắp xếp theo CPU, quan sát vài lần cập nhật; đối chiếu tên, PID và vị trí file của tiến trình nghi ngờ. Không chọn chỉ vì tên lạ.",
+      "Ghi lại triệu chứng và bằng chứng. Trong tình huống này công cụ lập chỉ mục lab không có tài liệu chưa lưu và được phép dừng; xử lý đúng tiến trình đó.",
+      "Đo lại sau 10–15 giây; giữ LabExNotesHelper và notes.txt. Bấm Kiểm tra kết quả, giải thích vì sao không cần khởi động lại hoặc tắt antivirus."
+    ],
+    "acceptance": [
+      "Đã có tải CPU thật được xác nhận khi chuẩn bị; tiến trình gây tải của lab đã dừng.",
+      "Ứng dụng phụ ban đầu vẫn chạy và xử lý yêu cầu mới; dữ liệu notes.txt còn nguyên.",
+      "Không khởi động lại VM; không lấy việc chờ hết thời hạn an toàn làm kết quả sửa.",
+      "Chấm theo trạng thái tiến trình và chức năng thật, không bắt chép lệnh hoặc nộp ảnh theo mẫu."
+    ],
+    "diagnosis": [
+      "Quan sát CPU, Memory và Disk để tránh kết luận mọi máy chậm đều thiếu RAM.",
+      "Theo dõi nhiều lần cập nhật; ghi tên, PID, CPU và đường dẫn của tiến trình nghi ngờ.",
+      "Phân biệt ứng dụng lab được phép dừng với công việc khác; nêu tác động trước khi End task."
+    ],
+    "hints": [
+      {
+        "title": "Đọc đúng công cụ",
+        "text": "Task Manager → Processes để xem tài nguyên; Details để đối chiếu PID. Có thể cần Run as administrator. Win+R của web → taskmgr gửi thao tác vào VM, không mở Task Manager máy chính."
+      },
+      {
+        "title": "Liên hệ với ticket",
+        "text": "Công cụ lập chỉ mục nằm trong C:\\LabEx\\PracticeFaults\\cpuincident. LabExIndexWorker.exe dùng CPU; LabExNotesHelper.exe phục vụ việc khác. Chuột phải → Open file location để đối chiếu. Không dừng tiến trình hệ thống đứng đầu danh sách chỉ vì nó đang dùng CPU."
+      },
+      {
+        "title": "Xử lý trong phạm vi được phép",
+        "text": "Chọn đúng LabExIndexWorker.exe → End task. Chờ 10–15 giây, xác nhận nó không còn và CPU do nó gây ra đã mất. Giữ LabExNotesHelper.exe. Bài này cho phép dừng vì ứng dụng thử nghiệm không có dữ liệu chưa lưu; ứng dụng thật cần hỏi người dùng và lưu công việc trước."
+      }
+    ],
+    "prerequisites": "Biết mở ứng dụng bằng Win+R của web. Chưa cần biết lệnh PowerShell.",
+    "concepts": [
+      {
+        "title": "CPU khác RAM và ổ đĩa",
+        "text": "CPU xử lý tính toán, RAM giữ dữ liệu đang dùng, Disk phản ánh hoạt động ổ đĩa. Hãy xem tài nguyên và tiến trình cùng lúc; một con số cao thoáng qua chưa chứng minh lỗi."
+      },
+      {
+        "title": "Một tiến trình không cần chiếm 100% toàn máy",
+        "text": "Ứng dụng dùng một luồng có thể chỉ chiếm một phần tổng CPU của VM nhiều vCPU. Lab cố ý giới hạn tải để giữ kết nối; không bắt bạn thấy đúng một tỷ lệ phần trăm mẫu."
+      },
+      {
+        "title": "End task là biện pháp phục hồi có điều kiện",
+        "text": "Kết thúc tiến trình có thể mất dữ liệu chưa lưu. Trong ticket này chỉ công cụ thử nghiệm được phép dừng. Ngoài thực tế, sau phục hồi còn cần tìm lý do ứng dụng bị kẹt và chuyển thông tin cho bên phụ trách."
+      }
+    ],
+    "investigation_questions": [
+      "Tài nguyên nào tăng kéo dài, tiến trình nào liên quan?",
+      "Bằng chứng nào nối tiến trình đó với công cụ người dùng vừa chạy?",
+      "Nếu dừng, dữ liệu hay người dùng nào bị ảnh hưởng?"
+    ],
+    "reflection": [
+      "Vì sao CPU tổng không cần đạt 100% mới có việc cần điều tra?",
+      "Nếu Memory hoặc Disk mới là tài nguyên nổi bật, bạn có dùng cùng kết luận không?",
+      "Sau End task, bằng chứng nào cho thấy đã xử lý đúng mà công việc khác còn chạy?"
+    ],
+    "sources": [
+      {
+        "title": "Microsoft: cải thiện hiệu năng Windows",
+        "url": "https://support.microsoft.com/en-gb/windows/experience/performance-optimization/tips-to-improve-pc-performance-in-windows"
+      },
+      {
+        "title": "Microsoft: mức ưu tiên tiến trình",
+        "url": "https://learn.microsoft.com/en-us/windows/win32/procthread/scheduling-priorities"
+      }
+    ]
+  },
+  "references": [
+    {
+      "title": "Microsoft: cải thiện hiệu năng Windows",
+      "url": "https://support.microsoft.com/en-gb/windows/experience/performance-optimization/tips-to-improve-pc-performance-in-windows"
+    },
+    {
+      "title": "Microsoft: mức ưu tiên tiến trình",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/procthread/scheduling-priorities"
+    }
+  ],
+  "sections": [
+    {
+      "id": "win-it-cpu-process-diagnosis-sec-0",
+      "position": 0,
+      "title": "Nhận ticket và chuẩn bị",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Máy chậm: tìm bằng chứng trước khi sửa\nNhân viên báo công cụ lập chỉ mục chạy mãi. Bạn được phép dừng **công cụ lab** nếu xác định đúng, nhưng phải giữ công việc ghi chú khác.\n\nBật CLIENT01, kết nối Desktop rồi **Chuẩn bị sự cố**. Hệ thống thử ứng dụng phụ hoạt động, khởi chạy tải và đo CPU thật trước khi cho vào bài. Thư mục: `C:\\LabEx\\PracticeFaults\\cpuincident`.\n\nTải chỉ dùng một luồng có khoảng nghỉ và mức ưu tiên BelowNormal. Không cần máy phải đơ hoặc CPU tổng 100%; bài ưu tiên khả năng quan sát mà vẫn giữ RDP. Không nâng cấu hình Azure để làm bài.\n\nBạn có tối đa khoảng **30 phút sau khi nạp lỗi**. Hết hạn, tải tự dừng để bảo vệ VM nhưng không tính là sửa đúng; hoàn nguyên rồi chuẩn bị lại. Đừng khởi động lại máy để bỏ qua việc tìm nguyên nhân. Nút hoàn nguyên dùng để dọn môi trường, không phải câu trả lời của bài.\n",
+      "content_vi": "## Máy chậm: tìm bằng chứng trước khi sửa\nNhân viên báo công cụ lập chỉ mục chạy mãi. Bạn được phép dừng **công cụ lab** nếu xác định đúng, nhưng phải giữ công việc ghi chú khác.\n\nBật CLIENT01, kết nối Desktop rồi **Chuẩn bị sự cố**. Hệ thống thử ứng dụng phụ hoạt động, khởi chạy tải và đo CPU thật trước khi cho vào bài. Thư mục: `C:\\LabEx\\PracticeFaults\\cpuincident`.\n\nTải chỉ dùng một luồng có khoảng nghỉ và mức ưu tiên BelowNormal. Không cần máy phải đơ hoặc CPU tổng 100%; bài ưu tiên khả năng quan sát mà vẫn giữ RDP. Không nâng cấu hình Azure để làm bài.\n\nBạn có tối đa khoảng **30 phút sau khi nạp lỗi**. Hết hạn, tải tự dừng để bảo vệ VM nhưng không tính là sửa đúng; hoàn nguyên rồi chuẩn bị lại. Đừng khởi động lại máy để bỏ qua việc tìm nguyên nhân. Nút hoàn nguyên dùng để dọn môi trường, không phải câu trả lời của bài.\n"
+    },
+    {
+      "id": "win-it-cpu-process-diagnosis-sec-1",
+      "position": 1,
+      "title": "Điều tra bằng Task Manager",
+      "kind": "document",
+      "need_verify": false,
+      "content": "## Quan sát và đối chiếu\n1. Dùng **Win+R trên thanh Desktop của web**, nhập `taskmgr`. Có thể mở Task Manager từ Start trong máy ảo; tránh phím tắt bị máy chính nhận.\n2. Xem Processes: CPU, Memory và Disk. Nhấp tiêu đề CPU để sắp xếp giảm dần. Quan sát ít nhất 10 giây; một lần tăng thoáng qua chưa đủ kết luận.\n3. Chuyển Details, tìm cùng tiến trình và ghi PID. Chuột phải → Open file location để xem có thuộc ứng dụng lab không. Nếu bị từ chối truy cập, mở Task Manager bằng Run as administrator.\n4. Viết ngắn tên tiến trình, mức CPU quan sát được và đường dẫn. Không cần đúng phần trăm trong một ảnh mẫu vì số vCPU và tải nền khác nhau.\n5. Nhận diện cả ứng dụng phụ cần giữ. `notes.txt` là dữ liệu công việc khác; không sửa hoặc xóa để thử.\n\nNếu Windows Update/Defender dùng CPU, đó không tự động là nguyên nhân của ticket này. Không tắt dịch vụ bảo vệ. Nếu tải nền làm phép đo khó phân biệt, chờ ổn định hoặc hoàn nguyên để học lại; không cố kết thúc tiến trình hệ thống.\n",
+      "content_vi": "## Quan sát và đối chiếu\n1. Dùng **Win+R trên thanh Desktop của web**, nhập `taskmgr`. Có thể mở Task Manager từ Start trong máy ảo; tránh phím tắt bị máy chính nhận.\n2. Xem Processes: CPU, Memory và Disk. Nhấp tiêu đề CPU để sắp xếp giảm dần. Quan sát ít nhất 10 giây; một lần tăng thoáng qua chưa đủ kết luận.\n3. Chuyển Details, tìm cùng tiến trình và ghi PID. Chuột phải → Open file location để xem có thuộc ứng dụng lab không. Nếu bị từ chối truy cập, mở Task Manager bằng Run as administrator.\n4. Viết ngắn tên tiến trình, mức CPU quan sát được và đường dẫn. Không cần đúng phần trăm trong một ảnh mẫu vì số vCPU và tải nền khác nhau.\n5. Nhận diện cả ứng dụng phụ cần giữ. `notes.txt` là dữ liệu công việc khác; không sửa hoặc xóa để thử.\n\nNếu Windows Update/Defender dùng CPU, đó không tự động là nguyên nhân của ticket này. Không tắt dịch vụ bảo vệ. Nếu tải nền làm phép đo khó phân biệt, chờ ổn định hoặc hoàn nguyên để học lại; không cố kết thúc tiến trình hệ thống.\n"
+    },
+    {
+      "id": "win-it-cpu-process-diagnosis-sec-2",
+      "position": 2,
+      "title": "Phục hồi có kiểm soát và đo lại",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Chỉ xử lý tiến trình đã xác định\nHãy tự chọn cách xử lý từ bằng chứng trước khi mở gợi ý cuối.\n\n### Hướng dẫn GUI khi cần\n1. Task Manager → Details, chọn đúng `LabExIndexWorker.exe` ở thư mục `C:\\LabEx\\PracticeFaults\\cpuincident`. Đây là tiến trình của công cụ lab được phép dừng; không có tài liệu chưa lưu.\n2. Chọn **End task**, xác nhận nếu Windows hỏi. Không dùng End process tree hàng loạt và không dừng `LabExNotesHelper.exe`.\n3. Chờ 10–15 giây, quan sát lại Processes/Performance. Xác nhận worker không còn và tải do nó gây ra đã mất. CPU toàn máy vẫn có thể cao do ứng dụng khác: đừng tuyên bố đã chữa mọi nguyên nhân máy chậm.\n4. Giữ nguyên `notes.txt` và ứng dụng phụ. Bấm **Kiểm tra kết quả**: hệ thống kiểm tra worker đã dừng, cùng phiên khởi động, chưa hết thời hạn và helper ban đầu xử lý một yêu cầu mới.\n\nNếu tắt nhầm helper, việc chỉ khởi động lại nó không khôi phục tiêu chí giữ nguyên công việc đang chạy. Hoàn nguyên, chuẩn bị lại và thử từ đầu. Nếu bài hết hạn, cũng chuẩn bị lại; không bị yêu cầu đoán câu lệnh để lấy điểm.\n\nChấm kỹ thuật không chứng minh bạn đã giải thích được nguyên nhân. Hãy tự kể lại bằng chứng trước/sau và vì sao End task là lựa chọn chấp nhận được riêng trong ticket này.\n",
+      "content_vi": "## Chỉ xử lý tiến trình đã xác định\nHãy tự chọn cách xử lý từ bằng chứng trước khi mở gợi ý cuối.\n\n### Hướng dẫn GUI khi cần\n1. Task Manager → Details, chọn đúng `LabExIndexWorker.exe` ở thư mục `C:\\LabEx\\PracticeFaults\\cpuincident`. Đây là tiến trình của công cụ lab được phép dừng; không có tài liệu chưa lưu.\n2. Chọn **End task**, xác nhận nếu Windows hỏi. Không dùng End process tree hàng loạt và không dừng `LabExNotesHelper.exe`.\n3. Chờ 10–15 giây, quan sát lại Processes/Performance. Xác nhận worker không còn và tải do nó gây ra đã mất. CPU toàn máy vẫn có thể cao do ứng dụng khác: đừng tuyên bố đã chữa mọi nguyên nhân máy chậm.\n4. Giữ nguyên `notes.txt` và ứng dụng phụ. Bấm **Kiểm tra kết quả**: hệ thống kiểm tra worker đã dừng, cùng phiên khởi động, chưa hết thời hạn và helper ban đầu xử lý một yêu cầu mới.\n\nNếu tắt nhầm helper, việc chỉ khởi động lại nó không khôi phục tiêu chí giữ nguyên công việc đang chạy. Hoàn nguyên, chuẩn bị lại và thử từ đầu. Nếu bài hết hạn, cũng chuẩn bị lại; không bị yêu cầu đoán câu lệnh để lấy điểm.\n\nChấm kỹ thuật không chứng minh bạn đã giải thích được nguyên nhân. Hãy tự kể lại bằng chứng trước/sau và vì sao End task là lựa chọn chấp nhận được riêng trong ticket này.\n",
+      "task": "Dừng đúng tiến trình lab gây tải; giữ helper ban đầu xử lý yêu cầu mới, dữ liệu nguyên vẹn và không reboot/chờ hết hạn.",
+      "hint": "Task Manager: đối chiếu CPU, PID và đường dẫn; chỉ End task công cụ lập chỉ mục lab rồi quan sát lại.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    },
+    {
+      "id": "win-it-cpu-process-diagnosis-sec-3",
+      "position": 3,
+      "title": "Bàn giao và phân biệt với lỗi khác",
+      "kind": "summary",
+      "need_verify": false,
+      "content": "## Kết luận vừa đủ\nBàn giao: thời điểm xảy ra → tài nguyên nổi bật → tiến trình/PID/đường dẫn → quyền được phép dừng → kết quả đo lại → công việc khác còn hoạt động.\n\nBạn đã học tìm và dừng một tiến trình gây tải CPU. Chưa học sửa rò rỉ bộ nhớ, ổ đĩa hỏng, ứng dụng doanh nghiệp treo do mạng, driver hoặc malware. Với ứng dụng thật, tiếp tục lưu log, phiên bản và cách tái hiện để tìm nguyên nhân gốc; End task chỉ là phục hồi trước mắt.\n\nBấm **Hoàn nguyên kịch bản**: dừng đúng hai task của lab, gỡ task và dọn workspace. Không xóa log Windows hay đổi dịch vụ hệ thống. Sau buổi học, tắt VM bằng web để tránh chạy không cần thiết.\n",
+      "content_vi": "## Kết luận vừa đủ\nBàn giao: thời điểm xảy ra → tài nguyên nổi bật → tiến trình/PID/đường dẫn → quyền được phép dừng → kết quả đo lại → công việc khác còn hoạt động.\n\nBạn đã học tìm và dừng một tiến trình gây tải CPU. Chưa học sửa rò rỉ bộ nhớ, ổ đĩa hỏng, ứng dụng doanh nghiệp treo do mạng, driver hoặc malware. Với ứng dụng thật, tiếp tục lưu log, phiên bản và cách tái hiện để tìm nguyên nhân gốc; End task chỉ là phục hồi trước mắt.\n\nBấm **Hoàn nguyên kịch bản**: dừng đúng hai task của lab, gỡ task và dọn workspace. Không xóa log Windows hay đổi dịch vụ hệ thống. Sau buổi học, tắt VM bằng web để tránh chạy không cần thiết.\n"
+    }
+  ],
+  "steps": [
+    {
+      "id": "win-it-cpu-process-diagnosis-sec-2",
+      "title": "Phục hồi có kiểm soát và đo lại",
+      "task": "Dừng đúng tiến trình lab gây tải; giữ helper ban đầu xử lý yêu cầu mới, dữ liệu nguyên vẹn và không reboot/chờ hết hạn.",
+      "hint": "Task Manager: đối chiếu CPU, PID và đường dẫn; chỉ End task công cụ lập chỉ mục lab rồi quan sát lại.",
+      "verification": {
+        "kind": "windows-remote"
+      }
+    }
+  ]
+}

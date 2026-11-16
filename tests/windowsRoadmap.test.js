@@ -8,7 +8,7 @@ import {getWindowsRoadmap} from '../server/services/windowsRoadmap.js';
 test('Windows roadmap has a coherent advisory prerequisite graph and distinct real/planned counts',()=>{
   const roadmap=getWindowsRoadmap(getCourses());
   assert.equal(roadmap.courses.length,15);assert.equal(roadmap.stages.length,6);
-  assert.equal(roadmap.totals.imported_labs,71);assert.equal(roadmap.totals.unique_imported_labs,71);
+  assert.equal(roadmap.totals.imported_labs,73);assert.equal(roadmap.totals.unique_imported_labs,73);
   assert.equal(roadmap.totals.implemented_courses,10);assert.equal(roadmap.totals.planned_courses,5);assert.equal(roadmap.totals.planned_lessons,30);
   const seen=new Set();
   for(const c of roadmap.courses){
@@ -31,17 +31,20 @@ test('Windows catalog, path aliases and course detail expose outline-only course
   const base=`http://127.0.0.1:${server.address().port}/api`;
   const get=async route=>{const res=await fetch(base+route);assert.equal(res.status,200,route);return res.json();};
   const roadmap=await get('/roadmaps/windows-system-administrator');
-  const path=await get('/paths/windows');assert.deepEqual(path.totals,roadmap.totals);assert.equal(path.labs_count,71);
+  const path=await get('/paths/windows');assert.deepEqual(path.totals,roadmap.totals);assert.equal(path.labs_count,73);
   const paths=await get('/paths');assert.equal(paths.paths.find(p=>p.alias==='windows').totals.planned_courses,5);
-  const catalog=await get('/courses?topic=windows');assert.equal(catalog.total,15);
+  const catalog=await get('/courses?topic=windows');assert.equal(catalog.total,16);
+  const review=catalog.courses.find(c=>c.learning_mode==='portfolio-review');
+  assert.equal(review.id,'portfolio-infrastructure-review');assert.equal(review.practice_labs_count,0);
+  assert.equal(roadmap.courses.some(c=>c.id===review.id),false);
   for(const item of roadmap.courses.filter(c=>c.status==='planned')){
     const detail=await get('/courses/'+item.id);
     assert.equal(detail.course.curriculum_status,'planned');assert.equal(detail.course.readiness,'planned');assert.deepEqual(detail.labs,[]);
     assert.equal(detail.course.syllabus_modules.length,3);
   }
-  const support=await get('/courses/windows-11-it-support-troubleshooting');assert.equal(support.labs.length,28);
+  const support=await get('/courses/windows-11-it-support-troubleshooting');assert.equal(support.labs.length,30);
   assert.equal(support.course.curriculum_status,'in-progress');
   assert.equal(support.course.readiness,'partial');
   assert.equal(roadmap.courses.find(c=>c.id===support.course.id).status,'partial');
-  const linux=await get('/roadmaps/linux-system-administrator');assert.equal(linux.courses.length,8);
+  const linux=await get('/roadmaps/linux-system-administrator');assert.equal(linux.courses.length,9);
 });

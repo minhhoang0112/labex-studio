@@ -1,0 +1,72 @@
+{
+  "id": "luc-day-09",
+  "course_id": "linux-upskill-challenge",
+  "order": 10,
+  "title": "Ngày 9: Mạng, cổng và firewall",
+  "title_vi": "Ngày 9: Mạng, cổng và firewall",
+  "type": "lab",
+  "difficulty": "Beginner",
+  "estimated_time": "45–90 mins",
+  "overview": "Địa chỉ IP, socket lắng nghe, firewall và ứng dụng là các lớp khác nhau. ss cho biết cổng trên VM; curl thử ứng dụng; kiểm tra từ máy chính mới cho biết đường mạng tới VM. NAT VMware không đồng nghĩa public server.",
+  "runtime": {
+    "kind": "upskill-ssh",
+    "shared_course": true
+  },
+  "source_url": "https://linuxupskillchallenge.org/09/",
+  "source": "Linux Upskill Challenge · CC BY 4.0",
+  "source_attribution": "Nguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/09/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+  "curriculum_origin": "cc-by-4.0-adaptation",
+  "validation_status": "live-ssh-verified-2026-11-03",
+  "sections": [
+    {
+      "id": "luc-day-09-intro",
+      "position": 0,
+      "title": "Ngày 9: Mạng, cổng và firewall",
+      "title_vi": "Ngày 9: Mạng, cổng và firewall",
+      "kind": "introduction",
+      "need_verify": false,
+      "content": "## Mục tiêu\nĐịa chỉ IP, socket lắng nghe, firewall và ứng dụng là các lớp khác nhau. ss cho biết cổng trên VM; curl thử ứng dụng; kiểm tra từ máy chính mới cho biết đường mạng tới VM. NAT VMware không đồng nghĩa public server.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/09/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "content_vi": "## Mục tiêu\nĐịa chỉ IP, socket lắng nghe, firewall và ứng dụng là các lớp khác nhau. ss cho biết cổng trên VM; curl thử ứng dụng; kiểm tra từ máy chính mới cho biết đường mạng tới VM. NAT VMware không đồng nghĩa public server.\n\n**Môi trường:** VM Ubuntu Server riêng qua SSH, dữ liệu giữ xuyên suốt cả khóa.\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/09/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu."
+    },
+    {
+      "id": "luc-day-09-guide",
+      "position": 1,
+      "title": "Tài liệu gốc và hướng dẫn thực hành",
+      "title_vi": "Tài liệu gốc và hướng dẫn thực hành",
+      "kind": "document",
+      "need_verify": false,
+      "content": "---\ncomments: true\n---\n# Day 9 - Diving into networking\n\n* [Lesson video](https://youtu.be/47BWW-SyAa8)\n* Complementary video: [Networking](https://www.youtube.com/live/WtcX60n-ui0?t=10370s)\n\n## INTRO\n\nThe two services your server is now running are *sshd* for remote login, and *apache2* for web access. These are both \"open to the world\" via the TCP/IP “ports” - 22  and 80.\n\nAs a sysadmin, you need to understand what ports you have open on your servers because each open port is also a potential focus of attacks. You need to be be able to put in place appropriate monitoring and controls.\n\n## YOUR TASKS TODAY\n\n* Secure your web server by using a firewall\n\n## INSTRUCTIONS\n\nFirst we'll look at a couple of ways of determining what ports are open on your server:\n\n* `ss` - this, \"socket status\", is a standard utility - replacing the older `netstat`\n* `nmap` - this \"port scanner\" won't normally be installed by default\n\nThere are a wide range of options that can be used with *ss*, but first try: *ss -ltpn*\n\nThe output lines show which ports are open on which interfaces:\n\n    sudo ss -ltp\n    State   Recv-Q  Send-Q   Local Address:Port     Peer Address:Port  Process\n    LISTEN  0       4096     127.0.0.53%lo:53        0.0.0.0:*      users:((\"systemd-resolve\",pid=364,fd=13))\n    LISTEN  0       128            0.0.0.0:22           0.0.0.0:*      users:((\"sshd\",pid=625,fd=3))\n    LISTEN  0       128               [::]:22              [::]:*      users:((\"sshd\",pid=625,fd=4))\n    LISTEN  0       511                  *:80                *:*      users:((\"apache2\",pid=106630,fd=4),(\"apache2\",pid=106629,fd=4),(\"apache2\",pid=106627,fd=4))\n\nThe network notation can be a little confusing, but the lines above show ports 80 and 22 open \"to the world\" on all local IP addresses - and port 53 (DNS) open only on a special local address.\n\nNow install `nmap` with `apt install`. This works rather differently, actively probing 1,000 or more ports to check whether they're open. It's most famously used to scan remote machines - please don't - but it's also very handy to check your own configuration, by scanning your server:\n\n    $ nmap localhost\n\n    Starting Nmap 5.21 ( http://nmap.org ) at 2013-03-17 02:18 UTC\n    Nmap scan report for localhost (127.0.0.1)\n    Host is up (0.00042s latency).\n    Not shown: 998 closed ports\n    PORT   STATE SERVICE\n    22/tcp open  ssh\n    80/tcp open  http\n\n    Nmap done: 1 IP address (1 host up) scanned in 0.08 seconds\n\nPort 22 is providing the *ssh* service, which is how you're connected, so that will be open. If you have Apache running then port 80/http will also be open. Every open port is an increase in the \"attack surface\", so it's Best Practice to shut down services that you don't need.\n\nNote that however that \"localhost\" (127.0.0.1), is the loopback network device. Services \"bound\" _only_ to this will only be available on this local machine. To see what's actually exposed to others, first use the `ip a` command to find the IP address of your actual network card, and then `nmap` that.\n\n## Host firewall\n\nThe Linux kernel has built-in firewall functionality called \"netfilter\". We configure and query this via various utilities,  the most low-level of which are the `iptables` command, and the newer `nftables`. These are powerful, but also complex - so we'll use a more friendly alternative - `ufw` - the \"uncomplicated firewall\".\n\nFirst let's list what rules are in place by typing `sudo iptables -L`\n\nYou will see something like this:\n\n    Chain INPUT (policy ACCEPT)\n    target  prot opt source             destination\n\n    Chain FORWARD (policy ACCEPT)\n    target  prot opt source             destination\n\n    Chain OUTPUT (policy ACCEPT)\n    target  prot opt source             destination\n\nSo, essentially no firewalling - any traffic is accepted to anywhere.\n\nUsing `ufw` is very simple. It is available by default in all Ubuntu installations after 8.04 LTS, but if you need to install it:\n\n    sudo apt install ufw\n\nThen, to allow SSH, but disallow HTTP we would type:\n\n    sudo ufw allow ssh\n    sudo ufw deny http\n\n**BEWARE!** Don't forget to explicitly ALLOW `ssh`, or you’ll lose all contact with your server! If not allowed, the firewall assumes the port is DENIED by default.\n\nAnd then enable this with:\n\n    sudo ufw enable\n\nTyping `sudo iptables -L` now will list the detailed rules generated by this - one of these should now be:\n\n    “DROP       tcp  --  anywhere             anywhere             tcp dpt:http”\n\nThe effect of this is that although your server is still running Apache, it's no longer accessible from the \"outside\" - all incoming traffic to the destination port of http/80 being DROPed. Test for yourself! You will probably want to reverse this with:\n\n    sudo ufw allow http\n    sudo ufw enable\n\nIn practice, ensuring that you're not running unnecessary services is often enough protection, and a host-based firewall is unnecessary, but this very much depends on the type of server you are configuring. Regardless, hopefully this session has given you some insight into the concepts.\n\nBTW: For this test/learning server you should allow http/80 access again now, because those `access.log` files will give you a real feel for what it's like to run a server in a hostile world.\n\n## Using non-standard ports\n\nOccasionally it may be reasonable to re-configure a service so that it’s provided on a non-standard port - this is particularly common advice for **ssh/22** - and would be done by altering the configuration in `/etc/ssh/sshd_config`.\n\nSome call this “security by obscurity” - equivalent to moving the keyhole on your front door to an unusual place rather than improving the lock itself, or camouflaging your tank rather than improving its armour - but it *does* effectively eliminate attacks by opportunistic hackers, which is the main threat for most servers.\n\nBut, if you're going to do it, remember all the rules and security tools you already have in place. If you are using AWS, for example, and change the SSH port to 2222, you will need to open that port in the EC2 security group for your instance.\n\n## EXTENSION\n\nEven after denying access, it might be useful to know who's been *trying* to gain entry. Check out these discussions of logging and more complex setups:\n\n* [How to Log Linux IPTables Firewall Dropped Packets to a Log File](http://www.thegeekstuff.com/2012/08/iptables-log-packets/)\n* [Iptables How To](https://help.ubuntu.com/community/IptablesHowTo)\n\n## RESOURCES\n\n* [12 ss Command Examples to Monitor Network Connections](https://www.tecmint.com/ss-command-examples-in-linux/)\n* [UFW - Uncomplicated Firewall](https://help.ubuntu.com/community/UFW)\n* [Collection of basic Linux Firewall iptables rules](http://linuxconfig.org/collection-of-basic-linux-firewall-iptables-rules)\n* [10 Netstat Command Example](http://www.thegeekstuff.com/2010/03/netstat-command-examples/)\n* [UFW Uncomplicated Firewall](http://www.youtube.com/watch?v=nc3A5Dy4xE0&feature=relmfu) (video)\n* [How to install nftables in Ubuntu](https://www.liquidweb.com/kb/how-to-install-nftables-in-ubuntu/)\n* [No, moving your ssh port isn't security by obscurity](https://danielmiessler.com/blog/no-moving-your-ssh-port-isnt-security-by-obscurity/)\n* [Port knocking](https://wiki.archlinux.org/title/Port_knocking)\n\n## TROUBLESHOOT AND MAKE A SAD SERVER HAPPY!\n\nPractice what you've learned with some challenges at [SadServers.com](https://sadservers.com/):\n\n* [\"Tokyo\": can't serve web file](https://sadservers.com/scenario/tokyo)\n* [\"Taipei\": Come a-knocking](https://sadservers.com/scenario/taipei)\n\nSome rights reserved. Check the license terms\n[here](https://github.com/livialima/linuxupskillchallenge/blob/master/LICENSE)\n",
+      "content_vi": "## Hiểu bản chất\nĐịa chỉ IP, socket lắng nghe, firewall và ứng dụng là các lớp khác nhau. ss cho biết cổng trên VM; curl thử ứng dụng; kiểm tra từ máy chính mới cho biết đường mạng tới VM. NAT VMware không đồng nghĩa public server.\n\n## Thực hành từng bước\nGiữ một phiên SSH đang mở và biết cách vào console VMware trước khi bật firewall. Kiểm tra cổng SSH thực tế trong cấu hình lab; VM mặc định dùng 22.\n```bash\nip -br addr\nip route\nss -lnt\nsudo apt install -y ufw\nsudo ufw allow OpenSSH\nsudo ufw allow 80/tcp\nsudo ufw default deny incoming\nsudo ufw default allow outgoing\nsudo ufw --force enable\nsudo ufw status verbose\n```\nMở **phiên SSH mới** và mở trang Apache từ Windows để thử end-to-end. Nếu SSH dùng cổng khác, allow đúng cổng đó trước enable. Nếu tự khóa, dùng console VMware sửa rule; không cần đổi mạng VM CV.\nBộ chấm kiểm tra UFW active, chính sách incoming deny và rule TCP 22/80. Nó không thay thế việc thử kết nối từ Windows, và không chấm các cổng khác ngoài hợp đồng bài này.\n\n## Tự giải thích\nCổng đang LISTEN nhưng kết nối từ máy chính thất bại có thể do đâu?\n\nNguồn: Linux Upskill Challenge — Steve Brorens (@snori74), Livia Lima và contributors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Bài gốc](https://linuxupskillchallenge.org/09/); revision `fc9ed4f08ee3`. Hướng dẫn VI, đầu ra bài tập và bộ chấm được dự án biên soạn thêm; không phải bản dịch nguyên văn toàn bộ tài liệu.",
+      "source_text_verified": true,
+      "source_url": "https://linuxupskillchallenge.org/09/",
+      "source_sha256": "c5009c69ab0bd3cc0399619d97675b01db649aa93885bf863e7283d3b399a450",
+      "translation_kind": "adaptation"
+    },
+    {
+      "id": "luc-day-09-task",
+      "position": 2,
+      "title": "Kiểm tra kết quả",
+      "kind": "task",
+      "need_verify": true,
+      "content": "## Đề bài\nUFW đang bật, incoming mặc định deny và cho phép TCP 22/80; tự kiểm tra phiên SSH mới và HTTP từ máy chính.\n\n## Phạm vi chấm\nBộ chấm kiểm tra kết quả trọng tâm được mô tả ở trên, không tự chấm toàn bộ phần Extension hoặc câu trả lời giải thích. Không dùng container bài khác để thay VM khóa này.",
+      "task": "UFW đang bật, incoming mặc định deny và cho phép TCP 22/80; tự kiểm tra phiên SSH mới và HTTP từ máy chính.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Cổng đang LISTEN nhưng kết nối từ máy chính thất bại có thể do đâu?",
+      "verification": {
+        "kind": "state",
+        "command": "s=$(sudo -n env LC_ALL=C ufw status verbose) && printf '%s\\n' \"$s\" | grep -q 'Status: active' && printf '%s\\n' \"$s\" | grep -q 'Default: deny (incoming)' && printf '%s\\n' \"$s\" | grep -Eq '^22/tcp([[:space:]]+\\(OpenSSH\\))?[[:space:]]+ALLOW IN' && printf '%s\\n' \"$s\" | grep -Eq '^80/tcp[[:space:]]+ALLOW IN'"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "luc-day-09-task",
+      "title": "Kiểm tra kết quả",
+      "task": "UFW đang bật, incoming mặc định deny và cho phép TCP 22/80; tự kiểm tra phiên SSH mới và HTTP từ máy chính.",
+      "hint": "Đọc lại hướng dẫn VI, thử từng lệnh ngắn và đối chiếu kết quả trên đúng VM lab. Cổng đang LISTEN nhưng kết nối từ máy chính thất bại có thể do đâu?",
+      "verification": {
+        "kind": "state",
+        "command": "s=$(sudo -n env LC_ALL=C ufw status verbose) && printf '%s\\n' \"$s\" | grep -q 'Status: active' && printf '%s\\n' \"$s\" | grep -q 'Default: deny (incoming)' && printf '%s\\n' \"$s\" | grep -Eq '^22/tcp([[:space:]]+\\(OpenSSH\\))?[[:space:]]+ALLOW IN' && printf '%s\\n' \"$s\" | grep -Eq '^80/tcp[[:space:]]+ALLOW IN'"
+      }
+    }
+  ]
+}
